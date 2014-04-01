@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<mappers>
+		<!-- 
+		<mapper resource="com/bruce/temp/model/xml/WxDefaultReplyMapper.xml" />
+		<mapper resource="com/bruce/temp/model/xml/WxTextCodeMapper.xml" />
+		<mapper resource="com/bruce/temp/model/xml/WxCustomizeMenuMapper.xml" />
+		<mapper resource="com/bruce/temp/model/xml/WxCodeModuleMapper.xml" />
+		 -->
+		<mapper resource="com/bruce/geekway/model/xml/WxArticleMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxArticleExtendMapper.xml" />
+	</mappers>
+
+</configuration>

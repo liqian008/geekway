@@ -8,6 +8,8 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>geekway-front</module>
+		<module>geekway-service</module>
+		<module>geekway-model</module>
 	</modules>
 
 	<properties>

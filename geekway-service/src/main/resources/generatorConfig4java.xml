@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	
+	<!-- 
+	<classPathEntry
+		location="/home/liqian/data/mysql.jar" />		
+	-->
+	
+	<classPathEntry
+		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
+	
+	<context id="context1">
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Criteria" />
+		</plugin>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://localhost:3306/wx" userId="designer"
+			password="designer" />
+		<javaModelGenerator targetPackage="com.bruce.geekway.model"
+			targetProject="geekway-model"/>
+		<sqlMapGenerator targetPackage="com.bruce.geekway.model.xml"
+			targetProject="geekway-model" />
+		<javaClientGenerator targetPackage="com.bruce.geekway.dao.mapper"
+			targetProject="geekway-service" type="XMLMAPPER">
+			<property name="enableSubPackages" value="false"/>
+		</javaClientGenerator>
+		
+		
+		<table schema="wx" tableName="wx_article" domainObjectName="WxArticle"/>
+		<table schema="wx" tableName="wx_code_module" domainObjectName="WxCodeModule"/>
+		<table schema="wx" tableName="wx_code_module_article" domainObjectName="WxCodeModuleArticle"/>
+		
+		<!--
+		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
+		<table schema="wx" tableName="wx_text_code" domainObjectName="WxTextCode"/> 
+		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
+		 -->
+		
+	</context>
+</generatorConfiguration>
