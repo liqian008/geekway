@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,6 +22,7 @@
 	</head>
 	<body class="o-page">
 		<div id="page">
+			<!-- 
 			<div id="header">
 				<a href="#menu"></a>
 				<span id="Logo" class="svg">
@@ -28,7 +30,10 @@
 				</span>
 				<a class="backBtn" href="javascript:history.back();"></a>
 			</div>
-			<div class="subHeader"><i class="i-blog i-small"></i>Ocean / Blog</div>
+			-->
+			<div class="subHeader">
+				文章列表
+			</div>
 			<div id="content">
 				
 				<article>
