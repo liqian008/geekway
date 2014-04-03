@@ -28,14 +28,14 @@
 	</bean> 
 	
 	
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<bean id="geekway_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis-conf.xml"/>
 		<property name="dataSource" ref="geekway_datasource" />
 	</bean>
 
 	<bean id="wxArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxArticleMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	
 	

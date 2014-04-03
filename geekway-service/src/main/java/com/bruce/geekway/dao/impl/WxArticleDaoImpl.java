@@ -14,7 +14,7 @@ import com.bruce.geekway.model.WxArticle;
 @Repository
 public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
 
-//     @Autowired
+     @Autowired
     private WxArticleMapper articleMapper;
 
     @Override
