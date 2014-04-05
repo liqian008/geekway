@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxArticle"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.WxDefaultReply"%>
+
+<%@ include file="../inc/include_tag.jsp" %>
 
 
 
@@ -81,7 +83,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						文章管理
+						默认回复
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -93,7 +95,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">文章管理</li>
+					<li class="active">默认回复</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -101,67 +103,90 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>Wide left sidebar layout</h5>
 				<p>Page layout with left aligned wide sidebar, with right
 					aligned icons and 4 level navigation.</p>
 			</div>
+			
+			<%
+			WxDefaultReply defaultReply = (WxDefaultReply)request.getAttribute("defaultReply");
+			%>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>文章管理
-					</h5>
-					<a href="./articleAdd"><span class="label label-danger pull-right">新增文章</span></a>
+			<form id="validate" action="<s:url value='./saveDefaultReply'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>编辑默认回复
+						</h6>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">文本默认回复:
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="textReply" id="textReply" value="${defaultReply.textReply}"/>
+	                            <form:hidden path="defaultReply.id"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">图片默认回复:
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="imageReply" id="imageReply" value="${defaultReply.imageReply}"/>
+	                             
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">语音默认回复:
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="voiceReply" id="voiceReply" value="${defaultReply.voiceReply}"/>
+	                             
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">按钮事件默认回复:
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="menuClickReply" id="menuClickReply" value="${defaultReply.menuClickReply}"/>
+	                             
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">LBS默认回复:
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="locationReply" id="locationReply" value="${defaultReply.locationReply}"/>
+	                             
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">视频默认回复:
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="videoReply" id="videoReply" value="${defaultReply.videoReply}"/>
+	                             
+							</div>
+						</div>
+						
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="提 交" class="btn btn-primary">
+						</div>
+					</div>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>封面图</th>
-                                <th>标题</th>
-                                <th>状态</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxArticle> articleList = (List<WxArticle>)request.getAttribute("articleList");
-                           	if(articleList!=null&&articleList.size()>0){
-                           		int i=0;
-                           		for(WxArticle article: articleList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
-		                        </td>
-		                        <td><%=article.getTitle()%></td>
-		                        <td>正常</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        	
-										<a href="./articleEdit?articleId=<%=article.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil"></i></a>
-										<a href="./delArticle?articleId=<%=article.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-cogs"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -171,4 +196,3 @@
 	<!-- /page container -->
 </body>
 </html>
-

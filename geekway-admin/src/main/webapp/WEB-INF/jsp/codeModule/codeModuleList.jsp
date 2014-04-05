@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxArticle"%>
+<%@page import="com.bruce.geekway.model.WxCodeModule"%>
 <%@page import="java.text.SimpleDateFormat"%>
-
 
 
 <!DOCTYPE html>
@@ -81,7 +80,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						文章管理
+						数据模块管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -93,7 +92,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">文章管理</li>
+					<li class="active">数据模块管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -113,43 +112,41 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>文章管理
+						<i class="icon-people"></i>数据模块管理
 					</h5>
-					<a href="./articleAdd"><span class="label label-danger pull-right">新增文章</span></a>
+					<a href="./codeModuleAdd"><span class="label label-danger pull-right">新增数据模块</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>ID</th>
-                                <th>封面图</th>
-                                <th>标题</th>
+                                <th>模块名称</th>
+                                <th>展示类型</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxArticle> articleList = (List<WxArticle>)request.getAttribute("articleList");
-                           	if(articleList!=null&&articleList.size()>0){
+                           	List<WxCodeModule> codeModuleList = (List<WxCodeModule>)request.getAttribute("codeModuleList");
+                           	if(codeModuleList!=null&&codeModuleList.size()>0){
                            		int i=0;
-                           		for(WxArticle article: articleList){
+                           		for(WxCodeModule codeModule: codeModuleList){
                            			i++;
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
-		                        </td>
-		                        <td><%=article.getTitle()%></td>
+		                        <td><%=codeModule.getModuleName()%></td>
+		                        <td><%=codeModule.getModuleType()==1?"原生图文":"外链展示"%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        	
-										<a href="./articleEdit?articleId=<%=article.getId()%>"
+										<a href="./codeModuleEdit?codeModuleId=<%=codeModule.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil"></i></a>
-										<a href="./delArticle?articleId=<%=article.getId()%>"
+										<a href="./delCodeModule?codeModuleId=<%=codeModule.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="删除"><i class="icon-cogs"></i></a>
 									</div>

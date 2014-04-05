@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxArticle"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.WxCodeModule"%>
+
+<%@ include file="../inc/include_tag.jsp" %>
+
 
 
 
@@ -81,7 +84,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						文章管理
+						文章内容
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -93,7 +96,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">文章管理</li>
+					<li class="active">文章内容</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -101,67 +104,58 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>Wide left sidebar layout</h5>
 				<p>Page layout with left aligned wide sidebar, with right
 					aligned icons and 4 level navigation.</p>
 			</div>
+			
+			<%
+			WxCodeModule codeModule = (WxCodeModule)request.getAttribute("codeModule");
+			
+			%>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>文章管理
-					</h5>
-					<a href="./articleAdd"><span class="label label-danger pull-right">新增文章</span></a>
+			<form id="validate" action="<s:url value='./saveArticle'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>编辑数据模块
+						</h6>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">模块名称:
+							</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="title" id="title" value="${codeModule.moduleName}"/>
+	                             <form:hidden path="codeModule.id"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">展示类型:
+							</label>
+							<div class="col-sm-2">
+								<form:select path="codeModule.moduleType" class="form-control">
+									<form:option value="1"  label="原生图文展示"/>
+									<form:option value="2"  label="外链展示"/>
+								</form:select>
+							</div>
+						</div>
+						
+						
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="提 交" class="btn btn-primary">
+						</div>
+					</div>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>封面图</th>
-                                <th>标题</th>
-                                <th>状态</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxArticle> articleList = (List<WxArticle>)request.getAttribute("articleList");
-                           	if(articleList!=null&&articleList.size()>0){
-                           		int i=0;
-                           		for(WxArticle article: articleList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
-		                        </td>
-		                        <td><%=article.getTitle()%></td>
-		                        <td>正常</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        	
-										<a href="./articleEdit?articleId=<%=article.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil"></i></a>
-										<a href="./delArticle?articleId=<%=article.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-cogs"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -171,4 +165,3 @@
 	<!-- /page container -->
 </body>
 </html>
-

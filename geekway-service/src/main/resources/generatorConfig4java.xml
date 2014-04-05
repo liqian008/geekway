@@ -28,12 +28,15 @@
 			<property name="enableSubPackages" value="false"/>
 		</javaClientGenerator>
 		
-		
-		<table schema="wx" tableName="wx_article" domainObjectName="WxArticle"/>
 		<table schema="wx" tableName="wx_code_module" domainObjectName="WxCodeModule"/>
+
+		<!--
+		<table schema="wx" tableName="wx_text_code" domainObjectName="WxTextCode"/>
+		<table schema="wx" tableName="wx_article" domainObjectName="WxArticle"/>
+		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
+		
 		<table schema="wx" tableName="wx_code_module_article" domainObjectName="WxCodeModuleArticle"/>
 		
-		<!--
 		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
 		<table schema="wx" tableName="wx_text_code" domainObjectName="WxTextCode"/> 
 		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
