@@ -118,7 +118,6 @@
 			%>
 
 			<form id="validate" action="<s:url value='./saveArticle'/>" method="post"  class="form-horizontal form-bordered">
-
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -128,17 +127,15 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">模块名称:
-							</label>
+							<label class="col-sm-2 control-label">模块名称:</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="title" id="title" value="${codeModule.moduleName}"/>
-	                             <form:hidden path="codeModule.id"/>
+	                            <form:hidden path="codeModule.id"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">展示类型:
-							</label>
+							<label class="col-sm-2 control-label">展示类型:</label>
 							<div class="col-sm-2">
 								<form:select path="codeModule.moduleType" class="form-control">
 									<form:option value="1"  label="原生图文展示"/>

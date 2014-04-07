@@ -145,10 +145,13 @@
 		                        	
 										<a href="./codeModuleEdit?codeModuleId=<%=codeModule.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil"></i></a>
+											data-original-title="编辑"><i class="icon-pencil3"></i></a>
+										<a href="./codeModuleArticleSet?codeModuleId=<%=codeModule.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="关联文章"><i class="icon-tree3"></i></a>
 										<a href="./delCodeModule?codeModuleId=<%=codeModule.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-cogs"></i></a>
+											data-original-title="删除"><i class="icon-remove3"></i></a>
 									</div>
 								</td>
                                </tr>

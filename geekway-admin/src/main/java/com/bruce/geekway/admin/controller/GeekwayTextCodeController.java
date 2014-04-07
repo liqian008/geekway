@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bruce.geekway.model.WxCodeModule;
 import com.bruce.geekway.model.WxTextCode;
+import com.bruce.geekway.service.IWxCodeModuleService;
 import com.bruce.geekway.service.IWxTextCodeService;
 
 
@@ -21,6 +23,8 @@ public class GeekwayTextCodeController {
 
 	@Autowired
 	private IWxTextCodeService wxTextCodeService;
+	@Autowired
+	private IWxCodeModuleService wxCodeModuleService;
 	
 	@RequestMapping("/textCodeList")
 	public String textCodeList(Model model, HttpServletRequest request) {
@@ -38,6 +42,10 @@ public class GeekwayTextCodeController {
 		model.addAttribute("servletPath", servletPath);
 		
 		model.addAttribute("textCode", textCode);
+		
+		List<WxCodeModule> codeModuleList = wxCodeModuleService.queryAll();
+		model.addAttribute("codeModuleList", codeModuleList);
+		
 		return "textCode/textCodeEdit";
 	}
 	
@@ -48,6 +56,10 @@ public class GeekwayTextCodeController {
 		
 		WxTextCode textCode = wxTextCodeService.loadById(textCodeId);
 		model.addAttribute("textCode", textCode);
+		
+		List<WxCodeModule> codeModuleList = wxCodeModuleService.queryAll();
+		model.addAttribute("codeModuleList", codeModuleList);
+		
 		return "textCode/textCodeEdit";
 	}
 	
@@ -60,6 +72,16 @@ public class GeekwayTextCodeController {
 		
 		Date currentTime = new Date();
 		textCode.setUpdateTime(currentTime);
+		
+		if(1==textCode.getDisplayType()){
+			//文本回复情况下，重新初始化数据
+			textCode.setModuleDesc("");
+			textCode.setModuleId(0);
+		}else{
+			textCode.setReplyContent("");
+		}
+		
+		
 		if(textCode!=null&&textCode.getId()!=null&&textCode.getId()>0){
 			result = wxTextCodeService.updateById(textCode);
 		}else{

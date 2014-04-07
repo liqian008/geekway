@@ -7,6 +7,13 @@
 		select <include refid="Article_Base_Column_List" /> from wx_article wa, wx_code_module_article wcma where wcma.article_id = wa.id and wcma.module_id=#{moduleId,jdbcType=INTEGER} order by wcma.top_time desc;
 	</select> 
 	
+	<!-- 查询不在moduleId中的article列表，供添加 -->
+	<select id="queryArticlesOutModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select <include refid="Article_Base_Column_List" /> from wx_article wa where wa.id not in (select article_id from wx_code_module_article where module_id=#{moduleId,jdbcType=INTEGER}) order by wa.create_time desc;
+	</select> 
+	
+	
+	
 	<sql id="Article_Base_Column_List">
     <!--
       WARNING - @mbggenerated

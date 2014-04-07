@@ -44,10 +44,12 @@
 	src="../js/plugins/forms/uploader/plupload.full.min.js"></script>
 <script type="text/javascript"
 	src="../js/plugins/forms/uploader/plupload.queue.min.js"></script>
+
 <script type="text/javascript"
-	src="../js/plugins/forms/wysihtml5/wysihtml5.min.js"></script>
+	src="../plugins/ckeditor/config.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/forms/wysihtml5/toolbar.js"></script>
+	src="../plugins/ckeditor/ckeditor.js"></script>
+
 <script type="text/javascript"
 	src="../js/plugins/interface/daterangepicker.js"></script>
 <script type="text/javascript"
@@ -111,7 +113,30 @@
 				<p>Page layout with left aligned wide sidebar, with right
 					aligned icons and 4 level navigation.</p>
 			</div>
-			
+
+			<!-- WYSIWYG editor inside panel -->
+			<!-- 
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h6 class="panel-title">
+						<i class="icon-pencil"></i>内容
+					</h6>
+				</div>
+				<div class="panel-body">
+					<form action="wysiwyg.html#" role="form">
+						<div class="block-inner">
+							<textarea class="editor" placeholder="请输入内容 ..."></textarea>
+						</div>
+						<div class="form-actions text-right">
+							<button type="submit" class="btn btn-danger">Cancel</button>
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			-->
+			<!-- /WYSIWYG editor inside panel -->
+
 			<%
 			WxArticle article = (WxArticle)request.getAttribute("article");
 			%>
@@ -127,13 +152,33 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">标 题:
-							</label>
-							<div class="col-sm-4">
+							<label class="col-sm-2 control-label">标 题:</label> 
+							<div class="col-sm-6">
 								<input type="text" class="form-control" name="title" id="title" value="${article.title}"/>
-	                             <form:hidden path="article.id"/>
+	                            <form:hidden path="article.id"/>
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">短标题:
+							</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="shortTitle" id="shortTitle" value="${article.shortTitle}"/>
+							</div>
+						</div>
+						 
+						<div class="form-group">
+							<label class="col-sm-2 control-label">内 容:
+							</label>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea class="ckeditor" name="content">
+										${article.content}
+									</textarea>   
+								</div>
+							</div>
+						</div>
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label">状 态:

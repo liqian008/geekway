@@ -3,6 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.WxTextCode"%>
+<%@page import="com.bruce.geekway.model.WxCodeModule"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
@@ -155,12 +156,36 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">数据模块名称:
+							<label class="col-sm-2 control-label">数据模块描述:
 							</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="moduleDesc" id="moduleDesc" value="${textCode.moduleDesc}"/>
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label">关联数据模块:
+							</label>
+							<div class="col-sm-10">
+								<%
+                               	List<WxCodeModule> codeModuleList = (List<WxCodeModule>)request.getAttribute("codeModuleList");
+                               	
+                               	if(codeModuleList!=null&&codeModuleList.size()>0){
+                               	%>
+                               	<div class="block-inner">
+                               	<%
+                               	for(WxCodeModule codeModule: codeModuleList){
+                               	%>
+                               		<label class="radio-inline radio-info">
+										<input class="styled" type="radio" name="moduleId" id="moduleId_<%=codeModule.getId()%>" value="<%=codeModule.getId()%>" <%=codeModule.getId().equals(textCode.getModuleId())?"checked='checked'":""%>/>
+										<%=codeModule.getModuleName()%>
+									</label>
+                               	<%}%>
+                               	</div>
+                               	<%}%>
+							</div>
+						</div>
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label">状 态:

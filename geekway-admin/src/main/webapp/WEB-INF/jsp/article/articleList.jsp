@@ -122,8 +122,9 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-                                <th>封面图</th>
+                                <th>封面</th>
                                 <th>标题</th>
+                                <th>短标题</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -142,16 +143,17 @@
 		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
 		                        </td>
 		                        <td><%=article.getTitle()%></td>
+		                        <td><%=article.getShortTitle()%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        	
 										<a href="./articleEdit?articleId=<%=article.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil"></i></a>
-										<a href="./delArticle?articleId=<%=article.getId()%>"
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+										<a href="./delArticle?articleId=<%=article.getId()%>" 
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-cogs"></i></a>
+											data-original-title="删除"><i class="icon-remove3"></i></a>
 									</div>
 								</td>
                                </tr>
