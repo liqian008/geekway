@@ -10,6 +10,7 @@
 		<module>geekway-front</module>
 		<module>geekway-service</module>
 		<module>geekway-model</module>
+		<module>geekway-admin</module>
 	</modules>
 
 	<properties>

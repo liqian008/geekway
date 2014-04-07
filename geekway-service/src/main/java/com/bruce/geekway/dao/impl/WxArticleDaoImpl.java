@@ -56,7 +56,12 @@ public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
     public List<WxArticle> queryArticlesByModuleId(int moduleId) {
         return articleMapper.queryArticlesByModuleId(moduleId);
     }
-
+    
+    @Override
+    public List<WxArticle> queryArticlesOutModuleId(int moduleId) {
+        return articleMapper.queryArticlesOutModuleId(moduleId);
+    }
+    
 	public WxArticleMapper getArticleMapper() {
 		return articleMapper;
 	}

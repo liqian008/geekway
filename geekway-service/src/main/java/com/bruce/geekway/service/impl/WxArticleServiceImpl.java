@@ -41,4 +41,14 @@ public class WxArticleServiceImpl implements IWxArticleService{
 	}
 	
 	
+	@Override
+    public List<WxArticle> queryArticlesByModuleId(int moduleId) { 
+        return wxArticleDao.queryArticlesByModuleId(moduleId);
+    }
+	
+	@Override
+    public List<WxArticle> queryArticlesOutModuleId(int moduleId) { 
+        return wxArticleDao.queryArticlesOutModuleId(moduleId);
+    }
+	
 }

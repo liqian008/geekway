@@ -74,9 +74,16 @@ public interface WxArticleMapper {
 	int updateByPrimaryKey(WxArticle record);
 
 	/**
-     * ?��????moduleId??rticle??��
+     * 根据查询moduleId相关的文章
      * @param moduleId
      * @return
      */
     List<WxArticle> queryArticlesByModuleId(int moduleId);
+    
+    /**
+     * 根据查询moduleId不相关的文章
+     * @param moduleId
+     * @return
+     */
+    List<WxArticle> queryArticlesOutModuleId(int moduleId);
 }
