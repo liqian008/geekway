@@ -141,11 +141,10 @@
 		                        <td><%=i%></td>
 		                        <td><%=textCode.getKeyCode()%></td>
 		                        <td><%=textCode.getDisplayType()==1?"文本回复":"数据模块"%></td>
-		                        <td><%=textCode.getDisplayType()==1?textCode.getReplyContent():textCode.getModuleDesc()%></td>
+		                        <td><%=textCode.getDisplayType()==1?textCode.getReplyContent():"【模块】"+textCode.getModuleDesc()%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        	
 										<a href="./textCodeEdit?textCodeId=<%=textCode.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a>

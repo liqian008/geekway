@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.codehaus.jackson.map.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -77,10 +78,15 @@ public class GeekwayTextCodeController {
 			//文本回复情况下，重新初始化数据
 			textCode.setModuleDesc("");
 			textCode.setModuleId(0);
-		}else{
+		}else if(2==textCode.getDisplayType()){
 			textCode.setReplyContent("");
+			
+			int codeModuleId = textCode.getModuleId();
+			WxCodeModule codeModule = wxCodeModuleService.loadById(codeModuleId);
+			if(codeModule!=null){
+				textCode.setModuleDesc(codeModule.getModuleName());
+			}
 		}
-		
 		
 		if(textCode!=null&&textCode.getId()!=null&&textCode.getId()>0){
 			result = wxTextCodeService.updateById(textCode);

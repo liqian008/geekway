@@ -7,8 +7,6 @@
 <%@ include file="../inc/include_tag.jsp" %>
 
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,7 +150,8 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">标 题:</label> 
+							<label class="col-sm-2 control-label text-right">标 题: <span class="mandatory">*</span></label>
+							
 							<div class="col-sm-6">
 								<input type="text" class="form-control" name="title" id="title" value="${article.title}"/>
 	                            <form:hidden path="article.id"/>
@@ -160,15 +159,38 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">短标题:
+							<label class="col-sm-2 control-label text-right">短标题: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="shortTitle" id="shortTitle" value="${article.shortTitle}"/>
 							</div>
 						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">封面图链接:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${article.coverImageUrl}"/>
+							
+								<!-- 
+								<img src="http://www.jinwanr.com.cn/staticFile/image/20140306/medium/100012_bb6d4f45aacd9b97a91063cda17cd3b3.jpg" width="160px"/>
+								<input type="file" class="styled">
+								 -->
+							</div> 
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">文章内容概要: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea name="shortContent" rows="3" cols="5" class="limited form-control" placeholder="上限100字">${article.shortContent}</textarea>
+								</div>
+							</div>
+						</div>
 						 
 						<div class="form-group">
-							<label class="col-sm-2 control-label">内 容:
+							<label class="col-sm-2 control-label text-right">文章内容详情: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
@@ -181,12 +203,12 @@
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">状 态:
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
 								<form:select path="article.status" class="select-liquid">
-									<form:option value="1"  label="启用"/>
 									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
 								</form:select>
 							</div>
 						</div>

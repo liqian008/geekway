@@ -126,7 +126,7 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">文本默认回复:
+							<label class="col-sm-2 control-label text-right">文本默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="textReply" id="textReply" value="${defaultReply.textReply}"/>
@@ -135,7 +135,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">图片默认回复:
+							<label class="col-sm-2 control-label text-right">图片默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="imageReply" id="imageReply" value="${defaultReply.imageReply}"/>
@@ -144,7 +144,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">语音默认回复:
+							<label class="col-sm-2 control-label text-right">语音默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="voiceReply" id="voiceReply" value="${defaultReply.voiceReply}"/>
@@ -153,7 +153,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">按钮事件默认回复:
+							<label class="col-sm-2 control-label text-right">按钮事件默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="menuClickReply" id="menuClickReply" value="${defaultReply.menuClickReply}"/>
@@ -162,7 +162,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">LBS默认回复:
+							<label class="col-sm-2 control-label text-right">LBS默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="locationReply" id="locationReply" value="${defaultReply.locationReply}"/>
@@ -171,7 +171,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">视频默认回复:
+							<label class="col-sm-2 control-label text-right">视频默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="videoReply" id="videoReply" value="${defaultReply.videoReply}"/>

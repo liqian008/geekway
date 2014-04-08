@@ -47,7 +47,7 @@
 					<img src="<%=article.getCoverImageUrl()%>" />
 					<h2><a href="./article?articleId=<%=article.getId()%>"><%=article.getTitle()%></a></h2>
 					<p>
-						<%=article.getContent() %>
+						<%=article.getShortContent() %>
 					</p>
 					<div class="a-meta">
 						<a href="./blog"><i class="i-comments i-small"></i>6 评论</a> 

@@ -128,7 +128,7 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">标 题:
+							<label class="col-sm-2 control-label text-right">标 题:
 							</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="keyCode" id="keyCode" value="${textCode.keyCode}"/>
@@ -137,7 +137,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">展示类型:
+							<label class="col-sm-2 control-label text-right">展示类型:
 							</label>
 							<div class="col-sm-2">
 								<form:select path="textCode.displayType" class="form-control">
@@ -148,7 +148,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">回复文本:
+							<label class="col-sm-2 control-label text-right">回复文本:
 							</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="replyContent" id="replyContent" value="${textCode.replyContent}"/>
@@ -156,7 +156,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">数据模块描述:
+							<label class="col-sm-2 control-label text-right">数据模块描述:
 							</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="moduleDesc" id="moduleDesc" value="${textCode.moduleDesc}"/>
@@ -164,7 +164,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">关联数据模块:
+							<label class="col-sm-2 control-label text-right">关联数据模块:
 							</label>
 							<div class="col-sm-10">
 								<%
@@ -188,12 +188,12 @@
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label">状 态:
+							<label class="col-sm-2 control-label text-right">状 态:
 							</label>
 							<div class="col-sm-4">
 								<form:select path="textCode.status" class="select-liquid">
-									<form:option value="1"  label="启用"/>
 									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
 								</form:select>
 							</div>
 						</div>

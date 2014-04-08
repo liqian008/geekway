@@ -5,7 +5,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,8 +138,10 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
+		                        <td class="text-center">
+		                        	<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
+		                        	</a> 
 		                        </td>
 		                        <td><%=article.getTitle()%></td>
 		                        <td><%=article.getShortTitle()%></td>

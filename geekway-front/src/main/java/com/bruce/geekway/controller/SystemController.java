@@ -1,7 +1,6 @@
 package com.bruce.geekway.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,7 @@ import com.bruce.geekway.service.IWxArticleService;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value="/mobile")
+@RequestMapping(value={"mobile"})
 public class SystemController {
 	
 	@Autowired
