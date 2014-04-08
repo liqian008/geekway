@@ -6,7 +6,6 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,13 +19,10 @@
 	type="text/css">
 <link href="../css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="../css/icons.min.css" rel="stylesheet" type="text/css">
-<link
-	href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=latin,cyrillic-ext"
-	rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="../js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="../js/jquery/1.10.2/jquery-ui.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/charts/sparkline.min.js"></script>
+<script type="text/javascript" src="../js/plugins/charts/sparkline.min.js"></script>
 <script type="text/javascript" src="../js/plugins/forms/uniform.min.js"></script>
 <script type="text/javascript" src="../js/plugins/forms/select2.min.js"></script>
 <script type="text/javascript" src="../js/plugins/forms/inputmask.js"></script>
@@ -38,15 +34,13 @@
 <script type="text/javascript" src="../js/plugins/forms/validate.min.js"></script>
 <script type="text/javascript" src="../js/plugins/forms/tags.min.js"></script>
 <script type="text/javascript" src="../js/plugins/forms/switch.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/forms/uploader/plupload.full.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="../js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript" src="../js/plugins/forms/uploader/plupload.queue.min.js"></script>
 
 <script type="text/javascript"
-	src="../plugins/ckeditor/config.js"></script>
-<script type="text/javascript"
 	src="../plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript"
+	src="../js/ckeditor/config.js"></script>
 
 <script type="text/javascript"
 	src="../js/plugins/interface/daterangepicker.js"></script>
@@ -194,13 +188,12 @@
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
-									<textarea class="ckeditor" name="content">
+									<textarea class="ckeditor" name="content" id="content">
 										${article.content}
-									</textarea>   
+									</textarea>
 								</div>
 							</div>
 						</div>
-						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
@@ -228,5 +221,32 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
+	<script type="text/javascript">
+	CKEDITOR.replace( 'content', {
+		toolbar :
+            [
+					['Source', 'newPage'],
+	//图片    flash    表格       水平线            表情       特殊字符        分页符
+	                ['Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+	//超链接  取消超链接 锚点
+	                ['Link','Unlink','Anchor'],
+	// 数字列表          实体列表            减小缩进    增大缩进
+	                ['NumberedList','BulletedList','-','Outdent','Indent'],
+	//左对 齐             居中对齐          右对齐          两端对齐
+	                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+	'/',
+	//加粗     斜体，     下划线      穿过线      下标字        上标字
+    ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
+	// 样式       格式      字体    字体大小 
+	                ['Styles','Format','Font','FontSize'],
+	//文本颜色     背景颜色
+	                ['TextColor','BGColor'],
+	//全屏           显示区块
+	                ['Maximize', 'ShowBlocks','-']
+             ]
+         }
+    );
+   </script>
 </body>
 </html>
