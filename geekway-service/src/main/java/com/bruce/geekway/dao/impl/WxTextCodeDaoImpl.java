@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.IWxTextCodeDao;
 import com.bruce.geekway.dao.mapper.WxTextCodeMapper;
 import com.bruce.geekway.model.WxTextCode;
+import com.bruce.geekway.model.WxTextCodeCriteria;
 
 
 @Repository
@@ -46,6 +47,18 @@ public class WxTextCodeDaoImpl implements IWxTextCodeDao, InitializingBean {
     public List<WxTextCode> fallLoadList(Integer tailId, int limit) {
         return null;
     }
+    
+    @Override
+	public WxTextCode loadByCode(String textCode) {
+    	WxTextCodeCriteria criteria = new WxTextCodeCriteria();
+    	criteria.createCriteria().andKeyCodeEqualTo(textCode);
+    	List<WxTextCode> textCodeList =  wxTextCodeMapper.selectByExample(criteria);
+    	if(textCodeList!=null&&textCodeList.size()>0){
+    		return textCodeList.get(0);
+    	}
+    	return null;
+	}
+    
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -59,6 +72,8 @@ public class WxTextCodeDaoImpl implements IWxTextCodeDao, InitializingBean {
 	public void setWxTextCodeMapper(WxTextCodeMapper wxTextCodeMapper) {
 		this.wxTextCodeMapper = wxTextCodeMapper;
 	}
+
+	
 
 
 }

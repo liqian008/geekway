@@ -40,5 +40,8 @@ public class WxTextCodeServiceImpl implements IWxTextCodeService{
 		return wxTextCodeDao.queryAll();
 	}
 	
+	public WxTextCode loadByCode(String textCode){
+		return wxTextCodeDao.loadByCode(textCode);
+	}
 	
 }
