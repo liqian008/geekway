@@ -1,6 +1,10 @@
 package com.bruce.geekway.handler.processor;
 
+import java.util.List;
+
+import com.bruce.geekway.model.WxArticle;
 import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.ClickEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationRequest;
@@ -8,6 +12,7 @@ import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VideoRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 
 
@@ -32,9 +37,9 @@ public abstract class AbstractProcessor implements Processor{
         }else if(request instanceof VoiceRequest){
             //语音默认回复
         	return processVoiceRequest((VoiceRequest)request);
-        }else if(request instanceof EventRequest){
+        }else if(request instanceof ClickEventRequest){
             //菜单点击默认回复
-        	return processEventRequest((EventRequest)request);
+        	return processClickEventRequest((ClickEventRequest)request);
         }else if(request instanceof LocationRequest){
             //位置默认回复
         	return processLocationRequest((LocationRequest)request);
@@ -48,18 +53,31 @@ public abstract class AbstractProcessor implements Processor{
 	protected void preProcess() {
 		//do nothing
 	}
+
+	protected BaseResponse processVideoRequest(VideoRequest request) {
+		return null;
+	}
+
+	protected BaseResponse processTextRequest(TextRequest request) {
+		return null;
+	}
+
+	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
+		return null;
+	}
+
 	
-	protected abstract BaseResponse processTextRequest(TextRequest request);
-	
-	protected abstract BaseResponse processVideoRequest(VideoRequest request);
+	protected BaseResponse processLocationRequest(LocationRequest request) {
+		return null;
+	}
 
-	protected abstract BaseResponse processEventRequest(EventRequest request);
+	protected BaseResponse processVoiceRequest(VoiceRequest request) {
+		return null;
+	}
 
-	protected abstract BaseResponse processLocationRequest(LocationRequest request);
-
-	protected abstract BaseResponse processVoiceRequest(VoiceRequest request);
-
-	protected abstract BaseResponse processImageRequest(ImageRequest request);
+	protected BaseResponse processImageRequest(ImageRequest request) {
+		return null;
+	}
 
 	/**
      * 文本回复
@@ -87,11 +105,27 @@ public abstract class AbstractProcessor implements Processor{
         return textResponse;
     }
     
-//    public int getSort() {
-//		return sort;
-//	}
-//
-//	public void setSort(int sort) {
-//		this.sort = sort;
-//	}
+    /**
+     * 图文回复
+     * @param request
+     * @param content
+     * @return
+     */
+	public static NewsResponse newsReply(BaseRequest request, List<WxArticle> articleList){
+        String fromUserName = request.getFromUserName();
+        String toUserName = request.getToUserName();
+        //交换fromUserName和toUserName
+        return newsReply(fromUserName, toUserName, articleList);
+    }
+
+	private static NewsResponse newsReply(String fromUserName, String toUserName, List<WxArticle> articleList) {
+		if(articleList!=null&&articleList.size()>0){
+			NewsResponse newsResponse = new NewsResponse();
+			for(WxArticle article: articleList){
+				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getLink());
+			}
+			return newsResponse;
+		}
+		return null;
+	}
 }

@@ -9,8 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * MsgId 字段无效
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
-@XmlRootElement(name = "xml")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ClickEventRequest extends EventRequest {
 
     private static final long serialVersionUID = 1L;

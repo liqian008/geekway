@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.handler.MessageHandler;
+import com.bruce.geekway.model.wx.response.BaseResponse;
 
 
 /**
@@ -21,7 +22,8 @@ public class WxEntryController {
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
 		try {
-			messageHandler.processMessage(null);
+			BaseResponse response =  messageHandler.processMessage(null);
+			System.out.println(response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

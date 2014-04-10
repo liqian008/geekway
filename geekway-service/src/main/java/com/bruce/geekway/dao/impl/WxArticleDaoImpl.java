@@ -15,31 +15,31 @@ import com.bruce.geekway.model.WxArticle;
 public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
 
      @Autowired
-    private WxArticleMapper articleMapper;
+    private WxArticleMapper wxArticleMapper;
 
     @Override
     public int save(WxArticle t) {
-        return articleMapper.insert(t);
+        return wxArticleMapper.insert(t);
     }
 
     @Override
     public int updateById(WxArticle t) {
-        return articleMapper.updateByPrimaryKey(t);
+        return wxArticleMapper.updateByPrimaryKey(t);
     }
 
     @Override
     public int deleteById(Integer id) {
-        return articleMapper.deleteByPrimaryKey(id);
+        return wxArticleMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public WxArticle loadById(Integer id) {
-        return articleMapper.selectByPrimaryKey(id);
+        return wxArticleMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public List<WxArticle> queryAll() {
-        return articleMapper.selectByExample(null);
+        return wxArticleMapper.selectByExample(null);
     }
 
     @Override
@@ -54,20 +54,20 @@ public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
 
     @Override
     public List<WxArticle> queryArticlesByModuleId(int moduleId) {
-        return articleMapper.queryArticlesByModuleId(moduleId);
+        return wxArticleMapper.queryArticlesByModuleId(moduleId);
     }
     
     @Override
     public List<WxArticle> queryArticlesOutModuleId(int moduleId) {
-        return articleMapper.queryArticlesOutModuleId(moduleId);
+        return wxArticleMapper.queryArticlesOutModuleId(moduleId);
     }
     
-	public WxArticleMapper getArticleMapper() {
-		return articleMapper;
+	public WxArticleMapper getWxArticleMapper() {
+		return wxArticleMapper;
 	}
 
-	public void setArticleMapper(WxArticleMapper articleMapper) {
-		this.articleMapper = articleMapper;
+	public void setWxArticleMapper(WxArticleMapper wxArticleMapper) {
+		this.wxArticleMapper = wxArticleMapper;
 	}
 
 }

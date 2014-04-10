@@ -19,14 +19,15 @@
 		<property name="wxCustomizeMenuDao" ref="wxCustomizeMenuDao"></property>
 	</bean>
 
-	<bean id="wxArticleService" class="com.bruce.geekway.service.impl.WxArticleServiceImpl">
+	<bean id="articleService" class="com.bruce.geekway.service.impl.WxArticleServiceImpl">
+		<property name="wxArticleDao" ref="wxArticleDao"></property>
 	</bean>
 	
 	<bean id="defaultReplyService" class="com.bruce.geekway.service.impl.WxDefaultReplyServiceImpl">
 		<property name="wxDefaultReplyDao" ref="wxDefaultReplyDao"></property>
 	</bean>
 	
-	<bean id="wxCodeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
+	<bean id="codeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
 	</bean>
 	
 	

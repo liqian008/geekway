@@ -50,5 +50,13 @@ public class WxArticleServiceImpl implements IWxArticleService{
     public List<WxArticle> queryArticlesOutModuleId(int moduleId) { 
         return wxArticleDao.queryArticlesOutModuleId(moduleId);
     }
+
+	public IWxArticleDao getWxArticleDao() {
+		return wxArticleDao;
+	}
+
+	public void setWxArticleDao(IWxArticleDao wxArticleDao) {
+		this.wxArticleDao = wxArticleDao;
+	}
 	
 }

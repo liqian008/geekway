@@ -1,13 +1,17 @@
 package com.bruce.geekway.handler.processor;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.model.WxArticle;
 import com.bruce.geekway.model.WxCustomizeMenu;
 import com.bruce.geekway.model.WxTextCode;
 import com.bruce.geekway.model.wx.request.*;
 import com.bruce.geekway.model.wx.response.*;
+import com.bruce.geekway.service.IWxArticleService;
 import com.bruce.geekway.service.IWxCustomizeMenuService;
 import com.bruce.geekway.service.IWxTextCodeService;
 
@@ -27,6 +31,8 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	@Autowired
     private IWxTextCodeService textCodeService;
 	@Autowired
+    private IWxArticleService articleService;
+	@Autowired
     private IWxCustomizeMenuService customizeMenuService;
     
 	
@@ -36,40 +42,29 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
         
         WxTextCode textCode = textCodeService.loadByCode(code);
         if(textCode!=null){
-        	return textReply(request, textCode.getReplyContent());
+        	if(textCode.getDisplayType()==1){//文本回复
+        		return textReply(request, textCode.getReplyContent());
+        	}else if(textCode.getDisplayType()==2){//图文回复
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(textCode.getModuleId());
+        		return newsReply(request, articleList);
+        	}
         }
 		return null;
 	}
 	
 	@Override
-	protected BaseResponse processVideoRequest(VideoRequest request) {
-		return null;
-	}
-
-	@Override
-	protected BaseResponse processEventRequest(EventRequest request) {
+	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
 		String key = ((EventRequest)request).getEventKey();
-//      return textCodeService.loadByMenuCode(key);
 		
 		WxCustomizeMenu customizeMenu = customizeMenuService.loadByCode(key);
         if(customizeMenu!=null){
-        	return textReply(request, customizeMenu.getReplyContent());
+        	if(customizeMenu.getDisplayType()==1){//文本回复
+        		return textReply(request, customizeMenu.getReplyContent());
+        	}else if(customizeMenu.getDisplayType()==2){//图文回复
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(customizeMenu.getModuleId());
+        		return newsReply(request, articleList);
+        	}
         }
-		return null;
-	}
-
-	@Override
-	protected BaseResponse processLocationRequest(LocationRequest request) {
-		return null;
-	}
-
-	@Override
-	protected BaseResponse processVoiceRequest(VoiceRequest request) {
-		return null;
-	}
-
-	@Override
-	protected BaseResponse processImageRequest(ImageRequest request) {
 		return null;
 	}
 
@@ -87,6 +82,14 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 
 	public void setCustomizeMenuService(IWxCustomizeMenuService customizeMenuService) {
 		this.customizeMenuService = customizeMenuService;
+	}
+
+	public IWxArticleService getArticleService() {
+		return articleService;
+	}
+
+	public void setArticleService(IWxArticleService articleService) {
+		this.articleService = articleService;
 	}
 
 }
