@@ -17,7 +17,7 @@ import com.bruce.geekway.service.IWxArticleService;
 @RequestMapping(value={"mobile"})
 public class SystemController {
 	
-	@Autowired
+//	@Autowired
 	private IWxArticleService wxArticleService;
 	
 	@RequestMapping(value = "/index")

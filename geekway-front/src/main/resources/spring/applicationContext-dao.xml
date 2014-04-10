@@ -12,37 +12,19 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<!-- <util:list id="textProcessorList"> <ref bean="keycodeCmsProcessor"></ref> 
-		<ref bean="defaultReplyProcessor"></ref> </util:list> -->
-	
-	<bean id="messageHandler" class="com.bruce.geekway.handler.MessageHandler">
-		<property name="textProcessorList" ref="textProcessorList"></property>
+	<bean id="wxArticleDao" class="com.bruce.geekway.dao.impl.WxArticleDaoImpl">
 	</bean>
-	
-	<bean id="textProcessorList" class="java.util.ArrayList"> 
-		<constructor-arg>
-			<list>
-				<ref bean="keycodeCmsProcessor"/>
-				<ref bean="defaultReplyProcessor"/>
-			</list>
-		</constructor-arg>
+
+	<bean id="wxTextCodeDao" class="com.bruce.geekway.dao.impl.WxTextCodeDaoImpl">
 	</bean>
-	
-	<bean id="imageProcessorList" class="java.util.ArrayList"> 
-		<constructor-arg>
-			<list>
-				<ref bean="keycodeCmsProcessor"/>
-				<ref bean="defaultReplyProcessor"/>
-			</list>
-		</constructor-arg>
+
+	<bean id="wxDefaultReplyDao" class="com.bruce.geekway.dao.impl.WxDefaultReplyDaoImpl">
 	</bean>
-	
-	<bean id="keycodeCmsProcessor" class="com.bruce.geekway.handler.processor.KeycodeCmsProcessor">
-		<property name="textCodeService" ref="textCodeService"></property>
-		<property name="customizeMenuService" ref="customizeMenuService"></property>
+
+	<bean id="wxCodeModuleDao" class="com.bruce.geekway.dao.impl.WxCodeModuleDaoImpl">
 	</bean>
-	<bean id="defaultReplyProcessor" class="com.bruce.geekway.handler.processor.DefaultReplyProcessor">
-		<property name="defaultReplyService" ref="defaultReplyService"></property>
+
+	<bean id="wxCustomizeMenuDao" class="com.bruce.geekway.dao.impl.WxCustomizeMenuDaoImpl">
 	</bean>
-	
+
 </beans>

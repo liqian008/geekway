@@ -6,23 +6,24 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.handler.processor.DefaultReplyProcessor;
 import com.bruce.geekway.handler.processor.Processor;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.*;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 
 
-@Service
+//@Service
 public class MessageHandler{
 //    @Resource
 //    @Qualifier("textProcessorList")
-	@Autowired
+//	@Autowired
     private List<Processor> textProcessorList;
-	@Autowired
+//	@Autowired
     private List<Processor> imageProcessorList;
-	@Autowired
+//	@Autowired
     private List<Processor> voiceProcessorList;
-	@Autowired
+//	@Autowired
     private List<Processor> eventProcessorList;
 
     protected BaseResponse processTextRequest(TextRequest request) {
@@ -34,7 +35,8 @@ public class MessageHandler{
     }
 
     protected BaseResponse processVoiceRequest(VoiceRequest request) {
-        return process(request, voiceProcessorList);
+    	
+    	return process(request, voiceProcessorList);
     }
 
     protected BaseResponse processEventRequest(EventRequest request) {

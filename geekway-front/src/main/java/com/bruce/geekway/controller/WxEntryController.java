@@ -18,7 +18,6 @@ public class WxEntryController {
 	@Autowired
 	private MessageHandler messageHandler;
 	
-	
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
 		try {
@@ -28,5 +27,6 @@ public class WxEntryController {
 		}
 		return "mobile/index";
 	}
+
 	
 }

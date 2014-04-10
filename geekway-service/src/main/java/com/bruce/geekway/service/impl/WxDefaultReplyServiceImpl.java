@@ -39,6 +39,13 @@ public class WxDefaultReplyServiceImpl implements IWxDefaultReplyService{
 	public List<WxDefaultReply> queryAll() {
 		return wxDefaultReplyDao.queryAll();
 	}
-	
+
+	public IWxDefaultReplyDao getWxDefaultReplyDao() {
+		return wxDefaultReplyDao;
+	}
+
+	public void setWxDefaultReplyDao(IWxDefaultReplyDao wxDefaultReplyDao) {
+		this.wxDefaultReplyDao = wxDefaultReplyDao;
+	}
 	
 }

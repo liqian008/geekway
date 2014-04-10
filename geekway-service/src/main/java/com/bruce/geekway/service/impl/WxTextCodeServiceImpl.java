@@ -43,5 +43,14 @@ public class WxTextCodeServiceImpl implements IWxTextCodeService{
 	public WxTextCode loadByCode(String textCode){
 		return wxTextCodeDao.loadByCode(textCode);
 	}
+
+	public IWxTextCodeDao getWxTextCodeDao() {
+		return wxTextCodeDao;
+	}
+
+	public void setWxTextCodeDao(IWxTextCodeDao wxTextCodeDao) {
+		this.wxTextCodeDao = wxTextCodeDao;
+	}
+	
 	
 }
