@@ -16,14 +16,14 @@ public class EventRequest extends BaseRequest {
 	private String ticket;
 
 	/** 事件类型 */
-	public WxEventTypeEnum Event;
+	public WxEventTypeEnum event;
 
 	public WxEventTypeEnum getEvent() {
-		return Event;
+		return event;
 	}
 
 	public void setEvent(WxEventTypeEnum event) {
-		Event = event;
+		this.event = event;
 	}
 
 	public String getEventKey() {

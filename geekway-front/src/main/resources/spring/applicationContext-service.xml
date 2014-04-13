@@ -12,12 +12,14 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<bean id="textCodeService" class="com.bruce.geekway.service.impl.WxTextCodeServiceImpl">
-		<property name="wxTextCodeDao" ref="wxTextCodeDao"></property>
+	<bean id="eventCodeService" class="com.bruce.geekway.service.impl.WxEventCodeServiceImpl">
+		<property name="wxEventCodeDao" ref="wxEventCodeDao"></property>
 	</bean>
+	<!-- 
 	<bean id="customizeMenuService" class="com.bruce.geekway.service.impl.WxCustomizeMenuServiceImpl">
 		<property name="wxCustomizeMenuDao" ref="wxCustomizeMenuDao"></property>
 	</bean>
+	 -->
 
 	<bean id="articleService" class="com.bruce.geekway.service.impl.WxArticleServiceImpl">
 		<property name="wxArticleDao" ref="wxArticleDao"></property>

@@ -19,7 +19,8 @@
 		<property name="textProcessorList" ref="textProcessorList"></property>
 	</bean>
 	
-	<bean id="textProcessorList" class="java.util.ArrayList"> 
+	<!-- 对于文本请求的处理器列表 -->
+	<bean id="textProcessorList" class="java.util.ArrayList">
 		<constructor-arg>
 			<list>
 				<ref bean="keycodeCmsProcessor"/>
@@ -28,7 +29,8 @@
 		</constructor-arg>
 	</bean>
 	
-	<bean id="imageProcessorList" class="java.util.ArrayList"> 
+	<!-- 对于按钮事件请求的处理器列表 -->
+	<bean id="eventClickProcessorList" class="java.util.ArrayList"> 
 		<constructor-arg>
 			<list>
 				<ref bean="keycodeCmsProcessor"/>
@@ -37,11 +39,24 @@
 		</constructor-arg>
 	</bean>
 	
+	<!-- 对于关注请求的处理器列表 -->
+	<bean id="eventSubscribeProcessorList" class="java.util.ArrayList"> 
+		<constructor-arg>
+			<list>
+				<ref bean="keycodeCmsProcessor"/>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 根据用户输入内容进行回复，应用场景：1、针对自定义菜单的code回复；2、针对订阅事件的回复；3、针对用户输入文本内容的回复 -->
 	<bean id="keycodeCmsProcessor" class="com.bruce.geekway.handler.processor.KeycodeCmsProcessor">
-		<property name="textCodeService" ref="textCodeService"></property>
-		<property name="customizeMenuService" ref="customizeMenuService"></property>
+		<property name="eventCodeService" ref="eventCodeService"></property>
+		<!-- <property name="customizeMenuService" ref="customizeMenuService"></property> -->
 		<property name="articleService" ref="articleService"></property>
 	</bean>
+	
+	<!-- 作为默认处理器，建议将放置在list的最后一个，优先使用其他处理器 -->
 	<bean id="defaultReplyProcessor" class="com.bruce.geekway.handler.processor.DefaultReplyProcessor">
 		<property name="defaultReplyService" ref="defaultReplyService"></property>
 	</bean>

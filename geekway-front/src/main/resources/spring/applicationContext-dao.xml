@@ -15,7 +15,7 @@
 	<bean id="wxArticleDao" class="com.bruce.geekway.dao.impl.WxArticleDaoImpl">
 	</bean>
 
-	<bean id="wxTextCodeDao" class="com.bruce.geekway.dao.impl.WxTextCodeDaoImpl">
+	<bean id="wxEventCodeDao" class="com.bruce.geekway.dao.impl.WxEventCodeDaoImpl">
 	</bean>
 
 	<bean id="wxDefaultReplyDao" class="com.bruce.geekway.dao.impl.WxDefaultReplyDaoImpl">
@@ -23,8 +23,8 @@
 
 	<bean id="wxCodeModuleDao" class="com.bruce.geekway.dao.impl.WxCodeModuleDaoImpl">
 	</bean>
-
+	<!-- 
 	<bean id="wxCustomizeMenuDao" class="com.bruce.geekway.dao.impl.WxCustomizeMenuDaoImpl">
 	</bean>
-
+	 -->
 </beans>

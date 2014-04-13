@@ -8,6 +8,7 @@ import com.bruce.geekway.model.wx.request.ClickEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationRequest;
+import com.bruce.geekway.model.wx.request.SubscribeEventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VideoRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
@@ -37,9 +38,14 @@ public abstract class AbstractProcessor implements Processor{
         }else if(request instanceof VoiceRequest){
             //语音默认回复
         	return processVoiceRequest((VoiceRequest)request);
-        }else if(request instanceof ClickEventRequest){
-            //菜单点击默认回复
-        	return processClickEventRequest((ClickEventRequest)request);
+        }else if(request instanceof EventRequest){//事件请求
+        	if(request instanceof ClickEventRequest){
+                //菜单点击默认回复
+            	return processClickEventRequest((ClickEventRequest)request);
+            }else if(request instanceof SubscribeEventRequest){
+                //关注事件
+            	return processSubscribeEventRequest((SubscribeEventRequest)request); 
+            }
         }else if(request instanceof LocationRequest){
             //位置默认回复
         	return processLocationRequest((LocationRequest)request);
@@ -63,6 +69,10 @@ public abstract class AbstractProcessor implements Processor{
 	}
 
 	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
+		return null;
+	}
+	
+	protected BaseResponse processSubscribeEventRequest(SubscribeEventRequest request) {
 		return null;
 	}
 

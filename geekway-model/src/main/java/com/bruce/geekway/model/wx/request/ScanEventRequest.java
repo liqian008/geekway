@@ -1,8 +1,5 @@
 package com.bruce.geekway.model.wx.request;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 扫描带参数二维码事件 的请求<br>
@@ -10,8 +7,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
-@XmlRootElement(name = "xml")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class ScanEventRequest extends EventRequest {
 
 	private static final long serialVersionUID = 1L;
@@ -40,7 +35,7 @@ public class ScanEventRequest extends EventRequest {
 
 	@Override
 	public String toString() {
-		return "ScanEventRequest [Event=" + Event + ", ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
+		return "ScanEventRequest [Event=" + event + ", ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
 				+ ", MsgId=" + msgId + ", EventKey=" + eventKey + ", Ticket=" + ticket + "]";
 	}
 

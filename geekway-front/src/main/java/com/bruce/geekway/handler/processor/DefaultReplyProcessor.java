@@ -51,6 +51,14 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 		}
 		return null;
 	}
+	
+	@Override
+	protected BaseResponse processSubscribeEventRequest(SubscribeEventRequest request) {
+			if(defaultReply!=null){
+			return textReply(request, defaultReply.getSubscribeReply());
+		}
+		return null;
+	}
 
 	@Override
 	protected BaseResponse processLocationRequest(LocationRequest request) {

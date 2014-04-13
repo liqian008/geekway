@@ -2,9 +2,13 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.WxDefaultReply"%>
+<%@page import="com.bruce.geekway.model.WxCustomizeMenu"%>
+<%@page import="com.bruce.geekway.model.WxCodeModule"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +85,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						默认回复
+						编辑菜单Code
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -93,7 +97,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">默认回复</li>
+					<li class="active">编辑菜单Code</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -104,75 +108,93 @@
 			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>提示</h5>
-				<p>系统在未进行任何配置情况下将使用默认回复，请务必填写完整！</p>
+				<h5>Wide left sidebar layout</h5>
+				<p>Page layout with left aligned wide sidebar, with right
+					aligned icons and 4 level navigation.</p>
 			</div>
 			
 			<%
-			WxDefaultReply defaultReply = (WxDefaultReply)request.getAttribute("defaultReply");
+			WxCustomizeMenu customizeMenu = (WxCustomizeMenu)request.getAttribute("customizeMenu");
 			%>
 
-			<form id="validate" action="<s:url value='./saveDefaultReply'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveCustomizeMenu'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑默认回复
+							<i class="icon-bubble4"></i>编辑菜单Code内容
 						</h6>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">菜单Code:
 							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="textReply" id="textReply" value="${defaultReply.textReply}"/>
-	                            <form:hidden path="defaultReply.id"/>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="menuCode" id="menuCode" value="${customizeMenu.menuCode}"/>
+	                             <form:hidden path="customizeMenu.id"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图片默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">展示类型:
 							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="imageReply" id="imageReply" value="${defaultReply.imageReply}"/>
-	                             
+							<div class="col-sm-2">
+								<form:select path="customizeMenu.displayType" class="form-control">
+									<form:option value="1"  label="文本回复"/>
+									<form:option value="2"  label="数据模块"/>
+								</form:select>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">语音默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">回复文本:
 							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="voiceReply" id="voiceReply" value="${defaultReply.voiceReply}"/>
-	                             
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="replyContent" id="replyContent" value="${customizeMenu.replyContent}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">按钮事件默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">数据模块描述:
 							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="menuClickReply" id="menuClickReply" value="${defaultReply.menuClickReply}"/>
-	                             
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="moduleDesc" id="moduleDesc" value="${customizeMenu.moduleDesc}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">LBS默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">关联数据模块:
 							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="locationReply" id="locationReply" value="${defaultReply.locationReply}"/>
-	                             
+							<div class="col-sm-10">
+								<%
+                               	List<WxCodeModule> codeModuleList = (List<WxCodeModule>)request.getAttribute("codeModuleList");
+                               	
+                               	if(codeModuleList!=null&&codeModuleList.size()>0){
+                               	%>
+                               	<div class="block-inner">
+                               	<%
+                               	for(WxCodeModule codeModule: codeModuleList){
+                               	%>
+                               		<label class="radio-inline radio-info">
+										<input class="styled" type="radio" name="moduleId" id="moduleId_<%=codeModule.getId()%>" value="<%=codeModule.getId()%>" <%=codeModule.getId().equals(customizeMenu.getModuleId())?"checked='checked'":""%>/>
+										<%=codeModule.getModuleName()%>
+									</label>
+                               	<%}%>
+                               	</div>
+                               	<%}%>
 							</div>
 						</div>
 						
+						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">视频默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">状 态:
 							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="videoReply" id="videoReply" value="${defaultReply.videoReply}"/>
-	                             
+							<div class="col-sm-4">
+								<form:select path="customizeMenu.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
 							</div>
 						</div>
 						

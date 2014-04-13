@@ -14,7 +14,9 @@ public enum WxEventTypeEnum {
 	SCAN("scan"),
 	/** 上报地理位置事件 */
 	LOCATION("location"),
-	/** 自定义菜单事件 */
+	/** 自定义菜单链接事件 */
+	VIEW("view"),
+	/** 自定义菜单点击事件 */
 	CLICK("click");
 
 	private final String eventType;

@@ -8,16 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.WxArticle;
 import com.bruce.geekway.model.WxCustomizeMenu;
-import com.bruce.geekway.model.WxTextCode;
+import com.bruce.geekway.model.WxEventCode;
 import com.bruce.geekway.model.wx.request.*;
 import com.bruce.geekway.model.wx.response.*;
 import com.bruce.geekway.service.IWxArticleService;
 import com.bruce.geekway.service.IWxCustomizeMenuService;
-import com.bruce.geekway.service.IWxTextCodeService;
+import com.bruce.geekway.service.IWxEventCodeService;
+import com.bruce.geekway.service.IWxEventCodeService;
 
 /**
  * 根据Key值，返回DB中对应的数据
- * 目前仅支持文本与菜单类型消息
+ * 目前支持1文本、2菜单点击、3订阅消息
  * @author liqian
  *
  */
@@ -29,23 +30,23 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 //	}
 
 	@Autowired
-    private IWxTextCodeService textCodeService;
+    private IWxEventCodeService eventCodeService;
 	@Autowired
     private IWxArticleService articleService;
-	@Autowired
-    private IWxCustomizeMenuService customizeMenuService;
+//	@Autowired
+//    private IWxCustomizeMenuService customizeMenuService;
     
 	
 	@Override
 	protected BaseResponse processTextRequest(TextRequest request) {
 		String code = ((TextRequest)request).getContent();
         
-        WxTextCode textCode = textCodeService.loadByCode(code);
-        if(textCode!=null){
-        	if(textCode.getDisplayType()==1){//文本回复
-        		return textReply(request, textCode.getReplyContent());
-        	}else if(textCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(textCode.getModuleId());
+        WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 1, code);
+        if(eventCode!=null){
+        	if(eventCode.getDisplayType()==1){//文本回复
+        		return textReply(request, eventCode.getReplyContent());
+        	}else if(eventCode.getDisplayType()==2){//图文回复
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId());
         		return newsReply(request, articleList);
         	}
         }
@@ -55,33 +56,39 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	@Override
 	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
 		String key = ((EventRequest)request).getEventKey();
-		
-		WxCustomizeMenu customizeMenu = customizeMenuService.loadByCode(key);
-        if(customizeMenu!=null){
-        	if(customizeMenu.getDisplayType()==1){//文本回复
-        		return textReply(request, customizeMenu.getReplyContent());
-        	}else if(customizeMenu.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(customizeMenu.getModuleId());
+		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 2, key);
+        if(eventCode!=null){
+        	if(eventCode.getDisplayType()==1){//文本回复
+        		return textReply(request, eventCode.getReplyContent());
+        	}else if(eventCode.getDisplayType()==2){//图文回复
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId());
+        		return newsReply(request, articleList);
+        	}
+        }
+		return null;
+	}
+	
+	@Override
+	protected BaseResponse processSubscribeEventRequest(SubscribeEventRequest request) {
+		String key = ((EventRequest)request).getEventKey();
+		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 3, key);
+        if(eventCode!=null){
+        	if(eventCode.getDisplayType()==1){//文本回复
+        		return textReply(request, eventCode.getReplyContent());
+        	}else if(eventCode.getDisplayType()==2){//图文回复
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId());
         		return newsReply(request, articleList);
         	}
         }
 		return null;
 	}
 
-	public IWxTextCodeService getTextCodeService() {
-		return textCodeService;
+	public IWxEventCodeService getEventCodeService() {
+		return eventCodeService;
 	}
 
-	public void setTextCodeService(IWxTextCodeService textCodeService) {
-		this.textCodeService = textCodeService;
-	}
-
-	public IWxCustomizeMenuService getCustomizeMenuService() {
-		return customizeMenuService;
-	}
-
-	public void setCustomizeMenuService(IWxCustomizeMenuService customizeMenuService) {
-		this.customizeMenuService = customizeMenuService;
+	public void setEventCodeService(IWxEventCodeService eventCodeService) {
+		this.eventCodeService = eventCodeService;
 	}
 
 	public IWxArticleService getArticleService() {

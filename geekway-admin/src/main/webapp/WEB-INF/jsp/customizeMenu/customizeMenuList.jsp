@@ -1,12 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.WxCustomizeMenu"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.WxTextCode"%>
-<%@page import="com.bruce.geekway.model.WxCodeModule"%>
-
-<%@ include file="../inc/include_tag.jsp" %>
-
 
 
 
@@ -85,7 +81,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						代码内容
+						菜单Code管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -97,7 +93,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">代码内容</li>
+					<li class="active">菜单Code管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -105,107 +101,66 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>Wide left sidebar layout</h5>
 				<p>Page layout with left aligned wide sidebar, with right
 					aligned icons and 4 level navigation.</p>
 			</div>
-			
-			<%
-			WxTextCode textCode = (WxTextCode)request.getAttribute("textCode");
-			%>
 
-			<form id="validate" action="<s:url value='./saveTextCode'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑代码内容
-						</h6>
-					</div>
-					<div class="panel-body">
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">标 题:
-							</label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="keyCode" id="keyCode" value="${textCode.keyCode}"/>
-	                             <form:hidden path="textCode.id"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">展示类型:
-							</label>
-							<div class="col-sm-2">
-								<form:select path="textCode.displayType" class="form-control">
-									<form:option value="1"  label="文本回复"/>
-									<form:option value="2"  label="数据模块"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">回复文本:
-							</label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="replyContent" id="replyContent" value="${textCode.replyContent}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">数据模块描述:
-							</label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="moduleDesc" id="moduleDesc" value="${textCode.moduleDesc}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关联数据模块:
-							</label>
-							<div class="col-sm-10">
-								<%
-                               	List<WxCodeModule> codeModuleList = (List<WxCodeModule>)request.getAttribute("codeModuleList");
-                               	
-                               	if(codeModuleList!=null&&codeModuleList.size()>0){
-                               	%>
-                               	<div class="block-inner">
-                               	<%
-                               	for(WxCodeModule codeModule: codeModuleList){
-                               	%>
-                               		<label class="radio-inline radio-info">
-										<input class="styled" type="radio" name="moduleId" id="moduleId_<%=codeModule.getId()%>" value="<%=codeModule.getId()%>" <%=codeModule.getId().equals(textCode.getModuleId())?"checked='checked'":""%>/>
-										<%=codeModule.getModuleName()%>
-									</label>
-                               	<%}%>
-                               	</div>
-                               	<%}%>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态:
-							</label>
-							<div class="col-sm-4">
-								<form:select path="textCode.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-					</div>
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>菜单Code管理
+					</h5>
+					<a href="./customizeMenuAdd"><span class="label label-danger pull-right">新增菜单Code</span></a>
 				</div>
-				
-			</form>
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>ID</th>
+                                <th>菜单Code</th>
+                                <th>展示类型</th>
+                                <th>内容</th>
+                                <th>状态</th>
+                                <th class="team-links">操作</th> 
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxCustomizeMenu> customizeMenuList = (List<WxCustomizeMenu>)request.getAttribute("customizeMenuList");
+                           	if(customizeMenuList!=null&&customizeMenuList.size()>0){
+                           		int i=0;
+                           		for(WxCustomizeMenu customizeMenu: customizeMenuList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td><%=customizeMenu.getMenuCode()%></td>
+		                        <td><%=customizeMenu.getDisplayType()==1?"文本回复":"数据模块"%></td>
+		                        <td><%=customizeMenu.getDisplayType()==1?customizeMenu.getReplyContent():"【模块】"+customizeMenu.getModuleDesc()%></td>
+		                        <td>正常</td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="./customizeMenuEdit?customizeMenuId=<%=customizeMenu.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
+										<a href="./delArticle?customizeMenuId=<%=customizeMenu.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="删除"><i class="icon-remove3"></i></a>
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -215,3 +170,4 @@
 	<!-- /page container -->
 </body>
 </html>
+

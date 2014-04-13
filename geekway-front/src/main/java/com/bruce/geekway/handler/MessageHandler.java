@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.handler.processor.DefaultReplyProcessor;
 import com.bruce.geekway.handler.processor.Processor;
+import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.*;
 import com.bruce.geekway.model.wx.response.BaseResponse;
@@ -24,7 +25,11 @@ public class MessageHandler{
 //	@Autowired
     private List<Processor> voiceProcessorList;
 //	@Autowired
-    private List<Processor> eventProcessorList;
+    private List<Processor> eventClickProcessorList;
+    @Autowired
+    private List<Processor> eventSubscribeProcessorList;
+    @Autowired
+    private List<Processor> eventLocationProcessorList;
 
     protected BaseResponse processTextRequest(TextRequest request) {
         return process(request, textProcessorList);
@@ -38,9 +43,17 @@ public class MessageHandler{
     	
     	return process(request, voiceProcessorList);
     }
-
-    protected BaseResponse processEventRequest(EventRequest request) {
-        return process(request, eventProcessorList);
+    
+    protected BaseResponse processEventSubscribeRequest(EventRequest request) { 
+        return process(request, eventSubscribeProcessorList);
+    }
+    
+    protected BaseResponse processEventClickRequest(EventRequest request) {
+        return process(request, eventClickProcessorList);
+    }
+    
+    protected BaseResponse processEventLocationRequest(EventRequest request) {
+        return process(request, eventLocationProcessorList);
     }
     
     public BaseResponse processMessage(String xml) throws Exception{
@@ -49,16 +62,44 @@ public class MessageHandler{
 //        if ((msgType = ele.elementText("MsgType")) == null) {
 ////            throw new WxException("cannot find MsgType Node!\n" + xml);
 //        }
-        WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.TEXT;//WxMsgTypeEnum.instance(msgType); 
+        WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.EVENT;//WxMsgTypeEnum.instance(msgType); 
         switch (msgTypeEnum) {
         case TEXT:
 //            TextRequest textRequest = WxXmlUtil.getMsgText(ele);
             TextRequest textRequest = new TextRequest();
             textRequest.setContent("welcome");
             return processTextRequest(textRequest);
-        case EVENT:
-            
-        default:
+        case EVENT:{
+        	WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.CLICK;//WxEventTypeEnum.instance(""); 
+        	switch(eventTypeEnum){
+        		case SUBSCRIBE: {//订阅关注
+        			SubscribeEventRequest subscribeEventRequest = new SubscribeEventRequest();
+                    return processEventSubscribeRequest(subscribeEventRequest);
+        		}
+        		case CLICK: {//点击菜单
+        			ClickEventRequest clickEventRequest = new ClickEventRequest(WxEventTypeEnum.CLICK.toString());
+        			clickEventRequest.setEventKey("welcome");
+                    return processEventClickRequest(clickEventRequest);
+        		}
+        		case VIEW: {//点击菜单
+        			ClickEventRequest clickEventRequest = new ClickEventRequest(WxEventTypeEnum.VIEW.toString());
+                    return processEventClickRequest(clickEventRequest);
+        		}
+        		case LOCATION: {//上报location位置
+        			LocationEventRequest locationEventRequest = new LocationEventRequest();
+                    return processEventLocationRequest(locationEventRequest);
+        		}
+        		case SCAN: {
+        			//TODO
+        		}
+        		case UNSUBSCRIBE: {//退订
+        			//do nothing
+        		}
+        		default: {
+        			//do nothing
+        		}
+        	}
+        }default:
             return null;
         }
     }
@@ -106,12 +147,29 @@ public class MessageHandler{
         this.voiceProcessorList = voiceProcessorList;
     }
 
-    public List<Processor> getEventProcessorList() {
-        return eventProcessorList;
-    }
+	public List<Processor> getEventClickProcessorList() {
+		return eventClickProcessorList;
+	}
 
-    public void setEventProcessorList(List<Processor> eventProcessorList) {
-        this.eventProcessorList = eventProcessorList;
-    }
+	public void setEventClickProcessorList(List<Processor> eventClickProcessorList) {
+		this.eventClickProcessorList = eventClickProcessorList;
+	}
+
+	public List<Processor> getEventSubscribeProcessorList() {
+		return eventSubscribeProcessorList;
+	}
+
+	public void setEventSubscribeProcessorList(List<Processor> eventSubscribeProcessorList) {
+		this.eventSubscribeProcessorList = eventSubscribeProcessorList;
+	}
+
+	public List<Processor> getEventLocationProcessorList() {
+		return eventLocationProcessorList;
+	}
+
+	public void setEventLocationProcessorList(List<Processor> eventLocationProcessorList) {
+		this.eventLocationProcessorList = eventLocationProcessorList;
+	}
+    
 
 }

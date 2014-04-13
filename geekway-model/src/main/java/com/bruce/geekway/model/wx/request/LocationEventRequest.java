@@ -51,7 +51,7 @@ public class LocationEventRequest extends EventRequest {
 
 	@Override
 	public String toString() {
-		return "LocationEventRequest [Event=" + Event + ", ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
+		return "LocationEventRequest [Event=" + event + ", ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
 				+ ", MsgId=" + msgId + ", Latitude=" + latitude + ", Longitude=" + longitude + ", Precision=" + precision + "]";
 	}
 
