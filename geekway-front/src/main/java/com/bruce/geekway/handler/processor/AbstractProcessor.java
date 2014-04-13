@@ -3,6 +3,8 @@ package com.bruce.geekway.handler.processor;
 import java.util.List;
 
 import com.bruce.geekway.model.WxArticle;
+import com.bruce.geekway.model.wx.WxEventTypeEnum;
+import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
 import com.bruce.geekway.model.wx.request.ClickEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
@@ -39,13 +41,17 @@ public abstract class AbstractProcessor implements Processor{
             //语音默认回复
         	return processVoiceRequest((VoiceRequest)request);
         }else if(request instanceof EventRequest){//事件请求
-        	if(request instanceof ClickEventRequest){
-                //菜单点击默认回复
-            	return processClickEventRequest((ClickEventRequest)request);
-            }else if(request instanceof SubscribeEventRequest){
-                //关注事件
-            	return processSubscribeEventRequest((SubscribeEventRequest)request); 
-            }
+        	EventRequest eventRequest = (EventRequest) request;
+        	//获取具体事件类型
+        	WxEventTypeEnum eventType = ((EventRequest)request).getEvent();
+        	if(WxEventTypeEnum.SUBSCRIBE.equals(eventType)){//订阅事件
+        		//关注事件
+            	return processSubscribeEventRequest(eventRequest);
+        	}else if(WxEventTypeEnum.CLICK.equals(eventType)){//点击事件
+            	return processClickEventRequest(eventRequest); 
+        	}else if(WxEventTypeEnum.VIEW.equals(eventType)){//View事件
+            	return processClickEventRequest(eventRequest); 
+        	}
         }else if(request instanceof LocationRequest){
             //位置默认回复
         	return processLocationRequest((LocationRequest)request);
@@ -68,11 +74,11 @@ public abstract class AbstractProcessor implements Processor{
 		return null;
 	}
 
-	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
+	protected BaseResponse processClickEventRequest(EventRequest request) {
 		return null;
 	}
 	
-	protected BaseResponse processSubscribeEventRequest(SubscribeEventRequest request) {
+	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
 		return null;
 	}
 
@@ -118,7 +124,7 @@ public abstract class AbstractProcessor implements Processor{
     /**
      * 图文回复
      * @param request
-     * @param content
+     * @param Content
      * @return
      */
 	public static NewsResponse newsReply(BaseRequest request, List<WxArticle> articleList){
@@ -130,7 +136,7 @@ public abstract class AbstractProcessor implements Processor{
 
 	private static NewsResponse newsReply(String fromUserName, String toUserName, List<WxArticle> articleList) {
 		if(articleList!=null&&articleList.size()>0){
-			NewsResponse newsResponse = new NewsResponse();
+			NewsResponse newsResponse = new NewsResponse(fromUserName, toUserName);
 			for(WxArticle article: articleList){
 				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getLink());
 			}

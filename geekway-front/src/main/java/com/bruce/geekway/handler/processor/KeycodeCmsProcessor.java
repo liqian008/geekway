@@ -54,7 +54,7 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	}
 	
 	@Override
-	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
+	protected BaseResponse processClickEventRequest(EventRequest request) {
 		String key = ((EventRequest)request).getEventKey();
 		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 2, key);
         if(eventCode!=null){
@@ -69,8 +69,8 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	}
 	
 	@Override
-	protected BaseResponse processSubscribeEventRequest(SubscribeEventRequest request) {
-		String key = ((EventRequest)request).getEventKey();
+	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
+		String key = "";
 		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 3, key);
         if(eventCode!=null){
         	if(eventCode.getDisplayType()==1){//文本回复

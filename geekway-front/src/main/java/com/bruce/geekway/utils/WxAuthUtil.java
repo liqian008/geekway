@@ -1,47 +1,33 @@
-package com.bruce.geekway.service.impl;
+package com.bruce.geekway.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.wx.WxAuth;
-import com.bruce.geekway.model.wx.json.response.WxAuthResult;
-import com.bruce.geekway.utils.JsonUtil;
-import com.bruce.geekway.utils.WxUtil;
 
 @Service
-public class WxAuthService {
+public class WxAuthUtil {
 	
-	private static final Logger log = LoggerFactory.getLogger(WxAuthService.class);
+	public static String weixinToken = ConfigUtil.getString("token");
 	
-	public WxAuthResult getAccessToken(String appid, String appsecret) {
-		
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("grant_type", "client_credential");
-		params.put("appid", appid);
-		params.put("secret", appsecret);
-		
-		String authResult = WxUtil.sendGetRequest("", params);
-		WxAuthResult wxAuthRes = JsonUtil.gson.fromJson(authResult, WxAuthResult.class);
-		return wxAuthRes;
-	}
+	private static final Logger log = LoggerFactory.getLogger(WxAuthUtil.class);
 
-	public boolean validateAuth(String signature, String timestamp, String nonce, String echostr) {
+	public static boolean validateAuth(String signature, String timestamp, String nonce, String echostr) {
 		WxAuth authReq = new WxAuth();
 		authReq.setSignature(signature);
 		authReq.setTimestamp(timestamp);
 		authReq.setNonce(nonce);
 		authReq.setEchostr(echostr);
 
-		String excepted = hash(getStringToHash(timestamp, nonce, ""));
+		
+		String excepted = hash(getStringToHash(timestamp, nonce, weixinToken));
 
 		if (signature == null || !signature.equals(excepted)) {
 			log.error("Authentication failed! excepted echostr ->" + excepted);
@@ -79,6 +65,5 @@ public class WxAuthService {
 		}
 		return null;
 	}
-
 
 }

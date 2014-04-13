@@ -11,16 +11,16 @@ public class VoiceResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     public VoiceResponse() {
-        msgType = "voice";
+        MsgType = "voice";
     }
 
     /** 通过上传多媒体文件，得到的id。 */
-    public Integer mediaId;
+    public Integer MediaId;
 
     @Override
     public String toString() {
-        return "VoiceResponse [ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
-                + ", MediaId=" + mediaId + "]";
+        return "VoiceResponse [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime + ", MsgType=" + MsgType
+                + ", MediaId=" + MediaId + "]";
     }
 
 }

@@ -12,34 +12,71 @@ public class NewsResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     public NewsResponse() {
-        msgType = "news";
+        MsgType = "news";
     }
 
+    public NewsResponse(String toUserName, String fromUserName) {
+    	super(toUserName, fromUserName);
+    	MsgType = "news";
+    }
+    
+    
     /** 图文消息个数，限制为10条以内 */
-    public int ArticleCount;
+    private int ArticleCount;
 
     /** 多条图文消息信息，默认第一个item为大图,注意，如果图文数超过10，则将会无响应 */
-    public List<Item> Articles = new ArrayList<Item>();
+    private List<Item> Articles = new ArrayList<Item>();
 
-    static class Item {
+    public static class Item {
 
         /** 图文消息标题 */
-        public String title;
+        private String title;
 
         /** 图文消息描述 */
-        public String description;
+        private String description;
 
         /** 图片链接，支持JPG、PNG格式，较好的效果为大图360*200，小图200*200 */
-        public String picUrl;
+        private String picUrl;
 
         /** 点击图文消息跳转链接 */
-        public String url;
+        private String url;
 
-        @Override
+		public String getTitle() {
+			return title;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public String getPicUrl() {
+			return picUrl;
+		}
+
+		public void setPicUrl(String picUrl) {
+			this.picUrl = picUrl;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public void setUrl(String url) {
+			this.url = url;
+		}
+		
+		@Override
         public String toString() {
             return "Item [Title=" + title + ", Description=" + description + ", PicUrl=" + picUrl + ", Url=" + url + "]";
         }
-
     }
 
     /**
@@ -62,8 +99,24 @@ public class NewsResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "NewsResponse [ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
+        return "NewsResponse [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime + ", MsgType=" + MsgType
                 + ", ArticleCount=" + ArticleCount + ", Articles=" + Articles + "]";
     }
 
+	public int getArticleCount() {
+		return ArticleCount;
+	}
+
+	public void setArticleCount(int articleCount) {
+		ArticleCount = articleCount;
+	}
+
+	public List<Item> getArticles() {
+		return Articles;
+	}
+
+	public void setArticles(List<Item> articles) {
+		Articles = articles;
+	}
+    
 }

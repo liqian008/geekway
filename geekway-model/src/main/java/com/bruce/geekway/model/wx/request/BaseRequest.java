@@ -29,6 +29,10 @@ public class BaseRequest implements Serializable {
 	/** 消息id，64位整型（事件消息{@link SubscribeEventRequest}没有该属性） */
 	public String msgId;
 
+	public BaseRequest(){
+		super();
+	}
+	
 	public String getToUserName() {
 		return toUserName;
 	}

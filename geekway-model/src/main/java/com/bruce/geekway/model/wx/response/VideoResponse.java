@@ -9,67 +9,65 @@ import javax.xml.bind.annotation.XmlRootElement;
  * MsgType 是 video
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
-@XmlRootElement(name = "xml")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class VideoResponse extends BaseResponse {
 
     private static final long serialVersionUID = 1L;
 
     public VideoResponse() {
-        msgType = "video";
+        MsgType = "video";
     }
 
     /** 通过上传多媒体文件，得到的id。 */
-    public Integer mediaId;
+    public Integer MediaId;
 
     /** 视频消息的标题 */
-    public Integer title;
+    public Integer Title;
 
     /** 视频消息的描述 */
-    public Integer description;
+    public Integer Description;
 
     
     
     public Integer getMediaId() {
-		return mediaId;
+		return MediaId;
 	}
 
 
 
 	public void setMediaId(Integer mediaId) {
-		this.mediaId = mediaId;
+		this.MediaId = mediaId;
 	}
 
 
 
 	public Integer getTitle() {
-		return title;
+		return Title;
 	}
 
 
 
 	public void setTitle(Integer title) {
-		this.title = title;
+		this.Title = title;
 	}
 
 
 
 	public Integer getDescription() {
-		return description;
+		return Description;
 	}
 
 
 
 	public void setDescription(Integer description) {
-		this.description = description;
+		this.Description = description;
 	}
 
 
 
 	@Override
     public String toString() {
-        return "VideoResponse [ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
-                + ", MediaId=" + mediaId + ", Title=" + title + ", Description=" + description + "]";
+        return "VideoResponse [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime + ", MsgType=" + MsgType
+                + ", MediaId=" + MediaId + ", Title=" + Title + ", Description=" + Description + "]";
     }
 
 }

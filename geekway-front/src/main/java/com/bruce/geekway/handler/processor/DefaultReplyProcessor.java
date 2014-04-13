@@ -45,7 +45,7 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 	}
 
 	@Override
-	protected BaseResponse processClickEventRequest(ClickEventRequest request) {
+	protected BaseResponse processClickEventRequest(EventRequest request) {
 			if(defaultReply!=null){
 			return textReply(request, defaultReply.getMenuClickReply());
 		}
@@ -53,7 +53,7 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 	}
 	
 	@Override
-	protected BaseResponse processSubscribeEventRequest(SubscribeEventRequest request) {
+	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
 			if(defaultReply!=null){
 			return textReply(request, defaultReply.getSubscribeReply());
 		}

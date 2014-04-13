@@ -1,6 +1,6 @@
 package com.bruce.geekway.model.wx;
 
-public class WxAuthReq {
+public class WxAuth {
 	
 	private String signature;
 	private String timestamp;
@@ -9,7 +9,7 @@ public class WxAuthReq {
 
 	public String getSignature() {
 		return signature;
-	}
+	} 
 
 	public void setSignature(String signature) {
 		this.signature = signature;

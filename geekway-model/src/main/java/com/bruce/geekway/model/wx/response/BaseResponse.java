@@ -15,63 +15,63 @@ public abstract class BaseResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** 接收方帐号（收到的OpenID），自动赋值 */
-    public String toUserName;
+    public String ToUserName;
 
     /** 开发者微信号，自动赋值 */
-    public String fromUserName;
+    public String FromUserName;
 
     /** 消息创建时间，自动赋值 */
-    public String createTime;
+    public String CreateTime;
 
     /** 消息类型，自动赋值 */
-    public String msgType;
+    public String MsgType;
 
     public String getToUserName() {
-        return toUserName;
+        return ToUserName;
     }
     
     public BaseResponse() {
     }
-
-    public BaseResponse(String toUserName, String fromUserName) {
-        this.toUserName = toUserName;
-        this.fromUserName = fromUserName;
-        this.createTime = String.valueOf(System.currentTimeMillis());
+    
+    protected BaseResponse(String toUserName, String fromUserName) {
+        this.ToUserName = toUserName;
+        this.FromUserName = fromUserName;
+        this.CreateTime = String.valueOf(System.currentTimeMillis());
     }
 
     public void setToUserName(String toUserName) {
-        this.toUserName = toUserName;
+        this.ToUserName = toUserName;
     }
 
     public String getFromUserName() {
-        return fromUserName;
+        return FromUserName;
     }
 
     public void setFromUserName(String fromUserName) {
-        this.fromUserName = fromUserName;
+        this.FromUserName = fromUserName;
     }
 
     public String getCreateTime() {
-        return createTime;
+        return CreateTime;
     }
 
     public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+        this.CreateTime = createTime;
     }
 
     public String getMsgType() {
-        return msgType;
+        return MsgType;
     }
 
     public void setMsgType(String msgType) {
-        this.msgType = msgType;
+        this.MsgType = msgType;
     }
 
     @Override
     public String toString() {
-        return "AbstractResponse [ToUserName=" + toUserName + ", FromUserName="
-                + fromUserName + ", CreateTime=" + createTime + ", MsgType="
-                + msgType + "]";
+        return "AbstractResponse [ToUserName=" + ToUserName + ", FromUserName="
+                + FromUserName + ", CreateTime=" + CreateTime + ", MsgType="
+                + MsgType + "]";
     }
 
 }

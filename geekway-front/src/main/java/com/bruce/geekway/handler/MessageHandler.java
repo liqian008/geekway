@@ -3,15 +3,22 @@ package com.bruce.geekway.handler;
 
 import java.util.List;
 
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.handler.processor.DefaultReplyProcessor;
 import com.bruce.geekway.handler.processor.Processor;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
+import com.bruce.geekway.model.wx.WxMsgRespTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.*;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.NewsResponse;
+import com.bruce.geekway.model.wx.response.TextResponse;
+import com.bruce.geekway.utils.WxXmlUtil;
 
 
 //@Service
@@ -57,33 +64,42 @@ public class MessageHandler{
     }
     
     public BaseResponse processMessage(String xml) throws Exception{
-//        Element ele = DocumentHelper.parseText(xml).getRootElement();
-//        String msgType = null;
-//        if ((msgType = ele.elementText("MsgType")) == null) {
-////            throw new WxException("cannot find MsgType Node!\n" + xml);
-//        }
-        WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.EVENT;//WxMsgTypeEnum.instance(msgType); 
+        Element ele = DocumentHelper.parseText(xml).getRootElement();
+        String msgType = ele.elementText("MsgType");
+        if (msgType == null) {
+        	throw new Exception("cannot find MsgType Node!" + xml);
+        }
+        WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.instance(msgType);
         switch (msgTypeEnum) {
         case TEXT:
-//            TextRequest textRequest = WxXmlUtil.getMsgText(ele);
-            TextRequest textRequest = new TextRequest();
-            textRequest.setContent("welcome");
+        	TextRequest textRequest = WxXmlUtil.getMsgText(ele);
             return processTextRequest(textRequest);
         case EVENT:{
-        	WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.CLICK;//WxEventTypeEnum.instance(""); 
+        	String event = ele.elementText("Event");
+        	if (event == null) {
+            	throw new Exception("cannot find Event Node!" + xml);
+            }
+        	WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.instance(event); 
         	switch(eventTypeEnum){
         		case SUBSCRIBE: {//订阅关注
-        			SubscribeEventRequest subscribeEventRequest = new SubscribeEventRequest();
-                    return processEventSubscribeRequest(subscribeEventRequest);
+//        			SubscribeEventRequest subscribeEventRequest = new SubscribeEventRequest();
+//                    return processEventSubscribeRequest(subscribeEventRequest);
+        			
+        			EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+                	return processEventSubscribeRequest(eventRequest);
         		}
         		case CLICK: {//点击菜单
-        			ClickEventRequest clickEventRequest = new ClickEventRequest(WxEventTypeEnum.CLICK.toString());
-        			clickEventRequest.setEventKey("welcome");
-                    return processEventClickRequest(clickEventRequest);
+//        			ClickEventRequest clickEventRequest = (ClickEventRequest) WxXmlUtil.getMsgEvent(ele);
+//                    return processEventClickRequest(clickEventRequest);
+        			EventRequest eventRequest =WxXmlUtil.getMsgEvent(ele);
+                	return processEventClickRequest(eventRequest);
         		}
         		case VIEW: {//点击菜单
-        			ClickEventRequest clickEventRequest = new ClickEventRequest(WxEventTypeEnum.VIEW.toString());
-                    return processEventClickRequest(clickEventRequest);
+//        			ClickEventRequest clickEventRequest = new ClickEventRequest(WxEventTypeEnum.VIEW.toString());
+//                    return processEventClickRequest(clickEventRequest);
+        			
+        			EventRequest eventRequest =WxXmlUtil.getMsgEvent(ele);
+                	return processEventClickRequest(eventRequest);
         		}
         		case LOCATION: {//上报location位置
         			LocationEventRequest locationEventRequest = new LocationEventRequest();
@@ -102,6 +118,27 @@ public class MessageHandler{
         }default:
             return null;
         }
+    }
+    
+    public String parseXMLResp(BaseResponse response) throws Exception{
+    	WxMsgRespTypeEnum responseType = WxMsgRespTypeEnum.instance(response.getMsgType());
+		switch (responseType) {
+			case NEWS:
+				return WxXmlUtil.buildNewsResponse((NewsResponse) response).asXML();
+			case TEXT:
+				return WxXmlUtil.buildTextResponse((TextResponse) response).asXML();
+//			case IMAGE:
+//				return WxXmlUtil.getRespImage((WxRespImageEntity) resp);
+//			case MUSIC:
+//				return WxXmlUtil.getRespMusic((WxRespMusicEntity) resp, ((WxRespMusicEntity) resp).getThumb());
+//			case VIDEO:
+//				return WxXmlUtil.getRespVideo((WxRespVideoEntity) resp);
+//			case VOICE:
+//				return WxXmlUtil.getRespVoice((WxRespVoiceEntity) resp);
+			default:
+				break;
+		}
+		return null;
     }
     
     /**

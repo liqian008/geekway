@@ -11,16 +11,16 @@ public class ImageResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     public ImageResponse() {
-        msgType = "image";
+        MsgType = "image";
     }
 
     /** 通过上传多媒体文件，得到的id。 */
-    public String mediaId;
+    public String MediaId;
 
     @Override
     public String toString() {
-        return "ImageResponse [ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
-                + ", MediaId=" + mediaId + "]";
+        return "ImageResponse [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime + ", MsgType=" + MsgType
+                + ", MediaId=" + MediaId + "]";
     }
 
 }

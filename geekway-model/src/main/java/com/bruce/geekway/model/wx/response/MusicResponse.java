@@ -10,7 +10,7 @@ public class MusicResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     public MusicResponse() {
-        msgType = "music";
+        MsgType = "music";
     }
 
     /** 音乐标题 */
@@ -30,7 +30,7 @@ public class MusicResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "MusicResponse [ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType
+        return "MusicResponse [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime + ", MsgType=" + MsgType
                 + ", Title=" + Title + ", Description=" + Description + ", MusicURL=" + MusicURL + ", HQMusicUrl=" + HQMusicUrl + ", ThumbMediaId="
                 + ThumbMediaId + "]";
     }

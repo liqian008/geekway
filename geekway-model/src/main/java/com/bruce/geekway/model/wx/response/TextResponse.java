@@ -11,34 +11,34 @@ public class TextResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     /** 回复的消息内容（换行：在content中能够换行，微信客户端就支持换行显示） （长度不超过2048字节） */
-    public String content;
+    public String Content;
     
     public TextResponse() {
-        msgType = "text";
+        MsgType = "text";
     }
     
     public TextResponse(String toUserName, String fromUserName, String content) {
-        msgType = "text";
-        this.toUserName = toUserName;
-        this.fromUserName = fromUserName;
-        this.createTime = String.valueOf(System.currentTimeMillis());
-        this.content = content;
+        MsgType = "text";
+        this.ToUserName = toUserName;
+        this.FromUserName = fromUserName;
+        this.CreateTime = String.valueOf(System.currentTimeMillis());
+        this.Content = content;
     }
     
 
     public String getContent() {
-        return content;
+        return Content;
     }
 
     public void setContent(String content) {
-        this.content = content;
+        this.Content = content;
     }
 
     @Override
     public String toString() {
-        return "TextResponse [ToUserName=" + toUserName + ", FromUserName="
-                + fromUserName + ", CreateTime=" + createTime + ", MsgType="
-                + msgType + ", Content=" + content + "]";
+        return "TextResponse [ToUserName=" + ToUserName + ", FromUserName="
+                + FromUserName + ", CreateTime=" + CreateTime + ", MsgType="
+                + MsgType + ", Content=" + Content + "]";
     }
 
 }
