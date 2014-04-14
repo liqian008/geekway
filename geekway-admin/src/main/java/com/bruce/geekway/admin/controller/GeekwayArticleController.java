@@ -79,5 +79,4 @@ public class GeekwayArticleController extends BaseController{
 		model.addAttribute("redirectUrl", "./articleList");
 		return "forward:/home/operationRedirect";
 	}
-
 }

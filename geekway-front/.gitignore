@@ -1,4 +1,7 @@
 /target
-/.settings
 /.project
+/.settings
 /.classpath
+/.gitignore
+/.DS_Store
+/.springBeans
