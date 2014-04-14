@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.wx.json.WxMenuBtnEntity"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.WxDefaultReply"%>
 
-<%@ include file="../inc/include_tag.jsp" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +80,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						默认回复
+						菜单Code管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -93,7 +92,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">默认回复</li>
+					<li class="active">查看自定义菜单</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -101,93 +100,55 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>提示</h5>
-				<p>系统在未进行任何配置情况下将使用默认回复，请务必填写完整！</p>
+				<h5>Wide left sidebar layout</h5>
+				<p>Page layout with left aligned wide sidebar, with right
+					aligned icons and 4 level navigation.</p>
 			</div>
-			
-			<%
-			WxDefaultReply defaultReply = (WxDefaultReply)request.getAttribute("defaultReply");
-			%>
 
-			<form id="validate" action="<s:url value='./saveDefaultReply'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑默认回复
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">订阅默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-	                            <form:hidden path="defaultReply.id"/>
-								<textarea name="subscribeReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.subscribeReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<textarea name="textReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.textReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图片默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<textarea name="imageReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.imageReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">语音默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-	                          	<textarea name="voiceReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.voiceReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">按钮事件默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<textarea name="menuClickReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.menuClickReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">LBS默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-	                            <textarea name="locationReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.locationReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">视频默认回复: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-	                            <textarea name="videoReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.videoReply}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-					</div>
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>查看自定义菜单
+					</h5>
 				</div>
-				
-			</form>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th>Level</th>
+                                <th>名称</th>
+                                <th>Key</th>
+                                <th>类型</th>
+                                <th>链接</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxMenuBtnEntity> menuButtonList = (List<WxMenuBtnEntity>)request.getAttribute("menuButtonList");
+                           	if(menuButtonList!=null&&menuButtonList.size()>0){
+                           		int i=0;
+                           		for(WxMenuBtnEntity menuButton: menuButtonList){ 
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=menuButton.getLevel()%>级</td>
+		                        <td><%=menuButton.getKey()%></td>
+		                        <td><%=menuButton.getName()%></td>
+		                        <td><%=menuButton.getType()%></td>
+		                        <td><a href="<%=menuButton.getUrl()%>" target="_blank">查看</a></td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /table view -->
+			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -197,3 +158,4 @@
 	<!-- /page container -->
 </body>
 </html>
+

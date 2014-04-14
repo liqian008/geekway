@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.bruce.baseAdmin.controller.BaseController;
@@ -82,28 +83,9 @@ public class GeekwayArticleController extends BaseController{
 		return "forward:/home/operationRedirect";
 	}
 
-	// 处理文件上传一
-	@RequestMapping(value = "/articleImgUpload", method = RequestMethod.POST)
-	public String fileUpload(Model model, @RequestParam("upload") CommonsMultipartFile file, @RequestParam("CKEditorFuncNum")String callback) {
-//		// 获取文件类型
-//		System.out.println(file.getContentType());
-//		// 获取文件大小
-//		System.out.println(file.getSize());
-//		// 获取文件名称
-//		System.out.println(file.getOriginalFilename());
-//		
-//		// 判断文件是否存在
-//		if (!file.isEmpty()) {
-//			String path = "/home/liqian/" + file.getOriginalFilename();
-//			File localFile = new File(path);
-//			try {
-//				file.transferTo(localFile);
-//			} catch (IllegalStateException e) {
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
+	//处理ckEditor文件上传
+	@RequestMapping(value = "/ckEditorImageUpload", method = RequestMethod.POST)
+	public String ckEditorImageUpload(Model model, @RequestParam("upload") CommonsMultipartFile file, @RequestParam("CKEditorFuncNum")String callback) {
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
@@ -114,6 +96,21 @@ public class GeekwayArticleController extends BaseController{
 			e.printStackTrace();
 		}
 		return "article/uploadResult";
+	}
+	
+	// 处理图片上传
+	@ResponseBody
+	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
+	public Object imageUpload(Model model, @RequestParam("imageFile") CommonsMultipartFile file) {
+		try {
+			WebUserDetails userDetail = getUserInfo();
+			int userId = userDetail.getUserId();
+			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), userId, file.getOriginalFilename());
+			return imageUploadResult;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 }

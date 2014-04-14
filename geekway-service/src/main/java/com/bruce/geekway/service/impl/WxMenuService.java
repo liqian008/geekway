@@ -21,7 +21,7 @@ import com.bruce.geekway.utils.WxUtil;
 @Service
 public class WxMenuService extends WxBaseService {
 	
-	private static String accessToken = "GlKBMMuX_RnMVnrpo-2aH6a_IAv4VA6gKiIr3aP3BUs246ThqU8UKsZixOGWweyS83PvWbz6FWjFqR8DUzQCz3tW_Zmd163BGvNOrYsUeNMo8EMTFqOUVEXcryy52iXUPj4hfENFeVyEKKlRa3u0Gw";
+	private String accessToken = "GlKBMMuX_RnMVnrpo-2aH6a_IAv4VA6gKiIr3aP3BUs246ThqU8UKsZixOGWweyS83PvWbz6FWjFqR8DUzQCz3tW_Zmd163BGvNOrYsUeNMo8EMTFqOUVEXcryy52iXUPj4hfENFeVyEKKlRa3u0Gw";
 
 	public WxJsonResult menuCreate(String accessToken, List<WxMenuBtnEntity> menuList) {
 		Map<String, String> params = getAccessTokenParams(accessToken);
@@ -53,11 +53,20 @@ public class WxMenuService extends WxBaseService {
 	}
 	
 	
-	public static void main(String[] args) {
-		WxMenuService menuService = new WxMenuService();
-		
-		WxMenuQueryResult result = menuService.menuGet(accessToken);
-		System.out.println(result);
+//	public static void main(String[] args) {
+//		WxMenuService menuService = new WxMenuService();
+//		WxMenuQueryResult result = menuService.menuGet(accessToken);
+//		System.out.println(result);
+//	}
+
+	public String getAccessToken() {
+		return accessToken;
 	}
 
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+	
+	
+	
 }

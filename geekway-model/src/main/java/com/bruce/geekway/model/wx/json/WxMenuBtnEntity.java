@@ -1,5 +1,6 @@
 package com.bruce.geekway.model.wx.json;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WxMenuBtnEntity {
@@ -8,8 +9,25 @@ public class WxMenuBtnEntity {
 	private String url;
 	private String name;
 	private String type;
+	private int level;
 	private WxMenuBtnEntity parent_button;
 	private List<WxMenuBtnEntity> sub_button;
+	
+	public WxMenuBtnEntity(){
+		super();
+	}
+	
+	public WxMenuBtnEntity(String key, String name){
+		this.key = key;
+		this.name = name;
+	}
+	
+	public void addSubButton(WxMenuBtnEntity sub){
+		if(sub_button==null || sub_button.size()<=0){
+			sub_button = new ArrayList<WxMenuBtnEntity>();
+		}
+		sub_button.add(sub);
+	}
 
 	public String getKey() {
 		return key;
@@ -59,6 +77,18 @@ public class WxMenuBtnEntity {
 		this.sub_button = sub_button;
 	}
 
-	
+	public int getLevel() {
+		return level;
+	}
 
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return key+"_"+level;
+	}
+	
 }
