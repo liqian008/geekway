@@ -161,15 +161,18 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">封面图链接:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">封面图:<span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${article.coverImageUrl}"/>
-							
+							<div class="col-sm-4">
 								<!-- 
+								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${article.coverImageUrl}"/>
 								<img src="http://www.jinwanr.com.cn/staticFile/image/20140306/medium/100012_bb6d4f45aacd9b97a91063cda17cd3b3.jpg" width="160px"/>
-								<input type="file" class="styled">
-								 -->
+								-->
+								<a href="${article.coverImageUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${article.coverImageUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${article.coverImageUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
 
@@ -178,7 +181,7 @@
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
-									<textarea name="shortContent" rows="3" cols="5" class="limited form-control" placeholder="上限100字">${article.shortContent}</textarea>
+									<textarea name="shortContent" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${article.shortContent}</textarea>
 								</div>
 							</div>
 						</div>
@@ -221,6 +224,36 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+	    $("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	});
+	</script>
 	
 	<script type="text/javascript">
 	CKEDITOR.replace( 'content', {
