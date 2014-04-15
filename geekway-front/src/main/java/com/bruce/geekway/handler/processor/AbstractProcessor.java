@@ -17,6 +17,7 @@ import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
+import com.bruce.geekway.utils.ArticleLinkUtil;
 
 
 public abstract class AbstractProcessor implements Processor{
@@ -138,7 +139,7 @@ public abstract class AbstractProcessor implements Processor{
 		if(articleList!=null&&articleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(fromUserName, toUserName);
 			for(WxArticle article: articleList){
-				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getLink());
+				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), ArticleLinkUtil.getArticleLink(article.getId()));
 			}
 			return newsResponse;
 		}

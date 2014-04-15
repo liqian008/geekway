@@ -3,10 +3,9 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.WxCodeModule"%>
+<%@page import="com.bruce.geekway.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
-
-
 
 
 <!DOCTYPE html>
@@ -114,7 +113,6 @@
 			
 			<%
 			WxCodeModule codeModule = (WxCodeModule)request.getAttribute("codeModule");
-			
 			%>
 
 			<form id="validate" action="<s:url value='./saveCodeModule'/>" method="post"  class="form-horizontal form-bordered">
@@ -143,6 +141,16 @@
 								</form:select>
 							</div>
 						</div>
+						
+						<%if(codeModule!=null&&codeModule.getId()!=null){%>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">文章链接: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="" value="<%=ArticleLinkUtil.getArticlesLink(codeModule.getId())%>"/>
+							</div>
+						</div>
+						<%}%>
 						
 						
 						<div class="form-actions text-right">

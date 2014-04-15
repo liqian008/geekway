@@ -38,5 +38,5 @@ CKEDITOR.editorConfig = function( config ) {
 	//预览区域显示内容
 	config.image_previewText=' '; 
 	//upload img url
-	config.filebrowserImageUploadUrl= "articleImgUpload";
+	config.filebrowserImageUploadUrl= "ckEditorImageUpload";
 };

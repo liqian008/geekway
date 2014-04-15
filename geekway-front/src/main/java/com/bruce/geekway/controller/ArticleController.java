@@ -15,10 +15,10 @@ import com.bruce.geekway.service.IWxArticleService;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value={"mobile"})
+@RequestMapping(value={"m"})
 public class ArticleController {
 	
-//	@Autowired
+	@Autowired
 	private IWxArticleService wxArticleService;
 	
 	@RequestMapping(value = "/index")

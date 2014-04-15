@@ -11,9 +11,9 @@
 		<title>ArticleInfo</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-		<link type="text/css" rel="stylesheet" href="css/style.css" />
+		<link type="text/css" rel="stylesheet" href="/geekway-front/mobile/css/style.css" />
 
-		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="/geekway-front/mobile/js/jquery.min.js"></script>
 		<!-- 
 		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" />
 		<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
@@ -45,7 +45,6 @@
 				if(article!=null){
 				%>	
 				<article>
-					<img src="<%=article.getCoverImageUrl()%>" />
 					<h2><a href="blog-single-post.html#"><%=article.getTitle()%></a></h2>
 					<p>
 						<%=article.getContent()%>

@@ -88,11 +88,12 @@ public class NewsResponse extends BaseResponse {
      * @param PicUrl
      *            图片链接，支持JPG、PNG格式，较好的效果为大图720*400，小图100*100
      */
-    public void addArticle(String Title, String Description, String PicUrl) {
+    public void addArticle(String Title, String Description, String PicUrl, String Url) {
         Item item = new Item();
         item.title = Title;
         item.description = Description;
         item.picUrl = PicUrl;
+        item.url = Url;
         Articles.add(item);
         ArticleCount = Articles.size();
     }

@@ -3,6 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.WxArticle"%>
+<%@page import="com.bruce.geekway.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
@@ -197,6 +198,16 @@
 								</div>
 							</div>
 						</div>
+						
+						<%if(article!=null&&article.getId()!=null){%>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">文章链接: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="" value="<%=ArticleLinkUtil.getArticleLink(article.getId())%>"/>
+							</div>
+						</div>
+						<%}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
