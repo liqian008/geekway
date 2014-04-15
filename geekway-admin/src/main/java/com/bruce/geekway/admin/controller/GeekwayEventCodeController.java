@@ -76,6 +76,7 @@ public class GeekwayEventCodeController {
 			//文本回复情况下，重新初始化数据
 			eventCode.setModuleDesc("");
 			eventCode.setModuleId(0);
+			eventCode.setRowLimit((short) 0);
 		}else if(2==eventCode.getDisplayType()){
 			eventCode.setReplyContent("");
 			

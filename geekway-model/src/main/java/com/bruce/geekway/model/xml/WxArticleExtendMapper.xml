@@ -3,9 +3,16 @@
 <mapper namespace="com.bruce.geekway.dao.mapper.WxArticleMapper">
 
 	<!-- 查询指定moduleId的article列表 -->
-	<select id="queryArticlesByModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	<select id="queryArticlesByModuleId" resultMap="BaseResultMap">
 		select <include refid="Article_Base_Column_List" /> from wx_article wa, wx_code_module_article wcma where wcma.article_id = wa.id and wcma.module_id=#{moduleId,jdbcType=INTEGER} order by wcma.top_time desc;
+	</select>
+	
+	
+	<!-- limit查询指定moduleId的article列表 -->
+	<select id="queryArticlesByModuleIdLimit" resultMap="BaseResultMap">
+		select <include refid="Article_Base_Column_List" /> from wx_article wa, wx_code_module_article wcma where wcma.article_id = wa.id and wcma.module_id=#{moduleId} order by wcma.top_time desc limit #{limit};
 	</select> 
+	 
 	
 	<!-- 查询不在moduleId中的article列表，供添加 -->
 	<select id="queryArticlesOutModuleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">

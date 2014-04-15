@@ -46,7 +46,7 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
         	if(eventCode.getDisplayType()==1){//文本回复
         		return textReply(request, eventCode.getReplyContent());
         	}else if(eventCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId());
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId(), eventCode.getRowLimit());
         		return newsReply(request, articleList);
         	}
         }
@@ -61,7 +61,7 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
         	if(eventCode.getDisplayType()==1){//文本回复
         		return textReply(request, eventCode.getReplyContent());
         	}else if(eventCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId());
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId(), eventCode.getRowLimit());
         		return newsReply(request, articleList);
         	}
         }
@@ -76,7 +76,7 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
         	if(eventCode.getDisplayType()==1){//文本回复
         		return textReply(request, eventCode.getReplyContent());
         	}else if(eventCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId());
+        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId(), eventCode.getRowLimit());
         		return newsReply(request, articleList);
         	}
         }

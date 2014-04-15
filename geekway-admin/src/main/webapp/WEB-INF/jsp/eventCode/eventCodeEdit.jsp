@@ -193,11 +193,17 @@
 										<%=codeModule.getModuleName()%>
 									</label>
                                	<%}%>
-                               	</div>
+                               	</div> 
                                	<%}%>
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">微信展示条数: <span class="mandatory">*</span></label>
+							<div class="col-sm-1">
+								<input type="text" class="form-control" name="rowLimit" id="rowLimit" value="${eventCode.rowLimit}"/>
+							</div>
+						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态:

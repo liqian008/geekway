@@ -80,7 +80,14 @@ public interface WxArticleMapper {
      * @param moduleId
      * @return
      */
-    List<WxArticle> queryArticlesByModuleId(int moduleId);
+    List<WxArticle> queryArticlesByModuleId(@Param("moduleId")int moduleId);
+    
+    /**
+     * 根据查询moduleId相关的文章
+     * @param moduleId
+     * @return
+     */
+    List<WxArticle> queryArticlesByModuleIdLimit(@Param("moduleId")int moduleId, @Param("limit")int limit);
     
     /**
      * 根据查询moduleId不相关的文章

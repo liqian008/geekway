@@ -1,6 +1,6 @@
 package com.bruce.geekway.model.wx.json.response;
 
-public class WxAuthResult {
+public class WxAuthResult extends WxJsonResult {
 
 	private String access_token;
 	private long expires_in;

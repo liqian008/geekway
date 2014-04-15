@@ -4,6 +4,21 @@
 <%@page import="com.bruce.geekway.model.wx.json.WxMenuBtnEntity"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
+<%!
+public String displayMenuName(String name, int level){
+	StringBuilder sb = new StringBuilder();
+	if(level>1){
+		sb.append("|");
+		for(int i=1;i<level;i++){
+			sb.append("——");			
+		}
+		sb.append(" ");
+	}
+	sb.append(name);
+	return sb.toString();
+}
+%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -120,7 +135,7 @@
 						<thead>
 							<tr>
 								<th>Level</th>
-                                <th>名称</th>
+                                <th>菜单名称</th>
                                 <th>Key</th>
                                 <th>类型</th>
                                 <th>链接</th>
@@ -136,10 +151,15 @@
                            	%>
 							<tr>
 		                        <td><%=menuButton.getLevel()%>级</td>
-		                        <td><%=menuButton.getKey()%></td>
-		                        <td><%=menuButton.getName()%></td>
-		                        <td><%=menuButton.getType()%></td>
-		                        <td><a href="<%=menuButton.getUrl()%>" target="_blank">查看</a></td>
+		                        <td><%=displayMenuName(menuButton.getName(), menuButton.getLevel())%></td>
+		                        <td><%=menuButton.getKey()==null?"":menuButton.getKey()%></td>
+		                        <td><%=menuButton.getType()==null?"":menuButton.getType()%></td>
+		                        <td>
+		                        	<%
+		                        	if("view".equalsIgnoreCase(menuButton.getType())){%>
+		                        		<a href="<%=menuButton.getUrl()%>" target="_blank">点击</a>
+		                        	<%}%>
+		                        </td>
                                </tr>
 							<%}
                            	} %>

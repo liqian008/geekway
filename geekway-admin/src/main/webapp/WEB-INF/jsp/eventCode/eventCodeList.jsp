@@ -152,7 +152,12 @@
 		                        <td><%=displayEventType(eventCode.getEventType())%></td>
 		                        <td><%=eventCode.getEventCode()%></td>
 		                        <td><%=eventCode.getDisplayType()==1?"固定文本":"动态数据"%></td>
-		                        <td><%=eventCode.getDisplayType()==1?eventCode.getReplyContent():"【模块】"+eventCode.getModuleDesc()%></td>
+		                        
+		                        <%
+		                        boolean isCodeModule = eventCode.getDisplayType()==2;
+		                        %>
+		                        
+		                        <td title="<%=isCodeModule?"上限"+eventCode.getRowLimit()+"条":""%>" ><%=isCodeModule?"【模块】"+eventCode.getModuleDesc():eventCode.getReplyContent()%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

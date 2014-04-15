@@ -26,16 +26,16 @@ public class GeekwayMpCustomizeMenuController {
 	
 	@RequestMapping("/mpMenuList")
 	public String mpMenuList(Model model, HttpServletRequest request) {
-//		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet(wxMenuService.getAccessToken());
-//		if(menuQueryResult!=null){
-//			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
-//			if(menuJsonObj!=null){
-//				List<WxMenuBtnEntity> menuButtonList = buildMenuList(new ArrayList<WxMenuBtnEntity>(), menuJsonObj.getButton(), 1);
-//				model.addAttribute("menuButtonList", menuButtonList);
-//			}
-//		}
+		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet();
+		if(menuQueryResult!=null){
+			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
+			if(menuJsonObj!=null){
+				List<WxMenuBtnEntity> menuButtonList = buildMenuList(new ArrayList<WxMenuBtnEntity>(), menuJsonObj.getButton(), 1);
+				model.addAttribute("menuButtonList", menuButtonList);
+			}
+		}
+//		model.addAttribute("menuButtonList", buildMenuList(new ArrayList<WxMenuBtnEntity>(), getMockMenuList(), 1));
 		
-		model.addAttribute("menuButtonList", buildMenuList(new ArrayList<WxMenuBtnEntity>(), getMockMenuList(), 1));
 		return "mp/menuList";
 	}
 	
@@ -82,7 +82,7 @@ public class GeekwayMpCustomizeMenuController {
 		GeekwayMpCustomizeMenuController instance = new GeekwayMpCustomizeMenuController();
 		
 		WxMenuService wxMenuService = new WxMenuService();
-		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet(wxMenuService.getAccessToken());
+		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet();
 		if(menuQueryResult!=null){
 			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
 			if(menuJsonObj!=null){

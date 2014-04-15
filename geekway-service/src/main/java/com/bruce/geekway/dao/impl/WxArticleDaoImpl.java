@@ -58,6 +58,11 @@ public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
     }
     
     @Override
+	public List<WxArticle> queryArticlesByModuleId(int moduleId, int limit){
+    	return wxArticleMapper.queryArticlesByModuleIdLimit(moduleId, limit);
+	}
+    
+    @Override
     public List<WxArticle> queryArticlesOutModuleId(int moduleId) {
         return wxArticleMapper.queryArticlesOutModuleId(moduleId);
     }
@@ -69,5 +74,7 @@ public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
 	public void setWxArticleMapper(WxArticleMapper wxArticleMapper) {
 		this.wxArticleMapper = wxArticleMapper;
 	}
+
+	
 
 }
