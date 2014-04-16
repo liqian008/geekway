@@ -3,6 +3,7 @@ package com.bruce.geekway.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +25,7 @@ public class WxEntryController {
 	private MessageHandler messageHandler;
 
 	@ResponseBody
-	@RequestMapping(value="/auth", method = { RequestMethod.GET})
+	@RequestMapping(value="/api", method = { RequestMethod.GET})
 	public String authGet(@RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce,
 			@RequestParam("echostr") String echostr) {
 		if (WxAuthUtil.validateAuth(signature, timestamp, nonce, echostr)) {
@@ -33,22 +34,23 @@ public class WxEntryController {
 		return "";
 	}
 
-	@ResponseBody
-	@RequestMapping(value="/message", method = {RequestMethod.GET, RequestMethod.POST})
-	public String message(Model model) {
+	@RequestMapping(value="/api", method = {RequestMethod.POST})
+	public String message(Model model, @RequestBody String xml) {
+		String response =  "";
 		try {
-			BaseResponse baseResponse = messageHandler.processMessage(null);
+			System.out.println("wx xml: "+xml);
+			BaseResponse baseResponse = messageHandler.processMessage(xml);
 			if (baseResponse != null) {
-				String response = messageHandler.parseXMLResp(baseResponse);
-				return response;
+				response = messageHandler.parseXMLResp(baseResponse);
+				System.out.println("response: "+response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		model.addAttribute("response", response);
+		return "wx/response";
 	}
 
-	@ResponseBody
 	@RequestMapping(value = "/mockMessage")
 	public String mockMessage(Model model, String type) throws Exception {
 		BaseResponse baseResponse = null;
@@ -63,7 +65,11 @@ public class WxEntryController {
 		}
 		System.out.println(baseResponse);
 		String response = messageHandler.parseXMLResp(baseResponse);
-		return response;
+		if(response==null){
+			response = "";
+		}
+		model.addAttribute("response", response);
+		return "wx/response";
 	}
 
 }

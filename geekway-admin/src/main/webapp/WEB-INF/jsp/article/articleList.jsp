@@ -3,7 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.bruce.geekway.model.WxArticle"%>
 <%@page import="java.text.SimpleDateFormat"%>
-
+<%@page import="com.bruce.geekway.utils.*"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -103,9 +103,11 @@
 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍：</h5>
+				<p>
+					1、点击封面图，可预览大图<br/>
+					2、点击【编辑】按钮，可对文章进行编辑
+				</p>
 			</div>
 
 			<!-- Table view -->
@@ -124,6 +126,7 @@
                                 <th>封面</th>
                                 <th>标题</th>
                                 <th>短标题</th>
+                                <th>链接</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -145,6 +148,7 @@
 		                        </td>
 		                        <td><%=article.getTitle()%></td>
 		                        <td><%=article.getShortTitle()%></td>
+		                        <td><a href='<%=ArticleLinkUtil.getArticleLink(article.getId())%>' target="_blank">预览</a></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

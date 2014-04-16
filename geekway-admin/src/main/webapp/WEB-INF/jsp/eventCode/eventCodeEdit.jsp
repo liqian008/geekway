@@ -108,9 +108,12 @@
 			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍：</h5>
+				<p>
+					回复类型支持两种方式： <br/>
+					1、固定文本的回复方式<br/>
+					2、图文集的回复方式（需事先创建相应的文章模块以做关联）
+				</p>
 			</div>
 			
 			<%
@@ -149,7 +152,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">展示类型:
+							<label class="col-sm-2 control-label text-right">回复类型:
 							</label>
 							<div class="col-sm-2">
 								<form:select path="eventCode.displayType" class="form-control">
@@ -163,7 +166,7 @@
 							<label class="col-sm-2 control-label text-right">回复固定文本:
 							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="replyContent" id="replyContent" value="${eventCode.replyContent}"/>
+								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${eventCode.replyContent}</textarea>
 							</div>
 						</div>
 						

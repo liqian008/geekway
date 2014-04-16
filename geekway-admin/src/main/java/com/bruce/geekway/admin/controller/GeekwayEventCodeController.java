@@ -80,10 +80,15 @@ public class GeekwayEventCodeController {
 		}else if(2==eventCode.getDisplayType()){
 			eventCode.setReplyContent("");
 			
+			
 			int codeModuleId = eventCode.getModuleId();
 			WxCodeModule codeModule = wxCodeModuleService.loadById(codeModuleId);
 			if(codeModule!=null){
 				eventCode.setModuleDesc(codeModule.getModuleName());
+				
+				if(eventCode.getRowLimit()!=null&&eventCode.getRowLimit()<=0){
+					eventCode.setRowLimit((short) 4);
+				}
 			}
 		}
 		

@@ -102,9 +102,11 @@
 			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍</h5>
+				<p>
+					录入文章支持Html可视化编辑，需注意以下几点： <br/>
+					1、在可视化编辑器中上传图片后，需手动将图片尺寸改为100%<br/>
+				</p>
 			</div>
 
 			<!-- WYSIWYG editor inside panel -->

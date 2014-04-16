@@ -118,9 +118,10 @@ public String displayMenuName(String name, int level){
 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍</h5>
+				<p>
+					此菜单项内容取自微信公众账户官方平台。出于微信平台的访问限制，每天访问此功能的次数不应超过100次<br/>
+				</p>
 			</div>
 
 			<!-- Table view -->

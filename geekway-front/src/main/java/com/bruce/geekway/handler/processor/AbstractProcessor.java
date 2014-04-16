@@ -118,7 +118,7 @@ public abstract class AbstractProcessor implements Processor{
      * @return
      */
     protected static TextResponse textReply(String toUserName, String fromUserName, String content){
-        TextResponse textResponse = new TextResponse(fromUserName, toUserName, content);
+        TextResponse textResponse = new TextResponse(toUserName, fromUserName, content);
         return textResponse;
     }
     
@@ -135,9 +135,9 @@ public abstract class AbstractProcessor implements Processor{
         return newsReply(fromUserName, toUserName, articleList);
     }
 
-	private static NewsResponse newsReply(String fromUserName, String toUserName, List<WxArticle> articleList) {
+	private static NewsResponse newsReply(String toUserName, String fromUserName, List<WxArticle> articleList) {
 		if(articleList!=null&&articleList.size()>0){
-			NewsResponse newsResponse = new NewsResponse(fromUserName, toUserName);
+			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
 			for(WxArticle article: articleList){
 				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), ArticleLinkUtil.getArticleLink(article.getId()));
 			}

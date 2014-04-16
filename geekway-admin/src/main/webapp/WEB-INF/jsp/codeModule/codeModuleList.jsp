@@ -103,9 +103,11 @@
 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍：</h5>
+				<p>
+					1、点击【关联】按钮，即可在【文章模块】中添加【文章】<br/>
+					2、操作员可在【接入代码管理】中将“关键字”与“文章模块”进行关联。
+				</p>
 			</div>
 
 			<!-- Table view -->

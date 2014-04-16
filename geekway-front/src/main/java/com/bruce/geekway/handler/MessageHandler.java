@@ -64,7 +64,8 @@ public class MessageHandler{
     }
     
     public BaseResponse processMessage(String xml) throws Exception{
-        Element ele = DocumentHelper.parseText(xml).getRootElement();
+        System.out.println("request xml: "+xml);
+    	Element ele = DocumentHelper.parseText(xml).getRootElement();
         String msgType = ele.elementText("MsgType");
         if (msgType == null) {
         	throw new Exception("cannot find MsgType Node!" + xml);

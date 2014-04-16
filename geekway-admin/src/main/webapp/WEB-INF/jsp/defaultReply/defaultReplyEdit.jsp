@@ -104,8 +104,8 @@
 			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>提示</h5>
-				<p>系统在未进行任何配置情况下将使用默认回复，请务必填写完整！</p>
+				<h5>功能介绍</h5>
+				<p>系统在匹配不到关键词的情况下将使用默认回复，请务必填写完整！</p>
 			</div>
 			
 			<%

@@ -113,9 +113,13 @@
 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍：</h5>
+				<p>
+					本功能支持3种类型的接入方式： <br/>
+					1、文本内容<br/>
+					2、菜单点击的EventKey（通常应用于有自定义菜单的公众账户）<br/>
+					3、用户关注事件
+				</p>
 			</div>
 
 			<!-- Table view -->
@@ -157,7 +161,9 @@
 		                        boolean isCodeModule = eventCode.getDisplayType()==2;
 		                        %>
 		                        
-		                        <td title="<%=isCodeModule?"上限"+eventCode.getRowLimit()+"条":""%>" ><%=isCodeModule?"【模块】"+eventCode.getModuleDesc():eventCode.getReplyContent()%></td>
+		                        <td title="<%=isCodeModule?"上限"+eventCode.getRowLimit()+"条":""%>" >
+		                        	<%=isCodeModule?"【模块】"+eventCode.getModuleDesc():eventCode.getReplyContent()%>
+		                        </td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
