@@ -105,7 +105,10 @@
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
-				<p>系统在匹配不到关键词的情况下将使用默认回复，请务必填写完整！</p>
+				<p>
+					1、本系统的关键词匹配策略为： 【接入代码】-> 【默认回复】，即优先匹配【接入代码管理】中的数据，如未找到，则针对消息类型使用【默认回复】的内容进行回复<br/>
+					2、请务必完整填写各类型消息的默认回复
+				</p>
 			</div>
 			
 			<%
@@ -124,7 +127,7 @@
 					<div class="panel-body">
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">订阅默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">新关注用户的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 	                            <form:hidden path="defaultReply.id"/>
@@ -133,7 +136,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">文本消息的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<textarea name="textReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.textReply}</textarea>
@@ -141,7 +144,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图片默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">图片消息的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<textarea name="imageReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.imageReply}</textarea>
@@ -149,7 +152,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">语音默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">语音消息的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 	                          	<textarea name="voiceReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.voiceReply}</textarea>
@@ -157,7 +160,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">按钮事件默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">按钮事件的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<textarea name="menuClickReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.menuClickReply}</textarea>
@@ -165,7 +168,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">LBS默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">LBS消息的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 	                            <textarea name="locationReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.locationReply}</textarea>
@@ -173,7 +176,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">视频默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">视频消息的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 	                            <textarea name="videoReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.videoReply}</textarea>

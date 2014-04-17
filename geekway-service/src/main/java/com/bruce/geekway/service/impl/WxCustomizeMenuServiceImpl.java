@@ -40,9 +40,9 @@ public class WxCustomizeMenuServiceImpl implements IWxCustomizeMenuService{
 		return wxCustomizeMenuDao.queryAll();
 	}
 	
-	public WxCustomizeMenu loadByCode(String textCode){
-		return wxCustomizeMenuDao.loadByCode(textCode);
-	}
+//	public WxCustomizeMenu loadByCode(String textCode){
+//		return wxCustomizeMenuDao.loadByCode(textCode);
+//	}
 
 	public IWxCustomizeMenuDao getWxCustomizeMenuDao() {
 		return wxCustomizeMenuDao;

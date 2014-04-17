@@ -4,6 +4,6 @@ import com.bruce.geekway.model.WxCustomizeMenu;
 
 public interface IWxCustomizeMenuDao extends IBaseDao<WxCustomizeMenu, Integer> {
 
-	public WxCustomizeMenu loadByCode(String menuCode);
+//	public WxCustomizeMenu loadByCode(String menuCode);
 	
 }

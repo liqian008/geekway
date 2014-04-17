@@ -29,8 +29,8 @@ public class WxMenuService extends WxBaseService {
 	 */
 	public WxJsonResult menuCreate(WxMenuCreateJson menuCreateJson) {
 		if(menuCreateJson!=null){
-			WxAuthResult authResult = getAccessToken(ConfigUtil.getString("weixinmp_menu_create_url"), ConfigUtil.getString("weixinmp_menu_create_url"));
-			if(authResult!=null && authResult.getErrcode()!=null){
+			WxAuthResult authResult = getWxAccessToken();
+			if(authResult!=null && authResult.getErrcode()==null){
 				String accessToken = authResult.getAccess_token();
 				Map<String, String> params = getAccessTokenParams(accessToken);
 				//创建菜单
@@ -52,8 +52,8 @@ public class WxMenuService extends WxBaseService {
 	@Deprecated
 	public WxJsonResult menuCreate(List<WxMenuBtnEntity> menuList) {
 		if(menuList!=null&&menuList.size()>0){
-			WxAuthResult authResult = getAccessToken(ConfigUtil.getString("weixinmp_menu_create_url"), ConfigUtil.getString("weixinmp_menu_create_url"));
-			if(authResult!=null && authResult.getErrcode()!=null){
+			WxAuthResult authResult = getWxAccessToken();
+			if(authResult!=null && authResult.getErrcode()==null){
 				String accessToken = authResult.getAccess_token();
 				Map<String, String> params = getAccessTokenParams(accessToken);
 				//构造菜单的json对象
@@ -69,6 +69,7 @@ public class WxMenuService extends WxBaseService {
 		}
 		return null;
 	}
+
 	
 	/**
 	 * 获取自定义菜单
@@ -76,8 +77,7 @@ public class WxMenuService extends WxBaseService {
 	 * @return
 	 */
 	public WxMenuQueryResult menuGet() {
-		
-		WxAuthResult authResult = getAccessToken(ConfigUtil.getString("weixinmp_appid"), ConfigUtil.getString("weixinmp_appsecret"));
+		WxAuthResult authResult = getWxAccessToken();
 		if(authResult!=null && authResult.getErrcode()==null){
 			String accessToken = authResult.getAccess_token();
 			Map<String, String> params = getAccessTokenParams(accessToken);
@@ -95,8 +95,8 @@ public class WxMenuService extends WxBaseService {
 	 * @return
 	 */
 	public WxJsonResult menuDelete() {
-		WxAuthResult authResult = getAccessToken(ConfigUtil.getString("weixinmp_menu_create_url"), ConfigUtil.getString("weixinmp_menu_create_url"));
-		if(authResult!=null && authResult.getErrcode()!=null){
+		WxAuthResult authResult = getWxAccessToken();
+		if(authResult!=null && authResult.getErrcode()==null){
 			String accessToken = authResult.getAccess_token();
 			Map<String, String> params = getAccessTokenParams(accessToken);
 		
@@ -108,6 +108,10 @@ public class WxMenuService extends WxBaseService {
 		return null;
 	}
 	
+	private WxAuthResult getWxAccessToken() {
+		WxAuthResult authResult = getAccessToken(ConfigUtil.getString("weixinmp_appid"), ConfigUtil.getString("weixinmp_appsecret"));
+		return authResult;
+	}
 	
 //	public static void main(String[] args) {
 //		WxMenuService menuService = new WxMenuService();

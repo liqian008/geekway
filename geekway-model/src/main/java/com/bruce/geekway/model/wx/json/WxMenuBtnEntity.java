@@ -17,9 +17,10 @@ public class WxMenuBtnEntity {
 		super();
 	}
 	
-	public WxMenuBtnEntity(String key, String name){
+	public WxMenuBtnEntity(String key, String name, String type){
 		this.key = key;
 		this.name = name;
+		this.type = type;
 	}
 	
 	public void addSubButton(WxMenuBtnEntity sub){

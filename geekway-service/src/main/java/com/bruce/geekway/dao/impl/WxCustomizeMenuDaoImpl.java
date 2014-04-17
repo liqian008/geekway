@@ -47,16 +47,16 @@ public class WxCustomizeMenuDaoImpl implements IWxCustomizeMenuDao, Initializing
         return null;
     }
     
-    @Override
-	public WxCustomizeMenu loadByCode(String menuCode) {
-    	WxCustomizeMenuCriteria criteria = new WxCustomizeMenuCriteria();
-    	criteria.createCriteria().andMenuCodeEqualTo(menuCode);
-    	List<WxCustomizeMenu> textCodeList =  wxCustomizeCodeMapper.selectByExample(criteria);
-    	if(textCodeList!=null&&textCodeList.size()>0){
-    		return textCodeList.get(0);
-    	}
-    	return null;
-	}
+//    @Override
+//	public WxCustomizeMenu loadByCode(String menuCode) {
+//    	WxCustomizeMenuCriteria criteria = new WxCustomizeMenuCriteria();
+//    	criteria.createCriteria().andMenuCodeEqualTo(menuCode);
+//    	List<WxCustomizeMenu> textCodeList =  wxCustomizeCodeMapper.selectByExample(criteria);
+//    	if(textCodeList!=null&&textCodeList.size()>0){
+//    		return textCodeList.get(0);
+//    	}
+//    	return null;
+//	}
     
     @Override
     public void afterPropertiesSet() throws Exception {

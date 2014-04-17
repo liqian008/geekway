@@ -44,8 +44,8 @@
 					for(WxArticle article: articleList){
 				%>	
 					<article>
-					<img src="<%=article.getCoverImageUrl()%>" />
-					<h2><a href="./article?articleId=<%=article.getId()%>"><%=article.getShortTitle()%></a></h2>
+					<a href="../article/<%=article.getId()%>"><img src="<%=article.getCoverImageUrl()%>" /></a>
+					<h2><a href="../article/<%=article.getId()%>"><%=article.getShortTitle()%></a></h2>
 					<p>
 						<%=article.getShortContent() %>
 					</p>

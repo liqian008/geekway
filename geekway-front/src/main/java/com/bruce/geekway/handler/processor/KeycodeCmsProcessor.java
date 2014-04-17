@@ -70,7 +70,7 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	
 	@Override
 	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
-		String key = "";
+		String key = "subscribe";
 		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 3, key);
         if(eventCode!=null){
         	if(eventCode.getDisplayType()==1){//文本回复

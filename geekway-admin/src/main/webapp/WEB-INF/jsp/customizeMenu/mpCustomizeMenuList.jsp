@@ -120,55 +120,84 @@ public String displayMenuName(String name, int level){
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					此菜单项内容取自微信公众账户官方平台。出于微信平台的访问限制，每天访问此功能的次数不应超过100次<br/>
+					1、此菜单项内容取自微信公众账户官方平台。出于微信平台的访问限制，每天访问此功能的次数不应超过100次<br/>
+					2、目前自定义菜单最多包括3个一级菜单，每个一级菜单最多包含5个二级菜单。一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替。<br/>
+					3、请注意，创建自定义菜单后，由于微信客户端缓存，需要24小时微信客户端才会展现出来。建议测试时可以尝试取消关注公众账号后再次关注，则可以看到创建后的效果。
 				</p>
 			</div>
-
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>查看自定义菜单
-					</h5>
+			
+			<div class="tabbable page-tabs">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="javascript:void(0)">
+							<i class="icon-table2"></i>线上自定义菜单
+						</a>
+					</li>
+					<li class="">
+						<a href="javascript:void(0)">
+							<i class="icon-hammer"></i>本地自定义菜单
+						</a>
+					</li>
+				</ul>
+			
+				<!-- Table view -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h5 class="panel-title">
+							<i class="icon-people"></i>查看自定义菜单
+						</h5>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-check">
+							<thead>
+								<tr>
+									<th>Level</th>
+	                                <th>菜单名称</th>
+	                                <th>Key</th>
+	                                <th>类型</th>
+	                                <th>链接</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+	                           	List<WxMenuBtnEntity> menuButtonList = (List<WxMenuBtnEntity>)request.getAttribute("menuButtonList");
+	                           	if(menuButtonList!=null&&menuButtonList.size()>0){
+	                           		int i=0;
+	                           		for(WxMenuBtnEntity menuButton: menuButtonList){ 
+	                           			i++;
+	                           	%>
+								<tr>
+			                        <td><%=menuButton.getLevel()%>级</td>
+			                        <td><%=displayMenuName(menuButton.getName(), menuButton.getLevel())%></td>
+			                        <td><%=menuButton.getKey()==null?"":menuButton.getKey()%></td>
+			                        <td><%=menuButton.getType()==null?"":menuButton.getType()%></td>
+			                        <td>
+			                        	<%
+			                        	if("view".equalsIgnoreCase(menuButton.getType())){%>
+			                        		<a href="<%=menuButton.getUrl()%>" target="_blank">点击</a>
+			                        	<%}%>
+			                        </td>
+	                               </tr>
+								<%}
+	                           	} %>
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="table-footer">
+						<div class="table-actions">
+							<!-- 
+							<label>操作:</label>
+							-->
+							<a href="./mpMenuCreate" class="btn btn-primary btn-xs">创建自定义菜单</a>
+							<a href="./mpMenuDelete" class="btn btn-danger btn-xs">删除自定义菜单</a>
+						</div> 
+					</div>
+					
 				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>Level</th>
-                                <th>菜单名称</th>
-                                <th>Key</th>
-                                <th>类型</th>
-                                <th>链接</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMenuBtnEntity> menuButtonList = (List<WxMenuBtnEntity>)request.getAttribute("menuButtonList");
-                           	if(menuButtonList!=null&&menuButtonList.size()>0){
-                           		int i=0;
-                           		for(WxMenuBtnEntity menuButton: menuButtonList){ 
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=menuButton.getLevel()%>级</td>
-		                        <td><%=displayMenuName(menuButton.getName(), menuButton.getLevel())%></td>
-		                        <td><%=menuButton.getKey()==null?"":menuButton.getKey()%></td>
-		                        <td><%=menuButton.getType()==null?"":menuButton.getType()%></td>
-		                        <td>
-		                        	<%
-		                        	if("view".equalsIgnoreCase(menuButton.getType())){%>
-		                        		<a href="<%=menuButton.getUrl()%>" target="_blank">点击</a>
-		                        	<%}%>
-		                        </td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
+				<!-- /table view -->
+			
 			</div>
-			<!-- /table view -->
 			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
