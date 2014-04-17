@@ -137,8 +137,7 @@
 							<label class="col-sm-2 control-label text-right">展示类型: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
 								<form:select path="codeModule.moduleType" class="form-control">
-									<form:option value="1"  label="原生图文展示"/>
-									<form:option value="2"  label="外链展示"/>
+									<form:option value="1"  label="图文消息展示"/>
 								</form:select>
 							</div>
 						</div>

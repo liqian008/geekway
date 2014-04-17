@@ -207,6 +207,7 @@
 							</label>
 							<div class="col-sm-6">
 								<input type="text" class="form-control" name="" value="<%=ArticleLinkUtil.getArticleLink(article.getId())%>"/>
+								<a href='<%=ArticleLinkUtil.getArticleLink(article.getId())%>' target="_blank">预览</a>
 							</div>
 						</div>
 						<%}%>

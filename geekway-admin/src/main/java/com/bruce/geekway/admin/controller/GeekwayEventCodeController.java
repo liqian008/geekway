@@ -72,6 +72,11 @@ public class GeekwayEventCodeController {
 		Date currentTime = new Date();
 		eventCode.setUpdateTime(currentTime);
 		
+		if(3==eventCode.getEventType()){//用户新关注的类型需特别处理
+			eventCode.setEventCode("subscribe");
+		}
+		
+		
 		if(1==eventCode.getDisplayType()){
 			//文本回复情况下，重新初始化数据
 			eventCode.setModuleDesc("");
@@ -79,7 +84,6 @@ public class GeekwayEventCodeController {
 			eventCode.setRowLimit((short) 0);
 		}else if(2==eventCode.getDisplayType()){
 			eventCode.setReplyContent("");
-			
 			
 			int codeModuleId = eventCode.getModuleId();
 			WxCodeModule codeModule = wxCodeModuleService.loadById(codeModuleId);

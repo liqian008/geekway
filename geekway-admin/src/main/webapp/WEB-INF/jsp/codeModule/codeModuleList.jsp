@@ -3,7 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.bruce.geekway.model.WxCodeModule"%>
 <%@page import="java.text.SimpleDateFormat"%>
-
+<%@page import="com.bruce.geekway.utils.*"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -125,6 +125,7 @@
 								<th>ID</th>
                                 <th>模块名称</th>
                                 <th>展示类型</th>
+                                <th>链接</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -140,7 +141,8 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=codeModule.getModuleName()%></td>
-		                        <td><%=codeModule.getModuleType()==1?"原生图文":"外链展示"%></td>
+		                        <td><%=codeModule.getModuleType()==1?"图文消息":"外链展示"%></td>
+		                        <td><a href='<%=ArticleLinkUtil.getArticlesLink(codeModule.getId())%>' target="_blank">预览</a></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
