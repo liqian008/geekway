@@ -18,10 +18,8 @@ public class TextResponse extends BaseResponse {
     }
     
     public TextResponse(String toUserName, String fromUserName, String content) {
-        MsgType = "text";
-        this.ToUserName = toUserName;
-        this.FromUserName = fromUserName;
-        this.CreateTime = String.valueOf(System.currentTimeMillis());
+        super(toUserName, fromUserName);
+        this.MsgType = "text";
         this.Content = content;
     }
     

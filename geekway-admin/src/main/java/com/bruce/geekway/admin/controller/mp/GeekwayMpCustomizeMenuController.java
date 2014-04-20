@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bruce.geekway.model.WxCustomizeMenu;
 import com.bruce.geekway.model.wx.json.WxMenuBtnEntity;
 import com.bruce.geekway.model.wx.json.request.WxMenuCreateJson;
 import com.bruce.geekway.model.wx.json.response.WxMenuQueryResult;
@@ -24,17 +25,19 @@ public class GeekwayMpCustomizeMenuController {
 
 	@Autowired
 	private WxMenuService wxMenuService;
+	@Autowired
+	private IWxCustomizeMenuService wxCustomizeMenuService;
 	
 	@RequestMapping("/mpMenuList")
 	public String mpMenuList(Model model, HttpServletRequest request) {
-//		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet();
-//		if(menuQueryResult!=null){
-//			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
-//			if(menuJsonObj!=null){
-//				List<WxMenuBtnEntity> menuButtonList = buildMenuList(new ArrayList<WxMenuBtnEntity>(), menuJsonObj.getButton(), 1);
-//				model.addAttribute("menuButtonList", menuButtonList);
-//			}
-//		}
+		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet();
+		if(menuQueryResult!=null){
+			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
+			if(menuJsonObj!=null){
+				List<WxMenuBtnEntity> menuButtonList = buildMenuList(new ArrayList<WxMenuBtnEntity>(), menuJsonObj.getButton(), 1);
+				model.addAttribute("menuButtonList", menuButtonList);
+			}
+		}
 		
 		
 //		mock的数据
@@ -46,14 +49,45 @@ public class GeekwayMpCustomizeMenuController {
 	@RequestMapping("/mpMenuCreate")
 	public String mpMenuCreate(Model model, HttpServletRequest request) {
 		
-		List<WxMenuBtnEntity> menuList = new ArrayList<WxMenuBtnEntity>();
-		menuList.add(new WxMenuBtnEntity("test1","test1", "click"));
-		menuList.add(new WxMenuBtnEntity("test2","test2", "click"));
-		WxMenuCreateJson menuCreateJson = new WxMenuCreateJson(menuList);
+		List<WxCustomizeMenu> customizeMenuList = wxCustomizeMenuService.querySortedMenus();
 		
-		wxMenuService.menuCreate(menuCreateJson);
+		List<WxMenuBtnEntity> mpMenuList = groupMpMenuList(customizeMenuList);
+		if(mpMenuList!=null&&mpMenuList.size()>0){
+			WxMenuCreateJson menuCreateJson = new WxMenuCreateJson(mpMenuList);
+			wxMenuService.menuCreate(menuCreateJson);
+		}
 		model.addAttribute("redirectUrl", "./mpMenuList");
 		return "forward:/home/operationRedirect";
+	}
+	
+	
+	/**
+	 * 构造微信格式的menuList
+	 * @param customizeMenuList
+	 * @return
+	 */
+	private List<WxMenuBtnEntity> groupMpMenuList(List<WxCustomizeMenu> customizeMenuList) {
+		if(customizeMenuList!=null&&customizeMenuList.size()>0){
+			List<WxMenuBtnEntity> groupedList = new ArrayList<WxMenuBtnEntity>();
+			for(WxCustomizeMenu loopMenu1: customizeMenuList){
+				int level1MenuId = 0;
+				if(0==loopMenu1.getParentId()){
+					level1MenuId = loopMenu1.getId();
+					//构造一级菜单
+					WxMenuBtnEntity level1MpMenu = new WxMenuBtnEntity(loopMenu1.getMenuKey(), loopMenu1.getMenuName(), loopMenu1.getMenuType(), loopMenu1.getUrl());
+					groupedList.add(level1MpMenu);
+					for(WxCustomizeMenu loopMenu2: customizeMenuList){
+						if(level1MenuId==loopMenu2.getParentId()){
+							//向一级菜单中加入二级菜单项
+							WxMenuBtnEntity level2MpMenu = new WxMenuBtnEntity(loopMenu2.getMenuKey(), loopMenu2.getMenuName(), loopMenu2.getMenuType(), loopMenu1.getUrl());
+							level1MpMenu.addSubButton(level2MpMenu);
+						}
+					}
+				}
+			}
+			return groupedList;
+		}
+		return null;
 	}
 	
 	

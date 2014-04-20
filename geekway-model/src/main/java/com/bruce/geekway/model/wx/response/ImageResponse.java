@@ -13,6 +13,11 @@ public class ImageResponse extends BaseResponse {
     public ImageResponse() {
         MsgType = "image";
     }
+    
+    public ImageResponse(String toUserName, String fromUserName) {
+    	super(toUserName, fromUserName);
+    	MsgType = "image";
+    }
 
     /** 通过上传多媒体文件，得到的id。 */
     public String MediaId;

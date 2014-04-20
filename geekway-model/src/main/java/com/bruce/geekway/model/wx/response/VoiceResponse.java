@@ -11,7 +11,12 @@ public class VoiceResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     public VoiceResponse() {
-        MsgType = "voice";
+    	MsgType = "voice";
+    }
+    
+    public VoiceResponse(String toUserName, String fromUserName) {
+    	super(toUserName, fromUserName);
+    	MsgType = "voice";
     }
 
     /** 通过上传多媒体文件，得到的id。 */

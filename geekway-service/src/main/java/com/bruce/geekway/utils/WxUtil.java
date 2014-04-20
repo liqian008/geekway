@@ -1,5 +1,6 @@
 package com.bruce.geekway.utils;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.apache.http.Consts;
@@ -86,4 +87,8 @@ public class WxUtil {
 		return null;
 	}
 
+	
+	public static final long currentTimeInSec() {
+		return System.currentTimeMillis() / 1000;
+	}
 }

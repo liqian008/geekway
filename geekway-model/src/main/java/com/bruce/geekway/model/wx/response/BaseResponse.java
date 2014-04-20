@@ -36,7 +36,7 @@ public abstract class BaseResponse implements Serializable {
     protected BaseResponse(String toUserName, String fromUserName) {
         this.ToUserName = toUserName;
         this.FromUserName = fromUserName;
-        this.CreateTime = String.valueOf(System.currentTimeMillis());
+        this.CreateTime = String.valueOf(System.currentTimeMillis()/1000);
     }
 
     public void setToUserName(String toUserName) {

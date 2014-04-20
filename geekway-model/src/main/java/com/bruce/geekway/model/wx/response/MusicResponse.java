@@ -10,7 +10,12 @@ public class MusicResponse extends BaseResponse {
     private static final long serialVersionUID = 1L;
 
     public MusicResponse() {
-        MsgType = "music";
+    	MsgType = "music";
+    }
+    
+    public MusicResponse(String toUserName, String fromUserName) {
+    	super(toUserName, fromUserName);
+    	MsgType = "music";
     }
 
     /** 音乐标题 */

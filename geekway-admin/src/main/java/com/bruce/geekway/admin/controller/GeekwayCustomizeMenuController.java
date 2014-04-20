@@ -1,6 +1,7 @@
 package com.bruce.geekway.admin.controller;
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,9 +32,32 @@ public class GeekwayCustomizeMenuController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxCustomizeMenu> customizeMenuList = wxCustomizeMenuService.queryAll();
-		model.addAttribute("customizeMenuList", customizeMenuList);
+		List<WxCustomizeMenu> customizeMenuList = wxCustomizeMenuService.querySortedMenus();
+		
+		List<WxCustomizeMenu> groupedMenuList = groupCustomizeMenu(customizeMenuList);
+		
+		model.addAttribute("customizeMenuList", groupedMenuList);
 		return "customizeMenu/customizeMenuList";
+	}
+
+	private List<WxCustomizeMenu> groupCustomizeMenu(List<WxCustomizeMenu> customizeMenuList) {
+		if(customizeMenuList!=null&&customizeMenuList.size()>0){
+			List<WxCustomizeMenu> groupedList = new ArrayList<WxCustomizeMenu>();
+			for(WxCustomizeMenu loopMenu1: customizeMenuList){
+				int level1MenuId = 0;
+				if(0==loopMenu1.getParentId()){
+					level1MenuId = loopMenu1.getId();
+					groupedList.add(loopMenu1);
+					for(WxCustomizeMenu loopMenu2: customizeMenuList){
+						if(level1MenuId==loopMenu2.getParentId()){
+							groupedList.add(loopMenu2);
+						}
+					}
+				}
+			}
+			return groupedList;
+		}
+		return null;
 	}
 	
 	@RequestMapping("/customizeMenuAdd")
@@ -41,8 +65,13 @@ public class GeekwayCustomizeMenuController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-//		List<WxCodeModule> codeModuleList = wxCodeModuleService.queryAll();
-//		model.addAttribute("codeModuleList", codeModuleList);
+		//构造父菜单列表
+		List<WxCustomizeMenu> parentMenus = wxCustomizeMenuService.queryChildrenMenus(0);
+		WxCustomizeMenu rootMenu = new WxCustomizeMenu();
+		rootMenu.setId(0);
+		rootMenu.setMenuName("--顶级菜单--");
+		parentMenus.add(0, rootMenu);
+		model.addAttribute("parentMenus", parentMenus);
 		
 		model.addAttribute("customizeMenu", customizeMenu);
 		return "customizeMenu/customizeMenuEdit";
@@ -53,8 +82,13 @@ public class GeekwayCustomizeMenuController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-//		List<WxCodeModule> codeModuleList = wxCodeModuleService.queryAll();
-//		model.addAttribute("codeModuleList", codeModuleList);
+		//构造父菜单列表
+		List<WxCustomizeMenu> parentMenus = wxCustomizeMenuService.queryChildrenMenus(0);
+		WxCustomizeMenu rootMenu = new WxCustomizeMenu();
+		rootMenu.setId(0);
+		rootMenu.setMenuName("--顶级菜单--");
+		parentMenus.add(0, rootMenu);
+		model.addAttribute("parentMenus", parentMenus);
 		
 		WxCustomizeMenu CustomizeMenu = wxCustomizeMenuService.loadById(customizeMenuId);
 		model.addAttribute("customizeMenu", CustomizeMenu);

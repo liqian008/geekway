@@ -1,8 +1,5 @@
 package com.bruce.geekway.model.wx.response;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * 视频消息的响应 <Br>
@@ -13,8 +10,9 @@ public class VideoResponse extends BaseResponse {
 
     private static final long serialVersionUID = 1L;
 
-    public VideoResponse() {
-        MsgType = "video";
+    public VideoResponse(String toUserName, String fromUserName) {
+    	super(toUserName, fromUserName);
+    	MsgType = "video";
     }
 
     /** 通过上传多媒体文件，得到的id。 */

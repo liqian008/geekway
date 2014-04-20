@@ -15,31 +15,31 @@ import com.bruce.geekway.model.WxCustomizeMenuCriteria;
 public class WxCustomizeMenuDaoImpl implements IWxCustomizeMenuDao, InitializingBean {
 
      @Autowired
-    private WxCustomizeMenuMapper wxCustomizeCodeMapper;
+    private WxCustomizeMenuMapper wxCustomizeMenuMapper;
 
     @Override
     public int save(WxCustomizeMenu t) {
-        return wxCustomizeCodeMapper.insert(t);
+        return wxCustomizeMenuMapper.insert(t);
     }
 
     @Override
     public int updateById(WxCustomizeMenu t) {
-        return wxCustomizeCodeMapper.updateByPrimaryKey(t);
+        return wxCustomizeMenuMapper.updateByPrimaryKey(t);
     }
 
     @Override
     public int deleteById(Integer id) {
-        return wxCustomizeCodeMapper.deleteByPrimaryKey(id);
+        return wxCustomizeMenuMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public WxCustomizeMenu loadById(Integer id) {
-        return wxCustomizeCodeMapper.selectByPrimaryKey(id);
+        return wxCustomizeMenuMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public List<WxCustomizeMenu> queryAll() {
-        return wxCustomizeCodeMapper.selectByExample(null);
+        return wxCustomizeMenuMapper.selectByExample(null);
     }
 
     @Override
@@ -47,27 +47,33 @@ public class WxCustomizeMenuDaoImpl implements IWxCustomizeMenuDao, Initializing
         return null;
     }
     
-//    @Override
-//	public WxCustomizeMenu loadByCode(String menuCode) {
-//    	WxCustomizeMenuCriteria criteria = new WxCustomizeMenuCriteria();
-//    	criteria.createCriteria().andMenuCodeEqualTo(menuCode);
-//    	List<WxCustomizeMenu> textCodeList =  wxCustomizeCodeMapper.selectByExample(criteria);
-//    	if(textCodeList!=null&&textCodeList.size()>0){
-//    		return textCodeList.get(0);
-//    	}
-//    	return null;
-//	}
+    @Override
+	public List<WxCustomizeMenu> queryChildrenMenus(int parentId) {
+    	WxCustomizeMenuCriteria criteria = new WxCustomizeMenuCriteria();
+    	criteria.createCriteria().andParentIdEqualTo(parentId);
+    	List<WxCustomizeMenu> menuList =  wxCustomizeMenuMapper.selectByExample(criteria);
+    	return menuList;
+	}
+    
+    @Override
+	public List<WxCustomizeMenu> querySortedMenus() {
+    	WxCustomizeMenuCriteria criteria = new WxCustomizeMenuCriteria();
+    	criteria.createCriteria();
+    	criteria.setOrderByClause(" sort, id");
+    	List<WxCustomizeMenu> menuList =  wxCustomizeMenuMapper.selectByExample(criteria);
+    	return menuList;
+	}
     
     @Override
     public void afterPropertiesSet() throws Exception {
     }
 
 	public WxCustomizeMenuMapper getWxCustomizeMenuMapper() {
-		return wxCustomizeCodeMapper;
+		return wxCustomizeMenuMapper;
 	}
 
 	public void setWxCustomizeMenuMapper(WxCustomizeMenuMapper wxCustomizeCodeMapper) {
-		this.wxCustomizeCodeMapper = wxCustomizeCodeMapper;
+		this.wxCustomizeMenuMapper = wxCustomizeCodeMapper;
 	}
 
 }

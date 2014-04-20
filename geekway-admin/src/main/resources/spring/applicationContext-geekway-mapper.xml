@@ -61,4 +61,9 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCustomizeMenuMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	
+	<!-- <bean id="wxTestMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxTestMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean> -->
 </beans>

@@ -20,65 +20,58 @@ public String displayMenuName(String name, int level){
 %>
 
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Londinium - premium responsive admin template by Eugene
-	Kopyov</title>
-<link href="../css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="../css/londinium-theme.min.css" rel="stylesheet"
+<title>Geekway微信管理平台</title>
+<link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
-<link href="../css/styles.min.css" rel="stylesheet" type="text/css">
-<link href="../css/icons.min.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
 <link
 	href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=latin,cyrillic-ext"
 	rel="stylesheet" type="text/css">
-<script type="text/javascript" src="../js/jquery/1.10.1/jquery.min.js"></script>
-<script type="text/javascript" src="../js/jquery/1.10.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/charts/sparkline.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uniform.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/select2.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/inputmask.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/autosize.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/inputlimit.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/listbox.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/multiselect.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/validate.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/tags.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/charts/sparkline.min.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/uniform.min.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/select2.min.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/inputmask.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/autosize.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/forms/inputlimit.min.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/listbox.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/multiselect.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/validate.min.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/tags.min.js"></script>
-<script type="text/javascript" src="../js/plugins/forms/switch.min.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/forms/uploader/plupload.full.min.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/forms/uploader/plupload.queue.min.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/moment.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/jgrowl.min.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/forms/wysihtml5/wysihtml5.min.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/colorpicker.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/forms/wysihtml5/toolbar.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/interface/daterangepicker.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
 <script type="text/javascript"
-	src="../js/plugins/interface/fancybox.min.js"></script>
-<script type="text/javascript" src="../js/plugins/interface/prettify.js"></script>
-<script type="text/javascript" src="../js/plugins/interface/moment.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/interface/jgrowl.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/interface/datatables.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/interface/colorpicker.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/interface/fullcalendar.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/interface/timepicker.min.js"></script>
-<script type="text/javascript"
-	src="../js/plugins/interface/collapsible.min.js"></script>
-<script type="text/javascript" src="../js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/application.js"></script>
+	src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/application.js"></script>
 </head>
 <body class="sidebar-wide">
 
@@ -121,21 +114,19 @@ public String displayMenuName(String name, int level){
 				<h5>功能介绍</h5>
 				<p>
 					1、此菜单项内容取自微信公众账户官方平台。出于微信平台的访问限制，每天访问此功能的次数不应超过100次<br/>
-					2、目前自定义菜单最多包括3个一级菜单，每个一级菜单最多包含5个二级菜单。一级菜单最多4个汉字，二级菜单最多7个汉字，多出来的部分将会以“...”代替。<br/>
-					3、请注意，创建自定义菜单后，由于微信客户端缓存，需要24小时微信客户端才会展现出来。建议测试时可以尝试取消关注公众账号后再次关注，则可以看到创建后的效果。
 				</p>
 			</div>
 			
 			<div class="tabbable page-tabs">
 				<ul class="nav nav-tabs">
+					<li>
+						<a href="./customizeMenuList">
+							<i class="icon-hammer"></i>本地自定义菜单
+						</a>
+					</li>
 					<li class="active">
 						<a href="javascript:void(0)">
 							<i class="icon-table2"></i>线上自定义菜单
-						</a>
-					</li>
-					<li class="">
-						<a href="javascript:void(0)">
-							<i class="icon-hammer"></i>本地自定义菜单
 						</a>
 					</li>
 				</ul>
@@ -189,8 +180,7 @@ public String displayMenuName(String name, int level){
 							<!-- 
 							<label>操作:</label>
 							-->
-							<a href="./mpMenuCreate" class="btn btn-primary btn-xs">创建自定义菜单</a>
-							<a href="./mpMenuDelete" class="btn btn-danger btn-xs">删除自定义菜单</a>
+							<a href="./mpMenuDelete" class="btn btn-danger btn-xs">清空自定义菜单</a>
 						</div> 
 					</div>
 					

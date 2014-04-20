@@ -23,6 +23,13 @@ public class WxMenuBtnEntity {
 		this.type = type;
 	}
 	
+	public WxMenuBtnEntity(String key, String name, String type, String url){
+		this.key = key;
+		this.name = name;
+		this.type = type;
+		this.url = url;
+	}
+	
 	public void addSubButton(WxMenuBtnEntity sub){
 		if(sub_button==null || sub_button.size()<=0){
 			sub_button = new ArrayList<WxMenuBtnEntity>();

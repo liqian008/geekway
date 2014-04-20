@@ -40,10 +40,15 @@ public class WxCustomizeMenuServiceImpl implements IWxCustomizeMenuService{
 		return wxCustomizeMenuDao.queryAll();
 	}
 	
-//	public WxCustomizeMenu loadByCode(String textCode){
-//		return wxCustomizeMenuDao.loadByCode(textCode);
-//	}
-
+	@Override
+	public List<WxCustomizeMenu> querySortedMenus() {
+		return wxCustomizeMenuDao.querySortedMenus();
+	}
+	
+	public List<WxCustomizeMenu> queryChildrenMenus(int parentId){
+		return wxCustomizeMenuDao.queryChildrenMenus(parentId);
+	}
+	
 	public IWxCustomizeMenuDao getWxCustomizeMenuDao() {
 		return wxCustomizeMenuDao;
 	}

@@ -83,24 +83,15 @@ public class MessageHandler{
         	WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.instance(event); 
         	switch(eventTypeEnum){
         		case SUBSCRIBE: {//订阅关注
-//        			SubscribeEventRequest subscribeEventRequest = new SubscribeEventRequest();
-//                    return processEventSubscribeRequest(subscribeEventRequest);
-        			
         			EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
                 	return processEventSubscribeRequest(eventRequest);
         		}
         		case CLICK: {//点击菜单
-//        			ClickEventRequest clickEventRequest = (ClickEventRequest) WxXmlUtil.getMsgEvent(ele);
-//                    return processEventClickRequest(clickEventRequest);
         			EventRequest eventRequest =WxXmlUtil.getMsgEvent(ele);
                 	return processEventClickRequest(eventRequest);
         		}
         		case VIEW: {//点击菜单
-//        			ClickEventRequest clickEventRequest = new ClickEventRequest(WxEventTypeEnum.VIEW.toString());
-//                    return processEventClickRequest(clickEventRequest);
-        			
-        			EventRequest eventRequest =WxXmlUtil.getMsgEvent(ele);
-                	return processEventClickRequest(eventRequest);
+        			//do nothing
         		}
         		case LOCATION: {//上报location位置
         			LocationEventRequest locationEventRequest = new LocationEventRequest();
