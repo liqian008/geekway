@@ -66,4 +66,29 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxTestMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean> -->
+	
+	
+	
+	<!-- ito mapper config -->
+	<bean id="itoProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="itoSkuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="itoSkuPropMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuPropMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="itoSkuPropValueMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuPropValueMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="itoProductSkuValueMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductSkuValueMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	
 </beans>
