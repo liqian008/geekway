@@ -27,4 +27,21 @@
 	<bean id="wxCustomizeMenuDao" class="com.bruce.geekway.dao.impl.WxCustomizeMenuDaoImpl">
 	</bean>
 	 -->
+	 
+	 
+	<!-- ito dao config -->
+	<bean id="itoProductDao" class="com.bruce.geekway.dao.impl.ito.ItoProductDaoImpl">
+	</bean>
+	<bean id="itoProductOrderDao" class="com.bruce.geekway.dao.impl.ito.ItoProductOrderDaoImpl">
+	</bean>
+	<bean id="itoSkuDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuDaoImpl">
+	</bean>
+	<bean id="itoSkuPropDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuPropDaoImpl">
+	</bean>
+	<bean id="itoSkuPropValueDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuPropValueDaoImpl">
+	</bean>
+	<bean id="itoProductSkuValueDao" class="com.bruce.geekway.dao.impl.ito.ItoProductSkuValueDaoImpl">
+	</bean>
+	
+	
 </beans>

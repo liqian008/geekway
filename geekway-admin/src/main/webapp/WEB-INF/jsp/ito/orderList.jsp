@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.ItoProduct"%>
+<%@page import="com.bruce.geekway.model.ItoProductOrder"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
@@ -73,7 +73,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品管理
+						订单管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -85,7 +85,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">商品管理</li>
+					<li class="active">订单管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -106,54 +106,43 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>商品管理
+						<i class="icon-people"></i>订单管理
 					</h5>
-					<a href="./productAdd"><span class="label label-danger pull-right">新增商品</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>序号</th>
-								<th>图片</th>
-                                <th>名称</th>
-                                <th>价格</th>
-                                <th>库存</th>
+								<th class="text-center">序号</th>
+								<th>商品</th>
+                                <th>SKU</th>
+                                <th>总价</th>
+                                <th>支付</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<ItoProduct> productList = (List<ItoProduct>)request.getAttribute("productList");
-                           	if(productList!=null&&productList.size()>0){
+                           	List<ItoProductOrder> orderList = (List<ItoProductOrder>)request.getAttribute("orderList");
+                           	if(orderList!=null&&orderList.size()>0){
                            		int i=0;
-                           		for(ItoProduct product: productList){
+                           		for(ItoProductOrder order: orderList){
                            			i++;
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td class="text-center">
-		                        	<a href="<%=product.getProductPicUrl()%>" class="lightbox">
-		                        	<img src='<%=product.getProductPicUrl()%>' class="img-media"/>
-		                        	</a> 
-		                        </td>
-		                        <td title="SN：<%=product.getOutId()%>"><%=product.getTitle()%></td>
-		                        <td title="原价：<%=product.getOriginPrice()%>元"><%=product.getPrice()%>元</td>
-		                        <td><%=product.getNum()%>个</td>
-		                        <td><%=product.getStatus()==1?"上架":"下架"%></td>
+		                        <td title="SN：<%=order.getOutId()%>"><%=order.getTitle()%></td>
+		                        <td class="text-center"><%=order.getSku()%></td>
+		                        <td title="单价：<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getPrice()%>元</td>
+		                        <td><%=order.getPayStatus()==1?"到付":"扫码"%></td>
+		                        <td><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        	
-										<a href="./productEdit?productId=<%=product.getId()%>"
+										<a href="./orderEdit?orderId=<%=order.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./productSkuValueEdit?productId=<%=product.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="配置SKU"><i class="icon-tree3"></i></a> 
-										<%-- <a href="./delProduct?productId=<%=product.getId()%>" 
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a> --%>
+											data-original-title="查 看"><i class="icon-envelop"></i></a> 
 									</div>
 								</td>
                                </tr>

@@ -1,4 +1,4 @@
-package com.bruce.geekway.controller;
+package com.bruce.geekway.controller.wx;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

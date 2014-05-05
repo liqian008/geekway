@@ -50,12 +50,26 @@
 	</bean>
 	
 	
-	<!-- Default ExceptionHandler 
-	<bean id="defaultExceptionHandler" class="com.bruce.designer.front.exception.DesignerExceptionResolver">
+	<bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+		<property name="encoding">
+			<value type="org.codehaus.jackson.JsonEncoding">UTF8</value>
+		</property>
+		<property name="extractValueFromSingleKeyModel" value="true" />
+		<property name="objectMapper">
+			<bean class="org.codehaus.jackson.map.ObjectMapper">
+				<property name="serializationInclusion"> 
+					<value type="org.codehaus.jackson.map.annotate.JsonSerialize$Inclusion">NON_NULL</value>
+				</property>
+			</bean>
+		</property>
+		<property name="contentType" value="application/json;charset=UTF-8" />
+	</bean>
+	
+	<!-- Default ExceptionHandler -->
+	<bean id="defaultExceptionHandler" class="com.bruce.geekway.exception.GeekwayExceptionResolver">
 		<property name="defaultErrorView" value="error" />
 		<property name="defaultStatusCode" value="500" />
 	</bean>
-	-->
 
 	<context:component-scan base-package="com.bruce.geekway.controller" />
 

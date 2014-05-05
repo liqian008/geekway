@@ -17,7 +17,7 @@ import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.service.IUploadService;
-import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.JsonResultBuilderUtil;
 
 @Controller
 @RequestMapping("/geekway")
@@ -61,12 +61,12 @@ public class GeekwayUploadController extends BaseController{
 			int userId = userDetail.getUserId();
 			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), userId, file.getOriginalFilename());
 			if(imageUploadResult!=null){
-				return ResponseBuilderUtil.buildSuccessJson(imageUploadResult);
+				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return ResponseBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 
 }

@@ -33,5 +33,17 @@
 	</bean>
 	
 	
+	<!-- ito service config -->
+	<bean id="itoProductService" class="com.bruce.geekway.service.impl.ito.ItoProductServiceImpl">
+	</bean>
+	<bean id="itoSkuService" class="com.bruce.geekway.service.impl.ito.ItoSkuServiceImpl">
+	</bean>
+	<bean id="itoSkuPropService" class="com.bruce.geekway.service.impl.ito.ItoSkuPropServiceImpl">
+	</bean>
+	<bean id="itoSkuPropValueService" class="com.bruce.geekway.service.impl.ito.ItoSkuPropValueServiceImpl">
+	</bean>
+	<bean id="itoProductOrderService" class="com.bruce.geekway.service.impl.ito.ItoProductOrderServiceImpl">
+	</bean>
+	
 	
 </beans>

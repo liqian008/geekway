@@ -90,5 +90,9 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductSkuValueMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<bean id="itoProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductOrderMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	
 </beans>

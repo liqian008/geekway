@@ -41,6 +41,10 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
 <script type="text/javascript"
+        src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/js/ckeditor/config.js"></script>
+<script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>

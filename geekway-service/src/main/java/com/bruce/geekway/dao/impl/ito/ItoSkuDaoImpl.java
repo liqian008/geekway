@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import com.bruce.geekway.dao.ito.IItoSkuDao;
 import com.bruce.geekway.dao.mapper.ItoSkuMapper;
-import com.bruce.geekway.model.ItoProductSkuValueCriteria;
 import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuCriteria;
 

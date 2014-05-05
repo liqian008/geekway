@@ -1,4 +1,4 @@
-package com.bruce.geekway.controller;
+package com.bruce.geekway.controller.web;
 
 import java.util.List;
 

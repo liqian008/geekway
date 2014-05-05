@@ -8,17 +8,13 @@ import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 
 
-public final class ResponseBuilderUtil {
-
-//	public final static String JSON_RESULT = "jsonResult";
-//
-//	public static final String ERROR_MSG = "message";
+public final class JsonResultBuilderUtil {
 
 	public final static int RESULT_SUCCESS = 0X01;
 
 	public final static int RESULT_FAILED = 0X00;
-
-
+	
+	
 	public static JsonResultBean buildSuccessJson() {
 		return buildSuccessJson(null);
 	}
@@ -53,3 +49,4 @@ public final class ResponseBuilderUtil {
 	}
 
 }
+

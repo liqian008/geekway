@@ -6,11 +6,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bruce.geekway.dao.ito.IItoSkuDao;
 import com.bruce.geekway.dao.ito.IItoSkuPropDao;
-import com.bruce.geekway.dao.mapper.ItoSkuMapper;
 import com.bruce.geekway.dao.mapper.ItoSkuPropMapper;
-import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuProp;
 
 

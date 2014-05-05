@@ -21,6 +21,7 @@
 		
 		<!-- ito config -->
 		<mapper resource="com/bruce/geekway/model/xml/ItoProductMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/ItoProductOrderMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSkuMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSkuPropMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSkuPropValueMapper.xml" />
