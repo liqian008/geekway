@@ -88,7 +88,6 @@ public class ProductController {
 		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 	}
 	
-	
 	/**
 	 * 提交订单
 	 * @param model
