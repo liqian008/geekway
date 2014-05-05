@@ -134,7 +134,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">事件Code:
 							</label>
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<input type="text" class="form-control" name="eventCode" id="eventCode" value="${eventCode.eventCode}"/>
 	                             <form:hidden path="eventCode.id"/>
 							</div>
@@ -154,7 +154,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">回复固定文本:
 							</label>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${eventCode.replyContent}</textarea>
 							</div>
 						</div>
