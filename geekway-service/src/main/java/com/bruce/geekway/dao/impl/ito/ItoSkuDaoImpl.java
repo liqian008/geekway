@@ -25,7 +25,7 @@ public class ItoSkuDaoImpl implements IItoSkuDao, InitializingBean {
 
     @Override
     public int updateById(ItoSku t) {
-        return itoSkuMapper.updateByPrimaryKey(t);
+        return itoSkuMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

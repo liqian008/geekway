@@ -25,7 +25,7 @@ public class WxEventCodeDaoImpl implements IWxEventCodeDao, InitializingBean {
 
     @Override
     public int updateById(WxEventCode t) {
-        return wxEventCodeMapper.updateByPrimaryKey(t);
+        return wxEventCodeMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

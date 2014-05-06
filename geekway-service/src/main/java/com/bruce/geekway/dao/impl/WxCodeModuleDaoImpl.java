@@ -24,7 +24,7 @@ public class WxCodeModuleDaoImpl implements IWxCodeModuleDao, InitializingBean {
 
     @Override
     public int updateById(WxCodeModule t) {
-        return wxCodeModuleMapper.updateByPrimaryKey(t);
+        return wxCodeModuleMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

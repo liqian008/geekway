@@ -24,7 +24,7 @@ public class WxCustomizeMenuDaoImpl implements IWxCustomizeMenuDao, Initializing
 
     @Override
     public int updateById(WxCustomizeMenu t) {
-        return wxCustomizeMenuMapper.updateByPrimaryKey(t);
+        return wxCustomizeMenuMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

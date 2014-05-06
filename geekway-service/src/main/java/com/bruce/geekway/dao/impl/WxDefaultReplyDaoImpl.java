@@ -24,7 +24,7 @@ public class WxDefaultReplyDaoImpl implements IWxDefaultReplyDao, InitializingBe
 
     @Override
     public int updateById(WxDefaultReply t) {
-        return wxDefaultReplyMapper.updateByPrimaryKey(t);
+        return wxDefaultReplyMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

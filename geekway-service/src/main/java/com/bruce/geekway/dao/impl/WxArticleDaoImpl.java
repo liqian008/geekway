@@ -24,7 +24,7 @@ public class WxArticleDaoImpl implements IWxArticleDao, InitializingBean {
 
     @Override
     public int updateById(WxArticle t) {
-        return wxArticleMapper.updateByPrimaryKey(t);
+        return wxArticleMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

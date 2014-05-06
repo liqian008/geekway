@@ -24,7 +24,7 @@ public class ItoSkuPropValueDaoImpl implements IItoSkuPropValueDao, Initializing
 
     @Override
     public int updateById(ItoSkuPropValue t) {
-        return itoSkuPropValueMapper.updateByPrimaryKey(t);
+        return itoSkuPropValueMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override

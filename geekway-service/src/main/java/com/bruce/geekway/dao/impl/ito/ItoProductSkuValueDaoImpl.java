@@ -32,7 +32,7 @@ public class ItoProductSkuValueDaoImpl implements IItoProductSkuValueDao, Initia
 
     @Override
     public int updateById(ItoProductSkuValue t) {
-        return itoProductSkuValueMapper.updateByPrimaryKey(t);
+        return itoProductSkuValueMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override
