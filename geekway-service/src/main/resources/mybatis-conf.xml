@@ -10,6 +10,11 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxTestMapper.xml" /> 
 		 -->
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
+		
 		<mapper resource="com/bruce/geekway/model/xml/WxCustomizeMenuMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxCodeModuleMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxCodeModuleArticleMapper.xml" />

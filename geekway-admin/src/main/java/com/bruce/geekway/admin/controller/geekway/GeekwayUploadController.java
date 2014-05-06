@@ -1,4 +1,4 @@
-package com.bruce.geekway.admin.controller;
+package com.bruce.geekway.admin.controller.geekway;
 
 import java.io.IOException;
 
