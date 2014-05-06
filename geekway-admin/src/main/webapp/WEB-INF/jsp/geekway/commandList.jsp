@@ -6,11 +6,11 @@
 
 <%!String displayCommandType(short commandType){
 	if(1==commandType){
-		return "文本请求指令";
+		return "文本请求";
 	}else if(2==commandType){
-		return "菜单点击指令";
+		return "菜单点击";
 	}else if(3==commandType){
-		return "新用户关注指令";
+		return "新用户关注";
 	}
 	return "类型错误";
 } %>
@@ -130,12 +130,11 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>类型</th>
-                                <th>指令</th>
-                                <th>素材类型</th>
+								<th>类 型</th>
+                                <th>指 令</th>
                                 <!-- <th>内容</th> -->
-                                <th>状态</th>
-                                <th class="team-links">操作</th> 
+                                <th>状 态</th>
+                                <th class="team-links">操 作</th> 
 							</tr>
 						</thead>
 						<tbody>
@@ -150,7 +149,6 @@
 		                        <td><%=i%></td>
 		                        <td><%=displayCommandType(command.getCommandType())%></td>
 		                        <td><%=command.getCommand()%></td>
-		                        <td><%=command.getMaterialType()==null?"":""%></td>
 		                        
 		                        <td>正常</td>
 		                        <td class='text-center'>
@@ -160,7 +158,10 @@
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
 										<a href="./commandMaterialSet?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="关联素材"><i class="icon-tree3"></i></a>
+											data-original-title="关联文本素材"><i class="icon-tree3"></i></a>
+										<a href="./commandMaterialSet?commandId=<%=command.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="关联图文"><i class="icon-tree3"></i></a>
 										<a href="./delCommand?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="删除"><i class="icon-remove3"></i></a>
