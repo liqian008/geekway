@@ -20,7 +20,15 @@
 		<property name="wxCustomizeMenuDao" ref="wxCustomizeMenuDao"></property>
 	</bean>
 	 -->
-
+	
+	<bean id="commandService" class="com.bruce.geekway.service.impl.WxCommandServiceImpl">
+		<property name="wxCommandDao" ref="wxCommandDao"></property>
+	</bean>
+	
+	<bean id="materialService" class="com.bruce.geekway.service.impl.WxMaterialServiceImpl">
+		<property name="wxMaterialDao" ref="wxMaterialDao"></property>
+	</bean>
+	
 	<bean id="articleService" class="com.bruce.geekway.service.impl.WxArticleServiceImpl">
 		<property name="wxArticleDao" ref="wxArticleDao"></property>
 	</bean>

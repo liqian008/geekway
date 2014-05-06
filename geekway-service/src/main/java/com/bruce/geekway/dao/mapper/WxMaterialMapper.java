@@ -93,4 +93,27 @@ public interface WxMaterialMapper {
      * @mbggenerated Tue May 06 15:15:28 CST 2014
      */
     int updateByPrimaryKey(WxMaterial record);
+    
+    
+    
+    /**
+     * 根据查询commandId相关的文章
+     * @param commandId
+     * @return
+     */
+    List<WxMaterial> queryMaterialsByCommandId(@Param("commandId")int commandId);
+    
+    /**
+     * 根据查询commandId相关的文章
+     * @param commandId
+     * @return
+     */
+    List<WxMaterial> queryMaterialsByCommandIdLimit(@Param("commandId")int commandId, @Param("limit")int limit);
+    
+    /**
+     * 根据查询commandId不相关的文章
+     * @param commandId
+     * @return
+     */
+    List<WxMaterial> queryMaterialsOutCommandId(int commandId);
 }

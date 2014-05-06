@@ -31,12 +31,12 @@
 
 		<!-- geekway config -->
 		
-		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
+		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
 		
 		<!--
+		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
-		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
 		<table schema="wx" tableName="wx_history_message" domainObjectName="WxHistorMessage"/>
 		
 		<table schema="wx" tableName="wx_test" domainObjectName="WxTest"/>		

@@ -41,20 +41,20 @@ public class WxMaterialServiceImpl implements IWxMaterialService{
 	}
 	
 	
-//	@Override
-//    public List<WxMaterial> queryMaterialsByModuleId(int moduleId) { 
-//        return wxMaterialDao.queryMaterialsByModuleId(moduleId);
-//    }
-//	
-//	@Override
-//    public List<WxMaterial> queryMaterialsByModuleId(int moduleId, int limit) {
-//        return wxMaterialDao.queryMaterialsByModuleId(moduleId, limit);
-//    }
-//	
-//	@Override
-//    public List<WxMaterial> queryMaterialsOutModuleId(int moduleId) { 
-//        return wxMaterialDao.queryMaterialsOutModuleId(moduleId);
-//    }
+	@Override
+    public List<WxMaterial> queryMaterialsByCommandId(int commandId) { 
+        return wxMaterialDao.queryMaterialsByCommandId(commandId);
+    }
+	
+	@Override
+    public List<WxMaterial> queryMaterialsByCommandId(int commandId, int limit) {
+        return wxMaterialDao.queryMaterialsByCommandId(commandId, limit);
+    }
+	
+	@Override
+    public List<WxMaterial> queryMaterialsOutCommandId(int commandId) { 
+        return wxMaterialDao.queryMaterialsOutCommandId(commandId);
+    }
 
 	public IWxMaterialDao getWxMaterialDao() {
 		return wxMaterialDao;

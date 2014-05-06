@@ -4,15 +4,29 @@
 <%@page import="com.bruce.geekway.model.WxCommand"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "文本请求指令";
-	}else if(2==commandType){
-		return "菜单点击指令";
-	}else if(3==commandType){
-		return "新用户关注指令";
+<%!String displayCommandType(Short commandType){
+	if(commandType!=null){
+		if(1==commandType){
+			return "文本请求";
+		}else if(2==commandType){
+			return "菜单点击";
+		}else if(3==commandType){
+			return "新用户关注";
+		}	
 	}
+	
 	return "类型错误";
+} %>
+
+<%!String displayMaterialType(Short materialType){
+	if(materialType!=null){
+		if(1==materialType){ 
+			return "文本";
+		}else if(2==materialType){
+			return "图文";
+		}
+	}
+	return "其他类型";
 } %>
 
 
@@ -121,21 +135,21 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>指令管理
 					</h5>
-					<a href="./commandAdd?type=3"><span class="label label-danger pull-right">新增关注指令</span></a>
-					<a href="./commandAdd?type=2"><span class="label label-primary pull-right">新增菜单指令</span></a>
-					<a href="./commandAdd?type=1"><span class="label label-info pull-right">新增文本指令</span></a>
+					<a href="./commandAddSubscribeEntry"><span class="label label-danger pull-right">增加关注指令</span></a>
+					<a href="./commandAddMenuEntry"><span class="label label-primary pull-right">增加菜单接入指令</span></a>
+					<a href="./commandAddTextEntry"><span class="label label-info pull-right">增加文本接入指令</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>ID</th>
-								<th>类型</th>
+								<th>序号</th>
+								<th>接入类型</th>
                                 <th>指令</th>
-                                <th>素材类型</th>
                                 <!-- <th>内容</th> -->
+                                <th>素材</th>
                                 <th>状态</th>
-                                <th class="team-links">操作</th> 
+                                <th class="team-links">操 作</th> 
 							</tr>
 						</thead>
 						<tbody>
@@ -150,17 +164,18 @@
 		                        <td><%=i%></td>
 		                        <td><%=displayCommandType(command.getCommandType())%></td>
 		                        <td><%=command.getCommand()%></td>
-		                        <td><%=command.getMaterialType()==null?"":""%></td>
-		                        
+		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./commandEdit?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
+										<%if(command.getMaterialType()!=null&&command.getMaterialType()==2){//图文%>
 										<a href="./commandMaterialSet?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="关联素材"><i class="icon-tree3"></i></a>
+											data-original-title="关联图文"><i class="icon-tree3"></i></a>
+										<%}%>
 										<a href="./delCommand?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="删除"><i class="icon-remove3"></i></a>

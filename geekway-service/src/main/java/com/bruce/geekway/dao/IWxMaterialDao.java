@@ -6,11 +6,11 @@ import com.bruce.geekway.model.WxMaterial;
 
 public interface IWxMaterialDao extends IBaseDao<WxMaterial, Integer> {
 	
-//    public List<WxMaterial> queryMaterialsByModuleId(int moduleId);
-//    
-//    public List<WxMaterial> queryMaterialsByModuleId(int moduleId, int limit);
-//
-//    public List<WxMaterial> queryMaterialsOutModuleId(int moduleId);
+    public List<WxMaterial> queryMaterialsByCommandId(int commandId);
+    
+    public List<WxMaterial> queryMaterialsByCommandId(int commandId, int limit);
+
+    public List<WxMaterial> queryMaterialsOutCommandId(int commandId);
 
     
 }

@@ -6,5 +6,8 @@ public interface IWxCommandMaterialService extends IBaseService<WxCommandMateria
 
 	public int delete(int commandId, int materialId); 
 	
+	public int deleteByCommandId(int commandId);
+	
+	public int deleteByMaterialId(int materialId); 
 	
 }

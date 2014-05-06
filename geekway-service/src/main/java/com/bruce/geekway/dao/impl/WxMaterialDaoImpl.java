@@ -52,20 +52,20 @@ public class WxMaterialDaoImpl implements IWxMaterialDao, InitializingBean {
 
     }
 
-//    @Override
-//    public List<WxMaterial> queryMaterialsByModuleId(int moduleId) {
-//        return wxMaterialMapper.queryMaterialsByModuleId(moduleId);
-//    }
-//    
-//    @Override
-//	public List<WxMaterial> queryMaterialsByModuleId(int moduleId, int limit){
-//    	return wxMaterialMapper.queryMaterialsByModuleIdLimit(moduleId, limit);
-//	}
-//    
-//    @Override
-//    public List<WxMaterial> queryMaterialsOutModuleId(int moduleId) {
-//        return wxMaterialMapper.queryMaterialsOutModuleId(moduleId);
-//    }
+    @Override
+    public List<WxMaterial> queryMaterialsByCommandId(int commandId) {
+        return wxMaterialMapper.queryMaterialsByCommandId(commandId);
+    }
+    
+    @Override
+	public List<WxMaterial> queryMaterialsByCommandId(int commandId, int limit){
+    	return wxMaterialMapper.queryMaterialsByCommandIdLimit(commandId, limit);
+	}
+    
+    @Override
+    public List<WxMaterial> queryMaterialsOutCommandId(int commandId) {
+        return wxMaterialMapper.queryMaterialsOutCommandId(commandId);
+    }
     
 	public WxMaterialMapper getWxMaterialMapper() {
 		return wxMaterialMapper;

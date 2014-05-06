@@ -18,6 +18,18 @@
 	return "类型错误";
 } %>
 
+<%!String displayMaterialType(Short materialType){
+	if(materialType!=null){
+		if(1==materialType){ 
+			return "文本";
+		}else if(2==materialType){
+			return "图文";
+		}
+	}
+	return "其他类型";
+} %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -109,9 +121,8 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					回复类型支持两种素材（均需事先创建相应的素材以做关联）： <br/>
-					1、文本素材<br/>
-					2、图文素材<br/>
+					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
+					2、 <br/>
 				</p>
 			</div>
 			
@@ -130,7 +141,7 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">事件类型:
+							<label class="col-sm-2 control-label text-right">接入指令类型:
 							</label>
 							<div class="col-sm-3">
 								
@@ -150,7 +161,7 @@
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">指令:
+							<label class="col-sm-2 control-label text-right">接入指令:
 							</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
@@ -158,8 +169,43 @@
 							</div>
 						</div>
 						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">回复类型:
+							</label>
+							<div class="col-sm-2">
+							<%
+							if(command==null||command.getId()==null){//<!-- 新增状态下 -->
+							%>
+								<form:select path="command.materialType" class="form-control">
+									<form:option value="1"  label="文本回复"/>
+									<form:option value="2"  label="图文素材"/>
+								</form:select>
+							<%}else{%>
+								<label class="control-label">
+									<%=displayMaterialType(command.getMaterialType()) %>
+								</label>
+							<%}%>
+							</div>
+						</div>
+						
 						<%
 						if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
+							if(command.getMaterialType()==1){//图文方式，可以文本回复
+						%>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">文本回复:
+							</label>
+							<div class="col-sm-6">
+								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="上限100字">${command.replyContent}</textarea>
+							</div>
+						</div> 
+						<%}
+						}%>
+						
+						<%
+						if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
+							if(command.getMaterialType()==2){//图文方式，可以配置rowLimit
 						%>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">上限条数（仅图文有效）:
@@ -168,7 +214,8 @@
 								<input type="text" class="form-control" name="rowLimit" id="rowLimit" value="${command.rowLimit}"/>
 							</div>
 						</div>
-						<%}%>
+						<%}
+						}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态:

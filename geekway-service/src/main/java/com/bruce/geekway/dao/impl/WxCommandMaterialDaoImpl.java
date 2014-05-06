@@ -30,7 +30,7 @@ public class WxCommandMaterialDaoImpl implements IWxCommandMaterialDao, Initiali
 
     @Override
     public int deleteById(Integer id) {
-        return wxCommandMaterialMapper.deleteByPrimaryKey(id);
+    	return wxCommandMaterialMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -69,4 +69,17 @@ public class WxCommandMaterialDaoImpl implements IWxCommandMaterialDao, Initiali
 	}
 
 	
+	public int deleteByCommandId(int commandId){
+		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
+        criteria.createCriteria().andCommandIdEqualTo(commandId);
+		return wxCommandMaterialMapper.deleteByExample(criteria);
+	
+	}
+	
+	public int deleteByMaterialId(int materialId){
+		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
+        criteria.createCriteria().andMaterialIdEqualTo(materialId);
+		return wxCommandMaterialMapper.deleteByExample(criteria);
+	
+	}
 }

@@ -23,6 +23,13 @@
 
 	<bean id="wxCodeModuleDao" class="com.bruce.geekway.dao.impl.WxCodeModuleDaoImpl">
 	</bean>
+	
+	<bean id="wxMaterialDao" class="com.bruce.geekway.dao.impl.WxMaterialDaoImpl">
+	</bean>
+
+	<bean id="wxCommandDao" class="com.bruce.geekway.dao.impl.WxCommandDaoImpl">
+	</bean>
+	
 	<!-- 
 	<bean id="wxCustomizeMenuDao" class="com.bruce.geekway.dao.impl.WxCustomizeMenuDaoImpl">
 	</bean>

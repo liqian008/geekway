@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bruce.baseAdmin.controller.BaseController;
 import com.bruce.geekway.model.WxMaterial;
 import com.bruce.geekway.service.IUploadService;
+import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxMaterialService;
 
 @Controller
@@ -23,6 +24,8 @@ public class GeekwayMaterialController extends BaseController{
 
 	@Autowired
 	private IWxMaterialService wxMaterialService;
+	@Autowired
+	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
 	private IUploadService uploadService;
 	
@@ -79,4 +82,20 @@ public class GeekwayMaterialController extends BaseController{
 		model.addAttribute("redirectUrl", "./materialList");
 		return "forward:/home/operationRedirect";
 	}
+	
+	
+	@RequestMapping("/delMaterial")
+	public String delMaterial(Model model,  int materialId) {
+		
+		//删除资源的关联
+		wxCommandMaterialService.deleteByCommandId(materialId);
+			
+		//删除menu实体
+		wxMaterialService.deleteById(materialId);
+		
+		model.addAttribute("redirectUrl", "./materialList");
+		return "forward:/home/operationRedirect";
+	}
+	
+	
 }

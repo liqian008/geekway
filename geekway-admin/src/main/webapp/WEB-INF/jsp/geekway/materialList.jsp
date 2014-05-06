@@ -117,8 +117,7 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>素材管理
 					</h5>
-					<a href="./materialAdd?materialType=2"><span class="label label-danger pull-right">新增图文素材</span></a>
-					<a href="./materialAdd?materialType=1"><span class="label label-info pull-right">新增文本素材</span></a>
+					<a href="./materialAdd?type=2"><span class="label label-info pull-right">新增图文素材</span></a>
 				</div> 
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -128,7 +127,6 @@
 								<th>类型</th>
                                 <!--<th>封面</th>--> 
                                 <th>内容</th>
-                                <th>链接</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -143,16 +141,18 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=displayMaterialType(material.getMaterialType())%></td> 
-		                        <!-- 
-		                        <td class="text-center">
-		                        	<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
-		                        	</a> 
+		                        <td>
+		                        	<%=displayMaterialType(material.getMaterialType())%>
+		                        	&nbsp;&nbsp;
+		                        	<%if(material.getMaterialType()==2){ %>
+		                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
+			                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
+			                        	</a>
+		                        	<%}%>
 		                        </td>
-		                         -->
-		                        <td><%=material.getTitle()%></td>
-		                        <td><a href='#' target="_blank">查看</a></td>
+		                        <td>
+		                        	<%=material.getShortContent()%>
+		                        </td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

@@ -54,6 +54,9 @@
 		<property name="eventCodeService" ref="eventCodeService"></property>
 		<!-- <property name="customizeMenuService" ref="customizeMenuService"></property> -->
 		<property name="articleService" ref="articleService"></property>
+		
+		<property name="commandService" ref="commandService"></property>
+		<property name="materialService" ref="materialService"></property> 
 	</bean>
 	
 	<!-- 作为默认处理器，建议将放置在list的最后一个，优先使用其他处理器 -->

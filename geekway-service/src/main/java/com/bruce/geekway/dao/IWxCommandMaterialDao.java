@@ -6,4 +6,8 @@ public interface IWxCommandMaterialDao extends IBaseDao<WxCommandMaterial, Integ
 
 	public int delete(int commandId, int materialId);
 	
+	public int deleteByCommandId(int commandId);
+	
+	public int deleteByMaterialId(int materialId); 
+	
 }

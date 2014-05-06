@@ -7,14 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.WxArticle;
+import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCustomizeMenu;
 import com.bruce.geekway.model.WxEventCode;
+import com.bruce.geekway.model.WxMaterial;
 import com.bruce.geekway.model.wx.request.*;
 import com.bruce.geekway.model.wx.response.*;
 import com.bruce.geekway.service.IWxArticleService;
+import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxCustomizeMenuService;
 import com.bruce.geekway.service.IWxEventCodeService;
 import com.bruce.geekway.service.IWxEventCodeService;
+import com.bruce.geekway.service.IWxMaterialService;
 
 /**
  * 根据Key值，返回DB中对应的数据
@@ -35,19 +39,25 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
     private IWxArticleService articleService;
 //	@Autowired
 //    private IWxCustomizeMenuService customizeMenuService;
+	
+	
+	@Autowired
+    private IWxCommandService commandService;
+	@Autowired
+    private IWxMaterialService materialService;
     
 	
 	@Override
 	protected BaseResponse processTextRequest(TextRequest request) {
-		String code = ((TextRequest)request).getContent();
+		String key = ((TextRequest)request).getContent();
         
-        WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 1, code);
-        if(eventCode!=null){
-        	if(eventCode.getDisplayType()==1){//文本回复
-        		return textReply(request, eventCode.getReplyContent());
-        	}else if(eventCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId(), eventCode.getRowLimit());
-        		return newsReply(request, articleList);
+        WxCommand command = commandService.loadByCommandType((short) 1, key);
+        if(command!=null){
+        	if(command.getMaterialType()==1){//文本回复
+        		return textReply(request, command.getReplyContent());
+        	}else if(command.getMaterialType()==2){//图文回复
+        		List<WxMaterial> materialList = materialService.queryMaterialsByCommandId(command.getId(), command.getRowLimit());
+        		return newsReply(request, materialList);
         	}
         }
 		return null;
@@ -56,13 +66,13 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	@Override
 	protected BaseResponse processClickEventRequest(EventRequest request) {
 		String key = ((EventRequest)request).getEventKey();
-		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 2, key);
-        if(eventCode!=null){
-        	if(eventCode.getDisplayType()==1){//文本回复
-        		return textReply(request, eventCode.getReplyContent());
-        	}else if(eventCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId(), eventCode.getRowLimit());
-        		return newsReply(request, articleList);
+		WxCommand command = commandService.loadByCommandType((short) 2, key);
+        if(command!=null){
+        	if(command.getMaterialType()==1){//文本回复
+        		return textReply(request, command.getReplyContent());
+        	}else if(command.getMaterialType()==2){//图文回复
+        		List<WxMaterial> materialList = materialService.queryMaterialsByCommandId(command.getId(), command.getRowLimit());
+        		return newsReply(request, materialList);
         	}
         }
 		return null;
@@ -71,13 +81,13 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 	@Override
 	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
 		String key = "subscribe";
-		WxEventCode eventCode = eventCodeService.loadByTypeCode((short) 3, key);
-        if(eventCode!=null){
-        	if(eventCode.getDisplayType()==1){//文本回复
-        		return textReply(request, eventCode.getReplyContent());
-        	}else if(eventCode.getDisplayType()==2){//图文回复
-        		List<WxArticle> articleList = articleService.queryArticlesByModuleId(eventCode.getModuleId(), eventCode.getRowLimit());
-        		return newsReply(request, articleList);
+		WxCommand command = commandService.loadByCommandType((short) 3, key);
+        if(command!=null){
+        	if(command.getMaterialType()==1){//文本回复
+        		return textReply(request, command.getReplyContent());
+        	}else if(command.getMaterialType()==2){//图文回复
+        		List<WxMaterial> materialList = materialService.queryMaterialsByCommandId(command.getId(), command.getRowLimit());
+        		return newsReply(request, materialList);
         	}
         }
 		return null;
@@ -99,4 +109,21 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
 		this.articleService = articleService;
 	}
 
+	public IWxCommandService getCommandService() {
+		return commandService;
+	}
+
+	public void setCommandService(IWxCommandService commandService) {
+		this.commandService = commandService;
+	}
+
+	public IWxMaterialService getMaterialService() {
+		return materialService;
+	}
+
+	public void setMaterialService(IWxMaterialService materialService) {
+		this.materialService = materialService;
+	}
+
+	
 }

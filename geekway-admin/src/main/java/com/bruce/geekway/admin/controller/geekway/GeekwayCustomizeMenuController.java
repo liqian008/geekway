@@ -113,6 +113,15 @@ public class GeekwayCustomizeMenuController {
 			result = wxCustomizeMenuService.save(customizeMenu);
 		}
 		
+		model.addAttribute("redirectUrl", "./customizeMenuList");
+		return "forward:/home/operationRedirect";
+	}
+
+	
+	@RequestMapping("/delCustomizeMenu")
+	public String delCustomizeMenu(Model model,  int menuId) {
+		//删除menu实体
+		wxCustomizeMenuService.deleteById(menuId);
 		
 		model.addAttribute("redirectUrl", "./customizeMenuList");
 		return "forward:/home/operationRedirect";

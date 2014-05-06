@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.ItoProductOrder"%>
+<%@page import="com.bruce.geekway.model.WxCommand"%>
+<%@page import="com.bruce.geekway.model.WxMaterial"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.utils.*"%>
-
 
 
 <!DOCTYPE html>
@@ -13,7 +12,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITO管理平台</title>
+<title>Geekway微信管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -73,7 +72,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						订单管理
+						素材关联管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -84,8 +83,8 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">订单管理</li>
+					<li><a href="index.html">首页</a></li>
+					<li class="active">素材关联管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -94,55 +93,70 @@
 			</div>
 			<!-- /breadcrumbs line -->
 
-			<div class="callout callout-info fade in">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
-				<p>
-					1、xxxxxx<br/>
-				</p>
-			</div>
-
+			
+			<form id="validate" action="<s:url value='./saveMaterial'/>" method="post"  class="form-horizontal form-bordered">
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>指令信息
+						</h6>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">接入指令:
+							</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="command" id="command" value="${command.command}" readonly="readonly"/>
+	                             <form:hidden path="command.id"/>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</form>
+			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>订单管理
+						<i class="icon-people"></i>已关联图文
 					</h5>
+					<a href="./commandMaterialSetAdd?commandId=${command.id}"><span class="label label-danger pull-right">关联新图文</span></a>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
 						<thead>
 							<tr>
-								<th class="text-center">序号</th>
-								<th>商品</th>
-                                <th>SKU</th>
-                                <th>总价</th>
-                                <th>支付</th>
+								<th><input type="checkbox" class="styled"></th>
+								<th>序号</th>
+                                <th>封面</th>
+                                <th>资源标题</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<ItoProductOrder> orderList = (List<ItoProductOrder>)request.getAttribute("orderList");
-                           	if(orderList!=null&&orderList.size()>0){
+                           	List<WxMaterial> materialList = (List<WxMaterial>)request.getAttribute("mappedMaterialList");
+                           	if(materialList!=null&&materialList.size()>0){
                            		int i=0;
-                           		for(ItoProductOrder order: orderList){
+                           		for(WxMaterial material: materialList){
                            			i++;
                            	%>
 							<tr>
-		                        <td><%=i%></td>
-		                        <td title="SN：<%=order.getOutId()%>"><%=order.getTitle()%></td>
-		                        <td class="text-center"><%=order.getSku()%></td>
-		                        <td title="单价：<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getPrice()%>元</td>
-		                        <td><%=order.getPayStatus()==1?"到付":"扫码"%></td>
-		                        <td title="<%=order.getPayStatus()==1?"":order.getPostSn()%>"><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
+		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
+		                        <td><%=material.getId()%></td>
+		                        <td>
+		                        	<!-- <img src='/designer-admin/img/demo/sidebar_material_big.png' width="50px"></img> -->
+		                        </td>
+		                        <td><%=material.getTitle()%></td>
+		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        	
-										<a href="./orderEdit?orderId=<%=order.getId()%>"
+		                        		<a href="./removeCommandMaterial?commandId=${command.id}&materialId=<%=material.getId()%>"  
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查 看"><i class="icon-envelop"></i></a> 
+											data-original-title="移除关联"><i class="icon-remove3"></i></a>
 									</div>
 								</td>
                                </tr>
@@ -151,6 +165,22 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<!-- 
+				<div class="table-footer">
+					<div class="table-actions">
+						<label>操作:</label>
+						<input type="button" value="批量移除" class="btn btn-danger btn-xs">
+					</div> 
+					<ul class="pagination">
+						<li><a href="#">Prev</a></li>
+						<li ><a href="#">1</a></li>
+						<li class="active"><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">Next</a></li>
+					</ul>
+				</div>
+				
 			</div>
 			<!-- /table view -->
 
