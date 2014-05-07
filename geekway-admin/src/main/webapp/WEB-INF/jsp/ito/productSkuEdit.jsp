@@ -167,6 +167,15 @@
 							<div class="col-sm-3">
 								<div class="input-group">
 									<span class="input-group-btn">
+										<button class="btn btn-default" type="button">原价(元)</button>
+									</span>
+									<input type="text" class="form-control" name="skuOriginPrice_<%=skuCombineValue%>">
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="input-group">
+									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">售价(元)</button>
 									</span>
 									<input type="text" class="form-control" name="skuPrice_<%=skuCombineValue%>">
@@ -182,14 +191,7 @@
 								</div>
 							</div>
 							
-							<div class="col-sm-3">
-								<div class="input-group">
-									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">SN</button>
-									</span>
-									<input type="text" class="form-control" name="skuSn_<%=skuCombineValue%>">
-								</div>
-							</div>
+							
 						</div>
 						<%}%>
 						

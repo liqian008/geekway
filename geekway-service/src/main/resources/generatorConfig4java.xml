@@ -3,12 +3,12 @@
 <generatorConfiguration>
 	
 	
-	<!-- 
 	<classPathEntry
 		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
-	-->
+	<!-- 
 	<classPathEntry
 		location="/home/liqian/data/mysql.jar" />		
+	-->
 	
 	<context id="context1">
 		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
@@ -31,9 +31,9 @@
 
 		<!-- geekway config -->
 		
-		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
 		
 		<!--
+		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
 		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
@@ -52,10 +52,10 @@
 		 -->
 		 
 		<!-- ito config  -->
+		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
 		<!--
 		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
 		<table schema="wx" tableName="ito_product" domainObjectName="ItoProduct"/> 
-		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
 		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>
 		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
 		<table schema="wx" tableName="ito_product_sku_value" domainObjectName="ItoProductSkuValue"/>

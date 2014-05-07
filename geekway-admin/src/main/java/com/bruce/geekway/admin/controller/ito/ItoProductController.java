@@ -153,31 +153,44 @@ public class ItoProductController {
 						
 						List<ItoSkuPropValue> sizeSkuList = new ArrayList<ItoSkuPropValue>();
 						List<ItoSkuPropValue> colorSkuList = new ArrayList<ItoSkuPropValue>();
-
-						if(skuGroupMap!=null&&skuGroupMap.size()==2){
+						List<ItoSkuPropValue> materialSkuList = new ArrayList<ItoSkuPropValue>();
+						
+						
+						if(skuGroupMap!=null&&skuGroupMap.size()==3){
 							sizeSkuList = skuGroupMap.get(1);
 							colorSkuList = skuGroupMap.get(2);
+							materialSkuList = skuGroupMap.get(3);
 						}
 
 						List<String> skuCombineLabelList = new ArrayList<String>();
 						List<String> skuCombineValueList = new ArrayList<String>();
 						List<String> skuCodeList = new ArrayList<String>();
 						
-						for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){
+						for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){//尺码SKU
 							int sizeSkuPropId = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getId();
 							String sizeSkuPropName = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getName();
 							String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId(), sizeSkuPropName, sizeSkuPropValue.getName());
 							
-							for(ItoSkuPropValue colorSkuPropValue: colorSkuList){
-								skuCombineLabelList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName());
-								skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId());
+							for(ItoSkuPropValue colorSkuPropValue: colorSkuList){//颜色SKU
 								//构造skuCode
 								int colorSkuPropId = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getId();
 								String colorSkuPropName = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getName();
 								String colorSkuCode = getSkuCode(colorSkuPropId, colorSkuPropValue.getId(), colorSkuPropName, colorSkuPropValue.getName());
-								skuCodeList.add(sizeSkuCode + colorSkuCode);
+								
+								for(ItoSkuPropValue materialSkuPropValue: materialSkuList){//材质SKU
+									skuCombineLabelList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName()+"+"+materialSkuPropValue.getName());
+									skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId()+"+"+materialSkuPropValue.getId());
+									//构造skuCode
+									int materialSkuPropId = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getId();
+									String materialSkuPropName = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getName();
+									String materialSkuCode = getSkuCode(materialSkuPropId, materialSkuPropValue.getId(), materialSkuPropName, materialSkuPropValue.getName());
+									
+									//SKUCode
+									skuCodeList.add(sizeSkuCode + colorSkuCode + materialSkuCode);
+								}
 							}
 						}
+						
 						
 						model.addAttribute("skuCombineLabelList", skuCombineLabelList);
 						model.addAttribute("skuCombineValueList", skuCombineValueList);
@@ -206,18 +219,20 @@ public class ItoProductController {
 		if(skuCombineArray!=null&&skuCombineArray.length>0){
 			Date currentTime = new Date();
 			for(String skuCombine: skuCombineArray){
+				double skuOriginPrice = NumberUtils.toDouble(request.getParameter("skuOriginPrice_"+skuCombine), 0);
 				double skuPrice = NumberUtils.toDouble(request.getParameter("skuPrice_"+skuCombine), 0);
 				int skuNum = NumberUtils.toInt(request.getParameter("skuQuality_"+skuCombine), 0);
 				String skuName = StringUtils.defaultString(request.getParameter("skuName_"+skuCombine), "");
 				String skuCode = StringUtils.defaultString(request.getParameter("skuCode_"+skuCombine), "");
 				
-				String skuSn = StringUtils.defaultString(request.getParameter("skuSn_"+skuCombine), "");
+//				String skuSn = StringUtils.defaultString(request.getParameter("skuSn_"+skuCombine), "");
 				
 				//保存
 				ItoSku itoSku = new ItoSku();
 				itoSku.setProductId(productId);
+				itoSku.setOriginPrice(skuOriginPrice);
 				itoSku.setPrice(skuPrice);
-				itoSku.setOutId(skuSn);
+//				itoSku.setOutId(skuSn);
 				itoSku.setQuality(skuNum);
 				itoSku.setName(skuName);
 				itoSku.setPropertiesName(skuCode);
@@ -259,17 +274,11 @@ public class ItoProductController {
 	 * @return
 	 */
 	private static String getSkuCode(int pid1, int vid1, String pname1, String vname1){
-			//, int pid2, int vid2, String pname2, String vname2){
 		StringBuilder sb = new StringBuilder();
 		sb.append(pid1+":");
 		sb.append(vid1+":");
 		sb.append(pname1+":");
 		sb.append(vname1+";");
-		
-//		sb.append(pid2+":");
-//		sb.append(vid2+":");
-//		sb.append(pname2+":");
-//		sb.append(vname2+";");
 		
 		return sb.toString();
 	}
