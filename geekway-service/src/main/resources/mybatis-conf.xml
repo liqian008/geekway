@@ -10,7 +10,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxTestMapper.xml" /> 
 		 -->
-		
+		<mapper resource="com/bruce/geekway/model/xml/WxMpUserMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMapper.xml" />

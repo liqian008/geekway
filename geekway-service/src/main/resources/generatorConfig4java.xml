@@ -4,10 +4,10 @@
 	
 	
 	<classPathEntry
-		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
+		location="/home/liqian/data/mysql.jar" />		
 	<!-- 
 	<classPathEntry
-		location="/home/liqian/data/mysql.jar" />		
+		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 	-->
 	
 	<context id="context1">
@@ -31,6 +31,7 @@
 
 		<!-- geekway config -->
 		
+		<table schema="wx" tableName="wx_mp_user" domainObjectName="WxMpUser"/>
 		
 		<!--
 		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
@@ -52,8 +53,8 @@
 		 -->
 		 
 		<!-- ito config  -->
-		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
 		<!--
+		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
 		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
 		<table schema="wx" tableName="ito_product" domainObjectName="ItoProduct"/> 
 		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>

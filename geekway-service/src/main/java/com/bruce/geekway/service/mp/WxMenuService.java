@@ -108,10 +108,6 @@ public class WxMenuService extends WxBaseService {
 		return null;
 	}
 	
-	private WxAuthResult getWxAccessToken() {
-		WxAuthResult authResult = getAccessToken(ConfigUtil.getString("weixinmp_appid"), ConfigUtil.getString("weixinmp_appsecret"));
-		return authResult;
-	}
 	
 //	public static void main(String[] args) {
 //		WxMenuService menuService = new WxMenuService();
