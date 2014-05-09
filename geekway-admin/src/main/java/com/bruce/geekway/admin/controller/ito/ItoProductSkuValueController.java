@@ -20,7 +20,7 @@ import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuPropService;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 
-
+@Deprecated
 @Controller
 @RequestMapping("/ito")
 public class ItoProductSkuValueController {

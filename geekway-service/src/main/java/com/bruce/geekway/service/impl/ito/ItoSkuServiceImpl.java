@@ -45,6 +45,15 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 	public List<ItoSku> queryAllByProductId(int productId) {
 		return itoSkuDao.queryAllByProductId(productId); 
 	}
+	
+	@Override
+	public ItoSku loadProductSku(int productId, int skuId) {
+		ItoSku sku = loadById(skuId);
+		if(sku!=null&&sku.getProductId()!=null&&sku.getProductId()==productId){
+			return sku;
+		}
+		return null;
+	}
 
 	public IItoSkuDao getItoSkuDao() {
 		return itoSkuDao;

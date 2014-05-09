@@ -7,7 +7,9 @@ import com.bruce.geekway.model.ItoSku;
 
 public interface IItoSkuDao extends IBaseDao<ItoSku, Integer> {
 	
-    public List<ItoSku> queryAllByProductId(int productId); 
+    public List<ItoSku> queryAllByProductId(int productId);
+
+//	public ItoSku loadProductSku(int productId, int skuId); 
 
 //    public List<ItoSku> queryArticlesByModuleId(int moduleId, int limit);
 //

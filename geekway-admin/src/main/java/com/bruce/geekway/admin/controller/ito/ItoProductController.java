@@ -191,14 +191,13 @@ public class ItoProductController {
 							}
 						}
 						
-						
 						model.addAttribute("skuCombineLabelList", skuCombineLabelList);
 						model.addAttribute("skuCombineValueList", skuCombineValueList);
 						model.addAttribute("skuCodeList", skuCodeList);
 					}
 				}
 			}
-			return "ito/productSkuEdit";
+			return "ito/productAddSkus";
 		}
 	}
 	
@@ -242,9 +241,55 @@ public class ItoProductController {
 			}
 		}
 
-		model.addAttribute("redirectUrl", "./productList");
+		//TODO 进入该product的sku列表页，供其确认&上传相应图片
+		model.addAttribute("redirectUrl", "./productSkus?productId="+productId);
 		return "forward:/home/operationRedirect";
+		
+//		model.addAttribute("redirectUrl", "./productList");
+//		return "forward:/home/operationRedirect";
 	}
+	
+	/**
+	 * 查看某个商品下的所有sku商品
+	 * @param model
+	 * @param request
+	 * @param productId
+	 * @return
+	 */
+	@RequestMapping("/productSkus")
+	public String productSkus(Model model, HttpServletRequest request, int productId) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		ItoProduct Product = itoProductService.loadById(productId);
+		model.addAttribute("product", Product);
+		
+		//获取产品对应的sku列表
+		List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
+		model.addAttribute("skuList", skuList);
+		
+		return "ito/productSkuList";
+	}
+	
+	
+	
+	@RequestMapping("/productSkuEdit")
+	public String productSkuEdit(Model model, HttpServletRequest request, int productId, int skuId) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		
+		
+		ItoSku productSku = itoSkuService.loadProductSku(productId, skuId);
+		if(productSku!=null){
+			model.addAttribute("productSku", productSku);
+			ItoProduct product = itoProductService.loadById(productId);
+			model.addAttribute("product", product);
+		}
+		
+		return "ito/productEdit";
+	}
+	
 	
 	/**
 	 * 获取sku属性列表

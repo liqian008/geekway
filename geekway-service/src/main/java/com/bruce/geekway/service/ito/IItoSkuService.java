@@ -9,4 +9,6 @@ public interface IItoSkuService extends IBaseService<ItoSku, Integer>{
 	
 	public List<ItoSku> queryAllByProductId(int productId);
 	
+	public ItoSku loadProductSku(int productId, int skuId);
+	
 }

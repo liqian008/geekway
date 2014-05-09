@@ -84,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">修改商品SKU数据</li>
+					<li class="active">商品SKU数据</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -102,9 +102,7 @@
 			</div>
 
 			<%
-			ItoSku productSku = (ItoSku)request.getAttribute("productSku");
 			ItoProduct product = (ItoProduct)request.getAttribute("product");
-			
 			%>
 
 			<form id="validate" action="<s:url value='./saveProductSku'/>" method="post"  class="form-horizontal form-bordered">
@@ -113,57 +111,109 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>修改商品SKU数据
+							<i class="icon-bubble4"></i>填写商品SKU数据
 						</h6>
 					</div>
 					<div class="panel-body">
 						
-						<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-						
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productSku.title}" readonly="readonly"/>
+								<input type="text" class="form-control" name="title" id="title" value="${product.title}" readonly="readonly"/>
+								<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span></label>
+						<%
+						/* HashMap<Integer, List<ItoSkuPropValue>> skuGroupMap = (HashMap<Integer, List<ItoSkuPropValue>>)request.getAttribute("skuGroupMap");
+						
+						List<ItoSkuPropValue> sizeSkuList = new ArrayList<ItoSkuPropValue>();
+						List<ItoSkuPropValue> colorSkuList = new ArrayList<ItoSkuPropValue>();
+
+						if(skuGroupMap!=null&&skuGroupMap.size()==2){
+							sizeSkuList = skuGroupMap.get(1);
+							colorSkuList = skuGroupMap.get(2);
+						}
+
+						List<String> skuCombineTitleList = new ArrayList<String>();
+						List<String> skuCombineValueList = new ArrayList<String>();
+						
+						for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){
+							for(ItoSkuPropValue colorSkuPropValue: colorSkuList){
+								skuCombineTitleList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName());
+								skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId());
+							}
+						} */
+						
+						List<String> skuCombineLabelList = (List<String>)request.getAttribute("skuCombineLabelList");
+						List<String> skuCombineValueList = (List<String>)request.getAttribute("skuCombineValueList");
+						List<String> skuCodeList = (List<String>)request.getAttribute("skuCodeList");
+						
+						
+						
+						for(int i=0;i<skuCombineLabelList.size();i++){
+							String skuCombineTitle = skuCombineLabelList.get(i);
+							String skuCombineValue = skuCombineValueList.get(i);
+							String skuCode = skuCodeList.get(i);
+						%>
+						<div class="form-group has-error sku-info">
+							<label class="col-sm-2 control-label text-right">SKU(<%=skuCombineTitle%>): <span class="mandatory">*</span>
+							</label>
+							
+							<input type="hidden" class="form-control" name="skuName_<%=skuCombineValue%>" value="<%=skuCombineTitle%>">
+							<input type="hidden" class="form-control" name="skuCombines" value="<%=skuCombineValue%>">
+							<input type="hidden" class="form-control" name="skuCode_<%=skuCombineValue%>" value="<%=skuCode%>">
+							
+							<div class="col-sm-3">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button">原价(元)</button>
+									</span>
+									<input type="text" class="form-control" name="skuOriginPrice_<%=skuCombineValue%>">
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button">售价(元)</button>
+									</span>
+									<input type="text" class="form-control" name="skuPrice_<%=skuCombineValue%>">
+								</div>
+							</div>
+							
+							<div class="col-sm-3">
+								<div class="input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button">数量(个)</button>
+									</span>
+									<input type="text" class="form-control" name="skuQuality_<%=skuCombineValue%>">
+								</div>
+							</div>
+							
+							
+						</div>
+						<%}%>
+						
+						<!-- <div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
+							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productSku.title}" readonly="readonly"/>
+								<form:select path="product.status" class="select-liquid">
+									<form:option value="0"  label="下架"/>
+									<form:option value="1"  label="上架"/>
+								</form:select>
 							</div>
-						</div>
+						</div> -->
 						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$原价(元): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" value="${productSku.originPrice}" >
-							</div>
-						</div>
-						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$现价(元): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" value="${productSku.price}" >
-							</div>
-						</div>
-						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$库存(个): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="quality" value="${productSku.quality}" >
-							</div>
-						</div>
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
+					
+					
 					
 				</div>
 				

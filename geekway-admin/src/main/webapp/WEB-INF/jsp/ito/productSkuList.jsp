@@ -1,12 +1,9 @@
-<%@page import="java.util.Map.Entry"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%@page import="java.util.*"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.ItoSku"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
-
-<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -15,7 +12,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITO管理平台</title>
+<title>Geekway微信管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -75,7 +72,10 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品SKU数据
+						查看SKU商品
+						<!-- 
+						<small>Headings, lists, code, pre etc. </small>
+						 -->
 					</h3>
 				</div>
 			</div>
@@ -83,8 +83,8 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">修改商品SKU数据</li>
+					<li><a href="index.html">首页</a></li>
+					<li class="active">查看SKU商品</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -92,82 +92,64 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、点击封面图，可预览大图<br/>
+					2、点击【编辑】按钮，可对查看SKU商品进行编辑
 				</p>
 			</div>
 
-			<%
-			ItoSku productSku = (ItoSku)request.getAttribute("productSku");
-			ItoProduct product = (ItoProduct)request.getAttribute("product");
-			
-			%>
-
-			<form id="validate" action="<s:url value='./saveProductSku'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>修改商品SKU数据
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productSku.title}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productSku.title}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$原价(元): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" value="${productSku.originPrice}" >
-							</div>
-						</div>
-						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$现价(元): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" value="${productSku.price}" >
-							</div>
-						</div>
-						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$库存(个): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="quality" value="${productSku.quality}" >
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-					</div>
-					
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>查看SKU商品
+					</h5>
+				</div> 
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>SKU名称</th>
+                                <th>价格</th> 
+                                <th>库存</th>
+                                <th>运费</th>
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<ItoSku> skuList = (List<ItoSku>)request.getAttribute("skuList");
+                           	if(skuList!=null&&skuList.size()>0){
+                           		int i=0;
+                           		for(ItoSku sku: skuList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>
+		                        <td title="<%=sku.getOriginPrice()%>"><%=sku.getPrice()%></td>
+		                        <td><%=sku.getQuality()%></td>
+		                        <td>运费</td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="./productSkuEdit?productId=<%=sku.getProductId()%>&skuId=<%=sku.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
 				</div>
-				
-			</form>
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -175,18 +157,6 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
-	<script type="text/javascript">
-		//checkbox操作时
-		$('.sku-prop').click(function(){
-			//删除原dom
-			$('.sku-info').remove();
-			//创建新dom
-			
-			
-		})
-	
-	</script>
-	
 </body>
 </html>
+
