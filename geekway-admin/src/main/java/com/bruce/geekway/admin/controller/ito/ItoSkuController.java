@@ -1,5 +1,6 @@
 package com.bruce.geekway.admin.controller.ito;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bruce.geekway.model.ItoProduct;
 import com.bruce.geekway.model.ItoSku;
+import com.bruce.geekway.model.ItoSkuPropValue;
+import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuService;
 
 
@@ -19,17 +24,95 @@ public class ItoSkuController {
 
 	@Autowired
 	private IItoSkuService itoSkuService;
+	@Autowired
+	private IItoProductService itoProductService;
 	
 	
-	@RequestMapping("/skuList")
-	public String skuList(Model model, HttpServletRequest request) {
+//	@RequestMapping("/skuList")
+//	public String skuList(Model model, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		List<ItoSku> skuList = itoSkuService.queryAll();
+//		model.addAttribute("skuList", skuList);
+//		return "ito/skuList";
+//	}
+	
+	
+	
+	
+	/**
+	 * 查看某个商品下的所有sku商品
+	 * @param model
+	 * @param request
+	 * @param productId
+	 * @return
+	 */
+	@RequestMapping("/productSkus")
+	public String productSkus(Model model, HttpServletRequest request, int productId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<ItoSku> skuList = itoSkuService.queryAll();
+		ItoProduct itoProduct = itoProductService.loadById(productId);
+		model.addAttribute("product", itoProduct);
+		
+		//获取产品对应的sku列表
+		List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
 		model.addAttribute("skuList", skuList);
-		return "ito/skuList";
+		
+		return "ito/productSkuList";
 	}
+	
+	
+	/**
+	 * 编辑Sku信息
+	 * @param model
+	 * @param request
+	 * @param productId
+	 * @param skuId
+	 * @return
+	 */
+	@RequestMapping("/productSkuEdit")
+	public String productSkuEdit(Model model, HttpServletRequest request, int productId, int skuId) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		
+		
+		ItoSku productSku = itoSkuService.loadProductSku(productId, skuId);
+		if(productSku!=null){
+			model.addAttribute("productSku", productSku);
+			ItoProduct product = itoProductService.loadById(productId);
+			model.addAttribute("product", product);
+		}
+		
+		return "ito/productSkuEdit";
+	}
+	
+	/**
+	 * 保存单个sku信息
+	 * @param model
+	 * @param itoSku
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/saveSku", method = RequestMethod.POST)
+	public String saveSkuPropValue(Model model, ItoSku itoSku, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		int result = 0;
+		
+		Date currentTime = new Date();
+		itoSku.setUpdateTime(currentTime);
+		if(itoSku!=null&&itoSku.getId()!=null&&itoSku.getId()>0){
+			itoSku.setSkuThumbPicUrl(itoSku.getSkuPicUrl()); 			result = itoSkuService.updateById(itoSku);
+		}
+		
+		model.addAttribute("redirectUrl", "./productSkus?productId="+itoSku.getProductId());
+		return "forward:/home/operationRedirect";
+	}
+	
 	
 	
 }

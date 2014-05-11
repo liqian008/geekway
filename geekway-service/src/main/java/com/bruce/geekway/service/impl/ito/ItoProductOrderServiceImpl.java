@@ -40,6 +40,11 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 		return itoProductOrderDao.queryAll();
 	}
 	
+	@Override
+	public int changeOrderStatus(ItoProductOrder order) {
+		return itoProductOrderDao.updateById(order);
+	}
+	
 	
 
 	public IItoProductOrderDao getItoProductOrderDao() {
@@ -49,5 +54,7 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 	public void setItoProductOrderDao(IItoProductOrderDao itoProductOrderDao) {
 		this.itoProductOrderDao = itoProductOrderDao;
 	}
+
+	
 	
 }

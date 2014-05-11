@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bruce.geekway.model.ItoProduct;
 import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.service.ito.IItoProductOrderService;
 import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
@@ -28,6 +29,8 @@ public class ProductController {
 	@Autowired
 	private IItoProductService itoProductService;
 	@Autowired
+	private IItoProductOrderService itoProductOrderService;
+	@Autowired
 	private IItoSkuService itoSkuService;
 	
 	/**
@@ -41,6 +44,7 @@ public class ProductController {
 		
 		List<ItoProduct> productList =  itoProductService.queryAll();
 		if(productList!=null&&productList.size()>0){
+			
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("productList", productList);
 			return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
@@ -78,6 +82,7 @@ public class ProductController {
 		//检查产品合法性
 		if(product!=null&&product.getId()!=null){
 			
+			
 			List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
 			product.setProductSkus(skuList);
 			
@@ -88,23 +93,5 @@ public class ProductController {
 		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 	}
 	
-	/**
-	 * 提交订单
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/postOrder.json")
-	public ModelAndView postOrder(String orderJson){
-		//检查请求合法性
-		
-		//检查参数合法性
-		
-		//获取支付类型（到付or支付宝）
-		
-		//到付直接修改更新db
-		
-		//alipay情况下，生成二维码并返回
-		
-		return null;
-	}
+	
 }

@@ -47,26 +47,20 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
     public List<ItoProductOrder> fallLoadList(Integer tailId, int limit) {
         return null;
     }
+    
+
+//	@Override
+//	public int changeOrderStatus(ItoProductOrder order) {
+//		//TODO 
+//		return 0;
+//	}
+    
+    
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
     }
-
-//    @Override
-//    public List<ItoProductOrder> queryArticlesByModuleId(int moduleId) {
-//        return itoProductOrderMapper.queryArticlesByModuleId(moduleId);
-//    }
-//    
-//    @Override
-//	public List<ItoProductOrder> queryArticlesByModuleId(int moduleId, int limit){
-//    	return itoProductOrderMapper.queryArticlesByModuleIdLimit(moduleId, limit);
-//	}
-//    
-//    @Override
-//    public List<ItoProductOrder> queryArticlesOutModuleId(int moduleId) {
-//        return itoProductOrderMapper.queryArticlesOutModuleId(moduleId);
-//    }
 
     public ItoProductOrderMapper getItoProductOrderMapper() {
 		return itoProductOrderMapper;
@@ -75,6 +69,7 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
 	public void setItoProductOrderMapper(ItoProductOrderMapper itoProductOrderMapper) {
 		this.itoProductOrderMapper = itoProductOrderMapper;
 	}
+
 
 	
 

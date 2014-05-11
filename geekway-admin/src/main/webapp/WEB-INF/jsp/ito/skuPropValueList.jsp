@@ -5,7 +5,19 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
+<%@ include file="../inc/include_tag.jsp" %>
 
+<%!String displaySkuType(int skuId){
+	if(1==skuId){
+		return "尺码";
+	}else if(2==skuId){
+		return "颜色";
+	}else if(3==skuId){
+		return "材质";
+	}
+	return "类型错误";
+}
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -131,7 +143,7 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=itoSkuPropValue.getSkuPropId()==1?"尺码":"颜色"%></td>
+		                        <td><%=displaySkuType(itoSkuPropValue.getSkuPropId())%></td>
 		                        <td><%=itoSkuPropValue.getName()%></td>
 		                        <td><%=itoSkuPropValue.getDescription()%></td>
 		                        <td class='text-center'>

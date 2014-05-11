@@ -107,7 +107,7 @@
 			
 			%>
 
-			<form id="validate" action="<s:url value='./saveProductSku'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveSku'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
@@ -119,24 +119,51 @@
 					<div class="panel-body">
 						
 						<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
+						<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
 						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productSku.title}" readonly="readonly"/>
+								<label class="control-label">
+									${product.title}
+								</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">SKU图片:<span class="mandatory">*</span>
+							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productSku.title}" readonly="readonly"/>
+								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									${productSku.name}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									${productSku.propertiesName}
+								</label>
 							</div>
 						</div>
 						
 						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$原价(元): <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">原价(元): <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-2">
 								<input type="text" class="form-control" name="originPrice" value="${productSku.originPrice}" >
@@ -144,7 +171,7 @@
 						</div>
 						
 						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$现价(元): <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">现价(元): <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-2">
 								<input type="text" class="form-control" name="price" value="${productSku.price}" >
@@ -152,10 +179,10 @@
 						</div>
 						
 						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">$库存(个): <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">库存(个): <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="quality" value="${productSku.quality}" >
+								<input type="text" class="form-control" name="num" value="${productSku.num}" >
 							</div>
 						</div>
 						
@@ -177,15 +204,32 @@
 	<!-- /page container -->
 	
 	<script type="text/javascript">
-		//checkbox操作时
-		$('.sku-prop').click(function(){
-			//删除原dom
-			$('.sku-info').remove();
-			//创建新dom
-			
-			
-		})
-	
+	$(document).ready(function(){
+	    $("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	});
 	</script>
 	
 </body>

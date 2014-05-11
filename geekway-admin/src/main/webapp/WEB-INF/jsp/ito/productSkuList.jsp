@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.ItoSku"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
@@ -84,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">查看SKU商品</li>
+					<li class="active">商品SKU</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -109,12 +109,13 @@
 						<i class="icon-people"></i>查看SKU商品
 					</h5>
 				</div> 
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
 						<thead>
 							<tr>
-								<th>序号</th>
-								<th>SKU名称</th>
+								<th>ID</th>
+								<th>图片</th>
+                                <th>SKU名称</th>
                                 <th>价格</th> 
                                 <th>库存</th>
                                 <th>运费</th>
@@ -123,6 +124,9 @@
 						</thead>
 						<tbody>
 							<%
+							
+							ItoProduct product = (ItoProduct) request.getAttribute("product"); 
+							
                            	List<ItoSku> skuList = (List<ItoSku>)request.getAttribute("skuList");
                            	if(skuList!=null&&skuList.size()>0){
                            		int i=0;
@@ -131,9 +135,14 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=sku.getSkuPicUrl()%>" class="lightbox">
+		                        	<img src='<%=sku.getSkuPicUrl()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
 		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>
-		                        <td title="<%=sku.getOriginPrice()%>"><%=sku.getPrice()%></td>
-		                        <td><%=sku.getQuality()%></td>
+		                        <td title="原价: <%=sku.getOriginPrice()%>元"><%=sku.getPrice()%>元</td>
+		                        <td><%=sku.getNum()%>个</td>
 		                        <td>运费</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
@@ -148,6 +157,13 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<div class="table-footer">
+					<div class="table-actions">
+						<a href="./batchEditProductSkus?productId=<%=product.getId()%>" class="btn btn-danger btn-xs">批量编辑商品SKU</a>
+					</div> 
+				</div>
+				
 			</div>
 			<!-- /table view -->
 

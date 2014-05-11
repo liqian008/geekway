@@ -105,13 +105,13 @@
 			ItoProduct product = (ItoProduct)request.getAttribute("product");
 			%>
 
-			<form id="validate" action="<s:url value='./saveProductSku'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./batchSaveProductSkus'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>填写商品SKU数据
+							<i class="icon-bubble4"></i>修改商品SKU数据
 						</h6>
 					</div>
 					<div class="panel-body">
@@ -119,57 +119,41 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${product.title}" readonly="readonly"/>
+								<label class="control-label">
+									${product.title}
+								</label>
 								<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${product.productPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${product.productPicUrl}" width="200px" />
+								</a>
+							</div>
+						</div>
+						
 						<%
-						/* HashMap<Integer, List<ItoSkuPropValue>> skuGroupMap = (HashMap<Integer, List<ItoSkuPropValue>>)request.getAttribute("skuGroupMap");
 						
-						List<ItoSkuPropValue> sizeSkuList = new ArrayList<ItoSkuPropValue>();
-						List<ItoSkuPropValue> colorSkuList = new ArrayList<ItoSkuPropValue>();
-
-						if(skuGroupMap!=null&&skuGroupMap.size()==2){
-							sizeSkuList = skuGroupMap.get(1);
-							colorSkuList = skuGroupMap.get(2);
-						}
-
-						List<String> skuCombineTitleList = new ArrayList<String>();
-						List<String> skuCombineValueList = new ArrayList<String>();
+						List<ItoSku> skuList = (List<ItoSku>)request.getAttribute("skuList");
 						
-						for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){
-							for(ItoSkuPropValue colorSkuPropValue: colorSkuList){
-								skuCombineTitleList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName());
-								skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId());
-							}
-						} */
-						
-						List<String> skuCombineLabelList = (List<String>)request.getAttribute("skuCombineLabelList");
-						List<String> skuCombineValueList = (List<String>)request.getAttribute("skuCombineValueList");
-						List<String> skuCodeList = (List<String>)request.getAttribute("skuCodeList");
-						
-						
-						
-						for(int i=0;i<skuCombineLabelList.size();i++){
-							String skuCombineTitle = skuCombineLabelList.get(i);
-							String skuCombineValue = skuCombineValueList.get(i);
-							String skuCode = skuCodeList.get(i);
+						for(ItoSku sku: skuList){
 						%>
 						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">SKU(<%=skuCombineTitle%>): <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right"><%=sku.getName()%>: <span class="mandatory">*</span>
 							</label>
 							
-							<input type="hidden" class="form-control" name="skuName_<%=skuCombineValue%>" value="<%=skuCombineTitle%>">
-							<input type="hidden" class="form-control" name="skuCombines" value="<%=skuCombineValue%>">
-							<input type="hidden" class="form-control" name="skuCode_<%=skuCombineValue%>" value="<%=skuCode%>">
+							<input type="hidden" name="skuIds" value="<%=sku.getId()%>">
 							
 							<div class="col-sm-3">
 								<div class="input-group">
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">原价(元)</button>
 									</span>
-									<input type="text" class="form-control" name="skuOriginPrice_<%=skuCombineValue%>">
+									<input type="text" class="form-control" name="skuOriginPrice_<%=sku.getId()%>" value="<%=sku.getOriginPrice()%>">
 								</div>
 							</div>
 							
@@ -178,7 +162,7 @@
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">售价(元)</button>
 									</span>
-									<input type="text" class="form-control" name="skuPrice_<%=skuCombineValue%>">
+									<input type="text" class="form-control" name="skuPrice_<%=sku.getId()%>" value="<%=sku.getPrice()%>">
 								</div>
 							</div>
 							
@@ -187,10 +171,9 @@
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">数量(个)</button>
 									</span>
-									<input type="text" class="form-control" name="skuQuality_<%=skuCombineValue%>">
+									<input type="text" class="form-control" name="skuNum_<%=sku.getId()%>" value="<%=sku.getNum()%>">
 								</div>
 							</div>
-							
 							
 						</div>
 						<%}%>

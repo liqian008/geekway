@@ -189,6 +189,9 @@
 							</div> 
 						</div>
 						
+						
+						
+						<!-- 
 						<%
 						List<ItoSku> skuList = (List<ItoSku>)request.getAttribute("skuList");
 						if(skuList!=null&&skuList.size()>0){
@@ -240,7 +243,7 @@
 						</div>
 						<%}
 						}%>
-						
+						 -->
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">

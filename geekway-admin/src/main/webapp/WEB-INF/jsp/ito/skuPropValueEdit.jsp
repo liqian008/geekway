@@ -123,6 +123,7 @@
 								<form:select path="skuPropValue.skuPropId" class="form-control">
 									<form:option value="1"  label="尺码"/>
 									<form:option value="2"  label="颜色"/>
+									<form:option value="3"  label="材质"/>
 								</form:select>
 							</div>
 						</div>

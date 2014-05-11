@@ -54,26 +54,26 @@ public class ItoProductSkuValueController {
 		return "ito/productSkuValueEdit";
 	}
 	
-	@RequestMapping(value = "/saveProductSkuValue", method = RequestMethod.POST)
-	public String saveProductSkuValue(Model model, Integer productId, Integer[] productSkuValueIds, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		int result = 0;
-		
-		if(productId!=null && productId>0){
-			//清除原配置
-		    itoSkuPropValueService.deleteSkuValuesByProductId(productId);
-		    //创建新配置
-			if(productSkuValueIds!=null && productSkuValueIds.length>0){
-			    List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
-			    result = itoSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
-		    }
-		}
-		
-		model.addAttribute("redirectUrl", "./productSkuValueEdit?productId="+productId);
-		return "forward:/home/operationRedirect";
-	}
+//	@RequestMapping(value = "/saveProductSkuValue", method = RequestMethod.POST)
+//	public String saveProductSkuValue(Model model, Integer productId, Integer[] productSkuValueIds, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		int result = 0;
+//		
+//		if(productId!=null && productId>0){
+//			//清除原配置
+//		    itoSkuPropValueService.deleteSkuValuesByProductId(productId);
+//		    //创建新配置
+//			if(productSkuValueIds!=null && productSkuValueIds.length>0){
+//			    List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
+//			    result = itoSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
+//		    }
+//		}
+//		
+//		model.addAttribute("redirectUrl", "./productSkuValueEdit?productId="+productId);
+//		return "forward:/home/operationRedirect";
+//	}
 	
 	
 	/**
