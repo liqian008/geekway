@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxMaterialArticles"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.geekway.model.*"%>
+
+<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -72,7 +73,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						多图文素材管理
+						多图文信息
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -84,7 +85,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">多图文素材管理</li>
+					<li class="active">多图文信息</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -92,67 +93,68 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、点击封面图，可预览大图<br/>
-					2、点击【编辑】按钮，可对素材进行编辑
+					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
+					2、 <br/>
 				</p>
 			</div>
+			
+			<%
+			WxMaterialNews materialNews = (WxMaterialNews)request.getAttribute("materialNews");
+			%>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>多图文素材管理
-					</h5>
-					<a href="./materialArticleAdd"><span class="label label-info pull-right">新增多图文素材</span></a>
-				</div> 
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-                                <th>名称</th>
-                                <th>条数</th>
-                                <th>状态</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMaterialArticles> articlesList = (List<WxMaterialArticles>)request.getAttribute("materialArticlesList");
-                           	if(articlesList!=null&&articlesList.size()>0){
-                           		int i=0;
-                           		for(WxMaterialArticles articles: articlesList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=articles.getName()%></td>
-		                        <td><%=articles.getRowLimit()%></td>
-		                        <th>状态</th>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        	
-										<a href="./materialArticlesEdit?articlesId=<%=articles.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./delMaterialArticles?articlesId=<%=articles.getId()%>" 
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
+			<form id="validate" action="<s:url value='./saveMaterialNews'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>编辑多图文信息
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">名称:
+							</label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="name" id="name" value="${materialNews.name}"/>
+	                            <form:hidden path="materialNews.id"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">上限条数（仅图文有效）:
+							</label>
+							<div class="col-sm-1">
+								<input type="text" class="form-control" name="rowLimit" id="rowLimit" value="${materialNews.rowLimit}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<form:select path="materialNews.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
+							</div>
+						</div>
+						
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="提 交" class="btn btn-primary">
+						</div>
+					</div>
 				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -162,4 +164,3 @@
 	<!-- /page container -->
 </body>
 </html>
-

@@ -41,20 +41,20 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService{
 	}
 	
 	
-//	@Override
-//    public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId) { 
-//        return wxMaterialArticleDao.queryMaterialArticlesByCommandId(commandId);
-//    }
-//	
-//	@Override
-//    public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId, int limit) {
-//        return wxMaterialArticleDao.queryMaterialArticlesByCommandId(commandId, limit);
-//    }
-//	
-//	@Override
-//    public List<WxMaterialArticle> queryMaterialArticlesOutCommandId(int commandId) { 
-//        return wxMaterialArticleDao.queryMaterialArticlesOutCommandId(commandId);
-//    }
+	@Override
+	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int articlesId){ 
+        return wxMaterialArticleDao.queryMaterialArticlesByNewsId(articlesId);
+    }
+	
+	@Override
+    public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int articlesId, int limit) {
+        return wxMaterialArticleDao.queryMaterialArticlesByNewsId(articlesId, limit);
+    }
+	
+	@Override
+    public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int articlesId) { 
+        return wxMaterialArticleDao.queryMaterialArticlesOutNewsId(articlesId);
+    }
 
 	public IWxMaterialArticleDao getWxMaterialArticleDao() {
 		return wxMaterialArticleDao;

@@ -4,10 +4,10 @@
 	
 	
 	<classPathEntry
-		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
+		location="/home/liqian/data/mysql.jar" />		
 	<!-- 
 	<classPathEntry
-		location="/home/liqian/data/mysql.jar" />		
+		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 	-->
 	
 	<context id="context1">
@@ -30,15 +30,14 @@
 		
 
 		<!-- geekway config -->
-		<table schema="wx" tableName="wx_material_articles" domainObjectName="WxMaterialArticles"/>
-		<table schema="wx" tableName="wx_material_articles_relation" domainObjectName="WxMaterialArticlesRelation"/>
-		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
-		
+		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		
 		<!--
+		<table schema="wx" tableName="wx_material_news" domainObjectName="WxMaterialNews"/>
+		<table schema="wx" tableName="wx_material_news_article" domainObjectName="WxMaterialNewsArticle"/>
+		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
 		<table schema="wx" tableName="wx_mp_user" domainObjectName="WxMpUser"/>
 		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
-		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
 		<table schema="wx" tableName="wx_history_message" domainObjectName="WxHistorMessage"/>

@@ -1,33 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxCommand"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="java.text.SimpleDateFormat"%>
-
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "文本请求指令";
-	}else if(2==commandType){
-		return "菜单点击指令";
-	}else if(3==commandType){
-		return "新用户关注指令";
-	}
-	return "类型错误";
-} %>
-
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null){
-		if(1==materialType){ 
-			return "文本";
-		}else if(2==materialType){
-			return "单图文";
-		}else if(3==materialType){
-			return "多图文";
-		}
-	}
-	return "其他类型";
-} %>
-
 
 
 <!DOCTYPE html>
@@ -96,7 +71,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						指令管理
+						多图文关联
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -108,7 +83,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">指令管理</li>
+					<li class="active">多图文关联</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -117,66 +92,71 @@
 			</div>
 			<!-- /breadcrumbs line -->
 
-			<div class="callout callout-info fade in">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
-				<p>
-					本功能支持3种类型的接入方式： <br/>
-					1、发送文本内容<br/>
-					2、菜单点击（通常应用于有自定义菜单的公众账户）<br/>
-					3、用户关注（仅一条）
-				</p>
-			</div>
-
+			
+			<form id="validate" action="<s:url value='./saveArticle'/>" method="post"  class="form-horizontal form-bordered">
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>多图文信息
+						</h6>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">名 称:
+							</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="title" id="title" value="${materialNews.name}" readonly="readonly"/>
+	                             <form:hidden path="materialNews.id"/>
+							</div> 
+						</div>
+					</div>
+				</div>
+			</form>
+			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>指令管理
+						<i class="icon-people"></i>已关联图文
 					</h5>
-					<a href="./commandAddSubscribeEntry"><span class="label label-danger pull-right">增加关注指令</span></a>
-					<a href="./commandAddMenuEntry"><span class="label label-primary pull-right">增加菜单接入指令</span></a>
-					<a href="./commandAddTextEntry"><span class="label label-info pull-right">增加文本接入指令</span></a>
+					<a href="./materialNewsSetAdd?newsId=${materialNews.id}"><span class="label label-danger pull-right">关联新图文</span></a>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
 						<thead>
 							<tr>
+								<th><input type="checkbox" class="styled"></th>
 								<th>序号</th>
-								<th>接入类型</th>
-                                <th>指令</th>
-                                <th>素材</th>
+                                <th>封面</th>
+                                <th>文章标题</th>
+                                <th>置顶</th>
                                 <th>状态</th>
-                                <th class="team-links">操 作</th> 
+                                <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-                           	if(commandList!=null&&commandList.size()>0){
+                           	List<WxMaterialArticle> articleList = (List<WxMaterialArticle>)request.getAttribute("mappedArticleList");
+                           	if(articleList!=null&&articleList.size()>0){
                            		int i=0;
-                           		for(WxCommand command: commandList){
+                           		for(WxMaterialArticle article: articleList){
                            			i++;
                            	%>
 							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=displayCommandType(command.getCommandType())%></td>
-		                        <td><%=command.getCommand()%></td>
-		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
+		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
+		                        <td><%=article.getId()%></td>
+		                        <td>
+		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
+		                        </td>
+		                        <td><%=article.getTitle()%></td>
+		                        <td><a href="./topMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=article.getId()%>">置顶</a></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./commandEdit?commandId=<%=command.getId()%>"
+		                        		<a href="./removeMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=article.getId()%>"  
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<%if(command.getMaterialType()!=null&&command.getMaterialType()==2){//图文%>
-										<a href="./commandMaterialSet?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="关联图文"><i class="icon-tree3"></i></a>
-										<%}%>
-										<a href="./delCommand?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
+											data-original-title="移除关联"><i class="icon-remove3"></i></a>
 									</div>
 								</td>
                                </tr>
@@ -185,6 +165,23 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<div class="table-footer">
+					<div class="table-actions">
+						<!-- 
+						<label>操作:</label>
+						-->
+						<input type="button" value="批量移除" class="btn btn-danger btn-xs">
+					</div> 
+					<ul class="pagination">
+						<li><a href="#">Prev</a></li>
+						<li ><a href="#">1</a></li>
+						<li class="active"><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">Next</a></li>
+					</ul>
+				</div>
+				
 			</div>
 			<!-- /table view -->
 

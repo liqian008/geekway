@@ -52,24 +52,25 @@ public class WxMaterialArticleDaoImpl implements IWxMaterialArticleDao, Initiali
 
     }
 
-//    @Override
-//    public List<WxMaterialArticle> queryMaterialssByCommandId(int commandId) {
-//        return wxMaterialArticleMapper.queryMaterialssByCommandId(commandId);
-//    }
-//    
-//    @Override
-//	public List<WxMaterialArticle> queryMaterialssByCommandId(int commandId, int limit){
-//    	return wxMaterialArticleMapper.queryMaterialssByCommandIdLimit(commandId, limit);
-//	}
-//    
-//    @Override
-//    public List<WxMaterialArticle> queryMaterialssOutCommandId(int commandId) {
-//        return wxMaterialArticleMapper.queryMaterialssOutCommandId(commandId);
-//    }
-//    
-//	public WxMaterialArticleMapper getWxMaterialArticleMapper() {
-//		return wxMaterialArticleMapper;
-//	}
+    public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId){
+    	return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId); 
+//    	return null;
+    }
+	
+	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit){
+		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId, limit);
+//		return null;
+	}
+
+	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId){
+		return wxMaterialArticleMapper.queryMaterialArticlesOutNewsId(newsId);
+//		return null;
+	}
+    
+    
+	public WxMaterialArticleMapper getWxMaterialArticleMapper() {
+		return wxMaterialArticleMapper;
+	}
 
 	public void setWxMaterialArticleMapper(WxMaterialArticleMapper wxMaterialArticleMapper) {
 		this.wxMaterialArticleMapper = wxMaterialArticleMapper;

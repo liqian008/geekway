@@ -17,9 +17,13 @@ import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCommandMaterial;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxMaterial;
+import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
+import com.bruce.geekway.service.IWxMaterialArticleService;
+import com.bruce.geekway.service.IWxMaterialNewsService;
 import com.bruce.geekway.service.IWxMaterialService;
 
 @Controller
@@ -34,6 +38,10 @@ public class GeekwayCommandController {
 	private IWxMaterialService wxMaterialService;
 	@Autowired
 	private IWxCommandMaterialService wxCommandMaterialService;
+	@Autowired
+	private IWxMaterialArticleService wxMaterialArticleService;
+	@Autowired
+	private IWxMaterialNewsService wxMaterialNewsService;
 	
 	
 	@RequestMapping("/commandList")
@@ -83,10 +91,33 @@ public class GeekwayCommandController {
 		model.addAttribute("servletPath", servletPath);
 		
 		WxCommand command = wxCommandService.loadById(commandId);
-		model.addAttribute("command", command);
+		
+		if(command!=null){
+			
+			short materialType = command.getMaterialType();
+			if(materialType==1){//文字
+				//nothing， 展示textarea即可
+			}else if(materialType==2){//单图文
+				//获取单图文列表
+				List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryAll();
+				model.addAttribute("materialArticleList", materialArticleList);
+			}else if(materialType==3){//多图文
+				//获取多图文列表
+				List<WxMaterialNews> materialNewsList = wxMaterialNewsService.queryAll();
+				model.addAttribute("materialNewsList", materialNewsList);
+			}else if(materialType==4){//图片
+				
+			}else if(materialType==5){//语音
+				
+			}
+			model.addAttribute("command", command);
+		}
 		
 //		List<WxCommand> commandList = wxCommandService.queryAll();
 //		model.addAttribute("commandList", commandList);
+		
+		
+		
 		
 		return "geekway/commandEdit";
 	}
@@ -130,88 +161,88 @@ public class GeekwayCommandController {
 	
 	
 	
-	/**
-	 * 列出当前module对应的素材列表
-	 * @param model
-	 * @param commandId
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/commandMaterialSet")
-	public String commandMaterialSet(Model model,int commandId, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-
-		WxCommand command = wxCommandService.loadById(commandId);
-		model.addAttribute("command", command);
-		
-		List<WxMaterial> mappedMaterialList = wxMaterialService.queryMaterialsByCommandId(commandId);
-		model.addAttribute("mappedMaterialList", mappedMaterialList);
-		
-		return "geekway/commandMaterialSet";
-	}
-	
-	
-	/**
-	 * 
-	 * @param model
-	 * @param commandId
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/commandMaterialSetAdd")
-	public String commandMaterialAdd(Model model,int commandId, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-
-		WxCommand command = wxCommandService.loadById(commandId);
-		model.addAttribute("command", command);
-		
-		List<WxMaterial> unmappedMaterialList = wxMaterialService.queryMaterialsOutCommandId(commandId);
-		model.addAttribute("unmappedMaterialList", unmappedMaterialList);
-		
-		return "geekway/commandMaterialSetAdd";
-	}
-	
-	/**
-	 * 
-	 * @param model
-	 * @param commandId
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/addCommandMaterial")
-	public String addCommandMaterial(Model model,int commandId, int materialId, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		WxCommandMaterial obj = new WxCommandMaterial();
-		obj.setCommandId(commandId);
-		obj.setMaterialId(materialId);
-		wxCommandMaterialService.save(obj);
-		
-		model.addAttribute("redirectUrl", "./commandMaterialSet?commandId="+commandId);
-		return "forward:/home/operationRedirect";
-	}
-	
-	/**
-	 * 
-	 * @param model
-	 * @param commandId
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/removeCommandMaterial")
-	public String removeCommandMaterial(Model model, int commandId, int materialId,  HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		wxCommandMaterialService.delete(commandId, materialId);
-		
-		model.addAttribute("redirectUrl", "./commandMaterialSet?commandId="+commandId);
-		return "forward:/home/operationRedirect";
-	}
-	
+//	/**
+//	 * 列出当前module对应的素材列表
+//	 * @param model
+//	 * @param commandId
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/commandMaterialSet")
+//	public String commandMaterialSet(Model model,int commandId, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//
+//		WxCommand command = wxCommandService.loadById(commandId);
+//		model.addAttribute("command", command);
+//		
+//		List<WxMaterial> mappedMaterialList = wxMaterialService.queryMaterialsByCommandId(commandId);
+//		model.addAttribute("mappedMaterialList", mappedMaterialList);
+//		
+//		return "geekway/commandMaterialSet";
+//	}
+//	
+//	
+//	/**
+//	 * 
+//	 * @param model
+//	 * @param commandId
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/commandMaterialSetAdd")
+//	public String commandMaterialAdd(Model model,int commandId, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//
+//		WxCommand command = wxCommandService.loadById(commandId);
+//		model.addAttribute("command", command);
+//		
+//		List<WxMaterial> unmappedMaterialList = wxMaterialService.queryMaterialsOutCommandId(commandId);
+//		model.addAttribute("unmappedMaterialList", unmappedMaterialList);
+//		
+//		return "geekway/commandMaterialSetAdd";
+//	}
+//	
+//	/**
+//	 * 
+//	 * @param model
+//	 * @param commandId
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/addCommandMaterial")
+//	public String addCommandMaterial(Model model,int commandId, int materialId, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		WxCommandMaterial obj = new WxCommandMaterial();
+//		obj.setCommandId(commandId);
+//		obj.setMaterialId(materialId);
+//		wxCommandMaterialService.save(obj);
+//		
+//		model.addAttribute("redirectUrl", "./commandMaterialSet?commandId="+commandId);
+//		return "forward:/home/operationRedirect";
+//	}
+//	
+//	/**
+//	 * 
+//	 * @param model
+//	 * @param commandId
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/removeCommandMaterial")
+//	public String removeCommandMaterial(Model model, int commandId, int materialId,  HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		wxCommandMaterialService.delete(commandId, materialId);
+//		
+//		model.addAttribute("redirectUrl", "./commandMaterialSet?commandId="+commandId);
+//		return "forward:/home/operationRedirect";
+//	}
+//	
 	
 	
 	

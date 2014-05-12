@@ -79,12 +79,12 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialArticleMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxMaterialArticlesMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialArticlesMapper" />
+	<bean id="wxMaterialNewsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialNewsMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxMaterialArticlesRelationMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialArticlesRelationMapper" />
+	<bean id="wxMaterialNewsArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialNewsArticleMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	

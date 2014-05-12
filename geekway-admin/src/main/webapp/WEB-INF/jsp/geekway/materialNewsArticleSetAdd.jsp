@@ -1,10 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.WxCodeModule"%>
+<%@page import="com.bruce.geekway.model.WxMaterialArticle"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
-
-<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -73,7 +72,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						多图文信息
+						多图文关联
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -85,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">多图文信息</li>
+					<li class="active">关联新图文</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -93,68 +92,98 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
-			<div class="callout callout-info fade in">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
-				<p>
-					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
-					2、 <br/>
-				</p>
-			</div>
-			
-			<%
-			WxMaterialArticles materialArticles = (WxMaterialArticles)request.getAttribute("materialArticles");
-			%>
 
-			<form id="validate" action="<s:url value='./saveMaterialArticless'/>" method="post"  class="form-horizontal form-bordered">
-
+			
+			<form id="validate" action="<s:url value='./saveArticle'/>" method="post"  class="form-horizontal form-bordered">
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑多图文信息
+							<i class="icon-bubble4"></i>多图文信息
 						</h6>
 					</div>
 					<div class="panel-body">
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">名称:
-							</label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="name" id="name" value="${materialArticles.name}"/>
-	                            <form:hidden path="materialArticles.id"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">上限条数（仅图文有效）:
-							</label>
-							<div class="col-sm-1">
-								<input type="text" class="form-control" name="rowLimit" id="rowLimit" value="${materialArticles.rowLimit}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label">名 称:
 							</label>
 							<div class="col-sm-4">
-								<form:select path="materialArticles.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
+								<input type="text" class="form-control" name="title" id="title" value="${materialNews.name}" readonly="readonly"/>
+	                             <form:hidden path="materialNews.id"/>
 							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
 				</div>
 				
 			</form>
+
+			<!-- Table with checkboxes -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-checkbox-partial"></i>关联新图文
+					</h5>
+					<a href="./materialNewsArticleSet?newsId=${materialNews.id}"><span class="label label-danger pull-right">返 回</span></a>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th><input type="checkbox" class="styled"></th>
+								<th>序号</th>
+                                <th>封面</th>
+                                <th>图文标题</th>
+                                <th>状态</th>
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxMaterialArticle> articleList = (List<WxMaterialArticle>)request.getAttribute("unmappedArticleList");
+                           	if(articleList!=null&&articleList.size()>0){
+                           		int i=0;
+                           		for(WxMaterialArticle article: articleList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
+		                        <td><%=article.getId()%></td> 
+		                        <td>
+		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
+		                        </td>
+		                        <td><%=article.getTitle()%></td>
+		                        <td>正常</td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="./addMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=article.getId()%>"  
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="添加关联"><i class="icon-plus"></i></a> 
+									</div> 
+								</td>
+                               </tr>
+							<%}
+                           	}%>
+						</tbody>
+					</table>
+				</div>
+
+				<div class="table-footer">
+					<div class="table-actions">
+						<!-- 
+						<label>操作:</label>
+						-->
+						<input type="button" value="批量添加" class="btn btn-info btn-xs">
+					</div> 
+					<ul class="pagination">
+						<li><a href="#">Prev</a></li>
+						<li ><a href="#">1</a></li>
+						<li class="active"><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">Next</a></li>
+					</ul>
+				</div>
+
+			</div>
+			<!-- /table with checkboxes -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -164,3 +193,4 @@
 	<!-- /page container -->
 </body>
 </html>
+

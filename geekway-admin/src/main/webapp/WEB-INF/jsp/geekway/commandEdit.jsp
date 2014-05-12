@@ -2,8 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.WxCommand"%>
-<%@page import="com.bruce.geekway.model.WxCodeModule"%>
+<%@page import="com.bruce.geekway.model.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
@@ -23,7 +22,9 @@
 		if(1==materialType){ 
 			return "文本";
 		}else if(2==materialType){
-			return "图文";
+			return "单图文";
+		}else if(3==materialType){
+			return "多图文";
 		}
 	}
 	return "其他类型";
@@ -169,7 +170,6 @@
 							</div>
 						</div>
 						
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">回复类型:
 							</label>
@@ -179,13 +179,24 @@
 							%>
 								<form:select path="command.materialType" class="form-control">
 									<form:option value="1"  label="文本回复"/>
-									<form:option value="2"  label="图文素材"/>
+									<form:option value="2"  label="单图文素材"/>
+									<form:option value="3"  label="多图文素材"/>
 								</form:select>
 							<%}else{%>
 								<label class="control-label">
 									<%=displayMaterialType(command.getMaterialType()) %>
 								</label>
 							<%}%>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">回复内容:
+							</label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									<a data-toggle="modal" role="button" href="#table_modal">查看</a>
+								</label>
 							</div>
 						</div>
 						
@@ -200,20 +211,6 @@
 								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="上限100字">${command.replyContent}</textarea>
 							</div>
 						</div> 
-						<%}
-						}%>
-						
-						<%
-						if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
-							if(command.getMaterialType()==2){//图文方式，可以配置rowLimit
-						%>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">上限条数（仅图文有效）:
-							</label>
-							<div class="col-sm-1">
-								<input type="text" class="form-control" name="rowLimit" id="rowLimit" value="${command.rowLimit}"/>
-							</div>
-						</div>
 						<%}
 						}%>
 						
@@ -236,6 +233,64 @@
 				</div>
 				
 			</form>
+
+
+			<!-- Modal with table -->
+			<div id="table_modal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">
+								<i class="icon-accessibility"></i>素材列表
+							</h4>
+						</div>
+						<div class="modal-body with-padding">
+							<div class="panel panel-default">
+								<table class="table table-bordered table-striped datatable-selectable">
+									<thead>
+										<tr>
+											<th>选择</th>
+											<th>封面</th>
+											<th>短标题</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+										List<WxMaterialArticle> materialArticleList = (List<WxMaterialArticle>)request.getAttribute("materialArticleList");
+										if(materialArticleList!=null&&materialArticleList.size()>0){
+											for(WxMaterialArticle article: materialArticleList){
+										%>
+										<tr>
+											<td>
+												<input type="radio" class="styled" name="mapArticleId">
+											</td>
+											<td>
+												<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
+					                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
+					                        	</a>
+											</td>
+											<td><%=article.getShortTitle()%></td>
+										</tr>
+										<%}
+										}%>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-warning" data-dismiss="modal">
+								<i class="icon-cancel-circle"></i> 关 闭
+							</button>
+							<button class="btn btn-primary">
+								<i class="icon-checkmark-circle"></i> 确 定
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /modal with table -->
+
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

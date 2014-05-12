@@ -1,8 +1,8 @@
 package com.bruce.geekway.dao;
 
-import com.bruce.geekway.model.WxMaterialArticles;
+import com.bruce.geekway.model.WxMaterialNews;
 
-public interface IWxMaterialArticlesDao extends IBaseDao<WxMaterialArticles, Integer> {
+public interface IWxMaterialNewsDao extends IBaseDao<WxMaterialNews, Integer> {
 	
 //    public List<WxMaterials> queryMaterialsByCommandId(int commandId);
 //    
