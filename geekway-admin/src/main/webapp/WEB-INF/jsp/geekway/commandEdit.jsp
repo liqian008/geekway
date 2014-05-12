@@ -145,7 +145,6 @@
 							<label class="col-sm-2 control-label text-right">接入指令类型:
 							</label>
 							<div class="col-sm-3">
-								
 								<%
 								short commandType = (short)1;
 								if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
@@ -190,29 +189,47 @@
 							</div>
 						</div>
 						
+						<%
+						if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
+						%>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">回复内容:
+							<label class="col-sm-2 control-label text-right">内 容:
 							</label>
 							<div class="col-sm-2">
 								<label class="control-label">
-									<a data-toggle="modal" role="button" href="#table_modal">查看</a>
+									<%
+									short materialType = command.getMaterialType();
+									if(materialType==2){//单图文
+										WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
+										if(materialArticle!=null){
+									%>
+										<%=materialArticle.getShortTitle()%>&nbsp;<a data-toggle="modal" role="button" href="#article_table_modal">查看</a>
+									<%}
+									}else if(materialType==3){//多图文
+										WxMaterialNews materialNews = (WxMaterialNews)request.getAttribute("materialNews");
+										if(materialNews!=null){
+										%>
+										<%=materialNews.getName()%>&nbsp;<a data-toggle="modal" role="button" href="#news_table_modal">查看</a>
+									<%}
+									}%>
+									
 								</label>
 							</div>
 						</div>
+						<%}%>
+						
 						
 						<%
-						if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
-							if(command.getMaterialType()==1){//图文方式，可以文本回复
+						if(command==null||command.getId()==null||command.getMaterialType()==1){//文本方式，运行显示文本回复
 						%>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">文本回复:
 							</label>
 							<div class="col-sm-6">
-								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="上限100字">${command.replyContent}</textarea>
+								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="回复类型为文本时有效，上限100字">${command.replyContent}</textarea>
 							</div>
 						</div> 
-						<%}
-						}%>
+						<%}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态:
@@ -236,13 +253,13 @@
 
 
 			<!-- Modal with table -->
-			<div id="table_modal" class="modal fade" tabindex="-1" role="dialog">
+			<div id="article_table_modal" class="modal fade" tabindex="-1" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 							<h4 class="modal-title">
-								<i class="icon-accessibility"></i>素材列表
+								<i class="icon-accessibility"></i>单图文列表
 							</h4>
 						</div>
 						<div class="modal-body with-padding">
@@ -273,7 +290,70 @@
 											<td><%=article.getShortTitle()%></td>
 										</tr>
 										<%}
-										}%>
+										}else{%>
+										<tr>
+											<td colspan="3">
+												创建单图文
+											</td>
+										</tr>
+										<%} %>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-warning" data-dismiss="modal">
+								<i class="icon-cancel-circle"></i>关 闭
+							</button>
+							<button class="btn btn-primary">
+								<i class="icon-checkmark-circle"></i>确 定
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /modal with table -->
+			
+			
+			<!-- Modal with table -->
+			<div id="news_table_modal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">
+								<i class="icon-accessibility"></i>多图文列表
+							</h4>
+						</div>
+						<div class="modal-body with-padding">
+							<div class="panel panel-default">
+								<table class="table table-bordered table-striped datatable-selectable">
+									<thead>
+										<tr>
+											<th>选择</th>
+											<th>短标题</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+										List<WxMaterialNews> materialNewsList = (List<WxMaterialNews>)request.getAttribute("materialNewsList");
+										if(materialNewsList!=null&&materialNewsList.size()>0){
+											for(WxMaterialNews news: materialNewsList){
+										%>
+										<tr>
+											<td>
+												<input type="radio" class="styled" name="mapArticleId">
+											</td>
+											<td><%=news.getName()%></td>
+										</tr>
+										<%}
+										}else{%>
+										<tr>
+											<td colspan="2">
+												创建多图文
+											</td>
+										</tr>
+										<%} %>
 									</tbody>
 								</table>
 							</div>
@@ -290,7 +370,7 @@
 				</div>
 			</div>
 			<!-- /modal with table -->
-
+			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

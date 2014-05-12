@@ -40,6 +40,14 @@
 	<bean id="codeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
 	</bean>
 	
+	<bean id="materialArticleService" class="com.bruce.geekway.service.impl.WxMaterialArticleServiceImpl">
+		<property name="wxMaterialArticleDao" ref="wxMaterialArticleDao"></property>
+	</bean>
+	<bean id="materialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
+		<property name="wxMaterialNewsDao" ref="wxMaterialNewsDao"></property>
+	</bean>
+	
+	
 	
 	<!-- ito service config -->
 	<bean id="itoProductService" class="com.bruce.geekway.service.impl.ito.ItoProductServiceImpl">

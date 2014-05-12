@@ -3,6 +3,7 @@ package com.bruce.geekway.handler.processor;
 import java.util.List;
 
 import com.bruce.geekway.model.WxMaterial;
+import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
@@ -129,18 +130,18 @@ public abstract class AbstractProcessor implements Processor{
      * @param Content
      * @return
      */
-	public static NewsResponse newsReply(BaseRequest request, List<WxMaterial> materialList){
+	public static NewsResponse newsReply(BaseRequest request, List<WxMaterialArticle> materialArticleList){
         String fromUserName = request.getFromUserName();
         String toUserName = request.getToUserName();
         //交换fromUserName和toUserName
-        return newsReply(fromUserName, toUserName, materialList);
+        return newsReply(fromUserName, toUserName, materialArticleList);
     }
 
-	private static NewsResponse newsReply(String toUserName, String fromUserName, List<WxMaterial> materialList) {
-		if(materialList!=null&&materialList.size()>0){
+	private static NewsResponse newsReply(String toUserName, String fromUserName, List<WxMaterialArticle> materialArticleList){
+		if(materialArticleList!=null&&materialArticleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
-			for(WxMaterial material: materialList){
-				newsResponse.addArticle(material.getShortTitle(), material.getShortContent(), material.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(material.getId()));
+			for(WxMaterialArticle article: materialArticleList){
+				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(article.getId()));
 			}
 			return newsResponse;
 		}

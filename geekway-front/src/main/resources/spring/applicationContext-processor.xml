@@ -51,12 +51,15 @@
 	
 	<!-- 根据用户输入内容进行回复，应用场景：1、针对自定义菜单的code回复；2、针对订阅事件的回复；3、针对用户输入文本内容的回复 -->
 	<bean id="keycodeCmsProcessor" class="com.bruce.geekway.handler.processor.KeycodeCmsProcessor">
-		<property name="eventCodeService" ref="eventCodeService"></property>
-		<!-- <property name="customizeMenuService" ref="customizeMenuService"></property> -->
-		<property name="articleService" ref="articleService"></property>
-		
 		<property name="commandService" ref="commandService"></property>
-		<property name="materialService" ref="materialService"></property> 
+		<property name="materialArticleService" ref="materialArticleService"></property> 
+		<property name="materialNewsService" ref="materialNewsService"></property> 
+		
+		<!-- 
+		<property name="eventCodeService" ref="eventCodeService"></property>
+		<property name="articleService" ref="articleService"></property>
+		<property name="materialService" ref="materialService"></property>
+		-->
 	</bean>
 	
 	<!-- 作为默认处理器，建议将放置在list的最后一个，优先使用其他处理器 -->

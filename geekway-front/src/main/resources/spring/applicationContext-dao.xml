@@ -29,6 +29,14 @@
 
 	<bean id="wxCommandDao" class="com.bruce.geekway.dao.impl.WxCommandDaoImpl">
 	</bean>
+	<bean id="wxMaterialArticleDao" class="com.bruce.geekway.dao.impl.WxMaterialArticleDaoImpl">
+	</bean>
+	<bean id="wxMaterialNewsDao" class="com.bruce.geekway.dao.impl.WxMaterialNewsDaoImpl">
+	</bean>
+	<!-- 
+	<bean id="wxMaterialNewsArticleDao" class="com.bruce.geekway.dao.impl.WxMaterialNewsArticleDaoImpl">
+	</bean>
+	 -->
 	
 	<!-- 
 	<bean id="wxCustomizeMenuDao" class="com.bruce.geekway.dao.impl.WxCustomizeMenuDaoImpl">
