@@ -95,16 +95,27 @@ public class GeekwayCommandController {
 		if(command!=null){
 			
 			short materialType = command.getMaterialType();
+			Integer materialId = command.getMaterialId();
 			if(materialType==1){//文字
 				//nothing， 展示textarea即可
 			}else if(materialType==2){//单图文
 				//获取单图文列表
 				List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryAll();
 				model.addAttribute("materialArticleList", materialArticleList);
+				
+				if(materialId!=null&&materialId>0){
+					WxMaterialArticle materialArticle = wxMaterialArticleService.loadById(materialId);
+					model.addAttribute("materialArticle", materialArticle);
+				}
 			}else if(materialType==3){//多图文
 				//获取多图文列表
 				List<WxMaterialNews> materialNewsList = wxMaterialNewsService.queryAll();
 				model.addAttribute("materialNewsList", materialNewsList);
+				
+				if(materialId!=null&&materialId>0){
+					WxMaterialNews materialNews = wxMaterialNewsService.loadById(materialId);
+					model.addAttribute("materialNews", materialNews);
+				}
 			}else if(materialType==4){//图片
 				
 			}else if(materialType==5){//语音

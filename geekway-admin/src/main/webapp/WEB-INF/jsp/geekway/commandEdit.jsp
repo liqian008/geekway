@@ -191,11 +191,24 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">回复内容:
+							<label class="col-sm-2 control-label text-right">内 容:
 							</label>
 							<div class="col-sm-2">
 								<label class="control-label">
-									<a data-toggle="modal" role="button" href="#table_modal">查看</a>
+									<%
+									WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
+									if(materialArticle!=null){
+									%>
+									<%=materialArticle.getShortTitle()%>
+									<%}%>
+									
+									<%
+									WxMaterialNews materialNews = (WxMaterialNews)request.getAttribute("materialNews");
+									if(materialNews!=null){
+									%>
+									<%=materialNews.getName()%>
+									<%}%>
+									&nbsp;<a data-toggle="modal" role="button" href="#table_modal">查看</a>
 								</label>
 							</div>
 						</div>
