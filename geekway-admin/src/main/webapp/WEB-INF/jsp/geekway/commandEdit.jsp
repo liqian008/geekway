@@ -218,7 +218,6 @@
 						</div>
 						<%}%>
 						
-						
 						<%
 						if(command==null||command.getId()==null||command.getMaterialType()==1){//文本方式，运行显示文本回复
 						%>
