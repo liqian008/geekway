@@ -104,11 +104,13 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">名 称:
+							<label class="col-sm-2 control-label">标 题:
 							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${materialNews.name}" readonly="readonly"/>
-	                             <form:hidden path="materialNews.id"/>
+								<label class="control-label">
+									${materialNews.title}
+								</label>
+	                            <form:hidden path="materialNews.id"/>
 							</div>
 						</div>
 					</div>
@@ -122,7 +124,7 @@
 					<h5 class="panel-title">
 						<i class="icon-checkbox-partial"></i>关联新图文
 					</h5>
-					<a href="./materialNewsArticleSet?newsId=${materialNews.id}"><span class="label label-danger pull-right">返 回</span></a>
+					<a href="./materialNewsSet?newsId=${materialNews.id}"><span class="label label-danger pull-right">返 回</span></a>
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped table-check">
@@ -148,7 +150,9 @@
 		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
 		                        <td><%=article.getId()%></td> 
 		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
+	                        		<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
+		                        	</a>
 		                        </td>
 		                        <td><%=article.getTitle()%></td>
 		                        <td>正常</td>

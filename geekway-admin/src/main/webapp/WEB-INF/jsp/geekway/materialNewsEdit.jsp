@@ -119,10 +119,10 @@
 					<div class="panel-body">
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">名称:
+							<label class="col-sm-2 control-label text-right">标 题:
 							</label>
 							<div class="col-sm-3">
-								<input type="text" class="form-control" name="name" id="name" value="${materialNews.name}"/>
+								<input type="text" class="form-control" name="title" id="title" value="${materialNews.title}"/>
 	                            <form:hidden path="materialNews.id"/>
 							</div>
 						</div>

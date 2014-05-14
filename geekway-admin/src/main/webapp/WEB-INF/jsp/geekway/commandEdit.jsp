@@ -30,6 +30,15 @@
 	return "其他类型";
 } %>
 
+<%!String displayCheckedStatus(Integer dataId, Integer itemId){
+	if(dataId!=null&&itemId!=null&&dataId==itemId){
+		return "checked='checked'";
+	}else{
+		return "";
+	}
+}
+
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -184,39 +193,48 @@
 							<%}else{%>
 								<label class="control-label">
 									<%=displayMaterialType(command.getMaterialType()) %>
+									<input type="hidden" name="materialType" id="materialType" value="${command.materialType}"/>
 								</label>
 							<%}%>
 							</div>
 						</div>
 						
 						<%
-						if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
+						if(command!=null&&command.getMaterialType()!=null&&command.getMaterialType()==2){//编辑单图文素材
 						%>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">内 容:
+							<label class="col-sm-2 control-label text-right">素材内容:
 							</label>
 							<div class="col-sm-2">
 								<label class="control-label">
 									<%
-									short materialType = command.getMaterialType();
-									if(materialType==2){//单图文
-										WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
-										if(materialArticle!=null){
+									WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
 									%>
-										<%=materialArticle.getShortTitle()%>&nbsp;<a data-toggle="modal" role="button" href="#article_table_modal">查看</a>
-									<%}
-									}else if(materialType==3){//多图文
-										WxMaterialNews materialNews = (WxMaterialNews)request.getAttribute("materialNews");
-										if(materialNews!=null){
-										%>
-										<%=materialNews.getName()%>&nbsp;<a data-toggle="modal" role="button" href="#news_table_modal">查看</a>
-									<%}
-									}%>
-									
+									<%=materialArticle!=null?materialArticle.getShortTitle():"尚未选择"%>&nbsp;
+									<a data-toggle="modal" role="button" href="#article_table_modal">选择</a>
 								</label>
 							</div>
 						</div>
 						<%}%>
+						
+						<%
+						if(command!=null&&command.getMaterialType()!=null&&command.getMaterialType()==3){//编辑图文素材
+						%>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">素材内容:
+							</label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									<%
+									WxMaterialNews materialNews = (WxMaterialNews)request.getAttribute("materialNews");
+									%>
+									<%=materialNews!=null?materialNews.getTitle():"尚未选择"%>&nbsp;
+									<a data-toggle="modal" role="button" href="#news_table_modal">选择</a>
+								</label>
+							</div>
+						</div>
+						<%}%>
+						
 						
 						<%
 						if(command==null||command.getId()==null||command.getMaterialType()==1){//文本方式，运行显示文本回复
@@ -251,7 +269,7 @@
 			</form>
 
 
-			<!-- Modal with table -->
+			<!-- Modal with article -->
 			<div id="article_table_modal" class="modal fade" tabindex="-1" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -261,6 +279,9 @@
 								<i class="icon-accessibility"></i>单图文列表
 							</h4>
 						</div>
+						
+						<form action="./updateCommandArticle" name="commandArticleForm" method="post">
+						<input type="hidden" name="commandId" value="${command.id}"/>
 						<div class="modal-body with-padding">
 							<div class="panel panel-default">
 								<table class="table table-bordered table-striped datatable-selectable">
@@ -279,7 +300,7 @@
 										%>
 										<tr>
 											<td>
-												<input type="radio" class="styled" name="mapArticleId">
+												<input type="radio" class="styled" name="materialArticleId" value="<%=article.getId()%>" <%=displayCheckedStatus(command.getMaterialId(), article.getId()) %>>
 											</td>
 											<td>
 												<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
@@ -301,20 +322,18 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-warning" data-dismiss="modal">
-								<i class="icon-cancel-circle"></i>关 闭
-							</button>
-							<button class="btn btn-primary">
-								<i class="icon-checkmark-circle"></i>确 定
-							</button>
+							<button class="btn btn-warning" data-dismiss="modal">关 闭</button>
+							<input type="submit" value="确 定" class="btn btn-primary"/>
 						</div>
+						
+						</form>
 					</div>
 				</div>
 			</div>
-			<!-- /modal with table -->
+			<!-- /modal with article -->
 			
 			
-			<!-- Modal with table -->
+			<!-- Modal with news -->
 			<div id="news_table_modal" class="modal fade" tabindex="-1" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -324,6 +343,8 @@
 								<i class="icon-accessibility"></i>多图文列表
 							</h4>
 						</div>
+						<form action="./updateCommandNews" name="commandNewsForm" method="post">
+						<input type="hidden" name="commandId" value="${command.id}"/>
 						<div class="modal-body with-padding">
 							<div class="panel panel-default">
 								<table class="table table-bordered table-striped datatable-selectable">
@@ -341,9 +362,9 @@
 										%>
 										<tr>
 											<td>
-												<input type="radio" class="styled" name="mapArticleId">
+												<input type="radio" class="styled" name="materialNewsId" value="<%=news.getId()%>" <%=displayCheckedStatus(command.getMaterialId(), news.getId()) %>>
 											</td>
-											<td><%=news.getName()%></td>
+											<td><%=news.getTitle()%></td>
 										</tr>
 										<%}
 										}else{%>
@@ -358,13 +379,10 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<button class="btn btn-warning" data-dismiss="modal">
-								<i class="icon-cancel-circle"></i> 关 闭
-							</button>
-							<button class="btn btn-primary">
-								<i class="icon-checkmark-circle"></i> 确 定
-							</button>
+							<button class="btn btn-warning" data-dismiss="modal">关 闭</button>
+							<input type="submit" value="确 定" class="btn btn-primary"/>
 						</div>
+						</form>
 					</div>
 				</div>
 			</div>

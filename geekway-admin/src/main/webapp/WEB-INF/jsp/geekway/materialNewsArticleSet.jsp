@@ -103,11 +103,13 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">名 称:
+							<label class="col-sm-2 control-label">标 题:
 							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${materialNews.name}" readonly="readonly"/>
-	                             <form:hidden path="materialNews.id"/>
+								<label class="control-label">
+									${materialNews.title}
+								</label>
+	                            <form:hidden path="materialNews.id"/>
 							</div> 
 						</div>
 					</div>
@@ -147,7 +149,9 @@
 		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
 		                        <td><%=article.getId()%></td>
 		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_article_big.png' width="50px"></img> -->
+	                        		<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
+		                        	</a>
 		                        </td>
 		                        <td><%=article.getTitle()%></td>
 		                        <td><a href="./topMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=article.getId()%>">置顶</a></td>

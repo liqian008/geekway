@@ -131,7 +131,7 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=news.getName()%></td>
+		                        <td><%=news.getTitle()%></td>
 		                        <td><%=news.getRowLimit()%></td>
 		                        <th>状态</th>
 		                        <td class='text-center'>

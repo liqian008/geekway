@@ -1,5 +1,8 @@
 package com.bruce.geekway.admin.controller.geekway;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -127,9 +130,6 @@ public class GeekwayCommandController {
 //		List<WxCommand> commandList = wxCommandService.queryAll();
 //		model.addAttribute("commandList", commandList);
 		
-		
-		
-		
 		return "geekway/commandEdit";
 	}
 	
@@ -170,6 +170,38 @@ public class GeekwayCommandController {
 		return "forward:/home/operationRedirect";
 	}
 	
+	
+	/**
+	 * 修改command对应的单图文素材
+	 * @param model
+	 * @param commandId
+	 * @param materialArticleId
+	 * @return
+	 */
+	@RequestMapping("/updateCommandArticle")
+	public String updateCommandArticle(Model model, int commandId, int materialArticleId) {
+		
+		int result = wxCommandService.updateMaterialArticle(commandId, materialArticleId);
+		
+		model.addAttribute("redirectUrl", "./commandEdit?commandId="+commandId);
+		return "forward:/home/operationRedirect";
+	}
+	
+	/**
+	 * 修改command对应的多图文素材
+	 * @param model
+	 * @param commandId
+	 * @param materialNewsId
+	 * @return
+	 */
+	@RequestMapping("/updateCommandNews")
+	public String updateCommandNews(Model model, int commandId, int materialNewsId) {
+		
+		int result = wxCommandService.updateMaterialNews(commandId, materialNewsId);
+		
+		model.addAttribute("redirectUrl", "./commandEdit?commandId="+commandId);
+		return "forward:/home/operationRedirect";
+	}
 	
 	
 //	/**
@@ -256,5 +288,21 @@ public class GeekwayCommandController {
 //	
 	
 	
+//	class ArticleCompartor implements Comparator<WxMaterialArticle>{
+//		
+//		private int checkedArticleId;
+//		
+//		public ArticleCompartor(int checkedArticleId){
+//			this.checkedArticleId = checkedArticleId;
+//		}
+//		
+//		@Override
+//		public int compare(WxMaterialArticle o1, WxMaterialArticle o2) {
+//			if(o1!=null&&o2!=null){
+//				if(o1.getId()==)
+//			}
+//			return 0;
+//		}
+//	} 
 	
 }

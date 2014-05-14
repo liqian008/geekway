@@ -113,7 +113,11 @@ public class KeycodeCmsProcessor extends AbstractProcessor{
         			//取多图文的组合数据
         			WxMaterialNews materialNews = materialNewsService.loadById(command.getMaterialId());
 	        		if(materialNews!=null){
-	        			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId(), materialNews.getRowLimit());
+	        			short rowLimit = 4;
+	        			if(materialNews.getRowLimit()!=null&&materialNews.getRowLimit()>0){
+	        				rowLimit = materialNews.getRowLimit();
+	        			}
+	        			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId(), rowLimit);
 		        		return newsReply(request, materialArticleList);
 		        	}
         		}
