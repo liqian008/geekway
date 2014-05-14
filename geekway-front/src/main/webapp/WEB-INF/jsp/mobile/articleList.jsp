@@ -9,7 +9,7 @@
 		<meta name="author" content="www.frebsite.nl" />
 		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
-		<title>News</title>
+		<title>ITO文章列表</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
 		<link type="text/css" rel="stylesheet" href="/geekway-front/mobile/css/style.css" />
@@ -39,9 +39,9 @@
 			<div id="content">
 				
 				<%
-				List<WxArticle> articleList = (List<WxArticle>)request.getAttribute("articleList");
+				List<WxMaterialArticle> articleList = (List<WxMaterialArticle>)request.getAttribute("articleList");
 				if(articleList!=null&&articleList.size()>0){
-					for(WxArticle article: articleList){
+					for(WxMaterialArticle article: articleList){
 				%>	
 					<article>
 					<a href="../article/<%=article.getId()%>"><img src="<%=article.getCoverImageUrl()%>" /></a>

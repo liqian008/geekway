@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.baseAdmin.controller.BaseController;
 import com.bruce.geekway.model.WxMaterialNews;
+import com.bruce.geekway.service.IWxMaterialNewsArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsService;
 
 @Controller
@@ -21,6 +22,8 @@ public class GeekwayMaterialNewsController extends BaseController {
 
 	@Autowired
 	private IWxMaterialNewsService wxMaterialNewsService;
+	@Autowired
+	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
 
 	@RequestMapping("/materialNewsList")
 	public String materialNewsList(Model model, HttpServletRequest request) {
@@ -76,10 +79,10 @@ public class GeekwayMaterialNewsController extends BaseController {
 	public String delMaterialNews(Model model, int newsId) {
 
 		// 删除资源的关联
-		// wxCommandMaterialService.deleteByCommandId(materialId);
+		wxMaterialNewsArticleService.deleteByNewsId(newsId);
 
 		// 删除实体
-		wxMaterialNewsService.deleteById(newsId);
+		int result = wxMaterialNewsService.deleteById(newsId);
 
 		model.addAttribute("redirectUrl", "./materialNewsList");
 		return "forward:/home/operationRedirect";

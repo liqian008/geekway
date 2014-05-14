@@ -45,6 +45,11 @@ public class WxMaterialNewsArticleServiceImpl implements IWxMaterialNewsArticleS
 		return wxMaterialNewsArticleDao.delete(newsId, articleId);
 	}
 	
+	@Override
+	public int deleteByNewsId(int newsId) {
+		return wxMaterialNewsArticleDao.deleteByNewsId(newsId);
+	}
+	
 	/**
 	 * 置顶
 	 * @param newsId

@@ -56,6 +56,14 @@ public class WxMaterialNewsArticleDaoImpl implements IWxMaterialNewsArticleDao, 
         criteria.createCriteria().andNewsIdEqualTo(newsId).andArticleIdEqualTo(articleId);
 		return wxMaterialNewsArticleMapper.deleteByExample(criteria);
 	}
+    
+    @Override
+    public int deleteByNewsId(int newsId){
+		WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();
+        criteria.createCriteria().andNewsIdEqualTo(newsId);
+		return wxMaterialNewsArticleMapper.deleteByExample(criteria);
+	}
+
 
     public int topNewsArticle(int newsId, int articleId){
     	WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();

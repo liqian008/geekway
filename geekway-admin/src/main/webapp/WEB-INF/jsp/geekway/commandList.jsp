@@ -146,7 +146,6 @@
 								<th>接入类型</th>
                                 <th>指令</th>
                                 <th>素材</th>
-                                <th>状态</th>
                                 <th class="team-links">操 作</th> 
 							</tr>
 						</thead>
@@ -163,17 +162,11 @@
 		                        <td><%=displayCommandType(command.getCommandType())%></td>
 		                        <td><%=command.getCommand()%></td>
 		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
-		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./commandEdit?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<%if(command.getMaterialType()!=null&&command.getMaterialType()==2){//图文%>
-										<a href="./commandMaterialSet?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="关联图文"><i class="icon-tree3"></i></a>
-										<%}%>
 										<a href="./delCommand?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="删除"><i class="icon-remove3"></i></a>

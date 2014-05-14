@@ -9,27 +9,29 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.model.WxArticle;
+import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.service.IWxArticleService;
+import com.bruce.geekway.service.IWxMaterialArticleService;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 @RequestMapping(value={"m"})
-public class ArticleController {
+public class MaterialController {
 	
 	@Autowired
-	private IWxArticleService wxArticleService;
+	private IWxMaterialArticleService wxMaterialArticleService;
 	
 	@RequestMapping(value = "/index")
 	public String index(Model model) {
-		System.out.println(wxArticleService);
+//		System.out.println(wxArticleService);
 		return "mobile/index";
 	}
 	
-	@RequestMapping(value = "/articles/{moduleId}")
-	public String articleList(Model model, @PathVariable int moduleId) {
-		List<WxArticle> articleList = wxArticleService.queryAll();
+	@RequestMapping(value = "/news/{newsId}")
+	public String news(Model model, @PathVariable int newsId) {
+		List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(newsId, 4);
 		if(articleList!=null){
 			model.addAttribute("articleList", articleList);
 		}
@@ -38,7 +40,7 @@ public class ArticleController {
 	
 	@RequestMapping(value = "/article/{articleId}")
 	public String article(Model model, @PathVariable int articleId) {
-		WxArticle article = wxArticleService.loadById(articleId);
+		WxMaterialArticle article = wxMaterialArticleService.loadById(articleId);
 		if(article!=null){
 			model.addAttribute("article", article);
 		}

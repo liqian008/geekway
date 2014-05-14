@@ -3,9 +3,9 @@ package com.bruce.geekway.utils;
 
 public class MaterialLinkUtil {
 
-	private static final String ARTICLE_INFO_URL = ConfigUtil.getString("geekway_material_link");
+	private static final String WX_ARTICLE_URL = ConfigUtil.getString("geekway_material_article_link");
 	
-	private static final String ARTICLE_GROUP_URL = ConfigUtil.getString("geekway_material_group_link");
+	private static final String WX_NEWS_URL = ConfigUtil.getString("geekway_material_news_link");
 	
 	/**
 	 * 获取material链接
@@ -13,7 +13,7 @@ public class MaterialLinkUtil {
 	 * @return
 	 */
 	public static String getMaterialLink(int materialId){
-		String link = String.format(ARTICLE_INFO_URL, materialId);
+		String link = String.format(WX_ARTICLE_URL, materialId);
 		return link;
 	}
 	
@@ -24,7 +24,7 @@ public class MaterialLinkUtil {
 	 * @return
 	 */
 	public static String getMaterialsLink(int commandId){
-		String link = String.format(ARTICLE_GROUP_URL, commandId);
+		String link = String.format(WX_NEWS_URL, commandId);
 		return link;
 	}
 	

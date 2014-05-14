@@ -1,8 +1,5 @@
 package com.bruce.geekway.admin.controller.geekway;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -15,19 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.bruce.geekway.model.WxMaterial;
 import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.model.WxCommandMaterial;
-import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.model.WxMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialNews;
-import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsService;
-import com.bruce.geekway.service.IWxMaterialService;
 
 @Controller
 @RequestMapping("/geekway") 
@@ -36,9 +27,7 @@ public class GeekwayCommandController {
 	@Autowired
 	private IWxCommandService wxCommandService;
 //	@Autowired
-//	private IWxCommandService wxCommandService;
-	@Autowired
-	private IWxMaterialService wxMaterialService;
+//	private IWxMaterialService wxMaterialService;
 	@Autowired
 	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
