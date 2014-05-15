@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.ito.IItoProductOrderDao;
 import com.bruce.geekway.dao.mapper.ItoProductOrderMapper;
 import com.bruce.geekway.model.ItoProductOrder;
+import com.bruce.geekway.model.ItoProductOrder;
+import com.bruce.geekway.model.ItoProductOrderCriteria;
 
 
 @Repository
@@ -48,6 +50,17 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
         return null;
     }
     
+    
+    @Override
+   	public ItoProductOrder loadByOrderSn(String orderSn) {
+       	ItoProductOrderCriteria criteria = new ItoProductOrderCriteria();
+   		criteria.createCriteria().andOrderSnEqualTo(orderSn);
+   		List<ItoProductOrder> orderList = itoProductOrderMapper.selectByExample(criteria);
+   		if(orderList!=null&&orderList.size()==1){
+   			return orderList.get(0);
+   		}
+   		return null;
+   	}
 
 //	@Override
 //	public int changeOrderStatus(ItoProductOrder order) {

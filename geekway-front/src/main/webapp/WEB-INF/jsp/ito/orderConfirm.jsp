@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="com.bruce.geekway.model.*" %>
 
+
+<%
+ItoProductOrder itoProductOrder = (ItoProductOrder)request.getAttribute("productOrder");
+%>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -47,18 +52,33 @@
 					尊敬的用户，以下是您要购买的商品信息，请确认：
 					<i></i>
 				</div>	
-					
 				<h5>
 					<img src="http://wximg.jinwanr.com.cn/staticFile//image/20140511/original/1_29149a6beafbd9fdcd9c24a646b47fd4.jpg" width="100%"> 
 				</h5>
-				<h5>商品名称： xxxxxx</h5>
-				<h5>商品信息：S号+红色+光面</h5>
-				<h5>商品单价：X元</h5>
-				<h5>购买数量：1个</h5>
-				<h5>邮费：xx元</h5>
-				<h5>总总计：xxx元</h5>
+				<h5>商品名称： <%=itoProductOrder.getTitle()%></h5>
+				<h5>商品信息：<%=itoProductOrder.getSkuName()%></h5>
+				<h5>商品单价：<%=itoProductOrder.getPrice()%>元</h5>
+				<h5>购买数量：<%=itoProductOrder.getNum()%>个</h5>
+				<h5>邮费：<%=itoProductOrder.getPostFee()%>元</h5>
+				<h5>费用总计：<%=itoProductOrder.getTotalPrice()%>元</h5>
+				
+				<input type="hidden" name="orderSn" value="<%=itoProductOrder.getOrderSn()%>"/>
+				<%
+				String sig = (String)request.getAttribute("sig"); 
+				if(sig!=null){
+				%>
+				<input type="hidden" name="sig" value="<%=sig%>"/>
+				
+				<hr>
+				
+				<h5>收货地址：<input type="text" name="postAddress"/></h5>
+				<h5>邮编：<input type="text" name="postCode"/></h5>
+				<h5>收件人：<input type="text" name="postName"/></h5>
+				<h5>联系电话：<input type="text" name="postMobile"/></h5>
+				<hr>
 				
 				<a href="#" class="o-buttons blue">确认购买</a>
+				<%}%>
 				
 				<hr>
 				

@@ -6,7 +6,9 @@ public interface IWxMaterialNewsArticleService extends IBaseService<WxMaterialNe
 	
 	public int delete(int newsId, int articleId);
 	
-	public int deleteByNewsId(int newsId);
+//	public int deleteByNewsId(int newsId);
+//	
+//	public int deleteByArticleId(int articleId);
 	
 	
 	/**

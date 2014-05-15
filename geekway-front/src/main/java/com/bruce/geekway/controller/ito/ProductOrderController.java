@@ -3,6 +3,7 @@ package com.bruce.geekway.controller.ito;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,33 +35,31 @@ public class ProductOrderController {
 	@Autowired
 	private IItoSkuService itoSkuService;
 	
-	
-	
-	/**
-	 * 产品详情
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/testPostOrder.json")
-	public ModelAndView testPostOrder() {
-		
-		ItoProductOrder itoProductOrder  = new ItoProductOrder();
-		itoProductOrder.setProductId(11);
-		itoProductOrder.setTitle("商品名称");
-		itoProductOrder.setDescription("商品描述");
-		itoProductOrder.setSkuId(1);
-		itoProductOrder.setSkuPropertiesName("");
-		
-		itoProductOrder.setPrice(1000d);
-		itoProductOrder.setPostFee(20d);
-		itoProductOrder.setNum(2);
-		itoProductOrder.setTotalPrice(2000d);
-		itoProductOrder.setPayType((short) 1);
-		
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		dataMap.put("productOrder", itoProductOrder);
-		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
-	}
+//	/**
+//	 * 产品详情
+//	 * @param model
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/testPostOrder.json")
+//	public ModelAndView testPostOrder() {
+//		
+//		ItoProductOrder itoProductOrder  = new ItoProductOrder();
+//		itoProductOrder.setProductId(11);
+//		itoProductOrder.setTitle("商品名称");
+//		itoProductOrder.setDescription("商品描述");
+//		itoProductOrder.setSkuId(1);
+//		itoProductOrder.setSkuPropertiesName("");
+//		
+//		itoProductOrder.setPrice(1000d);
+//		itoProductOrder.setPostFee(20d);
+//		itoProductOrder.setNum(2);
+//		itoProductOrder.setTotalPrice(2000d);
+//		itoProductOrder.setPayType((short) 1);
+//		
+//		Map<String, Object> dataMap = new HashMap<String, Object>();
+//		dataMap.put("productOrder", itoProductOrder);
+//		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+//	}
 	
 	/**
 	 * 产品详情
@@ -88,10 +87,11 @@ public class ProductOrderController {
 		if(orderJson==null||!validRequest){
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}else{
-			ItoProductOrder order = checkOrder(orderJson);//检查交易参数的合法性
+			ItoProductOrder order = new ItoProductOrder();//checkOrder(orderJson);//检查交易参数的合法性
 			if(order!=null){
 				//将新订单的支付状态初始化为未支付
 				order.setPayStatus((short)0);
+				order.setPayType((short)0);
 				
 				//获取支付类型（到付or支付宝）
 				if(order.getPayType()==1){
@@ -102,9 +102,12 @@ public class ProductOrderController {
 					
 				}
 				//TODO 创建订单记录，供付款流程使用
+				int result = itoProductOrderService.save(order);
+				String comfirmUrl = "http://wx.jinwanr.com.cn/m/order/"+order.getOrderSn()+"?hash=1234";
+				System.out.println(comfirmUrl);
 				
 				Map<String, Object> dataMap = new HashMap<String, Object>();
-				dataMap.put("payQrcode", "http://www.jinwanr.com.cn");
+				dataMap.put("payQrcode", comfirmUrl);
 				dataMap.put("payType", order.getPayType());
 				
 				return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
@@ -193,5 +196,12 @@ public class ProductOrderController {
 	 */
 	private double multiPrice(double itemPrice, int quality) {
 		return itemPrice*quality;
+	}
+	
+	
+	
+	public static void main(String[] args) {
+//		UUID.randomUUID().toString().replaceAll("-", "");
+		
 	}
 }

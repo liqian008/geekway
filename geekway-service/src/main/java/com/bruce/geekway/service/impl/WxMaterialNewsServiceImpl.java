@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.dao.IWxMaterialNewsArticleDao;
 import com.bruce.geekway.dao.IWxMaterialNewsDao;
 import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.service.IWxMaterialNewsService;
@@ -14,6 +15,8 @@ public class WxMaterialNewsServiceImpl implements IWxMaterialNewsService{
 	
 	@Autowired
 	private IWxMaterialNewsDao wxMaterialNewsDao;
+	@Autowired
+	private IWxMaterialNewsArticleDao wxMaterialNewsArticleDao;
 	
 	@Override
 	public int save(WxMaterialNews t) {
@@ -27,6 +30,9 @@ public class WxMaterialNewsServiceImpl implements IWxMaterialNewsService{
 
 	@Override
 	public int deleteById(Integer id) {
+		// 删除资源的关联
+		wxMaterialNewsArticleDao.deleteByNewsId(id);
+		//删除实体
 		return wxMaterialNewsDao.deleteById(id);
 	}
 

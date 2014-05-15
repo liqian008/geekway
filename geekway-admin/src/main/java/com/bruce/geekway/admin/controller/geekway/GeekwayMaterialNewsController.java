@@ -22,8 +22,8 @@ public class GeekwayMaterialNewsController extends BaseController {
 
 	@Autowired
 	private IWxMaterialNewsService wxMaterialNewsService;
-	@Autowired
-	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
+//	@Autowired
+//	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
 
 	@RequestMapping("/materialNewsList")
 	public String materialNewsList(Model model, HttpServletRequest request) {
@@ -78,10 +78,10 @@ public class GeekwayMaterialNewsController extends BaseController {
 	@RequestMapping("/delMaterialNews")
 	public String delMaterialNews(Model model, int newsId) {
 
-		// 删除资源的关联
-		wxMaterialNewsArticleService.deleteByNewsId(newsId);
+//		// 删除资源的关联
+//		wxMaterialNewsArticleService.deleteByNewsId(newsId);
 
-		// 删除实体
+		// 删除实体&关联
 		int result = wxMaterialNewsService.deleteById(newsId);
 
 		model.addAttribute("redirectUrl", "./materialNewsList");

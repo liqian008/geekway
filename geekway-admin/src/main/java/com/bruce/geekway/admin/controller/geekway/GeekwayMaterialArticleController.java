@@ -21,6 +21,7 @@ public class GeekwayMaterialArticleController extends BaseController {
 
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
+	
 
 	@RequestMapping("/materialArticleList")
 	public String materialArticleList(Model model, HttpServletRequest request) {
@@ -76,9 +77,9 @@ public class GeekwayMaterialArticleController extends BaseController {
 	public String delMaterialArticle(Model model, int articleId) {
 
 		// 删除资源的关联
-		// wxCommandMaterialService.deleteByCommandId(materialId);
+//		wxCommandMaterialService.deleteByCommandId(materialId);
 
-		// 删除menu实体
+		//删除实体&关联
 		wxMaterialArticleService.deleteById(articleId);
 
 		model.addAttribute("redirectUrl", "./materialArticleList");

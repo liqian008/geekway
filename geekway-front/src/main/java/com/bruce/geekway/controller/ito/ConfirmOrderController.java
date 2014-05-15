@@ -1,5 +1,6 @@
 package com.bruce.geekway.controller.ito;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,17 +24,25 @@ public class ConfirmOrderController {
 	@Autowired
 	private IItoProductOrderService itoProductOrderService;
 	
-	
+	/**
+	 * 展示订单信息，供用户确认
+	 * @param model
+	 * @param orderSn
+	 * @param orderHash
+	 * @return
+	 */
 	@RequestMapping(value = "/order/{orderSn}")
-	public String article(Model model, @PathVariable String orderSn) {
-//		WxMaterialArticle article = wxMaterialArticleService.loadById(articleId);
-//		if(article!=null){
-//			model.addAttribute("article", article);
-//		}
+	public String orderDisplay(Model model, @PathVariable String orderSn, String sig) {
+		//检查提交的参数
+		if(StringUtils.isBlank(orderSn)||StringUtils.isBlank(sig)){
+			return "ito/error";
+		}
 		
-		ItoProductOrder itoProductOrder = itoProductOrderService.loadById(1);
+		//根据订单号加载信息
+		ItoProductOrder itoProductOrder = itoProductOrderService.loadByOrderSn(orderSn);
 		if(itoProductOrder!=null){
 			model.addAttribute("productOrder", itoProductOrder);
+			model.addAttribute("sig", sig);
 			return "ito/orderConfirm";
 		}else{
 			return "ito/orderConfirm";

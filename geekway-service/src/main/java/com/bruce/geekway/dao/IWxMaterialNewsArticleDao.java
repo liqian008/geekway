@@ -6,8 +6,11 @@ public interface IWxMaterialNewsArticleDao extends IBaseDao<WxMaterialNewsArticl
 	
 	public int delete(int newsId, int articleId);
 	
-	public int deleteByNewsId(int newsId);
+	public int deleteByNewsId(int newsId); 
 
+	public int deleteByArticleId(int articleId);
+	
 	public int topNewsArticle(int newsId, int articleId);
+
 	
 }
