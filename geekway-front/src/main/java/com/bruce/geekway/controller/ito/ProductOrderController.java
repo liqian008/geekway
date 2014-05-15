@@ -103,42 +103,22 @@ public class ProductOrderController {
 				}
 				//TODO 创建订单记录，供付款流程使用
 				int result = itoProductOrderService.save(order);
-				String comfirmUrl = "http://wx.jinwanr.com.cn/m/order/"+order.getOrderSn()+"?hash=1234";
-				System.out.println(comfirmUrl);
-				
-				Map<String, Object> dataMap = new HashMap<String, Object>();
-				dataMap.put("payQrcode", comfirmUrl);
-				dataMap.put("payType", order.getPayType());
-				
-				return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+				if(result>0){
+					String orderSn = order.getOrderSn();
+					String sig = itoProductOrderService.signature(orderSn);
+					String comfirmUrl = "http://wx.jinwanr.com.cn/m/order/"+orderSn+"?sig="+sig;
+					System.out.println(comfirmUrl);
+					
+					Map<String, Object> dataMap = new HashMap<String, Object>();
+					dataMap.put("payQrcode", comfirmUrl);
+					dataMap.put("payType", order.getPayType());
+					
+					return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+				}
 			}
 		}
 		throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 	}
-	
-	
-	/**
-	 * 确认后&提交订单
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(String orderJson){
-		//检查请求合法性
-		boolean validRequest = true;
-		if(orderJson==null||!validRequest){
-			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
-		}else{
-			//更新订单状态（邮寄信息，订单状态）
-			ItoProductOrder order = checkOrder(orderJson);
-			order.setPayType((short) 1);//货到付款
-			order.setPayStatus((short)1);//已下单
-			order.setPostStatus((short)0);//未邮寄
-			int submitResult = itoProductOrderService.changeOrderStatus(order);
-		}
-		throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
-	}
-	
 	
 
 	/**

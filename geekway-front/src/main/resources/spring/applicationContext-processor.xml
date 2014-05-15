@@ -50,7 +50,7 @@
 	</bean>
 	
 	<!-- 根据用户输入内容进行回复，应用场景：1、针对自定义菜单的code回复；2、针对订阅事件的回复；3、针对用户输入文本内容的回复 -->
-	<bean id="keycodeCmsProcessor" class="com.bruce.geekway.handler.processor.KeycodeCmsProcessor">
+	<bean id="keycodeCmsProcessor" class="com.bruce.geekway.handler.processor.CommandCmsProcessor">
 		<property name="commandService" ref="commandService"></property>
 		<property name="materialArticleService" ref="materialArticleService"></property> 
 		<property name="materialNewsService" ref="materialNewsService"></property> 

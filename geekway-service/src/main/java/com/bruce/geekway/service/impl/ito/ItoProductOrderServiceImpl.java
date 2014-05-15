@@ -68,7 +68,10 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 		return orderTimeStr +"_"+ uuid;
 	}
 	
-	
+	@Override
+	public String signature(String orderSn){ 
+		return orderSn;
+	}
 
 	public IItoProductOrderDao getItoProductOrderDao() {
 		return itoProductOrderDao;

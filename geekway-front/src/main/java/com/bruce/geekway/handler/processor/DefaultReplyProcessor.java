@@ -23,9 +23,15 @@ public class DefaultReplyProcessor extends AbstractProcessor{
     
     private WxDefaultReply defaultReply = null;
     
+    private long lastLoadTime = 0;
+    
     @Override
-	protected void preProcess() {
-    	 defaultReply = defaultReplyService.loadById(1);
+	protected synchronized void preProcess() {
+    	long currentTime = System.currentTimeMillis();
+    	if(defaultReply==null||currentTime-lastLoadTime>1000*60*60){//每小时刷新一次默认值
+    		defaultReply = defaultReplyService.loadById(1);
+    		lastLoadTime = currentTime;
+    	}
 	}
 
 	@Override

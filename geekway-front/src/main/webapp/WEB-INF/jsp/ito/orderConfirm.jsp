@@ -62,28 +62,51 @@ ItoProductOrder itoProductOrder = (ItoProductOrder)request.getAttribute("product
 				<h5>邮费：<%=itoProductOrder.getPostFee()%>元</h5>
 				<h5>费用总计：<%=itoProductOrder.getTotalPrice()%>元</h5>
 				
-				<input type="hidden" name="orderSn" value="<%=itoProductOrder.getOrderSn()%>"/>
+				
+				<form action="#" method="post" name="orderForm">
+				<input type="hidden" id="orderSn" name="orderSn" value="<%=itoProductOrder.getOrderSn()%>"/>
 				<%
 				String sig = (String)request.getAttribute("sig"); 
 				if(sig!=null){
 				%>
-				<input type="hidden" name="sig" value="<%=sig%>"/>
+				<input type="hidden" id="sig" name="sig" value="<%=sig%>"/>
 				
 				<hr>
 				
-				<h5>收货地址：<input type="text" name="postAddress"/></h5>
-				<h5>邮编：<input type="text" name="postCode"/></h5>
-				<h5>收件人：<input type="text" name="postName"/></h5>
-				<h5>联系电话：<input type="text" name="postMobile"/></h5>
+				<h5>收件人：<input type="text" id="postName" name="postName"/></h5>
+				<h5>收货地址：<input type="text" id="postAddress" name="postAddress"/></h5>
+				<h5>邮编：<input type="text" id="postCode" name="postCode"/></h5>
+				<h5>联系电话：<input type="text" id="postMobile" name="postMobile"/></h5>
 				<hr>
 				
-				<a href="#" class="o-buttons blue">确认购买</a>
+				<a href="javascript:void(0)" id="confirmBtn" class="o-buttons blue">确认购买</a>
+				
 				<%}%>
-				
+				</form>
 				<hr>
 				
 			</div>
 			<div class="subFooter">Copyright 2013. All rights reserved.</div>
 		</div>
 	</body>
+	
+	
+	<script>
+	
+	$("#confirmBtn").click(function(){
+		//disable submitBtn
+		$("#confirmBtn").attr("disabled", "disabled");
+		var orderJsonData = {"orderSn": $("#orderSn").val(),'sig': $("#sig").val(), 'postAddress':$("#postAddress").val(), 'postName':$("#postName").val(), 'postCode':$("#postCode").val(), 'postMobile':$("#postMobile").val()};
+		$.post("../submitOrder.json", orderJsonData, function(data) {
+			var result = data.result;
+				if(result==1){
+    				$("#confirmBtn").hide();
+				}else{
+					
+				}
+			//enable submitBtn
+		 }, "json"); 
+	});
+	
+	</script>
 </html>

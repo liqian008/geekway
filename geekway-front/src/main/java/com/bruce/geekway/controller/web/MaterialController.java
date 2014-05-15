@@ -8,9 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bruce.geekway.model.WxArticle;
 import com.bruce.geekway.model.WxMaterialArticle;
-import com.bruce.geekway.service.IWxArticleService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 
 /**

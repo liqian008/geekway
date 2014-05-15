@@ -32,7 +32,7 @@ import com.bruce.geekway.service.IWxMaterialService;
  *
  */
 //@Service
-public class KeycodeCmsProcessor extends AbstractProcessor{
+public class CommandCmsProcessor extends AbstractProcessor{
     
 //	public KeycodeCmsProcessor(int sort) {
 //		super(sort);
