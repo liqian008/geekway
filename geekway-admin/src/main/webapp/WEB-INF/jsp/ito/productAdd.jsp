@@ -179,6 +179,7 @@
 							</div> 
 						</div>
 						
+						<!-- 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">单品基础信息: <span class="mandatory">*</span>
 							</label>
@@ -203,7 +204,8 @@
 								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>
-						
+						 -->
+						 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">外部购买链接: <span class="mandatory">*</span>
 							</label>

@@ -20,7 +20,6 @@ import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuPropService;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 
-@Deprecated
 @Controller
 @RequestMapping("/ito")
 public class ItoProductSkuValueController {
@@ -32,8 +31,8 @@ public class ItoProductSkuValueController {
 	@Autowired
 	private IItoSkuPropValueService itoSkuPropValueService;
 	
-	@RequestMapping("/productSkuValueEdit")
-	public String productSkuValueEdit(Model model, HttpServletRequest request, int productId) {
+	@RequestMapping("/productSkuValueDisplay")
+	public String productSkuValueDisplay(Model model, HttpServletRequest request, int productId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -54,28 +53,8 @@ public class ItoProductSkuValueController {
 		return "ito/productSkuValueEdit";
 	}
 	
-//	@RequestMapping(value = "/saveProductSkuValue", method = RequestMethod.POST)
-//	public String saveProductSkuValue(Model model, Integer productId, Integer[] productSkuValueIds, HttpServletRequest request) {
-//		String servletPath = request.getRequestURI();
-//		model.addAttribute("servletPath", servletPath);
-//		
-//		int result = 0;
-//		
-//		if(productId!=null && productId>0){
-//			//清除原配置
-//		    itoSkuPropValueService.deleteSkuValuesByProductId(productId);
-//		    //创建新配置
-//			if(productSkuValueIds!=null && productSkuValueIds.length>0){
-//			    List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
-//			    result = itoSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
-//		    }
-//		}
-//		
-//		model.addAttribute("redirectUrl", "./productSkuValueEdit?productId="+productId);
-//		return "forward:/home/operationRedirect";
-//	}
-	
-	
+
+	//TODO，与ItoProductController中的getPropListByValueList方法整合
 	/**
 	 * 获取sku属性列表
 	 * @param skuPropValueList

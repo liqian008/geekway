@@ -21,7 +21,7 @@ import com.bruce.geekway.service.ito.IItoProductOrderService;
 public class ItoProductOrderController {
 
 	@Autowired
-	private IItoProductOrderService itoSkuPropValueService;
+	private IItoProductOrderService itoProductOrderService;
 	
 	
 	@RequestMapping("/orderList")
@@ -29,7 +29,7 @@ public class ItoProductOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<ItoProductOrder> orderList = itoSkuPropValueService.queryAll();
+		List<ItoProductOrder> orderList = itoProductOrderService.queryAll();
 		model.addAttribute("orderList", orderList);
 		return "ito/orderList";
 	}
@@ -46,10 +46,7 @@ public class ItoProductOrderController {
 		Date currentTime = new Date();
 		order.setUpdateTime(currentTime);
 		if(order!=null&&order.getId()!=null&&order.getId()>0){
-			result = itoSkuPropValueService.updateById(order);
-		}else{
-			order.setCreateTime(currentTime);
-			result = itoSkuPropValueService.save(order);
+			result = itoProductOrderService.updateById(order);
 		}
 		
 		model.addAttribute("redirectUrl", "./orderList");

@@ -56,10 +56,10 @@ public class ItoProductController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		//计算product对应的SKU value列表
+		//计算所有可用的SKU value列表
 		List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.queryAll();
 		model.addAttribute("skuPropValueList", skuPropValueList);
-		//计算product对应的SKU prop列表
+		//计算的SKU prop分组
 		List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
 		model.addAttribute("skuPropList", skuPropList);
 		
@@ -204,6 +204,10 @@ public class ItoProductController {
 							ItoSku itoSku = new ItoSku();
 							itoSku.setProductId(productId);
 							itoSku.setName(skuNameList.get(i));
+							//设置各sku的缩略图
+							itoSku.setSkuPicUrl(product.getProductPicUrl());
+							itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
+							
 							itoSku.setOriginPrice((double) 0);
 							itoSku.setPrice((double) 0);
 //							itoSku.setOutId(skuSn);
@@ -290,7 +294,7 @@ public class ItoProductController {
 	}
 	
 	
-	
+	//TODO，与ItoProductSkuValueController中的getPropListByValueList方法整合
 	/**
 	 * 获取sku属性列表
 	 * @param skuPropValueList

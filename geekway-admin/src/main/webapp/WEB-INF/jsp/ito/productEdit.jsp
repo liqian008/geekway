@@ -117,6 +117,17 @@
 						</h6>
 					</div>
 					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${product.productPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${product.productPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="productPicUrl" value="${product.productPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+							</div> 
+						</div> 
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
@@ -144,18 +155,9 @@
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${product.productPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${product.productPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url" type="hidden" name="productPicUrl" value="${product.productPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
-						</div>
 						
+						
+						<!-- 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">单品基础信息: <span class="mandatory">*</span>
 							</label>
@@ -180,6 +182,7 @@
 								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>
+						-->
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">外部购买链接: <span class="mandatory">*</span>
@@ -217,10 +220,10 @@
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">库存(个)</button>
 									</span>
-									<input type="text" class="form-control" name="skuQuality_<%=sku.getId()%>" value="<%=sku.getQuality()%>">
+									<input type="text" class="form-control" name="skuQuality_<%=sku.getId()%>" value="<%=sku.getNum()%>">
 								</div>
 							</div>
-							
+							 
 							<div class="col-sm-2">
 								<div class="input-group">
 									<span class="input-group-btn">

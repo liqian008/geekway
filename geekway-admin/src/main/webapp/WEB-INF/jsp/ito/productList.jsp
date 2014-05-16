@@ -148,7 +148,7 @@
 										<a href="./productEdit?productId=<%=product.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./productSkuValueEdit?productId=<%=product.getId()%>"
+										<a href="./productSkuValueDisplay?productId=<%=product.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="查看SKU"><i class="icon-eye7"></i></a>
 										<a href="./productSkus?productId=<%=product.getId()%>"
