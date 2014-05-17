@@ -8,15 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.IWxMpUserDao;
 import com.bruce.geekway.model.WxMpUser;
-import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.service.IWxMpUserService;
-import com.bruce.geekway.service.mp.WxUserService;
 
 @Service
 public class WxMpUserServiceImpl implements IWxMpUserService{
 	
-	@Autowired
-	private WxUserService wxUserService;
+//	@Autowired
+//	private WxUserService wxUserService;
 	
 	@Autowired
 	private IWxMpUserDao wxMpUserDao;
@@ -48,33 +46,21 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 	}
 	
 	
-	@Override
-	public int insertOrUpdate(WxMpUser wxMpUser) {
-		return wxMpUserDao.insertOrUpdate(wxMpUser);
-	}
+//	@Override
+//	public int insertOrUpdate(WxMpUser wxMpUser) {
+//		return wxMpUserDao.insertOrUpdate(wxMpUser);
+//	}
 	
 	/**
 	 * 新关注用户
 	 */
 	@Override
-	public int newMpUser(String openId) {
-		
-		WxUserInfoResult userInfoResult =  wxUserService.getUser(openId);
-		if(userInfoResult!=null){
-			WxMpUser wxMpUser = new WxMpUser();
-			wxMpUser.setOpenId(openId);
-			wxMpUser.setNickname(userInfoResult.getNickname());
-			wxMpUser.setCity(userInfoResult.getCity());
-			wxMpUser.setCountry(userInfoResult.getCountry());
-			wxMpUser.setProvince(userInfoResult.getProvince());
-			wxMpUser.setHeadImgUrl(userInfoResult.getHeadimgurl());
-			wxMpUser.setLanguage(userInfoResult.getLanguage());
-			wxMpUser.setSubscribeStatus(userInfoResult.getSubscribe());
-			wxMpUser.setSex(userInfoResult.getSex());
-			wxMpUser.setCreateTime(new Date());
-			return save(wxMpUser);
-		}	
-		return 0;
+	public int newSubscribeUser(String userOpenId) {
+//		//TODO 放在线程中执行
+		WxMpUser wxMpUser = new WxMpUser();
+		wxMpUser.setOpenId(userOpenId);
+		wxMpUser.setCreateTime(new Date());
+		return save(wxMpUser);
 	}
 	
 	public IWxMpUserDao getWxMpUserDao() {
@@ -85,7 +71,12 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 		this.wxMpUserDao = wxMpUserDao;
 	}
 
-	
-	
+//	public WxUserService getWxUserService() {
+//		return wxUserService;
+//	}
+//
+//	public void setWxUserService(WxUserService wxUserService) {
+//		this.wxUserService = wxUserService;
+//	}
 
 }

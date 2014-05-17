@@ -52,7 +52,7 @@ public class MessageMocker {
 	
 	public static final String MSG_EVENT_SUBSCRIBE_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[FromUser]]></FromUserName>"
+			+ "<FromUserName><![CDATA[oxGeHjg87dS82dsp4iP4SE1iVujA]]></FromUserName>"
 			+ "<CreateTime>123456789</CreateTime>"
 			+ "<MsgType><![CDATA[event]]></MsgType>"
 			+ "<Event><![CDATA[subscribe]]></Event>"

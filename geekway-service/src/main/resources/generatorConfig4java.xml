@@ -30,13 +30,13 @@
 		
 
 		<!-- geekway config -->
+		<table schema="wx" tableName="wx_mp_user" domainObjectName="WxMpUser"/>
 		
 		<!--
 		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		<table schema="wx" tableName="wx_material_news" domainObjectName="WxMaterialNews"/>
 		<table schema="wx" tableName="wx_material_news_article" domainObjectName="WxMaterialNewsArticle"/>
 		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
-		<table schema="wx" tableName="wx_mp_user" domainObjectName="WxMpUser"/>
 		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
 		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
@@ -60,9 +60,9 @@
 		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
 		<table schema="wx" tableName="ito_product" domainObjectName="ItoProduct"/> 
 		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>
+		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
 		<table schema="wx" tableName="ito_product_sku_value" domainObjectName="ItoProductSkuValue"/>
 		 -->
-		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
 		
 	</context>
 </generatorConfiguration>

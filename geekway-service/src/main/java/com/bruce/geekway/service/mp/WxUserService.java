@@ -59,9 +59,21 @@ public class WxUserService extends WxBaseService {
 		params.put("lang","zh_CN");
 		
 //			String menuQueryResult = WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"), params);
-		String userinfoResult = WxUtil.sendGetRequest(ConfigUtil.getString("https://api.weixin.qq.com/cgi-bin/user/info"), params);
+		String userinfoResult = WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_user_info_url"), params);
 		
 		WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(userinfoResult, WxUserInfoResult.class);
 		return wxUserinfoResult;
 	}
+
+	public WxMpTokenService getMpTokenService() {
+		return mpTokenService;
+	}
+
+	public void setMpTokenService(WxMpTokenService mpTokenService) {
+		this.mpTokenService = mpTokenService;
+	}
+	
+	
+	
+	
 }

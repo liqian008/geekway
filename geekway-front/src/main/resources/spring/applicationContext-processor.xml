@@ -43,6 +43,7 @@
 	<bean id="eventSubscribeProcessorList" class="java.util.ArrayList"> 
 		<constructor-arg>
 			<list>
+				<ref bean="userSubscribeProcessor"/>
 				<ref bean="keycodeCmsProcessor"/>
 				<ref bean="defaultReplyProcessor"/>
 			</list>
@@ -65,6 +66,11 @@
 	<!-- 作为默认处理器，建议将放置在list的最后一个，优先使用其他处理器 -->
 	<bean id="defaultReplyProcessor" class="com.bruce.geekway.handler.processor.DefaultReplyProcessor">
 		<property name="defaultReplyService" ref="defaultReplyService"></property>
+	</bean>
+	
+	<!-- 作为默认处理器，建议将放置在list的最后一个，优先使用其他处理器 -->
+	<bean id="userSubscribeProcessor" class="com.bruce.geekway.handler.processor.UserSubscribeProcessor">
+		<property name="mpUserService" ref="mpUserService"></property>
 	</bean>
 	
 </beans>

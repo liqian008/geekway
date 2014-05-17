@@ -33,6 +33,9 @@
 	</bean>
 	<bean id="wxMaterialNewsDao" class="com.bruce.geekway.dao.impl.WxMaterialNewsDaoImpl">
 	</bean>
+	<bean id="wxMpUserDao" class="com.bruce.geekway.dao.impl.WxMpUserDaoImpl">
+	</bean>
+	
 	<!-- 
 	<bean id="wxMaterialNewsArticleDao" class="com.bruce.geekway.dao.impl.WxMaterialNewsArticleDaoImpl">
 	</bean>

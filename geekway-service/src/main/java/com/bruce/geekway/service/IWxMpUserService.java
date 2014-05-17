@@ -5,11 +5,9 @@ import com.bruce.geekway.model.WxMpUser;
 public interface IWxMpUserService extends IBaseService<WxMpUser, Integer>{
 
 	
-	public int newMpUser(String openId);
+	public int newSubscribeUser(String userOpenId);
 	
 	
-	public int insertOrUpdate(WxMpUser wxMpUser);
-	
-	
+//	public int insertOrUpdate(WxMpUser wxMpUser);
 	
 }

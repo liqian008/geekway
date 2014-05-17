@@ -48,19 +48,26 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
         return null;
     }
     
-    @Override
-	public int insertOrUpdate(WxMpUser wxMpUser) {
-//    	if(wxMpUser!=null&&wxMpUser.getId()!=null){//检查用户是否已经存在
-//	    	WxMpUserCriteria criteria = new WxMpUserCriteria();
-//	        criteria.createCriteria().andOpenIdEqualTo(wxMpUser.getOpenId());
-//			//return wxMpUserMapper.updateByExampleSelective(wxMpUser, criteria);
-//	        //TODO saveOrUpdate
-//	        return 0;
-//    	}
-//		return 0;
-    	return save(wxMpUser);
-	}
+//    @Override
+//	public int insertOrUpdate(WxMpUser wxMpUser) {
+////    	if(wxMpUser!=null&&wxMpUser.getId()!=null){//检查用户是否已经存在
+////	    	WxMpUserCriteria criteria = new WxMpUserCriteria();
+////	        criteria.createCriteria().andOpenIdEqualTo(wxMpUser.getOpenId());
+////			//return wxMpUserMapper.updateByExampleSelective(wxMpUser, criteria);
+////	        //TODO saveOrUpdate
+////	        return 0;
+////    	}
+////		return 0;
+//    	return save(wxMpUser);
+//	}
 
+
+	@Override
+	public List<WxMpUser> getUserListBySyncStatus(short syncStatus) {
+		WxMpUserCriteria criteria = new WxMpUserCriteria();
+		criteria.createCriteria().andSyncStatusEqualTo(syncStatus);
+		return wxMpUserMapper.selectByExample(criteria);
+	}
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -73,6 +80,7 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
 	public void setWxMpUserMapper(WxMpUserMapper wxMpUserMapper) {
 		this.wxMpUserMapper = wxMpUserMapper;
 	}
+
 
 
 }

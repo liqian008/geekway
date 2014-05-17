@@ -1,10 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxMpUser"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.geekway.model.*"%>
 
+<%@ include file="../inc/include_tag.jsp" %>
+
+
+<%!String displayCheckedStatus(Integer dataId, Integer itemId){
+	if(dataId!=null&&itemId!=null&&dataId==itemId){
+		return "checked='checked'";
+	}else{
+		return "";
+	}
+}
+
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +83,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						用户管理
+						用户资料
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -84,7 +95,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">用户管理</li>
+					<li class="active">用户资料</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -92,78 +103,91 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、点击封面图，可预览大图<br/>
-					2、点击【编辑】按钮，可对用户进行编辑
+					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
+					2、 <br/>
 				</p>
 			</div>
+			
+			<%
+			WxMpUser mpUser = (WxMpUser)request.getAttribute("mpUser");
+			%>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>用户管理
-					</h5>
-				</div> 
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>头像</th>
-								<th>昵称</th>
-								<th>OPENID</th>
-								<th>区域</th>
-                               <!--  <th>关注时间</th> -->
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMpUser> mpUserList = (List<WxMpUser>)request.getAttribute("mpUserList");
-                           	if(mpUserList!=null&&mpUserList.size()>0){
-                           		int i=0;
-                           		for(WxMpUser mpUser: mpUserList){
-                           			boolean synced = mpUser.getSyncStatus()>0;
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td>
-		                        	<%if(synced){ %>
-	                        		<a href="<%=mpUser.getHeadImgUrl()%>" class="lightbox">
-		                        	<img src='<%=mpUser.getHeadImgUrl()%>' class="img-media"/>
-		                        	</a>
-		                        	<%}%>
-		                        </td>
-		                        <td><%=synced?mpUser.getNickname():"暂未同步"%></td>
-		                        <td><%=mpUser.getOpenId()%></td>
-		                        <td>
-		                        	<%if(synced){%>
-		                        	<%=mpUser.getCountry()+"-"+mpUser.getProvince()+"-"+mpUser.getProvince()%>
-		                        	<%}%>
-		                        </td>
-		                        <td class='text-center'>
-		                        	<%if(synced){%>
-		                        	<div class="table-controls">
-										<a href="./mpUserInfo?mpUserId=<%=mpUser.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查看"><i class="icon-pencil3"></i></a> 
-									</div>
-									<%} %>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>用户资料
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">头 像:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${mpUser.headImgUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${mpUser.headImgUrl}" width="100px" />
+								</a>
+							</div> 
+						</div>
+					
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">昵 称:
+							</label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${mpUser.nickname}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">OPENID:
+							</label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${mpUser.openId}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">性 别:
+							</label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									<%=mpUser.getSex()==1?"男":"女"%>
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">地 区:
+							</label>
+							<div class="col-sm-6">
+								<label class="control-label">
+									<%=mpUser.getCountry()%>-<%=mpUser.getProvince()%>-<%=mpUser.getCity()%>
+								</label>
+							</div>
+						</div>
+						
+						<!-- <div class="modal-footer">
+							<input type="submit" value="发送文本" class="btn btn-info"/>
+							<input type="submit" value="发送单图文" class="btn btn-primary"/>
+							<input type="submit" value="发送多图文" class="btn btn-warning"/>
+						</div> -->
+						
+					</div>
 				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -173,4 +197,3 @@
 	<!-- /page container -->
 </body>
 </html>
-

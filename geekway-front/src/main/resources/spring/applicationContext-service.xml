@@ -46,8 +46,17 @@
 	<bean id="materialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
 		<property name="wxMaterialNewsDao" ref="wxMaterialNewsDao"></property>
 	</bean>
+	<!-- 本地MpUserService -->
+	<bean id="mpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">
+		<property name="wxMpUserDao" ref="wxMpUserDao"></property>
+	</bean>
 	
-	
+	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
+	<bean id="wxUserService" class="com.bruce.geekway.service.mp.WxUserService">
+	</bean>
+	<bean id="mpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
+	</bean>
+	-->
 	
 	<!-- ito service config -->
 	<bean id="itoProductService" class="com.bruce.geekway.service.impl.ito.ItoProductServiceImpl">
