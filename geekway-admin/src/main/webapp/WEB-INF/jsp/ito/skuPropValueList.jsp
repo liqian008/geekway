@@ -127,6 +127,7 @@
 						<thead>
 							<tr>
 								<th>序号</th>
+								<th>图片</th>
                                 <th>SKU属性</th>
                                 <th>名称</th>
                                 <th>描述</th>
@@ -143,6 +144,11 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=itoSkuPropValue.getSkuPicUrl()%>" class="lightbox">
+		                        	<img src='<%=itoSkuPropValue.getSkuPicUrl()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
 		                        <td><%=displaySkuType(itoSkuPropValue.getSkuPropId())%></td>
 		                        <td><%=itoSkuPropValue.getName()%></td>
 		                        <td><%=itoSkuPropValue.getDescription()%></td>

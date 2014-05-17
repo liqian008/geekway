@@ -41,8 +41,6 @@ public class ProductController {
 	private IItoSkuPropValueService itoSkuPropValueService;
 	@Autowired
 	private IItoSkuPropService itoSkuPropService;
-//	@Autowired
-//	private IItoProductSkuService itoProductSkuService;
 	
 	/**
 	 * 产品列表
@@ -95,21 +93,14 @@ public class ProductController {
 			List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
 			product.setProductSkus(skuList);
 			
-			//获取该商品的sku字典表
-			List<ItoSkuPropValue> productSkuProValueList =  itoSkuPropValueService.querySkuValueListByProductId(productId);
-			List<ItoSkuProp> skuPropList = getPropListByValueList(productSkuProValueList);
-			
-			
-			if(skuPropList!=null&&skuPropList.size()>0){//sku属性分组
-				for(ItoSkuProp skuProp: skuPropList){
-					
-				}
-			}
-			
-//			List<Integer> productSkuValueIdList =  itoSkuPropValueService.querySkuValueIdListByProductId(productId);
+			List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.querySkuValueListByProductId(productId);
+			List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
 			
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("product", product);
+			dataMap.put("skuPropValues", skuPropValueList);
+			dataMap.put("skuPropList", skuPropList);
+			
 			return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));

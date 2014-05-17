@@ -27,7 +27,7 @@ public class GeekwayRemoteMpUserController {
 	@RequestMapping("/mpUserListRemote") 
 	public String mpUserList(Model model, HttpServletRequest request, String nextOpenId, @RequestParam(value="pageSize", required=false, defaultValue="1") int pageSize) {
 		
-		List<String> openIdList = (List<String>) request.getSession().getAttribute("openIdList");
+		List<String> openIdList = null;//(List<String>) request.getSession().getAttribute("openIdList");
 		
 		if(openIdList==null){
 			WxUserListResult userListResult = wxUserService.getUsers(nextOpenId);

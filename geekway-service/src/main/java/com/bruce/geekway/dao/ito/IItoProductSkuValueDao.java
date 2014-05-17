@@ -7,7 +7,8 @@ import com.bruce.geekway.model.ItoProductSkuValue;
 import com.bruce.geekway.model.ItoSkuPropValue;
 
 public interface IItoProductSkuValueDao extends IBaseDao<ItoProductSkuValue, Integer> {
-
+	
+	
 	public List<Integer> querySkuValueIdListByProductId(int productId);
 
 	public List<ItoSkuPropValue> querySkuValueListByProductId(int productId);
@@ -15,5 +16,7 @@ public interface IItoProductSkuValueDao extends IBaseDao<ItoProductSkuValue, Int
 	public int deleteSkuValuesByProductId(int productId);
 
 	public int saveProductSkuValues(int productId, List<Integer> productSkuValueIdList);
+
+	public List<ItoProductSkuValue> queryByProductId(int productId); 
 
 }

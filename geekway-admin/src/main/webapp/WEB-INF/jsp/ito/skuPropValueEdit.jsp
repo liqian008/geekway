@@ -116,7 +116,20 @@
 						</h6>
 					</div>
 					<div class="panel-body">
-					
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${skuPropValue.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${skuPropValue.skuPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuPropValue.skuPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+							</div> 
+						</div>
+						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU属性: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
@@ -159,4 +172,35 @@
 	</div>
 	<!-- /page container -->
 </body>
+
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+	    $("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	});
+	</script>
+
 </html>

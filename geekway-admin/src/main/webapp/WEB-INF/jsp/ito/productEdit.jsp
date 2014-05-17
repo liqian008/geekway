@@ -127,7 +127,7 @@
 								<input id="cover-image-url" type="hidden" name="productPicUrl" value="${product.productPicUrl}"/>
 								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
-						</div> 
+						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>

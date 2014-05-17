@@ -17,5 +17,9 @@ public interface IItoSkuPropValueService extends IBaseService<ItoSkuPropValue, I
 	public int saveProductSkuValues(int productId, List<Integer> productSkuValueIdList);
 
 	public HashMap<Integer, ItoSkuPropValue> queryMap();
+	
+//	public List<ItoSkuPropValue> queryCombiledSkuPropValueListByProductId(int productId);
+    
+	
 
 }

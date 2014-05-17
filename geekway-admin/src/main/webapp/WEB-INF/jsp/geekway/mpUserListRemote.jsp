@@ -120,6 +120,7 @@
 								<th>省份</th>
 								<th>城市</th>
                                 <th>关注时间</th>
+                                <th class="team-links">操 作</th> 
 							</tr>
 						</thead>
 						<tbody>
@@ -142,7 +143,13 @@
 		                        <td><%=userinfo.getProvince()%></td>
 		                        <td><%=userinfo.getCity()%></td>
 		                        <td><%=userinfo.getSubscribe_time()%></td>
-		                       
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="./readyToSendText?openId=<%=userinfo.getOpenid()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="回复文本"><i class="icon-pencil3"></i></a>
+									</div>
+								</td>
                                </tr>
 							<%}
                            	} %>

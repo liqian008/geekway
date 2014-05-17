@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.ito.IItoProductSkuValueDao;
 import com.bruce.geekway.dao.ito.IItoSkuPropValueDao;
-import com.bruce.geekway.model.ItoSkuProp;
 import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 
@@ -18,7 +17,7 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 	@Autowired
 	private IItoSkuPropValueDao itoSkuPropValueDao;
 	@Autowired
-	private IItoProductSkuValueDao toProductSkuValueDao;
+	private IItoProductSkuValueDao itoProductSkuValueDao;
 	
 	@Override
 	public int save(ItoSkuPropValue t) {
@@ -62,23 +61,28 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 	
 	@Override
 	public List<Integer> querySkuValueIdListByProductId(int productId) {
-		return toProductSkuValueDao.querySkuValueIdListByProductId(productId);
+		return itoProductSkuValueDao.querySkuValueIdListByProductId(productId);
 	}
 	
 	@Override
 	public List<ItoSkuPropValue> querySkuValueListByProductId(int productId) {
-		return toProductSkuValueDao.querySkuValueListByProductId(productId);
+		return itoProductSkuValueDao.querySkuValueListByProductId(productId);
 	}
 	
 	@Override
 	public int deleteSkuValuesByProductId(int productId) {
-		return toProductSkuValueDao.deleteSkuValuesByProductId(productId);
+		return itoProductSkuValueDao.deleteSkuValuesByProductId(productId);
 	}
 
 	@Override
 	public int saveProductSkuValues(int productId, List<Integer> productSkuValueIdList) {
-		return toProductSkuValueDao.saveProductSkuValues(productId, productSkuValueIdList);
+		return itoProductSkuValueDao.saveProductSkuValues(productId, productSkuValueIdList);
 	}
+	
+//	@Override
+//	public List<ItoSkuPropValue> queryCombiledSkuPropValueListByProductId(int productId){
+//		return itoSkuPropValueDao.queryCombiledSkuPropValueListByProductId(productId);
+//	}
 	
 	public IItoSkuPropValueDao getItoSkuPropValueDao() {
 		return itoSkuPropValueDao;
@@ -88,6 +92,12 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 		this.itoSkuPropValueDao = itoSkuPropValueDao;
 	}
 
-	
+	public IItoProductSkuValueDao getItoProductSkuValueDao() {
+		return itoProductSkuValueDao;
+	}
+
+	public void setItoProductSkuValueDao(IItoProductSkuValueDao itoProductSkuValueDao) {
+		this.itoProductSkuValueDao = itoProductSkuValueDao;
+	}
 
 }

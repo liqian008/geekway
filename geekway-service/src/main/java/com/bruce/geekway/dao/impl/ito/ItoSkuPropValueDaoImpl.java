@@ -47,25 +47,16 @@ public class ItoSkuPropValueDaoImpl implements IItoSkuPropValueDao, Initializing
         return null;
     }
 
+//    public List<ItoSkuPropValue> queryCombiledSkuPropValueListByProductId(int productId){
+//    	return itoSkuPropValueMapper.querySkuPropValueListByProductId(productId);
+//    }
+    
+    
+    
     @Override
     public void afterPropertiesSet() throws Exception {
 
     }
-
-//    @Override
-//    public List<ItoSkuPropValue> queryArticlesByModuleId(int moduleId) {
-//        return itoSkuPropValueMapper.queryArticlesByModuleId(moduleId);
-//    }
-//    
-//    @Override
-//	public List<ItoSkuPropValue> queryArticlesByModuleId(int moduleId, int limit){
-//    	return itoSkuPropValueMapper.queryArticlesByModuleIdLimit(moduleId, limit);
-//	}
-//    
-//    @Override
-//    public List<ItoSkuPropValue> queryArticlesOutModuleId(int moduleId) {
-//        return itoSkuPropValueMapper.queryArticlesOutModuleId(moduleId);
-//    }
 
     public ItoSkuPropValueMapper getItoSkuPropValueMapper() {
 		return itoSkuPropValueMapper;

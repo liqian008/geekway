@@ -111,10 +111,35 @@ public class ItoProductSkuValueDaoImpl implements IItoProductSkuValueDao, Initia
 		return 0;
 	}
 
+	
+	public List<ItoProductSkuValue> queryByProductId(int productId){
+		ItoProductSkuValueCriteria criteria = new ItoProductSkuValueCriteria();
+		criteria.createCriteria().andProductIdEqualTo(productId);
+		return itoProductSkuValueMapper.selectByExample(criteria);
+	}
+
+	
+	
     @Override
     public void afterPropertiesSet() throws Exception {
 
     }
+
+	public ItoProductSkuValueMapper getItoProductSkuValueMapper() {
+		return itoProductSkuValueMapper;
+	}
+
+	public void setItoProductSkuValueMapper(ItoProductSkuValueMapper itoProductSkuValueMapper) {
+		this.itoProductSkuValueMapper = itoProductSkuValueMapper;
+	}
+
+	public ItoSkuPropValueMapper getItoSkuPropValueMapper() {
+		return itoSkuPropValueMapper;
+	}
+
+	public void setItoSkuPropValueMapper(ItoSkuPropValueMapper itoSkuPropValueMapper) {
+		this.itoSkuPropValueMapper = itoSkuPropValueMapper;
+	}
 
 	
 }
