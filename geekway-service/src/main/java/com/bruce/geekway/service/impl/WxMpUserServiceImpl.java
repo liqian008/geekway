@@ -59,6 +59,7 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 //		//TODO 放在线程中执行
 		WxMpUser wxMpUser = new WxMpUser();
 		wxMpUser.setOpenId(userOpenId);
+		wxMpUser.setSyncStatus((short) 0);
 		wxMpUser.setCreateTime(new Date());
 		return save(wxMpUser);
 	}

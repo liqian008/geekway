@@ -108,6 +108,7 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>用户管理
 					</h5>
+					<a href="./syncRemoteUser"><span class="label label-danger pull-right">用户数据同步</span></a>
 				</div> 
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -140,7 +141,7 @@
 		                        	</a>
 		                        	<%}%>
 		                        </td>
-		                        <td><%=synced?mpUser.getNickname():"暂未同步"%></td>
+		                        <td><%=synced?mpUser.getNickname():"详细信息未同步"%></td>
 		                        <td><%=mpUser.getOpenId()%></td>
 		                        <td>
 		                        	<%if(synced){%>
@@ -162,6 +163,7 @@
 						</tbody>
 					</table>
 				</div>
+				
 			</div>
 			<!-- /table view -->
 

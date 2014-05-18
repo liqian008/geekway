@@ -170,11 +170,11 @@
 					</table>
 				</div>
 
-				<div class="table-footer">
+				<!-- <div class="table-footer">
 					<div class="table-actions">
-						<!-- 
+						
 						<label>操作:</label>
-						-->
+						
 						<input type="button" value="批量添加" class="btn btn-info btn-xs">
 					</div> 
 					<ul class="pagination">
@@ -184,7 +184,7 @@
 						<li><a href="#">3</a></li>
 						<li><a href="#">Next</a></li>
 					</ul>
-				</div>
+				</div> -->
 
 			</div>
 			<!-- /table with checkboxes -->

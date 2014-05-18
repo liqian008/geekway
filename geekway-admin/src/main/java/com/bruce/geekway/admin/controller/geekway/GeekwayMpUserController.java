@@ -10,7 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.model.WxMpUser;
+import com.bruce.geekway.model.wx.json.response.WxUserListResult;
+import com.bruce.geekway.model.wx.json.response.WxUserListResult.OpenIdList;
 import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.service.mp.WxUserService;
 
 @Controller
 @RequestMapping("/geekway")
@@ -18,6 +21,9 @@ public class GeekwayMpUserController {
 
 	@Autowired
 	private IWxMpUserService wxMpUserService;
+	@Autowired
+	private WxUserService wxUserService;
+	
 
 	@RequestMapping("/mpUserList")
 	public String mpUserList(Model model, HttpServletRequest request) {
@@ -42,6 +48,25 @@ public class GeekwayMpUserController {
 		// model.addAttribute("mpUserList", mpUserList);
 
 		return "geekway/mpUserInfo";
+	}
+	
+	
+	@RequestMapping("/syncRemoteUser")
+	public String syncRemoteUser(Model model, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+
+		WxUserListResult userListResult =   wxUserService.getUsers(null);
+		if(userListResult!=null&&userListResult.getErrcode()==null){
+			OpenIdList openIdList = userListResult.getData();
+			if(openIdList!=null&&openIdList.getOpenid()!=null){
+				for(String userOpenId: openIdList.getOpenid()){
+					wxMpUserService.newSubscribeUser(userOpenId);
+				}
+			}
+		}
+		model.addAttribute("redirectUrl", "./mpUserList");
+		return "forward:/home/operationRedirect";
 	}
 
 }

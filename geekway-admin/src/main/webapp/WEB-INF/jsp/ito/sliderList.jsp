@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.ItoSlider"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
-<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -74,7 +73,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						订单详情
+						滑屏图片管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -86,7 +85,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">订单详情</li>
+					<li class="active">滑屏图片管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -94,137 +93,71 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、xxxxxx<br/>
 				</p>
 			</div>
 
-			<%
-			ItoProductOrder order = (ItoProductOrder)request.getAttribute("order");
-			%>
-
-			<form id="validate" action="<s:url value='./saveOrder'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>查看订单信息
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="productId" id="productId" value="${order.productId}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${order.title}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SN: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="outId" id="outId" value="${order.outId}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<textarea name="description" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${order.description}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${order.orderPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${order.orderPicUrl}" width="200px" />
-								</a>
-							</div> 
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">价格信息: <span class="mandatory">*</span>
-							</label>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="totalPrice" id="totalPrice" value="${order.totalPrice}"/>
-								<span class="label label-danger label-block">总价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${order.price}"/>
-								<span class="label label-info label-block">单价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" id="num" value="${order.num}"/>
-								<span class="label label-primary label-block">数量(个)</span>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SKU_ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="skuId" id="skuId" value="${order.skuId}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SKU信息: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="sku" id="sku" value="${order.sku}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付类型: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="payType" id="payType" value="${order.payType}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付状态: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="payStatus" id="payStatus" value="${order.payStatus}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">运单号: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="postSn" id="postSn" value="${order.postSn}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="下一步" class="btn btn-primary">
-						</div>
-					</div>
-					
-					
-					
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>滑屏图片管理
+					</h5>
+					<a href="./sliderAdd"><span class="label label-danger pull-right">新增滑屏图片</span></a>
 				</div>
-				
-			</form>
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>图片</th>
+                                <th>标题</th>
+                                <th>排序</th>
+                                <!-- <th>库存</th>
+                                <th>状态</th> -->
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<ItoSlider> sliderList = (List<ItoSlider>)request.getAttribute("sliderList");
+                           	if(sliderList!=null&&sliderList.size()>0){
+                           		int i=0;
+                           		for(ItoSlider slider: sliderList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=slider.getSliderPicUrl()%>" class="lightbox">
+		                        	<img src='<%=slider.getSliderPicUrl()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
+		                        <td title="<%=slider.getDescription()%>"><%=slider.getTitle()%></td>
+		                        <td><%=slider.getSort()%></td>
+		                        <%-- <td>个</td>
+		                        <td><%=slider.getStatus()==1?"上架":"下架"%></td> --%>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+		                        	
+										<a href="./sliderEdit?sliderId=<%=slider.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -232,6 +165,6 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
 </body>
 </html>
+

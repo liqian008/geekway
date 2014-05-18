@@ -133,9 +133,9 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td title="SN：<%=order.getOutId()%>"><%=order.getTitle()%></td>
-		                        <td class="text-center"><%=order.getSku()%></td>
-		                        <td title="单价：<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getPrice()%>元</td>
-		                        <td><%=order.getPayStatus()==1?"到付":"扫码"%></td>
+		                        <td  title="SN：<%=order.getOrderSn()%>"><%=order.getSkuName()%></td>
+		                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
+		                        <td><%=order.getPayStatus()==1?"到付":"支付宝"%></td>
 		                        <td title="<%=order.getPayStatus()==1?"":order.getPostSn()%>"><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

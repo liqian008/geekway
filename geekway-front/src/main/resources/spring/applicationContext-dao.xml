@@ -60,6 +60,8 @@
 	</bean>
 	<bean id="itoProductSkuValueDao" class="com.bruce.geekway.dao.impl.ito.ItoProductSkuValueDaoImpl">
 	</bean>
+	<bean id="itoSliderDao" class="com.bruce.geekway.dao.impl.ito.ItoSliderDaoImpl">
+	</bean>
 	
 	
 </beans>

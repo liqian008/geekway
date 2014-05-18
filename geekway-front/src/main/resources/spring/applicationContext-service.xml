@@ -69,6 +69,7 @@
 	</bean>
 	<bean id="itoProductOrderService" class="com.bruce.geekway.service.impl.ito.ItoProductOrderServiceImpl">
 	</bean>
-	
+	<bean id="itoSliderService" class="com.bruce.geekway.service.impl.ito.ItoSliderServiceImpl">
+	</bean>
 	
 </beans>

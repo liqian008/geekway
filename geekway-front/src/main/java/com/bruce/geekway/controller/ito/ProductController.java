@@ -96,18 +96,29 @@ public class ProductController {
 			List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.querySkuValueListByProductId(productId);
 			List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
 			
+			//主要为了构造该产品对应的sku属性及旗下的值
+			for(ItoSkuProp skuProp: skuPropList){
+				List<ItoSkuPropValue> valueList = new ArrayList<ItoSkuPropValue>();
+				for(ItoSkuPropValue skuPropValue: skuPropValueList){
+					if(skuPropValue.getSkuPropId()!=null&&skuPropValue.getSkuPropId().equals(skuProp.getId())){
+						valueList.add(skuPropValue);
+					}
+				}
+				if(valueList.size()>0){//有数据时才添加
+					skuProp.setSkuPropValueList(valueList);
+				}
+			}
+			
+			
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("product", product);
-			dataMap.put("skuPropValues", skuPropValueList);
 			dataMap.put("skuPropList", skuPropList);
+//			dataMap.put("skuPropValues", skuPropValueList);
 			
 			return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 	}
-	
-	
-	
 	
 	
 	/**

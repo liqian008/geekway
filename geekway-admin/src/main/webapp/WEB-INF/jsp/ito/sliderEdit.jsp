@@ -74,7 +74,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						订单详情
+						滑屏图片详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -86,7 +86,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">订单详情</li>
+					<li class="active">滑屏图片详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -104,119 +104,57 @@
 			</div>
 
 			<%
-			ItoProductOrder order = (ItoProductOrder)request.getAttribute("order");
+			ItoSlider slider = (ItoSlider)request.getAttribute("slider");
 			%>
 
-			<form id="validate" action="<s:url value='./saveOrder'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveSlider'/>" method="post"  class="form-horizontal form-bslidered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>查看订单信息
+							<i class="icon-bubble4"></i>滑屏图片详情
 						</h6>
 					</div>
 					<div class="panel-body">
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="productId" id="productId" value="${order.productId}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${order.title}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SN: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="outId" id="outId" value="${order.outId}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<textarea name="description" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${order.description}</textarea>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${order.orderPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${order.orderPicUrl}" width="200px" />
+								<a href="${slider.sliderPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${slider.sliderPicUrl}" width="200px" />
 								</a>
+								<input id="cover-image-url" type="hidden" name="sliderPicUrl" value="${slider.sliderPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">价格信息: <span class="mandatory">*</span>
-							</label>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="totalPrice" id="totalPrice" value="${order.totalPrice}"/>
-								<span class="label label-danger label-block">总价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${order.price}"/>
-								<span class="label label-info label-block">单价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" id="num" value="${order.num}"/>
-								<span class="label label-primary label-block">数量(个)</span>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SKU_ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="skuId" id="skuId" value="${order.skuId}" readonly="readonly"/>
+							<label class="col-sm-2 control-label text-right">标 题: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="title" id="title" value="${slider.title}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SKU信息: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">描 述: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="sku" id="sku" value="${order.sku}" readonly="readonly"/>
+								<input type="text" class="form-control" name="description" id="description" value="${slider.description}"/>
 							</div>
-						</div>
+						</div> 
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付类型: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="payType" id="payType" value="${order.payType}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付状态: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="payStatus" id="payStatus" value="${order.payStatus}" readonly="readonly"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">运单号: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="postSn" id="postSn" value="${order.postSn}" readonly="readonly"/>
+							<label class="col-sm-2 control-label text-right">排 序: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="sort" id="sort" value="${slider.sort}"/>
 							</div>
 						</div>
 						
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="下一步" class="btn btn-primary">
+							<input type="submit" value="确 认" class="btn btn-primary">
 						</div>
 					</div>
 					
@@ -232,6 +170,35 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+	    $("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	});
+	</script>
 	
 </body>
 </html>

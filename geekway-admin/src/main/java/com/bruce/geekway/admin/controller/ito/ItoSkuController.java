@@ -17,7 +17,11 @@ import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuService;
 
-
+/**
+ * 某个product下的sku操作
+ * @author liqian
+ *
+ */
 @Controller
 @RequestMapping("/ito")
 public class ItoSkuController {
