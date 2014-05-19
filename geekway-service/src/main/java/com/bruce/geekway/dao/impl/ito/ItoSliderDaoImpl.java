@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bruce.geekway.dao.ito.IItoSliderDao;
 import com.bruce.geekway.dao.mapper.ItoSliderMapper;
+import com.bruce.geekway.model.ItoSkuImage;
 import com.bruce.geekway.model.ItoSkuImageCriteria;
 import com.bruce.geekway.model.ItoSlider;
 import com.bruce.geekway.model.ItoSliderCriteria;

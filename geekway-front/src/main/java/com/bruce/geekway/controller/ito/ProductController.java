@@ -95,6 +95,9 @@ public class ProductController {
 		if(product!=null&&product.getId()!=null){
 			//获取该商品对应的所有sku产品
 			List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
+			
+			//TODO 分别获取每个SKU对应的图片，构造数组			
+			
 			product.setProductSkus(skuList);
 			
 			//获取该商品product对应的所有imageList
@@ -116,7 +119,6 @@ public class ProductController {
 					}
 				}
 			}
-			
 			
 			List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.querySkuValueListByProductId(productId);
 			List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);

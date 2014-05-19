@@ -50,7 +50,6 @@ public class ItoSkuImageServiceImpl implements IItoSkuImageService{
 		return itoSkuImageDao.queryAllByProductId(product);
 	}
 	
-	@Override
 	public int delete(int skuImageId, int productId, int skuId) {
 		return itoSkuImageDao.delete(skuImageId, productId, skuId); 
 	}

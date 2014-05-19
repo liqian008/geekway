@@ -138,6 +138,10 @@
 								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
 									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
 								</a>
+								<!-- 
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+								 -->
 							</div>
 						</div>
 						
