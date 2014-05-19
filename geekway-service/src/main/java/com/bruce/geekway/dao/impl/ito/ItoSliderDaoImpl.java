@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.bruce.geekway.dao.ito.IItoSliderDao;
 import com.bruce.geekway.dao.mapper.ItoSliderMapper;
+import com.bruce.geekway.model.ItoSkuImageCriteria;
 import com.bruce.geekway.model.ItoSlider;
+import com.bruce.geekway.model.ItoSliderCriteria;
 
 
 @Repository
@@ -47,7 +49,14 @@ public class ItoSliderDaoImpl implements IItoSliderDao, InitializingBean {
         return null;
     }
     
-
+    @Override
+   	public List<ItoSlider> querySortedList() {
+       	ItoSliderCriteria criteria = new ItoSliderCriteria();
+   		criteria.createCriteria();
+   		criteria.setOrderByClause(" sort");
+   		return itoSliderMapper.selectByExample(criteria);
+   	}
+    
     @Override
     public void afterPropertiesSet() throws Exception {
 

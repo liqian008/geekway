@@ -138,8 +138,6 @@
 								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
 									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
 								</a>
-								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div>
 						</div>
 						
@@ -195,6 +193,62 @@
 				</div>
 				
 			</form>
+			
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>SKU图片列表
+					</h5>
+					<a href="./skuImageAdd?productId=${product.id}&skuId=${productSku.id}"><span class="label label-info pull-right">添加新图片</span></a>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th>ID</th>
+                                <th>图片</th>
+                                <th>标题</th>
+                                <th>排序</th>
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<ItoSkuImage> skuImageList = (List<ItoSkuImage>)request.getAttribute("skuImageList");
+                           	if(skuImageList!=null&&skuImageList.size()>0){
+                           		int i=0;
+                           		for(ItoSkuImage skuImage: skuImageList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=skuImage.getId()%></td>
+		                        <td>
+	                        		<a href="<%=skuImage.getSkuPicUrl()%>" class="lightbox">
+		                        	<img src='<%=skuImage.getSkuPicUrl()%>' class="img-media"/>
+		                        	</a>
+		                        </td>
+		                        <td><%=skuImage.getTitle()%></td>
+		                        <td><%=skuImage.getSort()%></td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+		                        		<a href="./skuImageEdit?skuImageId=<%=skuImage.getId()%>"  
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
+		                        		<a href="./delSkuImage?productId=${productSku.productId}&skuId=${productSku.id}&skuImageId=<%=skuImage.getId()%>"  
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="删 除"><i class="icon-remove3"></i></a>
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

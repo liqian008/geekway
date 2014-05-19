@@ -7,5 +7,6 @@ import com.bruce.geekway.service.IBaseService;
 
 public interface IItoSliderService extends IBaseService<ItoSlider, Integer>{
 	
-	
-}
+	public List<ItoSlider> querySortedList();
+    
+	}

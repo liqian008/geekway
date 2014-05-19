@@ -54,6 +54,8 @@
 	</bean>
 	<bean id="itoSkuDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuDaoImpl">
 	</bean>
+	<bean id="itoSkuImageDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuImageDaoImpl">
+	</bean>
 	<bean id="itoSkuPropDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuPropDaoImpl">
 	</bean>
 	<bean id="itoSkuPropValueDao" class="com.bruce.geekway.dao.impl.ito.ItoSkuPropValueDaoImpl">

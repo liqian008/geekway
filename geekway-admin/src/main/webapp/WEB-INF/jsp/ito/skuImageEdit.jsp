@@ -74,7 +74,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						滑屏图片详情
+						Sku图片详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -86,7 +86,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">滑屏图片详情</li>
+					<li class="active">Sku图片详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -104,16 +104,16 @@
 			</div>
 
 			<%
-			ItoSlider slider = (ItoSlider)request.getAttribute("slider");
+			ItoSkuImage skuImage = (ItoSkuImage)request.getAttribute("skuImage");
 			%>
 
-			<form id="validate" action="<s:url value='./saveSlider'/>" method="post"  class="form-horizontal form-bslidered">
+			<form id="validate" action="<s:url value='./saveSkuImage'/>" method="post"  class="form-horizontal form-bskuImageed">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>滑屏图片详情
+							<i class="icon-bubble4"></i>Sku图片详情
 						</h6>
 					</div>
 					<div class="panel-body">
@@ -122,10 +122,10 @@
 							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${slider.sliderPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${slider.sliderPicUrl}" width="200px" />
+								<a href="${skuImage.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${skuImage.skuPicUrl}" width="200px" />
 								</a>
-								<input id="cover-image-url" type="hidden" name="sliderPicUrl" value="${slider.sliderPicUrl}"/>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuImage.skuPicUrl}"/>
 								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
@@ -133,15 +133,19 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">标 题: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${slider.title}"/>
+								<input type="text" class="form-control" name="title" id="title" value="${skuImage.title}"/>
 							</div>
+							<input type="hidden" name="id" id="id" value="${skuImage.id}"/>
+							<input type="hidden" name="productId" id="productId" value="${skuImage.productId}"/>
+							<input type="hidden" name="skuId" id="skuId" value="${skuImage.skuId}"/>
+							<input type="hidden" name="status" id="status" value="1"/>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">描 述: <span class="mandatory">*</span></label>
-							<div class="col-sm-8"> 
+							<div class="col-sm-8">
 								<div class="block-inner">
-									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${slider.description}</textarea>
+									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${skuImage.description}</textarea>
 								</div>
 							</div>
 						</div> 
@@ -149,18 +153,15 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">排 序: <span class="mandatory">*</span></label>
 							<div class="col-sm-1">
-								<input type="text" class="form-control" name="sort" id="sort" value="${slider.sort}"/>
+								<input type="text" class="form-control" name="sort" id="sort" value="${skuImage.sort}"/>
 							</div>
 						</div>
-						
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="确 认" class="btn btn-primary">
 						</div>
 					</div>
-					
-					
 					
 				</div>
 				

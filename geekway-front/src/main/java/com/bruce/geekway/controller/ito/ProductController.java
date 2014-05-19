@@ -13,11 +13,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.model.ItoProduct;
 import com.bruce.geekway.model.ItoSku;
+import com.bruce.geekway.model.ItoSkuImage;
 import com.bruce.geekway.model.ItoSkuProp;
 import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.ito.IItoProductOrderService;
 import com.bruce.geekway.service.ito.IItoProductService;
+import com.bruce.geekway.service.ito.IItoSkuImageService;
 import com.bruce.geekway.service.ito.IItoSkuPropService;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 import com.bruce.geekway.service.ito.IItoSkuService;
@@ -37,6 +39,8 @@ public class ProductController {
 	private IItoProductOrderService itoProductOrderService;
 	@Autowired
 	private IItoSkuService itoSkuService;
+	@Autowired
+	private IItoSkuImageService itoSkuImageService;
 	@Autowired
 	private IItoSkuPropValueService itoSkuPropValueService;
 	@Autowired
@@ -92,6 +96,27 @@ public class ProductController {
 			//获取该商品对应的所有sku产品
 			List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
 			product.setProductSkus(skuList);
+			
+			//获取该商品product对应的所有imageList
+			List<ItoSkuImage> skuImageList = itoSkuImageService.queryAllByProductId(productId);
+			
+			//TODO 分别获取每个SKU对应的图片，构造数组
+			if(skuList!=null&&skuList.size()>0){
+				for(ItoSku sku: skuList){
+					if(skuImageList!=null&&skuImageList.size()>0){
+						List<ItoSkuImage> itemSkuImageList = new ArrayList<ItoSkuImage>();
+						//循环构造skuImageList
+						for(ItoSkuImage loopSkuImage: skuImageList){
+							if(loopSkuImage.getSkuId()!=null&&loopSkuImage.getSkuId().equals(sku.getId())){
+								//为每个sku设置imageList
+								itemSkuImageList.add(loopSkuImage);
+							}
+						}
+						sku.setSkuImageList(itemSkuImageList);
+					}
+				}
+			}
+			
 			
 			List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.querySkuValueListByProductId(productId);
 			List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);

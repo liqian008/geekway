@@ -40,6 +40,10 @@ public class ItoSliderServiceImpl implements IItoSliderService{
 		return itoSliderDao.queryAll();
 	}
 	
+	@Override
+	public List<ItoSlider> querySortedList() {
+		return itoSliderDao.querySortedList();
+	}
 
 	public IItoSliderDao getItoSliderDao() {
 		return itoSliderDao;

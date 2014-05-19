@@ -3,12 +3,12 @@
 <generatorConfiguration>
 	
 	
-	<!-- 
 	<classPathEntry
 		location="/home/liqian/data/mysql.jar" />		
-	-->
+	<!-- 
 	<classPathEntry
 		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
+	-->
 	
 	<context id="context1">
 		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
@@ -63,7 +63,7 @@
 		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
 		<table schema="wx" tableName="ito_product_sku_value" domainObjectName="ItoProductSkuValue"/>
 		 -->
-		<table schema="wx" tableName="ito_slider" domainObjectName="ItoSlider"/>
+		<table schema="wx" tableName="ito_sku_image" domainObjectName="ItoSkuImage"/>
 		
 	</context>
 </generatorConfiguration>
