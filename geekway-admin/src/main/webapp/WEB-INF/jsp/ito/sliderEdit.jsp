@@ -139,14 +139,16 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">描 述: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="description" id="description" value="${slider.description}"/>
+							<div class="col-sm-8"> 
+								<div class="block-inner">
+									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${slider.description}</textarea>
+								</div>
 							</div>
 						</div> 
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">排 序: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
+							<div class="col-sm-1">
 								<input type="text" class="form-control" name="sort" id="sort" value="${slider.sort}"/>
 							</div>
 						</div>

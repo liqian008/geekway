@@ -1,6 +1,5 @@
-<%@page import="java.util.Map.Entry"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%@page import="java.util.*"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
@@ -75,7 +74,10 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品SKU数据
+						Sku图片详情
+						<!-- 
+						<small>Headings, lists, code, pre etc. </small>
+						 -->
 					</h3>
 				</div>
 			</div>
@@ -84,7 +86,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">修改商品SKU数据</li>
+					<li class="active">Sku图片详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -102,154 +104,67 @@
 			</div>
 
 			<%
-			ItoSku productSku = (ItoSku)request.getAttribute("productSku");
-			ItoProduct product = (ItoProduct)request.getAttribute("product");
-			
+			ItoSkuImage skuImage = (ItoSkuImage)request.getAttribute("skuImage");
 			%>
 
-			<form id="validate" action="<s:url value='./saveSku'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveSkuImage'/>" method="post"  class="form-horizontal form-bskuImageed">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>修改商品SKU数据
+							<i class="icon-bubble4"></i>Sku图片详情
 						</h6>
 					</div>
 					<div class="panel-body">
 						
-						<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-						<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
-						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<label class="control-label">
-									${product.title}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU图片:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
+								<a href="${skuImage.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${skuImage.skuPicUrl}" width="200px" />
 								</a>
-								<!-- 
-								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuImage.skuPicUrl}"/>
 								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-								 -->
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<label class="control-label">
-									${productSku.name}
-								</label>
-							</div>
+							</div> 
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">标 题: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<label class="control-label">
-									${productSku.propertiesName}
-								</label>
+								<input type="text" class="form-control" name="title" id="title" value="${skuImage.title}"/>
 							</div>
+							<input type="hidden" name="productId" id="productId" value="${skuImage.productId}"/>
+							<input type="hidden" name="skuId" id="skuId" value="${skuImage.skuId}"/>
+							<input type="hidden" name="status" id="status" value="1"/>
 						</div>
 						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">原价(元): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" value="${productSku.originPrice}" >
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">描 述: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<div class="block-inner">
+									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${skuImage.description}</textarea>
+								</div>
 							</div>
-						</div>
+						</div> 
 						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">现价(元): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" value="${productSku.price}" >
-							</div>
-						</div>
-						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">库存(个): <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" value="${productSku.num}" >
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">排 序: <span class="mandatory">*</span></label>
+							<div class="col-sm-1">
+								<input type="text" class="form-control" name="sort" id="sort" value="${skuImage.sort}"/>
 							</div>
 						</div>
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
+							<input type="submit" value="确 认" class="btn btn-primary">
 						</div>
 					</div>
 					
 				</div>
 				
 			</form>
-			
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>SKU图片列表
-					</h5>
-					<a href="./skuImageAdd?productId=${product.id}&skuId=${productSku.id}"><span class="label label-info pull-right">添加新图片</span></a>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>图片</th>
-                                <th>标题</th>
-                                <th>排序</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<ItoSkuImage> skuImageList = (List<ItoSkuImage>)request.getAttribute("skuImageList");
-                           	if(skuImageList!=null&&skuImageList.size()>0){
-                           		int i=0;
-                           		for(ItoSkuImage skuImage: skuImageList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=skuImage.getId()%></td>
-		                        <td>
-	                        		<a href="<%=skuImage.getSkuPicUrl()%>" class="lightbox">
-		                        	<img src='<%=skuImage.getSkuPicUrl()%>' class="img-media"/>
-		                        	</a>
-		                        </td>
-		                        <td><%=skuImage.getTitle()%></td>
-		                        <td><%=skuImage.getSort()%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        		<a href="./delSkuImage?productId=${productSku.productId}&skuId=${productSku.id}&skuImageId=<%=skuImage.getId()%>"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删 除"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-				
-			</div>
-			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
