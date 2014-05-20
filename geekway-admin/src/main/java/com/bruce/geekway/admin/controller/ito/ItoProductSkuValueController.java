@@ -20,6 +20,13 @@ import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuPropService;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 
+/**
+ * 真正废弃了
+ * @author liqian
+ *
+ */
+
+@Deprecated 
 @Controller
 @RequestMapping("/ito")
 public class ItoProductSkuValueController {
@@ -31,6 +38,14 @@ public class ItoProductSkuValueController {
 	@Autowired
 	private IItoSkuPropValueService itoSkuPropValueService;
 	
+	
+	/**
+	 * 该方法已移至productEdit中了
+	 * @param model
+	 * @param request
+	 * @param productId
+	 * @return
+	 */
 	@RequestMapping("/productSkuValueDisplay")
 	public String productSkuValueDisplay(Model model, HttpServletRequest request, int productId) {
 		String servletPath = request.getRequestURI();

@@ -136,8 +136,8 @@
 		                        <td><%=i%></td>
 		                        <td>
 		                        	<%if(synced){ %>
-	                        		<a href="<%=mpUser.getHeadImgUrl()%>" class="lightbox">
-		                        	<img src='<%=mpUser.getHeadImgUrl()%>' class="img-media"/>
+	                        		<a href="javascript:void(0)" class="lightbox">
+		                        	<img src="<%=mpUser.getHeadImgUrl()%>" class="img-media"/>
 		                        	</a>
 		                        	<%}%>
 		                        </td>

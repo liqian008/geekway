@@ -7,6 +7,14 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
+<%!public String getCheckedString(int id, List<Integer> idList){
+	if(idList!=null&&idList.size()>0){
+		if(idList.contains(id)){
+			return "checked=\"checked\"";
+		}
+	}
+	return "";
+}%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -155,6 +163,45 @@
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">外部购买链接: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-6"> 
+								<input type="text" class="form-control" id="buyUrl" name="buyUrl" value="<%=product==null||product.getId()==null?"":product.getBuyUrl()%>"/>
+							</div> 
+						</div>
+						
+						<%
+						List<ItoSkuProp> skuPropList = (List<ItoSkuProp>)request.getAttribute("skuPropList");
+						if(skuPropList!=null){
+							for(ItoSkuProp skuProp: skuPropList){
+								int skuPropId = skuProp.getId();
+						%>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-6">
+								<%
+								List<Integer> productSkuValueIdList = (List<Integer>)request.getAttribute("productSkuValueIdList");
+								
+								List<ItoSkuPropValue> skuPropValueList = (List<ItoSkuPropValue>)request.getAttribute("skuPropValueList");
+								if(skuPropValueList!=null&&skuPropValueList.size()>0){
+									for(ItoSkuPropValue skuPropValue : skuPropValueList){
+										if(skuPropId==skuPropValue.getSkuPropId()){
+								%>
+									<div class="checkbox-inline checkbox-info">
+										<label>
+											<input class="styled" type="checkbox" name="productSkuValueIds" value="<%=skuPropValue.getId()%>" <%=getCheckedString(skuPropValue.getId(), productSkuValueIdList)%> disabled="disabled"/>
+											<%=skuPropValue.getName()%>
+										</label>
+									</div>
+									<%}
+									}
+								}%>
+							</div> 
+						</div>
+						<%}
+						}%>
 						
 						
 						<!-- 
@@ -184,13 +231,7 @@
 						</div>
 						-->
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">外部购买链接: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-6"> 
-								<input type="text" class="form-control" id="buyUrl" name="buyUrl" value="<%=product==null||product.getId()==null?"":product.getBuyUrl()%>"/>
-							</div> 
-						</div>
+						
 						
 						
 						
@@ -253,13 +294,10 @@
 							<input type="submit" value="下一步" class="btn btn-primary">
 						</div>
 					</div>
-					
-					
-					
 				</div>
 				
 			</form>
-
+		
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>

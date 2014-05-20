@@ -76,9 +76,16 @@ public class ItoProductController {
 		ItoProduct Product = itoProductService.loadById(productId);
 		model.addAttribute("product", Product);
 		
-//		//获取产品对应的sku列表
-//		List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
-//		model.addAttribute("skuList", skuList);
+		//获取所有的sku数据列表
+		List<ItoSkuPropValue> skuPropValueList =  itoSkuPropValueService.queryAll();
+		model.addAttribute("skuPropValueList", skuPropValueList);
+		//根据数据计算出sku属性列表
+		List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
+		model.addAttribute("skuPropList", skuPropList);
+		
+		//获取产品关联的skuValue的idList数据
+		List<Integer> productSkuValueIdList =  itoSkuPropValueService.querySkuValueIdListByProductId(productId);
+		model.addAttribute("productSkuValueIdList", productSkuValueIdList);
 		
 		return "ito/productEdit";
 	}
