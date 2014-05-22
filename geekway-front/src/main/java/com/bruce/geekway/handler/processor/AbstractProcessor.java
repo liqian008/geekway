@@ -48,8 +48,11 @@ public abstract class AbstractProcessor implements Processor{
         	//获取具体事件类型
         	WxEventTypeEnum eventType = ((EventRequest)request).getEvent();
         	if(WxEventTypeEnum.SUBSCRIBE.equals(eventType)){//订阅事件
-        		//关注事件
+        		//订阅事件
             	return processSubscribeEventRequest(eventRequest);
+        	}if(WxEventTypeEnum.UNSUBSCRIBE.equals(eventType)){//订阅事件
+        		//退订事件
+            	return processUnsubscribeEventRequest(eventRequest);
         	}else if(WxEventTypeEnum.CLICK.equals(eventType)){//点击事件
             	return processClickEventRequest(eventRequest); 
         	}else if(WxEventTypeEnum.VIEW.equals(eventType)){//View事件
@@ -84,8 +87,11 @@ public abstract class AbstractProcessor implements Processor{
 	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
 		return null;
 	}
-
 	
+	protected BaseResponse processUnsubscribeEventRequest(EventRequest request) {
+		return null;
+	}
+
 	protected BaseResponse processLocationRequest(LocationRequest request) {
 		return null;
 	}

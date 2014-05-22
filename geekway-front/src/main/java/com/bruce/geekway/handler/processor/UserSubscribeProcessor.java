@@ -50,7 +50,6 @@ public class UserSubscribeProcessor extends AbstractProcessor{
 		try{
 			int result = mpUserService.newSubscribeUser(request.getFromUserName());
 		}catch(Exception e){
-			
 		}
 		return null;
 	}

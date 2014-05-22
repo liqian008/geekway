@@ -64,6 +64,15 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 		return save(wxMpUser);
 	}
 	
+	/**
+	 * 用户退订
+	 */
+	@Override
+	public int unsubscribeUser(String userOpenId) {
+//		//TODO 放在线程中执行
+		return wxMpUserDao.unsubscribeUser(userOpenId);
+	}
+	
 	public IWxMpUserDao getWxMpUserDao() {
 		return wxMpUserDao;
 	}

@@ -17,6 +17,7 @@
 	
 	<bean id="messageHandler" class="com.bruce.geekway.handler.MessageHandler">
 		<property name="textProcessorList" ref="textProcessorList"></property>
+		<property name="mpUserService" ref="mpUserService"></property>
 	</bean>
 	
 	<!-- 对于文本请求的处理器列表 -->

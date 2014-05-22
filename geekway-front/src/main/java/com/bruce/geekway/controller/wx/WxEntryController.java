@@ -53,6 +53,7 @@ public class WxEntryController {
 
 	@RequestMapping(value = "/mockMessage")
 	public String mockMessage(Model model, String type) throws Exception {
+		String response = "";
 		BaseResponse baseResponse = null;
 		if ("text".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_TEXT_XML);
@@ -60,13 +61,15 @@ public class WxEntryController {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_CLICK_XML);
 		} else if ("subscribe".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_SUBSCRIBE_XML);
+		} else if ("unsubscribe".equalsIgnoreCase(type)) {
+			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_UNSUBSCRIBE_XML);
 		} else if ("img".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_IMG_XML);
 		}
 		System.out.println(baseResponse);
-		String response = messageHandler.parseXMLResp(baseResponse);
-		if(response==null){
-			response = "";
+		if (baseResponse != null) {
+			response = messageHandler.parseXMLResp(baseResponse);
+			System.out.println("response: "+response);
 		}
 		model.addAttribute("response", response);
 		return "wx/response";

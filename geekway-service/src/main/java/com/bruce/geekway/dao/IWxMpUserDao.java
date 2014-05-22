@@ -10,8 +10,10 @@ public interface IWxMpUserDao extends IBaseDao<WxMpUser, Integer> {
 
 //	public List<WxMpUser> getUnsyncedUserList();
 //	
-//	public List<WxMpUser> getSyncedUserList();
+//	public List<WxMpUser> getSyncedUserList(); 
 	
 	public List<WxMpUser> getUserListBySyncStatus(short syncStatus);
+
+	public int unsubscribeUser(String userOpenId); 
 	
 }

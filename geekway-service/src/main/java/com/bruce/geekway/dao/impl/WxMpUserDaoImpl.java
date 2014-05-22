@@ -65,9 +65,22 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
 	@Override
 	public List<WxMpUser> getUserListBySyncStatus(short syncStatus) {
 		WxMpUserCriteria criteria = new WxMpUserCriteria();
-		criteria.createCriteria().andSyncStatusEqualTo(syncStatus);
+		//条件为已订阅但未同步
+		criteria.createCriteria().andSubscribeStatusEqualTo((short) 1).andSyncStatusEqualTo(syncStatus);
 		return wxMpUserMapper.selectByExample(criteria);
 	}
+	
+	
+	@Override
+	public int unsubscribeUser(String userOpenId) {
+		WxMpUser mpUser = new WxMpUser();
+		mpUser.setSubscribeStatus((short) 0);//将订阅状态改为0
+		
+		WxMpUserCriteria criteria = new WxMpUserCriteria();
+		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
+		return wxMpUserMapper.updateByExampleSelective(mpUser, criteria);
+	}
+
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -80,7 +93,5 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
 	public void setWxMpUserMapper(WxMpUserMapper wxMpUserMapper) {
 		this.wxMpUserMapper = wxMpUserMapper;
 	}
-
-
 
 }
