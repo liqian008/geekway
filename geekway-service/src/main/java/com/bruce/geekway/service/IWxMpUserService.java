@@ -6,6 +6,8 @@ public interface IWxMpUserService extends IBaseService<WxMpUser, Integer>{
 
 	
 	public int newSubscribeUser(String userOpenId);
+
+	public int unsubscribeUser(String userOpenId);
 	
 	
 //	public int insertOrUpdate(WxMpUser wxMpUser);

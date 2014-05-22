@@ -7,6 +7,7 @@ import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.geekway.handler.processor.Processor;
+import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgRespTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
@@ -19,6 +20,7 @@ import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
+import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.utils.WxXmlUtil;
 
 //@Service
@@ -36,8 +38,12 @@ public class MessageHandler {
 	@Autowired
 	private List<Processor> eventSubscribeProcessorList;
 	@Autowired
+	private List<Processor> eventUnsubscribeProcessorList;
+	@Autowired
 	private List<Processor> eventLocationProcessorList;
-
+	@Autowired
+	private IWxMpUserService mpUserService;
+	
 	public BaseResponse processMessage(String xml) throws Exception {
 		System.out.println("request xml: " + xml);
 		Element ele = DocumentHelper.parseText(xml).getRootElement();
@@ -59,24 +65,29 @@ public class MessageHandler {
 			switch (eventTypeEnum) {
 			case SUBSCRIBE: {// 订阅关注
 				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+				//作为系统级操作，向用户表中写入数据（脱离processor处理系统的订阅事件）
+				mpUserService.newSubscribeUser(eventRequest.getFromUserName());
 				return processEventSubscribeRequest(eventRequest);
+			}
+			case UNSUBSCRIBE: {// 退订
+				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+				//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
+				mpUserService.unsubscribeUser(eventRequest.getFromUserName());
+				return processEventUnsubscribeRequest(eventRequest);
 			}
 			case CLICK: {// 点击菜单
 				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 				return processEventClickRequest(eventRequest);
 			}
-			case VIEW: {// 点击菜单
-				// do nothing
-			}
+//			case VIEW: {// 点击菜单，通常情况下无法进入该流程
+//				// do nothing
+//			}
 			case LOCATION: {// 上报location位置
 				LocationEventRequest locationEventRequest = new LocationEventRequest();
 				return processEventLocationRequest(locationEventRequest);
 			}
 			case SCAN: {
 				// TODO
-			}
-			case UNSUBSCRIBE: {// 退订
-				// do nothing
 			}
 			default: {
 				// do nothing
@@ -153,6 +164,10 @@ public class MessageHandler {
 	protected BaseResponse processEventSubscribeRequest(EventRequest request) {
 		return process(request, eventSubscribeProcessorList);
 	}
+	
+	protected BaseResponse processEventUnsubscribeRequest(EventRequest request) {
+		return process(request, eventUnsubscribeProcessorList);
+	}
 
 	protected BaseResponse processEventClickRequest(EventRequest request) {
 		return process(request, eventClickProcessorList);
@@ -208,6 +223,23 @@ public class MessageHandler {
 
 	public void setEventLocationProcessorList(List<Processor> eventLocationProcessorList) {
 		this.eventLocationProcessorList = eventLocationProcessorList;
+	}
+
+	public List<Processor> getEventUnsubscribeProcessorList() {
+		return eventUnsubscribeProcessorList;
+	}
+
+	public void setEventUnsubscribeProcessorList(
+			List<Processor> eventUnsubscribeProcessorList) {
+		this.eventUnsubscribeProcessorList = eventUnsubscribeProcessorList;
+	}
+
+	public IWxMpUserService getMpUserService() {
+		return mpUserService;
+	}
+
+	public void setMpUserService(IWxMpUserService mpUserService) {
+		this.mpUserService = mpUserService;
 	}
 
 }

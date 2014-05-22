@@ -57,11 +57,32 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 	@Override
 	public int newSubscribeUser(String userOpenId) {
 //		//TODO 放在线程中执行
-		WxMpUser wxMpUser = new WxMpUser();
-		wxMpUser.setOpenId(userOpenId);
-		wxMpUser.setSyncStatus((short) 0);
-		wxMpUser.setCreateTime(new Date());
-		return save(wxMpUser);
+//		WxMpUser wxMpUser = new WxMpUser();
+//		wxMpUser.setOpenId(userOpenId);
+//		wxMpUser.setSyncStatus((short) 0);
+//		wxMpUser.setCreateTime(new Date());
+//		return save(wxMpUser);
+		
+		WxMpUser wxMpUser = wxMpUserDao.loadByOpenId(userOpenId);
+		if(wxMpUser!=null){//之前有记录，属于重复关注
+			//将订阅状态改为0
+			return wxMpUserDao.updateUserSubscribeStatus(userOpenId, (short) 1);
+		}else{//不为空，新关注
+			wxMpUser = new WxMpUser();
+			wxMpUser.setOpenId(userOpenId);
+			wxMpUser.setSyncStatus((short) 0);
+			wxMpUser.setCreateTime(new Date());
+			return save(wxMpUser);
+		}
+	}
+	
+	/**
+	 * 用户退订
+	 */
+	@Override
+	public int unsubscribeUser(String userOpenId) {
+		//TODO 放在线程中执行
+		return wxMpUserDao.updateUserSubscribeStatus(userOpenId, (short) 0);
 	}
 	
 	public IWxMpUserDao getWxMpUserDao() {

@@ -65,9 +65,35 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
 	@Override
 	public List<WxMpUser> getUserListBySyncStatus(short syncStatus) {
 		WxMpUserCriteria criteria = new WxMpUserCriteria();
-		criteria.createCriteria().andSyncStatusEqualTo(syncStatus);
+		//条件为已订阅但未同步
+		criteria.createCriteria().andSubscribeStatusEqualTo((short) 1).andSyncStatusEqualTo(syncStatus);
 		return wxMpUserMapper.selectByExample(criteria);
 	}
+	
+	
+	@Override
+	public int updateUserSubscribeStatus(String userOpenId, short subscribeStatus){
+		WxMpUser mpUser = new WxMpUser();
+		mpUser.setSubscribeStatus(subscribeStatus);//未订阅为0，订阅为0
+		
+		WxMpUserCriteria criteria = new WxMpUserCriteria();
+		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
+		return wxMpUserMapper.updateByExampleSelective(mpUser, criteria);
+	}
+	
+	/**
+	 * 
+	 */
+	public WxMpUser loadByOpenId(String userOpenId){
+		WxMpUserCriteria criteria = new WxMpUserCriteria();
+		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
+		List<WxMpUser> mpUserList = wxMpUserMapper.selectByExample(criteria);
+		if(mpUserList!=null&&mpUserList.size()>0){
+			return mpUserList.get(0);
+		}
+		return null;
+	}
+
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -80,7 +106,5 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
 	public void setWxMpUserMapper(WxMpUserMapper wxMpUserMapper) {
 		this.wxMpUserMapper = wxMpUserMapper;
 	}
-
-
 
 }

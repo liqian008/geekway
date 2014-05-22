@@ -140,8 +140,6 @@ public class CommandCmsProcessor extends AbstractProcessor{
 		this.commandService = commandService;
 	}
 
-	
-	
 
 
 	public IWxMaterialArticleService getMaterialArticleService() {
