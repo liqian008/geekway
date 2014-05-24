@@ -12,12 +12,12 @@ public interface IItoProductOrderService extends IBaseService<ItoProductOrder, I
 	 */
 	public int changeOrderStatus(ItoProductOrder order);
 	
-	
 	public ItoProductOrder loadByOrderSn(String orderSn);
+
+	public ItoProductOrder loadByOrderSn(String orderSn, short payType);
 
 	public String generateOrderSn();
 	
-	public String signature(String orderSn);
-	
+//	public String signature(String orderSn);
 	
 }

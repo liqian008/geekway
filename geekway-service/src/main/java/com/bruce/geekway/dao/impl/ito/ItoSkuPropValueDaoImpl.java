@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.ito.IItoSkuPropValueDao;
 import com.bruce.geekway.dao.mapper.ItoSkuPropValueMapper;
 import com.bruce.geekway.model.ItoSkuPropValue;
+import com.bruce.geekway.model.ItoSkuPropValueCriteria;
+import com.bruce.geekway.model.WxCustomizeMenu;
 
 
 @Repository
@@ -51,6 +53,12 @@ public class ItoSkuPropValueDaoImpl implements IItoSkuPropValueDao, Initializing
 //    	return itoSkuPropValueMapper.querySkuPropValueListByProductId(productId);
 //    }
     
+    public List<ItoSkuPropValue> querySortedSkuPropValues(){
+    	ItoSkuPropValueCriteria criteria = new ItoSkuPropValueCriteria();
+    	criteria.createCriteria();
+    	criteria.setOrderByClause(" sku_prop_id, sort ");
+    	return itoSkuPropValueMapper.selectByExample(criteria);
+    }
     
     
     @Override

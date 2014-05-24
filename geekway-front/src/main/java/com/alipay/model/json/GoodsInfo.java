@@ -14,6 +14,9 @@ public class GoodsInfo {
 	private String desc;
 	/* sku标题 */
 	private String sku_title;
+	/* sku */
+	private String sku;
+	
 
 	public String getId() {
 		return id;
@@ -62,5 +65,15 @@ public class GoodsInfo {
 	public void setSku_title(String sku_title) {
 		this.sku_title = sku_title;
 	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+	
+	
 
 }

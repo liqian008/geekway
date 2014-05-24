@@ -56,6 +56,11 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 	}
 	
 	@Override
+	public ItoProductOrder loadByOrderSn(String orderSn, short payType) {
+		return itoProductOrderDao.loadByOrderSn(orderSn, payType);
+	}
+	
+	@Override
 	public int changeOrderStatus(ItoProductOrder order) {
 		return itoProductOrderDao.updateById(order);
 	}
@@ -68,10 +73,6 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 		return orderTimeStr +"_"+ uuid;
 	}
 	
-	@Override
-	public String signature(String orderSn){ 
-		return orderSn;
-	}
 
 	public IItoProductOrderDao getItoProductOrderDao() {
 		return itoProductOrderDao;

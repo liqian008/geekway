@@ -45,6 +45,9 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 		return itoSkuPropValueDao.queryAll();
 	}
 	
+	public List<ItoSkuPropValue> querySortedSkuPropValues(){
+		return itoSkuPropValueDao.querySortedSkuPropValues();
+	}
 	
 	@Override
 	public HashMap<Integer, ItoSkuPropValue> queryMap() {
@@ -58,6 +61,7 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 		}
 		return skuPropValueHm;
 	}
+	
 	
 	@Override
 	public List<Integer> querySkuValueIdListByProductId(int productId) {

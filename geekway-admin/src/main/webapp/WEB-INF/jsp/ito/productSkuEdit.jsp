@@ -146,6 +146,7 @@
 						</div>
 						
 						
+						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
@@ -164,29 +165,50 @@
 							</div>
 						</div>
 						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">原价(元): <span class="mandatory">*</span>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span>
 							</label>
+							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" value="${productSku.originPrice}" >
+								<input type="text" class="form-control" name="originPrice" id="price" value="${productSku.originPrice}"/>
+								<span class="label label-info label-block">原价(元)</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="price" id="price" value="${productSku.price}"/>
+								<span class="label label-danger label-block">现价(元)</span>
+							</div>
+							
+							<%-- <div class="col-sm-2">
+								<input type="text" class="form-control" name="postFee" id="postFee" value="${productSku.postFee}"/>
+								<span class="label label-success label-block">运费(元)</span>
+							</div> --%>
+							
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="num" id="num" value="${productSku.num}"/>
+								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>
 						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">现价(元): <span class="mandatory">*</span>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">支付宝产品链接: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" value="${productSku.price}" >
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="alipaySkuUrl" value="${productSku.alipaySkuUrl}" >
 							</div>
 						</div>
 						
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">库存(个): <span class="mandatory">*</span>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">口袋通产品链接: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" value="${productSku.num}" >
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="koudaitongSkuUrl" value="${productSku.koudaitongSkuUrl}" >
 							</div>
 						</div>
+						
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">

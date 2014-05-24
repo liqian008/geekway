@@ -79,7 +79,7 @@ public class GeekwayMpCustomizeMenuController {
 					for(WxCustomizeMenu loopMenu2: customizeMenuList){
 						if(level1MenuId==loopMenu2.getParentId()){
 							//向一级菜单中加入二级菜单项
-							WxMenuBtnEntity level2MpMenu = new WxMenuBtnEntity(loopMenu2.getMenuKey(), loopMenu2.getMenuName(), loopMenu2.getMenuType(), loopMenu1.getUrl());
+							WxMenuBtnEntity level2MpMenu = new WxMenuBtnEntity(loopMenu2.getMenuKey(), loopMenu2.getMenuName(), loopMenu2.getMenuType(), loopMenu2.getUrl());
 							level1MpMenu.addSubButton(level2MpMenu);
 						}
 					}

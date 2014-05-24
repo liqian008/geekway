@@ -51,10 +51,22 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
     }
     
     
+
     @Override
    	public ItoProductOrder loadByOrderSn(String orderSn) {
        	ItoProductOrderCriteria criteria = new ItoProductOrderCriteria();
    		criteria.createCriteria().andOrderSnEqualTo(orderSn);
+   		List<ItoProductOrder> orderList = itoProductOrderMapper.selectByExample(criteria);
+   		if(orderList!=null&&orderList.size()==1){
+   			return orderList.get(0);
+   		}
+   		return null;
+   	}
+
+    @Override
+   	public ItoProductOrder loadByOrderSn(String orderSn, short payType) {
+       	ItoProductOrderCriteria criteria = new ItoProductOrderCriteria();
+   		criteria.createCriteria().andOrderSnEqualTo(orderSn).andPayTypeEqualTo(payType);
    		List<ItoProductOrder> orderList = itoProductOrderMapper.selectByExample(criteria);
    		if(orderList!=null&&orderList.size()==1){
    			return orderList.get(0);

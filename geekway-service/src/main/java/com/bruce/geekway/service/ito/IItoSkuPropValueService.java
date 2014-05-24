@@ -8,6 +8,9 @@ import com.bruce.geekway.service.IBaseService;
 
 public interface IItoSkuPropValueService extends IBaseService<ItoSkuPropValue, Integer>{
 
+	
+	public List<ItoSkuPropValue> querySortedSkuPropValues();
+
 	public List<Integer> querySkuValueIdListByProductId(int productId);
 	
 	public List<ItoSkuPropValue> querySkuValueListByProductId(int productId);
@@ -20,6 +23,7 @@ public interface IItoSkuPropValueService extends IBaseService<ItoSkuPropValue, I
 	
 //	public List<ItoSkuPropValue> queryCombiledSkuPropValueListByProductId(int productId);
     
+	
 	
 
 }

@@ -122,15 +122,16 @@
 					</h5>
 					<a href="./skuPropValueAdd"><span class="label label-danger pull-right">新增SKU属性值</span></a>
 				</div>
-				<div class="datatable-media">
+				<div class="table-responsive">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>序号</th>
 								<th>图片</th>
-                                <th>SKU属性</th>
+                                <th>属性</th>
                                 <th>名称</th>
                                 <th>描述</th>
+                                <th>排序</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
@@ -152,6 +153,7 @@
 		                        <td><%=displaySkuType(itoSkuPropValue.getSkuPropId())%></td>
 		                        <td><%=itoSkuPropValue.getName()%></td>
 		                        <td><%=itoSkuPropValue.getDescription()%></td>
+		                        <td><%=itoSkuPropValue.getSort()%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./skuPropValueEdit?skuPropValueId=<%=itoSkuPropValue.getId()%>"

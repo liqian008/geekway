@@ -4,19 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.model.ItoSlider;
-import com.bruce.geekway.model.ItoSlider;
 import com.bruce.geekway.model.exception.ErrorCode;
-import com.bruce.geekway.model.exception.GeekwayException;
-import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.ito.IItoSliderService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;

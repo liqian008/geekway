@@ -29,7 +29,7 @@ public class ItoSkuPropValueController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.queryAll();
+		List<ItoSkuPropValue> skuPropValueList = itoSkuPropValueService.querySortedSkuPropValues();
 		model.addAttribute("skuPropValueList", skuPropValueList);
 		return "ito/skuPropValueList";
 	}

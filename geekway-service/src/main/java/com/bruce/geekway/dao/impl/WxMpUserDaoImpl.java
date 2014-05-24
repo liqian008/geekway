@@ -72,13 +72,26 @@ public class WxMpUserDaoImpl implements IWxMpUserDao, InitializingBean {
 	
 	
 	@Override
-	public int unsubscribeUser(String userOpenId) {
+	public int updateUserSubscribeStatus(String userOpenId, short subscribeStatus){
 		WxMpUser mpUser = new WxMpUser();
-		mpUser.setSubscribeStatus((short) 0);//将订阅状态改为0
+		mpUser.setSubscribeStatus(subscribeStatus);//未订阅为0，订阅为0
 		
 		WxMpUserCriteria criteria = new WxMpUserCriteria();
 		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
 		return wxMpUserMapper.updateByExampleSelective(mpUser, criteria);
+	}
+	
+	/**
+	 * 
+	 */
+	public WxMpUser loadByOpenId(String userOpenId){
+		WxMpUserCriteria criteria = new WxMpUserCriteria();
+		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
+		List<WxMpUser> mpUserList = wxMpUserMapper.selectByExample(criteria);
+		if(mpUserList!=null&&mpUserList.size()>0){
+			return mpUserList.get(0);
+		}
+		return null;
 	}
 
     

@@ -156,6 +156,13 @@
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">排 序: <span class="mandatory">*</span></label>
+							<div class="col-sm-1">
+								<input type="text" class="form-control" name="sort" id="sort" value="${skuPropValue.sort}"/>
+							</div>
+						</div>
+						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="提 交" class="btn btn-primary">

@@ -82,6 +82,7 @@ public class ItoProductSkuValueDaoImpl implements IItoProductSkuValueDao, Initia
 		if(valueIdList!=null&&valueIdList.size()>0){
 			ItoSkuPropValueCriteria criteria = new ItoSkuPropValueCriteria();
 			criteria.createCriteria().andIdIn(valueIdList);
+			criteria.setOrderByClause(" sort ");
 			return itoSkuPropValueMapper.selectByExample(criteria);
 		}
 		return null;
