@@ -124,4 +124,8 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSliderMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<bean id="itoSystemStatusMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSystemStatusMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 </beans>

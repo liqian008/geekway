@@ -194,9 +194,11 @@ public class ItoSkuController {
 	
 	
 	/**
-	 * 保存sku商品的图片
+	 * 删除sku的图片
 	 * @param model
-	 * @param skuImage
+	 * @param productId
+	 * @param skuId
+	 * @param skuImageId
 	 * @param request
 	 * @return
 	 */

@@ -55,6 +55,8 @@ public class ItoSkuDaoImpl implements IItoSkuDao, InitializingBean {
 		return itoSkuMapper.selectByExample(criteria);
 	}
     
+
+    
 //    @Override
 //	public ItoSku loadProductSku(int productId, int skuId) { 
 //    	ItoSkuCriteria criteria = new ItoSkuCriteria();

@@ -117,8 +117,8 @@
 								<th>序号</th>
 								<th>图片</th>
                                 <th>名称</th>
-                                <th>价格</th>
-                                <th>库存</th>
+                                <!-- <th>价格</th>
+                                <th>库存</th> -->
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -139,8 +139,8 @@
 		                        	</a> 
 		                        </td>
 		                        <td title="SN：<%=product.getOutId()%>"><%=product.getTitle()%></td>
-		                        <td title="原价：<%=product.getOriginPrice()%>元"><%=product.getPrice()%>元</td>
-		                        <td><%=product.getNum()%>个</td>
+		                        <%-- <td title="原价：<%=product.getOriginPrice()%>元"><%=product.getPrice()%>元</td>
+		                        <td><%=product.getNum()%>个</td> --%>
 		                        <td><%=product.getStatus()==1?"上架":"下架"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

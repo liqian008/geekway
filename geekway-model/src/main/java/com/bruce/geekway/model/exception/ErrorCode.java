@@ -94,7 +94,7 @@ public class ErrorCode {
 	/*收件人电话错误*/
 	public static final int ITO_PRODUCT_ORDER_POST_MOBILE_ERROR = 311;
 	/*收件地址错误*/
-	public static final int ITO_PRODUCT_ORDER_POST_ADDRESS_ERROR = 311;
+	public static final int ITO_PRODUCT_ORDER_POST_ADDRESS_ERROR = 312;
 	
 	
 	

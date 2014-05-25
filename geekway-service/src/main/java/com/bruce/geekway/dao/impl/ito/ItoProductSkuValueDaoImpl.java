@@ -119,7 +119,12 @@ public class ItoProductSkuValueDaoImpl implements IItoProductSkuValueDao, Initia
 		return itoProductSkuValueMapper.selectByExample(criteria);
 	}
 
-	
+  @Override
+	public int queryCountBySkuPropValueId(int skuPropValueId){
+	  ItoProductSkuValueCriteria criteria = new ItoProductSkuValueCriteria();
+		criteria.createCriteria().andSkuPropValueIdEqualTo(skuPropValueId);
+		return itoProductSkuValueMapper.countByExample(criteria);
+	}
 	
     @Override
     public void afterPropertiesSet() throws Exception {

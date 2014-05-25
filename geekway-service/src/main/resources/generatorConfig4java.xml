@@ -62,8 +62,9 @@
 		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>
 		<table schema="wx" tableName="ito_product_sku_value" domainObjectName="ItoProductSkuValue"/>
 		<table schema="wx" tableName="ito_sku_image" domainObjectName="ItoSkuImage"/>
-		 -->
 		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
+		 -->
+		<table schema="wx" tableName="ito_system_status" domainObjectName="ItoSystemStatus"/>
 		
 	</context>
 </generatorConfiguration>

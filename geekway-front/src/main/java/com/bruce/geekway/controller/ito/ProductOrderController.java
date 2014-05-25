@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -83,12 +84,13 @@ public class ProductOrderController {
 	 * @param model
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "/postNewOrder.json")
 	public ModelAndView postNewOrder(String orderJson){
 		//检查请求合法性
 		boolean validRequest = true;
 		if(orderJson!=null&&validRequest){
-			ItoProductOrder order = new ItoProductOrder();//checkOrder(orderJson);//检查交易参数的合法性
+			ItoProductOrder order = checkOrder(orderJson);//检查交易参数的合法性
 			if(order!=null){
 				//将新订单的支付状态初始化为未支付
 				order.setPayStatus((short)0);
@@ -124,6 +126,57 @@ public class ProductOrderController {
 		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
 	}
 	
+	
+	
+	/**
+	 * 客户端提交新订单
+	 * 支持2种方式： 1、pad提交地址直接购买；2、提交至支付宝支付
+	 * （微支付的方式，则直接使用口袋通的二维码）
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/postJsonOrder.json")
+	public ModelAndView postJsonOrder(@RequestBody String orderJson){
+		//检查请求合法性
+		boolean validRequest = true;
+		if(orderJson!=null&&validRequest){
+			ItoProductOrder order = checkOrder(orderJson);//检查交易参数的合法性
+			if(order!=null){
+				//将新订单的支付状态初始化为未支付
+				order.setPayStatus((short)0);
+				
+				//判断支付类型
+				if(order.getPayType()==ConstIto.PAYTYPE_ALIPAY){//支付宝流程，调用支付宝生成二维码
+					//生成预备订单
+					int result = itoProductOrderService.save(order);
+					if(result>0){
+						//TODO 根据订单信息，动态生成alipay的二维码订单
+						String alipayQrcodeUrl = "http://www.alipay.com";
+						
+						Map<String, Object> dataMap = new HashMap<String, Object>();
+						dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
+						dataMap.put("payType", ConstIto.PAYTYPE_ALIPAY);
+						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+					}
+				}else if(order.getPayType()==ConstIto.PAYTYPE_SELF){//pad上进行到付
+					//检查邮寄信息
+					checkOrderPostInfo(order);
+					//直接生成订单
+					int result = itoProductOrderService.save(order);
+					if(result>0){
+						Map<String, Object> dataMap = new HashMap<String, Object>();
+						dataMap.put("payType", ConstIto.PAYTYPE_SELF);
+						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+					}
+				}else{
+					throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PAYTYPE_ERROR);
+				}
+			}
+		}
+		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
+	}
+	
+	
 
 	/**
 	 * 检查提交的订单信息是否与服务器配置的信息匹配，避免恶意购买
@@ -147,7 +200,7 @@ public class ProductOrderController {
 		if(postOrder.getNum()<=0){//数量必须有效(>0)
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_BUY_NUM_ERROR);
 		}
-		if(postOrder.getPayType()!=null&&postOrder.getPayType()>0){//支付类型必须有效(>0)
+		if(postOrder.getPayType()!=null&&postOrder.getPayType()<0){//支付类型必须有效(>0)
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PAYTYPE_ERROR);
 		}
 		
@@ -159,13 +212,13 @@ public class ProductOrderController {
 		if(postOrder.getNum()>itoSku.getNum()){//剩货不足，无法购买
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_EMPTY_ITEM_ERROR);
 		}
-		if(postOrder.getSkuPropertiesName().equals(itoSku.getPropertiesName())){//sku的properties信息不正确
+		if(!postOrder.getSkuPropertiesName().equals(itoSku.getPropertiesName())){//sku的properties信息不正确
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_SKU_NO_TMATCH_ERROR);
 		}
-		if(postOrder.getPrice()!=itoSku.getPrice()){//提交价格不正确
+		if(!postOrder.getPrice().equals(itoSku.getPrice())){//提交价格不正确
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PRICE_ERROR);
 		}
-		if(postOrder.getTotalPrice()!= multiPrice(itoSku.getPrice(), postOrder.getNum())){//总价计算不正确（未包含运费）
+		if(!postOrder.getTotalPrice().equals(multiPrice(itoSku.getPrice(), postOrder.getNum()))){//总价计算不正确（未包含运费）
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_TOTAL_PRICE_ERROR);
 		}
 		return postOrder;

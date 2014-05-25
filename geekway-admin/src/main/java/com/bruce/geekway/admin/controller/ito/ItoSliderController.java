@@ -98,6 +98,22 @@ public class ItoSliderController {
 		return "forward:/home/operationRedirect";
 	}
 	
-	
+	/**
+	 * 删除slider
+	 * @param model
+	 * @param sliderId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/delSlider")
+	public String delSkuImage(Model model, int sliderId, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		int result = itoSliderService.deleteById(sliderId);
+		
+		model.addAttribute("redirectUrl", "./sliderList");
+		return "forward:/home/operationRedirect"; 
+	}
 	
 }

@@ -54,6 +54,13 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 		}
 		return null;
 	}
+	
+//	
+//	@Override
+//	public int queryCountBySkuPropValueId(int skuPropValueId){
+//		return itoSkuDao.queryCountBySkuPropValueId(skuPropValueId); 
+//	}
+	
 
 	public IItoSkuDao getItoSkuDao() {
 		return itoSkuDao;

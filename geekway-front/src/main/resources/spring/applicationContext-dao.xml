@@ -64,6 +64,7 @@
 	</bean>
 	<bean id="itoSliderDao" class="com.bruce.geekway.dao.impl.ito.ItoSliderDaoImpl">
 	</bean>
-	
+	<bean id="itoSystemStatusDao" class="com.bruce.geekway.dao.impl.ito.ItoSystemStatusDaoImpl">
+	</bean>
 	
 </beans>

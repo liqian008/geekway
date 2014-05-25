@@ -39,6 +39,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/ItoSkuPropValueMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoProductSkuValueMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSliderMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/ItoSystemStatusMapper.xml" />
 		
 	</mappers>
 

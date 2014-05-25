@@ -140,7 +140,7 @@
 		                        	<img src='<%=sku.getSkuPicUrl()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
-		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>
+		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getPropertiesName()%></td>
 		                        <td title="原价: <%=sku.getOriginPrice()%>元"><%=sku.getPrice()%>元</td>
 		                        <td><%=sku.getNum()%>个</td>
 		                        <td>运费</td>
