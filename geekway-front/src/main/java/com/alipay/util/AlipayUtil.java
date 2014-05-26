@@ -12,8 +12,16 @@ import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.ItoOrderUtil;
 
 public class AlipayUtil {
-
-	public String buildAlipayQrCode(ItoProductOrder itoProductOrder, ItoSku itoSku) {
+	
+	
+	/**
+	 * 根据pad提交的订单信息生成alipay的二维码url
+	 * @param itoProductOrder
+	 * @param itoSku
+	 * @return
+	 * @throws Exception 
+	 */
+	public static String buildAlipayQrCode(ItoProductOrder itoProductOrder, ItoSku itoSku) throws Exception {
 		String bizData = buildBizData(itoProductOrder, itoSku);
 		return buildAlipayQrCode(bizData);
 	}
@@ -22,8 +30,9 @@ public class AlipayUtil {
 	 * 提交订单信息，换取支付宝的支付二维码
 	 * @param bizData
 	 * @return
+	 * @throws Exception 
 	 */
-	public String buildAlipayQrCode(String bizData) {
+	private static String buildAlipayQrCode(String bizData) throws Exception {
 		// 接口调用时间
 		String timestamp = UtilDate.getDateFormatter();
 		// 格式为：yyyy-MM-dd HH:mm:ss
@@ -52,10 +61,9 @@ public class AlipayUtil {
 		sParaTemp.put("biz_type", biz_type);
 		sParaTemp.put("biz_data", biz_data);
 
-		// 建立请求
-		// String sHtmlText = AlipaySubmit.buildRequest("", "", sParaTemp);
-
-		return null;
+		//支付宝请求，换取二维码
+		String sHtmlText = AlipaySubmit.buildRequest("", "", sParaTemp);
+		return sHtmlText;
 	}
 
 	/**
@@ -63,7 +71,7 @@ public class AlipayUtil {
 	 * @param itoProductOrder
 	 * @return
 	 */
-	private String buildBizData(ItoProductOrder itoProductOrder, ItoSku itoSku) {
+	private static String buildBizData(ItoProductOrder itoProductOrder, ItoSku itoSku) {
 		
 		BizData bizData = new BizData();
 		bizData.setTrade_type("2");//支付类型，2为担保支付
@@ -78,7 +86,7 @@ public class AlipayUtil {
 		
 //		goodsInfo.setPrice(itoSku.getPrice());
 		goodsInfo.setId(String.valueOf(itoSku.getId()));
-		goodsInfo.setName(itoSku.getName());
+//		goodsInfo.setName(itoSku.getName());
 		goodsInfo.setPrice(String.valueOf(itoSku.getPrice()));
 		goodsInfo.setSku_title(itoSku.getPropertiesName());
 

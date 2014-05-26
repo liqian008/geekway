@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.alipay.config.AlipayConfig;
+import com.alipay.util.AlipaySubmit;
+import com.alipay.util.AlipayUtil;
+import com.alipay.util.UtilDate;
 import com.bruce.geekway.constants.ConstIto;
 import com.bruce.geekway.model.ItoProductOrder;
 import com.bruce.geekway.model.ItoSku;
@@ -84,57 +88,6 @@ public class ProductOrderController {
 	 * @param model
 	 * @return
 	 */
-	@Deprecated
-	@RequestMapping(value = "/postNewOrder.json")
-	public ModelAndView postNewOrder(String orderJson){
-		//检查请求合法性
-		boolean validRequest = true;
-		if(orderJson!=null&&validRequest){
-			ItoProductOrder order = checkOrder(orderJson);//检查交易参数的合法性
-			if(order!=null){
-				//将新订单的支付状态初始化为未支付
-				order.setPayStatus((short)0);
-				
-				//判断支付类型
-				if(order.getPayType()==ConstIto.PAYTYPE_ALIPAY){//支付宝流程，调用支付宝生成二维码
-					//生成预备订单
-					int result = itoProductOrderService.save(order);
-					if(result>0){
-						//TODO 根据订单信息，动态生成alipay的二维码订单
-						String alipayQrcodeUrl = "";
-						
-						Map<String, Object> dataMap = new HashMap<String, Object>();
-						dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
-						dataMap.put("payType", ConstIto.PAYTYPE_ALIPAY);
-						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
-					}
-				}else if(order.getPayType()==ConstIto.PAYTYPE_SELF){//pad上进行到付
-					//检查邮寄信息
-					checkOrderPostInfo(order);
-					//直接生成订单
-					int result = itoProductOrderService.save(order);
-					if(result>0){
-						Map<String, Object> dataMap = new HashMap<String, Object>();
-						dataMap.put("payType", ConstIto.PAYTYPE_SELF);
-						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
-					}
-				}else{
-					throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PAYTYPE_ERROR);
-				}
-			}
-		}
-		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
-	}
-	
-	
-	
-	/**
-	 * 客户端提交新订单
-	 * 支持2种方式： 1、pad提交地址直接购买；2、提交至支付宝支付
-	 * （微支付的方式，则直接使用口袋通的二维码）
-	 * @param model
-	 * @return
-	 */
 	@RequestMapping(value = "/postJsonOrder.json")
 	public ModelAndView postJsonOrder(@RequestBody String orderJson){
 		//检查请求合法性
@@ -152,6 +105,8 @@ public class ProductOrderController {
 					if(result>0){
 						//TODO 根据订单信息，动态生成alipay的二维码订单
 						String alipayQrcodeUrl = "http://www.alipay.com";
+						//TODO FIX
+						AlipayUtil.buildAlipayQrCode(order, null);
 						
 						Map<String, Object> dataMap = new HashMap<String, Object>();
 						dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
@@ -258,6 +213,34 @@ public class ProductOrderController {
 		return itemPrice*quality;
 	}
 	
+//	private Map<String, String> buildAlipayParam(String bizData){
+//		//接口调用时间
+//		String timestamp = UtilDate.getDateFormatter();
+//		//格式为：yyyy-MM-dd HH:mm:ss
+//
+//		//动作
+//		String method = "add";
+//		//创建商品二维码
+//		//业务类型
+//		String biz_type = "1";
+//		//目前只支持1
+//		//业务数据
+//		String biz_data = bizData;
+//		//格式：JSON 大字符串，详见技术文档4.2.1章节
+//		
+//		//////////////////////////////////////////////////////////////////////////////////
+//		
+//		//把请求参数打包成数组
+//		Map<String, String> sParaTemp = new HashMap<String, String>();
+//		sParaTemp.put("service", "alipay.mobile.qrcode.manage");
+//        sParaTemp.put("partner", AlipayConfig.partner);
+//        sParaTemp.put("_input_charset", AlipayConfig.input_charset);
+//		sParaTemp.put("timestamp", timestamp);
+//		sParaTemp.put("method", method);
+//		sParaTemp.put("biz_type", biz_type);
+//		sParaTemp.put("biz_data", biz_data);
+//		return sParaTemp;
+//	}
 	
 	
 	public static void main(String[] args) {

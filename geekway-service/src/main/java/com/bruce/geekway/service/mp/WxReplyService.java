@@ -3,18 +3,17 @@ package com.bruce.geekway.service.mp;
 
 import java.util.Map;
 
-import org.apache.http.Consts;
-import org.apache.http.entity.StringEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bruce.geekway.model.wx.json.response.WxAuthResult;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxUtil;
+//import org.apache.http.Consts;
+//import org.apache.http.entity.StringEntity;
 
 @Service
 public class WxReplyService extends WxBaseService {
@@ -52,7 +51,7 @@ public class WxReplyService extends WxBaseService {
 				Map<String, String> params = buildAccessTokenParams(accessToken);
 				
 				//回复消息
-				String sendResultStr = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_reply_message_url"), params, new StringEntity(message, Consts.UTF_8));
+				String sendResultStr = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_reply_message_url"), params, message);
 				WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
 				if(wxSendResult!=null && wxSendResult.getErrcode()!=null && wxSendResult.getErrcode()==0){//自定义菜单创建成功
 					return wxSendResult;
