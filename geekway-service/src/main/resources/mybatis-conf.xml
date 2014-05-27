@@ -41,6 +41,11 @@
 		<mapper resource="com/bruce/geekway/model/xml/ItoSliderMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSystemStatusMapper.xml" />
 		
+		
+		<!-- klh config -->
+		<mapper resource="com/bruce/geekway/model/xml/KlhVoteMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhVoteOptionMapper.xml" />
+		
 	</mappers>
 
 </configuration>
