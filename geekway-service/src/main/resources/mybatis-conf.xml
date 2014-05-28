@@ -45,6 +45,11 @@
 		<!-- klh config -->
 		<mapper resource="com/bruce/geekway/model/xml/KlhVoteMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhVoteOptionMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhProductMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhScoreSettingMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhBindSettingMapper.xml" />
+		
+		
 		
 	</mappers>
 

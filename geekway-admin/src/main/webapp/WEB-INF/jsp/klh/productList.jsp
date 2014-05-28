@@ -1,17 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.KlhProduct"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 <%@page import="java.text.*"%>
-
-<%@ include file="../inc/include_tag.jsp" %>
-
-<%
-//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-%>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +72,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						投票详情
+						兑换产品管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -91,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">投票详情</li>
+					<li class="active">兑换产品管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -99,116 +92,57 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、xxxxxx<br/>
 				</p>
 			</div>
 
-			<%
-			KlhVote vote = (KlhVote)request.getAttribute("vote");
-			%>
-
-			<form id="validate" action="<s:url value='./saveVote'/>" method="post"  class="form-horizontal form-bvoteed">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>投票详情
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">起始时间: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="startTime" id="startTime" value="${vote.startTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">结束时间: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="endTime" id="endTime" value="${vote.endTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
-							</div> 
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">投票标题: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${vote.title}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">投票描述: <span class="mandatory">*</span></label>
-							<div class="col-sm-8"> 
-								<div class="block-inner">
-									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${vote.description}</textarea>
-								</div>
-							</div>
-						</div> 
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="确 认" class="btn btn-primary">
-						</div>
-					</div>
-					
-				</div>
-			</form>
-			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>投票选项列表
+						<i class="icon-people"></i>兑换产品管理
 					</h5>
-					<a href="./voteOptionAdd?voteId=${vote.id}"><span class="label label-info pull-right">添加投票选项</span></a>
+					<a href="./productAdd"><span class="label label-danger pull-right">新增兑换产品</span></a>
 				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>ID</th>
-                                <th>图片</th>
+								<th>序号</th>
+								<th>图片</th>
                                 <th>标题</th>
-                                <th>排序</th>
+                                <th>积分</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<KlhVoteOption> voteOptionList = (List<KlhVoteOption>)request.getAttribute("voteOptionList");
-                           	if(voteOptionList!=null&&voteOptionList.size()>0){
+                           	List<KlhProduct> productList = (List<KlhProduct>)request.getAttribute("productList");
+                           	if(productList!=null&&productList.size()>0){
                            		int i=0;
-                           		for(KlhVoteOption voteOption: voteOptionList){
+                           		for(KlhProduct product: productList){
                            			i++;
                            	%>
 							<tr>
-		                        <td><%=voteOption.getId()%></td>
-		                        <td>
-	                        		<a href="<%=voteOption.getPicUrl()%>" class="lightbox">
-		                        	<img src='<%=voteOption.getThumbPicUrl()%>' class="img-media"/>
-		                        	</a>
+		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=product.getProductPicUrl()%>" class="lightbox">
+		                        	<img src='<%=product.getProductPicUrl()%>' class="img-media"/>
+		                        	</a> 
 		                        </td>
-		                        <td><%=voteOption.getTitle()%></td>
-		                        <td><%=voteOption.getSort()%></td>
+		                        <td title="<%=product.getDescription()%>"><%=product.getTitle()%></td>
+		                        <td><%=product.getScore()%>分</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        		<a href="./voteOptionEdit?voteOptionId=<%=voteOption.getId()%>"  
+										<a href="./productEdit?productId=<%=product.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-		                        		<a href="./delVoteOption?voteId=${vote.id}&voteOptionId=<%=voteOption.getId()%>"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删 除"><i class="icon-remove3"></i></a>
-									</div> 
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+									</div>
 								</td>
                                </tr>
 							<%}
@@ -218,13 +152,13 @@
 				</div>
 			</div>
 			<!-- /table view -->
-			
+
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
 </body>
 </html>
+

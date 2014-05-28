@@ -67,11 +67,15 @@
 		 -->
 		
 		<!-- klh config  -->
-		<table schema="wx" tableName="klh_vote" domainObjectName="KlhVote"/>
 		<!-- 
+		<table schema="wx" tableName="klh_product" domainObjectName="KlhProduct"/>
+		<table schema="wx" tableName="klh_score_setting" domainObjectName="KlhScoreSetting"/>
+		<table schema="wx" tableName="klh_vote" domainObjectName="KlhVote"/>
 		<table schema="wx" tableName="klh_vote_option" domainObjectName="KlhVoteOption"/>
 		<table schema="wx" tableName="klh_vote_result" domainObjectName="KlhVoteResult"/>
+		<table schema="wx" tableName="klh_user_score_history" domainObjectName="KlhUserScoreHistory"/>
 		 -->
+		<table schema="wx" tableName="klh_bind_setting" domainObjectName="KlhBindSetting"/> 
 		
 	</context>
 </generatorConfiguration>

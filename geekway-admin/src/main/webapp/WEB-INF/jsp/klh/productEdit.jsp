@@ -79,7 +79,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						投票详情
+						兑换产品详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -91,7 +91,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">投票详情</li>
+					<li class="active">兑换产品详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -109,48 +109,52 @@
 			</div>
 
 			<%
-			KlhVote vote = (KlhVote)request.getAttribute("vote");
+			KlhProduct product = (KlhProduct)request.getAttribute("product");
 			%>
 
-			<form id="validate" action="<s:url value='./saveVote'/>" method="post"  class="form-horizontal form-bvoteed">
+			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bproducted">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>投票详情
+							<i class="icon-bubble4"></i>兑换产品详情
 						</h6>
 					</div>
 					<div class="panel-body">
-						
-						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">起始时间: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="startTime" id="startTime" value="${vote.startTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">结束时间: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="endTime" id="endTime" value="${vote.endTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
+							<label class="col-sm-2 control-label text-right">产品大图:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${product.productPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${product.productPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="productPicUrl" value="${product.productPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">投票标题: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">产品标题: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${vote.title}"/>
+								<input type="text" class="form-control" name="title" id="title" value="${product.title}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">投票描述: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">产品描述: <span class="mandatory">*</span></label>
 							<div class="col-sm-8"> 
 								<div class="block-inner">
-									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${vote.description}</textarea>
+									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${product.description}</textarea>
+								</div>
+							</div>
+						</div> 
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">兑换积分: <span class="mandatory">*</span></label>
+							<div class="col-sm-8"> 
+								<div class="block-inner">
+									<input type="text" class="form-control" name="score" id="score" value="${product.score}"/>
 								</div>
 							</div>
 						</div> 
@@ -164,67 +168,41 @@
 				</div>
 			</form>
 			
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>投票选项列表
-					</h5>
-					<a href="./voteOptionAdd?voteId=${vote.id}"><span class="label label-info pull-right">添加投票选项</span></a>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>图片</th>
-                                <th>标题</th>
-                                <th>排序</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<KlhVoteOption> voteOptionList = (List<KlhVoteOption>)request.getAttribute("voteOptionList");
-                           	if(voteOptionList!=null&&voteOptionList.size()>0){
-                           		int i=0;
-                           		for(KlhVoteOption voteOption: voteOptionList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=voteOption.getId()%></td>
-		                        <td>
-	                        		<a href="<%=voteOption.getPicUrl()%>" class="lightbox">
-		                        	<img src='<%=voteOption.getThumbPicUrl()%>' class="img-media"/>
-		                        	</a>
-		                        </td>
-		                        <td><%=voteOption.getTitle()%></td>
-		                        <td><%=voteOption.getSort()%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        		<a href="./voteOptionEdit?voteOptionId=<%=voteOption.getId()%>"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-		                        		<a href="./delVoteOption?voteId=${vote.id}&voteOptionId=<%=voteOption.getId()%>"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删 除"><i class="icon-remove3"></i></a>
-									</div> 
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
-			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+	    $("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	});
+	</script>
 	
 </body>
 </html>

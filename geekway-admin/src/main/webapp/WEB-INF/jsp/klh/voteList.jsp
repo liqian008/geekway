@@ -119,7 +119,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 							<tr>
 								<th>序号</th>
                                 <th>标题</th>
-                                <th>模式</th>
+                                <th>上限</th>
                                 <th>开始</th>
                                 <th>结束</th>
                                 <th>排序</th>
@@ -137,7 +137,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 							<tr>
 		                        <td><%=i%></td>
 		                        <td title="<%=vote.getDescription()%>"><%=vote.getTitle()%></td>
-		                        <td><%=vote.getVoteMode()%></td>
+		                        <td><%=vote.getMaxOptionNum()%>条</td>
 		                        <td><%=vote.getStartTime()!=null?sdf.format(vote.getStartTime()):""%></td>
 		                        <td><%=vote.getEndTime()!=null?sdf.format(vote.getEndTime()):""%></td>
 		                        <td><%=vote.getSort()%></td>

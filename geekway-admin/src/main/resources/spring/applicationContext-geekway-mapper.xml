@@ -148,4 +148,16 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhVoteOptionMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<bean id="klhProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhProductMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="klhScoreSettingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhScoreSettingMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="klhBindSettingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhBindSettingMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean> 
 </beans>
