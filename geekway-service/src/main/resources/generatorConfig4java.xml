@@ -5,10 +5,10 @@
 	
 	<!-- 
 	<classPathEntry
-		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
+		location="/home/liqian/data/mysql.jar" />		
 	-->
 	<classPathEntry
-		location="/home/liqian/data/mysql.jar" />		
+		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 	
 	<context id="context1">
 		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
@@ -74,8 +74,10 @@
 		<table schema="wx" tableName="klh_vote_option" domainObjectName="KlhVoteOption"/>
 		<table schema="wx" tableName="klh_vote_result" domainObjectName="KlhVoteResult"/>
 		<table schema="wx" tableName="klh_user_score_history" domainObjectName="KlhUserScoreHistory"/>
-		 -->
 		<table schema="wx" tableName="klh_bind_setting" domainObjectName="KlhBindSetting"/> 
+		
+		 -->
+		<table schema="wx" tableName="klh_user" domainObjectName="KlhUser"/> 
 		
 	</context>
 </generatorConfiguration>
