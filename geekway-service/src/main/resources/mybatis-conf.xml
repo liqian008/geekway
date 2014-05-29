@@ -40,6 +40,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/ItoProductSkuValueMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSliderMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSystemStatusMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/ItoWwjRecordMapper.xml" />
 		
 		
 		<!-- klh config -->
@@ -48,7 +49,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/KlhProductMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhScoreSettingMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhBindSettingMapper.xml" />
-		
+		<mapper resource="com/bruce/geekway/model/xml/KlhUserMapper.xml" />
 		
 		
 	</mappers>
