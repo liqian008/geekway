@@ -2,6 +2,7 @@ package com.bruce.geekway.utils;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -25,7 +26,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 //import org.apache.http.util.EntityUtils;
 
 
-public class WxUtil {
+public class WxHttpUtil {
 	
 	
 	/**
@@ -176,5 +177,18 @@ public class WxUtil {
 	
 	public static final long currentTimeInSec() {
 		return System.currentTimeMillis() / 1000;
+	}
+	
+	
+	
+	public static Map<String, String> buildAccessTokenParams(String accessToken) {
+		Map<String, String> result = buildParams();
+		result.put("access_token", accessToken);
+		return result;
+	}
+
+	public static Map<String, String> buildParams() {
+		Map<String, String> result = new HashMap<String, String>();
+		return result;
 	}
 }

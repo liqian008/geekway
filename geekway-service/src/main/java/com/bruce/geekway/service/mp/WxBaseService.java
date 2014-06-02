@@ -8,12 +8,13 @@ import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxAuthResult;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
-import com.bruce.geekway.utils.WxUtil;
+import com.bruce.geekway.utils.WxHttpUtil;
 
 public class WxBaseService {
 	
-	protected static final String APPID =  ConfigUtil.getString("weixinmp_appid");
-	protected static final String SECRET =  ConfigUtil.getString("weixinmp_appsecret");
+//	public static final String APPID =  ConfigUtil.getString("weixinmp_appid");
+//	
+//	public static final String SECRET =  ConfigUtil.getString("weixinmp_appsecret");
 	
 	
 ////	/*微信MP中accessToken的超时time，单位秒*/
@@ -68,15 +69,15 @@ public class WxBaseService {
 //		return null;
 //	}
 	
-	public Map<String, String> buildAccessTokenParams(String accessToken) {
-		Map<String, String> result = buildParams();
-		result.put("access_token", accessToken);
-		return result;
-	}
-	
-	public Map<String, String> buildParams() {
-		Map<String, String> result = new HashMap<String, String>();
-		return result;
-	}
+//	public Map<String, String> buildAccessTokenParams(String accessToken) {
+//		Map<String, String> result = buildParams();
+//		result.put("access_token", accessToken);
+//		return result;
+//	}
+//	
+//	public Map<String, String> buildParams() {
+//		Map<String, String> result = new HashMap<String, String>();
+//		return result;
+//	}
 
 }

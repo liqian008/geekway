@@ -93,9 +93,12 @@
 	</bean>
 	<bean id="klhSettingService" class="com.bruce.geekway.service.impl.klh.KlhSettingServiceImpl">
 	</bean>
-	<bean id="klhUserScoreHistoryService" class="com.bruce.geekway.service.impl.klh.KlhUserScoreHistoryServiceImpl">
+	<bean id="klhUserScoreLogService" class="com.bruce.geekway.service.impl.klh.KlhUserScoreLogServiceImpl">
 	</bean>
 	<bean id="klhProductService" class="com.bruce.geekway.service.impl.klh.KlhProductServiceImpl">
 	</bean>
-	
+	<bean id="klhUserProfileService" class="com.bruce.geekway.service.impl.klh.KlhUserProfileServiceImpl">
+	</bean>
+	<bean id="klhDailySignService" class="com.bruce.geekway.service.impl.klh.KlhDailySignServiceImpl">
+	</bean>
 </beans>

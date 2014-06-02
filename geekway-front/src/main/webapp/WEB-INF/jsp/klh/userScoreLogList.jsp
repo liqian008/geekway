@@ -31,10 +31,10 @@
 			<div id="content">
 				
 				<%
-				List<KlhUserScoreHistory> userScoreList = (List<KlhUserScoreHistory>)request.getAttribute("userScoreHistoryList");
-				if(userScoreList!=null&&userScoreList.size()>0){
+				List<KlhUserScoreLog> userScoreLogList = (List<KlhUserScoreLog>)request.getAttribute("userScoreLogList");
+				if(userScoreLogList!=null&&userScoreLogList.size()>0){
 					int i=0;
-					for(KlhUserScoreHistory userScore: userScoreList){
+					for(KlhUserScoreLog userScore: userScoreLogList){
 						i++;
 				%>	
 					<article>

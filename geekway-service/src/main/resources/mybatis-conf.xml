@@ -49,8 +49,9 @@
 		<mapper resource="com/bruce/geekway/model/xml/KlhVoteResultMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhProductMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhSettingMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/KlhUserMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/KlhUserScoreHistoryMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhUserScoreLogMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhUserProfileMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhDailySignMapper.xml" />
 		
 		
 	</mappers>

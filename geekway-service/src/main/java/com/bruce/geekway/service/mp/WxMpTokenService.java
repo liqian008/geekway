@@ -10,7 +10,7 @@ import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxAuthResult;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
-import com.bruce.geekway.utils.WxUtil;
+import com.bruce.geekway.utils.WxHttpUtil;
 
 @Service
 public class WxMpTokenService {
@@ -40,7 +40,7 @@ public class WxMpTokenService {
 			params.put("appid", ConfigUtil.getString("weixinmp_appid"));
 			params.put("secret",  ConfigUtil.getString("weixinmp_appsecret"));
 			
-			String authResultStr = WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_access_token_url"), params);
+			String authResultStr = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_access_token_url"), params);
 			WxAuthResult wxAuthRes = JsonUtil.gson.fromJson(authResultStr, WxAuthResult.class);
 			if(wxAuthRes!=null && wxAuthRes.getErrcode()==null){//正常的响应结果
 				authResult = wxAuthRes;

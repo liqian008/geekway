@@ -1,14 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.KlhUserScoreHistory"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 <%@page import="java.text.*"%>
 
+<%@ include file="../inc/include_tag.jsp" %>
+
 <%
-SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +25,6 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
-
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/charts/sparkline.min.js"></script>
@@ -74,7 +76,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						积分变更历史
+						积分变更详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -86,7 +88,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">积分变更历史</li>
+					<li class="active">积分变更详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -94,69 +96,76 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
+				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxx<br/>
+					1、xxxxxxxxxx<br/>
 				</p>
 			</div>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>积分变更历史
-					</h5>
-				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-                                <th>用户</th>
-                                <th>变更积分</th>
-                                <th>时间</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<KlhUserScoreHistory> userScoreHistoryList = (List<KlhUserScoreHistory>)request.getAttribute("userScoreHistoryList");
-                           	if(userScoreHistoryList!=null&&userScoreHistoryList.size()>0){
-                           		int i=0;
-                           		for(KlhUserScoreHistory userScoreHistory: userScoreHistoryList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=userScoreHistory.getKlhUserId()%></td>
-		                        <td title="<%=userScoreHistory.getReason()%>"><%=userScoreHistory.getScoreChange()%></td>
-		                        <td><%=userScoreHistory.getCreateTime()!=null?sdf.format(userScoreHistory.getCreateTime()):""%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="./userScoreHistoryDisplay?userScoreHistoryId=<%=userScoreHistory.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查看"><i class="icon-pencil3"></i></a> 
-										
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+			<%
+			KlhUserScoreLog userScoreLog = (KlhUserScoreLog)request.getAttribute("userScoreLog");
+			%>
 
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-buserScoreLoged">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>积分变更详情
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						<form:hidden path="userScoreLog.id"/>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">变更用户ID: <span class="mandatory">*</span></label>
+							<div class="col-sm-1">
+								<input type="text" class="form-control" name="klhUserId" id="klhUserId" value="${userScoreLog.klhUserId}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">积分变更(分): <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="socreChange" id="scoreChange" value="${userScoreLog.scoreChange}"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">变更时间: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="createTime" id="createTime" value="${userScoreLog.createTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">变更原因: <span class="mandatory">*</span></label>
+							<div class="col-sm-8"> 
+								<div class="block-inner">
+									<textarea name="reason" rows="2" cols="5" class="elastic form-control">${userScoreLog.reason}</textarea>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+				</div>
+			</form>
+			
+			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
 </body>
 </html>
-

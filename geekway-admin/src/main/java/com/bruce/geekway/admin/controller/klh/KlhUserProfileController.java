@@ -1,6 +1,5 @@
 package com.bruce.geekway.admin.controller.klh;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.geekway.model.KlhUser;
-import com.bruce.geekway.service.klh.IKlhUserService;
+import com.bruce.geekway.model.KlhUserProfile;
+import com.bruce.geekway.service.klh.IKlhUserProfileService;
 
 /**
  * 某个user下的user操作
@@ -21,24 +19,24 @@ import com.bruce.geekway.service.klh.IKlhUserService;
  */
 @Controller
 @RequestMapping("/klh")
-public class KlhUserController {
+public class KlhUserProfileController {
 
 	@Autowired
-	private IKlhUserService klhUserService;
+	private IKlhUserProfileService klhUserProfileService;
 	
 	@RequestMapping("/userList")
 	public String userList(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<KlhUser> userList = klhUserService.queryAll();
+		List<KlhUserProfile> userList = klhUserProfileService.queryAll();
 		model.addAttribute("userList", userList);
 		return "klh/userList";
 	}
 	
 	
 //	@RequestMapping("/userAdd")
-//	public String userAdd(Model model, KlhUser user, HttpServletRequest request) {
+//	public String userAdd(Model model, KlhUserProfile user, HttpServletRequest request) {
 //		String servletPath = request.getRequestURI();
 //		model.addAttribute("servletPath", servletPath);
 //		
@@ -48,7 +46,7 @@ public class KlhUserController {
 	
 	
 	/**
-	 * 编辑User信息
+	 * 编辑UserProfile信息
 	 * @param model
 	 * @param request
 	 * @param userId
@@ -60,7 +58,7 @@ public class KlhUserController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		KlhUser user = klhUserService.loadById(userId);
+		KlhUserProfile user = klhUserProfileService.loadById(userId);
 		if(user!=null){
 			model.addAttribute("user", user);
 		}
@@ -70,12 +68,12 @@ public class KlhUserController {
 //	/**
 //	 * 保存单个user信息
 //	 * @param model
-//	 * @param klhUser
+//	 * @param klhUserProfile
 //	 * @param request
 //	 * @return
 //	 */
-//	@RequestMapping(value = "/saveUser", method = RequestMethod.POST)
-//	public String saveUserPropValue(Model model, KlhUser klhUser, HttpServletRequest request) {
+//	@RequestMapping(value = "/saveUserProfile", method = RequestMethod.POST)
+//	public String saveUserProfilePropValue(Model model, KlhUserProfile klhUserProfile, HttpServletRequest request) {
 //		String servletPath = request.getRequestURI();
 //		model.addAttribute("servletPath", servletPath);
 //		
@@ -83,12 +81,12 @@ public class KlhUserController {
 //		
 //		Date currentTime = new Date();
 //		
-//		if(klhUser!=null&&klhUser.getId()!=null&&klhUser.getId()>0){
-//			klhUser.setUpdateTime(currentTime);
-//			result = klhUserService.updateById(klhUser);
+//		if(klhUserProfile!=null&&klhUserProfile.getId()!=null&&klhUserProfile.getId()>0){
+//			klhUserProfile.setUpdateTime(currentTime);
+//			result = klhUserProfileService.updateById(klhUserProfile);
 //		}else{
-//			klhUser.setCreateTime(currentTime);
-//			result = klhUserService.save(klhUser);
+//			klhUserProfile.setCreateTime(currentTime);
+//			result = klhUserProfileService.save(klhUserProfile);
 //		}
 //		
 //		model.addAttribute("redirectUrl", "./userList");
@@ -102,12 +100,12 @@ public class KlhUserController {
 //	 * @param request
 //	 * @return
 //	 */
-//	@RequestMapping(value = "/delUser")
-//	public String delUserOption(Model model, int userId, HttpServletRequest request) {
+//	@RequestMapping(value = "/delUserProfile")
+//	public String delUserProfileOption(Model model, int userId, HttpServletRequest request) {
 //		String servletPath = request.getRequestURI();
 //		model.addAttribute("servletPath", servletPath);
 //		
-//		int result = klhUserService.deleteById(userId);
+//		int result = klhUserProfileService.deleteById(userId);
 //		
 //		model.addAttribute("redirectUrl", "./userList");
 //		return "forward:/home/operationRedirect"; 
