@@ -51,6 +51,12 @@
 	<bean id="mpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">
 		<property name="wxMpUserDao" ref="wxMpUserDao"></property>
 	</bean>
+	<!-- weixin web oauth -->
+	<bean id="mpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
+	</bean>
+	
+	
+	
 	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
 	<bean id="wxUserService" class="com.bruce.geekway.service.mp.WxUserService">
@@ -75,6 +81,21 @@
 	<bean id="itoSliderService" class="com.bruce.geekway.service.impl.ito.ItoSliderServiceImpl">
 	</bean>
 	<bean id="itoSystemStatusService" class="com.bruce.geekway.service.impl.ito.ItoSystemStatusServiceImpl">
+	</bean>
+	
+	
+	<!-- sku service config -->
+	<bean id="klhVoteService" class="com.bruce.geekway.service.impl.klh.KlhVoteServiceImpl">
+	</bean>
+	<bean id="klhVoteOptionService" class="com.bruce.geekway.service.impl.klh.KlhVoteOptionServiceImpl">
+	</bean>
+	<bean id="klhVoteResultService" class="com.bruce.geekway.service.impl.klh.KlhVoteResultServiceImpl">
+	</bean>
+	<bean id="klhSettingService" class="com.bruce.geekway.service.impl.klh.KlhSettingServiceImpl">
+	</bean>
+	<bean id="klhUserScoreHistoryService" class="com.bruce.geekway.service.impl.klh.KlhUserScoreHistoryServiceImpl">
+	</bean>
+	<bean id="klhProductService" class="com.bruce.geekway.service.impl.klh.KlhProductServiceImpl">
 	</bean>
 	
 </beans>

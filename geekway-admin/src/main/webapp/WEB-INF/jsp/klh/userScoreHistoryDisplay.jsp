@@ -8,6 +8,10 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
+<%
+//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,9 +25,6 @@
 	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
-<link
-	href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=latin,cyrillic-ext"
-	rel="stylesheet" type="text/css">
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/charts/sparkline.min.js"></script>
@@ -75,7 +76,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						绑定设置
+						积分变更详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -87,7 +88,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">绑定设置</li>
+					<li class="active">积分变更详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -105,63 +106,59 @@
 			</div>
 
 			<%
-			KlhBindSetting bindSetting = (KlhBindSetting)request.getAttribute("bindSetting");
+			KlhUserScoreHistory userScoreHistory = (KlhUserScoreHistory)request.getAttribute("userScoreHistory");
 			%>
 
-			<form id="validate" action="<s:url value='./saveBindSetting'/>" method="post"  class="form-horizontal form-bbindSettinged">
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-buserScoreHistoryed">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>绑定设置
+							<i class="icon-bubble4"></i>积分变更详情
 						</h6>
 					</div>
 					<div class="panel-body">
+						
+						<form:hidden path="userScoreHistory.id"/>
+						
+						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">必填姓名: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="bindRealname" id="bindRealname" value="${bindSetting.bindRealname}"/>
+							<label class="col-sm-2 control-label text-right">变更用户ID: <span class="mandatory">*</span></label>
+							<div class="col-sm-1">
+								<input type="text" class="form-control" name="klhUserId" id="klhUserId" value="${userScoreHistory.klhUserId}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">必填电话: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">积分变更(分): <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="bindMobile" id="bindMobile" value="${bindSetting.bindMobile}"/>
+								<input type="text" class="form-control" name="socreChange" id="scoreChange" value="${userScoreHistory.scoreChange}"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">变更时间: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="createTime" id="createTime" value="${userScoreHistory.createTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">必填生日: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="bindBirthday" id="bindBirthday" value="${bindSetting.bindBirthday}"/>
+							<label class="col-sm-2 control-label text-right">变更原因: <span class="mandatory">*</span></label>
+							<div class="col-sm-8"> 
+								<div class="block-inner">
+									<textarea name="reason" rows="2" cols="5" class="elastic form-control">${userScoreHistory.reason}</textarea>
+								</div>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">必填Email: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="bindEmail" id="bindEmail" value="${bindSetting.bindEmail}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">必填地址: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="bindAddress" id="bindAddress" value="${bindSetting.bindAddress}"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="确 认" class="btn btn-primary">
-						</div>
 					</div>
 					
 				</div>
 			</form>
+			
 			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -169,7 +166,6 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
 	
 </body>
 </html>

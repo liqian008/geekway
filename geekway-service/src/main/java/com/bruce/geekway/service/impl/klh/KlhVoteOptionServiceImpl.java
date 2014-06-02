@@ -40,6 +40,10 @@ public class KlhVoteOptionServiceImpl implements IKlhVoteOptionService{
 		return klhVoteOptionDao.queryAll();
 	}
 	
+	@Override
+	public List<KlhVoteOption> queryByVoteId(int voteId) {
+		return klhVoteOptionDao.queryByVoteId(voteId);
+	}
 
 	public IKlhVoteOptionDao getKlhVoteOptionDao() {
 		return klhVoteOptionDao;

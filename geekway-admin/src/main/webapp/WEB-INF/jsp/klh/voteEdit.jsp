@@ -25,9 +25,7 @@
 	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
-<link
-	href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=latin,cyrillic-ext"
-	rel="stylesheet" type="text/css">
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/charts/sparkline.min.js"></script>
@@ -123,7 +121,7 @@
 					</div>
 					<div class="panel-body">
 						
-						
+						<form:hidden path="vote.id"/>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">起始时间: <span class="mandatory">*</span></label>
@@ -153,7 +151,43 @@
 									<textarea name="description" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${vote.description}</textarea>
 								</div>
 							</div>
-						</div> 
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">选项上限: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="maxPickLimit" id="maxPickLimit" value="${vote.maxPickLimit}" placeholder="单选项请填写1"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">重复投票上限: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="maxRepeatLimit" id="maxRepeatLimit" value="${vote.maxPickLimit}" placeholder="不允许重复投票请填写为1"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">需绑定用户: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<form:select path="bindSetting.needBind" class="form-control">
+									<form:option value="0"  label="否"/>
+									<form:option value="1"  label="是"/>
+								</form:select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">需参与购物: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<form:select path="bindSetting.needBeBuyer" class="form-control">
+									<form:option value="0"  label="否"/>
+									<form:option value="1"  label="是"/>
+								</form:select>
+							</div>
+						</div>
+						
+						
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">

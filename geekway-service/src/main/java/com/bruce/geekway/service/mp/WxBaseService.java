@@ -12,6 +12,10 @@ import com.bruce.geekway.utils.WxUtil;
 
 public class WxBaseService {
 	
+	protected static final String APPID =  ConfigUtil.getString("weixinmp_appid");
+	protected static final String SECRET =  ConfigUtil.getString("weixinmp_appsecret");
+	
+	
 ////	/*微信MP中accessToken的超时time，单位秒*/
 ////	private static final int ACCESS_TOKEN_MP_EXPIRES_IN = 7200; 
 //	/*微信MP中请求accessToken网络请求的TimeOut，单位秒*/
@@ -65,8 +69,13 @@ public class WxBaseService {
 //	}
 	
 	public Map<String, String> buildAccessTokenParams(String accessToken) {
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = buildParams();
 		result.put("access_token", accessToken);
+		return result;
+	}
+	
+	public Map<String, String> buildParams() {
+		Map<String, String> result = new HashMap<String, String>();
 		return result;
 	}
 

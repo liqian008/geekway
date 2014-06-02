@@ -46,11 +46,7 @@ public class UserSubscribeProcessor extends AbstractProcessor{
 	
 	@Override
 	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
-		//交给UserService处理，新增用户数据
-		try{
-			int result = mpUserService.newSubscribeUser(request.getFromUserName());
-		}catch(Exception e){
-		}
+		//TODO
 		return null;
 	}
 

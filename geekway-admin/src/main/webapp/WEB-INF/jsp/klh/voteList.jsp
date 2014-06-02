@@ -22,9 +22,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
-<link
-	href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=latin,cyrillic-ext"
-	rel="stylesheet" type="text/css">
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/charts/sparkline.min.js"></script>
@@ -137,7 +135,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 							<tr>
 		                        <td><%=i%></td>
 		                        <td title="<%=vote.getDescription()%>"><%=vote.getTitle()%></td>
-		                        <td><%=vote.getMaxOptionNum()%>条</td>
+		                        <td><%=vote.getMaxPickLimit()%>条</td>
 		                        <td><%=vote.getStartTime()!=null?sdf.format(vote.getStartTime()):""%></td>
 		                        <td><%=vote.getEndTime()!=null?sdf.format(vote.getEndTime()):""%></td>
 		                        <td><%=vote.getSort()%></td>

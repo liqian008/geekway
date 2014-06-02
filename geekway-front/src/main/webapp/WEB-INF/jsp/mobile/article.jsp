@@ -12,9 +12,9 @@
 		<title>ITO文章</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-		<link type="text/css" rel="stylesheet" href="/geekway-front/mobile/css/style.css" />
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css" />
 
-		<script type="text/javascript" src="/geekway-front/mobile/js/jquery.min.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/mobile/js/jquery.min.js"></script>
 		<!-- 
 		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" />
 		<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
@@ -25,20 +25,12 @@
 	</head>
 	<body class="o-page">
 		<div id="page">
-			<!-- 
 			<div id="header">
-				<a href="blog-single-post.html#menu"></a>
-				<span id="Logo" class="svg">
-					<img src="img/logo.svg" />
-				</span>
-				<a class="backBtn" href="javascript:history.back();"></a>
-			</div>
-			-->
-			<div class="subHeader">
 				<!-- 
 				<i class="i-blog i-small"></i>
 				 -->
-				文章详情 
+				文章详情
+				<a class="backBtn" href="javascript:history.back();"></a>
 			</div>
 			<div id="content">
 				<%
@@ -59,7 +51,7 @@
 				<%} %>
 				
 			</div>
-			<div class="subFooter">Copyright 2013. All rights reserved.</div>
+			<!--<div class="subFooter">Copyright 2013. All rights reserved.</div>-->
 		</div>
 	</body>
 </html>

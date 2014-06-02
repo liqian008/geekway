@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.klh.IKlhVoteOptionDao;
 import com.bruce.geekway.dao.mapper.KlhVoteOptionMapper;
 import com.bruce.geekway.model.KlhVoteOption;
+import com.bruce.geekway.model.KlhVoteOptionCriteria;
 
 
 @Repository
@@ -45,6 +46,13 @@ public class KlhVoteOptionDaoImpl implements IKlhVoteOptionDao, InitializingBean
     @Override
     public List<KlhVoteOption> fallLoadList(Integer tailId, int limit) {
         return null;
+    }
+    
+    @Override
+    public List<KlhVoteOption> queryByVoteId(int voteId) {
+    	KlhVoteOptionCriteria criteria = new KlhVoteOptionCriteria();
+    	criteria.createCriteria().andVoteIdEqualTo(voteId);
+    	return klhVoteOptionMapper.selectByExample(criteria);
     }
     
     

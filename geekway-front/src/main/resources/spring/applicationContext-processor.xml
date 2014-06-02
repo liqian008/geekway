@@ -44,7 +44,7 @@
 	<bean id="eventSubscribeProcessorList" class="java.util.ArrayList"> 
 		<constructor-arg>
 			<list>
-				<ref bean="userSubscribeProcessor"/>
+				<!-- <ref bean="userSubscribeProcessor"/> -->
 				<ref bean="keycodeCmsProcessor"/>
 				<ref bean="defaultReplyProcessor"/>
 			</list>

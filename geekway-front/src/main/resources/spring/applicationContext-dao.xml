@@ -67,4 +67,19 @@
 	<bean id="itoSystemStatusDao" class="com.bruce.geekway.dao.impl.ito.ItoSystemStatusDaoImpl">
 	</bean>
 	
+	
+	<!-- sku dao config -->
+	<bean id="klhVoteDao" class="com.bruce.geekway.dao.impl.klh.KlhVoteDaoImpl">
+	</bean>
+	<bean id="klhVoteOptionDao" class="com.bruce.geekway.dao.impl.klh.KlhVoteOptionDaoImpl">
+	</bean>
+	<bean id="klhVoteResultDao" class="com.bruce.geekway.dao.impl.klh.KlhVoteResultDaoImpl">
+	</bean>
+	<bean id="klhSettingDao" class="com.bruce.geekway.dao.impl.klh.KlhSettingDaoImpl">
+	</bean>
+	<bean id="klhUserScoreHistoryDao" class="com.bruce.geekway.dao.impl.klh.KlhUserScoreHistoryDaoImpl">
+	</bean>
+	<bean id="klhProductDao" class="com.bruce.geekway.dao.impl.klh.KlhProductDaoImpl">
+	</bean>
+	
 </beans>

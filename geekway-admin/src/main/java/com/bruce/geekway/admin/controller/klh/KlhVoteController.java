@@ -15,7 +15,9 @@ import com.bruce.geekway.model.KlhVote;
 import com.bruce.geekway.model.KlhVoteOption;
 import com.bruce.geekway.model.KlhVote;
 import com.bruce.geekway.model.KlhVoteOption;
+import com.bruce.geekway.model.KlhVoteResult;
 import com.bruce.geekway.service.klh.IKlhVoteOptionService;
+import com.bruce.geekway.service.klh.IKlhVoteResultService;
 import com.bruce.geekway.service.klh.IKlhVoteService;
 
 /**
@@ -31,6 +33,8 @@ public class KlhVoteController {
 	private IKlhVoteService klhVoteService;
 	@Autowired
 	private IKlhVoteOptionService klhVoteOptionService;
+	@Autowired
+	private IKlhVoteResultService klhVoteResultService;
 	
 	@RequestMapping("/voteList")
 	public String voteList(Model model, HttpServletRequest request) {
@@ -116,6 +120,7 @@ public class KlhVoteController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
+		//删除投票
 		int result = klhVoteService.deleteById(voteId);
 		
 		model.addAttribute("redirectUrl", "./voteList");
@@ -227,13 +232,28 @@ public class KlhVoteController {
 		return "forward:/home/operationRedirect";
 	}
 	
-	
+	/**
+	 * 查看投票结果
+	 * @param model
+	 * @param voteId
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value = "/voteResult")
 	public String voteResult(Model model, int voteId, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-//		int result = klhVoteOptionService.deleteById(voteOptionId);
+		KlhVote vote = klhVoteService.loadById(voteId);
+		if(vote!=null){
+			List<KlhVoteOption> voteOptionList = klhVoteOptionService.queryAll();
+			List<KlhVoteResult> voteResultList = klhVoteResultService.queryAll();
+			
+			model.addAttribute("vote", vote);
+			model.addAttribute("voteOptionList", voteOptionList);
+			model.addAttribute("voteResultList", voteResultList);
+		}
+		
 		return "klh/voteResult";
 	}
 	

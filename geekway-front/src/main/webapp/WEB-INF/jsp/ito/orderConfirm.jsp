@@ -16,11 +16,11 @@ ItoProductOrder itoProductOrder = (ItoProductOrder)request.getAttribute("product
 		<title>ITO订单确认</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-		<link type="text/css" rel="stylesheet" href="/geekway-front/mobile/css/style.css" />
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css" />
 
-		<script type="text/javascript" src="/geekway-front/mobile/js/jquery.min.js"></script>
+		<script type="text/javascript" src="<%=request.getContextPath()%>/mobile/js/jquery.min.js"></script>
 		<!-- 
-		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" />
+		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" /> 
 		<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
 		<script type="text/javascript" src="js/jquery.flexslider.js"></script>
 		<script type="text/javascript" src="js/jquery.easy-pie-chart.js"></script>
@@ -29,9 +29,11 @@ ItoProductOrder itoProductOrder = (ItoProductOrder)request.getAttribute("product
 	</head>
 	<body class="o-page">
 		<div id="page">
-			<div class="subHeader">
+			<div id="header">
 				订单确认
+				<a class="backBtn" href="javascript:history.back();"></a>
 			</div>
+			
 			<div id="content">
 				<h3 class="title">订单详情</h3>
 				<!-- <div class="notifications success">
@@ -86,7 +88,7 @@ ItoProductOrder itoProductOrder = (ItoProductOrder)request.getAttribute("product
 				<hr>
 				
 			</div>
-			<div class="subFooter">Copyright 2013. All rights reserved.</div>
+			<!--<div class="subFooter">Copyright 2013. All rights reserved.</div>-->
 		</div>
 	</body>
 	
