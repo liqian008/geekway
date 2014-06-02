@@ -5,10 +5,10 @@
 	
 	<!-- 
 	<classPathEntry
-		location="/home/liqian/data/mysql.jar" />		
+		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 	-->
 	<classPathEntry
-		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
+		location="/home/liqian/data/mysql.jar" />		
 	
 	<context id="context1">
 		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
@@ -76,14 +76,13 @@
 		<table schema="wx" tableName="klh_score_setting" domainObjectName="KlhScoreSetting"/>
 		<table schema="wx" tableName="klh_vote" domainObjectName="KlhVote"/>
 		<table schema="wx" tableName="klh_vote_option" domainObjectName="KlhVoteOption"/>
-		<table schema="wx" tableName="klh_vote_result" domainObjectName="KlhVoteResult"/>
-		<table schema="wx" tableName="klh_vote_result" domainObjectName="KlhVoteResult"/>
 		<table schema="wx" tableName="klh_user_score_history" domainObjectName="KlhUserScoreHistory"/>
-		<table schema="wx" tableName="klh_user" domainObjectName="KlhUser"/> 
-		<table schema="wx" tableName="klh_user_score_history" domainObjectName="KlhUserScoreHistory"/>
-		
-		 -->
 		<table schema="wx" tableName="klh_setting" domainObjectName="KlhSetting"/> 
+		<table schema="wx" tableName="klh_user_score_log" domainObjectName="KlhUserScoreLog"/>
+		<table schema="wx" tableName="klh_user_profile" domainObjectName="KlhUserProfile"/>
+		<table schema="wx" tableName="klh_daily_sign" domainObjectName="KlhDailySign"/>
+		 -->
+		<table schema="wx" tableName="klh_vote_result" domainObjectName="KlhVoteResult"/>
 		
 	</context>
 </generatorConfiguration>

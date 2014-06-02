@@ -3,6 +3,8 @@ package com.bruce.geekway.controller.klh;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.model.KlhProduct;
 import com.bruce.geekway.service.klh.IKlhProductService;
+import com.bruce.geekway.utils.KlhUtil;
 
 /**
  * Handles requests for the application home page.
@@ -27,7 +30,13 @@ public class KlhProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/productList")
-	public String productList(Model model) {
+	public String productList(Model model, HttpServletRequest request) {
+		if(!KlhUtil.sessionValid(request)){// 页面流程
+			//TODO 跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
+		
 		List<KlhProduct> productList =  klhProductService.queryAll();
 		if(productList!=null&&productList.size()>0){
 			model.addAttribute("productList", productList);
@@ -41,7 +50,12 @@ public class KlhProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/productInfo")
-	public String productInfo(Model model, int productId) {
+	public String productInfo(Model model, int productId, HttpServletRequest request) {
+		if(!KlhUtil.sessionValid(request)){// 页面流程
+			//TODO 跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
 		KlhProduct productInfo = klhProductService.loadById(productId);
 		if(productInfo!=null&&productInfo.getId()>0){
 			model.addAttribute("productInfo", productInfo);
@@ -57,7 +71,12 @@ public class KlhProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/productApply")
-	public String productApply(Model model, int productId) {
+	public String productApply(Model model, int productId, HttpServletRequest request) {
+		if(!KlhUtil.sessionValid(request)){// 页面流程
+			//TODO 跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
 		KlhProduct productInfo = klhProductService.loadById(productId);
 		if(productInfo!=null&&productInfo.getId()>0){
 			model.addAttribute("productInfo", productInfo);

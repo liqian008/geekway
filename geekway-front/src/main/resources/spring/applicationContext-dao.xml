@@ -77,9 +77,13 @@
 	</bean>
 	<bean id="klhSettingDao" class="com.bruce.geekway.dao.impl.klh.KlhSettingDaoImpl">
 	</bean>
-	<bean id="klhUserScoreHistoryDao" class="com.bruce.geekway.dao.impl.klh.KlhUserScoreHistoryDaoImpl">
+	<bean id="klhUserScoreLogDao" class="com.bruce.geekway.dao.impl.klh.KlhUserScoreLogDaoImpl">
 	</bean>
 	<bean id="klhProductDao" class="com.bruce.geekway.dao.impl.klh.KlhProductDaoImpl">
+	</bean>
+	<bean id="klhUserProfileDao" class="com.bruce.geekway.dao.impl.klh.KlhUserProfileDaoImpl">
+	</bean>
+	<bean id="klhDailySignDao" class="com.bruce.geekway.dao.impl.klh.KlhDailySignDaoImpl">
 	</bean>
 	
 </beans>

@@ -107,14 +107,60 @@
 					1、xxxxxxxxxx<br/>
 				</p>
 			</div>
+			
+			<%
+			List<KlhVoteOption> voteOptionList = (List<KlhVoteOption>)request.getAttribute("voteOptionList");
+			%>
+			
+			
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
 
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>投票主题信息
+						</h6>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">投票主题:
+							</label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${vote.title}
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">投票项上限:
+							</label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${vote.maxPickLimit}个
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">重复投票次数:
+							</label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${vote.maxRepeatLimit}次
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			
 			<div class="row">
 				<div class="col-md-6"> 
 					<!-- Vertical bars -->
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h6 class="panel-title">
-								<i class="icon-calendar2"></i>柱状图 
+								<i class="icon-calendar2"></i>投票结果分布 - 柱状图 
 							</h6>
 						</div>
 						<div class="panel-body">
@@ -130,7 +176,7 @@
 					<!-- Pie --> 
 					<div class="panel panel-default"> 
 					<div class="panel-heading">
-						<h6 class="panel-title"><i class="icon-calendar2"></i>饼状图</h6>
+						<h6 class="panel-title"><i class="icon-calendar2"></i>投票结果分布 - 饼状图</h6>
 					</div> 
 					<div class="panel-body"> 
 					<div class="graph-standard" id="pie"></div> 
@@ -146,13 +192,16 @@
 	<!-- /page container -->
 	
 	<script>
+	var itemLabel = ["选项1", "选项2"];
+	var itemValue = [20,58];
+	
 	$(function () {
 	    var previousPoint;
 	 
 	    var d1 = [];
-	    for (var i = 0; i <= 10; i += 1)
-	        d1.push([i, parseInt(Math.random() * 30)]);
-	 
+	    for (var i = 0; i < <%=voteOptionList.size()%>; i += 1){
+	        d1.push([i, itemValue[i]]);
+	    }
 	    var ds = new Array();
 	 
 		ds.push({
@@ -194,18 +243,9 @@
 		            $('.chart-tooltip').remove();
 		 
 		            var x = item.datapoint[0];
-		 
-		            //All the bars concerning a same x value must display a tooltip with this value and not the shifted value
-		            if(item.series.bars.order){
-		                for(var i=0; i < item.series.data.length; i++){
-		                    if(item.series.data[i][3] == item.datapoint[0])
-		                        x = item.series.data[i][0];
-		                }
-		            }
-		 
 		            var y = item.datapoint[1];
 		 
-		            showTooltip(item.pageX+5, item.pageY+5,x + " = " + y);
+		            showTooltip(item.pageX+5, item.pageY+5, x + " : " + y+"票");
 		 
 		        }
 		    }
@@ -219,11 +259,12 @@
 	
 	//pie chart
 	$(function () {
+		
 		var data = [];
-		var series = Math.floor(Math.random()*10)+1;
+		var series = <%=voteOptionList.size()%>;
 		for( var i = 0; i<series; i++)
 		{
-			data[i] = { label: "Series"+(i+1), data: Math.floor(Math.random()*100)+1 }
+			data[i] = { label: itemLabel[i], data: itemValue[i]}
 		}
 	
 		$.plot($("#pie"), data, 

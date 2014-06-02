@@ -16,7 +16,7 @@ import com.bruce.geekway.model.wx.json.response.WxMenuQueryResult;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
-import com.bruce.geekway.utils.WxUtil;
+import com.bruce.geekway.utils.WxHttpUtil;
 
 @Service
 public class WxMenuService extends WxBaseService {
@@ -37,10 +37,10 @@ public class WxMenuService extends WxBaseService {
 //			if(authResult!=null && authResult.getErrcode()==null){
 //				String accessToken = authResult.getAccess_token();
 				
-				String accessToken = mpTokenService.getMpAccessToken();
-				Map<String, String> params = buildAccessTokenParams(accessToken);
+				String accessToken = mpTokenService.getMpAccessToken(); 
+				Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 				//创建菜单
-				String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, JsonUtil.gson.toJson(menuCreateJson));
+				String menuCreateResult = WxHttpUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, JsonUtil.gson.toJson(menuCreateJson));
 
 				//for httpclient 4.0
 				//String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(menuCreateJson), Consts.UTF_8));
@@ -68,12 +68,12 @@ public class WxMenuService extends WxBaseService {
 				
 				String accessToken = mpTokenService.getMpAccessToken();
 				
-				Map<String, String> params = buildAccessTokenParams(accessToken);
+				Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 				//构造菜单的json对象
 				WxMenuCreateJson wrapper = new WxMenuCreateJson(menuList);
 				wrapper.setButton(menuList);
 				//创建菜单
-				String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, JsonUtil.gson.toJson(wrapper));
+				String menuCreateResult = WxHttpUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, JsonUtil.gson.toJson(wrapper));
 				
 				//for httpclient 4.0
 //				String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(wrapper), Consts.UTF_8));
@@ -95,9 +95,9 @@ public class WxMenuService extends WxBaseService {
 	public WxMenuQueryResult menuGet() {
 		String accessToken = mpTokenService.getMpAccessToken();
 		
-		Map<String, String> params = buildAccessTokenParams(accessToken);
+		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
-		String menuQueryResult = WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"), params);
+		String menuQueryResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"), params);
 		WxMenuQueryResult wxMenuQueryResult = JsonUtil.gson.fromJson(menuQueryResult, WxMenuQueryResult.class);
 		return wxMenuQueryResult;
 	}
@@ -114,9 +114,9 @@ public class WxMenuService extends WxBaseService {
 		
 			String accessToken = mpTokenService.getMpAccessToken();
 		
-			Map<String, String> params = buildAccessTokenParams(accessToken);
+			Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
-			String menuDeleteResult = WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_delete_url"), params);
+			String menuDeleteResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_delete_url"), params);
 			
 			WxJsonResult wxMenuDeleteResult = JsonUtil.gson.fromJson(menuDeleteResult, WxJsonResult.class);
 			return wxMenuDeleteResult;

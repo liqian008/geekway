@@ -23,15 +23,14 @@
 			<!-- Header -->
 			<div id="header">
 				<%
-				WxUserInfoResult sessionUser = (WxUserInfoResult)session.getAttribute("sessionUser");
-				if(sessionUser==null){%>
+				KlhUserProfile sessionUserProfile = (KlhUserProfile)session.getAttribute("sessionUserProfile");
+				if(sessionUserProfile==null){%>
 					个人信息
 				<%}else{%>
-					您好，<%=sessionUser.getNickname() %>!
+					您好，<%=sessionUserProfile.getNickname() %>
 				<%}%>
 				<!-- <a class="backBtn" href="javascript:history.back();"></a> -->
 			</div>
-			
 			
 			<div class="exploreSiteFullPane">
 				
@@ -53,7 +52,7 @@
 					</span>
 					<h4>我的订单</h4>
 				</a>
-				<a href="./userScoreHistoryList" class="explorePane">
+				<a href="./userScoreLogList" class="explorePane">
 					<span class="i-pane i-blue">
 						<i class="i-gallery"></i>
 					</span>
@@ -65,11 +64,11 @@
 					</span>
 					<h4>投票</h4>
 				</a>
-				<a href="javascript:void(0)" class="explorePane">
+				<a href="./dailySign" class="explorePane">
 					<span class="i-pane i-blue">
 						<i class="i-contact"></i>
 					</span>
-					<h4>关于我们</h4>
+					<h4>今日签到</h4>
 				</a>
 			</div>
 			

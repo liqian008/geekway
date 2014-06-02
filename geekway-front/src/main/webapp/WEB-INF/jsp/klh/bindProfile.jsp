@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="com.bruce.geekway.model.*" %>
+<%@ page import="com.bruce.geekway.model.wx.json.response.WxUserInfoResult" %>
 
 
 <!DOCTYPE html>
@@ -30,17 +31,30 @@
 				<h3 class="title">用户资料绑定</h3>
 					
 				
+				<%
+				//WxUserInfoResult sessionUser = (WxUserInfoResult)session.getAttribute("sessionUser");
+				KlhUserProfile sessionUserProfile = (KlhUserProfile)session.getAttribute("sessionUserProfile");
+				
+				String userOpenId = sessionUserProfile!=null&&sessionUserProfile.getUserOpenId()!=null?sessionUserProfile.getUserOpenId():"";
+				String realname = sessionUserProfile!=null&&sessionUserProfile.getRealname()!=null?sessionUserProfile.getRealname():"";
+				String mobile = sessionUserProfile!=null&&sessionUserProfile.getMobile()!=null?sessionUserProfile.getMobile():"";
+				String birthday = sessionUserProfile!=null&&sessionUserProfile.getBirthday()!=null?sessionUserProfile.getBirthday()+"":"";
+				String email = sessionUserProfile!=null&&sessionUserProfile.getEmail()!=null?sessionUserProfile.getEmail():"";
+				String address = sessionUserProfile!=null&&sessionUserProfile.getAddress()!=null?sessionUserProfile.getAddress():"";
+				%>
+				
 				<form action="./bindProfile" method="post" name="bindForm" id="bindForm">
+				<input type="hidden" id="userOpenId" name="userOpenId" value="<%=userOpenId%>"/> 
 				
-				<h5>姓名：<input type="text" id="realname" name="realname"/></h5>
-				<h5>手机号：<input type="text" id="mobile" name="mobile"/></h5>
-				<h5>生日：<input type="text" id="birth" name="birth"/></h5>
-				<h5>邮箱：<input type="text" id="email" name="email"/></h5>
-				<h5>地址：<input type="text" id="address" name="address"/></h5>
-				<h5>淘宝账户：<input type="text" id="taobaoId" name="taobaoId"/></h5>
+				<h5>姓名：<input type="text" id="realname" name="realname" value="<%=realname%>"/></h5>
+				<h5>手机号：<input type="text" id="mobile" name="mobile" value="<%=mobile%>"/></h5>
+				<h5>生日：<input type="text" id="birthday" name="birthday" value="<%=birthday%>"/></h5>
+				<h5>邮箱：<input type="text" id="email" name="email" value="<%=email%>"/></h5>
+				<h5>地址：<input type="text" id="address" name="address" value="<%=address%>"/></h5>
+				<!-- <h5>淘宝账户：<input type="text" id="taobaoId" name="taobaoId"/></h5> -->
 				
 				
-				<a href="javascript:void(0)" id="submitBtn" class="o-buttons blue">注册</a>
+				<a href="javascript:void(0)" id="submitBtn" class="o-buttons blue">绑定</a>
 				
 				<a href="javascript:void(0)" id="resetBtn" class="o-buttons red">重置</a>
 				

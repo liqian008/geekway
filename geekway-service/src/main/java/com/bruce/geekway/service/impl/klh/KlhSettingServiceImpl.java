@@ -15,6 +15,12 @@ public class KlhSettingServiceImpl implements IKlhSettingService{
 	@Autowired
 	private IKlhSettingDao klhSettingDao;
 	
+	/*系统的setting对象，默认x分钟更新一次*/
+	private KlhSetting klhSetting;
+	
+	private long lastLoadTime = 0;
+	
+	
 	@Override
 	public int save(KlhSetting t) {
 		return klhSettingDao.save(t);
@@ -38,6 +44,16 @@ public class KlhSettingServiceImpl implements IKlhSettingService{
 	@Override
 	public List<KlhSetting> queryAll() {
 		return klhSettingDao.queryAll();
+	}
+	
+	@Override
+	public synchronized KlhSetting loadKlhSetting() {
+    	long currentTime = System.currentTimeMillis();
+    	if(klhSetting==null||currentTime-lastLoadTime>1000*60*60){//每小时刷新一次默认值
+    		klhSetting = klhSettingDao.loadById(1);
+    		lastLoadTime = currentTime;
+    	}
+    	return klhSetting;
 	}
 	
 

@@ -15,12 +15,12 @@ public interface ConstFront {
 
 	/*登录or新用户注册的tab激活状态*/
 	public static final String REGISTER_ACTIVE = "_registerActive";
-	
-    /*登录错误消息*/
-	public static final String LOGIN_ERROR_MESSAGE = "_loginErrorMessage";
 
-    /*登录错误消息*/
-	public static final String REG_ERROR_MESSAGE = "_regErrorMessage";
+//    /*登录错误消息*/
+//	public static final String LOGIN_ERROR_MESSAGE = "_loginErrorMessage";
+//
+//    /*登录错误消息*/
+//	public static final String REG_ERROR_MESSAGE = "_regErrorMessage";
     
     /*跳转请求的后续链接*/
 	public static final String REDIRECT_URL = "_redirect";

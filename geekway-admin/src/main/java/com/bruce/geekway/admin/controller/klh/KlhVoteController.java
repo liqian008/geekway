@@ -246,8 +246,8 @@ public class KlhVoteController {
 		
 		KlhVote vote = klhVoteService.loadById(voteId);
 		if(vote!=null){
-			List<KlhVoteOption> voteOptionList = klhVoteOptionService.queryAll();
-			List<KlhVoteResult> voteResultList = klhVoteResultService.queryAll();
+			List<KlhVoteOption> voteOptionList = klhVoteOptionService.queryByVoteId(voteId);
+			List<KlhVoteResult> voteResultList = klhVoteResultService.queryByVoteId(voteId);
 			
 			model.addAttribute("vote", vote);
 			model.addAttribute("voteOptionList", voteOptionList);
