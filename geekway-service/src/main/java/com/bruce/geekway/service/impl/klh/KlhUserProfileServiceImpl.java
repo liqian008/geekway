@@ -101,6 +101,4 @@ public class KlhUserProfileServiceImpl implements IKlhUserProfileService{
 		this.klhUserScoreLogService = klhUserScoreLogService;
 	}
 	
-	
-	
 }
