@@ -5,25 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import com.bruce.geekway.model.WxArticle;
 import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.model.WxCustomizeMenu;
-import com.bruce.geekway.model.WxEventCode;
-import com.bruce.geekway.model.WxMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialNews;
-import com.bruce.geekway.model.wx.request.*;
-import com.bruce.geekway.model.wx.response.*;
-import com.bruce.geekway.service.IWxArticleService;
+import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.EventRequest;
+import com.bruce.geekway.model.wx.request.TextRequest;
+import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.service.IWxCommandService;
-import com.bruce.geekway.service.IWxCustomizeMenuService;
-import com.bruce.geekway.service.IWxEventCodeService;
-import com.bruce.geekway.service.IWxEventCodeService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsService;
-import com.bruce.geekway.service.IWxMaterialService;
+//import com.bruce.geekway.model.WxArticle;
+//import com.bruce.geekway.model.WxEventCode;
+//import com.bruce.geekway.model.WxMaterial;
+//import com.bruce.geekway.service.IWxArticleService;
+//import com.bruce.geekway.service.IWxEventCodeService;
+//import com.bruce.geekway.service.IWxEventCodeService;
+//import com.bruce.geekway.service.IWxMaterialService;
 
 /**
  * 根据Key值，返回DB中对应的数据

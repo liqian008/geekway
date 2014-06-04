@@ -1,5 +1,6 @@
 package com.bruce.geekway.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -25,12 +26,12 @@ public class WxCommandMaterialDaoImpl implements IWxCommandMaterialDao, Initiali
 
     @Override
     public int updateById(WxCommandMaterial t) {
-        return wxCommandMaterialMapper.updateByPrimaryKeySelective(t);
+        return wxCommandMaterialMapper.updateByPrimaryKey(t);
     }
 
     @Override
     public int deleteById(Integer id) {
-    	return wxCommandMaterialMapper.deleteByPrimaryKey(id);
+        return wxCommandMaterialMapper.deleteByPrimaryKey(id);
     }
 
     @Override
@@ -49,6 +50,39 @@ public class WxCommandMaterialDaoImpl implements IWxCommandMaterialDao, Initiali
     }
 
     @Override
+    public int delete(int commandId, int materialId){
+		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
+        criteria.createCriteria().andCommandIdEqualTo(commandId).andMaterialIdEqualTo(materialId);
+		return wxCommandMaterialMapper.deleteByExample(criteria);
+	}
+    
+    @Override
+    public int deleteByCommandId(int commandId){
+		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
+        criteria.createCriteria().andCommandIdEqualTo(commandId);
+		return wxCommandMaterialMapper.deleteByExample(criteria);
+	}
+    
+    @Override
+    public int deleteByMaterialId(int materialId){
+		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
+        criteria.createCriteria().andMaterialIdEqualTo(materialId);
+		return wxCommandMaterialMapper.deleteByExample(criteria);
+	}
+
+
+    public int topCommandMaterial(int commandId, int materialId){
+    	WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
+        criteria.createCriteria().andCommandIdEqualTo(commandId).andMaterialIdEqualTo(materialId);
+        
+        //修改top
+        WxCommandMaterial commandMaterial = new WxCommandMaterial();
+        commandMaterial.setTopTime(new Date()); 
+		return wxCommandMaterialMapper.updateByExampleSelective(commandMaterial, criteria);
+    } 
+    
+    
+    @Override
     public void afterPropertiesSet() throws Exception {
 
     }
@@ -61,25 +95,4 @@ public class WxCommandMaterialDaoImpl implements IWxCommandMaterialDao, Initiali
 		this.wxCommandMaterialMapper = wxCommandMaterialMapper;
 	}
 
-	@Override
-	public int delete(int commandId, int materialId) {
-		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
-        criteria.createCriteria().andCommandIdEqualTo(commandId).andMaterialIdEqualTo(materialId);
-		return wxCommandMaterialMapper.deleteByExample(criteria);
-	}
-
-	
-	public int deleteByCommandId(int commandId){
-		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
-        criteria.createCriteria().andCommandIdEqualTo(commandId);
-		return wxCommandMaterialMapper.deleteByExample(criteria);
-	
-	}
-	
-	public int deleteByMaterialId(int materialId){
-		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
-        criteria.createCriteria().andMaterialIdEqualTo(materialId);
-		return wxCommandMaterialMapper.deleteByExample(criteria);
-	
-	}
 }

@@ -66,6 +66,12 @@ public class WxMaterialArticleDaoImpl implements IWxMaterialArticleDao, Initiali
 		return wxMaterialArticleMapper.queryMaterialArticlesOutNewsId(newsId);
 //		return null;
 	}
+	
+	/*查询commandId对应的素材列表*/
+	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId){
+		return wxMaterialArticleMapper.queryMaterialArticlesByCommandId(commandId);
+	}
+	
     
     
 	public WxMaterialArticleMapper getWxMaterialArticleMapper() {
@@ -76,6 +82,5 @@ public class WxMaterialArticleDaoImpl implements IWxMaterialArticleDao, Initiali
 		this.wxMaterialArticleMapper = wxMaterialArticleMapper;
 	}
 
-	
-
+ 
 }

@@ -8,37 +8,16 @@
 
 <%!String displayCommandType(short commandType){
 	if(1==commandType){
-		return "文本请求指令";
+		return "文本请求关键词";
 	}else if(2==commandType){
-		return "菜单点击指令";
+		return "菜单点击关键词";
 	}else if(3==commandType){
-		return "新用户关注指令";
+		return "新用户关注关键词";
 	}
 	return "类型错误";
 } %>
 
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null){
-		if(1==materialType){ 
-			return "文本";
-		}else if(2==materialType){
-			return "单图文";
-		}else if(3==materialType){
-			return "多图文";
-		}
-	}
-	return "其他类型";
-} %>
 
-<%!String displayCheckedStatus(Integer dataId, Integer itemId){
-	if(dataId!=null&&itemId!=null&&dataId==itemId){
-		return "checked='checked'";
-	}else{
-		return "";
-	}
-}
-
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,7 +83,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						指令内容
+						关键词内容
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -116,7 +95,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">指令内容</li>
+					<li class="active">关键词内容</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -144,12 +123,12 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑指令内容
+							<i class="icon-bubble4"></i>编辑关键词内容
 						</h6>
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入指令类型:
+							<label class="col-sm-2 control-label text-right">接入关键词类型:
 							</label>
 							<div class="col-sm-3">
 								<%
@@ -168,7 +147,7 @@
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入指令:
+							<label class="col-sm-2 control-label text-right">接入关键词:
 							</label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
@@ -176,75 +155,7 @@
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">回复类型:
-							</label>
-							<div class="col-sm-2">
-							<%
-							if(command==null||command.getId()==null){//<!-- 新增状态下 -->
-							%>
-								<form:select path="command.materialType" class="form-control">
-									<form:option value="1"  label="文本回复"/>
-									<form:option value="2"  label="单图文素材"/>
-									<form:option value="3"  label="多图文素材"/>
-								</form:select>
-							<%}else{%>
-								<label class="control-label">
-									<%=displayMaterialType(command.getMaterialType()) %>
-									<input type="hidden" name="materialType" id="materialType" value="${command.materialType}"/>
-								</label>
-							<%}%>
-							</div>
-						</div>
 						
-						<%
-						if(command!=null&&command.getMaterialType()!=null&&command.getMaterialType()==2){//编辑单图文素材
-						%>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">素材内容:
-							</label>
-							<div class="col-sm-2">
-								<label class="control-label">
-									<%
-									WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
-									%>
-									<%=materialArticle!=null?materialArticle.getShortTitle():"尚未选择"%>&nbsp;
-									<a data-toggle="modal" role="button" href="#article_table_modal">选择</a>
-								</label>
-							</div>
-						</div>
-						<%}%>
-						
-						<%
-						if(command!=null&&command.getMaterialType()!=null&&command.getMaterialType()==3){//编辑图文素材
-						%>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">素材内容:
-							</label>
-							<div class="col-sm-2">
-								<label class="control-label">
-									<%
-									WxMaterialNews materialNews = (WxMaterialNews)request.getAttribute("materialNews");
-									%>
-									<%=materialNews!=null?materialNews.getTitle():"尚未选择"%>&nbsp;
-									<a data-toggle="modal" role="button" href="#news_table_modal">选择</a>
-								</label>
-							</div>
-						</div>
-						<%}%>
-						
-						
-						<%
-						if(command==null||command.getId()==null||command.getMaterialType()==1){//文本方式，运行显示文本回复
-						%>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本回复:
-							</label>
-							<div class="col-sm-6">
-								<textarea name="replyContent" rows="3" cols="5" class="elastic form-control" placeholder="回复类型为文本时有效，上限100字">${command.replyContent}</textarea>
-							</div>
-						</div> 
-						<%}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态:
@@ -263,128 +174,64 @@
 						</div>
 					</div>
 				</div>
-				
 			</form>
-
-
-			<!-- Modal with article -->
-			<div id="article_table_modal" class="modal fade" tabindex="-1" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h4 class="modal-title">
-								<i class="icon-accessibility"></i>单图文列表
-							</h4>
-						</div>
-						
-						<form action="./updateCommandArticle" name="commandArticleForm" method="post">
-						<input type="hidden" name="commandId" value="${command.id}"/>
-						<div class="modal-body with-padding">
-							<div class="panel panel-default">
-								<table class="table table-bordered table-striped datatable-selectable">
-									<thead>
-										<tr>
-											<th>选择</th>
-											<th>封面</th>
-											<th>短标题</th>
-										</tr>
-									</thead>
-									<tbody>
-										<%
-										List<WxMaterialArticle> materialArticleList = (List<WxMaterialArticle>)request.getAttribute("materialArticleList");
-										if(materialArticleList!=null&&materialArticleList.size()>0){
-											for(WxMaterialArticle article: materialArticleList){
-										%>
-										<tr>
-											<td>
-												<input type="radio" class="styled" name="materialArticleId" value="<%=article.getId()%>" <%=displayCheckedStatus(command.getMaterialId(), article.getId()) %>>
-											</td>
-											<td>
-												<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
-					                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
-					                        	</a>
-											</td>
-											<td><%=article.getShortTitle()%></td>
-										</tr>
-										<%}
-										}else{%>
-										<tr>
-											<td colspan="3">
-												创建单图文
-											</td>
-										</tr>
-										<%} %>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button class="btn btn-warning" data-dismiss="modal">关 闭</button>
-							<input type="submit" value="确 定" class="btn btn-primary"/>
-						</div>
-						
-						</form>
-					</div>
-				</div>
-			</div>
-			<!-- /modal with article -->
 			
 			
-			<!-- Modal with news -->
-			<div id="news_table_modal" class="modal fade" tabindex="-1" role="dialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h4 class="modal-title">
-								<i class="icon-accessibility"></i>多图文列表
-							</h4>
-						</div>
-						<form action="./updateCommandNews" name="commandNewsForm" method="post">
-						<input type="hidden" name="commandId" value="${command.id}"/>
-						<div class="modal-body with-padding">
-							<div class="panel panel-default">
-								<table class="table table-bordered table-striped datatable-selectable">
-									<thead>
-										<tr>
-											<th>选择</th>
-											<th>短标题</th>
-										</tr>
-									</thead>
-									<tbody>
-										<%
-										List<WxMaterialNews> materialNewsList = (List<WxMaterialNews>)request.getAttribute("materialNewsList");
-										if(materialNewsList!=null&&materialNewsList.size()>0){
-											for(WxMaterialNews news: materialNewsList){
-										%>
-										<tr>
-											<td>
-												<input type="radio" class="styled" name="materialNewsId" value="<%=news.getId()%>" <%=displayCheckedStatus(command.getMaterialId(), news.getId()) %>>
-											</td>
-											<td><%=news.getTitle()%></td>
-										</tr>
-										<%}
-										}else{%>
-										<tr>
-											<td colspan="2">
-												创建多图文
-											</td>
-										</tr>
-										<%} %>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button class="btn btn-warning" data-dismiss="modal">关 闭</button>
-							<input type="submit" value="确 定" class="btn btn-primary"/>
-						</div>
-						</form>
-					</div>
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>已匹配的素材
+					</h5>
 				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th>ID</th>
+                                <th>封面</th>
+                                <th>标题</th>
+                                <th>排序</th>
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxMaterialArticle> materialList = (List<WxMaterialArticle>)request.getAttribute("materialList");
+                           	if(materialList!=null&&materialList.size()>0){
+                           		int i=0;
+                           		for(WxMaterialArticle material: materialList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=material.getId()%></td>
+		                        <td>
+	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
+		                        	</a>
+		                        </td>
+		                        <td><%=material.getTitle()%></td>
+		                        <td><%=material.getTitle()%></td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+		                        		<a href="./materialArticleEdit?articleId=<%=material.getId()%>"  
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="修改素材"><i class="icon-pencil3"></i></a>
+		                        		<a href="javascript:void(0)"  
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="解除匹配"><i class="icon-remove3"></i></a>
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+				
 			</div>
-			<!-- /modal with table -->
+			<!-- /table view -->
+			
 			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>

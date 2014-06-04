@@ -61,6 +61,11 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService{
     public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int articlesId) { 
         return wxMaterialArticleDao.queryMaterialArticlesOutNewsId(articlesId);
     }
+	
+	/*查询commandId对应的素材列表*/
+	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId){
+		return wxMaterialArticleDao.queryMaterialArticlesByCommandId(commandId);
+	}
 
 	public IWxMaterialArticleDao getWxMaterialArticleDao() {
 		return wxMaterialArticleDao;

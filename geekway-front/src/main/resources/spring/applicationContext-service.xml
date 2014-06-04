@@ -26,21 +26,19 @@
 	<bean id="articleService" class="com.bruce.geekway.service.impl.WxArticleServiceImpl">
 		<property name="wxArticleDao" ref="wxArticleDao"></property>
 	</bean>
+	<bean id="codeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
+	</bean>
 	 -->
 	
+<!-- 	<bean id="commandMaterialService" class="com.bruce.geekway.service.impl.WxCommandMaterialServiceImpl">
+		<property name="wxCommandMaterialDao" ref="wxCommandMaterialDao"></property>
+	</bean> -->
 	<bean id="commandService" class="com.bruce.geekway.service.impl.WxCommandServiceImpl">
 		<property name="wxCommandDao" ref="wxCommandDao"></property>
 	</bean>
-	
-	
-	
 	<bean id="defaultReplyService" class="com.bruce.geekway.service.impl.WxDefaultReplyServiceImpl">
 		<property name="wxDefaultReplyDao" ref="wxDefaultReplyDao"></property>
 	</bean>
-	
-	<bean id="codeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
-	</bean>
-	
 	<bean id="materialArticleService" class="com.bruce.geekway.service.impl.WxMaterialArticleServiceImpl">
 		<property name="wxMaterialArticleDao" ref="wxMaterialArticleDao"></property>
 	</bean>

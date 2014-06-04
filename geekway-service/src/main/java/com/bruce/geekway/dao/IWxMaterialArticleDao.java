@@ -11,5 +11,8 @@ public interface IWxMaterialArticleDao extends IBaseDao<WxMaterialArticle, Integ
 	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit);
 
 	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
-    
+	
+	/*查询commandId对应的素材列表*/
+	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
+	
 }

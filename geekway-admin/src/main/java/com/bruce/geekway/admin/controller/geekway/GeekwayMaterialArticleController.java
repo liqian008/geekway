@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.baseAdmin.controller.BaseController;
+import com.bruce.geekway.model.WxCommand;
+import com.bruce.geekway.model.WxCommandMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.service.IWxCommandMaterialService;
+import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 
 @Controller
@@ -21,7 +26,10 @@ public class GeekwayMaterialArticleController extends BaseController {
 
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
-	
+	@Autowired
+	private IWxCommandMaterialService wxCommandMaterialService;
+	@Autowired
+	private IWxCommandService wxCommandService;
 
 	@RequestMapping("/materialArticleList")
 	public String materialArticleList(Model model, HttpServletRequest request) {
@@ -39,8 +47,8 @@ public class GeekwayMaterialArticleController extends BaseController {
 		model.addAttribute("servletPath", servletPath);
 
 		model.addAttribute("materialArticle", materialArticle);
-
-		return "geekway/materialArticleEdit";
+		
+		return "geekway/materialArticleAdd";
 	}
 
 	@RequestMapping("/materialArticleEdit")
@@ -49,7 +57,13 @@ public class GeekwayMaterialArticleController extends BaseController {
 		model.addAttribute("servletPath", servletPath);
 
 		WxMaterialArticle materialArticle = wxMaterialArticleService.loadById(articleId);
-		model.addAttribute("materialArticle", materialArticle);
+		if(materialArticle!=null){
+			model.addAttribute("materialArticle", materialArticle);
+			
+			//TODO 查询引用了该素材的command列表
+			List<WxCommand> commandList = wxCommandService.queryCommandsByMaterialId(articleId);
+			model.addAttribute("commandList", commandList);
+		}
 		return "geekway/materialArticleEdit";
 	}
 
@@ -62,25 +76,45 @@ public class GeekwayMaterialArticleController extends BaseController {
 
 		Date currentTime = new Date();
 		materialArticle.setUpdateTime(currentTime);
-		if (materialArticle != null && materialArticle.getId() != null && materialArticle.getId() > 0) {
+		if (materialArticle != null && materialArticle.getId() != null && materialArticle.getId()>0) {//更新素材内容操作
 			result = wxMaterialArticleService.updateById(materialArticle);
-		} else {
+		} else {//新增素材操作
 			materialArticle.setCreateTime(currentTime);
 			result = wxMaterialArticleService.save(materialArticle);
+			
+			String command = request.getParameter("command");
+			if(!StringUtils.isBlank(command)){//用户输入了关键词
+				String[] commandTypeArray = request.getParameterValues("commandTypes");
+				if(commandTypeArray!=null&&commandTypeArray.length>0){
+					for(String commandTypeStr: commandTypeArray){
+						short commandType = Short.parseShort(commandTypeStr);
+						//查询相应command是否存在，不存在则创建
+						WxCommand commandBean = wxCommandService.loadOrSave(commandType, command);
+						if(commandBean!=null){
+							//插入中间表记录
+							WxCommandMaterial commandMaterial = new WxCommandMaterial();
+							commandMaterial.setCommandId(commandBean.getId());
+							commandMaterial.setMaterialId(materialArticle.getId());
+							commandMaterial.setCreateTime(currentTime);
+							commandMaterial.setTopTime(currentTime);
+							wxCommandMaterialService.save(commandMaterial);
+						}
+					}
+				}
+			}
 		}
-
 		model.addAttribute("redirectUrl", "./materialArticleList");
 		return "forward:/home/operationRedirect";
 	}
 
 	@RequestMapping("/delMaterialArticle")
-	public String delMaterialArticle(Model model, int articleId) {
-
+	public String delMaterialArticle(Model model, int materialId) {
+		
 		// 删除资源的关联
-//		wxCommandMaterialService.deleteByCommandId(materialId);
+		wxCommandMaterialService.deleteByCommandId(materialId);
 
 		//删除实体&关联
-		wxMaterialArticleService.deleteById(articleId);
+		wxMaterialArticleService.deleteById(materialId);
 
 		model.addAttribute("redirectUrl", "./materialArticleList");
 		return "forward:/home/operationRedirect";

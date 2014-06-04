@@ -44,14 +44,36 @@ public class WxCommandMaterialServiceImpl implements IWxCommandMaterialService{
 	public int delete(int commandId, int materialId) {
 		return wxCommandMaterialDao.delete(commandId, materialId);
 	}
+	
 	@Override
-	public int deleteByCommandId(int commandId){
+	public int deleteByCommandId(int commandId) {
 		return wxCommandMaterialDao.deleteByCommandId(commandId);
 	}
-
+	
 	@Override
-	public int deleteByMaterialId(int materialId){
+	public int deleteByMaterialId(int materialId) {
 		return wxCommandMaterialDao.deleteByMaterialId(materialId);
 	}
+	
+	/**
+	 * 置顶
+	 * @param commandId
+	 * @param materialId
+	 * @return
+	 */
+	public int topCommandMaterial(int commandId, int materialId){
+		return wxCommandMaterialDao.topCommandMaterial(commandId, materialId); 
+	}
+
+	public IWxCommandMaterialDao getWxCommandMaterialDao() {
+		return wxCommandMaterialDao;
+	}
+
+	public void setWxCommandMaterialDao(IWxCommandMaterialDao wxCommandMaterialDao) {
+		this.wxCommandMaterialDao = wxCommandMaterialDao;
+	}
+	
+	
+	
 	
 }

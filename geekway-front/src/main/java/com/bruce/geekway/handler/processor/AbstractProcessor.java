@@ -2,24 +2,20 @@ package com.bruce.geekway.handler.processor;
 
 import java.util.List;
 
-import com.bruce.geekway.model.WxMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
-import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
-import com.bruce.geekway.model.wx.request.ClickEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationRequest;
-import com.bruce.geekway.model.wx.request.SubscribeEventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VideoRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
-import com.bruce.geekway.utils.ArticleLinkUtil;
 import com.bruce.geekway.utils.MaterialLinkUtil;
+//import com.bruce.geekway.model.WxMaterial;
 
 
 public abstract class AbstractProcessor implements Processor{

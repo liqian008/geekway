@@ -1,6 +1,9 @@
 package com.bruce.geekway.service;
 
+import java.util.List;
+
 import com.bruce.geekway.model.WxCommand;
+import com.bruce.geekway.model.WxMaterialArticle;
 
 public interface IWxCommandService extends IBaseService<WxCommand, Integer>{
 
@@ -8,6 +11,9 @@ public interface IWxCommandService extends IBaseService<WxCommand, Integer>{
 //	public WxCommand loadByCode(String eventCode);
 	
 	public WxCommand loadByCommandType(short commandType, String command);
+	
+	
+	public WxCommand loadOrSave(short commandType, String command);
 	
 	/**
 	 * 变更对应的单图文Id
@@ -25,5 +31,7 @@ public interface IWxCommandService extends IBaseService<WxCommand, Integer>{
 	 */
 	public int updateMaterialNews(int commandId, int newsId);
 	
+	/*查询materialId对应的关键词列表*/
+	public List<WxCommand> queryCommandsByMaterialId(int materialId);
 	
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bruce.geekway.dao.mapper.WxCommandMapper">
+  
+  
+  <!-- 查询指定commandId的materialArticle列表 -->
+	<select id="queryCommandsByMaterialId" resultMap="BaseResultMap">
+		select <include refid="Command_Base_Column_List" /> from wx_command wc, wx_command_material wcm where wcm.material_id=#{materialId,jdbcType=INTEGER} and wc.id = wcm.command_id order by wc.id desc;
+	</select>
+  
+  
+  <sql id="Command_Base_Column_List">
+    wc.id, wc.command, wc.command_type, wc.publish_status, wc.status, wc.create_time, wc.update_time
+  </sql>
+  
+</mapper>

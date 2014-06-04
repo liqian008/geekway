@@ -90,6 +90,15 @@ public class WxCommandDaoImpl implements IWxCommandDao, InitializingBean {
 //    	command.setRowLimit(rowLimit);
     	return wxCommandMapper.updateByExampleSelective(command, criteria);
 	}
+	
+	/**
+	 * 查询materialId对应的关键词列表
+	 * @param materialId
+	 * @return
+	 */
+	public List<WxCommand> queryCommandsByMaterialId(int materialId){
+		return wxCommandMapper.queryCommandsByMaterialId(materialId);
+	}	
 
     @Override
     public void afterPropertiesSet() throws Exception {

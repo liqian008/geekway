@@ -2,7 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.model.WxMaterialArticle"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
@@ -76,7 +76,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						图文内容
+						添加素材
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -88,7 +88,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">图文内容</li>
+					<li class="active">添加素材</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -116,28 +116,25 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑图文内容
+							<i class="icon-bubble4"></i>添加素材
 						</h6>
 					</div>
 					<div class="panel-body">
 						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory"></span></label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									<%
-									List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-									if(commandList==null){%>
-										暂无关联
-									<%}else{
-										for(WxCommand command: commandList){%>
-										【<a href="./commandEdit?commandId=<%=command.getId()%>"><%=command.getCommand()%></a>】
-									<%}
-									}%>
-								</label>
+							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory">*</span></label>
+							
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="command" id="command" value=""/>
+								<div class="checkbox checkbox-info">
+									<label>
+										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="1"/>文本关键词
+										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="2"/>菜单关键词
+									</label>
+								</div>
 							</div>
 						</div>
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图文标题: <span class="mandatory">*</span></label>
@@ -172,7 +169,7 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文内容概要: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">内容概要: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
@@ -182,7 +179,7 @@
 						</div>
 						 
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文内容详情: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">详细内容: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">

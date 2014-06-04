@@ -11,9 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.geekway.model.WxArticle;
 import com.bruce.geekway.model.WxDefaultReply;
-import com.bruce.geekway.service.IWxArticleService;
 import com.bruce.geekway.service.IWxDefaultReplyService;
 
 

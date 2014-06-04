@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,27 @@ public class WxCommandServiceImpl implements IWxCommandService{
 		return wxCommandDao.loadByCommandType(commandType, command);
 	}
 	
+	/**
+	 * 加载或新建，确保返回有效的command数据
+	 */
+	@Override
+	public WxCommand loadOrSave(short commandType, String command){
+		WxCommand commandBean = loadByCommandType(commandType, command);
+		if(commandBean==null||commandBean.getId()==null){
+			commandBean = new WxCommand();
+			commandBean.setCommand(command);
+			commandBean.setCommandType(commandType);
+			commandBean.setCreateTime(new Date());
+			commandBean.setPublishStatus((short) 0);
+			commandBean.setStatus((short) 0);
+			int result = save(commandBean);
+			if(result <=0){
+				return null;
+			}
+		}
+		return commandBean;
+	}
+	
 	
 
 	/**
@@ -84,6 +106,14 @@ public class WxCommandServiceImpl implements IWxCommandService{
 			return result; 
 		}
 		return 0;
+	}
+	
+	
+	/**
+	 * 查询materialId对应的关键词列表
+	 */
+	public List<WxCommand> queryCommandsByMaterialId(int materialId){
+		return wxCommandDao.queryCommandsByMaterialId(materialId);
 	}
 	
 

@@ -12,5 +12,6 @@ public interface IWxMaterialArticleService extends IBaseService<WxMaterialArticl
 
 	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
 	
-	
+	/*查询commandId对应的素材列表*/
+	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
 }

@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bruce.geekway.dao.mapper.WxMaterialArticleMapper">
 
+
+	<!-- 查询指定commandId的materialArticle列表 -->
+	<select id="queryMaterialArticlesByCommandId" resultMap="BaseResultMap">
+		select <include refid="Material_Article_Base_Column_List" /> from wx_material_article wma, wx_command_material wcm where wcm.command_id=#{commandId,jdbcType=INTEGER} and wma.id = wcm.material_id order by wcm.top_time desc;
+	</select>
+
+
 	<!-- 查询指定newsId的article列表 -->
 	<select id="queryMaterialArticlesByNewsId" resultMap="BaseResultMap">
 		select <include refid="Material_Article_Base_Column_List" /> from wx_material_article wma, wx_material_news_article wmna where wma.id = wmna.article_id and wmna.news_id=#{newsId,jdbcType=INTEGER} order by wmna.top_time desc;

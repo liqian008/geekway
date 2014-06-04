@@ -6,11 +6,11 @@
 
 <%!String displayCommandType(short commandType){
 	if(1==commandType){
-		return "文本请求指令";
+		return "文本请求关键词";
 	}else if(2==commandType){
-		return "菜单点击指令";
+		return "菜单点击关键词";
 	}else if(3==commandType){
-		return "新用户关注指令";
+		return "新用户关注关键词";
 	}
 	return "类型错误";
 } %>
@@ -94,7 +94,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						指令管理
+						关键词管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -106,7 +106,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">指令管理</li>
+					<li class="active">关键词管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -130,19 +130,19 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>指令管理
+						<i class="icon-people"></i>关键词管理
 					</h5>
-					<a href="./commandAddSubscribeEntry"><span class="label label-danger pull-right">增加关注指令</span></a>
-					<a href="./commandAddMenuEntry"><span class="label label-primary pull-right">增加菜单接入指令</span></a>
-					<a href="./commandAddTextEntry"><span class="label label-info pull-right">增加文本接入指令</span></a>
+					<!-- <a href="./commandAddSubscribeEntry"><span class="label label-danger pull-right">增加关注关键词</span></a>
+					<a href="./commandAddMenuEntry"><span class="label label-primary pull-right">增加菜单接入关键词</span></a>
+					<a href="./commandAddTextEntry"><span class="label label-info pull-right">增加文本接入关键词</span></a> -->
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>序号</th>
-								<th>接入类型</th>
-                                <th>指令</th>
+								<th>类型</th>
+                                <th>关键词</th>
                                 <th>素材</th>
                                 <th class="team-links">操 作</th> 
 							</tr>

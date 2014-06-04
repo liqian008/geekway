@@ -74,4 +74,6 @@ public interface WxCommandMapper {
 	 * @mbggenerated  Wed May 14 15:22:42 CST 2014
 	 */
 	int updateByPrimaryKey(WxCommand record);
+
+	List<WxCommand> queryCommandsByMaterialId(int materialId);
 }

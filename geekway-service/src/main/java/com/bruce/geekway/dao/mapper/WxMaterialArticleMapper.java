@@ -99,4 +99,11 @@ public interface WxMaterialArticleMapper {
      * @return
      */
     List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
+    
+    /**
+     * 根据commandId查询其对应的素材列表
+     * @param commandId
+     * @return
+     */
+    List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
 }

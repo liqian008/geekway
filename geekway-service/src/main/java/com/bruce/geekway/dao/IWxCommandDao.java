@@ -1,5 +1,7 @@
 package com.bruce.geekway.dao;
 
+import java.util.List;
+
 import com.bruce.geekway.model.WxCommand;
 
 public interface IWxCommandDao extends IBaseDao<WxCommand, Integer> {
@@ -27,5 +29,12 @@ public interface IWxCommandDao extends IBaseDao<WxCommand, Integer> {
 	 * @return
 	 */
 	public int updateMaterialNews(int commandId, int newsId, short rowLimit, short materialType);
+
+	/**
+	 * 查询materialId对应的关键词列表
+	 * @param materialId
+	 * @return
+	 */
+	public List<WxCommand> queryCommandsByMaterialId(int materialId);
 	
 }
