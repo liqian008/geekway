@@ -70,6 +70,7 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 		}else{//不为空，新关注
 			wxMpUser = new WxMpUser();
 			wxMpUser.setOpenId(userOpenId);
+			wxMpUser.setSubscribeStatus((short) 1);
 			wxMpUser.setSyncStatus((short) 0);
 			wxMpUser.setCreateTime(new Date());
 			return save(wxMpUser);

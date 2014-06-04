@@ -172,7 +172,10 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhUserScoreLogMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
+	<bean id="klhDailySignMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhDailySignMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	
 	
 </beans>
