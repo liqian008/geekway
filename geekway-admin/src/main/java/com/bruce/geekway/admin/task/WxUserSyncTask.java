@@ -50,6 +50,8 @@ public class WxUserSyncTask implements Runnable{
 						mpUser.setSyncStatus((short) 1);
 						
 						int result = wxMpUserDao.updateById(mpUser);
+						//休息5秒，避免被微信当做恶意攻击
+						Thread.sleep(5000);
 					}
 				}
 			}catch(Exception e){

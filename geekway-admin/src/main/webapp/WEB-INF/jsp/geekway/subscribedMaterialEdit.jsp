@@ -76,7 +76,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						图文内容
+						用户关注素材内容
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -88,7 +88,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">图文内容</li>
+					<li class="active">用户关注素材内容</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -107,10 +107,10 @@
 			</div>
 
 			<%
-			WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
+			WxMaterialArticle subscribedMaterial = (WxMaterialArticle)request.getAttribute("subscribedMaterial");
 			%>
 
-			<form id="validate" action="<s:url value='./saveMaterialArticle'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveSubscribedMaterial'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
@@ -121,24 +121,17 @@
 					</div>
 					<div class="panel-body">
 						
+						<form:hidden path="subscribedMaterial.id"/>
+						
 						
 						<div class="form-group">
-							
-							<form:hidden path="materialArticle.id"/>
-						
-							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory"></span></label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									<%
-									List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-									if(commandList==null){%>
-										暂无关联
-									<%}else{
-										for(WxCommand command: commandList){%>
-										【<a href="./commandEdit?commandId=<%=command.getId()%>"><%=command.getCommand()%></a>】
-									<%}
-									}%>
-								</label>
+							<label class="col-sm-2 control-label text-right">应用场景: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+							<form:select path="subscribedMaterial.subscribeStatus" class="select-liquid">
+									<form:option value="1"  label="用户首次关注时有效"/>
+									<!-- <form:option value="2"  label="用户重复关注时有效"/> -->
+								</form:select>
 							</div>
 						</div>
 						
@@ -146,7 +139,7 @@
 							<label class="col-sm-2 control-label text-right">图文标题: <span class="mandatory">*</span></label>
 							
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="title" id="title" value="${materialArticle.title}"/>
+								<input type="text" class="form-control" name="title" id="title" value="${subscribedMaterial.title}"/>
 							</div>
 						</div>
 						
@@ -154,7 +147,7 @@
 							<label class="col-sm-2 control-label text-right">图文短标题: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="shortTitle" id="shortTitle" value="${materialArticle.shortTitle}"/>
+								<input type="text" class="form-control" name="shortTitle" id="shortTitle" value="${subscribedMaterial.shortTitle}"/>
 							</div>
 						</div>
 
@@ -163,13 +156,13 @@
 							</label>
 							<div class="col-sm-4">
 								<!-- 
-								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
+								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${subscribedMaterial.coverImageUrl}"/>
 								<img src="http://www.jinwanr.com.cn/staticFile/image/20140306/medium/100012_bb6d4f45aacd9b97a91063cda17cd3b3.jpg" width="160px"/>
 								-->
-								<a href="${materialArticle.coverImageUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
+								<a href="${subscribedMaterial.coverImageUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${subscribedMaterial.coverImageUrl}" width="200px" />
 								</a>
-								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
+								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${subscribedMaterial.coverImageUrl}"/>
 								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
@@ -179,7 +172,7 @@
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
-									<textarea name="shortContent" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${materialArticle.shortContent}</textarea>
+									<textarea name="shortContent" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${subscribedMaterial.shortContent}</textarea>
 								</div>
 							</div>
 						</div>
@@ -190,19 +183,19 @@
 							<div class="col-sm-10"> 
 								<div class="block-inner">
 									<textarea class="ckeditor" name="content" id="content">
-										${materialArticle.content}
+										${subscribedMaterial.content}
 									</textarea>
 								</div>
 							</div>
 						</div>
 						
-						<%if(materialArticle!=null&&materialArticle.getId()!=null){%>
+						<%if(subscribedMaterial!=null&&subscribedMaterial.getId()!=null){%>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图文链接: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-6">
 								<label class="control-label">
-									<%=ArticleLinkUtil.getArticleLink(materialArticle.getId())%>
+									<%=ArticleLinkUtil.getArticleLink(subscribedMaterial.getId())%>
 								</label>
 							</div>
 						</div>
@@ -213,7 +206,7 @@
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<form:select path="materialArticle.status" class="select-liquid">
+								<form:select path="subscribedMaterial.status" class="select-liquid">
 									<form:option value="0"  label="禁用"/>
 									<form:option value="1"  label="启用"/>
 								</form:select>

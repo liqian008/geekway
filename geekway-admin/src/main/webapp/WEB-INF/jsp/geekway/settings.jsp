@@ -4,19 +4,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
 
-<%@ include file="../inc/include_tag.jsp" %>
-
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "文本请求关键词";
-	}else if(2==commandType){
-		return "菜单点击关键词";
-	}else if(3==commandType){
-		return "用户关注关键词";
-	}
-	return "类型错误";
-} %>
-
 
 
 <!DOCTYPE html>
@@ -83,7 +70,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词内容
+						微信开发模式配置
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -95,7 +82,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">关键词内容</li>
+					<li class="active">微信开发模式配置</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -108,139 +95,43 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
-					2、 <br/>
+					1、在<a href="http://mp.weixin.qq.com">微信公众平台</a>中开启开发模式后，填写以下内容即可。<br/>
 				</p>
 			</div>
 			
-			<%
-			WxCommand command = (WxCommand)request.getAttribute("command");
-			%>
 
-			<form id="validate" action="<s:url value='./saveCommand'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑关键词内容
+							<i class="icon-bubble4"></i>微信开发模式配置信息
 						</h6>
 					</div>
 					<div class="panel-body">
-	                    <form:hidden path="command.id"/>
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入关键词类型:
+							<label class="col-sm-2 control-label text-right">URL:
 							</label>
 							<div class="col-sm-3">
-								<%
-								short commandType = (short)1;
-								if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
-									commandType = command.getCommandType();
-								}else{//<!-- 新增状态下 -->
-									commandType = (Short)request.getAttribute("commandType");
-								}%>
 								<label class="control-label">
-									<%=displayCommandType(commandType) %>
+									${devmodeUrl} 
 								</label>
-								<input type="hidden" class="form-control" name="commandType" id="commandType" value="${commandType}"/>
 							</div>
 						</div>
 						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入关键词:
+							<label class="col-sm-2 control-label text-right">TOKEN:
 							</label>
 							<div class="col-sm-3">
-								<%if(command!=null&&command.getCommandType()!=3) {%>
-									<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
-								<%}else{ %>
-									<label class="control-label">
-										${command.command}
-									</label>
-								<%} %>
+								<label class="control-label">
+									${devmodeToken}
+								</label>
 							</div>
-						</div>
-						
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态:
-							</label>
-							<div class="col-sm-4">
-								<form:select path="command.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
 				</div>
 			</form>
-			
-			<%if(command!=null&&command.getCommandType()!=3) {%>
-			
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>已匹配的素材
-					</h5>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>封面</th>
-                                <th>标题</th>
-                                <th>排序</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMaterialArticle> materialList = (List<WxMaterialArticle>)request.getAttribute("materialList");
-                           	if(materialList!=null&&materialList.size()>0){
-                           		int i=0;
-                           		for(WxMaterialArticle material: materialList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=material.getId()%></td>
-		                        <td>
-	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
-		                        	</a>
-		                        </td>
-		                        <td><%=material.getTitle()%></td>
-		                        <td><%=material.getTitle()%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        		<a href="./materialArticleEdit?articleId=<%=material.getId()%>"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="修改素材"><i class="icon-pencil3"></i></a>
-		                        		<a href="javascript:void(0)"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="解除匹配"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-				
-			</div>
-			<!-- /table view -->
-			<%}%>
-			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

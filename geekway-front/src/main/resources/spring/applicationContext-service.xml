@@ -28,6 +28,9 @@
 	</bean>
 	<bean id="codeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
 	</bean>
+	<bean id="materialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
+		<property name="wxMaterialNewsDao" ref="wxMaterialNewsDao"></property>
+	</bean>
 	 -->
 	
 <!-- 	<bean id="commandMaterialService" class="com.bruce.geekway.service.impl.WxCommandMaterialServiceImpl">
@@ -41,9 +44,6 @@
 	</bean>
 	<bean id="materialArticleService" class="com.bruce.geekway.service.impl.WxMaterialArticleServiceImpl">
 		<property name="wxMaterialArticleDao" ref="wxMaterialArticleDao"></property>
-	</bean>
-	<bean id="materialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
-		<property name="wxMaterialNewsDao" ref="wxMaterialNewsDao"></property>
 	</bean>
 	<!-- 本地MpUserService -->
 	<bean id="mpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">

@@ -6,16 +6,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bruce.geekway.constant.ConstConfig;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxMaterialArticle;
-import com.bruce.geekway.model.WxMaterialNews;
+//import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.model.wx.request.BaseRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
-import com.bruce.geekway.service.IWxMaterialNewsService;
+//import com.bruce.geekway.service.IWxMaterialNewsService;
 //import com.bruce.geekway.model.WxArticle;
 //import com.bruce.geekway.model.WxEventCode;
 //import com.bruce.geekway.model.WxMaterial;
@@ -45,8 +46,8 @@ public class CommandCmsProcessor extends AbstractProcessor{
 //	private IWxMaterialService materialService;
 	@Autowired
     private IWxMaterialArticleService materialArticleService;
-	@Autowired
-    private IWxMaterialNewsService materialNewsService;
+//	@Autowired
+//    private IWxMaterialNewsService materialNewsService;
 //	@Autowired
 //    private IWxCustomizeMenuService customizeMenuService;
 	
@@ -59,10 +60,16 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	 */
 	@Override
 	protected BaseResponse processTextRequest(TextRequest request) {
-		String key = ((TextRequest)request).getContent();
-        
-        WxCommand command = commandService.loadByCommandType((short) 1, key);
-        return commandResponse(request, command);
+		String key = ((TextRequest) request).getContent();
+
+		WxCommand command = commandService.loadByCommandType((short) 1, key);
+		// return commandResponse(request, command);
+
+		if (command != null) {
+			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByCommandId(command.getId());
+			return newsReply(request, materialArticleList);
+		}
+		return null;
 	}
 
 	
@@ -71,9 +78,15 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	 */
 	@Override
 	protected BaseResponse processClickEventRequest(EventRequest request) {
-		String key = ((EventRequest)request).getEventKey();
+		String key = ((EventRequest) request).getEventKey();
 		WxCommand command = commandService.loadByCommandType((short) 2, key);
-		return commandResponse(request, command);
+		// return commandResponse(request, command);
+
+		if (command != null) {
+			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByCommandId(command.getId());
+			return newsReply(request, materialArticleList);
+		}
+		return null;
 	}
 	
 	/**
@@ -81,9 +94,11 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	 */
 	@Override
 	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
-		String key = "subscribe";
-		WxCommand command = commandService.loadByCommandType((short) 3, key);
-		return commandResponse(request, command);
+		String key = ConstConfig.NEW_SUBSCRIBE;
+//		WxCommand command = commandService.loadByCommandType((short) 3, key);
+//		return commandResponse(request, command);
+		List<WxMaterialArticle> materialArticleList = materialArticleService.querySubscribedMaterials();
+		return newsReply(request, materialArticleList);
 	}
 	
 	
@@ -95,36 +110,41 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	 */
 	private BaseResponse commandResponse(BaseRequest request, WxCommand command) {
 		if(command!=null){
-        	if(command.getMaterialType()==1){//文本回复
-        		return textReply(request, command.getReplyContent());
-        	}else if(command.getMaterialType()==2){//单图文回复
-        		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
-        			//取单图文的数据
-	        		WxMaterialArticle materialArticle = materialArticleService.loadById(command.getMaterialId());
-	        		if(materialArticle!=null){
-	        			List<WxMaterialArticle> articleList = new ArrayList<WxMaterialArticle>();
-	        			articleList.add(materialArticle);
-	        			return newsReply(request, articleList);
-	        		}
-        		}
-        	}else if(command.getMaterialType()==3){//多图文回复
-        		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
-        			//取多图文的组合数据
-        			WxMaterialNews materialNews = materialNewsService.loadById(command.getMaterialId());
-	        		if(materialNews!=null){
-	        			short rowLimit = 4;
-	        			if(materialNews.getRowLimit()!=null&&materialNews.getRowLimit()>0){
-	        				rowLimit = materialNews.getRowLimit();
-	        			}
-	        			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId(), rowLimit);
-		        		return newsReply(request, materialArticleList);
-		        	}
-        		}
-        	}else if(command.getMaterialType()==4){//单图片
-        		//do nothing
-        	}else if(command.getMaterialType()==5){//语音
-        		//do nothing
-        	}
+//        	if(command.getMaterialType()==1){//文本回复
+//        		return textReply(request, command.getReplyContent());
+//        	}else if(command.getMaterialType()==2){//单图文回复
+//        		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
+//        			//取单图文的数据
+//	        		WxMaterialArticle materialArticle = materialArticleService.loadById(command.getMaterialId());
+//	        		if(materialArticle!=null){
+//	        			List<WxMaterialArticle> articleList = new ArrayList<WxMaterialArticle>();
+//	        			articleList.add(materialArticle);
+//	        			return newsReply(request, articleList);
+//	        		}
+//        		}
+//        	}else if(command.getMaterialType()==3){//多图文回复
+//        		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
+//        			//取多图文的组合数据
+//        			WxMaterialNews materialNews = materialNewsService.loadById(command.getMaterialId());
+//	        		if(materialNews!=null){
+//	        			short rowLimit = 4;
+//	        			if(materialNews.getRowLimit()!=null&&materialNews.getRowLimit()>0){
+//	        				rowLimit = materialNews.getRowLimit();
+//	        			}
+//	        			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId(), rowLimit);
+//		        		return newsReply(request, materialArticleList);
+//		        	}
+//        		}
+//        	}else if(command.getMaterialType()==4){//单图片
+//        		//do nothing
+//        	}else if(command.getMaterialType()==5){//语音
+//        		//do nothing
+//        	}
+			
+			
+			
+			
+			
         }
 		return null;
 	}
@@ -152,14 +172,14 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	}
 
 
-	public IWxMaterialNewsService getMaterialNewsService() {
-		return materialNewsService;
-	}
-
-
-	public void setMaterialNewsService(IWxMaterialNewsService materialNewsService) {
-		this.materialNewsService = materialNewsService;
-	}
+//	public IWxMaterialNewsService getMaterialNewsService() {
+//		return materialNewsService;
+//	}
+//
+//
+//	public void setMaterialNewsService(IWxMaterialNewsService materialNewsService) {
+//		this.materialNewsService = materialNewsService;
+//	}
 
 	
 //	public IWxEventCodeService getEventCodeService() {

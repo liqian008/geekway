@@ -1,22 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.WxMaterialArticle"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
-
-<%@ include file="../inc/include_tag.jsp" %>
-
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "文本请求关键词";
-	}else if(2==commandType){
-		return "菜单点击关键词";
-	}else if(3==commandType){
-		return "用户关注关键词";
-	}
-	return "类型错误";
-} %>
-
+<%@page import="com.bruce.geekway.utils.*"%>
 
 
 <!DOCTYPE html>
@@ -83,7 +70,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词内容
+						关注素材管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -95,7 +82,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">关键词内容</li>
+					<li class="active">关注素材管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -103,131 +90,63 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
-					2、 <br/>
+					1、点击封面图，可预览大图<br/>
+					2、点击【编辑】按钮，可对素材进行编辑
 				</p>
 			</div>
-			
-			<%
-			WxCommand command = (WxCommand)request.getAttribute("command");
-			%>
 
-			<form id="validate" action="<s:url value='./saveCommand'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑关键词内容
-						</h6>
-					</div>
-					<div class="panel-body">
-	                    <form:hidden path="command.id"/>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入关键词类型:
-							</label>
-							<div class="col-sm-3">
-								<%
-								short commandType = (short)1;
-								if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
-									commandType = command.getCommandType();
-								}else{//<!-- 新增状态下 -->
-									commandType = (Short)request.getAttribute("commandType");
-								}%>
-								<label class="control-label">
-									<%=displayCommandType(commandType) %>
-								</label>
-								<input type="hidden" class="form-control" name="commandType" id="commandType" value="${commandType}"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入关键词:
-							</label>
-							<div class="col-sm-3">
-								<%if(command!=null&&command.getCommandType()!=3) {%>
-									<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
-								<%}else{ %>
-									<label class="control-label">
-										${command.command}
-									</label>
-								<%} %>
-							</div>
-						</div>
-						
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态:
-							</label>
-							<div class="col-sm-4">
-								<form:select path="command.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-					</div>
-				</div>
-			</form>
-			
-			<%if(command!=null&&command.getCommandType()!=3) {%>
-			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>已匹配的素材
+						<i class="icon-people"></i>关注素材管理
 					</h5>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
+					<a href="./subscribedMaterialAdd"><span class="label label-info pull-right">新增关注素材</span></a>
+				</div> 
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
-								<th>ID</th>
+								<th>序号</th>
                                 <th>封面</th>
-                                <th>标题</th>
-                                <th>排序</th>
+                                <th>内容</th>
+                                <th>场景</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxMaterialArticle> materialList = (List<WxMaterialArticle>)request.getAttribute("materialList");
-                           	if(materialList!=null&&materialList.size()>0){
+                           	List<WxMaterialArticle> articleList = (List<WxMaterialArticle>)request.getAttribute("subscribedMaterialList");
+                           	if(articleList!=null&&articleList.size()>0){
                            		int i=0;
-                           		for(WxMaterialArticle material: materialList){
+                           		for(WxMaterialArticle article: articleList){
                            			i++;
                            	%>
 							<tr>
-		                        <td><%=material.getId()%></td>
+		                        <td><%=i%></td>
 		                        <td>
-	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
+	                        		<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
 		                        	</a>
 		                        </td>
-		                        <td><%=material.getTitle()%></td>
-		                        <td><%=material.getTitle()%></td>
+		                        <td>
+		                        	<%=article.getShortContent()%>
+		                        </td>
+		                        <td><%=article.getSubscribeStatus()==1?"首次关注":"重复关注"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        		<a href="./materialArticleEdit?articleId=<%=material.getId()%>"  
+		                        	
+										<a href="./subscribedMaterialEdit?articleId=<%=article.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="修改素材"><i class="icon-pencil3"></i></a>
-		                        		<a href="javascript:void(0)"  
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+										<a href="./delSubscribedMaterial?articleId=<%=article.getId()%>" 
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="解除匹配"><i class="icon-remove3"></i></a>
+											data-original-title="删除"><i class="icon-remove3"></i></a>
 									</div>
 								</td>
                                </tr>
@@ -236,11 +155,8 @@
 						</tbody>
 					</table>
 				</div>
-				
 			</div>
 			<!-- /table view -->
-			<%}%>
-			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -250,3 +166,4 @@
 	<!-- /page container -->
 </body>
 </html>
+

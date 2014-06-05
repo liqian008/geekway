@@ -13,13 +13,13 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleExtendMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsArticleMapper.xml" />
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxCustomizeMenuMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
 		
 		<!-- 
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsArticleMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialExtendMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxCodeModuleMapper.xml" />

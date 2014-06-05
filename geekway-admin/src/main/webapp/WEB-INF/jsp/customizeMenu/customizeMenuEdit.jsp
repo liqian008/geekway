@@ -3,7 +3,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.WxCustomizeMenu"%>
-<%@page import="com.bruce.geekway.model.WxCodeModule"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 

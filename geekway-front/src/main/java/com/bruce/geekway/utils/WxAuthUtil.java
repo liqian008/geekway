@@ -15,7 +15,7 @@ import com.bruce.geekway.model.wx.WxAuth;
 @Service
 public class WxAuthUtil {
 	
-	public static String weixinToken = ConfigUtil.getString("token");
+	public static String weixinToken = ConfigUtil.getString("weixinmp_devmode_token");
 	
 	private static final Logger log = LoggerFactory.getLogger(WxAuthUtil.class);
 

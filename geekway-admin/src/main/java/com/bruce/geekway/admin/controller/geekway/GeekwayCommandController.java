@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxMaterialArticle;
-import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
-import com.bruce.geekway.service.IWxMaterialNewsService;
+//import com.bruce.geekway.model.WxMaterialNews;
+//import com.bruce.geekway.service.IWxMaterialNewsService;
+import com.bruce.geekway.utils.ConfigUtil;
 
 @Controller
 @RequestMapping("/geekway") 
@@ -30,9 +31,24 @@ public class GeekwayCommandController {
 	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
-	@Autowired
-	private IWxMaterialNewsService wxMaterialNewsService;
+//	@Autowired
+//	private IWxMaterialNewsService wxMaterialNewsService;
 	
+	
+	@RequestMapping("/settings")
+	public String settings(Model model, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		//开发模式的配置
+		String devmodeUrl = ConfigUtil.getString("weixinmp_devmode_url");
+		String devmodeToken = ConfigUtil.getString("weixinmp_devmode_token");
+		
+		model.addAttribute("devmodeUrl", devmodeUrl);
+		model.addAttribute("devmodeToken", devmodeToken);
+		
+		return "geekway/settings";
+	}
 	
 	@RequestMapping("/commandList")
 	public String commandList(Model model, HttpServletRequest request) {

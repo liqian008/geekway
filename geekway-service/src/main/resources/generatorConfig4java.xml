@@ -30,13 +30,13 @@
 		
 
 		<!-- geekway config -->
-		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		
+		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
 		<!--
+		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		<table schema="wx" tableName="wx_material_news" domainObjectName="WxMaterialNews"/>
 		<table schema="wx" tableName="wx_material_news_article" domainObjectName="WxMaterialNewsArticle"/>
-		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
 		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
 		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
 		<table schema="wx" tableName="wx_history_message" domainObjectName="WxHistorMessage"/>

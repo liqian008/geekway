@@ -7,8 +7,19 @@
 	<select id="queryMaterialArticlesByCommandId" resultMap="BaseResultMap">
 		select <include refid="Material_Article_Base_Column_List" /> from wx_material_article wma, wx_command_material wcm where wcm.command_id=#{commandId,jdbcType=INTEGER} and wma.id = wcm.material_id order by wcm.top_time desc;
 	</select>
-
-
+	
+	<!-- 查询普通类型的素材列表
+	<select id="queryGeneralMaterials" resultMap="BaseResultMap">
+		select <include refid="Material_Article_Base_Column_List" /> from wx_material_article wma where wma.id in (select material_id from wx_command_material where command_id in (select id from wx_command where command_type!=3));
+	</select>
+	 -->
+	
+	<!-- 查询订阅类型时的素材列表 
+	<select id="querySubscribedMaterials" resultMap="BaseResultMap">
+		select <include refid="Material_Article_Base_Column_List" /> from wx_material_article wma where wma.id in (select material_id from wx_command_material where command_id in (select id from wx_command where command_type=3));
+	</select>
+	-->
+	
 	<!-- 查询指定newsId的article列表 -->
 	<select id="queryMaterialArticlesByNewsId" resultMap="BaseResultMap">
 		select <include refid="Material_Article_Base_Column_List" /> from wx_material_article wma, wx_material_news_article wmna where wma.id = wmna.article_id and wmna.news_id=#{newsId,jdbcType=INTEGER} order by wmna.top_time desc;

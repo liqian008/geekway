@@ -10,7 +10,7 @@
 	}else if(2==commandType){
 		return "菜单点击关键词";
 	}else if(3==commandType){
-		return "新用户关注关键词";
+		return "用户关注关键词";
 	}
 	return "类型错误";
 } %>
@@ -143,7 +143,7 @@
 								<th>序号</th>
 								<th>类型</th>
                                 <th>关键词</th>
-                                <th>素材</th>
+                                <th>素材类型</th>
                                 <th class="team-links">操 作</th> 
 							</tr>
 						</thead>
@@ -159,7 +159,7 @@
 		                        <td><%=i%></td>
 		                        <td><%=displayCommandType(command.getCommandType())%></td>
 		                        <td><%=command.getCommand()%></td>
-		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
+		                        <td>图文</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./commandEdit?commandId=<%=command.getId()%>"

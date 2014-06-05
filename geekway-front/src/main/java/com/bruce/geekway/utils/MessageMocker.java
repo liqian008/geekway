@@ -7,7 +7,7 @@ public class MessageMocker {
 			+ "<FromUserName><![CDATA[fromUser]]></FromUserName> "
 			+ "<CreateTime>1348831860</CreateTime>"
 			+ "<MsgType><![CDATA[text]]></MsgType>"
-			+ "<Content><![CDATA[this is a test]]></Content>"
+			+ "<Content><![CDATA[liqian]]></Content>"
 			+ "<MsgId>1234567890123456</MsgId>" + "</xml>";
 	
 	
@@ -47,7 +47,7 @@ public class MessageMocker {
 			+ "<CreateTime>123456789</CreateTime>"
 			+ "<MsgType><![CDATA[event]]></MsgType>"
 			+ "<Event><![CDATA[click]]></Event>"
-			+ "<EventKey><![CDATA[EVENTKEY]]></EventKey>" + "</xml>";
+			+ "<EventKey><![CDATA[liqian]]></EventKey>" + "</xml>";
 	
 	
 	public static final String MSG_EVENT_SUBSCRIBE_XML = "<xml>"

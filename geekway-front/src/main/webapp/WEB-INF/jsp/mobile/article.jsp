@@ -42,11 +42,11 @@
 					<p>
 						<%=article.getContent()%>
 					</p>
-					<div class="a-meta">
+					<!-- <div class="a-meta">
 						<a href="blog-single-post.html#"><i class="i-comments i-small"></i>6 Comments</a> 
 						<a href="blog-single-post.html#"><i class="i-author i-small"></i>John Doe</a> 
 						<a href="blog-single-post.html#"><i class="i-calendar i-small"></i>31 Nov 2013</a>
-					</div>
+					</div> -->
 				</article>
 				<%} %>
 				

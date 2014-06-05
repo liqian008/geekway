@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.IWxCommandDao;
-import com.bruce.geekway.dao.IWxMaterialNewsDao;
 import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.model.WxMaterialNews;
+//import com.bruce.geekway.dao.IWxMaterialNewsDao;
+//import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.service.IWxCommandService;
 
 @Service
@@ -17,8 +17,8 @@ public class WxCommandServiceImpl implements IWxCommandService{
 	
 	@Autowired
 	private IWxCommandDao wxCommandDao;
-	@Autowired
-	private IWxMaterialNewsDao wxMaterialNewsDao;
+//	@Autowired
+//	private IWxMaterialNewsDao wxMaterialNewsDao;
 	
 	
 	@Override
@@ -78,35 +78,35 @@ public class WxCommandServiceImpl implements IWxCommandService{
 	
 	
 
-	/**
-	 * 变更对应的单图文Id
-	 * @param commandId
-	 * @param articleId
-	 * @return
-	 */
-	public int updateMaterialArticle(int commandId, int articleId){
-		return wxCommandDao.updateMaterialArticle(commandId, articleId, (short) 2);
-	}
-	
-	/**
-	 * 变更对应的多图文Id
-	 * @param commandId
-	 * @param newsId
-	 * @return
-	 */
-	public int updateMaterialNews(int commandId, int newsId){
-		WxMaterialNews materialNews = wxMaterialNewsDao.loadById(newsId);
-		if(materialNews!=null&&materialNews.getId()!=null){
-			short rowLimit = 4;//分页的默认值
-			if(materialNews.getRowLimit()!=null&&materialNews.getRowLimit()>0){//使用多图中的rowLimit配置
-				rowLimit = materialNews.getRowLimit();
-			}
-			int result = wxCommandDao.updateMaterialNews(commandId, newsId, rowLimit, (short) 3);
-			
-			return result; 
-		}
-		return 0;
-	}
+//	/**
+//	 * 变更对应的单图文Id
+//	 * @param commandId
+//	 * @param articleId
+//	 * @return
+//	 */
+//	public int updateMaterialArticle(int commandId, int articleId){
+//		return wxCommandDao.updateMaterialArticle(commandId, articleId, (short) 2);
+//	}
+//	
+//	/**
+//	 * 变更对应的多图文Id
+//	 * @param commandId
+//	 * @param newsId
+//	 * @return
+//	 */
+//	public int updateMaterialNews(int commandId, int newsId){
+//		WxMaterialNews materialNews = wxMaterialNewsDao.loadById(newsId);
+//		if(materialNews!=null&&materialNews.getId()!=null){
+//			short rowLimit = 4;//分页的默认值
+//			if(materialNews.getRowLimit()!=null&&materialNews.getRowLimit()>0){//使用多图中的rowLimit配置
+//				rowLimit = materialNews.getRowLimit();
+//			}
+//			int result = wxCommandDao.updateMaterialNews(commandId, newsId, rowLimit, (short) 3);
+//			
+//			return result; 
+//		}
+//		return 0;
+//	}
 	
 	
 	/**
