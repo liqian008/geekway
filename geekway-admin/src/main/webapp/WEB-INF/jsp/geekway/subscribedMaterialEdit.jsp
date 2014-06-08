@@ -121,7 +121,6 @@
 					</div>
 					<div class="panel-body">
 						
-						<form:hidden path="subscribedMaterial.id"/>
 						
 						
 						<div class="form-group">
@@ -129,9 +128,10 @@
 							</label>
 							<div class="col-sm-4">
 							<form:select path="subscribedMaterial.subscribeStatus" class="select-liquid">
-									<form:option value="1"  label="用户首次关注时有效"/>
-									<form:option value="2"  label="用户重复关注时有效"/>
-								</form:select>
+								<form:option value="1"  label="用户首次关注时有效"/>
+								<form:option value="2"  label="用户重复关注时有效"/>
+							</form:select>
+							<form:hidden path="subscribedMaterial.id"/>
 							</div>
 						</div>
 						

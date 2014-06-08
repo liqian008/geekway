@@ -95,6 +95,8 @@ public class ErrorCode {
 	public static final int ITO_PRODUCT_ORDER_POST_MOBILE_ERROR = 311;
 	/*收件地址错误*/
 	public static final int ITO_PRODUCT_ORDER_POST_ADDRESS_ERROR = 312;
+	/*收件email错误*/
+	public static final int ITO_PRODUCT_ORDER_POST_EMAIL_ERROR = 313;
 
 	
 	/*支付宝的return回调信息错误*/

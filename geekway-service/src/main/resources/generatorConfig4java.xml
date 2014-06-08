@@ -59,6 +59,7 @@
 		<!-- ito config  -->
 		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
 		<!--
+		<table schema="wx" tableName="ito_product_bg" domainObjectName="ItoProductBg"/> 
 		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
 		<table schema="wx" tableName="ito_product" domainObjectName="ItoProduct"/> 
 		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>

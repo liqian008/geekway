@@ -106,8 +106,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
-					2、 <br/>
+					1、用户详细资料<br/>
 				</p>
 			</div>
 			

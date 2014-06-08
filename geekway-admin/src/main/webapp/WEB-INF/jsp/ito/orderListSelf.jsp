@@ -96,7 +96,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、xxxxxx<br/>
+					1、线下支付（APP支付）订单列表<br/>
 				</p>
 			</div>
 

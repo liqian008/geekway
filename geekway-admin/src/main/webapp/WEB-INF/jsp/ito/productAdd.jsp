@@ -142,8 +142,8 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<form:hidden path="product.id"/>
 								<input type="text" class="form-control" name="title" id="title" value="${product.title}"/>
+								<form:hidden path="product.id"/>
 							</div>
 						</div>
 						

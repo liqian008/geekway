@@ -96,8 +96,11 @@ public class AlipayOrderController {
 				alipayProductOrder.setSkuName(alipayReturnData.getSku_name());
 				//数量
 				alipayProductOrder.setNum(alipayReturnData.getQuantity());
+				System.out.println("=========alipayProductOrder.getNum========="+alipayProductOrder.getNum());
+				
 				//价格
 				alipayProductOrder.setTotalPrice(alipayReturnData.getPrice());
+				System.out.println("=========alipayProductOrder.getTotalPrice========="+alipayProductOrder.getTotalPrice());
 				//买家
 				alipayProductOrder.setPostName(alipayReturnData.getBuyer_name());
 				//邮编

@@ -88,7 +88,7 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="javascript:void(0)">首页</a></li>
+					<li><a href="javascript:void(0)">首页</a></li> 
 					<li class="active">投票详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -110,7 +110,7 @@
 			KlhVote vote = (KlhVote)request.getAttribute("vote");
 			%>
 
-			<form id="validate" action="<s:url value='./saveVote'/>" method="post"  class="form-horizontal form-bvoteed">
+			<form id="validate" action="<s:url value='./saveVote'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
@@ -121,12 +121,11 @@
 					</div>
 					<div class="panel-body">
 						
-						<form:hidden path="vote.id"/>
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">起始时间: <span class="mandatory">*</span></label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" name="startTime" id="startTime" value="${vote.startTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
+								<form:hidden path="vote.id"/>
 							</div>
 						</div>
 						
@@ -170,7 +169,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">需绑定用户: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
-								<form:select path="bindSetting.needBind" class="form-control">
+								<form:select path="vote.needBind" class="form-control">
 									<form:option value="0"  label="否"/>
 									<form:option value="1"  label="是"/>
 								</form:select>
@@ -180,7 +179,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">需参与购物: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
-								<form:select path="bindSetting.needBeBuyer" class="form-control">
+								<form:select path="vote.needBeBuyer" class="form-control">
 									<form:option value="0"  label="否"/>
 									<form:option value="1"  label="是"/>
 								</form:select>

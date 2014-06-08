@@ -109,7 +109,7 @@
 			KlhUserScoreLog userScoreLog = (KlhUserScoreLog)request.getAttribute("userScoreLog");
 			%>
 
-			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-buserScoreLoged">
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
@@ -120,13 +120,13 @@
 					</div>
 					<div class="panel-body">
 						
-						<form:hidden path="userScoreLog.id"/>
 						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">变更用户ID: <span class="mandatory">*</span></label>
 							<div class="col-sm-1">
 								<input type="text" class="form-control" name="klhUserId" id="klhUserId" value="${userScoreLog.klhUserId}"/>
+								<form:hidden path="userScoreLog.id"/>
 							</div>
 						</div>
 						

@@ -110,7 +110,7 @@
 			KlhProduct product = (KlhProduct)request.getAttribute("product");
 			%>
 
-			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bproducted">
+			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
@@ -121,7 +121,6 @@
 					</div>
 					<div class="panel-body">
 					
-						<form:hidden path="product.id"/>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">产品大图:<span class="mandatory">*</span>
@@ -139,6 +138,7 @@
 							<label class="col-sm-2 control-label text-right">产品标题: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="title" id="title" value="${product.title}"/>
+								<form:hidden path="product.id"/>
 							</div>
 						</div>
 						

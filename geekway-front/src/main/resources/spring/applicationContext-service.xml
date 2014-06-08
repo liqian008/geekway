@@ -64,6 +64,8 @@
 	-->
 	
 	<!-- ito service config -->
+	<bean id="itoProductBgService" class="com.bruce.geekway.service.impl.ito.ItoProductBgServiceImpl">
+	</bean>
 	<bean id="itoProductService" class="com.bruce.geekway.service.impl.ito.ItoProductServiceImpl">
 	</bean>
 	<bean id="itoSkuService" class="com.bruce.geekway.service.impl.ito.ItoSkuServiceImpl">

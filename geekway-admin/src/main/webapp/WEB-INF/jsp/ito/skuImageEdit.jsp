@@ -105,7 +105,7 @@
 			ItoSkuImage skuImage = (ItoSkuImage)request.getAttribute("skuImage");
 			%>
 
-			<form id="validate" action="<s:url value='./saveSkuImage'/>" method="post"  class="form-horizontal form-bskuImageed">
+			<form id="validate" action="<s:url value='./saveSkuImage'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">

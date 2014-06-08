@@ -54,7 +54,6 @@ public class WxDefaultReplyDaoImpl implements IWxDefaultReplyDao, InitializingBe
     
     @Override
 	public List<WxDefaultReply> loadDefaultReply(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

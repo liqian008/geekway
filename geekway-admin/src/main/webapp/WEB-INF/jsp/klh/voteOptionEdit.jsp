@@ -105,7 +105,7 @@
 			KlhVoteOption voteOption = (KlhVoteOption)request.getAttribute("voteOption");
 			%>
 
-			<form id="validate" action="<s:url value='./saveVoteOption'/>" method="post"  class="form-horizontal form-bvoteOptioned">
+			<form id="validate" action="<s:url value='./saveVoteOption'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
