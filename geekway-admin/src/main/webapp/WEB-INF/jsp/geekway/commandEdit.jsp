@@ -114,8 +114,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、回复类型目前支持图文素材（均需事先创建相应的素材以做关联） <br/>
-					2、 <br/>
+					1、管理员可修改关键词的名称，以便于调整关键词。<br/>
 				</p>
 			</div>
 			
@@ -133,10 +132,9 @@
 						</h6>
 					</div>
 					<div class="panel-body">
-	                    <form:hidden path="command.id"/>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入关键词类型:
+							<label class="col-sm-2 control-label text-right">关键词类型:
 							</label>
 							<div class="col-sm-3">
 								<%
@@ -150,12 +148,13 @@
 									<%=displayCommandType(commandType) %>
 								</label>
 								<input type="hidden" class="form-control" name="commandType" id="commandType" value="${commandType}"/>
+			                    <form:hidden path="command.id"/>
 							</div>
 						</div>
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">接入关键词:
+							<label class="col-sm-2 control-label text-right">关键词名称:
 							</label>
 							<div class="col-sm-3">
 								<%if(command!=null&&command.getCommandType()<2) {//文本接入&菜单接入%>

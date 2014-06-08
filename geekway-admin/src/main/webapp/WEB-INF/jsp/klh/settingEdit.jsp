@@ -117,7 +117,6 @@
 						</h6>
 					</div>
 					<div class="panel-body">
-						<form:hidden path="setting.id"/>
 					 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">必填姓名: <span class="mandatory">*</span></label>
@@ -126,6 +125,7 @@
 									<form:option value="0"  label="否"/>
 									<form:option value="1"  label="是"/>
 								</form:select>
+								<form:hidden path="setting.id"/>
 							</div>
 						</div>
 						

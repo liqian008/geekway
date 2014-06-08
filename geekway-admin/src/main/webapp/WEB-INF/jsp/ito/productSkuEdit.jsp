@@ -116,15 +116,14 @@
 					</div>
 					<div class="panel-body">
 						
-						<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-						<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
-						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<label class="control-label">
 									${product.title}
+									<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
+									<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
 								</label>
 							</div>
 						</div>

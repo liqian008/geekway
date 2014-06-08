@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.model.ItoProduct;
+import com.bruce.geekway.model.ItoProductBg;
 import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuImage;
 import com.bruce.geekway.model.ItoSkuProp;
 import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.service.ito.IItoProductBgService;
 import com.bruce.geekway.service.ito.IItoProductOrderService;
 import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuImageService;
@@ -45,6 +47,8 @@ public class ProductController {
 	private IItoSkuPropValueService itoSkuPropValueService;
 	@Autowired
 	private IItoSkuPropService itoSkuPropService;
+	@Autowired
+	private IItoProductBgService itoProductCoverService;
 	
 	/**
 	 * 产品列表
@@ -56,12 +60,22 @@ public class ProductController {
 		//检查请求合法性
 		
 		List<ItoProduct> productList =  itoProductService.queryAll();
-		if(productList!=null&&productList.size()>0){
-			Map<String, Object> dataMap = new HashMap<String, Object>();
-			dataMap.put("productList", productList);
-			return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+		if(productList==null){
+			productList = new ArrayList<ItoProduct>();
 		}
-		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
+		//额外构造一个ito封面的商品，主要为了给客户端使用
+		ItoProductBg productBg = itoProductCoverService.loadById(1);
+		if(productBg!=null){
+			ItoProduct coverProduct = new ItoProduct();
+			coverProduct.setProductPicUrl(productBg.getCoverPicUrl());
+			coverProduct.setProductThumbPicUrl(productBg.getCoverThumbPicUrl());
+			coverProduct.setIsCover((short) 1);
+			productList.add(0, coverProduct);
+		}
+		//返回数据
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("productList", productList);
+		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
 	/**

@@ -19,8 +19,11 @@ import com.bruce.geekway.service.ito.IItoSystemStatusService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
 
+
 /**
- * Handles requests for the application home page.
+ * 系统状态监察
+ * @author liqian
+ *
  */
 @Controller
 @RequestMapping(value={"api"})

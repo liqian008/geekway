@@ -132,6 +132,7 @@
 							<label class="col-sm-2 control-label text-right">标 题: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="title" id="title" value="${slider.title}"/>
+								<form:hidden path="slider.id"/>
 							</div>
 						</div>
 						

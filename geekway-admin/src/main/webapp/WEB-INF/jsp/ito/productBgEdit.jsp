@@ -3,23 +3,8 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
-<%@page import="com.bruce.geekway.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
-
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null&&1==materialType){
-		return "图文素材";
-	}
-	return "文本素材";
-} %>
-
-<%!String displayCommandType(Short comandType){
-	if(comandType!=null&&1==comandType){
-		return "菜单关键词";
-	}
-	return "文本关键词";
-} %>
 
 
 <!DOCTYPE html>
@@ -28,7 +13,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>ITO管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -52,10 +37,6 @@
 	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
-<script type="text/javascript"
-        src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
-<script type="text/javascript"
-        src="${pageContext.request.contextPath}/js/ckeditor/config.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
 <script type="text/javascript"
@@ -90,7 +71,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						图文内容
+						ITO产品背景图
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -102,7 +83,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">图文内容</li>
+					<li class="active">ITO产品背景图</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -115,148 +96,47 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					图文素材支持Html可视化编辑，需注意以下几点： <br/>
-					1、在可视化编辑器中上传图片后，需手动将图片尺寸改为100%<br/>
+					1、此处的图片，将在APP的页面中加以展示<br/>
 				</p>
 			</div>
-
+			
 			<%
-			WxMaterialArticle materialArticle = (WxMaterialArticle)request.getAttribute("materialArticle");
+				ItoProductBg productBg = (ItoProductBg)request.getAttribute("productBg");
 			%>
 
-			<form id="validate" action="<s:url value='./saveMaterialArticle'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveProductBg'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑<%=displayMaterialType(materialArticle.getMaterialType()) %>
+							<i class="icon-bubble4"></i>编辑产品背景图
 						</h6>
 					</div>
 					<div class="panel-body">
 						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">素材类型: <span class="mandatory">*</span></label>
-							
+							<label class="col-sm-2 control-label text-right">背景图名称:
+							</label>
 							<div class="col-sm-3">
+			                    <form:hidden path="productBg.id"/>
 								<label class="control-label">
-									<%=displayMaterialType(materialArticle.getMaterialType()) %>
-									<form:hidden path="materialArticle.id"/>
+									<%=request.getAttribute("productBgName")%>
 								</label>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory"></span></label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									<%
-									List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-									if(commandList==null){%>
-										暂无关联
-									<%}else{
-										for(WxCommand command: commandList){%>
-										<%=displayCommandType(command.getCommandType()) %>:【<a href="./commandEdit?commandId=<%=command.getId()%>"><%=command.getCommand()%></a>】, 
-									<%}
-									}%>
-								</label>
-							</div>
-						</div>
-						
-						<%if(materialArticle.getMaterialType()==1){//图文素材 %>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文标题: <span class="mandatory">*</span></label>
-							
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="title" id="title" value="${materialArticle.title}"/>
-							</div>
-						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文短标题: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">封面图片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="shortTitle" id="shortTitle" value="${materialArticle.shortTitle}"/>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文封面图:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<!-- 
-								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
-								<img src="http://www.jinwanr.com.cn/staticFile/image/20140306/medium/100012_bb6d4f45aacd9b97a91063cda17cd3b3.jpg" width="160px"/>
-								-->
-								<a href="${materialArticle.coverImageUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
+								<a href="${productBg.coverPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${productBg.coverPicUrl}" width="200px" />
 								</a>
-								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
+								<input id="cover-image-url" type="hidden" name="coverPicUrl" value="${productBg.coverPicUrl}"/>
 								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
-						</div>
-
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文内容概要: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea name="shortContent" rows="6" cols="5" class="elastic form-control" placeholder="上限100字">${materialArticle.shortContent}</textarea>
-								</div>
-							</div>
-						</div>
-						 
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文内容详情: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea class="ckeditor" name="content" id="content">
-										${materialArticle.content}
-									</textarea>
-								</div>
-							</div>
-						</div>
-						
-						<%if(materialArticle!=null&&materialArticle.getId()!=null){%>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文链接: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									<%
-									String meterialLink = ArticleLinkUtil.getArticleLink(materialArticle.getId());%>
-									<%=meterialLink%>
-									<a href="<%=meterialLink%>" target="_blank">预览</a>
-								</label>
-							</div>
-						</div>
-						<%}%>
-						
-						<%}else{//文本素材 %>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本内容: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea name="textReply" rows="2" cols="5" class="elastic form-control" placeholder="上限200字">${materialArticle.textReply}</textarea>
-								</div>
-							</div>
-						</div>
-						
-						<%}%>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<form:select path="materialArticle.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
-							</div>
 						</div>
 						
 						<div class="form-actions text-right">
@@ -274,8 +154,8 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
-	
+</body>
+
 	<script type="text/javascript">
 	$(document).ready(function(){
 	    $("#cover-image-file").change(function(){
@@ -304,32 +184,6 @@
 	    });
 	});
 	</script>
-	
-	<script type="text/javascript">
-	CKEDITOR.replace( 'content', {
-		toolbar :
-            [
-					['Source', 'newPage'],
-	//图片    flash    表格       水平线            表情       特殊字符        分页符
-	                ['Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-	//超链接  取消超链接 锚点
-	                ['Link','Unlink','Anchor'],
-	// 数字列表          实体列表            减小缩进    增大缩进
-	                ['NumberedList','BulletedList','-','Outdent','Indent'],
-	//左对 齐             居中对齐          右对齐          两端对齐
-	                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-	'/',
-	//加粗     斜体，     下划线      穿过线      下标字        上标字
-    ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
-	// 样式       格式      字体    字体大小 
-	                ['Styles','Format','Font','FontSize'],
-	//文本颜色     背景颜色
-	                ['TextColor','BGColor'],
-	//全屏           显示区块
-	                ['Maximize', 'ShowBlocks','-']
-             ]
-         }
-    );
-   </script>
-</body>
+
+
 </html>

@@ -46,6 +46,8 @@
 	 
 	 
 	<!-- ito dao config -->
+	<bean id="itoProductBgDao" class="com.bruce.geekway.dao.impl.ito.ItoProductBgDaoImpl">
+	</bean>
 	<bean id="itoProductDao" class="com.bruce.geekway.dao.impl.ito.ItoProductDaoImpl">
 	</bean>
 	<bean id="itoProductOrderDao" class="com.bruce.geekway.dao.impl.ito.ItoProductOrderDaoImpl">

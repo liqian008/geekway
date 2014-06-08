@@ -110,25 +110,9 @@ public class GeekwaySubscribedMaterialController extends BaseController {
 		if (subscribedMaterial != null && subscribedMaterial.getId() != null && subscribedMaterial.getId()>0) {//更新素材内容操作
 			result = wxMaterialArticleService.updateById(subscribedMaterial);
 		} else {//新增素材操作
+			subscribedMaterial.setMaterialType((short) 1);//关注类的素材均为图文素材
 			subscribedMaterial.setCreateTime(currentTime);
 			result = wxMaterialArticleService.save(subscribedMaterial);
-			
-//			String command = ConstConfig.RE_SUBSCRIBE;//默认为重复关注
-//			if(subscribedMaterial.getSubscribeStatus()==1){//用户首次关注
-//				command = ConstConfig.NEW_SUBSCRIBE;
-//			}
-			
-			//查询相应command是否存在，不存在则创建
-//			WxCommand commandBean = wxCommandService.loadOrSave((short) 3, command);
-//			if(commandBean!=null){
-//				//插入中间表记录
-//				WxCommandMaterial commandMaterial = new WxCommandMaterial();
-//				commandMaterial.setCommandId(commandBean.getId());
-//				commandMaterial.setMaterialId(subscribedMaterial.getId());
-//				commandMaterial.setCreateTime(currentTime);
-//				commandMaterial.setTopTime(currentTime);
-//				wxCommandMaterialService.save(commandMaterial);
-//			}
 		}
 		model.addAttribute("redirectUrl", "./subscribedMaterialList");
 		return "forward:/home/operationRedirect";

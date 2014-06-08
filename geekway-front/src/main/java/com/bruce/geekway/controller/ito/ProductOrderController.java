@@ -41,31 +41,39 @@ public class ProductOrderController {
 	@Autowired
 	private IItoSkuService itoSkuService;
 	
-//	/**
-//	 * 产品详情
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequestMapping(value = "/testPostOrder.json")
-//	public ModelAndView testPostOrder() {
-//		
-//		ItoProductOrder itoProductOrder  = new ItoProductOrder();
-//		itoProductOrder.setProductId(11);
-//		itoProductOrder.setTitle("商品名称");
-//		itoProductOrder.setDescription("商品描述");
-//		itoProductOrder.setSkuId(1);
-//		itoProductOrder.setSkuPropertiesName("");
-//		
-//		itoProductOrder.setPrice(1000d);
-//		itoProductOrder.setPostFee(20d);
-//		itoProductOrder.setNum(2);
-//		itoProductOrder.setTotalPrice(2000d);
-//		itoProductOrder.setPayType((short) 1);
-//		
-//		Map<String, Object> dataMap = new HashMap<String, Object>();
-//		dataMap.put("productOrder", itoProductOrder);
-//		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
-//	}
+	/**
+	 * 产品详情
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/testPostOrder.json")
+	public ModelAndView testPostOrder() {
+		
+		ItoProductOrder itoProductOrder  = new ItoProductOrder();
+		itoProductOrder.setProductId(11);
+		itoProductOrder.setTitle("商品名称");
+		itoProductOrder.setDescription("商品描述");
+		itoProductOrder.setSkuId(1);
+		itoProductOrder.setSkuPropertiesName("");
+		
+		itoProductOrder.setPrice(1000d);
+		itoProductOrder.setPostFee(20d);
+		itoProductOrder.setNum(2);
+		itoProductOrder.setTotalPrice(2000d);
+		itoProductOrder.setPayType((short) 1);
+		
+		
+		itoProductOrder.setPostAddress("收件人地址");
+		itoProductOrder.setPostMobile("收件人电话");
+		itoProductOrder.setPostName("收件人姓名");
+		itoProductOrder.setPostCode("邮编");
+		itoProductOrder.setPostEmail("Email");
+		
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("productOrder", itoProductOrder);
+		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+	}
 	
 	/**
 	 * 产品详情
@@ -93,6 +101,7 @@ public class ProductOrderController {
 		//检查请求合法性
 		boolean validRequest = true;
 		if(orderJson!=null&&validRequest){
+			System.out.println("=======orderJson========="+orderJson);
 			ItoProductOrder order = checkOrder(orderJson);//检查交易参数的合法性
 			if(order!=null){
 				//将新订单的支付状态初始化为未支付
@@ -100,25 +109,25 @@ public class ProductOrderController {
 				
 				//判断支付类型
 				if(order.getPayType()==ConstIto.PAYTYPE_ALIPAY){//支付宝流程，调用支付宝生成二维码
-					//生成预备订单
-					int result = itoProductOrderService.save(order);
-					if(result>0){
+//					//生成预备订单
+//					int result = itoProductOrderService.save(order);
+//					if(result>0){
 						
-						ItoSku orderSku = itoSkuService.loadById(order.getSkuId());
-						if(orderSku!=null){
-							//根据订单信息，动态生成alipay的二维码订单
-							String alipayQrcodeUrl;
-							try {
-								alipayQrcodeUrl = AlipayUtil.buildAlipayQrCode(order, orderSku);
-							} catch (Exception e) {
-								throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
-							}
-							Map<String, Object> dataMap = new HashMap<String, Object>();
-							dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
-							dataMap.put("payType", ConstIto.PAYTYPE_ALIPAY);
-							return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+					ItoSku orderSku = itoSkuService.loadById(order.getSkuId());
+					if(orderSku!=null){
+						//根据订单信息，返回alipay的二维码订单
+						String alipayQrcodeUrl;
+						try {
+							alipayQrcodeUrl = orderSku.getAlipaySkuUrl() ;//TODO动态二维码 AlipayUtil.buildAlipayQrCode(order, orderSku);
+						} catch (Exception e) {
+							throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
 						}
+						Map<String, Object> dataMap = new HashMap<String, Object>();
+						dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
+						dataMap.put("payType", ConstIto.PAYTYPE_ALIPAY);
+						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 					}
+//					}
 				}else if(order.getPayType()==ConstIto.PAYTYPE_SELF){//pad上进行到付
 					//检查邮寄信息
 					checkOrderPostInfo(order);
@@ -136,7 +145,6 @@ public class ProductOrderController {
 		}
 		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
 	}
-	
 	
 
 	/**
@@ -202,6 +210,9 @@ public class ProductOrderController {
 			}
 			if(StringUtils.isBlank(postOrder.getPostMobile())){//收货电话未填写
 				throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_POST_MOBILE_ERROR);
+			}
+			if(StringUtils.isBlank(postOrder.getPostEmail())){//收货人email未填写
+				throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_POST_EMAIL_ERROR);
 			}
 		}
 		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);

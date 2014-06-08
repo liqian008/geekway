@@ -96,8 +96,11 @@
 	</bean> -->
 	
 	
-	
 	<!-- ito mapper config -->
+	<bean id="itoProductBgMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductBgMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	<bean id="itoProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />

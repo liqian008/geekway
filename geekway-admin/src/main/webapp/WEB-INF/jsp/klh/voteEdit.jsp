@@ -121,12 +121,12 @@
 					</div>
 					<div class="panel-body">
 						
-						<form:hidden path="vote.id"/>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">起始时间: <span class="mandatory">*</span></label>
 							<div class="col-sm-3">
 								<input type="text" class="form-control" name="startTime" id="startTime" value="${vote.startTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
+								<form:hidden path="vote.id"/>
 							</div>
 						</div>
 						
