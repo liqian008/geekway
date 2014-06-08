@@ -7,6 +7,13 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
+<%!String displayMaterialType(short materialType){
+	if(1==materialType){
+		return "图文素材";
+	}
+	return "文本素材";
+} %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -116,16 +123,24 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑图文内容
+							<i class="icon-bubble4"></i>编辑<%=displayMaterialType(materialArticle.getMaterialType()) %>
 						</h6>
 					</div>
 					<div class="panel-body">
 						
+						<form:hidden path="materialArticle.id"/>
 						
 						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">素材类型: <span class="mandatory">*</span></label>
 							
-							<form:hidden path="materialArticle.id"/>
+							<div class="col-sm-3">
+								<label class="control-label">
+									<%=displayMaterialType(materialArticle.getMaterialType()) %>
+								</label>
+							</div>
+						</div>
 						
+						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory"></span></label>
 							<div class="col-sm-6">
 								<label class="control-label">
@@ -142,6 +157,7 @@
 							</div>
 						</div>
 						
+						<%if(materialArticle.getMaterialType()==1){//图文素材 %>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图文标题: <span class="mandatory">*</span></label>
 							
@@ -179,7 +195,7 @@
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
-									<textarea name="shortContent" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${materialArticle.shortContent}</textarea>
+									<textarea name="shortContent" rows="6" cols="5" class="elastic form-control" placeholder="上限100字">${materialArticle.shortContent}</textarea>
 								</div>
 							</div>
 						</div>
@@ -202,10 +218,26 @@
 							</label>
 							<div class="col-sm-6">
 								<label class="control-label">
-									<%=ArticleLinkUtil.getArticleLink(materialArticle.getId())%>
+									<%
+									String meterialLink = ArticleLinkUtil.getArticleLink(materialArticle.getId());%>
+									<%=meterialLink%>
+									<a href="<%=meterialLink%>" target="_blank">预览</a>
 								</label>
 							</div>
 						</div>
+						<%}%>
+						
+						<%}else{//文本素材 %>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">文本内容: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea name="textReply" rows="2" cols="5" class="elastic form-control" placeholder="上限200字">${materialArticle.textReply}</textarea>
+								</div>
+							</div>
+						</div>
+						
 						<%}%>
 						
 						

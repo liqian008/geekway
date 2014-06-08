@@ -43,10 +43,13 @@ public abstract class AbstractProcessor implements Processor{
         	EventRequest eventRequest = (EventRequest) request;
         	//获取具体事件类型
         	WxEventTypeEnum eventType = ((EventRequest)request).getEvent();
-        	if(WxEventTypeEnum.SUBSCRIBE.equals(eventType)){//订阅事件
-        		//订阅事件
-            	return processSubscribeEventRequest(eventRequest);
-        	}if(WxEventTypeEnum.UNSUBSCRIBE.equals(eventType)){//订阅事件
+        	if(WxEventTypeEnum.SUBSCRIBE.equals(eventType)){//新订阅事件
+        		//全新关注事件
+            	return processFirstSubscribeEventRequest(eventRequest);
+        	}if(WxEventTypeEnum.RESUBSCRIBE.equals(eventType)){//重复订阅事件(此消息类型是自行构造的，非原生系统中给出的)
+        		//重复关注事件
+            	return processRepeatSubscribeEventRequest(eventRequest);
+        	}else if(WxEventTypeEnum.UNSUBSCRIBE.equals(eventType)){//退订事件
         		//退订事件
             	return processUnsubscribeEventRequest(eventRequest);
         	}else if(WxEventTypeEnum.CLICK.equals(eventType)){//点击事件
@@ -80,7 +83,21 @@ public abstract class AbstractProcessor implements Processor{
 		return null;
 	}
 	
-	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
+	/**
+	 * 用户首次关注
+	 * @param request
+	 * @return
+	 */
+	protected BaseResponse processFirstSubscribeEventRequest(EventRequest request) {
+		return null;
+	}
+	
+	/**
+	 * 用户重复关注
+	 * @param request
+	 * @return
+	 */
+	protected BaseResponse processRepeatSubscribeEventRequest(EventRequest request) {
 		return null;
 	}
 	
@@ -138,12 +155,21 @@ public abstract class AbstractProcessor implements Processor{
         //交换fromUserName和toUserName
         return newsReply(fromUserName, toUserName, materialArticleList);
     }
-
+	
+	/**
+	 * 
+	 * @param toUserName
+	 * @param fromUserName
+	 * @param materialArticleList
+	 * @return
+	 */
 	private static NewsResponse newsReply(String toUserName, String fromUserName, List<WxMaterialArticle> materialArticleList){
 		if(materialArticleList!=null&&materialArticleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
 			for(WxMaterialArticle article: materialArticleList){
-				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(article.getId()));
+				if(article.getMaterialType()!=null&&article.getMaterialType()==1){//过滤纯文本素材，保留图文素材
+					newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(article.getId()));
+				}
 			}
 			return newsResponse;
 		}

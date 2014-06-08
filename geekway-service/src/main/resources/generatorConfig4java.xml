@@ -30,9 +30,11 @@
 		
 
 		<!-- geekway config -->
+
 		
-		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
 		<!--
+		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
+		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
 		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
 		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
 		<table schema="wx" tableName="wx_material_news" domainObjectName="WxMaterialNews"/>
@@ -55,9 +57,9 @@
 		 -->
 		 
 		<!-- ito config  -->
+		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
 		<!--
 		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
-		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
 		<table schema="wx" tableName="ito_product" domainObjectName="ItoProduct"/> 
 		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>
 		<table schema="wx" tableName="ito_product_sku_value" domainObjectName="ItoProductSkuValue"/>

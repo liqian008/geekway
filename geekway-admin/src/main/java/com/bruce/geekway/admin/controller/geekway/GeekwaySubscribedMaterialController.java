@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.baseAdmin.controller.BaseController;
-import com.bruce.geekway.constant.ConstConfig;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCommandMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
@@ -113,13 +113,13 @@ public class GeekwaySubscribedMaterialController extends BaseController {
 			subscribedMaterial.setCreateTime(currentTime);
 			result = wxMaterialArticleService.save(subscribedMaterial);
 			
-			String command = ConstConfig.RE_SUBSCRIBE;//默认为重复关注
-			if(subscribedMaterial.getSubscribeStatus()==1){//用户首次关注
-				command = ConstConfig.NEW_SUBSCRIBE;
-			}
+//			String command = ConstConfig.RE_SUBSCRIBE;//默认为重复关注
+//			if(subscribedMaterial.getSubscribeStatus()==1){//用户首次关注
+//				command = ConstConfig.NEW_SUBSCRIBE;
+//			}
 			
 			//查询相应command是否存在，不存在则创建
-			WxCommand commandBean = wxCommandService.loadOrSave((short) 3, command);
+//			WxCommand commandBean = wxCommandService.loadOrSave((short) 3, command);
 //			if(commandBean!=null){
 //				//插入中间表记录
 //				WxCommandMaterial commandMaterial = new WxCommandMaterial();

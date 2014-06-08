@@ -8,6 +8,14 @@
 <%@ include file="../inc/include_tag.jsp" %>
 
 
+<%!String displayMaterialType(short materialType){
+	if(1==materialType){
+		return "图文素材";
+	}
+	return "文本素材";
+} %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,10 +124,21 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>添加素材
+							<i class="icon-bubble4"></i>添加<%=displayMaterialType(materialArticle.getMaterialType()) %>
 						</h6>
 					</div>
 					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">素材类型: <span class="mandatory">*</span></label>
+							
+							<div class="col-sm-3">
+								<label class="control-label">
+									<form:hidden path="materialArticle.materialType"/>
+									<%=displayMaterialType(materialArticle.getMaterialType()) %>
+								</label>
+							</div>
+						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory">*</span></label>
@@ -128,14 +147,16 @@
 								<input type="text" class="form-control" name="command" id="command" value=""/>
 								<div class="checkbox checkbox-info">
 									<label>
-										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="1"/>文本关键词
-										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="2"/>菜单关键词
+										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="0"/>文本关键词
+										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="1"/>菜单关键词
+										<!-- <input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="2"/>用户首次关注
+										<input class="styled" type="checkbox" name="commandTypes" id="commandTypes" value="3"/>用户重复关注 -->
 									</label>
 								</div>
 							</div>
 						</div>
 						
-						
+						<%if(materialArticle.getMaterialType()==1){//图文素材 %>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图文标题: <span class="mandatory">*</span></label>
 							
@@ -190,16 +211,18 @@
 							</div>
 						</div>
 						
-						<%if(materialArticle!=null&&materialArticle.getId()!=null){%>
+						<%}else{//文本素材 %>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文链接: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">文本内容: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="" value=""/>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea name="textReply" rows="6" cols="5" class="elastic form-control" placeholder="上限200字">${materialArticle.textReply}</textarea>
+								</div>
 							</div>
 						</div>
-						<%}%>
 						
+						<%}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>

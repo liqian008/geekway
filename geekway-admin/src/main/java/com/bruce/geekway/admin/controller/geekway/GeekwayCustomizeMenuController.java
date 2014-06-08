@@ -119,9 +119,9 @@ public class GeekwayCustomizeMenuController {
 
 	
 	@RequestMapping("/delCustomizeMenu")
-	public String delCustomizeMenu(Model model,  int menuId) {
+	public String delCustomizeMenu(Model model,  int customizeMenuId) {
 		//删除menu实体
-		wxCustomizeMenuService.deleteById(menuId);
+		wxCustomizeMenuService.deleteById(customizeMenuId);
 		
 		model.addAttribute("redirectUrl", "./customizeMenuList");
 		return "forward:/home/operationRedirect";

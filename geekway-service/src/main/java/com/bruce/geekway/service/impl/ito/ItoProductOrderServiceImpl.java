@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstIto;
 import com.bruce.geekway.dao.ito.IItoProductOrderDao;
 import com.bruce.geekway.model.ItoProductOrder;
 import com.bruce.geekway.service.ito.IItoProductOrderService;
@@ -49,6 +50,23 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 	public List<ItoProductOrder> queryAll() {
 		return itoProductOrderDao.queryAll();
 	}
+	
+	/**
+	 * 查询来自支付宝的订单列表
+	 * @return
+	 */
+	public List<ItoProductOrder> queryAlipayOrderList(){
+		return itoProductOrderDao.queryOrderListByPayType(ConstIto.PAYTYPE_ALIPAY);
+	}
+	
+	/**
+	 * 查询来自线下支付的订单列表
+	 * @return
+	 */
+	public List<ItoProductOrder> querySelfOrderList(){
+		return itoProductOrderDao.queryOrderListByPayType(ConstIto.PAYTYPE_SELF);
+	}
+	
 	
 	@Override
 	public ItoProductOrder loadByOrderSn(String orderSn) {

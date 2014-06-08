@@ -1,10 +1,26 @@
 package com.bruce.geekway.service.ito;
 
+import java.util.List;
+
 import com.bruce.geekway.model.ItoProductOrder;
 import com.bruce.geekway.service.IBaseService;
 
 public interface IItoProductOrderService extends IBaseService<ItoProductOrder, Integer>{
 
+	
+	/**
+	 * 查询来自支付宝的订单列表
+	 * @return
+	 */
+	public List<ItoProductOrder> queryAlipayOrderList();
+	
+	/**
+	 * 查询来自线下支付的订单列表
+	 * @return
+	 */
+	public List<ItoProductOrder> querySelfOrderList();
+	
+	
 	/**
 	 * 修改订单状态
 	 * @param order
@@ -17,6 +33,12 @@ public interface IItoProductOrderService extends IBaseService<ItoProductOrder, I
 	public ItoProductOrder loadByOrderSn(String orderSn, short payType);
 
 	public String generateOrderSn();
+	
+	
+	
+	
+	
+	
 	
 //	public String signature(String orderSn);
 	

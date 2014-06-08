@@ -1,29 +1,19 @@
 package com.bruce.geekway.handler.processor;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bruce.geekway.constant.ConstConfig;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxMaterialArticle;
-//import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.model.wx.request.BaseRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
-//import com.bruce.geekway.service.IWxMaterialNewsService;
-//import com.bruce.geekway.model.WxArticle;
-//import com.bruce.geekway.model.WxEventCode;
-//import com.bruce.geekway.model.WxMaterial;
-//import com.bruce.geekway.service.IWxArticleService;
-//import com.bruce.geekway.service.IWxEventCodeService;
-//import com.bruce.geekway.service.IWxEventCodeService;
-//import com.bruce.geekway.service.IWxMaterialService;
+//import com.bruce.geekway.model.WxMaterialNews;
 
 /**
  * 根据Key值，返回DB中对应的数据
@@ -62,12 +52,10 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	protected BaseResponse processTextRequest(TextRequest request) {
 		String key = ((TextRequest) request).getContent();
 
-		WxCommand command = commandService.loadByCommandType((short) 1, key);
-		// return commandResponse(request, command);
-
+		WxCommand command = commandService.loadByCommandType((short) 0, key);
 		if (command != null) {
 			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByCommandId(command.getId());
-			return newsReply(request, materialArticleList);
+			return processResponse(request, materialArticleList);
 		}
 		return null;
 	}
@@ -79,12 +67,10 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	@Override
 	protected BaseResponse processClickEventRequest(EventRequest request) {
 		String key = ((EventRequest) request).getEventKey();
-		WxCommand command = commandService.loadByCommandType((short) 2, key);
-		// return commandResponse(request, command);
-
+		WxCommand command = commandService.loadByCommandType((short) 1, key);
 		if (command != null) {
 			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByCommandId(command.getId());
-			return newsReply(request, materialArticleList);
+			return processResponse(request, materialArticleList);
 		}
 		return null;
 	}
@@ -93,63 +79,44 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	 * 处理新关注指令
 	 */
 	@Override
-	protected BaseResponse processSubscribeEventRequest(EventRequest request) {
-		String key = ConstConfig.NEW_SUBSCRIBE;
-//		WxCommand command = commandService.loadByCommandType((short) 3, key);
-//		return commandResponse(request, command);
-		List<WxMaterialArticle> materialArticleList = materialArticleService.querySubscribedMaterials();
-		return newsReply(request, materialArticleList);
+	protected BaseResponse processFirstSubscribeEventRequest(EventRequest request) {
+		List<WxMaterialArticle> materialArticleList = materialArticleService.querySubscribedMaterials((short) 1);
+		return processResponse(request, materialArticleList);
 	}
 	
+	/**
+	 * 处理重复关注指令
+	 */
+	@Override
+	protected BaseResponse processRepeatSubscribeEventRequest(EventRequest request) {
+		List<WxMaterialArticle> materialArticleList = materialArticleService.querySubscribedMaterials((short) 2);
+		return processResponse(request, materialArticleList);
+	}
 	
 	/**
-	 * 处理消息
-	 * @param request
-	 * @param command
+	 * 素材列表的处理（1、文本、图文素材同时存在的情况下，优先使用图文）
+	 * @param materialArticleList
 	 * @return
 	 */
-	private BaseResponse commandResponse(BaseRequest request, WxCommand command) {
-		if(command!=null){
-//        	if(command.getMaterialType()==1){//文本回复
-//        		return textReply(request, command.getReplyContent());
-//        	}else if(command.getMaterialType()==2){//单图文回复
-//        		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
-//        			//取单图文的数据
-//	        		WxMaterialArticle materialArticle = materialArticleService.loadById(command.getMaterialId());
-//	        		if(materialArticle!=null){
-//	        			List<WxMaterialArticle> articleList = new ArrayList<WxMaterialArticle>();
-//	        			articleList.add(materialArticle);
-//	        			return newsReply(request, articleList);
-//	        		}
-//        		}
-//        	}else if(command.getMaterialType()==3){//多图文回复
-//        		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
-//        			//取多图文的组合数据
-//        			WxMaterialNews materialNews = materialNewsService.loadById(command.getMaterialId());
-//	        		if(materialNews!=null){
-//	        			short rowLimit = 4;
-//	        			if(materialNews.getRowLimit()!=null&&materialNews.getRowLimit()>0){
-//	        				rowLimit = materialNews.getRowLimit();
-//	        			}
-//	        			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId(), rowLimit);
-//		        		return newsReply(request, materialArticleList);
-//		        	}
-//        		}
-//        	}else if(command.getMaterialType()==4){//单图片
-//        		//do nothing
-//        	}else if(command.getMaterialType()==5){//语音
-//        		//do nothing
-//        	}
-			
-			
-			
-			
-			
-        }
+	private BaseResponse processResponse(BaseRequest request, List<WxMaterialArticle> materialArticleList) {
+		if(materialArticleList!=null&&materialArticleList.size()>0){
+			boolean onlyTextMaterial = true;
+			//检查是纯文本素材
+			for(WxMaterialArticle material: materialArticleList){
+				if(material.getMaterialType()!=null&&material.getMaterialType()==1){
+					onlyTextMaterial = false;
+					break;
+				}
+			}
+			if(onlyTextMaterial){//纯文本素材
+				return textReply(request, materialArticleList.get(0).getTextReply());
+			}else{//图文&文本素材共存
+				return newsReply(request, materialArticleList);
+			}
+		}
 		return null;
 	}
 	
-
 	
 	public IWxCommandService getCommandService() {
 		return commandService;
@@ -171,39 +138,4 @@ public class CommandCmsProcessor extends AbstractProcessor{
 		this.materialArticleService = materialArticleService;
 	}
 
-
-//	public IWxMaterialNewsService getMaterialNewsService() {
-//		return materialNewsService;
-//	}
-//
-//
-//	public void setMaterialNewsService(IWxMaterialNewsService materialNewsService) {
-//		this.materialNewsService = materialNewsService;
-//	}
-
-	
-//	public IWxEventCodeService getEventCodeService() {
-//		return eventCodeService;
-//	}
-//
-//	public void setEventCodeService(IWxEventCodeService eventCodeService) {
-//		this.eventCodeService = eventCodeService;
-//	}
-//
-//	public IWxArticleService getArticleService() {
-//		return articleService;
-//	}
-//
-//	public void setArticleService(IWxArticleService articleService) {
-//		this.articleService = articleService;
-//	}
-//
-//	
-//	public IWxMaterialService getMaterialService() {
-//		return materialService;
-//	}
-//
-//	public void setMaterialService(IWxMaterialService materialService) {
-//		this.materialService = materialService;
-//	}
 }

@@ -100,57 +100,74 @@
 				</p>
 			</div>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>订单管理
-					</h5>
+
+			<div class="tabbable page-tabs">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="javascript:void(0)">
+							<i class="icon-hammer"></i>线下支付订单管理
+						</a>
+					</li>
+					<li>
+						<a href="./orderListAlipay">
+							<i class="icon-table2"></i>支付宝订单管理
+						</a>
+					</li>
+				</ul>
+
+
+				<!-- Table view -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h5 class="panel-title">
+							<i class="icon-people"></i>订单管理
+						</h5>
+					</div>
+					<div class="datatable-media">
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th class="text-center">序号</th>
+									<th>商品</th>
+	                                <th>SKU</th>
+	                                <th>总价</th>
+	                                <th>支付类型</th>
+	                                <th>状态</th>
+	                                <th class="team-links">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+	                           	List<ItoProductOrder> orderList = (List<ItoProductOrder>)request.getAttribute("orderList");
+	                           	if(orderList!=null&&orderList.size()>0){
+	                           		int i=0;
+	                           		for(ItoProductOrder order: orderList){
+	                           			i++;
+	                           	%>
+								<tr>
+			                        <td><%=i%></td>
+			                        <td title="SN：<%=order.getOutId()%>"><%=order.getTitle()%></td>
+			                        <td  title="SN：<%=order.getOrderSn()%>"><%=order.getSkuName()%></td>
+			                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
+			                        <td><%=order.getPayType()==0?"线下支付":"支付宝"%></td>
+			                        <td title="<%=order.getPayStatus()==1?"":order.getPostSn()%>"><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
+			                        <td class='text-center'>
+			                        	<div class="table-controls">
+			                        	
+											<a href="./orderDisplay?orderSn=<%=order.getOrderSn()%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="查 看"><i class="icon-envelop"></i></a> 
+										</div>
+									</td>
+	                               </tr>
+								<%}
+	                           	} %>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th class="text-center">序号</th>
-								<th>商品</th>
-                                <th>SKU</th>
-                                <th>总价</th>
-                                <th>支付</th>
-                                <th>状态</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<ItoProductOrder> orderList = (List<ItoProductOrder>)request.getAttribute("orderList");
-                           	if(orderList!=null&&orderList.size()>0){
-                           		int i=0;
-                           		for(ItoProductOrder order: orderList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td title="SN：<%=order.getOutId()%>"><%=order.getTitle()%></td>
-		                        <td  title="SN：<%=order.getOrderSn()%>"><%=order.getSkuName()%></td>
-		                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
-		                        <td><%=order.getPayStatus()==1?"到付":"支付宝"%></td>
-		                        <td title="<%=order.getPayStatus()==1?"":order.getPostSn()%>"><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        	
-										<a href="./orderEdit?orderId=<%=order.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查 看"><i class="icon-envelop"></i></a> 
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
+				<!-- /table view -->
 			</div>
-			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

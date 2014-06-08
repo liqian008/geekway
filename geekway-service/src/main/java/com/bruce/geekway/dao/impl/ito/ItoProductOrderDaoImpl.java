@@ -50,6 +50,14 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
         return null;
     }
     
+    /**
+     * 查询指定类型的订单
+     */
+    public List<ItoProductOrder> queryOrderListByPayType(short payType){
+    	ItoProductOrderCriteria criteria = new ItoProductOrderCriteria();
+   		criteria.createCriteria().andPayTypeEqualTo(payType);
+   		return itoProductOrderMapper.selectByExample(criteria);
+    }
     
 
     @Override

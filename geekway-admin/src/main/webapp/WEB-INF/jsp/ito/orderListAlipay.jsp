@@ -1,28 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxCommand"%>
+<%@page import="com.bruce.geekway.model.ItoProductOrder"%>
 <%@page import="java.text.SimpleDateFormat"%>
-
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "菜单关键词";
-	}else if(0==commandType){
-		return "文本关键词";
-	}
-	return "类型错误";
-} %>
-
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null){
-		if(0==materialType){ 
-			return "文本";
-		}else if(1==materialType){
-			return "图文";
-		}
-	}
-	return "其他类型";
-} %>
+<%@page import="com.bruce.geekway.utils.*"%>
 
 
 
@@ -32,7 +13,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>ITO管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -90,7 +71,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词管理
+						订单管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -101,8 +82,8 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
-					<li class="active">关键词管理</li>
+					<li><a href="javascript:void(0)">首页</a></li>
+					<li class="active">订单管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -115,65 +96,80 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					本功能支持3种类型的接入方式： <br/>
-					1、发送文本内容<br/>
-					2、菜单点击（通常应用于有自定义菜单的公众账户）<br/>
-					3、用户关注（仅一条）
+					1、xxxxxx<br/>
 				</p>
 			</div>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>关键词管理
-					</h5>
-					<!-- <a href="./commandAddSubscribeEntry"><span class="label label-danger pull-right">增加关注关键词</span></a>
-					<a href="./commandAddMenuEntry"><span class="label label-primary pull-right">增加菜单接入关键词</span></a>
-					<a href="./commandAddTextEntry"><span class="label label-info pull-right">增加文本接入关键词</span></a> -->
+
+			<div class="tabbable page-tabs">
+				<ul class="nav nav-tabs">
+					<li>
+						<a href="./orderListSelf">
+							<i class="icon-hammer"></i>线下支付订单管理
+						</a>
+					</li>
+					<li class="active">
+						<a href="javascript:void(0)">
+							<i class="icon-table2"></i>支付宝订单管理
+						</a>
+					</li>
+				</ul>
+
+
+				<!-- Table view -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h5 class="panel-title">
+							<i class="icon-people"></i>订单管理
+						</h5>
+					</div>
+					<div class="datatable-media">
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th class="text-center">序号</th>
+									<th>商品</th>
+	                                <th>SKU</th>
+	                                <th>总价</th>
+	                                <th>类型</th>
+	                                <th>状态</th>
+	                                <th>物流</th>
+	                                <th class="team-links">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+	                           	List<ItoProductOrder> orderList = (List<ItoProductOrder>)request.getAttribute("orderList");
+	                           	if(orderList!=null&&orderList.size()>0){
+	                           		int i=0;
+	                           		for(ItoProductOrder order: orderList){
+	                           			i++;
+	                           	%>
+								<tr>
+			                        <td><%=i%></td>
+			                        <td title="SN：<%=order.getOrderSn()%>"><%=order.getTitle()%></td>
+			                        <td><%=order.getSkuName()%></td>
+			                        <td><%=order.getTotalPrice()%>元</td>
+			                        <td>支付宝</td>
+			                        <td><%=order.getPayStatus()==10?"已下单":"已支付"%></td>
+			                        <td>未发货</td>
+			                        <td class='text-center'>
+			                        	<div class="table-controls">
+			                        	
+											<a href="./orderDisplay?orderSn=<%=order.getOrderSn()%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="查 看"><i class="icon-envelop"></i></a> 
+										</div>
+									</td>
+	                               </tr>
+								<%}
+	                           	} %>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>类型</th>
-                                <th>关键词</th>
-                                <th>状态</th>
-                                <th class="team-links">操 作</th> 
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-                           	if(commandList!=null&&commandList.size()>0){
-                           		int i=0;
-                           		for(WxCommand command: commandList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=displayCommandType(command.getCommandType())%></td>
-		                        <td><%=command.getCommand()%></td>
-		                        <td>状态</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="./commandEdit?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<a href="./delCommand?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
+				<!-- /table view -->
 			</div>
-			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

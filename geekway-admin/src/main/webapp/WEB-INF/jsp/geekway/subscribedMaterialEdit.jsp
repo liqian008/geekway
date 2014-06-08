@@ -130,7 +130,7 @@
 							<div class="col-sm-4">
 							<form:select path="subscribedMaterial.subscribeStatus" class="select-liquid">
 									<form:option value="1"  label="用户首次关注时有效"/>
-									<!-- <form:option value="2"  label="用户重复关注时有效"/> -->
+									<form:option value="2"  label="用户重复关注时有效"/>
 								</form:select>
 							</div>
 						</div>
@@ -195,7 +195,12 @@
 							</label>
 							<div class="col-sm-6">
 								<label class="control-label">
-									<%=ArticleLinkUtil.getArticleLink(subscribedMaterial.getId())%>
+									<label class="control-label">
+									<%
+									String meterialLink = ArticleLinkUtil.getArticleLink(subscribedMaterial.getId());%>
+									<%=meterialLink%>
+									<a href="<%=meterialLink%>" target="_blank">预览</a>
+								</label>
 								</label>
 							</div>
 						</div>

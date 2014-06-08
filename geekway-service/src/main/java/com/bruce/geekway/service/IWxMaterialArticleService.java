@@ -15,8 +15,16 @@ public interface IWxMaterialArticleService extends IBaseService<WxMaterialArticl
 	/*查询commandId对应的素材列表*/
 	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
 	
-	/*查询关注时素材列表*/
 	public List<WxMaterialArticle> querySubscribedMaterials();
+
+	/**
+	 * 根据状态查询关注素材
+	 * @param subscribeStatus
+	 * @return
+	 */
+	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus);
+	
+	
 	
 	/*查询普通的素材列表*/
 	public List<WxMaterialArticle> queryGeneralMaterials();

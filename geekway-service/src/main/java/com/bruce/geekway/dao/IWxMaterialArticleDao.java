@@ -16,11 +16,16 @@ public interface IWxMaterialArticleDao extends IBaseDao<WxMaterialArticle, Integ
 	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
 	
 	
-	/*查询关注时素材列表*/
-	public List<WxMaterialArticle> querySubscribedMaterials();
+	
 	
 	/*查询普通的素材列表*/
 	public List<WxMaterialArticle> queryGeneralMaterials();
+	
+	/*查询关注时素材列表*/
+	public List<WxMaterialArticle> querySubscribedMaterials();
+	
+	/*查询关注状态对应的素材列表*/
+	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus);
 	
 	
 	

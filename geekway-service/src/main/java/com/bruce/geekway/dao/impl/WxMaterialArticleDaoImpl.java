@@ -69,13 +69,7 @@ public class WxMaterialArticleDaoImpl implements IWxMaterialArticleDao, Initiali
 		return wxMaterialArticleMapper.queryMaterialArticlesByCommandId(commandId);
 	}
 	
-	/*查询关注时素材列表*/
-	public List<WxMaterialArticle> querySubscribedMaterials(){
-		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
-		criteria.createCriteria().andSubscribeStatusNotEqualTo((short) 0);
-		criteria.setOrderByClause("id desc");
-		return wxMaterialArticleMapper.selectByExample(criteria);
-	}
+	
 	
 	/*查询普通的素材列表*/
 	public List<WxMaterialArticle> queryGeneralMaterials(){
@@ -85,6 +79,22 @@ public class WxMaterialArticleDaoImpl implements IWxMaterialArticleDao, Initiali
 		return wxMaterialArticleMapper.selectByExample(criteria);
 	}
 	
+	
+	/*查询关注时素材列表*/
+	public List<WxMaterialArticle> querySubscribedMaterials(){
+		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
+		criteria.createCriteria().andSubscribeStatusNotEqualTo((short) 0);
+		criteria.setOrderByClause("id desc");
+		return wxMaterialArticleMapper.selectByExample(criteria);
+	}
+	
+	/*查询关注状态对应的素材列表*/
+	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus){
+		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
+		criteria.createCriteria().andSubscribeStatusEqualTo(subscribeStatus);
+		criteria.setOrderByClause("id desc");
+		return wxMaterialArticleMapper.selectByExample(criteria);
+	}
     
 	@Override
 	public void afterPropertiesSet() throws Exception {

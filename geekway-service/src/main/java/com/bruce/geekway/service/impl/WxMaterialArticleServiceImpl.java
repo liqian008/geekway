@@ -72,6 +72,12 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService{
 		return wxMaterialArticleDao.querySubscribedMaterials();
 	}
 	
+	/*查询关注状态对应的素材列表*/
+	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus){
+		return wxMaterialArticleDao.querySubscribedMaterials(subscribeStatus);
+	}
+	
+	
 	/*查询普通的素材列表*/
 	public List<WxMaterialArticle> queryGeneralMaterials(){
 		return wxMaterialArticleDao.queryGeneralMaterials();

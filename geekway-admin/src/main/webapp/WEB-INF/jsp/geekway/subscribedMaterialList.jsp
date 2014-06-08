@@ -137,7 +137,7 @@
 		                        <td>
 		                        	<%=article.getShortContent()%>
 		                        </td>
-		                        <td><%=article.getSubscribeStatus()==1?"首次关注":"重复关注"%></td>
+		                        <td><%=article.getSubscribeStatus()==1?"首次关注":"重复关注"%></td> 
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        	

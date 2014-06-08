@@ -8,13 +8,19 @@
 
 <%!String displayCommandType(short commandType){
 	if(1==commandType){
-		return "文本请求关键词";
-	}else if(2==commandType){
-		return "菜单点击关键词";
-	}else if(3==commandType){
-		return "用户关注关键词";
+		return "菜单关键词";
+	}else if(0==commandType){
+		return "文本关键词";
 	}
-	return "类型错误";
+	return "其他关键词";
+} %>
+
+
+<%!String displayMaterialType(short materialType){
+	if(1==materialType){
+		return "图文素材";
+	}
+	return "文本素材";
 } %>
 
 
@@ -152,7 +158,7 @@
 							<label class="col-sm-2 control-label text-right">接入关键词:
 							</label>
 							<div class="col-sm-3">
-								<%if(command!=null&&command.getCommandType()!=3) {%>
+								<%if(command!=null&&command.getCommandType()<2) {//文本接入&菜单接入%>
 									<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
 								<%}else{ %>
 									<label class="control-label">
@@ -197,9 +203,9 @@
 						<thead>
 							<tr>
 								<th>ID</th>
+                                <th>类型</th>
                                 <th>封面</th>
-                                <th>标题</th>
-                                <th>排序</th>
+                                <th>内容</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
@@ -213,13 +219,19 @@
                            	%>
 							<tr>
 		                        <td><%=material.getId()%></td>
-		                        <td>
+		                        <td><%=displayMaterialType(material.getMaterialType())%></td>
+		                       	<td>
+		                        	<%if(material.getMaterialType()==1){%>
 	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
 		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
 		                        	</a>
+		                        	<%}else{ %>
+		                        		无
+		                        	<%} %>
 		                        </td>
-		                        <td><%=material.getTitle()%></td>
-		                        <td><%=material.getTitle()%></td>
+		                        <td>
+		                        	<%=material.getMaterialType()==1?material.getShortContent():material.getTextReply()%>
+		                        </td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        		<a href="./materialArticleEdit?articleId=<%=material.getId()%>"  

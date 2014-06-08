@@ -5,6 +5,13 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
+<%!String displayMaterialType(short materialType){
+	if(1==materialType){
+		return "图文素材";
+	}
+	return "文本素材";
+} %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -106,13 +113,15 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>图文素材管理
 					</h5>
-					<a href="./materialArticleAdd"><span class="label label-info pull-right">新增素材</span></a>
+					<a href="./materialArticleAdd"><span class="label label-danger pull-right">新增图文素材</span></a>
+					<a href="./materialTextAdd"><span class="label label-info pull-right">新增文本素材</span></a>
 				</div> 
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>序号</th>
+                                <th>类型</th>
                                 <th>封面</th>
                                 <th>内容</th>
                                 <th>状态</th>
@@ -124,27 +133,32 @@
                            	List<WxMaterialArticle> articleList = (List<WxMaterialArticle>)request.getAttribute("materialArticleList");
                            	if(articleList!=null&&articleList.size()>0){
                            		int i=0;
-                           		for(WxMaterialArticle article: articleList){
+                           		for(WxMaterialArticle material: articleList){
                            			i++;
                            	%>
 							<tr>
 		                        <td><%=i%></td>
+		                        <td><%=displayMaterialType(material.getMaterialType())%></td> 
 		                        <td>
-	                        		<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
+		                        	<%if(material.getMaterialType()==1){%>
+	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
 		                        	</a>
+		                        	<%}else{ %>
+		                        		无
+		                        	<%} %>
 		                        </td>
 		                        <td>
-		                        	<%=article.getShortContent()%>
+		                        	<%=material.getMaterialType()==1?material.getShortContent():material.getTextReply()%>
 		                        </td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        	
-										<a href="./materialArticleEdit?articleId=<%=article.getId()%>"
+										<a href="./materialArticleEdit?articleId=<%=material.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./delMaterialArticle?articleId=<%=article.getId()%>" 
+										<a href="./delMaterialArticle?articleId=<%=material.getId()%>" 
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="删除"><i class="icon-remove3"></i></a>
 									</div>

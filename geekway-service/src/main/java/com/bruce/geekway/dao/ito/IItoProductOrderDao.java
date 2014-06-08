@@ -1,11 +1,14 @@
 package com.bruce.geekway.dao.ito;
 
+import java.util.List;
+
 import com.bruce.geekway.dao.IBaseDao;
 import com.bruce.geekway.model.ItoProductOrder;
 
 public interface IItoProductOrderDao extends IBaseDao<ItoProductOrder, Integer> {
 
 	
+	public List<ItoProductOrder> queryOrderListByPayType(short payType);
 
 	/**
 	 * 根据订单号查询订单
@@ -22,6 +25,7 @@ public interface IItoProductOrderDao extends IBaseDao<ItoProductOrder, Integer> 
 	 * @return
 	 */
 	public ItoProductOrder loadByOrderSn(String orderSn, short payType);
+
 
 
 //	public int changeOrderStatus(ItoProductOrder order);

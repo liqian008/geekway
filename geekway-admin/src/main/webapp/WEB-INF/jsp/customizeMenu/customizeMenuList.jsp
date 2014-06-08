@@ -173,7 +173,7 @@ public String displayMenuName(String name, int parentId){
 											<a href="./customizeMenuEdit?customizeMenuId=<%=customizeMenu.getId()%>"
 												class="btn btn-link btn-icon btn-xs tip" title=""
 												data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-											<a href="./delArticle?customizeMenuId=<%=customizeMenu.getId()%>"
+											<a href="./delCustomizeMenu?customizeMenuId=<%=customizeMenu.getId()%>"
 												class="btn btn-link btn-icon btn-xs tip" title=""
 												data-original-title="删除"><i class="icon-remove3"></i></a>
 										</div>

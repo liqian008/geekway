@@ -97,7 +97,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、本系统的关键词匹配策略为： 【接入代码】-> 【默认回复】，即优先匹配【接入代码管理】中的数据，如未找到，则针对消息类型使用【默认回复】的内容进行回复<br/>
+					1、本系统的关键词匹配策略为： 【关键词管理】-> 【默认回复】，即优先匹配【关键词管理】中的数据，如未找到，则针对消息类型使用【默认回复】的内容进行回复<br/>
 					2、请务必完整填写各类型消息的默认回复
 				</p>
 			</div>
@@ -116,13 +116,21 @@
 						</h6>
 					</div>
 					<div class="panel-body">
+	                    <form:hidden path="defaultReply.id"/>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">新关注用户的默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">用户新关注的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
-	                            <form:hidden path="defaultReply.id"/>
-								<textarea name="subscribeReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.subscribeReply}</textarea>
+								<textarea name="newSubscribeReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.newSubscribeReply}</textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">用户重复关注的默认回复: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-8">
+								<textarea name="reSubscribeReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.reSubscribeReply}</textarea>
 							</div>
 						</div>
 						

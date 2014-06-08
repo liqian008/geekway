@@ -11,7 +11,7 @@ import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.service.IWxMpUserService;
 
 @Service
-public class WxMpUserServiceImpl implements IWxMpUserService{
+public class WxMpUserServiceImpl implements IWxMpUserService{ 
 	
 //	@Autowired
 //	private WxUserService wxUserService;
@@ -46,28 +46,18 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 	}
 	
 	
-//	@Override
-//	public int insertOrUpdate(WxMpUser wxMpUser) {
-//		return wxMpUserDao.insertOrUpdate(wxMpUser);
-//	}
+	@Override
+	public WxMpUser loadByOpenId(String userOpenId) {
+		return wxMpUserDao.loadByOpenId(userOpenId);
+	}
 	
 	/**
 	 * 新关注用户
 	 */
 	@Override
 	public int newSubscribeUser(String userOpenId) {
-//		//TODO 放在线程中执行
-//		WxMpUser wxMpUser = new WxMpUser();
-//		wxMpUser.setOpenId(userOpenId);
-//		wxMpUser.setSyncStatus((short) 0);
-//		wxMpUser.setCreateTime(new Date());
-//		return save(wxMpUser);
-		
-		WxMpUser wxMpUser = wxMpUserDao.loadByOpenId(userOpenId);
-		if(wxMpUser!=null){//之前有记录，属于重复关注
-			//将订阅状态改为0
-			return wxMpUserDao.updateUserSubscribeStatus(userOpenId, (short) 1);
-		}else{//不为空，新关注
+		WxMpUser wxMpUser = loadByOpenId(userOpenId);
+		if(wxMpUser==null){//不为空，新关注
 			wxMpUser = new WxMpUser();
 			wxMpUser.setOpenId(userOpenId);
 			wxMpUser.setSubscribeStatus((short) 1);
@@ -75,7 +65,19 @@ public class WxMpUserServiceImpl implements IWxMpUserService{
 			wxMpUser.setCreateTime(new Date());
 			return save(wxMpUser);
 		}
+		return 0; 
 	}
+	
+	/**
+	 * 用户关注重复
+	 */
+	@Override
+	public int repeatSubscribeUser(String userOpenId) {
+		//将订阅状态改为0
+		return wxMpUserDao.updateUserSubscribeStatus(userOpenId, (short) 1);
+	}
+	
+	
 	
 	/**
 	 * 用户退订

@@ -19,6 +19,14 @@ public class WxAuthUtil {
 	
 	private static final Logger log = LoggerFactory.getLogger(WxAuthUtil.class);
 
+	/**
+	 * 验证token
+	 * @param signature
+	 * @param timestamp
+	 * @param nonce
+	 * @param echostr
+	 * @return
+	 */
 	public static boolean validateAuth(String signature, String timestamp, String nonce, String echostr) {
 		WxAuth authReq = new WxAuth();
 		authReq.setSignature(signature);
@@ -36,7 +44,8 @@ public class WxAuthUtil {
 		}
 		return true;
 	}
-
+	
+	
 	private static String getStringToHash(String timestamp, String nonce, String token) {
 		List<String> list = new ArrayList<String>();
 		list.add(timestamp);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.utils.ConfigUtil;
+import com.bruce.geekway.utils.EmojiUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
@@ -64,8 +65,10 @@ public class WxUserService extends WxBaseService {
 		// WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"),
 		// params);
 		String userinfoResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_user_info_url"), params);
-
-		WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(userinfoResult, WxUserInfoResult.class);
+		
+		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResult);
+		
+		WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
 		return wxUserinfoResult;
 	}
 

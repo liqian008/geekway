@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.baseAdmin.controller.BaseController;
-import com.bruce.geekway.constant.ConstConfig;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCommandMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
@@ -55,6 +55,7 @@ public class GeekwayMaterialArticleController extends BaseController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
+		materialArticle.setMaterialType((short) 1);//1为图文素材
 		model.addAttribute("materialArticle", materialArticle);
 		
 		return "geekway/materialArticleAdd";
@@ -72,9 +73,11 @@ public class GeekwayMaterialArticleController extends BaseController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
+		materialArticle.setMaterialType((short) 0);//0为纯文本素材
 		model.addAttribute("materialArticle", materialArticle);
 		
-		return "geekway/materialTextAdd";
+//		return "geekway/materialTextAdd";
+		return "geekway/materialArticleAdd";
 	}
 	
 

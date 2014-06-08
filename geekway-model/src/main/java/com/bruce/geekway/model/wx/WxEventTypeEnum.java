@@ -6,8 +6,10 @@ package com.bruce.geekway.model.wx;
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
 public enum WxEventTypeEnum {
-	/** 1:订阅; 2:用户未关注时，进行关注后的事件推送 */
+	/** 1:首次订阅; 2:用户首次关注时，进行关注后的事件推送 */
 	SUBSCRIBE("subscribe"),
+	/** 2:重复订阅; 2:用户重复关注时，进行关注后的事件推送 */
+	RESUBSCRIBE("resubscribe"),
 	/** 取消订阅 */
 	UNSUBSCRIBE("unsubscribe"),
 	/** 用户已关注时的事件推送 */

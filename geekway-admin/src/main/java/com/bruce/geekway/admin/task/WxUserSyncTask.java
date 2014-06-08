@@ -11,6 +11,7 @@ import com.bruce.geekway.dao.IWxMpUserDao;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.service.mp.WxUserService;
+import com.bruce.geekway.utils.EmojiUtil;
 
 @Component
 public class WxUserSyncTask implements Runnable{
@@ -35,21 +36,22 @@ public class WxUserSyncTask implements Runnable{
 					for(WxMpUser mpUser: mpUserList){
 						String userOpenId = mpUser.getOpenId();
 						WxUserInfoResult userInfoResult =  wxUserService.getUser(userOpenId);
-						
-						mpUser.setOpenId(userOpenId);
-						mpUser.setNickname(userInfoResult.getNickname());
-						mpUser.setCity(userInfoResult.getCity());
-						mpUser.setCountry(userInfoResult.getCountry());
-						mpUser.setProvince(userInfoResult.getProvince());
-						mpUser.setHeadImgUrl(userInfoResult.getHeadimgurl());
-						mpUser.setLanguage(userInfoResult.getLanguage());
-						mpUser.setSubscribeStatus(userInfoResult.getSubscribe());
-						mpUser.setSex(userInfoResult.getSex());
-						mpUser.setUpdateTime(new Date());
-						
-						mpUser.setSyncStatus((short) 1);
-						
-						int result = wxMpUserDao.updateById(mpUser);
+						//有效数据
+						if(userInfoResult!=null&&userInfoResult.getErrcode()==null){
+							mpUser.setOpenId(userOpenId);
+							mpUser.setNickname(userInfoResult.getNickname());
+							mpUser.setCity(userInfoResult.getCity());
+							mpUser.setCountry(userInfoResult.getCountry());
+							mpUser.setProvince(userInfoResult.getProvince());
+							mpUser.setHeadImgUrl(userInfoResult.getHeadimgurl());
+							mpUser.setLanguage(userInfoResult.getLanguage());
+							mpUser.setSubscribeStatus(userInfoResult.getSubscribe());
+							mpUser.setSex(userInfoResult.getSex());
+							mpUser.setUpdateTime(new Date());
+							
+							mpUser.setSyncStatus((short) 1);
+							int result = wxMpUserDao.updateById(mpUser);
+						}
 						//休息5秒，避免被微信当做恶意攻击
 						Thread.sleep(5000);
 					}

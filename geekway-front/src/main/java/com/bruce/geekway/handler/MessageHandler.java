@@ -36,7 +36,9 @@ public class MessageHandler {
 	// @Autowired
 	private List<Processor> eventClickProcessorList;
 	@Autowired
-	private List<Processor> eventSubscribeProcessorList;
+	private List<Processor> eventFirstSubscribeProcessorList;
+	@Autowired
+	private List<Processor> eventRepeatSubscribeProcessorList;
 	@Autowired
 	private List<Processor> eventUnsubscribeProcessorList;
 	@Autowired
@@ -65,9 +67,17 @@ public class MessageHandler {
 			switch (eventTypeEnum) {
 			case SUBSCRIBE: {// 订阅关注
 				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				//作为系统级操作，向用户表中写入数据（脱离processor处理系统的订阅事件）
-				mpUserService.newSubscribeUser(eventRequest.getFromUserName());
-				return processEventSubscribeRequest(eventRequest);
+				String fromOpenId = eventRequest.getFromUserName();
+				WxMpUser wxUser = mpUserService.loadByOpenId(fromOpenId);
+				if(wxUser==null){//全新用户关注
+					mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+					return processEventFirstSubscribeRequest(eventRequest);
+				}else{//之前存在，属于重复关注
+					mpUserService.repeatSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+					
+					eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
+					return processEventRepeatSubscribeRequest(eventRequest);
+				}
 			}
 			case UNSUBSCRIBE: {// 退订
 				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
@@ -161,8 +171,12 @@ public class MessageHandler {
 		return process(request, voiceProcessorList);
 	}
 
-	protected BaseResponse processEventSubscribeRequest(EventRequest request) {
-		return process(request, eventSubscribeProcessorList);
+	protected BaseResponse processEventFirstSubscribeRequest(EventRequest request) {
+		return process(request, eventFirstSubscribeProcessorList);
+	}
+	
+	protected BaseResponse processEventRepeatSubscribeRequest(EventRequest request) {
+		return process(request, eventRepeatSubscribeProcessorList);
 	}
 	
 	protected BaseResponse processEventUnsubscribeRequest(EventRequest request) {
@@ -209,12 +223,20 @@ public class MessageHandler {
 		this.eventClickProcessorList = eventClickProcessorList;
 	}
 
-	public List<Processor> getEventSubscribeProcessorList() {
-		return eventSubscribeProcessorList;
+	public List<Processor> getEventFirstSubscribeProcessorList() {
+		return eventFirstSubscribeProcessorList;
 	}
 
-	public void setEventSubscribeProcessorList(List<Processor> eventSubscribeProcessorList) {
-		this.eventSubscribeProcessorList = eventSubscribeProcessorList;
+	public void setEventFirstSubscribeProcessorList(List<Processor> eventFirstSubscribeProcessorList) {
+		this.eventFirstSubscribeProcessorList = eventFirstSubscribeProcessorList;
+	}
+
+	public List<Processor> getEventRepeatSubscribeProcessorList() {
+		return eventRepeatSubscribeProcessorList;
+	}
+
+	public void setEventRepeatSubscribeProcessorList(List<Processor> eventRepeatSubscribeProcessorList) {
+		this.eventRepeatSubscribeProcessorList = eventRepeatSubscribeProcessorList;
 	}
 
 	public List<Processor> getEventLocationProcessorList() {
