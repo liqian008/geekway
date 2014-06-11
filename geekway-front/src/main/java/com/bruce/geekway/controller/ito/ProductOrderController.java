@@ -106,40 +106,44 @@ public class ProductOrderController {
 			if(order!=null){
 				//将新订单的支付状态初始化为未支付
 				order.setPayStatus((short)0);
-				
-				//判断支付类型
-				if(order.getPayType()==ConstIto.PAYTYPE_ALIPAY){//支付宝流程，调用支付宝生成二维码
-//					//生成预备订单
-//					int result = itoProductOrderService.save(order);
-//					if(result>0){
+				ItoSku orderSku = itoSkuService.loadById(order.getSkuId());
+				if(orderSku!=null){
+					//判断支付类型
+					if(order.getPayType()==ConstIto.PAYTYPE_ALIPAY){//支付宝流程，调用支付宝生成二维码
+	//					//生成预备订单
+	//					int result = itoProductOrderService.save(order);
+	//					if(result>0){
+							
 						
-					ItoSku orderSku = itoSkuService.loadById(order.getSkuId());
-					if(orderSku!=null){
-						//根据订单信息，返回alipay的二维码订单
-						String alipayQrcodeUrl;
-						try {
-							alipayQrcodeUrl = orderSku.getAlipaySkuUrl() ;//TODO动态二维码 AlipayUtil.buildAlipayQrCode(order, orderSku);
-						} catch (Exception e) {
-							throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
+							//根据订单信息，返回alipay的二维码订单
+							String alipayQrcodeUrl;
+							try {
+								alipayQrcodeUrl = orderSku.getAlipaySkuUrl() ;//TODO动态二维码 AlipayUtil.buildAlipayQrCode(order, orderSku);
+							} catch (Exception e) {
+								throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
+							}
+							Map<String, Object> dataMap = new HashMap<String, Object>();
+							dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
+							dataMap.put("payType", ConstIto.PAYTYPE_ALIPAY);
+							dataMap.put("orderSn", order.getOrderSn());
+							return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+	//					}
+					}else if(order.getPayType()==ConstIto.PAYTYPE_SELF){//APP支付
+						//TODO 设置skuName
+						
+						//检查邮寄信息
+						checkOrderPostInfo(order);
+						//直接生成订单
+						int result = itoProductOrderService.save(order);
+						if(result>0){
+							Map<String, Object> dataMap = new HashMap<String, Object>();
+							dataMap.put("payType", ConstIto.PAYTYPE_SELF);
+							dataMap.put("orderSn", order.getOrderSn());
+							return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 						}
-						Map<String, Object> dataMap = new HashMap<String, Object>();
-						dataMap.put("payQrcodeUrl", alipayQrcodeUrl);
-						dataMap.put("payType", ConstIto.PAYTYPE_ALIPAY);
-						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+					}else{
+						throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PAYTYPE_ERROR);
 					}
-//					}
-				}else if(order.getPayType()==ConstIto.PAYTYPE_SELF){//pad上进行到付
-					//检查邮寄信息
-					checkOrderPostInfo(order);
-					//直接生成订单
-					int result = itoProductOrderService.save(order);
-					if(result>0){
-						Map<String, Object> dataMap = new HashMap<String, Object>();
-						dataMap.put("payType", ConstIto.PAYTYPE_SELF);
-						return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
-					}
-				}else{
-					throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PAYTYPE_ERROR);
 				}
 			}
 		}
@@ -214,6 +218,7 @@ public class ProductOrderController {
 			if(StringUtils.isBlank(postOrder.getPostEmail())){//收货人email未填写
 				throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_POST_EMAIL_ERROR);
 			}
+			return true;
 		}
 		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
 	}

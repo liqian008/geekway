@@ -105,7 +105,7 @@
 				<ul class="nav nav-tabs">
 					<li class="active">
 						<a href="javascript:void(0)">
-							<i class="icon-hammer"></i>线下支付订单管理
+							<i class="icon-hammer"></i>APP支付订单管理
 						</a>
 					</li>
 					<li>
@@ -128,8 +128,7 @@
 							<thead>
 								<tr>
 									<th class="text-center">序号</th>
-									<th>商品</th>
-	                                <th>SKU</th>
+									<th>商品名</th>
 	                                <th>总价</th>
 	                                <th>支付类型</th>
 	                                <th>状态</th>
@@ -146,11 +145,10 @@
 	                           	%>
 								<tr>
 			                        <td><%=i%></td>
-			                        <td title="SN：<%=order.getOutId()%>"><%=order.getTitle()%></td>
-			                        <td  title="SN：<%=order.getOrderSn()%>"><%=order.getSkuName()%></td>
+			                        <td><%=order.getTitle()%></td>
 			                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
-			                        <td><%=order.getPayType()==0?"线下支付":"支付宝"%></td>
-			                        <td title="<%=order.getPayStatus()==1?"":order.getPostSn()%>"><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
+			                        <td>APP支付</td>
+			                        <td><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
 			                        <td class='text-center'>
 			                        	<div class="table-controls">
 			                        	

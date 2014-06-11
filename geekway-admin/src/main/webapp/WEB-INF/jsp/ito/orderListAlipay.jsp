@@ -105,7 +105,7 @@
 				<ul class="nav nav-tabs">
 					<li>
 						<a href="./orderListSelf">
-							<i class="icon-hammer"></i>线下支付订单管理
+							<i class="icon-hammer"></i>APP支付订单管理
 						</a>
 					</li>
 					<li class="active">
@@ -130,7 +130,7 @@
 									<th class="text-center">序号</th>
 									<th>商品</th>
 	                                <th>SKU</th>
-	                                <th>总价</th>
+	                                <th>价格</th>
 	                                <th>类型</th>
 	                                <th>状态</th>
 	                                <th>物流</th>

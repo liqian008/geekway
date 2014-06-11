@@ -77,8 +77,8 @@ public class AlipayOrderController {
 			params.put(name, valueStr);
 		}
 		System.out.println("=========alipayReturn=====2====");
-		if(true){//验证成功
-//		if(AlipayNotify.verify(params)){//验证成功
+//		if(true){//验证成功
+		if(AlipayNotify.verify(params)){//验证成功
 			System.out.println("=========alipayReturn=====3====");
 			if(alipayReturnData!=null){
 				System.out.println("=========alipayReturn=====4====");
@@ -165,8 +165,8 @@ public class AlipayOrderController {
 		//参数格式请参见技术文档7.2章节
 		System.out.println("=========alipayNotify=====2====");
 		
-		if(true){//验证成功
-//		if(AlipayNotify.verify(params)){//验证成功
+//		if(true){//验证成功
+		if(AlipayNotify.verify(params)){//验证成功
 				System.out.println("=========alipayNotify=====3====");
 			AlipayNotifyData notifyData = parseNotifyData(notify_data);
 			//获取ito订单号

@@ -8,6 +8,25 @@
 <%@ include file="../inc/include_tag.jsp" %>
 
 
+<%!String displayPayType(Short payType){
+	if(payType!=null&&1==payType){
+		return "支付宝支付";
+	}
+	return "APP支付";
+} %>
+
+
+<%!String displayPayStatus(Short payStatus){
+	if(payStatus!=null&&10==payStatus){
+		return "支付宝已下单";
+	}else if(payStatus!=null&&11==payStatus){
+		return "支付宝已支付";
+	}else if(payStatus!=null&&0==payStatus){
+		return "APP已下单";
+	}
+	return "支付状态错误";
+} %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,7 +121,7 @@
 			</div>
 
 			<%
-			ItoProductOrder order = (ItoProductOrder)request.getAttribute("order");
+			ItoProductOrder productOrder = (ItoProductOrder)request.getAttribute("productOrder");
 			%>
 
 			<form id="validate" action="<s:url value='./saveOrder'/>" method="post"  class="form-horizontal form-bordered">
@@ -119,95 +138,146 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品ID: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="productId" id="productId" value="${order.productId}" readonly="readonly"/>
+								<label class="control-label">
+									${productOrder.productId}
+								</label>
+								<input type="hidden" name="productId" id="productId" value="${productOrder.productId}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${order.title}" readonly="readonly"/>
+								<label class="control-label">
+									${productOrder.title}
+								</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品SN: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="outId" id="outId" value="${order.outId}" readonly="readonly"/>
+								<label class="control-label">
+									${productOrder.outId}
+								</label>
 							</div>
 						</div>
 						
-						<div class="form-group">
+						<%-- <div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
-								<textarea name="description" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${order.description}</textarea>
+								<label class="control-label">
+									${productOrder.description}
+								</label>
 							</div>
-						</div>
+						</div> --%>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${order.orderPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${order.orderPicUrl}" width="200px" />
-								</a>
-							</div> 
-						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">价格信息: <span class="mandatory">*</span>
 							</label>
 							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="totalPrice" id="totalPrice" value="${order.totalPrice}"/>
+								<input type="text" class="form-control" name="totalPrice" id="totalPrice" value="${productOrder.totalPrice}" readonly="readonly"/>
+								<%-- <label class="control-label">
+									${productOrder.totalPrice}
+								</label> --%>
 								<span class="label label-danger label-block">总价(元)</span>
 							</div>
 							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${order.price}"/>
-								<span class="label label-info label-block">单价(元)</span>
+								<input type="text" class="form-control" name="price" id="price" value="${productOrder.price}" readonly="readonly"/>
+								<%-- <label class="control-label">
+									${productOrder.price}
+								</label> --%>
+								 <span class="label label-info label-block">单价(元)</span>
 							</div>
 							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" id="num" value="${order.num}"/>
+								<input type="text" class="form-control" name="num" id="num" value="${productOrder.num}" readonly="readonly"/>
+								<%-- <label class="control-label">
+									${productOrder.num}
+								</label> --%>
 								<span class="label label-primary label-block">数量(个)</span>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品SKU_ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="skuId" id="skuId" value="${order.skuId}" readonly="readonly"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品SKU信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="sku" id="sku" value="${order.sku}" readonly="readonly"/>
+								<label class="control-label">
+								${productOrder.skuName}
+								</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">支付类型: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="payType" id="payType" value="${order.payType}" readonly="readonly"/>
+								<label class="control-label">
+									<%=displayPayType(productOrder.getPayType()) %>
+								</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">支付状态: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="payStatus" id="payStatus" value="${order.payStatus}" readonly="readonly"/>
+								<label class="control-label">
+									<%=displayPayStatus(productOrder.getPayStatus()) %>
+								</label>
+							</div>
+						</div>
+						
+						<%
+						if(productOrder.getPayType()!=null&&productOrder.getPayType()==0){
+						%>	
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">收件人: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.postName}
+								</label>
+							</div>
+							<label class="col-sm-2 control-label text-right">收件人电话: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${productOrder.postMobile}
+								</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">运单号: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">收件人邮编: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.postCode}
+								</label>
+							</div>
+							<label class="col-sm-2 control-label text-right">收件人Email: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									${productOrder.postEmail}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">收件人地址: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" name="postSn" id="postSn" value="${order.postSn}" readonly="readonly"/>
+								<label class="control-label">
+									${productOrder.postAddress}
+								</label>
+							</div>
+						</div>
+						<%}%>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">运单号: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="postSn" id="postSn" value="${productOrder.postSn}" readonly="readonly"/>
 							</div>
 						</div>
 						
