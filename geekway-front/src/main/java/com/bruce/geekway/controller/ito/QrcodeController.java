@@ -1,5 +1,7 @@
 package com.bruce.geekway.controller.ito;
 
+import java.util.Date;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,9 +11,13 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.geekway.model.ItoSystemStatus;
 import com.bruce.geekway.model.ito.json.ItoWwjQrcodeResult;
 import com.bruce.geekway.utils.JsonUtil;
+import com.bruce.geekway.utils.JsonViewBuilderUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**
@@ -71,6 +77,23 @@ public class QrcodeController {
 			model.addAttribute("userApplyedTime", userApplyedTime);
 			return "ito/lotteryQrcode/success";
 		}
+	}
+	
+	
+	/**
+	 * 消费二维码的回调
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/qrcodeConsumeNotify")//, method=RequestMethod.POST
+	public ModelAndView qrcodeConsumeNotify(String qrcodeKey, String qrcodeUrl, String sign) {
+		//TODO 检查签名
+		
+		int result = 1;//itoSystemStatusService.save(systemStatus); 
+		if(result>0){
+			return JsonViewBuilderUtil.SUBMIT_SUCCESS_VIEW;
+		}
+		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
 	}
 	
 }

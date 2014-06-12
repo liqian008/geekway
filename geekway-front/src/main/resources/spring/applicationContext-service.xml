@@ -101,4 +101,9 @@
 	</bean>
 	<bean id="klhDailySignService" class="com.bruce.geekway.service.impl.klh.KlhDailySignServiceImpl">
 	</bean>
+	
+	<!-- upload service -->
+	<bean id="uploadService" class="com.bruce.geekway.service.impl.UploadServiceImpl">
+	</bean>
+	
 </beans>
