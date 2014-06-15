@@ -20,6 +20,10 @@ public class KlhEdbOrder {
 	private String phone;
 	/* 店铺名称 */
 	private String shopName;
+	/* 快递公司名称 */
+	private String express;
+	/* 快递公司code */
+	private String expressCoding;
 	/* 订单号 */
 	private String expressNo;
 	/* 收件人姓名 */
@@ -41,6 +45,22 @@ public class KlhEdbOrder {
 
 	public KlhEdbOrder() {
 		super();
+	}
+
+	public String getPlatType() {
+		return platType;
+	}
+
+	public void setPlatType(String platType) {
+		this.platType = platType;
+	}
+
+	public String getOrderChannel() {
+		return orderChannel;
+	}
+
+	public void setOrderChannel(String orderChannel) {
+		this.orderChannel = orderChannel;
 	}
 
 	public String getMobile() {
@@ -67,12 +87,12 @@ public class KlhEdbOrder {
 		this.shopName = shopName;
 	}
 
-	public String getOrderChannel() {
-		return orderChannel;
+	public String getExpressCoding() {
+		return expressCoding;
 	}
 
-	public void setOrderChannel(String orderChannel) {
-		this.orderChannel = orderChannel;
+	public void setExpressCoding(String expressCoding) {
+		this.expressCoding = expressCoding;
 	}
 
 	public String getExpressNo() {
@@ -123,14 +143,6 @@ public class KlhEdbOrder {
 		this.deliveryStatus = deliveryStatus;
 	}
 
-	public String getPlatType() {
-		return platType;
-	}
-
-	public void setPlatType(String platType) {
-		this.platType = platType;
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -146,6 +158,15 @@ public class KlhEdbOrder {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+
+	public String getExpress() {
+		return express;
+	}
+
+	public void setExpress(String express) {
+		this.express = express;
+	}
 
 	public List<KlhEdbOrderItem> getEdbOrderItemList() {
 		return edbOrderItemList;
@@ -154,5 +175,6 @@ public class KlhEdbOrder {
 	public void setEdbOrderItemList(List<KlhEdbOrderItem> edbOrderItemList) {
 		this.edbOrderItemList = edbOrderItemList;
 	}
+
 	
 }

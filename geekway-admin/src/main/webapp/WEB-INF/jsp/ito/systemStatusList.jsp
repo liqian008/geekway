@@ -74,7 +74,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						SKU属性管理
+						APP联网运行状态
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -86,7 +86,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="#">首页</a></li>
-					<li class="active">SKU属性管理</li>
+					<li class="active">APP联网运行状态</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -107,7 +107,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>运行状态
+						<i class="icon-people"></i>APP联网运行状态
 					</h5>
 				</div>
 				<div class="table-responsive">

@@ -48,7 +48,7 @@ public class ProductController {
 	@Autowired
 	private IItoSkuPropService itoSkuPropService;
 	@Autowired
-	private IItoProductBgService itoProductCoverService;
+	private IItoProductBgService itoProductBgService;
 	
 	/**
 	 * 产品列表
@@ -64,7 +64,7 @@ public class ProductController {
 			productList = new ArrayList<ItoProduct>();
 		}
 		//额外构造一个ito封面的商品，主要为了给客户端使用
-		ItoProductBg productBg = itoProductCoverService.loadById(1);
+		ItoProductBg productBg = itoProductBgService.loadById(1);
 		if(productBg!=null){
 			ItoProduct coverProduct = new ItoProduct();
 			coverProduct.setProductPicUrl(productBg.getCoverPicUrl());

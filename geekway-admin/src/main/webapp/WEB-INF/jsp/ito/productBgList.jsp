@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.ItoProductBg"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.utils.*"%>
 
-<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -82,7 +82,7 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="javascript:void(0)">首页</a></li>
 					<li class="active">App图片配置</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -91,75 +91,66 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、此处的图片，将在APP的页面中加以展示<br/>
+					1、此处的图片，将在APP中加以展示<br/>
 				</p>
 			</div>
-			
-			<%
-				ItoProductBg productBg = (ItoProductBg)request.getAttribute("productBg");
-			%>
 
-			<form id="validate" action="<s:url value='./saveProductBg'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>配置App图片
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">应用场景:
-							</label>
-							<div class="col-sm-3">
-			                    <form:hidden path="productBg.id"/>
-								<label class="control-label">
-									${productBg.title}
-								</label>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">描 述:
-							</label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									${productBg.description}
-								</label>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图片:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${productBg.coverPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${productBg.coverPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url" type="hidden" name="coverPicUrl" value="${productBg.coverPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
-						</div>
-						
-						
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-					</div>
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>App图片配置
+					</h5>
 				</div>
-				
-			</form>
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>图片</th>
+                                <th>应用场景</th>
+                                <th>状态</th>
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<ItoProductBg> productBgList = (List<ItoProductBg>)request.getAttribute("productBgList");
+                           	if(productBgList!=null&&productBgList.size()>0){
+                           		int i=0;
+                           		for(ItoProductBg productBg: productBgList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=productBg.getCoverPicUrl()%>" class="lightbox">
+		                        	<img src='<%=productBg.getCoverPicUrl()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
+		                        <td><%=productBg.getTitle()%></td>
+		                        <td>正常</td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+		                        	
+										<a href="./productBgEdit?productBgId=<%=productBg.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -168,35 +159,5 @@
 	</div>
 	<!-- /page container -->
 </body>
-
-	<script type="text/javascript">
-	$(document).ready(function(){
-	    $("#cover-image-file").change(function(){
-	        //创建FormData对象
-	        var data = new FormData();
-	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
-	        $.ajax({
-	            url:'/geekway-admin/geekway/imageUpload',
-	            type:'POST',
-	            data:data,
-	            cache: false,
-	            contentType: false,    //不可缺
-	            processData: false,    //不可缺
-	            success:function(responseData){
-	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
-		                $('#cover-image').attr("src", imageUrl);
-		                $('#cover-image-link').attr("href", imageUrl);
-		                $('#cover-image-url').val(imageUrl);
-	                }else{
-	                	alert(responseData.message);
-	                }
-	            }
-	        });
-	    });
-	});
-	</script>
-
-
 </html>
+

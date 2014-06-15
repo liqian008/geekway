@@ -4,6 +4,35 @@
 <%@ page import="com.bruce.geekway.model.klh.*" %>
 
 
+<%!
+public String getExpressUrl(String expressName, String expressCoding, String expressNo){
+	
+	String deliverInfo = "快递类型: "+expressName;
+	String expressCompany = null;
+	if(expressCoding!=null){
+		if("SF".equalsIgnoreCase(expressCoding)){
+			expressCompany = "shunfeng";
+		}else if("YUNDA".equalsIgnoreCase(expressCoding)){
+			expressCompany = "yunda";
+		}else if("STO".equalsIgnoreCase(expressCoding)){
+			expressCompany = "shentong";
+		}else if("快捷".equalsIgnoreCase(expressCoding)){
+			expressCompany = "kuaijiesudi";
+		}else if("YTO".equalsIgnoreCase(expressCoding)){
+			expressCompany = "yuantong";
+		}else if("ZJS".equalsIgnoreCase(expressCoding)){
+			expressCompany = "zhaijisong";
+		}
+	}
+	if(expressCompany!=null){
+		return deliverInfo + " <a href='http://m.kuaidi100.com/index_all.html?type="+expressCompany+"&postid="+expressNo+"' id='submitBtn' class='o-buttons blue'>查看物流</a>";
+	}else{
+		return deliverInfo;
+	}
+}
+%>
+
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -66,6 +95,8 @@
 						订单状态：<%=edbOrder.getType()%><br/>
 						发货状态：<%=edbOrder.getDeliveryStatus()%><br/>
 						</p>
+						<%=getExpressUrl(edbOrder.getExpress(), edbOrder.getExpressCoding(), edbOrder.getExpressNo())%>
+						
 						<!-- <div class="a-meta">
 							<a href="./blog"><i class="i-comments i-small"></i>6 评论</a> 
 							<a href="about.html"><i class="i-author i-small"></i>John Doe</a> 

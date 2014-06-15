@@ -8,13 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bruce.geekway.model.ItoSlider;
+import com.bruce.geekway.model.ItoProductBg;
 import com.bruce.geekway.model.ItoSystemStatus;
-import com.bruce.geekway.model.exception.ErrorCode;
-import com.bruce.geekway.service.ito.IItoSliderService;
+import com.bruce.geekway.service.ito.IItoProductBgService;
 import com.bruce.geekway.service.ito.IItoSystemStatusService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
@@ -31,9 +29,11 @@ public class ItoController {
 	
 	@Autowired
 	private IItoSystemStatusService itoSystemStatusService;
+	@Autowired
+	private IItoProductBgService itoProductBgService;
 	
 	/**
-	 * 滑屏列表
+	 * 系统状态
 	 * @param model
 	 * @return
 	 */
@@ -51,4 +51,27 @@ public class ItoController {
 		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
 	}
 	
+	
+	/**
+	 * 图片配置列表，2为支付宝，3为ap支付
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/productBgList.json")
+	public ModelAndView productList() {
+		List<ItoProductBg> productBgList = itoProductBgService.queryAll();
+		
+		if(productBgList!=null&&productBgList.size()>0){
+			for(int i=productBgList.size()-1;i>=0;i--){
+				ItoProductBg productBg = productBgList.get(i);
+				if(productBg.getId()!=null&&productBg.getId()==1){
+					productBgList.remove(productBg);
+				}
+			}
+		}
+		//返回数据
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		dataMap.put("productBgList", productBgList);
+		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+	}
 }
