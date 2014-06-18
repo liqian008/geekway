@@ -115,19 +115,6 @@
 					</div>
 					<div class="panel-body">
 						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${skuPropValue.skuPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${skuPropValue.skuPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuPropValue.skuPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
-						</div>
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU属性: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
@@ -138,6 +125,48 @@
 								</form:select>
 							</div>
 						</div>
+						
+						<%if(skuPropValue!=null&&skuPropValue.getSkuPropId()!=null&&skuPropValue.getSkuPropId()==2){%>
+						
+						<!-- 颜色选项时，需要区分材质，做两套图片 start-->
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">光面图片:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${skuPropValue.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${skuPropValue.skuPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuPropValue.skuPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+							</div> 
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">条纹图片:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${skuPropValue.skuThumbPicUrl}" id="cover-image-link2"  class="lightbox">
+									<img id="cover-image2" src="${skuPropValue.skuThumbPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url2" type="hidden" name="skuThumbPicUrl" value="${skuPropValue.skuThumbPicUrl}"/>
+								<input type="file" name="imageFile2" id="cover-image-file2" class="styled">
+							</div> 
+						</div>
+						<%}else{%>
+							
+							<!-- 其他情况只显示正常图片即可 -->
+							<div class="form-group">
+							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${skuPropValue.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${skuPropValue.skuPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuPropValue.skuPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+							</div> 
+						</div>
+							
+						<%}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>
@@ -199,6 +228,31 @@
 		                $('#cover-image').attr("src", imageUrl);
 		                $('#cover-image-link').attr("href", imageUrl);
 		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	    
+	    $("#cover-image-file2").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[1].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image2').attr("src", imageUrl);
+		                $('#cover-image-link2').attr("href", imageUrl);
+		                $('#cover-image-url2').val(imageUrl);
 	                }else{
 	                	alert(responseData.message);
 	                }

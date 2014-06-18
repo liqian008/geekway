@@ -144,7 +144,7 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
+							<div class="col-sm-8">
 								<label class="control-label">
 									${productSku.name}
 								</label>
@@ -152,7 +152,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">SKU KEY: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
 								<label class="control-label">
 									${productSku.propertiesName}
@@ -161,7 +161,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">SKU基本信息: <span class="mandatory">*</span>
 							</label>
 							
 							<div class="col-sm-2">

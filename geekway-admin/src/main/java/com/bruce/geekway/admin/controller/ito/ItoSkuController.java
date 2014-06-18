@@ -57,7 +57,32 @@ public class ItoSkuController {
 		
 		//获取产品对应的sku列表
 		List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
-		model.addAttribute("skuList", skuList);
+		if(skuList!=null&&skuList.size()>0){
+			
+			//获取propValue的map，供构造skuName
+			HashMap<Integer, ItoSkuPropValue> propValueMap = itoSkuPropValueService.queryMap();
+			for(ItoSku productSku: skuList){
+				//根据propName动态计算sku显示name，TODO与edit时进行合并
+				String skuPropName = productSku.getPropertiesName();
+				String[] skuPropNameArray = skuPropName.split(";");
+				StringBuilder sb = new StringBuilder();
+				if(skuPropNameArray!=null&&skuPropNameArray.length>0){
+					
+					for(String skuPropItem: skuPropNameArray){
+						String skuPropValueIdStr = skuPropItem.substring(skuPropItem.lastIndexOf(":")+1);
+						String skuPropValueName = "错误";
+						ItoSkuPropValue propValue = propValueMap.get(Integer.valueOf(skuPropValueIdStr));
+						if(propValue!=null){
+							skuPropValueName = propValue.getName();
+						}
+						sb.append(skuPropValueName+"+");
+					}
+				}
+				if(sb.length()>0)sb.setLength(sb.length()-1);
+				productSku.setName(sb.toString());
+			}
+			model.addAttribute("skuList", skuList);
+		}
 		
 		return "ito/productSkuList";
 	}

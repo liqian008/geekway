@@ -136,6 +136,15 @@
 					<div class="panel-body">
 						
 						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">订单号: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.orderSn}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品ID: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
 								<label class="control-label">

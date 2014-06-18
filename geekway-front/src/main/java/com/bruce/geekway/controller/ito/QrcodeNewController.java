@@ -125,7 +125,7 @@ public class QrcodeNewController {
 	 * @return
 	 */
 	private static String getQrcodeUrl(){
-		boolean isTest = true;
+		boolean isTest = false;
 		if(isTest){
 			return getMockQrcodeUrl();
 		}
