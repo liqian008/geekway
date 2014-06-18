@@ -175,34 +175,7 @@ public class ItoProductController {
 							materialSkuList = skuGroupMap.get(3);
 						}
 
-//						List<String> skuNameList = new ArrayList<String>();
 						List<String> skuPropertiesNameList = new ArrayList<String>();
-						
-						//Backup
-//						for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){//尺码SKU
-//							int sizeSkuPropId = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getId();
-//							String sizeSkuPropName = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getName();
-//							String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId());
-//							
-//							for(ItoSkuPropValue colorSkuPropValue: colorSkuList){//颜色SKU
-//								//构造skuCode
-//								int colorSkuPropId = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getId();
-//								String colorSkuPropName = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getName();
-//								String colorSkuCode = getSkuCode(colorSkuPropId, colorSkuPropValue.getId());
-//								
-//								for(ItoSkuPropValue materialSkuPropValue: materialSkuList){//材质SKU
-//									skuNameList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName()+"+"+materialSkuPropValue.getName());
-////									skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId()+"+"+materialSkuPropValue.getId());
-//									//构造skuCode
-//									int materialSkuPropId = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getId();
-//									String materialSkuPropName = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getName();
-//									String materialSkuCode = getSkuCode(materialSkuPropId, materialSkuPropValue.getId());
-//									
-//									//SKUCode
-//									skuPropertiesNameList.add(sizeSkuCode + colorSkuCode + materialSkuCode);
-//								}
-//							}
-//						}
 						
 						for(ItoSkuPropValue materialSkuPropValue: materialSkuList){//材质SKU
 //							skuNameList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName()+"+"+materialSkuPropValue.getName());
@@ -224,12 +197,11 @@ public class ItoProductController {
 //									String sizeSkuPropName = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getName();
 									String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId());
 									
-									//最后生成的SKUCode
+									//最后生成的SKUCode，格式为 —— 3:6;2:3;1:1;
 									skuPropertiesNameList.add(materialSkuCode + colorSkuCode + sizeSkuCode);
 								}
 							}
 						}
-						
 						
 						//根据商品的sku配置，生成sku数据，填写价格
 						//创建新sku数据
@@ -237,16 +209,16 @@ public class ItoProductController {
 						for(String skuPropertiesName: skuPropertiesNameList){
 							ItoSku itoSku = new ItoSku();
 							itoSku.setProductId(productId);
-//							itoSku.setName("");
 							//设置各sku的缩略图
 							itoSku.setSkuPicUrl(product.getProductPicUrl());
 							itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
 							
 							itoSku.setOriginPrice((double) 0);
 							itoSku.setPrice((double) 0);
-//							itoSku.setOutId(skuSn);
 							itoSku.setNum(0);
+							
 							itoSku.setPropertiesName(skuPropertiesName);
+							
 							itoSku.setCreateTime(currentTime);
 							itoSku.setUpdateTime(currentTime);
 							i++;
@@ -272,6 +244,31 @@ public class ItoProductController {
 		
 		//获取产品对应的sku列表
 		List<ItoSku> skuList = itoSkuService.queryAllByProductId(productId);
+		if(skuList!=null&&skuList.size()>0){
+			//获取propValue的map，供构造skuName
+			HashMap<Integer, ItoSkuPropValue> propValueMap = itoSkuPropValueService.queryMap();
+			for(ItoSku productSku: skuList){
+				//根据propName动态计算sku显示name，TODO与edit时进行合并
+				String skuPropName = productSku.getPropertiesName();
+				String[] skuPropNameArray = skuPropName.split(";");
+				StringBuilder sb = new StringBuilder();
+				if(skuPropNameArray!=null&&skuPropNameArray.length>0){
+					
+					for(String skuPropItem: skuPropNameArray){
+						String skuPropValueIdStr = skuPropItem.substring(skuPropItem.lastIndexOf(":")+1);
+						String skuPropValueName = "错误";
+						ItoSkuPropValue propValue = propValueMap.get(Integer.valueOf(skuPropValueIdStr));
+						if(propValue!=null){
+							skuPropValueName = propValue.getName();
+						}
+						sb.append(skuPropValueName+"+");
+					}
+				}
+				if(sb.length()>0)sb.setLength(sb.length()-1);
+				productSku.setName(sb.toString());
+			}
+		}
+		
 		model.addAttribute("skuList", skuList);
 		
 		return "ito/productSkusBatchEdit";
@@ -299,32 +296,18 @@ public class ItoProductController {
 				double skuOriginPrice = NumberUtils.toDouble(request.getParameter("skuOriginPrice_"+skuIdStr), 0);
 				double skuPrice = NumberUtils.toDouble(request.getParameter("skuPrice_"+skuIdStr), 0);
 				int skuNum = NumberUtils.toInt(request.getParameter("skuNum_"+skuIdStr), 0);
-//				String skuName = StringUtils.defaultString(request.getParameter("skuName_"+skuCombine), "");
-//				String skuCode = StringUtils.defaultString(request.getParameter("skuCode_"+skuCombine), "");
-//				String skuSn = StringUtils.defaultString(request.getParameter("skuSn_"+skuCombine), "");
-				
 				//保存
 				ItoSku itoSku = new ItoSku();
 				itoSku.setId(skuId);
 				itoSku.setOriginPrice(skuOriginPrice);
 				itoSku.setPrice(skuPrice);
 				itoSku.setNum(skuNum);
-//				itoSku.setOutId(skuSn);
-//				itoSku.setProductId(productId);
-//				itoSku.setName(skuName);
-//				itoSku.setPropertiesName(skuCode);
-//				itoSku.setCreateTime(currentTime);
 				itoSku.setUpdateTime(currentTime);
 				itoSkuService.updateById(itoSku);
 			}
 		}
-
-		//TODO 进入该product的sku列表页，供其确认&上传相应图片
 		model.addAttribute("redirectUrl", "./productSkus?productId="+productId);
 		return "forward:/home/operationRedirect";
-		
-//		model.addAttribute("redirectUrl", "./productList");
-//		return "forward:/home/operationRedirect";
 	}
 	
 	

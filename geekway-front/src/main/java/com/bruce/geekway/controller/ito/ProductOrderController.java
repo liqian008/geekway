@@ -113,7 +113,6 @@ public class ProductOrderController {
 	//					//生成预备订单
 	//					int result = itoProductOrderService.save(order);
 	//					if(result>0){
-							
 						
 							//根据订单信息，返回alipay的二维码订单
 							String alipayQrcodeUrl;

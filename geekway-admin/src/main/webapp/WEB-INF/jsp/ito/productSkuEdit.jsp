@@ -95,7 +95,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、商品SKU详情<br/>
 				</p>
 			</div>
 
@@ -142,8 +142,6 @@
 							</div>
 						</div>
 						
-						
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
@@ -155,13 +153,12 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
+							<div class="col-sm-8">
 								<label class="control-label">
 									${productSku.propertiesName}
 								</label>
 							</div>
 						</div>
-						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span>
@@ -187,8 +184,6 @@
 								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>
-						
-						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">支付宝产品链接: <span class="mandatory">*</span>
@@ -218,6 +213,7 @@
 			</form>
 			
 			<!-- Table view -->
+			<!-- 
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
@@ -269,8 +265,8 @@
 						</tbody>
 					</table>
 				</div>
-				
 			</div>
+			-->
 			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>

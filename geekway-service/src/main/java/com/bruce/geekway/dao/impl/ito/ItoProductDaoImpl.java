@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.ito.IItoProductDao;
 import com.bruce.geekway.dao.mapper.ItoProductMapper;
 import com.bruce.geekway.model.ItoProduct;
+import com.bruce.geekway.model.ItoProductCriteria;
 
 
 @Repository
@@ -49,6 +50,14 @@ public class ItoProductDaoImpl implements IItoProductDao, InitializingBean {
     }
 
     @Override
+	public List<ItoProduct> queryAvailableList() {
+    	ItoProductCriteria criteria = new ItoProductCriteria();
+    	criteria.createCriteria().andStatusEqualTo((short) 1);
+		return itoProductMapper.selectByExample(criteria);
+	}
+
+    
+    @Override
     public void afterPropertiesSet() throws Exception {
 
     }
@@ -76,6 +85,7 @@ public class ItoProductDaoImpl implements IItoProductDao, InitializingBean {
 		this.itoProductMapper = itoProductMapper;
 	}
 
+	
 	
 
 }

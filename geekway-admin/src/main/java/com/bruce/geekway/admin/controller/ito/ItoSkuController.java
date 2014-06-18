@@ -1,6 +1,7 @@
 package com.bruce.geekway.admin.controller.ito;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +16,10 @@ import com.bruce.geekway.model.ItoProduct;
 import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuImage;
 import com.bruce.geekway.model.ItoSkuImage;
+import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuImageService;
+import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 import com.bruce.geekway.service.ito.IItoSkuService;
 
 /**
@@ -34,20 +37,8 @@ public class ItoSkuController {
 	private IItoSkuImageService itoSkuImageService;
 	@Autowired
 	private IItoProductService itoProductService;
-	
-	
-//	@RequestMapping("/skuList")
-//	public String skuList(Model model, HttpServletRequest request) {
-//		String servletPath = request.getRequestURI();
-//		model.addAttribute("servletPath", servletPath);
-//		
-//		List<ItoSku> skuList = itoSkuService.queryAll();
-//		model.addAttribute("skuList", skuList);
-//		return "ito/skuList";
-//	}
-	
-	
-	
+	@Autowired
+	private IItoSkuPropValueService itoSkuPropValueService;
 	
 	/**
 	 * 查看某个商品下的所有sku商品
@@ -86,14 +77,34 @@ public class ItoSkuController {
 		model.addAttribute("servletPath", servletPath);
 		
 		ItoSku productSku = itoSkuService.loadProductSku(productId, skuId);
+		
+		//根据propName动态计算sku显示name
+		String skuPropName = productSku.getPropertiesName();
+		String[] skuPropNameArray = skuPropName.split(";");
+		StringBuilder sb = new StringBuilder();
+		if(skuPropNameArray!=null&&skuPropNameArray.length>0){
+			HashMap<Integer, ItoSkuPropValue> propValueMap = itoSkuPropValueService.queryMap();
+			for(String skuPropItem: skuPropNameArray){
+				String skuPropValueIdStr = skuPropItem.substring(skuPropItem.lastIndexOf(":")+1);
+				String skuPropValueName = "错误";
+				ItoSkuPropValue propValue = propValueMap.get(Integer.valueOf(skuPropValueIdStr));
+				if(propValue!=null){
+					skuPropValueName = propValue.getName();
+				}
+				sb.append(skuPropValueName+"+");
+			}
+		}
+		if(sb.length()>0)sb.setLength(sb.length()-1);
+		productSku.setName(sb.toString());
+		
 		if(productSku!=null){
 			model.addAttribute("productSku", productSku);
 			ItoProduct product = itoProductService.loadById(productId);
 			model.addAttribute("product", product);
 			
-			//加载该sku商品对应的图片
-			List<ItoSkuImage> skuImageList = itoSkuImageService.queryAllBySkuId(skuId);
-			model.addAttribute("skuImageList", skuImageList);
+//			//加载该sku商品对应的图片
+//			List<ItoSkuImage> skuImageList = itoSkuImageService.queryAllBySkuId(skuId);
+//			model.addAttribute("skuImageList", skuImageList);
 		}
 		
 		return "ito/productSkuEdit";
@@ -128,6 +139,7 @@ public class ItoSkuController {
 	//////////////////////    sku 图片的处理   //////////////////////////////
 	///////////////////////////////////////////////////////////////////////	
 	
+	@Deprecated
 	@RequestMapping("/skuImageAdd")
 	public String skuImageAdd(Model model, int productId, int skuId, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -145,7 +157,7 @@ public class ItoSkuController {
 		return "ito/skuImageEdit";
 	}
 	
-	
+	@Deprecated
 	@RequestMapping("/skuImageEdit")
 	public String skuImageEdit(Model model, HttpServletRequest request, int skuImageId) {
 		String servletPath = request.getRequestURI();
@@ -164,6 +176,7 @@ public class ItoSkuController {
 	 * @param request
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "/saveSkuImage", method = RequestMethod.POST)
 	public String saveSkuImage(Model model, ItoSkuImage skuImage, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -191,8 +204,6 @@ public class ItoSkuController {
 	}
 
 	
-	
-	
 	/**
 	 * 删除sku的图片
 	 * @param model
@@ -202,6 +213,7 @@ public class ItoSkuController {
 	 * @param request
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "/delSkuImage")
 	public String delSkuImage(Model model, int productId, int skuId, int skuImageId, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -226,6 +238,7 @@ public class ItoSkuController {
 	 * 使用imageList的第一个来更新skuInfo中的图片url
 	 * @param skuId
 	 */
+	@Deprecated
 	private void updateSkuInfoPic(int skuId) {
 		//加载该sku商品对应的图片
 		List<ItoSkuImage> skuImageList = itoSkuImageService.queryAllBySkuId(skuId);

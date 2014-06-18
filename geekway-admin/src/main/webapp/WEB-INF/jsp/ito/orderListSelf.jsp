@@ -96,7 +96,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、线下支付（APP支付）订单列表<br/>
+					1、此页数据为APP支付的订单列表<br/>
 				</p>
 			</div>
 
@@ -148,9 +148,9 @@
 			                        <td><%=order.getTitle()%></td>
 			                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
 			                        <td>APP支付</td>
-			                        <td><%=order.getPayStatus()==1?"待发货":"已发货"%></td>
+			                        <td><%=order.getPayStatus()==20?"已发货":"待发货"%></td>
 			                        <td class='text-center'>
-			                        	<div class="table-controls">
+			                        	<div class="table-controls"> 
 			                        	
 											<a href="./orderDisplay?orderSn=<%=order.getOrderSn()%>"
 												class="btn btn-link btn-icon btn-xs tip" title=""

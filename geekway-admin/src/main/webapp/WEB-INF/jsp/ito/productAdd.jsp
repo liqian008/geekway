@@ -97,32 +97,9 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、新增商品系列<br/>
 				</p>
 			</div>
-
-			<!-- WYSIWYG editor inside panel -->
-			<!-- 
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h6 class="panel-title">
-						<i class="icon-pencil"></i>详情
-					</h6>
-				</div>
-				<div class="panel-body">
-					<form action="wysiwyg.html#" role="form">
-						<div class="block-inner">
-							<textarea class="editor" placeholder="请输入详情 ..."></textarea>
-						</div>
-						<div class="form-actions text-right">
-							<button type="submit" class="btn btn-danger">Cancel</button>
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</div>
-					</form>
-				</div>
-			</div>
-			-->
-			<!-- /WYSIWYG editor inside panel -->
 
 			<%
 			ItoProduct product = (ItoProduct)request.getAttribute("product");
@@ -202,7 +179,7 @@
 								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>
-						 -->
+						
 						 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">外部购买链接: <span class="mandatory">*</span>
@@ -211,7 +188,8 @@
 								<input type="text" class="form-control" id="buyUrl" name="buyUrl" value="<%=product==null||product.getId()==null?"":product.getBuyUrl()%>"/>
 							</div> 
 						</div>
-						
+						 -->
+						 
 						<%
 						List<ItoSkuProp> skuPropList = (List<ItoSkuProp>)request.getAttribute("skuPropList");
 						if(skuPropList!=null){
@@ -242,9 +220,20 @@
 						<%}
 						}%>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<form:select path="product.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
+							</div>
+						</div>
+						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="下一步" class="btn btn-primary">
+							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
 					

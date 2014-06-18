@@ -6,6 +6,8 @@ import com.bruce.geekway.dao.IBaseDao;
 import com.bruce.geekway.model.ItoProduct;
 
 public interface IItoProductDao extends IBaseDao<ItoProduct, Integer> {
+
+	public List<ItoProduct> queryAvailableList();
 	
 //    public List<ItoProduct> queryArticlesByModuleId(int moduleId);
 //    

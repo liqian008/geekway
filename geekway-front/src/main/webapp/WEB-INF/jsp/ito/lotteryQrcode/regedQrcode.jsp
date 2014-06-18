@@ -2,15 +2,6 @@
 <%@ page import="com.bruce.geekway.model.*" %>
 
 
-<%
-String errorMsg = (String) request.getAttribute("errorMsg");
-if(errorMsg==null){
-	errorMsg = "系统正在开小差，请稍后再试";
-}
-
-%>
-
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -18,26 +9,42 @@ if(errorMsg==null){
 		<meta name="author" content="www.frebsite.nl" />
 		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
-		<title>娃娃机游戏</title>
+		<title>NUTS Machine互动游戏</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
 		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css" />
 
 		<script type="text/javascript" src="<%=request.getContextPath()%>/mobile/js/jquery.min.js"></script>
+		<!-- 
+		<link type="text/css" rel="stylesheet" href="css/jquery.mmenu.all.css" />
+		<script type="text/javascript" src="js/jquery.mmenu.min.all.js"></script>
+		<script type="text/javascript" src="js/jquery.flexslider.js"></script>
+		<script type="text/javascript" src="js/jquery.easy-pie-chart.js"></script>
+		<script type="text/javascript" src="js/o-script.js"></script>
+ 		-->
 	</head>
 	<body class="o-page">
 		<div id="page">
 			<div id="header">
-				提示信息
+				<!-- 
+				<i class="i-blog i-small"></i>
+				 -->
+				NUTS Machine互动游戏
 			</div>
 			<div id="content">
 				<article>
-					<h2><a href="javascript:void(0)">提示信息</a></h2>
+					
+					<h2><a href="javascript:void(0)">注册奖励娃娃机抓取二维码</a></h2>
 					<p>
-						<%=errorMsg%>
+						恭喜您，获得再次体验抓娃娃机游戏机会！一定要把握住这次机会！
 					</p>
+					<img src="<%=request.getAttribute("regedQrcodeUrl")%>">
+					
+					<p>
+						即刻扫描此二维码，启动抓娃娃机。
+					</p>
+					
 				</article>
-				
 			</div>
 			<!--<div class="subFooter">Copyright 2013. All rights reserved.</div>-->
 		</div>

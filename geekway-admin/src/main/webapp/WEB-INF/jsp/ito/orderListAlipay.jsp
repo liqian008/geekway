@@ -96,7 +96,8 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、支付宝订单列表<br/>
+					1、此页数据为支付宝订单列表<br/>
+					1、支付宝的发货管理务必要在<a href="http://www.alipay.com">支付宝网站</a>进行操作，否则无法完成支付宝的流程<br/>
 				</p>
 			</div>
 
@@ -133,7 +134,6 @@
 	                                <th>价格</th>
 	                                <th>类型</th>
 	                                <th>状态</th>
-	                                <th>物流</th>
 	                                <th class="team-links">操作</th>
 								</tr>
 							</thead>
@@ -151,8 +151,7 @@
 			                        <td><%=order.getSkuName()%></td>
 			                        <td><%=order.getTotalPrice()%>元</td>
 			                        <td>支付宝</td>
-			                        <td><%=order.getPayStatus()==10?"已下单":"已支付"%></td>
-			                        <td>未发货</td>
+			                        <td>已下单</td>
 			                        <td class='text-center'>
 			                        	<div class="table-controls">
 			                        	

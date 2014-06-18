@@ -42,6 +42,8 @@
 		<mapper resource="com/bruce/geekway/model/xml/ItoSliderMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoSystemStatusMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ItoWwjRecordMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/ItoUserProfileMapper.xml" />
+		
 		
 		
 		<!-- klh config -->

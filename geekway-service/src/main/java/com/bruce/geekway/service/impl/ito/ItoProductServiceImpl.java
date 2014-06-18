@@ -40,6 +40,10 @@ public class ItoProductServiceImpl implements IItoProductService{
 		return itoProductDao.queryAll();
 	}
 	
+	@Override
+	public List<ItoProduct> queryAvailableList() {
+		return itoProductDao.queryAvailableList();
+	}
 	
 
 	public IItoProductDao getItoProductDao() {
@@ -49,5 +53,7 @@ public class ItoProductServiceImpl implements IItoProductService{
 	public void setItoProductDao(IItoProductDao itoProductDao) {
 		this.itoProductDao = itoProductDao;
 	}
+
+	
 	
 }

@@ -105,12 +105,12 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、商品系列详情<br/>
 				</p>
 			</div>
 
 			<%
-			ItoProduct product = (ItoProduct)request.getAttribute("product");
+			ItoProduct product = (ItoProduct)request.getAttribute("product"); 
 			%>
 
 			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bordered">
@@ -154,13 +154,11 @@
 							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-6">
-								<%-- 
-								<input type="text" class="form-control" name="description" id="description" value="${product.description}"/>
-								--%>
 								<textarea name="description" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${product.description}</textarea>
 							</div>
 						</div>
 						
+						<!-- 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">外部购买链接: <span class="mandatory">*</span>
 							</label>
@@ -168,6 +166,7 @@
 								<input type="text" class="form-control" id="buyUrl" name="buyUrl" value="<%=product==null||product.getId()==null?"":product.getBuyUrl()%>"/>
 							</div> 
 						</div>
+						-->
 						
 						<%
 						List<ItoSkuProp> skuPropList = (List<ItoSkuProp>)request.getAttribute("skuPropList");
@@ -201,7 +200,6 @@
 						<%}
 						}%>
 						
-						
 						<!-- 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">单品基础信息: <span class="mandatory">*</span>
@@ -229,67 +227,20 @@
 						</div>
 						-->
 						
-						
-						
-						
-						
-						<!-- 
-						<%
-						List<ItoSku> skuList = (List<ItoSku>)request.getAttribute("skuList");
-						if(skuList!=null&&skuList.size()>0){
-							for(ItoSku sku: skuList){
-						%>
-						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right">SKU(<%=sku.getName()%>): <span class="mandatory">*</span>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
 							</label>
-							
-							<input type="hidden" class="form-control" name="skuIds" value="<%=sku.getId()%>">
-
-							<div class="col-sm-2">
-								<div class="input-group">
-									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">售价(元)</button>
-									</span>
-									<input type="text" class="form-control" name="skuPrice_<%=sku.getId()%>" value="<%=sku.getPrice()%>">
-								</div>
+							<div class="col-sm-4">
+								<form:select path="product.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
 							</div>
-							
-							<div class="col-sm-2">
-								<div class="input-group">
-									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">库存(个)</button>
-									</span>
-									<input type="text" class="form-control" name="skuQuality_<%=sku.getId()%>" value="<%=sku.getNum()%>">
-								</div>
-							</div>
-							 
-							<div class="col-sm-2">
-								<div class="input-group">
-									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">Sn</button>
-									</span>
-									<input type="text" class="form-control" name="skuSn_<%=sku.getId()%>" value="<%=sku.getOutId()%>">
-								</div>
-							</div>
-							
-							<div class="col-sm-3">
-								<div class="input-group">
-									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">Sku</button>
-									</span>
-									<input type="text" class="form-control" name="skuCode_<%=sku.getId()%>" value="<%=sku.getPropertiesName()%> "readonly="readonly">
-								</div>
-							</div>
-							
-							
 						</div>
-						<%}
-						}%>
-						 -->
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="下一步" class="btn btn-primary">
+							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
 				</div>

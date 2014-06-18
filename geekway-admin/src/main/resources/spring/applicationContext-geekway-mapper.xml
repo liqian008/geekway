@@ -141,7 +141,10 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoWwjRecordMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
+	<bean id="itoUserProfileMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoUserProfileMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	
 	<!-- sku mapper config -->
 	<bean id="klhVoteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">

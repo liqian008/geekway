@@ -116,7 +116,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、订单详情页<br/>
 				</p>
 			</div>
 
@@ -124,7 +124,7 @@
 			ItoProductOrder productOrder = (ItoProductOrder)request.getAttribute("productOrder");
 			%>
 
-			<form id="validate" action="<s:url value='./saveOrder'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
@@ -284,7 +284,7 @@
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="下一步" class="btn btn-primary">
+							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
 					
