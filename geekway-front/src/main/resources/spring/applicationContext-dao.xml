@@ -66,6 +66,8 @@
 	</bean>
 	<bean id="itoSystemStatusDao" class="com.bruce.geekway.dao.impl.ito.ItoSystemStatusDaoImpl">
 	</bean>
+	<bean id="itoUserProfileDao" class="com.bruce.geekway.dao.impl.ito.ItoUserProfileDaoImpl">
+	</bean>
 	
 	
 	<!-- sku dao config -->

@@ -24,6 +24,8 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 public class WxHttpUtil {
 	
+	private static final int REQUEST_TIMEOUT = 6*1000;//设置请求超时时间  
+	private static final int SO_TIMEOUT = 6*1000;  //设置等待数据超时时间 
 	
 	/**
 	 * Httpclient get
@@ -34,6 +36,9 @@ public class WxHttpUtil {
 	 */
 	public static final String sendGetRequest(String url, Map<String, String> params) {
 		HttpClient httpClient = new HttpClient();
+		
+		setConnectionParam(httpClient);
+		
 		GetMethod getMethod = new GetMethod(url);
 		NameValuePair[] pairs = null;
 		if (params != null) {
@@ -57,7 +62,7 @@ public class WxHttpUtil {
 		}
 		return null;
 	}
-	
+
 
 	/**
 	 * Httpclient Post
@@ -68,6 +73,9 @@ public class WxHttpUtil {
 	 */
 	public static final String sendPostRequest(String url, Map<String, String> params, String data) {
 		HttpClient httpClient = new HttpClient();
+		
+		setConnectionParam(httpClient);
+		
 		PostMethod postMethod = new PostMethod(url);
 		NameValuePair[] pairs = null;
 		if (params != null) {
@@ -187,4 +195,11 @@ public class WxHttpUtil {
 		Map<String, String> result = new HashMap<String, String>();
 		return result;
 	}
+	
+	private static void setConnectionParam(HttpClient httpClient) {
+		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(REQUEST_TIMEOUT);
+	    //读数据超时
+		httpClient.getHttpConnectionManager().getParams().setSoTimeout(SO_TIMEOUT);
+	}
+	
 }

@@ -82,6 +82,8 @@
 	</bean>
 	<bean id="itoSystemStatusService" class="com.bruce.geekway.service.impl.ito.ItoSystemStatusServiceImpl">
 	</bean>
+	<bean id="itoUserProfileService" class="com.bruce.geekway.service.impl.ito.ItoUserProfileServiceImpl">
+	</bean>
 	
 	
 	<!-- sku service config -->

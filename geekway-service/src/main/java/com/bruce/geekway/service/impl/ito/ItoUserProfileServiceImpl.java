@@ -14,43 +14,50 @@ import com.bruce.geekway.utils.DateUtil;
 @Service
 public class ItoUserProfileServiceImpl implements IItoUserProfileService{
 	
-	
-	
 	@Autowired
-	private IItoUserProfileDao klhUserProfileDao;
+	private IItoUserProfileDao itoUserProfileDao;
 	
 	@Override
 	public int save(ItoUserProfile t) {
-		return klhUserProfileDao.save(t);
+		return itoUserProfileDao.save(t);
 	}
 
 	@Override
 	public int updateById(ItoUserProfile t) {
-		return klhUserProfileDao.updateById(t);
+		return itoUserProfileDao.updateById(t);
 	}
 
 	@Override
 	public int deleteById(Integer id) {
-		return klhUserProfileDao.deleteById(id);
+		return itoUserProfileDao.deleteById(id);
 	}
 
 	@Override
 	public ItoUserProfile loadById(Integer id) {
-		return klhUserProfileDao.loadById(id);
+		return itoUserProfileDao.loadById(id);
 	}
 
 	@Override
 	public List<ItoUserProfile> queryAll() {
-		return klhUserProfileDao.queryAll();
+		return itoUserProfileDao.queryAll();
 	}
 	
-
-	public IItoUserProfileDao getItoUserProfileDao() {
-		return klhUserProfileDao;
+	@Override
+	public boolean usernameExists(String username) {
+		return itoUserProfileDao.usernameExists(username);
 	}
 
-	public void setItoUserProfileDao(IItoUserProfileDao klhUserProfileDao) {
-		this.klhUserProfileDao = klhUserProfileDao;
+	@Override
+	public boolean mobileExists(String mobile) {
+		return itoUserProfileDao.mobileExists(mobile); 
+	}
+
+	public IItoUserProfileDao getItoUserProfileDao() {
+		return itoUserProfileDao;
+	}
+
+	public void setItoUserProfileDao(IItoUserProfileDao itoUserProfileDao) {
+		this.itoUserProfileDao = itoUserProfileDao;
 	}
 
 	

@@ -38,7 +38,13 @@
 					<p>
 						恭喜您，获得再次体验抓娃娃机游戏机会！一定要把握住这次机会！
 					</p>
-					<img src="<%=request.getAttribute("regedQrcodeUrl")%>">
+					<%
+					String regedQrcodeUrl = (String)request.getAttribute("regedQrcodeUrl");
+					if(regedQrcodeUrl==null){
+						regedQrcodeUrl= request.getContextPath()+"/mobile/img/qrcode/error.jpg";
+					}
+					%>
+					<img src="<%=regedQrcodeUrl%>">
 					
 					<p>
 						即刻扫描此二维码，启动抓娃娃机。

@@ -39,14 +39,15 @@
 					<div class="notifications success"> 
 						NUTS Machine互动游戏二维码区域
 					</div>	
-					<%
-					String subscribedQrcodeUrl = (String) request.getAttribute("subscribedQrcodeUrl");
-					if(subscribedQrcodeUrl!=null){
-					%>
+					
 					<h5>对准游戏装备扫描区域，扫描此二维码</h5>
 					<h5>二维码为首次关注ITO官方微信，系统自动推送二维码</h5>
+					<%
+					String subscribedQrcodeUrl = (String) request.getAttribute("subscribedQrcodeUrl");
+					if(subscribedQrcodeUrl==null){
+						subscribedQrcodeUrl= request.getContextPath()+"/mobile/img/qrcode/error.jpg";
+					}%>
 					<img src="<%=subscribedQrcodeUrl%>">
-					<%}%>
 					
 					<%
 					String regedQrcodeUrl = (String) request.getAttribute("regedQrcodeUrl");

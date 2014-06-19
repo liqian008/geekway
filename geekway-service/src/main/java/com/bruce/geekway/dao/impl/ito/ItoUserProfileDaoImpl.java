@@ -16,31 +16,31 @@ import com.bruce.geekway.model.ItoUserProfileCriteria;
 public class ItoUserProfileDaoImpl implements IItoUserProfileDao, InitializingBean {
 
      @Autowired
-    private ItoUserProfileMapper klhUserProfileMapper;
+    private ItoUserProfileMapper itoUserProfileMapper;
 
     @Override
     public int save(ItoUserProfile t) {
-        return klhUserProfileMapper.insert(t);
+        return itoUserProfileMapper.insert(t);
     }
 
     @Override
     public int updateById(ItoUserProfile t) {
-        return klhUserProfileMapper.updateByPrimaryKeySelective(t);
+        return itoUserProfileMapper.updateByPrimaryKeySelective(t);
     }
 
     @Override
     public int deleteById(Integer id) {
-        return klhUserProfileMapper.deleteByPrimaryKey(id);
+        return itoUserProfileMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public ItoUserProfile loadById(Integer id) {
-        return klhUserProfileMapper.selectByPrimaryKey(id);
+        return itoUserProfileMapper.selectByPrimaryKey(id);
     }
 
     @Override
     public List<ItoUserProfile> queryAll() {
-        return klhUserProfileMapper.selectByExample(null);
+        return itoUserProfileMapper.selectByExample(null);
     }
 
     @Override
@@ -48,6 +48,19 @@ public class ItoUserProfileDaoImpl implements IItoUserProfileDao, InitializingBe
         return null;
     }
     
+    @Override
+	public boolean usernameExists(String username) {
+		ItoUserProfileCriteria criteria = new ItoUserProfileCriteria();
+		criteria.createCriteria().andUsernameEqualTo(username);
+		return itoUserProfileMapper.countByExample(criteria)>0;
+	}
+
+	@Override
+	public boolean mobileExists(String mobile) {
+		ItoUserProfileCriteria criteria = new ItoUserProfileCriteria();
+		criteria.createCriteria().andMobileEqualTo(mobile);
+		return itoUserProfileMapper.countByExample(criteria)>0;
+	}
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -55,11 +68,11 @@ public class ItoUserProfileDaoImpl implements IItoUserProfileDao, InitializingBe
     }
 
     public ItoUserProfileMapper getItoUserProfileMapper() {
-		return klhUserProfileMapper;
+		return itoUserProfileMapper;
 	}
 
-	public void setItoUserProfileMapper(ItoUserProfileMapper klhUserProfileMapper) {
-		this.klhUserProfileMapper = klhUserProfileMapper;
+	public void setItoUserProfileMapper(ItoUserProfileMapper itoUserProfileMapper) {
+		this.itoUserProfileMapper = itoUserProfileMapper;
 	}
 
 	

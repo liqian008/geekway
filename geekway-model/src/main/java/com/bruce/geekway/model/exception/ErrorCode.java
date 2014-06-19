@@ -57,6 +57,8 @@ public class ErrorCode {
 	public static final int USER_REGISTER_ERROR = 209;
 	/* 用户登录失败 */
 	public static final int USER_LOGIN_ERROR = 210;
+	/* 手机号已存在 */
+	public static final int USER_MOBILE_EXISTS = 211;
 
 	/* 上传分配x00-x00的错误码 */
 	/* 未知错误 */

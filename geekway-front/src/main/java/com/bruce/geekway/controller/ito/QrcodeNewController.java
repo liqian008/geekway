@@ -68,7 +68,7 @@ public class QrcodeNewController {
 		}
 		if(StringUtils.isBlank(subscribedQrcodeUrl)){//创建新cookie
 			subscribedQrcodeUrl = getQrcodeUrl();
-			if(subscribedQrcodeUrl!=null){
+			if(!StringUtils.isBlank(subscribedQrcodeUrl)){
 				//重新写入cookie
 				Cookie cookie = new Cookie(KEY_USER_SURSCRIBE_QRCODE, subscribedQrcodeUrl);
 				cookie.setMaxAge(999999999);
@@ -148,5 +148,7 @@ public class QrcodeNewController {
 	private static String getMockQrcodeUrl(){
 		return "http://qr.liantu.com/api.php?text=29|40|10|74|C8|D8|4E|B3|88|44|9B|06|42|8F|7C|18|CF|DF|F1|81|70|4E|4C|05|E8|CC|56|77|ED|22|12|E4|E0|D7|9F|77|36|06|5E|1A";
 	}
+	
+	
 	
 }

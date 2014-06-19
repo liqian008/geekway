@@ -32,12 +32,12 @@
 				
 				<form action="./register" method="post" name="registerForm" id="registerForm">
 				
-				<h5>姓名：<input type="text" id="username" name="username"></h5>
-				<h5>手机：<input type="text" id="mobile" name="mobile"/></h5> 
-				<h5>邮箱：<input type="text" id="email" name="email"/></h5>
+				<h5>姓名：<input type="text" id="reg-username" name="username"></h5>
+				<h5>手机：<input type="text" id="reg-mobile" name="mobile"/></h5> 
+				<h5>邮箱：<input type="text" id="reg-email" name="email"/></h5>
 				
-				<h5><input type="radio" name="promote"/>我希望接收关于ITO旅行箱产品，促销以及活动信息</h5>
-				<h5><input type="radio" name="promote"/>我不希望接任何关于ITO旅行箱产品，促销以及活动信息</h5>
+				<h5><input type="radio" name="promoting" checked="checked"/>我希望接收关于ITO旅行箱产品，促销以及活动信息</h5>
+				<h5><input type="radio" name="promoting"/>我不希望接任何关于ITO旅行箱产品，促销以及活动信息</h5>
 				
 				<a href="javascript:void(0)" id="submitBtn" class="o-buttons blue">确认提交</a>
 				<a href="javascript:void(0)" id="resetBtn" class="o-buttons red">重置</a>
@@ -57,8 +57,68 @@
 	
 	
 	<script>
+	/*注册部分JS*/
+	var regUsernameAvailable = false;
+	var regMobileAvailable = false;
+	
+	$('#reg-username').blur(function(){
+		checkRegUsername();
+	});
+	$('#reg-mobile').blur(function(){
+		checkRegMobile();
+	});
+	
+	//检查用户名是否合法
+	function checkRegUsername(){
+		var usernameVal = $('#reg-username').val();
+		if(usernameVal==''){
+			alert("用户名不能为空");
+    		return false;
+		}else{//ajax检查是否可用
+			var jsonData = {'username':usernameVal};
+			$.post('<%=request.getContextPath()%>/ito/usernameExists.json', jsonData, function(data) {
+   				var result = data.result;
+   				if(result==1){
+   					//设置username available的标识
+   					regUsernameAvailable = true;
+   				}else{
+   					//设置username unabailable的标识
+   					regUsernameAvailable = false;
+   					alert("用户名已被注册");
+   				}
+   			});
+		}
+	}
+	
+	//检查用户名是否合法
+	function checkRegMobile(){
+		var mobileVal = $('#reg-mobile').val();
+		if(mobileVal==''){
+			alert("手机号不能为空");
+    		return false;
+		}else{//ajax检查是否可用
+			var jsonData = {'mobile':mobileVal};
+			$.post('<%=request.getContextPath()%>/ito/mobileExists.json', jsonData, function(data) {
+   				var result = data.result;
+   				if(result==1){
+   					//设置mobile available的标识
+   					regMobileAvailable = true;
+   				}else{
+   					//设置mobile unabailable的标识
+   					regMobileAvailable = false;
+   					alert("手机号已被注册");
+   				}
+   			});
+		}
+	}
+	
 	$("#submitBtn").click(function(){
-		$("#registerForm").submit();
+   		if(regUsernameAvailable && regMobileAvailable){
+   			//所有数据项均可用
+			$("#registerForm").submit();
+   		}else{
+   			return false;
+   		}
 	});
 	
 	$("#resetBtn").click(function(){
