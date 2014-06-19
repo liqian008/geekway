@@ -108,7 +108,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、xxxxxx<br/>
+					1、SKU属性值配置<br/>
 				</p>
 			</div>
 

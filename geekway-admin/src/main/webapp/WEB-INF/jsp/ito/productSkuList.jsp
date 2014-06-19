@@ -116,7 +116,7 @@
                                 <th>SKU名称</th>
                                 <th>价格</th> 
                                 <th>库存</th>
-                                <th>运费</th>
+                                <th>二维码</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
@@ -138,10 +138,14 @@
 		                        	<img src='<%=sku.getSkuPicUrl()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
-		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getPropertiesName()%></td>
+		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>
 		                        <td title="原价: <%=sku.getOriginPrice()%>元"><%=sku.getPrice()%>元</td>
 		                        <td><%=sku.getNum()%>个</td>
-		                        <td>运费</td>
+		                        <td class="text-center">
+		                        	<a href="<%=sku.getAlipaySkuUrl()%>" class="lightbox" target="_blank">
+		                        	<img src='<%=sku.getAlipaySkuUrl()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./productSkuEdit?productId=<%=sku.getProductId()%>&skuId=<%=sku.getId()%>"

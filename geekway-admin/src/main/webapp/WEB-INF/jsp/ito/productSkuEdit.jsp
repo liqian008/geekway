@@ -96,6 +96,7 @@
 				<h5>功能介绍</h5>
 				<p>
 					1、商品SKU详情<br/>
+					2、商品SKU图片尺寸应为1976 × 1536，透明背景，且大小应尽量控制在200K以内<br/>
 				</p>
 			</div>
 
@@ -135,16 +136,14 @@
 								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
 									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
 								</a>
-								<!-- 
 								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
 								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-								 -->
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
+							<div class="col-sm-8">
 								<label class="control-label">
 									${productSku.name}
 								</label>
@@ -152,7 +151,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">SKU KEY: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
 								<label class="control-label">
 									${productSku.propertiesName}
@@ -161,7 +160,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU信息: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">SKU基本信息: <span class="mandatory">*</span>
 							</label>
 							
 							<div class="col-sm-2">
@@ -186,9 +185,12 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付宝产品链接: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">支付宝二维码链接: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
+								<a href="${productSku.alipaySkuUrl}" id="ali-image-link"  class="lightbox">
+									<img id="cover-image" src="${productSku.alipaySkuUrl}" width="200px" />
+								</a>
 								<input type="text" class="form-control" name="alipaySkuUrl" value="${productSku.alipaySkuUrl}" >
 							</div>
 						</div>

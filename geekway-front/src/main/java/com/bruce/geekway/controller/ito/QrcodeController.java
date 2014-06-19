@@ -21,6 +21,7 @@ import com.bruce.geekway.utils.WxHttpUtil;
  * @author liqian
  *
  */
+@Deprecated
 @Controller
 @RequestMapping(value={"ito"})
 public class QrcodeController {

@@ -10,19 +10,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alipay.config.AlipayConfig;
-import com.alipay.util.AlipaySubmit;
-import com.alipay.util.AlipayUtil;
-import com.alipay.util.UtilDate;
 import com.bruce.geekway.constants.ConstIto;
 import com.bruce.geekway.model.ItoProductOrder;
 import com.bruce.geekway.model.ItoSku;
+import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.service.ito.IItoProductOrderService;
 import com.bruce.geekway.service.ito.IItoProductService;
+import com.bruce.geekway.service.ito.IItoSkuPropValueService;
 import com.bruce.geekway.service.ito.IItoSkuService;
-import com.bruce.geekway.utils.ItoOrderUtil;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
@@ -38,6 +35,9 @@ public class ProductOrderController {
 	private IItoProductService itoProductService;
 	@Autowired
 	private IItoProductOrderService itoProductOrderService;
+	@Autowired
+	private IItoSkuPropValueService itoSkuPropValueService;
+	
 	@Autowired
 	private IItoSkuService itoSkuService;
 	
@@ -132,6 +132,7 @@ public class ProductOrderController {
 						
 						//检查邮寄信息
 						checkOrderPostInfo(order);
+						
 						//直接生成订单
 						int result = itoProductOrderService.save(order);
 						if(result>0){
@@ -193,6 +194,28 @@ public class ProductOrderController {
 		if(!postOrder.getTotalPrice().equals(multiPrice(itoSku.getPrice(), postOrder.getNum()))){//总价计算不正确（未包含运费）
 			throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_TOTAL_PRICE_ERROR);
 		}
+		
+		//获取propValue的map，供构造order中的skuName
+		HashMap<Integer, ItoSkuPropValue> propValueMap = itoSkuPropValueService.queryMap();
+		//根据propName动态计算sku显示name，TODO与edit时进行合并
+		String skuPropName = itoSku.getPropertiesName();
+		String[] skuPropNameArray = skuPropName.split(";");
+		StringBuilder sb = new StringBuilder();
+		if(skuPropNameArray!=null&&skuPropNameArray.length>0){
+			
+			for(String skuPropItem: skuPropNameArray){
+				String skuPropValueIdStr = skuPropItem.substring(skuPropItem.lastIndexOf(":")+1);
+				String skuPropValueName = "错误";
+				ItoSkuPropValue propValue = propValueMap.get(Integer.valueOf(skuPropValueIdStr));
+				if(propValue!=null){
+					skuPropValueName = propValue.getName();
+				}
+				sb.append(skuPropValueName+"+");
+			}
+		}
+		if(sb.length()>0)sb.setLength(sb.length()-1);
+		postOrder.setSkuName(sb.toString());
+		
 		return postOrder;
 	}
 	

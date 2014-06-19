@@ -144,7 +144,7 @@
 	                           			i++;
 	                           	%>
 								<tr>
-			                        <td><%=i%></td>
+			                        <td><%=order.getId()%></td>
 			                        <td><%=order.getTitle()%></td>
 			                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
 			                        <td>APP支付</td>

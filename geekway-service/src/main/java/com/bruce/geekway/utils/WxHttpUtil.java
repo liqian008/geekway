@@ -1,17 +1,13 @@
 package com.bruce.geekway.utils;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
 //import org.apache.http.Consts;
