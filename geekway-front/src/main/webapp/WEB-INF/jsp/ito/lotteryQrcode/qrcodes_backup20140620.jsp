@@ -25,26 +25,22 @@
 	</head>
 	<body class="o-page">
 		<div id="page">
-			<div id="ito-header">
+			<!-- <div id="header">
+				<i class="i-blog i-small"></i>
 				NUTS Machine互动游戏
-			</div>
+			</div> -->
 			<div id="ito-content">
 				<article>
-					<!-- <h1>NUTS<br/>MACHINE</h1>
+					<h1>NUTS<br/>MACHINE</h1>
 					<h4>
 						Nuts Machine是ITO NUTS概念店的互动游戏装置，请参照以下步骤开始游戏。抓取到的Nuts Bubble中可能包含一只ITO Ginkgo系列旅行箱。
-					</h4> -->
+					</h4>
 					<!-- <div class="notifications success"> 
 						NUTS Machine互动游戏二维码区域
 					</div> -->
 					
-					<img src="<%=request.getContextPath()%>/mobile/img/ito/title.jpg">
-					
-					
 					<%
-					String loadingImgUrl = request.getContextPath()+"/mobile/img/ito/qrcode/loading.jpg";
-					String errorImgUrl = request.getContextPath()+"/mobile/img/ito/qrcode/error.jpg";
-					
+					String loadingImgUrl = request.getContextPath()+"/mobile/img/qrcode/error.jpg";
 					String subscribedQrcodeUrl = (String) request.getAttribute("subscribedQrcodeUrl");
 					if(subscribedQrcodeUrl==null){
 						//展示图片加载中
@@ -60,58 +56,54 @@
 			   					$('#subscribedQrcode').attr("src", data.data.subscribeQrcodeUrl);
 							}else{
 								//失败，暂时失败的图片
-								$('#subscribedQrcode').attr("src", "<%=errorImgUrl%>");
+								$('#subscribedQrcode').attr("src", "<%=request.getContextPath()%>/mobile/img/qrcode/error.jpg");
 							}
 			   			});
 						</script>
-					<%}%>
-					<div style="text-align:center"><img id="subscribedQrcode" src="<%=subscribedQrcodeUrl%>" style="width:60%"></div>
+					<%
+						
+					}%>
+					<img id="subscribedQrcode" src="<%=subscribedQrcodeUrl%>">
 					<h5 style="text-align:center">请将二维码对准操纵杆上方的扫描端口，扫描成功启动游戏</h5>
 					
 					<%
 					String regedQrcodeUrl = (String) request.getAttribute("regedQrcodeUrl");
-					if(regedQrcodeUrl!=null){//不为空的情况下直接展示
+					if(regedQrcodeUrl!=null){
 					%>
-						<div style="text-align:center"><img id="regedQrcode" src="<%=regedQrcodeUrl%>" style="width:60%"></div>
-						<h5 style="text-align:center">注册成功奖励二维码游戏机会</h5>
-					<%}else{
-						Boolean alreadyReged = (Boolean)request.getAttribute("alreadyReged");
-						if(alreadyReged!=null&&alreadyReged){//注册成功，但未取到图片
-						%>
-						<div style="text-align:center"><img id="regedQrcode" src="<%=loadingImgUrl%>" style="width:60%"></div>
-						<h5 style="text-align:center">注册成功奖励二维码游戏机会</h5>
-						
-						<script>
-						//ajax方式重新获取图片
-						var jsonData = {'a':'1'};
-						$.post('<%=request.getContextPath()%>/ito/getRegedQrcode.json', jsonData, function(data) {
-			   				var result = data.result;
-			   				if(result==1){
-								//成功
-			   					$('#regedQrcode').attr("src", data.data.regedQrcodeUrl);
-							}else{
-								//失败，暂时失败的图片
-								$('#regedQrcode').attr("src", "<%=errorImgUrl%>");
-							}
-			   			});
-						</script>
-						
-						
-						<%}else{//未注册，可以进行注册%>
+						<h5>二维码为用户注册后，系统奖励二维码</h5>
+						<img id="regedQrcode"  src="<%=regedQrcodeUrl%>">
+					<%}else{%>
 						<h5>请先完成第一次游戏，再点击下方“再玩一次”按钮，每个微信帐号仅有两次游戏机会。</h5>
  						<a href="./register" id="submitBtn" class="ito-buttons grey">再玩一次</a>
-					<%}
-					}%>
+					<%}%>
 					
-					<br/> 
-					<h5>NUTS by概念店地址:</h5>
+					<h5>NUTS by概念店地址：</h5>
 					<h5>上海市武康路216号</h5>
-					<img src="<%=request.getContextPath()%>/mobile/img/ito/map.jpg">
-					<h5>*本游戏目前仅在上海地区开通。</h5>
+					<img src="<%=request.getContextPath()%>/mobile/img/ito/nuts-machine-2_05.jpg"">
+					<!-- <div class="notifications success">
+						获取NUTS Machine互动游戏二维码攻略
+					</div>		
+					<p>
+						1.打开微信，扫描橱窗上的二维码，或搜索”ITO”，关注ITO官方微信；<br/>
+						2.点选首页下方”活动”按钮中的”NUTS Machine”选项；<br/>
+						3.将二维码对准操纵杆上方的扫描仪，扫描成功，开始游戏；<br/>
+						4.点击页面下方“再玩一次”按钮，可再获得一次游戏机会.<br/>
+					</p>
+					<div class="notifications success">
+						NUTS Machine位置
+					</div>		
+					<p>
+						1.目前仅在上海地区开通；<br/>
+						2.上海地区NUTS Machine位于武康路216号；<br/>
+					</p> -->
+					
 				</article>
 			</div>
 			<!--<div class="subFooter">Copyright 2013. All rights reserved.</div>-->
 		</div>
 	</body>
+	
+	
+	
 	
 </html>

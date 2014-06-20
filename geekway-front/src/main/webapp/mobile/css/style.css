@@ -88,6 +88,21 @@ pre
 	padding: 0 50px;
 }
 
+#ito-header,
+.ito-header,
+#ito-footer
+{
+	background: #a8a6a5;
+	font-size: 16px;
+	font-weight: bold;
+	color: #fff;
+	text-align: center;
+	line-height: 51px;
+	height: 51px;
+	padding: 0 50px;
+}
+
+
 .subHeader, .subFooter { 
 	background-color:#233241;
 	font-size: 15px;
@@ -143,6 +158,12 @@ pre
 .content
 {
 	padding: 10px;
+}
+
+#ito-content,
+.ito-content
+{
+	padding: 10px 50px;
 }
 
 /*********************/
@@ -325,6 +346,7 @@ div.gallery-item img { display: block; width: 100%; height: auto; }
 .o-buttons { padding:5px 10px; font-size:12px; color:#fff !important; margin:3px; text-decoration:none !important; display:inline-block;}
 .o-buttons.b-big { padding: 10px 20px; font-size: 16px; }
 .o-buttons:hover { text-decoration:none; }
+
 .o-buttons.blue { background: #587eac; }
 .o-buttons.blue:hover { background: #233241; }
 
@@ -336,6 +358,13 @@ div.gallery-item img { display: block; width: 100%; height: auto; }
 
 .o-buttons.orange { background: #e0af50; }
 .o-buttons.orange:hover { background: #c68a2a; }
+
+.ito-buttons {width:100%; text-align:center; padding:5px 10px; font-size:18px; color:#5e5e5e !important; margin:3px; text-decoration:none !important; display:inline-block;}
+.ito-buttons.grey { background: #e5e4e4; }
+
+.ito-buttons2 {text-align:center; padding:5px 10px; font-size:18px; color:#5e5e5e !important; margin:3px; text-decoration:none !important; display:inline-block;}
+.ito-buttons2.grey { background: #e5e4e4; }
+
 
 
 .notifications { padding:20px; position: relative; margin-bottom: 20px; font-size: 13px; }

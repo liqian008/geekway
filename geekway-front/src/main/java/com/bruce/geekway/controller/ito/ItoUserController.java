@@ -2,7 +2,9 @@ package com.bruce.geekway.controller.ito;
 
 import java.util.Date;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,11 @@ import com.bruce.geekway.utils.ResponseBuilderUtil;
 @Controller
 @RequestMapping(value = { "ito" })
 public class ItoUserController {
+	
+	
+	/*用户注册后的key*/
+	public static final String KEY_USER_REGISTERED = "user_registed";
+	
 	
 	@Autowired
 	private IItoUserProfileService itoUserProfileService;
@@ -62,10 +69,15 @@ public class ItoUserController {
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String registerGo(Model model, ItoUserProfile itoUserProfile, HttpServletRequest request) {
+	public String registerGo(Model model, ItoUserProfile itoUserProfile, HttpServletRequest request,  HttpServletResponse response) {
 		int result = itoUserProfileService.save(itoUserProfile);
-		
-		return "redirect:/ito/regedQrcode";
+		if(result>0){
+			//重新写入cookie
+			Cookie cookie = new Cookie(KEY_USER_REGISTERED, "true");
+			cookie.setMaxAge(999999999);
+			response.addCookie(cookie);
+		}
+		return "redirect:/ito/gameQrcodes";
 	}
 
 }

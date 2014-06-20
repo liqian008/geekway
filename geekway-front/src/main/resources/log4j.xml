@@ -10,9 +10,23 @@
 		</layout>
 	</appender>
 	
+	<appender name="ito_qrcode_stdout" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/Users/liqian/temp/qrcode_stdout.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
+		</layout>
+	</appender>
+	
 	<!-- Application Loggers -->
 	<logger name="com.bruce.geekway">
 		<level value="info" />
+	</logger>
+	
+	<!-- 第三方发码中心 Loggers -->
+	<logger name="com.bruce.geekway.controller.ito.QrcodeNewController">
+		<level value="info"/>
+		<appender-ref ref="ito_qrcode_stdout"/>
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

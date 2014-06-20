@@ -1,11 +1,15 @@
 package com.bruce.geekway.controller.ito;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bruce.geekway.model.ito.json.ItoWwjQrcodeResult;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
+import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**
@@ -24,6 +29,8 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @Controller
 @RequestMapping(value={"ito"})
 public class QrcodeNewController {
+
+	private static final Logger logger = LoggerFactory.getLogger(QrcodeNewController.class);
 	
 	/*用户请求二维码的次数*/
 	private static final String KEY_USER_APPLIED_TIME = "user_appled_time";
@@ -35,7 +42,6 @@ public class QrcodeNewController {
 	/*用户注册后生成的二维码key*/
 	private static final String KEY_USER_REGISTER_QRCODE = "user_register_qrcode";
 	
-	
 	/**
 	 * 
 	 * @param model
@@ -44,6 +50,7 @@ public class QrcodeNewController {
 	 */
 	@RequestMapping(value = "/gameQrcodes")
 	public String gameQrcodes(Model model, HttpServletRequest request, HttpServletResponse response) {
+		boolean alreadyReged = false;//默认为未注册
 		String subscribedQrcodeUrl = null;
 		String regedQrcodeUrl = null;
 		
@@ -51,10 +58,20 @@ public class QrcodeNewController {
 		Cookie[] cookies = request.getCookies();
 		if(cookies!=null&&cookies.length>0){
 			for(Cookie cookie: cookies){
+				//检查登录与否
+				if(ItoUserController.KEY_USER_REGISTERED.equals(cookie.getName())){
+					String userRegisterStr = cookie.getValue();
+					if(!StringUtils.isEmpty(userRegisterStr)){//注册过
+						alreadyReged = true;
+					}
+					continue;
+				}
+				
 				if(KEY_USER_SURSCRIBE_QRCODE.equals(cookie.getName())){
 					String qrcodesStr = cookie.getValue();
 					if(!StringUtils.isBlank(qrcodesStr)){//有数据
 						subscribedQrcodeUrl = qrcodesStr;
+						continue;
 					}
 				}
 				
@@ -62,20 +79,24 @@ public class QrcodeNewController {
 					String qrcodesStr = cookie.getValue();
 					if(!StringUtils.isBlank(qrcodesStr)){//有数据
 						regedQrcodeUrl = qrcodesStr;
+						continue;
 					}
 				}
 			}
 		}
-		if(StringUtils.isBlank(subscribedQrcodeUrl)){//创建新cookie
-			subscribedQrcodeUrl = getQrcodeUrl();
-			if(!StringUtils.isBlank(subscribedQrcodeUrl)){
-				//重新写入cookie
-				Cookie cookie = new Cookie(KEY_USER_SURSCRIBE_QRCODE, subscribedQrcodeUrl);
-				cookie.setMaxAge(999999999);
-				response.addCookie(cookie);
-			}
-		}
 		
+		//TODO 改用ajax方式load图片
+//		if(StringUtils.isBlank(subscribedQrcodeUrl)){//创建新cookie
+//			subscribedQrcodeUrl = getQrcodeUrl();
+//			if(!StringUtils.isBlank(subscribedQrcodeUrl)){
+//				//重新写入cookie
+//				Cookie cookie = new Cookie(KEY_USER_SURSCRIBE_QRCODE, subscribedQrcodeUrl);
+//				cookie.setMaxAge(999999999);
+//				response.addCookie(cookie);
+//			}
+//		}
+		
+		model.addAttribute("alreadyReged", alreadyReged);//是否注册过
 		model.addAttribute("subscribedQrcodeUrl", subscribedQrcodeUrl);
 		model.addAttribute("regedQrcodeUrl", regedQrcodeUrl);
 		return "ito/lotteryQrcode/qrcodes";
@@ -104,51 +125,101 @@ public class QrcodeNewController {
 				}
 			}
 		}
-		
-		if(StringUtils.isBlank(regedQrcodeUrl)){//创建新cookie
-			regedQrcodeUrl = getQrcodeUrl();
-			if(regedQrcodeUrl!=null){
-				//重新写入cookie
-				Cookie cookie = new Cookie(KEY_USER_REGISTER_QRCODE, regedQrcodeUrl);
-				cookie.setMaxAge(999999999);
-				response.addCookie(cookie);
-			}
-		}
-		
 		model.addAttribute("regedQrcodeUrl", regedQrcodeUrl);
 		return "ito/lotteryQrcode/regedQrcode";
 	}
 	
+	
+	
+	/**
+	 * ajax方式获取关注时的二维码
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/getSubscribedQrcode.json")
+	public ModelAndView getSubscribedQrcode(Model model, HttpServletRequest request, HttpServletResponse response) {
+		String subscribeQrcodeUrl = getQrcodeUrl();
+		if(subscribeQrcodeUrl!=null){
+			//重新写入cookie
+			Cookie cookie = new Cookie(KEY_USER_SURSCRIBE_QRCODE, subscribeQrcodeUrl);
+			cookie.setMaxAge(999999999);
+			response.addCookie(cookie);
+			//返回成功响应
+			Map<String, String> dataMap = new HashMap<String, String>();
+			dataMap.put("subscribeQrcodeUrl", subscribeQrcodeUrl);
+			return JsonViewBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+		}
+		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
+	}
+	
+	/**
+	 * ajax方式获取注册后奖励的二维码
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/getRegedQrcode.json")
+	public ModelAndView getRegedQrcode(Model model, HttpServletRequest request, HttpServletResponse response) {
+		String regedQrcodeUrl = getQrcodeUrl();
+		if(regedQrcodeUrl!=null){
+			//重新写入cookie
+			Cookie cookie = new Cookie(KEY_USER_REGISTER_QRCODE, regedQrcodeUrl);
+			cookie.setMaxAge(999999999);
+			response.addCookie(cookie);
+			//返回成功响应
+			Map<String, String> dataMap = new HashMap<String, String>();
+			dataMap.put("regedQrcodeUrl", regedQrcodeUrl);
+			return JsonViewBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+		}
+		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
+	}
 	
 	/**
 	 * 
 	 * @return
 	 */
 	private static String getQrcodeUrl(){
-		boolean isTest = false;
+		boolean isTest = false; 
 		if(isTest){
 			return getMockQrcodeUrl();
 		}
-		
 		//从第三方服务获取二维码&展示给用户
 		String qrcodeUrl = null;
-		
 		String wwjUrl = "http://itocases.eicp.net:8733/design_time_addresses/qrgamecontrollerservice/qrurl";
 		String result = WxHttpUtil.sendGetRequest(wwjUrl, null);
 		if(!StringUtils.isBlank(result)){
+			logger.info("从发码中心获取二维码成功!");
 			ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
 			if(wwjResult!=null&&wwjResult.getErrorCode()==0){
 				qrcodeUrl = wwjResult.getImageUrl();
 			}
+		}else{
+			logger.error("从发码中心获取二维码失败!");
 		}
+		
 		return qrcodeUrl;
 	}
 
 	
+	/**
+	 * 消费二维码的回调
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/qrcodeConsumeNotify")//, method=RequestMethod.POST
+	public ModelAndView qrcodeConsumeNotify(String qrcodeKey, String qrcodeUrl, String sign) {
+		
+		logger.info("发码中心回调的消费记录。["+qrcodeUrl+"]["+sign+"]");
+		//TODO 检查签名
+		//更新二维码使用状态
+		int result = 1; 
+		if(result>0){
+			return JsonViewBuilderUtil.SUBMIT_SUCCESS_VIEW;
+		}
+		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
+	}
+	
 	private static String getMockQrcodeUrl(){
 		return "http://qr.liantu.com/api.php?text=29|40|10|74|C8|D8|4E|B3|88|44|9B|06|42|8F|7C|18|CF|DF|F1|81|70|4E|4C|05|E8|CC|56|77|ED|22|12|E4|E0|D7|9F|77|36|06|5E|1A";
 	}
-	
-	
 	
 }

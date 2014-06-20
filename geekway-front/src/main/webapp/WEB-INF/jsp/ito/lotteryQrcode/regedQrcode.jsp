@@ -25,30 +25,38 @@
 	</head>
 	<body class="o-page">
 		<div id="page">
-			<div id="header">
-				<!-- 
-				<i class="i-blog i-small"></i>
-				 -->
+			<div id="ito-header">
 				NUTS Machine互动游戏
 			</div>
 			<div id="content">
 				<article>
+					<h5 style="text-align:center">恭喜您，获得再次游戏机会！一定要把握住这次机会！</h5>
 					
-					<h2><a href="javascript:void(0)">注册奖励娃娃机抓取二维码</a></h2>
-					<p>
-						恭喜您，获得再次体验抓娃娃机游戏机会！一定要把握住这次机会！
-					</p>
 					<%
 					String regedQrcodeUrl = (String)request.getAttribute("regedQrcodeUrl");
 					if(regedQrcodeUrl==null){
 						regedQrcodeUrl= request.getContextPath()+"/mobile/img/qrcode/error.jpg";
-					}
 					%>
-					<img src="<%=regedQrcodeUrl%>">
 					
-					<p>
-						即刻扫描此二维码，启动抓娃娃机。
-					</p>
+						<script>
+						var jsonData = {'a':'1'};
+						$.post('<%=request.getContextPath()%>/ito/getRegedQrcode.json', jsonData, function(data) {
+			   				var result = data.result;
+			   				if(result==1){
+								//成功
+								//alert(data.data.subscribeQrcodeUrl);
+			   					$('#regedQrcode').attr("src", data.data.regedQrcodeUrl);
+							}else{
+								//失败，暂时失败的图片
+								$('#regedQrcode').attr("src", "<%=request.getContextPath()%>/mobile/img/qrcode/error.jpg");
+							}
+			   			});
+						</script>
+					
+					<%}
+					%>
+					<div style="text-align:center"><img id="regedQrcode" src="<%=regedQrcodeUrl%>" style="width:50%"></div>
+					<h5 style="text-align:center">请将二维码对准操纵杆上方的扫描端口，扫描成功启动游戏</h5>
 					
 				</article>
 			</div>

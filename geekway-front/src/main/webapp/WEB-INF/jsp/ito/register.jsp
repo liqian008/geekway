@@ -19,14 +19,9 @@
 	</head>
 	<body class="o-page">
 		<div id="page">
-			<div id="header">
+			<div id="ito-header">
 				用户信息填写
-				<a class="backBtn" href="javascript:history.back();"></a>
 			</div> 
-			
-			<!-- <div class="subHeader">
-				用户注册
-			</div> -->
 			<div id="content">
 				<h4 class="title">请填写以下信息，系统会自动为你推送二维码以启动游戏设备；</h4>
 				
@@ -36,11 +31,11 @@
 				<h5>手机：<input type="text" id="reg-mobile" name="mobile"/></h5> 
 				<h5>邮箱：<input type="text" id="reg-email" name="email"/></h5>
 				
-				<h5><input type="radio" name="promoting" checked="checked"/>我希望接收关于ITO旅行箱产品，促销以及活动信息</h5>
-				<h5><input type="radio" name="promoting"/>我不希望接任何关于ITO旅行箱产品，促销以及活动信息</h5>
+				<h5><input type="radio" name="promoting" checked="checked" value="1"/>我希望接收关于ITO旅行箱产品，促销以及活动信息</h5>
+				<h5><input type="radio" name="promoting"  value="0"/>我不希望接任何关于ITO旅行箱产品，促销以及活动信息</h5>
 				
-				<a href="javascript:void(0)" id="submitBtn" class="o-buttons blue">确认提交</a>
-				<a href="javascript:void(0)" id="resetBtn" class="o-buttons red">重置</a>
+				<a href="javascript:void(0)" id="submitBtn" class="ito-buttons2 grey">确认提交</a>
+				<a href="javascript:void(0)" id="resetBtn" class="ito-buttons2 grey">重置</a>
 				
 				</form>
 				
