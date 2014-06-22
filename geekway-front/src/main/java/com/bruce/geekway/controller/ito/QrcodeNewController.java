@@ -30,7 +30,7 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @RequestMapping(value={"ito"})
 public class QrcodeNewController {
 
-	private static final Logger logger = LoggerFactory.getLogger(QrcodeNewController.class);
+	private static final Logger logger = LoggerFactory.getLogger("ItoQrcodeLogger");
 	
 	/*用户请求二维码的次数*/
 	private static final String KEY_USER_APPLIED_TIME = "user_appled_time";
@@ -187,10 +187,10 @@ public class QrcodeNewController {
 		String wwjUrl = "http://itocases.eicp.net:8733/design_time_addresses/qrgamecontrollerservice/qrurl";
 		String result = WxHttpUtil.sendGetRequest(wwjUrl, null);
 		if(!StringUtils.isBlank(result)){
-			logger.info("从发码中心获取二维码成功!");
 			ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
 			if(wwjResult!=null&&wwjResult.getErrorCode()==0){
 				qrcodeUrl = wwjResult.getImageUrl();
+				logger.info("从发码中心获取二维码成功!["+qrcodeUrl+"]");
 			}
 		}else{
 			logger.error("从发码中心获取二维码失败!");
@@ -208,7 +208,7 @@ public class QrcodeNewController {
 	@RequestMapping(value = "/qrcodeConsumeNotify")//, method=RequestMethod.POST
 	public ModelAndView qrcodeConsumeNotify(String qrcodeKey, String qrcodeUrl, String sign) {
 		
-		logger.info("发码中心回调的消费记录。["+qrcodeUrl+"]["+sign+"]");
+		logger.info("发码中心回调的消费记录。["+qrcodeKey+"]["+qrcodeUrl+"]["+sign+"]");
 		//TODO 检查签名
 		//更新二维码使用状态
 		int result = 1; 

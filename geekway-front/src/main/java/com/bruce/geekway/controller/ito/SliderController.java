@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,8 @@ import com.bruce.geekway.utils.JsonViewBuilderUtil;
 @RequestMapping(value={"api"})
 public class SliderController {
 	
+	private static final Logger logger = LoggerFactory.getLogger("ItoAppLogger");
+	
 	@Autowired
 	private IItoSliderService itoSliderService;
 	
@@ -32,6 +36,8 @@ public class SliderController {
 	 */
 	@RequestMapping(value = "/sliderList.json")
 	public ModelAndView sliderList() {
+		
+		logger.info("App客户端获取轮播图片列表");
 		
 		List<ItoSlider> sliderList =  itoSliderService.queryAll();
 		if(sliderList!=null&&sliderList.size()>0){

@@ -108,6 +108,7 @@
 	}
 	
 	$("#submitBtn").click(function(){
+   		$("#submitBtn").attr("disabled","disabled");
    		if(regUsernameAvailable && regMobileAvailable){
    			//所有数据项均可用
 			$("#registerForm").submit();
