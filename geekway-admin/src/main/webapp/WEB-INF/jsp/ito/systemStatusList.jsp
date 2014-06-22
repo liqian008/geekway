@@ -115,6 +115,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						<thead>
 							<tr>
 								<th>序号</th>
+								<th>设备ID</th>
                                 <th>检查时间</th>
                                 <th>运行状态</th>
 							</tr>
@@ -129,6 +130,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                            	%>
 							<tr>
 		                        <td><%=i%></td>
+		                        <td><%=systemStatus.getDeviceId()%></td>
 		                        <td><%=sdf.format(systemStatus.getCreateTime())%></td>
 		                        <td>正常</td>
                                </tr>

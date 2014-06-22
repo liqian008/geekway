@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,9 @@ import com.bruce.geekway.utils.JsonViewBuilderUtil;
 @RequestMapping(value={"api"})
 public class ItoController {
 	
+	private static final Logger logger = LoggerFactory.getLogger("ItoAppLogger");
+	
+	
 	@Autowired
 	private IItoSystemStatusService itoSystemStatusService;
 	@Autowired
@@ -38,12 +43,14 @@ public class ItoController {
 	 * @return
 	 */
 	@RequestMapping(value = "/running.json")
-	public ModelAndView running() {
+	public ModelAndView running(String deviceId) {
+		
+		logger.info("App客户端["+deviceId+"]发送运行状态");
 		
 		ItoSystemStatus systemStatus=  new ItoSystemStatus();
 		Date currentTime = new Date();
+		systemStatus.setDeviceId(deviceId);
 		systemStatus.setCreateTime(currentTime);
-		
 		int result =  itoSystemStatusService.save(systemStatus);
 		if(result>0){
 			return JsonViewBuilderUtil.SUBMIT_SUCCESS_VIEW;
@@ -59,6 +66,9 @@ public class ItoController {
 	 */
 	@RequestMapping(value = "/productBgList.json")
 	public ModelAndView productList() {
+		
+		logger.info("App客户端获取图片配置数据");
+		
 		List<ItoProductBg> productBgList = itoProductBgService.queryAll();
 		
 		if(productBgList!=null&&productBgList.size()>0){

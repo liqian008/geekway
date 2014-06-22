@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,6 +37,8 @@ import com.bruce.geekway.utils.JsonViewBuilderUtil;
 @RequestMapping(value={"api"})
 public class ProductController {
 	
+	private static final Logger logger = LoggerFactory.getLogger("ItoAppLogger");
+	
 	@Autowired
 	private IItoProductService itoProductService;
 	@Autowired
@@ -57,6 +61,9 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/productList.json")
 	public ModelAndView productList() {
+		
+		logger.info("App客户端获取产品列表");
+		
 		//检查请求合法性
 		
 		List<ItoProduct> productList =  itoProductService.queryAvailableList();
@@ -85,6 +92,9 @@ public class ProductController {
 	 */
 	@RequestMapping(value = "/productInfo.json")
 	public ModelAndView productInfo(int productId) {
+		
+		logger.info("App客户端获取产品详情");
+		
 		//检查请求合法性
 		
 		ItoProduct product =  itoProductService.loadById(productId);

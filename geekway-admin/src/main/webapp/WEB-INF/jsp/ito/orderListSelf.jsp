@@ -5,6 +5,9 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
+<%
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+%>
 
 
 <!DOCTYPE html>
@@ -132,6 +135,7 @@
 	                                <th>总价</th>
 	                                <th>支付类型</th>
 	                                <th>状态</th>
+	                                <th>下单时间</th>
 	                                <th class="team-links">操作</th>
 								</tr>
 							</thead>
@@ -149,6 +153,7 @@
 			                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
 			                        <td>APP支付</td>
 			                        <td><%=order.getPayStatus()==20?"已发货":"待发货"%></td>
+			                        <td><%=sdf.format(order.getCreateTime())%></td>
 			                        <td class='text-center'>
 			                        	<div class="table-controls"> 
 			                        	

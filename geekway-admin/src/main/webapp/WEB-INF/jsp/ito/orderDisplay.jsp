@@ -8,6 +8,11 @@
 <%@ include file="../inc/include_tag.jsp" %>
 
 
+<%
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+%>
+
+
 <%!String displayPayType(Short payType){
 	if(payType!=null&&1==payType){
 		return "支付宝支付";
@@ -284,17 +289,26 @@
 						
 						
 						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">下单时间: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									<%=sdf.format(productOrder.getCreateTime())%>
+								</label>
+							</div>
+						</div>
+						
+						<%-- <div class="form-group">
 							<label class="col-sm-2 control-label text-right">运单号: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="postSn" id="postSn" value="${productOrder.postSn}" readonly="readonly"/>
 							</div>
-						</div>
+						</div> --%>
 						
 						
-						<div class="form-actions text-right">
+						<!-- <div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
+						</div> -->
 					</div>
 					
 					

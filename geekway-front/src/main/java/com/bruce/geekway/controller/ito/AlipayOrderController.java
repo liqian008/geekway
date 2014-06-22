@@ -48,7 +48,6 @@ public class AlipayOrderController {
 	private IWxMaterialArticleService wxMaterialArticleService;
 	@Autowired
 	private IItoProductOrderService itoProductOrderService;
-	
 
 	
 	/**

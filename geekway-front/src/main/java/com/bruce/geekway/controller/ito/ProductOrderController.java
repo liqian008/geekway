@@ -1,9 +1,12 @@
 package com.bruce.geekway.controller.ito;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +33,9 @@ import com.bruce.geekway.utils.JsonViewBuilderUtil;
 @Controller
 @RequestMapping(value={"api"})
 public class ProductOrderController {
+	
+	private static final Logger logger = LoggerFactory.getLogger("ItoAppOrderLogger");
+	
 	
 	@Autowired
 	private IItoProductService itoProductService;
@@ -101,7 +107,6 @@ public class ProductOrderController {
 		//检查请求合法性
 		boolean validRequest = true;
 		if(orderJson!=null&&validRequest){
-			System.out.println("=======orderJson========="+orderJson);
 			ItoProductOrder order = checkOrder(orderJson);//检查交易参数的合法性
 			if(order!=null){
 				//将新订单的支付状态初始化为未支付
@@ -110,10 +115,6 @@ public class ProductOrderController {
 				if(orderSku!=null){
 					//判断支付类型
 					if(order.getPayType()==ConstIto.PAYTYPE_ALIPAY){//支付宝流程，调用支付宝生成二维码
-	//					//生成预备订单
-	//					int result = itoProductOrderService.save(order);
-	//					if(result>0){
-						
 							//根据订单信息，返回alipay的二维码订单
 							String alipayQrcodeUrl;
 							try {
@@ -128,10 +129,11 @@ public class ProductOrderController {
 							return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 	//					}
 					}else if(order.getPayType()==ConstIto.PAYTYPE_SELF){//APP支付
-						//TODO 设置skuName
-						
 						//检查邮寄信息
 						checkOrderPostInfo(order);
+						order.setCreateTime(new Date());//订单创建时间
+						
+						logger.info("APP下单的订单信息!["+orderJson+"]");
 						
 						//直接生成订单
 						int result = itoProductOrderService.save(order);
@@ -142,11 +144,13 @@ public class ProductOrderController {
 							return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 						}
 					}else{
+						logger.error("不支持的订单类型["+order.getPayType()+"]");
 						throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_PAYTYPE_ERROR);
 					}
 				}
 			}
 		}
+		logger.error("下单失败");
 		throw new GeekwayException(ErrorCode.ITO_PRODUCT_ORDER_ERROR);
 	}
 	

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +34,9 @@ import com.bruce.geekway.utils.ResponseBuilderUtil;
 @Controller
 @RequestMapping(value = { "ito" })
 public class ItoUserController {
+	
+	
+	private static final Logger logger = LoggerFactory.getLogger("ItoUserLogger");
 	
 	
 	/*用户注册后的key*/
@@ -70,12 +75,15 @@ public class ItoUserController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String registerGo(Model model, ItoUserProfile itoUserProfile, HttpServletRequest request,  HttpServletResponse response) {
-		int result = itoUserProfileService.save(itoUserProfile);
-		if(result>0){
-			//重新写入cookie
-			Cookie cookie = new Cookie(KEY_USER_REGISTERED, "true");
-			cookie.setMaxAge(999999999);
-			response.addCookie(cookie);
+		if(itoUserProfile!=null){
+			itoUserProfile.setCreateTime(new Date());
+			int result = itoUserProfileService.save(itoUserProfile);
+			if(result>0){
+				//重新写入cookie
+				Cookie cookie = new Cookie(KEY_USER_REGISTERED, "true");
+				cookie.setMaxAge(999999999);
+				response.addCookie(cookie);
+			}
 		}
 		return "redirect:/ito/gameQrcodes";
 	}

@@ -10,8 +10,24 @@
 		</layout>
 	</appender>
 	
-	<appender name="ito_qrcode_stdout" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/Users/liqian/temp/qrcode_stdout.log" />
+	<appender name="ito_qrcode_logger" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/geekway/www/logs/geekway-front/ito_qrcode.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
+		</layout>
+	</appender>
+	
+	<appender name="ito_order_logger" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/geekway/www/logs/geekway-front/ito_app_order.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
+		</layout>
+	</appender>
+	
+	<appender name="ito_app_logger" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/data/geekway/www/logs/geekway-front/ito_app.log" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
@@ -24,9 +40,21 @@
 	</logger>
 	
 	<!-- 第三方发码中心 Loggers -->
-	<logger name="com.bruce.geekway.controller.ito.QrcodeNewController">
+	<logger name="ItoQrcodeLogger">
 		<level value="info"/>
-		<appender-ref ref="ito_qrcode_stdout"/>
+		<appender-ref ref="ito_qrcode_logger"/>
+	</logger>
+	
+	<!-- App访问 Loggers -->
+	<logger name="ItoAppLogger">
+		<level value="info"/>
+		<appender-ref ref="ito_app_logger"/>
+	</logger>
+	
+	<!-- App 订单 Loggers -->
+	<logger name="ItoAppOrderLogger">
+		<level value="info"/>
+		<appender-ref ref="ito_order_logger"/>
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
