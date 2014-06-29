@@ -206,8 +206,9 @@ public class QrcodeNewController {
 	 * @return
 	 */
 	@RequestMapping(value = "/qrcodeConsumeNotify")//, method=RequestMethod.POST
-	public ModelAndView qrcodeConsumeNotify(String qrcodeKey, String qrcodeUrl, String sign) {
+	public ModelAndView qrcodeConsumeNotify(String qrcodeKey, String qrcodeUrl, String sign, HttpServletRequest request) {
 		
+		logger.info("发码中心回调的消费参数。["+request.getParameterMap()+"]");
 		logger.info("发码中心回调的消费记录。["+qrcodeKey+"]["+qrcodeUrl+"]["+sign+"]");
 		//TODO 检查签名
 		//更新二维码使用状态

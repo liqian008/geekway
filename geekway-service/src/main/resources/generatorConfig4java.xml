@@ -67,12 +67,13 @@
 		<table schema="wx" tableName="ito_sku_image" domainObjectName="ItoSkuImage"/>
 		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
 		 <table schema="wx" tableName="ito_wwj_record" domainObjectName="ItoWwjRecord"/>
-		 -->
 		<table schema="wx" tableName="ito_system_status" domainObjectName="ItoSystemStatus"/>
+		 -->
 		
 		
 		<!-- klh config  -->
 		
+		<table schema="wx" tableName="klh_wall_image" domainObjectName="KlhWallImage"/>
 		
 		<!-- 
 		<table schema="wx" tableName="klh_product" domainObjectName="KlhProduct"/>

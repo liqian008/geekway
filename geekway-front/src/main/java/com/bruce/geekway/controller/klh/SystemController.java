@@ -36,52 +36,52 @@ public class SystemController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/index")
+	@RequestMapping(value = {"/","/index", "/home"})
 	public String index(Model model) {
-		model.addAttribute("authorizeUrl", WxMpUtil.AUTHORIZE_URL);
+//		model.addAttribute("authorizeUrl", WxMpUtil.AUTHORIZE_URL);
 		return "klh/index";
 	}
 
-	/**
-	 * 个人页
-	 * 
-	 * @param model
-	 * @param code
-	 * @return
-	 */
-	@RequestMapping(value = "/home")
-	public String home(Model model, @RequestParam(value = "code", required = false, defaultValue = "") String code, HttpServletRequest request) {
-
-		if (!StringUtils.isEmpty(code)) {//回调地址进来的
-			WxOauthTokenResult oauthResult = mpOauthService.getOauthAccessToken(code);
-			if (oauthResult != null && oauthResult.getAccess_token() != null) {
-				System.out.println("==========1=========");
-				String openid = oauthResult.getOpenid();
-				//使用accessToken获取userInfo
-				WxUserInfoResult authUserInfoResult = mpOauthService.getOauthUserinfo(oauthResult.getAccess_token(), oauthResult.getOpenid());
-				if (authUserInfoResult != null) {
-					System.out.println("==========2=========");
-					KlhUserProfile sessionUserProfile = klhUserProfileService.loadByOpenid(openid);
-					if (sessionUserProfile== null) {//全新用户
-						System.out.println("==========4=========");
-						sessionUserProfile = new KlhUserProfile();
-						sessionUserProfile.setUserOpenId(openid);
-					}
-					sessionUserProfile.setNickname(authUserInfoResult.getNickname());
-					request.getSession().setAttribute("sessionUserProfile", sessionUserProfile);
-					return "klh/home";
-				}
-			}
-			System.out.println("===oauthResult==" + oauthResult.getOpenid());
-		}else{
-			if(KlhUtil.sessionValid(request)){// 页面流程
-				return "klh/home";
-			}else{
-				return KlhUtil.redirectToOauth(model);
-			}
-		}
-		return "redirect:./error";
-	}
+//	/**
+//	 * 个人页
+//	 * 
+//	 * @param model
+//	 * @param code
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/home")
+//	public String home(Model model, @RequestParam(value = "code", required = false, defaultValue = "") String code, HttpServletRequest request) {
+//
+//		if (!StringUtils.isEmpty(code)) {//回调地址进来的
+//			WxOauthTokenResult oauthResult = mpOauthService.getOauthAccessToken(code);
+//			if (oauthResult != null && oauthResult.getAccess_token() != null) {
+//				System.out.println("==========1=========");
+//				String openid = oauthResult.getOpenid();
+//				//使用accessToken获取userInfo
+//				WxUserInfoResult authUserInfoResult = mpOauthService.getOauthUserinfo(oauthResult.getAccess_token(), oauthResult.getOpenid());
+//				if (authUserInfoResult != null) {
+//					System.out.println("==========2=========");
+//					KlhUserProfile sessionUserProfile = klhUserProfileService.loadByOpenid(openid);
+//					if (sessionUserProfile== null) {//全新用户
+//						System.out.println("==========4=========");
+//						sessionUserProfile = new KlhUserProfile();
+//						sessionUserProfile.setUserOpenId(openid);
+//					}
+//					sessionUserProfile.setNickname(authUserInfoResult.getNickname());
+//					request.getSession().setAttribute("sessionUserProfile", sessionUserProfile);
+//					return "klh/home";
+//				}
+//			}
+//			System.out.println("===oauthResult==" + oauthResult.getOpenid());
+//		}else{
+//			if(KlhUtil.sessionValid(request)){// 页面流程
+//				return "klh/home";
+//			}else{
+//				return KlhUtil.redirectToOauth(model);
+//			}
+//		}
+//		return "redirect:./error";
+//	}
 
 	
 //	/**

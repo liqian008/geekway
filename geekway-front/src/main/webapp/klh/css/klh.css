@@ -1,0 +1,140 @@
+
+body{
+margin:0px auto;
+background-color:#f7f3f0;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, p, blockquote, th, td, textarea, input { 
+font-family: 'Open Sans'; 
+font-weight: normal;
+}
+
+a {
+text-decoration:none !important;
+color:#f6f4f1;
+}
+
+.header{
+height:40px;
+padding-bottom:3px;
+background-color:#c6c0b4;
+}
+
+.header_menu{
+text-align:center;
+color:#f6f3f0;
+height:40px;
+line-height:40px;
+overflow:hidden; 
+background-color:#93242a;
+}
+
+.header a{
+background: url('../images/back.png') no-repeat;
+display: block;
+width: 30px;
+height: 30px;
+position: absolute;
+left: 3px;
+top:5px;
+}
+
+.header a.home{
+background: url('../images/home.png') no-repeat;
+display: block;
+width: 30px;
+height: 30px;
+position: absolute;
+right: 3px;
+top:5px;
+left: inherit;
+}
+
+
+
+.content{
+text-align:center;
+padding: 15px;
+}
+
+.content .main{
+margin:0px auto;
+}
+
+.main_border{
+border:1.5px solid #93242a;
+-moz-border-radius:15px;/*仅Firefox支持，实现圆角效果*/
+-webkit-border-radius:15px;/*仅Safari,Chrome支持，实现圆角效果*/
+-khtml-border-radius:15px;/*仅Safari,Chrome支持，实现圆角效果*/
+border-radius:15px;/*仅Opera，Safari,Chrome支持，实现圆角效果*/
+}
+
+.content .logo{
+margin:0px;
+}
+
+.content .logo img{
+width:100%;
+}
+
+.content .menu{
+margin:20px;
+}
+
+.content ul{
+list-style:none;
+margin:0px;
+padding:0px;
+}
+
+
+.content ul li{
+margin:0px 0px 15px;
+}
+
+.klh-button{
+width: 80px;
+padding: 4px 10px;
+background-color:#93242a;
+text-align:center;
+font-size:16px; 
+margin:3px; 
+text-decoration:none !important;
+color: #fff !important;
+display:inline-block;
+}
+
+.menu .klh-button{
+	width:120px !important;
+}
+
+.klh-button-white{
+width: 60px;
+padding: 4px 10px;
+background-color:#f7f3f0;
+color:darkred;
+text-align:center;
+font-size:12px; 
+margin:3px;
+text-decoration:none !important;
+display:inline-block;
+}
+
+
+.content #register{
+margin:30px 30px;
+}
+
+.form-group{
+margin:10px 10px;
+}
+
+
+.radius{
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+}
+
+.clearfix{
+	clear:both;
+}

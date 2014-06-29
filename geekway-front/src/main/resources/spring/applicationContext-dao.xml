@@ -87,5 +87,7 @@
 	</bean>
 	<bean id="klhDailySignDao" class="com.bruce.geekway.dao.impl.klh.KlhDailySignDaoImpl">
 	</bean>
+	<bean id="klhWallImageDao" class="com.bruce.geekway.dao.impl.klh.KlhWallImageDaoImpl"> 
+	</bean>
 	
 </beans>

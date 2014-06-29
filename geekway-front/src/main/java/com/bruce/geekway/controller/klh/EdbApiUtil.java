@@ -15,10 +15,12 @@ import org.dom4j.Element;
 
 import com.bruce.geekway.model.klh.KlhEdbOrder;
 import com.bruce.geekway.model.klh.KlhEdbOrderItem;
+import com.bruce.geekway.utils.DateUtil;
 import com.edb.util.Util;
 
 
 public class EdbApiUtil {
+	
 	
 	/**
 	 * 可乐惠在易店宝的配置
@@ -71,12 +73,19 @@ public class EdbApiUtil {
 	 * 订单列表
 	 * @return
 	 */
-	public static List<KlhEdbOrder> edbTradeGet() {
+	public static List<KlhEdbOrder> edbTradeGet(int periodType) {
+		int daysPeriod = 7;//默认取7天的数据
+		if(periodType==1){
+			daysPeriod=14;
+		}
+		
+		
 		List<KlhEdbOrder> edbOrderList = new ArrayList<KlhEdbOrder>();
 		TreeMap<String, String> dataMap = new TreeMap<String, String>();
 		dataMap.put("date_type", "建档日期");
-		dataMap.put("begin_time", "2014-06-01");
-		dataMap.put("end_time", "2014-06-13");
+		Date currentTime = new Date();
+		dataMap.put("begin_time", DateUtil.date2YMD(DateUtil.calcDate(currentTime, -daysPeriod)));
+		dataMap.put("end_time", DateUtil.date2YMD(currentTime));
 		dataMap.put("page_size", "20");
 		
 		String methodName = "edbTradeGet";
@@ -174,7 +183,7 @@ public class EdbApiUtil {
 	
 	
 	public static void main(String[] args) {
-		edbTradeGet();
+		edbTradeGet(0);
 //		System.out.println(edbTradeGet());
 	}
 }
