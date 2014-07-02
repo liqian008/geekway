@@ -52,14 +52,15 @@ margin:30px 20px;
 $("#orderSubmitBtn").click(function(){
 	if(checkUserMobile()){
 		$("#orderForm").submit();
-	}
+	}else{
 	alert("请输入正确额手机号码");
+	}
 })
 
 //检查邮箱是否合法
 function checkUserMobile(){
 	var userMobile = $('#userMobile').val();
-	if(userMobile!=null){
+	if(userMobile!=''){
 		return true;
 	}
 	return false;

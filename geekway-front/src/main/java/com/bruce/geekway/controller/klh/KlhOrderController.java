@@ -66,16 +66,17 @@ public class KlhOrderController {
 		cookie.setMaxAge(999999999);
 		response.addCookie(cookie);
 		
-		long startTime = System.currentTimeMillis();
+//		long startTime = System.currentTimeMillis();
 		List<KlhEdbOrder> edbOrderList = EdbApiUtil.edbTradeGet(periodType);
-//		if(edbOrderList!=null&&edbOrderList.size()>0){
-//			for(int i=edbOrderList.size()-1;i>=0;i--){
-//				KlhEdbOrder order = edbOrderList.get(i);
-//				if(!userMobile.equals(order.getMobile())){//手机号不相同，需要移除
-//					edbOrderList.remove(order);
-//				}
-//			}
-//		}
+		if(edbOrderList!=null&&edbOrderList.size()>0){
+			//移除非制定手机号码的数据
+			for(int i=edbOrderList.size()-1;i>=0;i--){
+				KlhEdbOrder order = edbOrderList.get(i);
+				if(!userMobile.equals(order.getMobile())){//手机号不相同，需要移除
+					edbOrderList.remove(order);
+				}
+			}
+		}
 		model.addAttribute("userMobile", userMobile);
 		model.addAttribute("edbOrderList", edbOrderList);
 		

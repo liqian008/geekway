@@ -107,7 +107,7 @@ $("#uploadBtn").click(function(){
         processData: false,    //不可缺
         success:function(responseData){
             if(responseData.result==1){
-            	var imageUrl = responseData.data.originalImage.url;
+            	var imageUrl = responseData.data.mediumImage.url;
 				$("#uploadContainer").hide();
             	$('#imgView').attr("src", imageUrl);
             	$('#picUrl').val(imageUrl);

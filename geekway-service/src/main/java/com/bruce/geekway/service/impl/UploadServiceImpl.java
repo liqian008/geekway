@@ -52,7 +52,7 @@ public class UploadServiceImpl implements IUploadService {
 
 	static {
 //		imageSizeMap.put(UPLOAD_IMAGE_SPEC_LARGE, 1024);
-//		imageSizeMap.put(UPLOAD_IMAGE_SPEC_MEDIUM, 400);
+		imageSizeMap.put(UPLOAD_IMAGE_SPEC_MEDIUM, 400);
 //		imageSizeMap.put(UPLOAD_IMAGE_SPEC_SMALL, 200);
 	}
 
