@@ -9,6 +9,12 @@ import java.util.List;
  * 
  */
 public class KlhEdbOrder {
+	/* 订单ID */
+	private String transactionId;
+	/* 订单金额 */
+	private String proTotalfee;
+	/* 订单总金额 */
+	private String orderTotalfee;
 
 	/* 平台类型 */
 	private String platType;
@@ -40,11 +46,35 @@ public class KlhEdbOrder {
 	private String type;
 	/* 订单状态 */
 	private String status;
-	
+
 	private List<KlhEdbOrderItem> edbOrderItemList;
 
 	public KlhEdbOrder() {
 		super();
+	}
+
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
+
+	public String getProTotalfee() {
+		return proTotalfee;
+	}
+
+	public void setProTotalfee(String proTotalfee) {
+		this.proTotalfee = proTotalfee;
+	}
+
+	public String getOrderTotalfee() {
+		return orderTotalfee;
+	}
+
+	public void setOrderTotalfee(String orderTotalfee) {
+		this.orderTotalfee = orderTotalfee;
 	}
 
 	public String getPlatType() {
@@ -158,7 +188,6 @@ public class KlhEdbOrder {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
 
 	public String getExpress() {
 		return express;
@@ -176,5 +205,4 @@ public class KlhEdbOrder {
 		this.edbOrderItemList = edbOrderItemList;
 	}
 
-	
 }

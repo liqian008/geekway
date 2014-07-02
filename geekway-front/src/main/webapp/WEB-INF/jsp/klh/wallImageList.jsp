@@ -18,6 +18,8 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
+<title>可乐惠</title>
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/klh/css/klh.css" />
 <script type="text/javascript" src="<%=request.getContextPath() %>/klh/js/jquery.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath() %>/klh/js/jquery.masonry.js"></script>
@@ -45,7 +47,7 @@ border-right:1px solid #f7f3f0;
   padding: 0px;
 }
 .box {
-padding:0px 5px;
+  padding:0px 5px;
   margin-bottom: 20px;
   float: left;
   width: 46%;
@@ -60,9 +62,16 @@ padding:0px 5px;
 .box img {
   max-width: 100%
 }
-
+.box div{
+	height:12px;
+	line-height:12px;
+}
 .box i {
-  background: url('http://img.jinwanr.com.cn/staticFile/avatar/100/100012.jpg');
+  background-image: url('images/like.png');
+  width: 12px;
+  height: 10px;
+  margin-right:3px;
+  display:inline-block;
 }
 </style>
 

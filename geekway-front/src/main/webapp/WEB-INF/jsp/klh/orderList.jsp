@@ -37,6 +37,8 @@ public String getExpressUrl(String expressName, String expressCoding, String exp
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
+<title>可乐惠</title>
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/klh/css/klh.css" />
 <script type="text/javascript" src="<%=request.getContextPath() %>/klh/js/jquery.js"></script>
 
@@ -140,8 +142,8 @@ background-color:#fff;
 							<%=getExpressUrl(edbOrder.getExpress(), edbOrder.getExpressCoding(), edbOrder.getExpressNo())%>
 							<!-- <a href="#" class="klh-button-white radius">订单跟踪</a> -->
 							</div>	
-							<div>订单号: </div>
-							<div>订单金额:</div>
+							<div>订单号: <%=edbOrder.getTransactionId()%></div>
+							<div>订单金额:<%=edbOrder.getProTotalfee()%></div>
 							<div>下单时间:<%=edbOrder.getTidTime()%></div>
 							<div class="sperator"></div>
 							<%
@@ -150,7 +152,13 @@ background-color:#fff;
 							%>
 							<div class="product">
 								<%for(KlhEdbOrderItem orderItem: orderItemList){%>
-								<%=orderItem.getProName()%>, 价格: <%=orderItem.getSellPrice()%>元<br/>
+								<%
+								String price = orderItem.getSellPrice();
+								if(price.endsWith("00")){
+									price = price.substring(0, price.length()-2);
+								}
+								%>
+								<%=orderItem.getProName()%>, 价格: <%=price%>元<p/>
 								<%}%>
 							</div>
 							<%}%>

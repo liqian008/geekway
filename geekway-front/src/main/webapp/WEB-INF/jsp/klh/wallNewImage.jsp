@@ -9,6 +9,8 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
+<title>可乐惠</title>
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/klh/css/klh.css" />
 <script type="text/javascript" src="<%=request.getContextPath() %>/klh/js/jquery.js"></script>
 
@@ -105,7 +107,7 @@ $("#uploadBtn").click(function(){
         processData: false,    //不可缺
         success:function(responseData){
             if(responseData.result==1){
-            	var imageUrl = responseData.data.originalImage.url;
+            	var imageUrl = responseData.data.mediumImage.url;
 				$("#uploadContainer").hide();
             	$('#imgView').attr("src", imageUrl);
             	$('#picUrl').val(imageUrl);
