@@ -3,6 +3,7 @@
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import="com.bruce.geekway.model.wx.json.response.WxUserInfoResult" %>
 
+<!-- 带用户登录模块的首页 -->
 
 
 <!DOCTYPE html>
@@ -31,16 +32,12 @@
 
 		<div class="menu">
 			<ul>
-				<!--
-				<li><a href="javascript:void(0)" class="klh-button radius">登 录</a></li>
-				<li><a href="./register.htm" class="klh-button radius">注 册</a></li>
-				<li><a href="javascript:void(0)" class="klh-button radius">兑换赠品</a></li>
-				<li><a href="./myscore.htm" class="klh-button radius">我的积分</a></li>
-				-->
 				<li><a href="./latestWallImages" class="klh-button radius">随手拍</a></li>
-
 				<li><a href="./edbOrderMobile" class="klh-button radius">订单查询</a></li>
-				
+				<li><a href="./scoreIntro" class="klh-button radius">我的积分</a></li>
+				<li><a href="./scoreProductList" class="klh-button radius">兑换赠品</a></li>
+				<li><a href="javascript:void(0)" class="klh-button radius lock">登 录</a></li>
+				<li><a href="javascript:void(0)" class="klh-button radius lock">注 册</a></li>
 			</ul>
 		</div>	
 	</div>
@@ -48,7 +45,9 @@
 </body>
 
 <script>
-
+$(".lock").click(function(){
+	alert("因可乐惠系统未开放用户注册，此功能暂时予以屏蔽");
+})
 
 </script>
 

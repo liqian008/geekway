@@ -26,7 +26,31 @@ public class ScoreController {
 	private IKlhUserScoreLogService klhUserScoreLogService;
 	@Autowired
 	private IKlhDailySignService klhDailySignService;
+	
+	
 
+	/**
+	 * 积分介绍
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/scoreIntro")
+	public String scoreIntro(Model model, HttpServletRequest request) {
+		return "klh/scoreIntro";
+	}
+	
+	/**
+	 * 积分主页
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/scoreHome")
+	public String scoreHome(Model model, HttpServletRequest request) {
+		return "klh/scoreHome";
+	}
+	
 	/**
 	 * 积分记录
 	 * 

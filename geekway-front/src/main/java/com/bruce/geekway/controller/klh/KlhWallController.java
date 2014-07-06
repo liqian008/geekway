@@ -14,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.geekway.data.PagingData;
 import com.bruce.geekway.model.KlhWallImage;
 import com.bruce.geekway.service.klh.IKlhWallImageService;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
@@ -39,31 +41,60 @@ public class KlhWallController {
 	
 
 	@RequestMapping(value = "/latestWallImages")
-	public String latestWallImages(Model model, HttpServletRequest request) {
+	public String latestWallImages(Model model, @RequestParam(value="pageNo", defaultValue="1") int pageNo, HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		int tabType = 0;
-		List<KlhWallImage> wallImageList = klhWallImageService.queryLatestImages(PAGE_SIZE);
-		if(wallImageList!=null&&wallImageList.size()>0){
-			for(KlhWallImage wallImage: wallImageList){
-				int wallImageId = wallImage.getId();
-				boolean hasLiked = hasLike(wallImageId, cookies);
-				wallImage.setHasLike(hasLiked);
+		List<KlhWallImage> wallImageList = null;
+		PagingData<KlhWallImage> wallImagePaging = klhWallImageService.pagingLatestImages(pageNo, PAGE_SIZE);
+		if(wallImagePaging!=null&&wallImagePaging.getPagingData()!=null){
+			wallImageList = wallImagePaging.getPagingData();
+			if(wallImageList!=null&&wallImageList.size()>0){
+				for(KlhWallImage wallImage: wallImageList){
+					int wallImageId = wallImage.getId();
+					boolean hasLiked = hasLike(wallImageId, cookies);
+					wallImage.setHasLike(hasLiked);
+				}
+				
+				if(wallImagePaging.getTotalPage()>pageNo){
+					model.addAttribute("nextPage", pageNo+1);
+				}
 			}
 		}
-		
 		model.addAttribute("wallImageList", wallImageList);
 		model.addAttribute("tabType", tabType);
 		return "klh/wallImageList";
 	}
 	
 	@RequestMapping(value = "/hotestWallImages")
-	public String hotestWallImages(Model model, HttpServletRequest request) {
+	public String hotestWallImages(Model model, @RequestParam(value="pageNo", defaultValue="1") int pageNo, HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
 		int tabType = 1;
-		List<KlhWallImage> wallImageList = klhWallImageService.queryHotestImages(PAGE_SIZE);
+		List<KlhWallImage> wallImageList = null;
+		PagingData<KlhWallImage> wallImagePaging = klhWallImageService.pagingHotestImages(pageNo, PAGE_SIZE);
+		if(wallImagePaging!=null&&wallImagePaging.getPagingData()!=null){
+			wallImageList = wallImagePaging.getPagingData();
+			if(wallImageList!=null&&wallImageList.size()>0){
+				for(KlhWallImage wallImage: wallImageList){
+					int wallImageId = wallImage.getId();
+					boolean hasLiked = hasLike(wallImageId, cookies);
+					wallImage.setHasLike(hasLiked);
+				}
+				if(wallImagePaging.getTotalPage()>pageNo){
+					model.addAttribute("nextPage", pageNo+1);
+				}
+			}
+		}
 		model.addAttribute("wallImageList", wallImageList);
 		model.addAttribute("tabType", tabType);
 		return "klh/wallImageList";
 	}
+	
+	@RequestMapping(value = "/imagePreview")
+	public String imagePreview(Model model, String imgUrl, HttpServletRequest request) {
+		model.addAttribute("imgUrl", imgUrl);
+		return "klh/wallImagePreview";
+	}
+	
 	
 	@RequestMapping(value = "/newImage")
 	public String newImage(Model model, HttpServletRequest request) {

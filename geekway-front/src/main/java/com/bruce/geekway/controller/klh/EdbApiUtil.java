@@ -152,7 +152,9 @@ public class EdbApiUtil {
 								for(Element itemElement: itemList){
 									KlhEdbOrderItem orderItem = new KlhEdbOrderItem();
 									orderItem.setProName(itemElement.elementText("pro_name"));
+									orderItem.setProNum(itemElement.elementText("pro_num"));
 									orderItem.setSellPrice(itemElement.elementText("sell_price"));
+									
 									edbOrderItemList.add(orderItem);
 								}
 								edbOrder.setEdbOrderItemList(edbOrderItemList);

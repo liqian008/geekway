@@ -29,19 +29,18 @@ public class KlhProductController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/productList")
+	@RequestMapping(value = "/scoreProductList")
 	public String productList(Model model, HttpServletRequest request) {
-		if(!KlhUtil.sessionValid(request)){// 页面流程
-			//TODO 跳转auth界面
-			return KlhUtil.redirectToOauth(model);
-		}
-		
+//		if(!KlhUtil.sessionValid(request)){// 页面流程
+//			//TODO 跳转auth界面
+//			return KlhUtil.redirectToOauth(model);
+//		}
 		
 		List<KlhProduct> productList =  klhProductService.queryAll();
 		if(productList!=null&&productList.size()>0){
 			model.addAttribute("productList", productList);
 		}
-		return "klh/productList";
+		return "klh/scoreProductList";
 	}
 	
 	/**
@@ -49,18 +48,18 @@ public class KlhProductController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/productInfo")
+	@RequestMapping(value = "/scoreProductInfo")
 	public String productInfo(Model model, int productId, HttpServletRequest request) {
-		if(!KlhUtil.sessionValid(request)){// 页面流程
-			//TODO 跳转auth界面
-			return KlhUtil.redirectToOauth(model);
-		}
+//		if(!KlhUtil.sessionValid(request)){// 页面流程
+//			//TODO 跳转auth界面
+//			return KlhUtil.redirectToOauth(model);
+//		}
 		
 		KlhProduct productInfo = klhProductService.loadById(productId);
 		if(productInfo!=null&&productInfo.getId()>0){
 			model.addAttribute("productInfo", productInfo);
 		}
-		return "klh/productInfo";
+		return "klh/scoreProductInfo";
 	}
 	
 	
@@ -70,17 +69,10 @@ public class KlhProductController {
 	 * @param model
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping(value = "/productApply")
 	public String productApply(Model model, int productId, HttpServletRequest request) {
-		if(!KlhUtil.sessionValid(request)){// 页面流程
-			//TODO 跳转auth界面
-			return KlhUtil.redirectToOauth(model);
-		}
-		
-		KlhProduct productInfo = klhProductService.loadById(productId);
-		if(productInfo!=null&&productInfo.getId()>0){
-			model.addAttribute("productInfo", productInfo);
-		}
+		//TODO 
 		return "klh/productInfo";
 	}
 }

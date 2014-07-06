@@ -105,7 +105,9 @@ display:inline-block;
 }
 
 .menu .klh-button{
-	width:120px !important;
+	width:140px !important;
+	padding: 12px !important;
+	font-size:18px; 
 }
 
 .klh-button-white{

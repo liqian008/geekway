@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bruce.geekway.dao.klh.IKlhWallImageDao;
 import com.bruce.geekway.dao.mapper.KlhWallImageMapper;
+import com.bruce.geekway.data.PagingData;
 import com.bruce.geekway.model.KlhWallImage;
 import com.bruce.geekway.model.KlhWallImageCriteria;
 
@@ -48,22 +49,78 @@ public class KlhWallImageDaoImpl implements IKlhWallImageDao, InitializingBean {
         return null;
     }
     
-    @Override
-	public List<KlhWallImage> queryLatestImages(int pageSize) {
-    	KlhWallImageCriteria criteria = new KlhWallImageCriteria();
-    	criteria.createCriteria().andStatusEqualTo((short)1);
-    	criteria.setOrderByClause(" id desc");
-    	return klhWallImageMapper.selectByExample(criteria);
-	}
-
-	@Override
-	public List<KlhWallImage> queryHotestImages(int pageSize) {
-		KlhWallImageCriteria criteria = new KlhWallImageCriteria();
-    	criteria.createCriteria().andStatusEqualTo((short)1);
-    	criteria.setOrderByClause(" like_count desc");
-    	return klhWallImageMapper.selectByExample(criteria);
-	}
+//    @Override
+//	public List<KlhWallImage> queryLatestImages(int pageSize) {
+//    	KlhWallImageCriteria criteria = new KlhWallImageCriteria();
+//    	criteria.createCriteria().andStatusEqualTo((short)1);
+//    	criteria.setOrderByClause(" id desc");
+//    	return klhWallImageMapper.selectByExample(criteria);
+//	}
+//
+//	@Override
+//	public List<KlhWallImage> queryHotestImages(int pageSize) {
+//		KlhWallImageCriteria criteria = new KlhWallImageCriteria();
+//    	criteria.createCriteria().andStatusEqualTo((short)1);
+//    	criteria.setOrderByClause(" like_count desc");
+//    	return klhWallImageMapper.selectByExample(criteria);
+//	}
     
+	
+//	/**
+//	 * 瀑布流方式加载更多
+//	 */
+//	@Override
+//	public List<KlhWallImage> fallLoadLatestImages(int imageTailId, int limit) {
+//		KlhWallImageCriteria criteria = new KlhWallImageCriteria();
+//		KlhWallImageCriteria.Criteria subCriteria = criteria.createCriteria();
+//		subCriteria.andStatusEqualTo((short)1);
+//		if(imageTailId>0){
+//			subCriteria.andIdLessThan(imageTailId);
+//		}
+//		criteria.setLimit(limit);
+//	    criteria.setOrderByClause("id desc");
+//        List<KlhWallImage> albumList = klhWallImageMapper.selectByExample(criteria);
+//        return albumList;
+//	}
+	
+	
+	
+	/**
+	 * 分页展示列表
+	 */
+	@Override
+    public PagingData<KlhWallImage> pagingLatestImages(int pageNo, int pageSize){
+        if(pageNo<0) pageNo = 1;
+        int start = (pageNo-1) * pageSize;
+        KlhWallImageCriteria criteria = new KlhWallImageCriteria();
+        criteria.createCriteria();
+        criteria.setStart(start);
+        criteria.setLimit(pageSize);
+        criteria.setOrderByClause("id desc");
+        List<KlhWallImage> dataList = klhWallImageMapper.selectByExample(criteria); 
+        int totalCount = klhWallImageMapper.countByExample(criteria);//总条数
+        com.bruce.geekway.data.PagingData<KlhWallImage> pagingData = new PagingData<KlhWallImage>(dataList, totalCount, pageNo, pageSize);
+        return pagingData;
+    }
+	
+	/**
+	 * 分页展示列表
+	 */
+	@Override
+    public PagingData<KlhWallImage> pagingHotestImages(int pageNo, int pageSize){
+        if(pageNo<0) pageNo = 1;
+        int start = (pageNo-1) * pageSize;
+        KlhWallImageCriteria criteria = new KlhWallImageCriteria();
+        criteria.createCriteria();
+        criteria.setStart(start);
+        criteria.setLimit(pageSize);
+        criteria.setOrderByClause("like_count desc");
+        List<KlhWallImage> dataList = klhWallImageMapper.selectByExample(criteria); 
+        int totalCount = klhWallImageMapper.countByExample(criteria);//总条数
+        com.bruce.geekway.data.PagingData<KlhWallImage> pagingData = new PagingData<KlhWallImage>(dataList, totalCount, pageNo, pageSize);
+        return pagingData;
+    }
+	
 
     @Override
     public void afterPropertiesSet() throws Exception {

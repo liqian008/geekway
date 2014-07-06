@@ -9,6 +9,7 @@ package com.bruce.geekway.model.klh;
 public class KlhEdbOrderItem {
 
 	private String proName;
+	private String proNum;
 	private String sellPrice;
 
 	public String getProName() {
@@ -27,4 +28,12 @@ public class KlhEdbOrderItem {
 		this.sellPrice = sellPrice;
 	}
 
+	public String getProNum() {
+		return proNum;
+	}
+	public void setProNum(String proNum) {
+		this.proNum = proNum;
+	}
+
+	
 }

@@ -67,11 +67,17 @@ float:left;
 width:50%;
 text-align:center;
 line-height:40px;
+}
 
+.nav ul li.active{
+border-bottom:2px solid;
+}
+
+.nav ul li a{
+color:#93242a;
 }
 
 .nav ul li div{
- 
 border-right:1px solid #fff;
 }
 
@@ -102,12 +108,16 @@ height:1px;
 background-color:#fff;
 }
 
+.order_item .product td, .order_item .product th{
+padding: 5px;
+}
+
 </style>
 <body>
 	<div class="header">
 		<div class="header_menu">
 			<a class="back" href="javascript:history.back();"></a>
-			<span>订单查询</span>
+			<span>我的订单</span>
 			<a class="home" href="./home.htm"></a>
 		</div>	
 		
@@ -117,10 +127,12 @@ background-color:#fff;
 	<div class="nav">
 		<%
 		String userMobile = (String)request.getAttribute("userMobile");
+		
+		Integer periodType = (Integer)request.getAttribute("periodType");
 		%>
 		<ul>
-			<li><div><a href="./edbOrderList?periodType=0&userMobile=<%=userMobile%>">近一周订单</a></div></li>
-			<li><a href="./edbOrderList?periodType=1&userMobile=<%=userMobile%>">近两周订单</a></li>
+			<li <%=periodType==null||periodType==0?"class='active'":""%>><div><a href="./edbOrderList?periodType=0&userMobile=<%=userMobile%>">近一周订单</a></div></li>
+			<li <%=periodType!=null&&periodType==1?"class='active'":""%>><a href="./edbOrderList?periodType=1&userMobile=<%=userMobile%>">近两周订单</a></li>
  		</ul>
 	</div>	
 	
@@ -142,29 +154,41 @@ background-color:#fff;
 							<%=getExpressUrl(edbOrder.getExpress(), edbOrder.getExpressCoding(), edbOrder.getExpressNo())%>
 							<!-- <a href="#" class="klh-button-white radius">订单跟踪</a> -->
 							</div>	
-							<div>订单号: <%=edbOrder.getTransactionId()%></div>
-							<div>订单金额:<%=edbOrder.getProTotalfee()%></div>
-							<div>下单时间:<%=edbOrder.getTidTime()%></div>
-							<div class="sperator"></div>
+							<div>订单号：<%=edbOrder.getTransactionId()%></div>
+							<div>订单金额：<%=edbOrder.getProTotalfee()%>元</div>
+							<div>下单时间：<%=edbOrder.getTidTime()%></div>
+							<!-- <div class="sperator"></div> -->
 							<%
 							List<KlhEdbOrderItem> orderItemList = edbOrder.getEdbOrderItemList();
 							if(orderItemList!=null&&orderItemList.size()>0){
 							%>
 							<div class="product">
-								<%for(KlhEdbOrderItem orderItem: orderItemList){%>
-								<%
-								String price = orderItem.getSellPrice();
-								if(price.endsWith("00")){
-									price = price.substring(0, price.length()-2);
-								}
-								%>
-								<%=orderItem.getProName()%>, 价格: <%=price%>元<p/>
-								<%}%>
+								<table border="1px" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid; border-bottom:0px; border-right:0px">
+									<tr>
+										<th align="center" width="68%">产品名称</th>
+										<th align="center" width="12%">数量</th>
+										<th align="center" width="20%">价格</th>
+									</tr>
+									<%for(KlhEdbOrderItem orderItem: orderItemList){%>
+										<tr>
+											<td align="left"><%=orderItem.getProName()%></td>
+											<td align="center"><%=orderItem.getProNum()%></td>
+										<%
+										String price = orderItem.getSellPrice();
+										if(price.endsWith("00")){
+											price = price.substring(0, price.length()-2);
+										}
+										%>
+										<td  align="center"><%=price%>元</td>
+									</tr>
+									<%}%>
+								</table>
+								
 							</div>
 							<%}%>
-							<div class="sperator"></div>
-							<div>收件人:<%=edbOrder.getReceiverName()%></div>
-							<div>订单状态:<%=edbOrder.getType()%></div>
+							<!-- <div class="sperator"></div> -->
+							<div>收件人：<%=edbOrder.getReceiverName()%></div>
+							<div>订单状态：<%=edbOrder.getType()%></div>
 							<div>发货状态：<%=edbOrder.getDeliveryStatus()%></div>
 							
 						</div>

@@ -80,7 +80,7 @@ border-right:1px solid #f7f3f0;
 		<div class="header_menu">
 			<div class="header_menu">
 				<a class="back" href="javascript:history.back();"></a>
-				<span>照片墙</span>
+				<span>随手拍</span>
 				<a class="home" href="./home.htm"></a>
 			</div>	
 		</div>
@@ -114,7 +114,7 @@ border-right:1px solid #f7f3f0;
 			<div id="masonry" class="container-fluid">
 			<%for(KlhWallImage wallImage: wallImageList) {%>
 			  <div class="box">
-			  	<img src="<%=wallImage.getThumbPicUrl()%>">
+			  	<a href="./imagePreview?imgUrl=<%=wallImage.getThumbPicUrl()%>"><img src="<%=wallImage.getThumbPicUrl()%>"></a>
 			  	<div style="float:left">
 			  		<%if(wallImage.isHasLike()){%>
 			  		<a href="javascript:void(0)" class="hasliked"><i></i><%=wallImage.getLikeCount()%>个喜欢</a>
@@ -125,6 +125,14 @@ border-right:1px solid #f7f3f0;
 			  	<div style="float:right"><%=wallImage.getNickname()%></div>
 			  </div>
 			<%} %>
+			</div>
+			<%} %>
+			
+			
+			<%Integer nextPage = (Integer)request.getAttribute("nextPage"); 
+			if(nextPage!=null){%>
+			<div>
+				<a href="?pageNo=<%=nextPage%>" id="nextPageBtn" class="klh-button radius">下一页</a>
 			</div>
 			<%} %>
 		</div>

@@ -66,6 +66,8 @@ public class KlhOrderController {
 		cookie.setMaxAge(999999999);
 		response.addCookie(cookie);
 		
+		model.addAttribute("periodType", periodType);
+		
 //		long startTime = System.currentTimeMillis();
 		List<KlhEdbOrder> edbOrderList = EdbApiUtil.edbTradeGet(periodType);
 		if(edbOrderList!=null&&edbOrderList.size()>0){

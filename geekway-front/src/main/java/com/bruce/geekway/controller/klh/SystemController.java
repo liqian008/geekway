@@ -41,6 +41,17 @@ public class SystemController {
 //		model.addAttribute("authorizeUrl", WxMpUtil.AUTHORIZE_URL);
 		return "klh/index";
 	}
+	
+	/**
+	 * 带用户模块模式的首页
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/indexFull")
+	public String indexFull(Model model) {
+		return "klh/index_full";
+	}
 
 //	/**
 //	 * 个人页
