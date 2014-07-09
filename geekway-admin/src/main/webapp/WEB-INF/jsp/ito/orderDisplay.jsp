@@ -245,7 +245,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						</div>
 						
 						<%
-						if(productOrder.getPayType()!=null&&productOrder.getPayType()==0){
+						//if(productOrder.getPayType()!=null&&productOrder.getPayType()==0){
 						%>	
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">收件人: <span class="mandatory">*</span></label>
@@ -285,7 +285,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 								</label>
 							</div>
 						</div>
-						<%}%>
+						<%//}%>
 						
 						
 						<div class="form-group">

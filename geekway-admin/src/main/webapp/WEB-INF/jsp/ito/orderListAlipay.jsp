@@ -132,6 +132,8 @@
 									<th>商品</th>
 	                                <th>SKU</th>
 	                                <th>价格</th>
+	                                <th>姓名</th>
+	                                <th>地址</th>
 	                                <th>类型</th>
 	                                <th>状态</th>
 	                                <th class="team-links">操作</th>
@@ -150,6 +152,7 @@
 			                        <td title="SN：<%=order.getOrderSn()%>"><%=order.getTitle()%></td>
 			                        <td><%=order.getSkuName()%></td>
 			                        <td><%=order.getTotalPrice()%>元</td>
+			                        <td><%=order.getPostAddress()%></td>
 			                        <td>支付宝</td>
 			                        <td>已下单</td>
 			                        <td class='text-center'>

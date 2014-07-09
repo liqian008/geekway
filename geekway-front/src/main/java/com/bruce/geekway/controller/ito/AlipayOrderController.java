@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +45,8 @@ public class AlipayOrderController {
 
 	private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
+	private static final Logger logger = LoggerFactory.getLogger("ItoAppOrderLogger");
+	
 	
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
@@ -59,11 +63,13 @@ public class AlipayOrderController {
 	 */
 	@RequestMapping(value = "/order/alipayReturn")
 	public String alipayReturn(Model model, AlipayReturnData alipayReturnData, HttpServletRequest request) {
+		
 		System.out.println("=========alipayReturn=====1====");
 		
 		//获取支付宝POST过来反馈信息
 		Map<String,String> params = new HashMap<String,String>();
 		Map requestParams = request.getParameterMap();
+		logger.info("Alipay下单的订单请求!["+requestParams+"]");
 		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
 			String name = (String) iter.next();
 			String[] values = (String[]) requestParams.get(name);
@@ -75,6 +81,7 @@ public class AlipayOrderController {
 			//valueStr = new String(valueStr.getBytes("ISO-8859-1"), "gbk");
 			params.put(name, valueStr);
 		}
+		
 		System.out.println("=========alipayReturn=====2====");
 //		if(true){//验证成功
 		if(AlipayNotify.verify(params)){//验证成功
@@ -148,6 +155,7 @@ public class AlipayOrderController {
 		//获取支付宝POST过来反馈信息
 		Map<String,String> params = new HashMap<String,String>();
 		Map requestParams = request.getParameterMap();
+		logger.info("Alipay订单状态变更的请求!["+requestParams+"]");
 		for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
 			String name = (String) iter.next();
 			String[] values = (String[]) requestParams.get(name);

@@ -133,6 +133,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 									<th class="text-center">序号</th>
 									<th>商品名</th>
 	                                <th>总价</th>
+	                                <th>姓名</th>
+	                                <th>地址</th>
 	                                <th>支付类型</th>
 	                                <th>状态</th>
 	                                <th>下单时间</th>
@@ -151,6 +153,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			                        <td><%=order.getId()%></td>
 			                        <td><%=order.getTitle()%></td>
 			                        <td title="单价:<%=order.getPrice()%>元 X <%=order.getNum()%>个"><%=order.getTotalPrice()%>元</td>
+			                        <td><%=order.getPostName()%></td>
+			                        <td><%=order.getPostAddress()%></td>
 			                        <td>APP支付</td>
 			                        <td><%=order.getPayStatus()==20?"已发货":"待发货"%></td>
 			                        <td><%=sdf.format(order.getCreateTime())%></td>
