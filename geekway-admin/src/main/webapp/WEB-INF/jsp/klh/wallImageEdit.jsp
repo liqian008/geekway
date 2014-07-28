@@ -140,15 +140,15 @@
 							</div> 
 						</div>
 						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">赞数: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">显示的赞数: <span class="mandatory">*</span></label>
 							<div class="col-sm-2"> 
 								<div class="block-inner">
 									<input type="text" class="form-control" name="likeCount" id="likeCount" value="${wallImage.likeCount}"/>
 								</div>
 							</div>
 						</div> 
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>

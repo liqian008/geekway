@@ -1,18 +1,14 @@
 package com.bruce.geekway.service.impl;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
-import javax.imageio.ImageIO;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
@@ -22,7 +18,11 @@ import com.bruce.geekway.utils.UploadUtil;
 
 
 @Service
-public class UploadServiceImpl implements IUploadService { 
+public class UploadServiceImpl implements IUploadService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(UploadImageInfo.class);
+	
+	
 	
 
 	/* 普通文件类型 */
@@ -39,9 +39,6 @@ public class UploadServiceImpl implements IUploadService {
 	/* 小图片规格 */
 	public static final String UPLOAD_IMAGE_SPEC_SMALL = "small";
 	
-	
-    private static final Logger logger = Logger.getLogger(UploadServiceImpl.class);
-    
 	// 文件存储的绝对路径
 	public static final String basePath = UploadUtil.getBasePath();
 	// 文件的baseUrl
@@ -78,10 +75,16 @@ public class UploadServiceImpl implements IUploadService {
 		// 获取图片存储的绝对、相对路径及文件名
 		String imageDirPath = UploadUtil.getImagePath(time);
 		String absoultImagePath = basePath + imageDirPath;
+		
+		logger.debug("upload absoultImagePath: "+absoultImagePath);
+
 		String imageName = UploadUtil.getFileNameWithPlaceHolder(userId, filename, null, time);
+		
+		logger.debug("upload image rename to: "+imageName);
 
 		String originalImageSpec = "original";
-		String originalUrl = UploadUtil.saveFile(data, basePath, imageDirPath+ "/"+originalImageSpec,  imageName);
+		
+		String originalUrl = UploadUtil.saveFile(data, basePath, imageDirPath+ UploadUtil.FILE_SEPARTOR + originalImageSpec,  imageName);
 
 		// 构造uploadResult
 		UploadImageResult uploadResult = new UploadImageResult();
@@ -92,7 +95,7 @@ public class UploadServiceImpl implements IUploadService {
 		// 根据需要的尺寸进行zoom
 		for (String imageSpec : keys) {
 			int width = imageSizeMap.get(imageSpec);// 获取指定的尺寸
-			String scaleImagePath = absoultImagePath+"/"+imageSpec;
+			String scaleImagePath = absoultImagePath + UploadUtil.FILE_SEPARTOR +imageSpec;
 			File scaleImageFile = new File(scaleImagePath);
 			scaleImageFile.mkdirs();
 			

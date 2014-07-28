@@ -15,4 +15,6 @@ public interface IKlhWallImageService extends IBaseService<KlhWallImage, Integer
 	public PagingData<KlhWallImage> pagingHotestImages(int pageNo, int pageSize);
 
 	public int increaseLike(int wallImageId);
+	
+	public int increaseBrowse(int wallImageId);
 }

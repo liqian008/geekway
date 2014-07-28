@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.data.PagingData;
 import com.bruce.geekway.model.KlhWallImage;
+import com.bruce.geekway.service.klh.IKlhWallImageLogService;
 import com.bruce.geekway.service.klh.IKlhWallImageService;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
 /**
@@ -38,6 +39,8 @@ public class KlhWallController {
 	
 	@Autowired
 	private IKlhWallImageService klhWallImageService;
+	@Autowired
+	private IKlhWallImageLogService klhWallImageLogService;
 	
 
 	@RequestMapping(value = "/latestWallImages")
@@ -90,7 +93,9 @@ public class KlhWallController {
 	}
 	
 	@RequestMapping(value = "/imagePreview")
-	public String imagePreview(Model model, String imgUrl, HttpServletRequest request) {
+	public String imagePreview(Model model, int wallImageId, String imgUrl, HttpServletRequest request) {
+		//增加浏览记录
+		klhWallImageService.increaseBrowse(wallImageId);
 		model.addAttribute("imgUrl", imgUrl);
 		return "klh/wallImagePreview";
 	}

@@ -89,5 +89,7 @@
 	</bean>
 	<bean id="klhWallImageDao" class="com.bruce.geekway.dao.impl.klh.KlhWallImageDaoImpl"> 
 	</bean>
+	<bean id="klhWallImageLogDao" class="com.bruce.geekway.dao.impl.klh.KlhWallImageLogDaoImpl"> 
+	</bean>
 	
 </beans>

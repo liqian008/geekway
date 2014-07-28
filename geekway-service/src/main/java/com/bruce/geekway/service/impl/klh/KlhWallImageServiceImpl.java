@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.dao.klh.IKlhWallImageDao;
 import com.bruce.geekway.data.PagingData;
 import com.bruce.geekway.model.KlhWallImage;
+import com.bruce.geekway.service.klh.IKlhWallImageLogService;
 import com.bruce.geekway.service.klh.IKlhWallImageService;
 
 @Service
@@ -15,6 +16,10 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 	
 	@Autowired
 	private IKlhWallImageDao klhWallImageDao;
+	@Autowired
+	private IKlhWallImageLogService klhWallImageLogService;
+	
+	
 	
 	@Override
 	public int save(KlhWallImage t) {
@@ -41,6 +46,7 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 		return klhWallImageDao.queryAll();
 	}
 	
+	
 	@Override
 	public int increaseLike(int wallImageId) {
 		KlhWallImage wallImage =klhWallImageDao.loadById(wallImageId);
@@ -48,13 +54,30 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 			KlhWallImage updateWallImage = new KlhWallImage();
 			updateWallImage.setId(wallImageId);
 			updateWallImage.setLikeCount(wallImage.getLikeCount()+1);
+
+			//赞操作日志记录
+			klhWallImageLogService.increaseLike(wallImageId);
+			
 			return klhWallImageDao.updateById(updateWallImage);
 		}
 		return 0;
 	}
 	
+	@Override
+	public int increaseBrowse(int wallImageId) {
+		//赞操作日志记录
+		return klhWallImageLogService.increaseBrowse(wallImageId);
+	}
 	
 	
+	public PagingData<KlhWallImage> pagingLatestImages(int pageNo, int pageSize){
+		return klhWallImageDao.pagingLatestImages(pageNo, pageSize);
+	}
+
+	public PagingData<KlhWallImage> pagingHotestImages(int pageNo, int pageSize){
+		return klhWallImageDao.pagingHotestImages(pageNo, pageSize);
+	}
+
 
 	public IKlhWallImageDao getKlhWallImageDao() {
 		return klhWallImageDao;
@@ -62,6 +85,14 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 
 	public void setKlhWallImageDao(IKlhWallImageDao klhWallImageDao) {
 		this.klhWallImageDao = klhWallImageDao;
+	}
+
+	public IKlhWallImageLogService getKlhWallImageLogService() {
+		return klhWallImageLogService;
+	}
+
+	public void setKlhWallImageLogService(IKlhWallImageLogService klhWallImageLogService) {
+		this.klhWallImageLogService = klhWallImageLogService;
 	}
 
 //	@Override
@@ -74,14 +105,7 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 //		return klhWallImageDao.queryHotestImages(pageSize);
 //	}
 	
-	public PagingData<KlhWallImage> pagingLatestImages(int pageNo, int pageSize){
-		return klhWallImageDao.pagingLatestImages(pageNo, pageSize);
-	}
-
-	public PagingData<KlhWallImage> pagingHotestImages(int pageNo, int pageSize){
-		return klhWallImageDao.pagingHotestImages(pageNo, pageSize);
-	}
-
+	
 
 	
 }

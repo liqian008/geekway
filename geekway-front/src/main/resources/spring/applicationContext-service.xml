@@ -105,6 +105,8 @@
 	</bean>
 	<bean id="klhWallImageService" class="com.bruce.geekway.service.impl.klh.KlhWallImageServiceImpl">
 	</bean>
+	<bean id="klhWallImageLogService" class="com.bruce.geekway.service.impl.klh.KlhWallImageLogServiceImpl">
+	</bean>
 	
 	
 	<!-- upload service -->

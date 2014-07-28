@@ -73,7 +73,7 @@
 		
 		<!-- klh config  -->
 		
-		<table schema="wx" tableName="klh_wall_image" domainObjectName="KlhWallImage"/>
+		<table schema="wx" tableName="klh_wall_image_log" domainObjectName="KlhWallImageLog"/>
 		
 		<!-- 
 		<table schema="wx" tableName="klh_product" domainObjectName="KlhProduct"/>
