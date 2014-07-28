@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhWallImageLogDao;
 import com.bruce.geekway.model.KlhWallImageLog;
+import com.bruce.geekway.model.KlhWallImageStatBean;
 import com.bruce.geekway.service.klh.IKlhWallImageLogService;
 
 @Service
@@ -50,6 +51,10 @@ public class KlhWallImageLogServiceImpl implements IKlhWallImageLogService{
 		return klhWallImageLogDao.increaseBrowse(wallImageId);
 	}
 	
+	@Override
+	public List<KlhWallImageStatBean> wallImageStat(int periodType){
+		return klhWallImageLogDao.wallImageStat(periodType);
+	}
 
 	public IKlhWallImageLogDao getKlhWallImageLogDao() {
 		return klhWallImageLogDao;

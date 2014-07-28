@@ -57,6 +57,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/KlhDailySignMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhWallImageMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhWallImageLogMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhWallImageLogStatMapper.xml" />
 		
 		
 	</mappers>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.klh.IKlhWallImageLogDao;
 import com.bruce.geekway.dao.mapper.KlhWallImageLogMapper;
 import com.bruce.geekway.model.KlhWallImageLog;
+import com.bruce.geekway.model.KlhWallImageStatBean;
 
 
 @Repository
@@ -81,5 +82,17 @@ public class KlhWallImageLogDaoImpl implements IKlhWallImageLogDao, Initializing
 		wallImageLog.setCreateTime(new Date());
 		return save(wallImageLog);
 	}
-
+	
+	@Override
+	public List<KlhWallImageStatBean> wallImageStat(int periodType){
+		switch (periodType) {
+		case 0:
+			return klhWallImageLogMapper.weeklyStat();
+		case 1:
+			return klhWallImageLogMapper.monthlyStat();
+		default:
+			return klhWallImageLogMapper.totalStat();
+		}
+	}
+	
 }

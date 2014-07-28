@@ -1,9 +1,12 @@
 package com.bruce.geekway.dao.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.bruce.geekway.model.KlhWallImageLog;
 import com.bruce.geekway.model.KlhWallImageLogCriteria;
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
+import com.bruce.geekway.model.KlhWallImageStatBean;
 
 public interface KlhWallImageLogMapper {
 
@@ -72,4 +75,12 @@ public interface KlhWallImageLogMapper {
 	 * @mbggenerated  Sun Jul 27 10:37:28 CST 2014
 	 */
 	int updateByPrimaryKey(KlhWallImageLog record);
+	
+	
+	List<KlhWallImageStatBean> weeklyStat();
+	
+	List<KlhWallImageStatBean> monthlyStat();
+	
+	List<KlhWallImageStatBean> totalStat();
+	
 }

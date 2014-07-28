@@ -124,6 +124,7 @@
                                 <th>类型</th>
                                 <th>封面</th>
                                 <th>内容</th>
+                                <th>预览</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -151,6 +152,13 @@
 		                        <td>
 		                        	<%=material.getMaterialType()==1?material.getShortContent():material.getTextReply()%>
 		                        </td>
+		                        <td>
+									<%if(material.getMaterialType()==1){%>
+										<%
+										String meterialLink = ArticleLinkUtil.getArticleLink(material.getId());%>
+										<a href="<%=meterialLink%>" target="_blank">预览</a>
+									<%}%>
+								</td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

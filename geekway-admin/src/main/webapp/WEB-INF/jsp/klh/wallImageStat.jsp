@@ -1,19 +1,11 @@
+<%@page import="com.bruce.geekway.model.KlhWallImageStatBean"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxMaterial"%>
+<%@page import="com.bruce.geekway.model.KlhWallImage"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
-
-
-<%!String displayMaterialType(short materialType){
-	if(1==materialType){ 
-		return "文本";
-	}else if(2==materialType){
-		return "图文";
-	}
-	return "其他类型";
-} %>
+<%@page import="java.text.*"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +13,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>可乐惠管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -79,7 +71,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						素材管理
+						照片墙数据统计
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -90,8 +82,8 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
-					<li class="active">素材管理</li>
+					<li><a href="javascript:void(0)">首页</a></li>
+					<li class="active">照片墙数据统计</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -104,8 +96,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、点击封面图，可预览大图<br/>
-					2、点击【编辑】按钮，可对素材进行编辑
+					1、xxxxxx<br/>
 				</p>
 			</div>
 
@@ -113,54 +104,40 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>素材管理
+						<i class="icon-people"></i>照片墙数据统计
 					</h5>
-					<a href="./materialAdd?type=2"><span class="label label-info pull-right">新增图文素材</span></a>
-				</div> 
+				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>序号</th>
-								<th>类型</th>
-                                <!--<th>封面</th>--> 
-                                <th>内容</th>
-                                <th>状态</th>
+								<th>图片ID</th>
+                                <th>浏览数</th>
+                                <th>赞数</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxMaterial> materialList = (List<WxMaterial>)request.getAttribute("materialList");
-                           	if(materialList!=null&&materialList.size()>0){
+                           	List<KlhWallImageStatBean> statList = (List<KlhWallImageStatBean>)request.getAttribute("statList");
+                           	if(statList!=null&&statList.size()>0){
                            		int i=0;
-                           		for(WxMaterial material: materialList){
+                           		for(KlhWallImageStatBean statBean: statList){
                            			i++;
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td>
-		                        	<%=displayMaterialType(material.getMaterialType())%>
-		                        	&nbsp;&nbsp;
-		                        	<%if(material.getMaterialType()==2){ %>
-		                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
-			                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
-			                        	</a>
-		                        	<%}%>
+		                        <td class="text-center">
+		                        	<%=statBean.getImageId()%>
 		                        </td>
-		                        <td>
-		                        	<%=material.getShortContent()%>
-		                        </td>
-		                        <td>正常</td>
+		                        <td><%=statBean.getBrowseAmount()%></td>
+		                        <td><%=statBean.getLikeAmount()%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        	
-										<a href="./materialEdit?materialId=<%=material.getId()%>"
+										<a href="./wallImageEdit?wallImageId=<%=statBean.getImageId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./delMaterial?materialId=<%=material.getId()%>" 
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
 									</div>
 								</td>
                                </tr>

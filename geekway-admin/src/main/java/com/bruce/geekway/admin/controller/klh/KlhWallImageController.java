@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.model.KlhWallImage;
+import com.bruce.geekway.model.KlhWallImageStatBean;
+import com.bruce.geekway.service.klh.IKlhWallImageLogService;
 import com.bruce.geekway.service.klh.IKlhWallImageService;
 
 /**
@@ -25,6 +28,8 @@ public class KlhWallImageController {
 
 	@Autowired
 	private IKlhWallImageService klhWallImageService;
+	@Autowired
+	private IKlhWallImageLogService klhWallImageLogService;
 	
 	@RequestMapping("/wallImageList")
 	public String wallImageList(Model model, HttpServletRequest request) {
@@ -99,4 +104,22 @@ public class KlhWallImageController {
 		return "forward:/home/operationRedirect"; 
 	}
 	
+	
+	/**
+	 * 照片墙数据统计
+	 * @param model
+	 * @param periodType
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/wallImageStat")
+	public String wallImageStat(Model model, @RequestParam(value="periodType", defaultValue="-1")int periodType, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		List<KlhWallImageStatBean> statList = klhWallImageLogService.wallImageStat(periodType);
+		model.addAttribute("statList", statList);
+		
+		return "klh/wallImageStat";
+	}
 }
