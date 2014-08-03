@@ -42,8 +42,12 @@ public class QrcodeNewController {
 	/*用户注册后生成的二维码key*/
 	private static final String KEY_USER_REGISTER_QRCODE = "user_register_qrcode";
 	
+	/*用户关注新天地分店后生成的二维码key*/
+	private static final String KEY_USER_SURSCRIBE_XTD_QRCODE = "user_subscribe_xtd_qrcode";
+	
+	
 	/**
-	 * 
+	 * 发放的二维码处理（第一家分店）
 	 * @param model
 	 * @param request
 	 * @return
@@ -85,21 +89,43 @@ public class QrcodeNewController {
 			}
 		}
 		
-		//TODO 改用ajax方式load图片
-//		if(StringUtils.isBlank(subscribedQrcodeUrl)){//创建新cookie
-//			subscribedQrcodeUrl = getQrcodeUrl();
-//			if(!StringUtils.isBlank(subscribedQrcodeUrl)){
-//				//重新写入cookie
-//				Cookie cookie = new Cookie(KEY_USER_SURSCRIBE_QRCODE, subscribedQrcodeUrl);
-//				cookie.setMaxAge(999999999);
-//				response.addCookie(cookie);
-//			}
-//		}
+		//改用ajax方式load图片
 		
 		model.addAttribute("alreadyReged", alreadyReged);//是否注册过
 		model.addAttribute("subscribedQrcodeUrl", subscribedQrcodeUrl);
 		model.addAttribute("regedQrcodeUrl", regedQrcodeUrl);
 		return "ito/lotteryQrcode/qrcodes";
+	}
+	
+	
+	
+	/**
+	 * 新天地分店的二维码发放
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/gameQrcodesXtd")
+	public String gameQrcodesXtd(Model model, HttpServletRequest request, HttpServletResponse response) {
+		String subscribedQrcodeUrl = null;
+		
+		//检查cookie中的
+		Cookie[] cookies = request.getCookies();
+		if(cookies!=null&&cookies.length>0){
+			for(Cookie cookie: cookies){
+				//TODO 修改cookie的key
+				if(KEY_USER_SURSCRIBE_XTD_QRCODE.equals(cookie.getName())){
+					String qrcodesStr = cookie.getValue();
+					if(!StringUtils.isBlank(qrcodesStr)){//有数据
+						subscribedQrcodeUrl = qrcodesStr;
+						continue;
+					}
+				}
+			}
+		}
+		//
+		model.addAttribute("subscribedQrcodeUrl", subscribedQrcodeUrl);
+		return "ito/lotteryQrcode/qrcodesXtd";
 	}
 	
 	
@@ -132,7 +158,7 @@ public class QrcodeNewController {
 	
 	
 	/**
-	 * ajax方式获取关注时的二维码
+	 * ajax方式获取关注第一家分店时的二维码
 	 * @param model
 	 * @return
 	 */
@@ -151,6 +177,31 @@ public class QrcodeNewController {
 		}
 		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
 	}
+	
+	
+	/**
+	 * ajax方式获取关注新天地分店时的二维码
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/getSubscribedXtdQrcode.json")
+	public ModelAndView getSubscribedXtdQrcode(Model model, HttpServletRequest request, HttpServletResponse response) {
+		String subscribeQrcodeUrl = getQrcodeUrl();
+		if(subscribeQrcodeUrl!=null){
+			//重新写入cookie
+			Cookie cookie = new Cookie(KEY_USER_SURSCRIBE_XTD_QRCODE, subscribeQrcodeUrl);
+			cookie.setMaxAge(999999999);
+			response.addCookie(cookie);
+			//返回成功响应
+			Map<String, String> dataMap = new HashMap<String, String>();
+			dataMap.put("subscribeQrcodeUrl", subscribeQrcodeUrl);
+			return JsonViewBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+		}
+		return JsonViewBuilderUtil.SUBMIT_FAILED_VIEW;
+	}
+	
+	
+	
 	
 	/**
 	 * ajax方式获取注册后奖励的二维码
