@@ -4,6 +4,7 @@ package com.bruce.geekway.model.wx;
  * 签名信息
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
+@Deprecated
 public class SignatureInfo {
 
     /** TOKEN */

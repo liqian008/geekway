@@ -7,6 +7,7 @@ import java.util.List;
  * 关注着列表
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
+@Deprecated
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -6,12 +6,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
+import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.EmojiUtil;
 import com.bruce.geekway.utils.JsonUtil;
-import com.bruce.geekway.utils.WxHttpUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 @Service
@@ -61,9 +60,6 @@ public class WxUserService extends WxBaseService {
 		params.put("OPENID", openId);
 		params.put("lang", "zh_CN");
 
-		// String menuQueryResult =
-		// WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"),
-		// params);
 		String userinfoResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_user_info_url"), params);
 		
 		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResult);
@@ -71,6 +67,10 @@ public class WxUserService extends WxBaseService {
 		WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
 		return wxUserinfoResult;
 	}
+	
+	
+	
+	
 
 	public WxMpTokenService getMpTokenService() {
 		return mpTokenService;

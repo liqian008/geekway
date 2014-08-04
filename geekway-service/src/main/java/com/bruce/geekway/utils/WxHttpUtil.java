@@ -103,6 +103,33 @@ public class WxHttpUtil {
 		return null;
 	}
 	
+	/**
+	 * Httpclient Post
+	 * @param url
+	 * @param params
+	 * @param bytes
+	 * @return
+	 */
+	public static final String postMultipartRequest(String url, Map<String, String> params, byte[] data) {
+		HttpClient httpClient = new HttpClient();
+		
+		setConnectionParam(httpClient);
+		
+		PostMethod postMethod = new PostMethod(url);
+		NameValuePair[] pairs = null;
+		if (params != null) {
+			pairs = new NameValuePair[params.size()];
+			int i=0;
+			for (Map.Entry<String, String> entry : params.entrySet()) {
+		        pairs[i] = new NameValuePair(entry.getKey(), entry.getValue());
+		        i++;
+			}
+			postMethod.setQueryString(pairs);
+		}
+		postMethod.getParams().setContentCharset("utf-8");
+		
+		return null;
+	}
 	
 
 	
