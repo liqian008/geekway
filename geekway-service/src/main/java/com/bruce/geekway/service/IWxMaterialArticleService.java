@@ -2,9 +2,12 @@ package com.bruce.geekway.service;
 
 import java.util.List;
 
+import com.bruce.foundation.service.IFoundationPagingService;
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.model.WxMaterialArticleCriteria;
 
-public interface IWxMaterialArticleService extends IBaseService<WxMaterialArticle, Integer>{
+public interface IWxMaterialArticleService extends IFoundationPagingService<WxMaterialArticle, Integer, WxMaterialArticleCriteria>{
 
 	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId);
 	
@@ -19,7 +22,7 @@ public interface IWxMaterialArticleService extends IBaseService<WxMaterialArticl
 
 	/**
 	 * 根据状态查询关注素材
-	 * @param subscribeStatus
+	 * @param subscribeStatus 1为首次关注，2为重复关注
 	 * @return
 	 */
 	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus);

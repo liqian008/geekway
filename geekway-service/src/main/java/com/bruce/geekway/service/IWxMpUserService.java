@@ -1,8 +1,12 @@
 package com.bruce.geekway.service;
 
-import com.bruce.geekway.model.WxMpUser;
+import java.util.List;
 
-public interface IWxMpUserService extends IBaseService<WxMpUser, Integer> {
+import com.bruce.foundation.service.IFoundationService;
+import com.bruce.geekway.model.WxMpUser;
+import com.bruce.geekway.model.WxMpUserCriteria;
+
+public interface IWxMpUserService extends IFoundationService<WxMpUser, Integer, WxMpUserCriteria> {
 
 	public WxMpUser loadByOpenId(String userOpenId);
 
@@ -11,5 +15,8 @@ public interface IWxMpUserService extends IBaseService<WxMpUser, Integer> {
 	public int repeatSubscribeUser(String userOpenId);
 
 	public int unsubscribeUser(String userOpenId);
+	
+	
+	public List<WxMpUser> getMpUserListBySyncStatus(short s);
 
 }

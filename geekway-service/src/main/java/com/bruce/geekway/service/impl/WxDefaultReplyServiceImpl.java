@@ -5,47 +5,74 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bruce.geekway.dao.IWxDefaultReplyDao;
+import com.bruce.geekway.dao.mapper.WxDefaultReplyMapper;
+import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.model.WxDefaultReply;
+import com.bruce.geekway.model.WxDefaultReplyCriteria;
 import com.bruce.geekway.service.IWxDefaultReplyService;
 
 @Service
-public class WxDefaultReplyServiceImpl implements IWxDefaultReplyService{
-	
+public class WxDefaultReplyServiceImpl implements IWxDefaultReplyService {
+
 	@Autowired
-	private IWxDefaultReplyDao wxDefaultReplyDao;
-	
+	private WxDefaultReplyMapper wxDefaultReplyMapper;
+
 	@Override
 	public int save(WxDefaultReply t) {
-		return wxDefaultReplyDao.save(t);
+		return wxDefaultReplyMapper.insertSelective(t);
 	}
 
 	@Override
 	public int updateById(WxDefaultReply t) {
-		return wxDefaultReplyDao.updateById(t);
+		return wxDefaultReplyMapper.updateByPrimaryKeySelective(t);
+	}
+
+	@Override
+	public int updateByCriteria(WxDefaultReply t, WxDefaultReplyCriteria criteria) {
+		return wxDefaultReplyMapper.updateByExampleSelective(t, criteria);
 	}
 
 	@Override
 	public int deleteById(Integer id) {
-		return wxDefaultReplyDao.deleteById(id);
+		return wxDefaultReplyMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public int deleteByCriteria(WxDefaultReplyCriteria criteria) {
+		return wxDefaultReplyMapper.deleteByExample(criteria);
 	}
 
 	@Override
 	public WxDefaultReply loadById(Integer id) {
-		return wxDefaultReplyDao.loadById(id);
+		return wxDefaultReplyMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
 	public List<WxDefaultReply> queryAll() {
-		return wxDefaultReplyDao.queryAll();
+		return wxDefaultReplyMapper.selectByExample(null);
 	}
 
-	public IWxDefaultReplyDao getWxDefaultReplyDao() {
-		return wxDefaultReplyDao;
+	@Override
+	public List<WxDefaultReply> queryAll(String orderByClause) {
+		WxCommandCriteria criteria = new WxCommandCriteria();
+		criteria.createCriteria();
+		criteria.setOrderByClause(orderByClause);
+		return wxDefaultReplyMapper.selectByExample(null);
 	}
 
-	public void setWxDefaultReplyDao(IWxDefaultReplyDao wxDefaultReplyDao) {
-		this.wxDefaultReplyDao = wxDefaultReplyDao;
+	@Override
+	public List<WxDefaultReply> queryByCriteria(WxDefaultReplyCriteria criteria) {
+		return wxDefaultReplyMapper.selectByExample(criteria);
 	}
 	
+	
+
+	public WxDefaultReplyMapper getWxDefaultReplyMapper() {
+		return wxDefaultReplyMapper;
+	}
+
+	public void setWxDefaultReplyMapper(WxDefaultReplyMapper wxDefaultReplyMapper) {
+		this.wxDefaultReplyMapper = wxDefaultReplyMapper;
+	}
+
 }

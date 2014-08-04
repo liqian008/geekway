@@ -13,7 +13,7 @@
 
 	<context:property-placeholder location="classpath:conf/jdbc.properties"
 		ignore-unresolvable="true" />
-	
+
 	<bean id="geekway_datasource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
 		<property name="url" value="${jdbc.url}" />
@@ -25,167 +25,47 @@
 		<property name="minIdle" value="${jdbc.minIdle}" />
 		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
 		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
-	</bean> 
-	
-	
+	</bean>
+
+
 	<bean id="geekway_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="configLocation" value="classpath:mybatis-conf.xml"/>
+		<property name="configLocation" value="classpath:mybatis-conf.xml" />
 		<property name="dataSource" ref="geekway_datasource" />
 	</bean>
 
 	<bean id="wxDefaultReplyMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxDefaultReplyMapper" />
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxDefaultReplyMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
+
 	<bean id="wxCommandMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCommandMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	<bean id="wxCommandMaterialMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCommandMaterialMapper" />
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxCommandMaterialMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
-	<!-- <bean id="wxMaterialMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	<bean id="wxArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxArticleMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	<bean id="wxMaterialNewsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialNewsMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	<bean id="wxMaterialNewsArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialNewsArticleMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	<bean id="wxEventCodeMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxEventCodeMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	<bean id="wxCodeModuleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCodeModuleMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	<bean id="wxCodeModuleArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCodeModuleArticleMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean> -->
-	
+
+
 	<bean id="wxCustomizeMenuArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCustomizeMenuMapper" />
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxCustomizeMenuMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
+
 	<bean id="wxMaterialArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMaterialArticleMapper" />
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxMaterialArticleMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
-	
+
 	<bean id="wxMpUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMpUserMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
-	
-	<!-- ito mapper config -->
-	<bean id="itoProductBgMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductBgMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoSkuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoSkuImageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuImageMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoSkuPropMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuPropMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoSkuPropValueMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSkuPropValueMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoProductSkuValueMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductSkuValueMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoProductOrderMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoSliderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSliderMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoSystemStatusMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoSystemStatusMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="itoUserProfileMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.ItoUserProfileMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
-	
-	<!-- sku mapper config -->
-	<bean id="klhVoteMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhVoteMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhVoteOptionMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhVoteOptionMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhVoteResultMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhVoteResultMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhProductMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhSettingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhSettingMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhUserScoreLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhUserScoreLogMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhUserProfileMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhUserProfileMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhDailySignMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhDailySignMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhWallImageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhWallImageMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	<bean id="klhWallImageLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhWallImageLogMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
-	
+
+
 </beans>

@@ -7,11 +7,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bruce.geekway.dao.IWxMpUserDao;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
+import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.service.mp.WxUserService;
-import com.bruce.geekway.utils.EmojiUtil;
 
 @Component
 public class WxUserSyncTask implements Runnable{
@@ -20,7 +19,7 @@ public class WxUserSyncTask implements Runnable{
 	private WxUserService wxUserService;
 	
 	@Autowired
-	private IWxMpUserDao wxMpUserDao;
+	private IWxMpUserService wxMpUserService;
 	
 	private boolean running;
 	
@@ -28,10 +27,10 @@ public class WxUserSyncTask implements Runnable{
 	public void run() {
 		
 		if(!running){
-			System.out.println("==========wxMpUserDao====="+wxMpUserDao+"=======wxUserService========="+wxUserService);
+			System.out.println("==========wxMpUserService====="+wxMpUserService+"=======wxUserService========="+wxUserService);
 			System.out.println("=================sync mp userinfo from wx");
 			try{
-				List<WxMpUser> mpUserList = wxMpUserDao.getUserListBySyncStatus((short) 0);
+				List<WxMpUser> mpUserList = wxMpUserService.getMpUserListBySyncStatus((short) 0);
 				if(mpUserList!=null&&mpUserList.size()>0){
 					for(WxMpUser mpUser: mpUserList){
 						String userOpenId = mpUser.getOpenId();
@@ -50,7 +49,7 @@ public class WxUserSyncTask implements Runnable{
 							mpUser.setUpdateTime(new Date());
 							
 							mpUser.setSyncStatus((short) 1);
-							int result = wxMpUserDao.updateById(mpUser);
+							int result = wxMpUserService.updateById(mpUser);
 						}
 						//休息5秒，避免被微信当做恶意攻击
 						Thread.sleep(5000);

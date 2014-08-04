@@ -2,10 +2,13 @@ package com.bruce.geekway.service;
 
 import java.util.List;
 
+import com.bruce.foundation.service.IFoundationPagingService;
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxCommand;
+import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.model.WxMaterialArticle;
 
-public interface IWxCommandService extends IBaseService<WxCommand, Integer>{
+public interface IWxCommandService extends IFoundationPagingService<WxCommand, Integer, WxCommandCriteria>{
 
 //	@Deprecated
 //	public WxCommand loadByCode(String eventCode);
