@@ -69,44 +69,6 @@ public class ErrorCode {
 	public static final int UPLOAD_IMAGE_ERROR = 602;
 	
 	
-	/* ito订单信息分配300-400的错误码 */
-	/*商品或SKU信息的基本参数错误*/
-	public static final int ITO_PRODUCT_ORDER_ERROR = 300;
-	/*商品或SKU信息的基本参数错误*/
-	public static final int ITO_PRODUCT_ORDER_BASIC_PARAM_ERROR = 301;
-	/*单价或购买数量为空*/
-	public static final int ITO_PRODUCT_ORDER_BUY_DATA_ERROR = 302;
-	/*数量必须有效*/
-	public static final int ITO_PRODUCT_ORDER_BUY_NUM_ERROR = 303;
-	/*支付类型必须有效*/
-	public static final int ITO_PRODUCT_ORDER_PAYTYPE_ERROR = 304;
-	/*SKU信息错误*/
-	public static final int ITO_PRODUCT_ORDER_SKU_ERROR = 305;
-	/*库存不足*/
-	public static final int ITO_PRODUCT_ORDER_EMPTY_ITEM_ERROR = 306;
-	/*SKU信息不匹配*/
-	public static final int ITO_PRODUCT_ORDER_SKU_NO_TMATCH_ERROR = 307;
-	/*价格不匹配*/
-	public static final int ITO_PRODUCT_ORDER_PRICE_ERROR = 308;
-	/*总价计算错误*/
-	public static final int ITO_PRODUCT_ORDER_TOTAL_PRICE_ERROR = 309;
-	
-	/*收件人姓名错误*/
-	public static final int ITO_PRODUCT_ORDER_POST_NAME_ERROR = 310;
-	/*收件人电话错误*/
-	public static final int ITO_PRODUCT_ORDER_POST_MOBILE_ERROR = 311;
-	/*收件地址错误*/
-	public static final int ITO_PRODUCT_ORDER_POST_ADDRESS_ERROR = 312;
-	/*收件email错误*/
-	public static final int ITO_PRODUCT_ORDER_POST_EMAIL_ERROR = 313;
-
-	
-	/*支付宝的return回调信息错误*/
-	public static final int ITO_PRODUCT_ORDER_ALIPAY_RETURN_ERROR = 330;
-	/*支付宝的notify回调信息错误*/
-	public static final int ITO_PRODUCT_ORDER_ALIPAY_NOTIFY_ERROR = 331;
-	
-	
 	
 	/* WEB AJAX请求分配10000-19999的错误码 */
 

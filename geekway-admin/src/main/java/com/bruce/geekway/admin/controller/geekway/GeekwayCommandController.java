@@ -10,16 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
+import com.bruce.geekway.utils.ConfigUtil;
 //import com.bruce.geekway.model.WxMaterialNews;
 //import com.bruce.geekway.service.IWxMaterialNewsService;
-import com.bruce.geekway.utils.ConfigUtil;
 
 @Controller
 @RequestMapping("/geekway") 

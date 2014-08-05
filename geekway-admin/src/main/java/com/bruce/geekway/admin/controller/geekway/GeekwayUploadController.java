@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import com.bruce.baseAdmin.controller.BaseController;
-import com.bruce.baseAdmin.security.WebUserDetails;
+import com.bruce.foundation.admin.controller.BaseController;
+import com.bruce.foundation.admin.security.WebUserDetails;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;

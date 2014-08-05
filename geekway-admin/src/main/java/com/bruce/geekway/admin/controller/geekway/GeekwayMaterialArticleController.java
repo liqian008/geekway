@@ -12,8 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.baseAdmin.controller.BaseController;
-import com.bruce.geekway.constants.ConstConfig;
+import com.bruce.foundation.admin.controller.BaseController;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCommandMaterial;
 import com.bruce.geekway.model.WxMaterialArticle;
