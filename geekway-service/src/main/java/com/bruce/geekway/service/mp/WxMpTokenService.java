@@ -15,7 +15,9 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @Service
 public class WxMpTokenService {
 	
-//	/*微信MP中accessToken的超时time，单位秒*/
+private static final String WX_ACCESS_TOKEN_API = ConfigUtil.getString("weixinmp_access_token_url");
+
+	//	/*微信MP中accessToken的超时time，单位秒*/
 //	private static final int ACCESS_TOKEN_MP_EXPIRES_IN = 7200; 
 	/*微信MP中请求accessToken网络请求的TimeOut，单位秒*/
 	private static final int ACCESS_TOKEN_REQUEST_TIME = 200; 
@@ -40,7 +42,7 @@ public class WxMpTokenService {
 			params.put("appid", ConfigUtil.getString("weixinmp_appid"));
 			params.put("secret",  ConfigUtil.getString("weixinmp_appsecret"));
 			
-			String authResultStr = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_access_token_url"), params);
+			String authResultStr = WxHttpUtil.getRequest(WX_ACCESS_TOKEN_API, params);
 			WxAuthResult wxAuthRes = JsonUtil.gson.fromJson(authResultStr, WxAuthResult.class);
 			if(wxAuthRes!=null && wxAuthRes.getErrcode()==null){//正常的响应结果
 				authResult = wxAuthRes;

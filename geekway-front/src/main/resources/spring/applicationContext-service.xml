@@ -12,30 +12,6 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<!-- 
-	<bean id="eventCodeService" class="com.bruce.geekway.service.impl.WxEventCodeServiceImpl">
-		<property name="wxEventCodeMapper" ref="wxEventCodeMapper"></property>
-	</bean>
-	<bean id="customizeMenuService" class="com.bruce.geekway.service.impl.WxCustomizeMenuServiceImpl">
-		<property name="wxCustomizeMenuMapper" ref="wxCustomizeMenuMapper"></property>
-	</bean>
-	<bean id="materialService" class="com.bruce.geekway.service.impl.WxMaterialServiceImpl">
-		<property name="wxMaterialMapper" ref="wxMaterialMapper"></property>
-	</bean>
-	
-	<bean id="articleService" class="com.bruce.geekway.service.impl.WxArticleServiceImpl">
-		<property name="wxArticleMapper" ref="wxArticleMapper"></property>
-	</bean>
-	<bean id="codeModuleService" class="com.bruce.geekway.service.impl.WxCodeModuleServiceImpl">
-	</bean>
-	<bean id="materialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
-		<property name="wxMaterialNewsMapper" ref="wxMaterialNewsMapper"></property>
-	</bean>
-	 -->
-	
-<!-- 	<bean id="commandMaterialService" class="com.bruce.geekway.service.impl.WxCommandMaterialServiceImpl">
-		<property name="wxCommandMaterialMapper" ref="wxCommandMaterialMapper"></property>
-	</bean> -->
 	<bean id="commandService" class="com.bruce.geekway.service.impl.WxCommandServiceImpl">
 		<property name="wxCommandMapper" ref="wxCommandMapper"></property>
 	</bean>
@@ -49,11 +25,20 @@
 	<bean id="mpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">
 		<property name="wxMpUserMapper" ref="wxMpUserMapper"></property>
 	</bean>
+	
+	<bean id="broadcastService" class="com.bruce.geekway.service.impl.WxBroadcastServiceImpl">
+		<property name="wxBroadcastMapper" ref="wxBroadcastMapper"></property>
+	</bean>
+	
 	<!-- weixin web oauth -->
 	<bean id="mpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
 	</bean>
 	
 	
+	
+	<!-- upload service -->
+	<bean id="uploadService" class="com.bruce.geekway.service.impl.UploadServiceImpl">
+	</bean>
 	
 	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
@@ -62,9 +47,5 @@
 	<bean id="mpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
 	-->
-	
-	<!-- upload service -->
-	<bean id="uploadService" class="com.bruce.geekway.service.impl.UploadServiceImpl">
-	</bean>
 	
 </beans>

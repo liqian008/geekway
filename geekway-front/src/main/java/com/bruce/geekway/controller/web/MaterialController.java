@@ -27,14 +27,14 @@ public class MaterialController {
 		return "mobile/index";
 	}
 	
-	@RequestMapping(value = "/news/{newsId}")
-	public String news(Model model, @PathVariable int newsId) {
-		List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(newsId, 4);
-		if(articleList!=null){
-			model.addAttribute("articleList", articleList);
-		}
-		return "mobile/articleList";
-	}
+//	@RequestMapping(value = "/news/{newsId}")
+//	public String news(Model model, @PathVariable int newsId) {
+//		List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(newsId, 4);
+//		if(articleList!=null){
+//			model.addAttribute("articleList", articleList);
+//		}
+//		return "mobile/articleList";
+//	}
 	
 	@RequestMapping(value = "/article/{articleId}")
 	public String article(Model model, @PathVariable int articleId) {

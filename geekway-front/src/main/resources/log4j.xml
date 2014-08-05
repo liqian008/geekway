@@ -10,73 +10,33 @@
 		</layout>
 	</appender>
 	
-	<appender name="ito_qrcode_logger" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/geekway/www/logs/geekway-front/ito_qrcode.log" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
-		</layout>
-	</appender>
-	
-	<appender name="ito_order_logger" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/geekway/www/logs/geekway-front/ito_app_order.log" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
-		</layout>
-	</appender>
-	
-	<appender name="ito_app_logger" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/data/geekway/www/logs/geekway-front/ito_app.log" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-5p: %c - %d{yyyy-MM-dd-HH:mm:ss,SSS} - %m%n " />
-		</layout>
-	</appender>
 	
 	<!-- Application Loggers -->
 	<logger name="com.bruce.geekway">
 		<level value="info" />
 	</logger>
 	
-	<!-- 第三方发码中心 Loggers -->
-	<logger name="ItoQrcodeLogger">
-		<level value="info"/>
-		<appender-ref ref="ito_qrcode_logger"/>
-	</logger>
-	
-	<!-- App访问 Loggers -->
-	<logger name="ItoAppLogger">
-		<level value="info"/>
-		<appender-ref ref="ito_app_logger"/>
-	</logger>
-	
-	<!-- App 订单 Loggers -->
-	<logger name="ItoAppOrderLogger">
-		<level value="info"/>
-		<appender-ref ref="ito_order_logger"/>
-	</logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<logger name="org.springframework.beans">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<logger name="org.springframework.context">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="org.springframework.web">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="debug" />
 		<appender-ref ref="console" />
 	</root>
 	

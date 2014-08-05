@@ -1,6 +1,6 @@
 package com.bruce.geekway.model.wx.json.response;
 
-public class WxMediaResult extends WxJsonResult {
+public class WxMediaUploadResult extends WxJsonResult {
 
 	private String type;
 	private String media_id;

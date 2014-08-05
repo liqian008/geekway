@@ -12,6 +12,7 @@ import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgRespTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.BroadcastFinishEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationEventRequest;
@@ -20,6 +21,7 @@ import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
+import com.bruce.geekway.service.IWxBroadcastService;
 import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.utils.WxXmlUtil;
 
@@ -50,6 +52,8 @@ public class MessageHandler {
 	private List<Processor> eventLocationProcessorList;
 	@Autowired
 	private IWxMpUserService mpUserService;
+	@Autowired
+	private IWxBroadcastService broadcastService;
 	
 	public BaseResponse processMessage(String xml) throws Exception {
 		System.out.println("request xml: " + xml);
@@ -94,7 +98,6 @@ public class MessageHandler {
 					return processEventClickRequest(eventRequest);
 				}
 				case VIEW: {// 点击菜单链接跳转（wiki文档中写到会发送该消息，但实际未检测到该消息）
-					// do nothing
 					break;
 				}
 				case LOCATION: {// 上报location位置
@@ -102,15 +105,15 @@ public class MessageHandler {
 					return processEventLocationRequest(locationEventRequest);
 				}
 				case SCAN: {
-					// do nothing
 					break;
 				}
 				case BROADCAST_FINISH: {
-					// TODO 回写群发结果数据
+					BroadcastFinishEventRequest request = WxXmlUtil.getBroadcastMsgEvent(ele);
+					//作为系统级操作，向表中回写群发结果数据（脱离processor处理系统的订阅事件）
+					broadcastService.broadcastNofify(request.getMsgID(), request.getTotalCount(), request.getFilterCount(), request.getSentCount(), request.getErrorCount());
 					break;
 				}
 				default: {
-					// do nothing
 					break;
 				}
 			}
@@ -134,6 +137,7 @@ public class MessageHandler {
 			return WxXmlUtil.buildNewsResponse((NewsResponse) response).asXML();
 		case TEXT:
 			return WxXmlUtil.buildTextResponse((TextResponse) response).asXML();
+			// 以下功能暂不支持
 			// case IMAGE:
 			// return WxXmlUtil.getRespImage((WxRespImageEntity) resp);
 			// case MUSIC:
@@ -273,6 +277,14 @@ public class MessageHandler {
 
 	public void setMpUserService(IWxMpUserService mpUserService) {
 		this.mpUserService = mpUserService;
+	}
+
+	public IWxBroadcastService getBroadcastService() {
+		return broadcastService;
+	}
+
+	public void setBroadcastService(IWxBroadcastService broadcastService) {
+		this.broadcastService = broadcastService;
 	}
 
 }

@@ -50,7 +50,7 @@ public class GeekwayMpUserController {
 		return "geekway/mpUserInfo";
 	}
 	
-	
+	@Deprecated
 	@RequestMapping("/syncRemoteUser")
 	public String syncRemoteUser(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();

@@ -16,6 +16,7 @@
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxCustomizeMenuMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxBroadcastMapper.xml" />
 		
 	</mappers>
 

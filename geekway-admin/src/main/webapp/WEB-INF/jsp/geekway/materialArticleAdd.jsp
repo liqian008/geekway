@@ -185,14 +185,14 @@
 									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
 								</a>
 								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+								<input type="file" name="mediaFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">内容概要: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-10"> 
+							<div class="col-sm-8"> 
 								<div class="block-inner">
 									<textarea name="shortContent" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${materialArticle.shortContent}</textarea>
 								</div>
@@ -215,9 +215,9 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">文本内容: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-10"> 
+							<div class="col-sm-8">
 								<div class="block-inner">
-									<textarea name="textReply" rows="6" cols="5" class="elastic form-control" placeholder="上限200字">${materialArticle.textReply}</textarea>
+									<textarea name="textReply" rows="4" cols="5" class="elastic form-control" placeholder="上限200字">${materialArticle.textReply}</textarea>
 								</div>
 							</div>
 						</div>
@@ -258,9 +258,9 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        data.append('mediaFile', $('input[type=file]')[0].files[0]);  
 	        $.ajax({
-	            url:'/geekway-admin/geekway/imageUpload',
+	            url:'/geekway-admin/geekway/wxMediaUpload',
 	            type:'POST',
 	            data:data,
 	            cache: false,

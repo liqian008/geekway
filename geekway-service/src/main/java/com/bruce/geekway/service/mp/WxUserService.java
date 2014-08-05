@@ -16,6 +16,8 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @Service
 public class WxUserService extends WxBaseService {
 
+	private static final String WX_USER_INFO_API = ConfigUtil.getString("weixinmp_user_info_url");
+	
 	@Autowired
 	private WxMpTokenService mpTokenService;
 
@@ -41,7 +43,7 @@ public class WxUserService extends WxBaseService {
 		// String menuQueryResult =
 		// WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"),
 		// params);
-		String userListResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("https://api.weixin.qq.com/cgi-bin/user/get"), params);
+		String userListResult = WxHttpUtil.getRequest(ConfigUtil.getString("https://api.weixin.qq.com/cgi-bin/user/get"), params);
 
 		WxUserListResult wxUserListResult = JsonUtil.gson.fromJson(userListResult, WxUserListResult.class);
 		return wxUserListResult;
@@ -60,7 +62,7 @@ public class WxUserService extends WxBaseService {
 		params.put("OPENID", openId);
 		params.put("lang", "zh_CN");
 
-		String userinfoResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_user_info_url"), params);
+		String userinfoResult = WxHttpUtil.getRequest(WX_USER_INFO_API, params);
 		
 		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResult);
 		

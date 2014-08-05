@@ -15,6 +15,11 @@ public class WxMedia implements Serializable {
     private String media_id;
     /*文本内容，仅用在群发文本上*/
     private String content;
+    
+    public WxMedia(String media_id, String content){
+    	this.media_id = media_id;
+    	this.content = content;
+    }
 
 	public String getMedia_id() {
 		return media_id;

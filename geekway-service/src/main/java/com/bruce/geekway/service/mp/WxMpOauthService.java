@@ -20,6 +20,7 @@ public class WxMpOauthService extends WxBaseService {
 //	
 //	protected static final String AUTHORIZE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+APPID+"&redirect_uri="+REDIRECT_URI+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 	
+	private static final String WX_USER_ACCESS_TOKEN_API = ConfigUtil.getString("weixinmp_oauth_accesstoken_url");
 	@Autowired
 	private WxMpTokenService mpTokenService;
 	
@@ -41,7 +42,7 @@ public class WxMpOauthService extends WxBaseService {
 		params.put("code", code);
 		params.put("grant_type", "authorization_code");
 		
-		String oauthResult = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_oauth_accesstoken_url"), params);
+		String oauthResult = WxHttpUtil.getRequest(WX_USER_ACCESS_TOKEN_API, params);
 		
 		WxOauthTokenResult wxOauthTokenResult = JsonUtil.gson.fromJson(oauthResult, WxOauthTokenResult.class);
 		return wxOauthTokenResult;
@@ -59,7 +60,7 @@ public class WxMpOauthService extends WxBaseService {
 		params.put("openid", openid);
 		params.put("lang", "zh_CN");
 		
-		String userinfoResultStr = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_oauth_userinfo_url"), params); 
+		String userinfoResultStr = WxHttpUtil.getRequest(ConfigUtil.getString("weixinmp_oauth_userinfo_url"), params); 
 		
 		WxUserInfoResult userinfoResult = JsonUtil.gson.fromJson(userinfoResultStr, WxUserInfoResult.class);
 		return userinfoResult;
