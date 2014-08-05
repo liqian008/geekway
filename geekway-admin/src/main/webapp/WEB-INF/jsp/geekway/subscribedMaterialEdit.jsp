@@ -170,7 +170,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图文内容概要: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-10"> 
+							<div class="col-sm-8"> 
 								<div class="block-inner">
 									<textarea name="shortContent" rows="2" cols="5" class="elastic form-control" placeholder="上限100字">${subscribedMaterial.shortContent}</textarea>
 								</div>

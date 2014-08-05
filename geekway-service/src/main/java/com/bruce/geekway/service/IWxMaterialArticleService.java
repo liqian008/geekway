@@ -3,18 +3,11 @@ package com.bruce.geekway.service;
 import java.util.List;
 
 import com.bruce.foundation.service.IFoundationPagingService;
-import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialArticleCriteria;
 
 public interface IWxMaterialArticleService extends IFoundationPagingService<WxMaterialArticle, Integer, WxMaterialArticleCriteria>{
 
-	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId);
-	
-	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit);
-
-	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
-	
 	/*查询commandId对应的素材列表*/
 	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
 	
@@ -32,4 +25,9 @@ public interface IWxMaterialArticleService extends IFoundationPagingService<WxMa
 	/*查询普通的素材列表*/
 	public List<WxMaterialArticle> queryGeneralMaterials();
 	
+//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId);
+//	
+//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit);
+//
+//	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
 }

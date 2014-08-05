@@ -10,6 +10,7 @@ import com.bruce.geekway.model.wx.WxAuth;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.BroadcastFinishEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
@@ -221,6 +222,36 @@ public class WxXmlUtil {
 		}
 		return eventRequest;
 	}
+	
+	
+	/**
+	 * 解析出群发结果的request对象
+	 * @param ele
+	 * @return
+	 * @throws DocumentException
+	 */
+	public static BroadcastFinishEventRequest getBroadcastMsgEvent(Element ele) throws DocumentException {
+		BroadcastFinishEventRequest eventRequest = populateRequest(BroadcastFinishEventRequest.class, ele);
+		eventRequest.setEvent(WxEventTypeEnum.instance(strVal(ele, "Event")));
+		if (ele.elementText("TotalCount") != null) {
+			eventRequest.setMsgID(strVal(ele, "MsgID"));
+		}
+		if (ele.elementText("TotalCount") != null) {
+			eventRequest.setTotalCount(intVal(ele, "TotalCount"));
+		}
+		if (ele.elementText("FilterCount") != null) {
+			eventRequest.setFilterCount(intVal(ele, "FilterCount"));
+		}
+		if (ele.elementText("SentCount") != null) {
+			eventRequest.setSentCount(intVal(ele, "SentCount"));
+		}
+		if (ele.elementText("ErrorCount") != null) {
+			eventRequest.setErrorCount(intVal(ele, "ErrorCount"));
+		}
+		return eventRequest;
+	}
+	
+	
 	
 	/**
 	 * <code>
@@ -451,6 +482,9 @@ public class WxXmlUtil {
 		return ele;
 	}
 	
+	private static Integer intVal(Element ele, String name) {
+		return Integer.valueOf(ele.element(name).getStringValue());
+	}
 	
 	private static String strVal(Element ele, String name) {
 		return ele.element(name).getStringValue();

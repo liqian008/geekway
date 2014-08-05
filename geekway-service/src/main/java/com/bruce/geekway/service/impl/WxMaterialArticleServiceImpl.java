@@ -69,22 +69,25 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService, 
 		return wxMaterialArticleMapper.selectByExample(criteria);
 	}
 
-	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId) {
-		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId);
-	}
-
-	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit) {
-		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId, limit);
-	}
-
-	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId) {
-		return wxMaterialArticleMapper.queryMaterialArticlesOutNewsId(newsId);
-	}
 
 	/* 查询commandId对应的素材列表 */
 	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId) {
 		return wxMaterialArticleMapper.queryMaterialArticlesByCommandId(commandId);
 	}
+	
+	
+//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId) {
+//		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId);
+//	}
+//
+//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit) {
+//		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId, limit);
+//	}
+//
+//	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId) {
+//		return wxMaterialArticleMapper.queryMaterialArticlesOutNewsId(newsId);
+//	}
+	
 
 	/* 查询普通的素材列表 */
 	public List<WxMaterialArticle> queryGeneralMaterials() {
@@ -121,6 +124,8 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService, 
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {

@@ -1,29 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxCommand"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.utils.*"%>
 
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "菜单关键词";
-	}else if(0==commandType){
-		return "文本关键词";
-	}
-	return "类型错误";
-} %>
-
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null){
-		if(0==materialType){ 
-			return "文本";
-		}else if(1==materialType){
-			return "图文";
-		}
-	}
-	return "其他类型";
-} %>
-
+<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -54,6 +36,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/ckeditor/config.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
@@ -82,7 +66,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词管理
+						消息群发
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -94,7 +78,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">关键词管理</li>
+					<li class="active">消息群发</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -102,69 +86,71 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
+				<h5>功能介绍</h5>
 				<p>
-					本功能支持2种类型的关键词： <br/>
-					1、文本关键词（用户在微信中输入的关键词）<br/>
-					2、菜单关键词（微信中菜单对应的关键词）<br/>
+					消息群发需注意以下几点： <br/>
 				</p>
 			</div>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>关键词管理
-					</h5>
-					<!-- <a href="./commandAddSubscribeEntry"><span class="label label-danger pull-right">增加关注关键词</span></a>
-					<a href="./commandAddMenuEntry"><span class="label label-primary pull-right">增加菜单接入关键词</span></a>
-					<a href="./commandAddTextEntry"><span class="label label-info pull-right">增加文本接入关键词</span></a> -->
+			<%
+			WxBroadcast broadcast = (WxBroadcast)request.getAttribute("broadcast");
+			%>
+
+			<form id="validate" action="<s:url value='./sendBroadcast'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>编辑
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">群发消息类型: <span class="mandatory">*</span></label>
+							
+							<div class="col-sm-3">
+								<label class="control-label">
+									<form:hidden path="broadcast.id"/>
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">文本内容: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-8"> 
+								<div class="block-inner">
+									<textarea name="textReply" rows="4" cols="5" class="elastic form-control" placeholder="上限200字">${broadcast.content}</textarea>
+								</div>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<form:select path="broadcast.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
+							</div>
+						</div>
+						
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="提 交" class="btn btn-primary">
+						</div>
+					</div>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>类型</th>
-                                <th>关键词</th>
-                                <th>状态</th>
-                                <th class="team-links">操 作</th> 
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-                           	if(commandList!=null&&commandList.size()>0){
-                           		int i=0;
-                           		for(WxCommand command: commandList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=displayCommandType(command.getCommandType())%></td>
-		                        <td><%=command.getCommand()%></td>
-		                        <td>状态</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="./commandEdit?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<a href="./delCommand?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -172,6 +158,6 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
 </body>
 </html>
-

@@ -3,6 +3,8 @@ package com.bruce.geekway.model.wx.json;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.bruce.geekway.model.wx.WxBroadcastTypeEnum;
+
 /**
  * 群发广播对象
  * @author liqian
@@ -18,17 +20,35 @@ public class WxBroadcastInfo implements Serializable {
     /*根据openid进行群发*/
     private Set<String> touser;
     
-    /*文本*/
+    /* 文本 */
 	private WxMedia text;
-	/*图文*/
+	/* 图文 */
 	private WxMedia mpnews;
-	/*图片*/
+	/* 图片 */
 	private WxMedia image;
+	/* 语音*/
 	private WxMedia voice;
-	/*视频（暂时不支持）*/
+	/* 视频（暂时不支持）*/
 	private WxMedia mpvideo;
 	
-	
+	/**
+	 * 构造群发对象
+	 * @param broadcastTypeEnum
+	 * @param content
+	 * @param mediaId
+	 */
+	public WxBroadcastInfo(WxBroadcastTypeEnum broadcastTypeEnum, String content, String mediaId){
+		this.msgtype = broadcastTypeEnum.toString();
+		if(WxBroadcastTypeEnum.TEXT.equals(broadcastTypeEnum)){//群发文本
+			text = new WxMedia(null, content);
+		}else if(WxBroadcastTypeEnum.MPNEWS.equals(broadcastTypeEnum)){//群发图文消息
+			mpnews = new WxMedia(null, content);
+		}else if(WxBroadcastTypeEnum.IMAGE.equals(broadcastTypeEnum)){//群发图片
+			image = new WxMedia(null, content);
+		}else if(WxBroadcastTypeEnum.VOICE.equals(broadcastTypeEnum)){//群发语音
+			voice = new WxMedia(null, content);
+		}
+	}
 	
     
 	public WxGroupInfo.Group getFilter() {

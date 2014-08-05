@@ -1,14 +1,25 @@
 package com.bruce.geekway.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.lang3.CharSet;
 
 //import org.apache.http.Consts;
 //import org.apache.http.HttpEntity;
@@ -34,7 +45,7 @@ public class WxHttpUtil {
 	 * @param params
 	 * @return
 	 */
-	public static final String sendGetRequest(String url, Map<String, String> params) {
+	public static final String getRequest(String url, Map<String, String> params) {
 		HttpClient httpClient = new HttpClient();
 		
 		setConnectionParam(httpClient);
@@ -68,10 +79,10 @@ public class WxHttpUtil {
 	 * Httpclient Post
 	 * @param url
 	 * @param params
-	 * @param requestEntity
+	 * @param data
 	 * @return
 	 */
-	public static final String sendPostRequest(String url, Map<String, String> params, String data) {
+	public static final String postRequest(String url, Map<String, String> params, String data) {
 		HttpClient httpClient = new HttpClient();
 		
 		setConnectionParam(httpClient);
@@ -104,30 +115,51 @@ public class WxHttpUtil {
 	}
 	
 	/**
-	 * Httpclient Post
+	 * post multipart data
 	 * @param url
 	 * @param params
 	 * @param bytes
 	 * @return
 	 */
-	public static final String postMultipartRequest(String url, Map<String, String> params, byte[] data) {
+	public static final String postMultipartRequest(String url, Map<String, String> params, byte[] bytes) {
 		HttpClient httpClient = new HttpClient();
 		
 		setConnectionParam(httpClient);
-		
 		PostMethod postMethod = new PostMethod(url);
-		NameValuePair[] pairs = null;
-		if (params != null) {
-			pairs = new NameValuePair[params.size()];
-			int i=0;
-			for (Map.Entry<String, String> entry : params.entrySet()) {
-		        pairs[i] = new NameValuePair(entry.getKey(), entry.getValue());
-		        i++;
-			}
-			postMethod.setQueryString(pairs);
-		}
-		postMethod.getParams().setContentCharset("utf-8");
 		
+		if (params == null) {
+			params = new HashMap<String, String>();
+		}
+//		if (files == null) {
+//			files = new File[0];
+//		}
+		
+		Part[] parts = new Part[params.size() + 1];
+		int i=0;
+		for (Map.Entry<String, String> entry : params.entrySet()) {
+			parts[i++] = new StringPart(entry.getKey(), entry.getValue());
+		}
+		
+		try {
+//			for (File file: files) {
+	//			parts[i++] = new FilePart(name, new ByteArrayPartSource());\
+//			}
+			
+			String fileName = String.valueOf(System.currentTimeMillis());
+			parts[i++] = new FilePart(fileName, new ByteArrayPartSource(fileName, bytes));
+			
+			postMethod.getParams().setContentCharset("utf-8");
+			MultipartRequestEntity multipartEntity = new MultipartRequestEntity(parts, postMethod.getParams());
+			postMethod.setRequestEntity(multipartEntity);
+			
+			int statusCode = httpClient.executeMethod(postMethod);
+			if (statusCode == HttpStatus.SC_OK) {
+				String response = postMethod.getResponseBodyAsString();
+				return response;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 	

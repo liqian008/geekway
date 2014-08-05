@@ -18,6 +18,8 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @Service
 public class WxReplyService extends WxBaseService {
 
+	private static final String WX_REPLY_MESSAGE_API = ConfigUtil.getString("weixinmp_reply_message_url");
+	
 	@Autowired
 	private WxMpTokenService mpTokenService;
 
@@ -55,7 +57,7 @@ public class WxReplyService extends WxBaseService {
 			Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 
 			// 回复消息
-			String sendResultStr = WxHttpUtil.sendPostRequest(ConfigUtil.getString("weixinmp_reply_message_url"), params, message);
+			String sendResultStr = WxHttpUtil.postRequest(WX_REPLY_MESSAGE_API, params, message);
 			WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
 			if (wxSendResult != null && wxSendResult.getErrcode() != null && wxSendResult.getErrcode() == 0) {// 自定义菜单创建成功
 				return wxSendResult;

@@ -16,7 +16,9 @@ import com.bruce.foundation.admin.security.WebUserDetails;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
+import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.IUploadService;
+import com.bruce.geekway.service.mp.WxMediaUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 
 @Controller
@@ -25,6 +27,9 @@ public class GeekwayUploadController extends BaseController{
 
 	@Autowired
 	private IUploadService uploadService;
+	
+	@Autowired
+	private WxMediaUploadService wxMediaUploadService;
 	
 	/**
 	 * 处理ckEditor文件上传
@@ -66,6 +71,20 @@ public class GeekwayUploadController extends BaseController{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/wxMediaUpload", method = RequestMethod.POST)
+	public JsonResultBean wxMediaUpload(Model model, @RequestParam("mediaFile") CommonsMultipartFile mediaFile) {
+		WebUserDetails userDetail = getUserInfo();
+		int userId = userDetail.getUserId();
+//			UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());
+		
+		WxMediaUploadResult uploadResult = wxMediaUploadService.uploadImage(mediaFile.getBytes());
+			
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 

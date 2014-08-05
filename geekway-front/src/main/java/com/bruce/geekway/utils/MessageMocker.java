@@ -66,4 +66,18 @@ public class MessageMocker {
 			+ "<Event><![CDATA[unsubscribe]]></Event>"
 			+ "<EventKey><![CDATA[EVENTKEY]]></EventKey>" + "</xml>";
 	
+	public static final String MSG_EVENT_BROADCAST_XML = "<xml>"
+			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
+			+ "<FromUserName><![CDATA[oxGeHjg87dS82dsp4iP4SE1iVujA]]></FromUserName>"
+			+ "<CreateTime>123456789</CreateTime>"
+			+ "<MsgType><![CDATA[event]]></MsgType>"
+			+ "<Event><![CDATA[MASSSENDJOBFINISH]]></Event>"
+			+ "<MsgID>1988</MsgID>"
+			+ "<Status><![CDATA[sendsuccess]]></Status>"
+			+ "<TotalCount>100</TotalCount>"
+			+ "<FilterCount>80</FilterCount>"
+			+ "<SentCount>75</SentCount>"
+			+ "<ErrorCount>5</ErrorCount>"
+			+ "</xml>";
+	
 }

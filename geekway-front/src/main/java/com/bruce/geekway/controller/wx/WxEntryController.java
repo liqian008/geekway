@@ -65,6 +65,8 @@ public class WxEntryController {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_UNSUBSCRIBE_XML);
 		} else if ("img".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_IMG_XML);
+		} else if ("broadcast".equalsIgnoreCase(type)) {
+			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_BROADCAST_XML);
 		}
 		System.out.println(baseResponse);
 		if (baseResponse != null) {

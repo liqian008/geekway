@@ -19,7 +19,16 @@ import com.bruce.geekway.utils.WxHttpUtil;
  */
 @Service
 public class WxUserGroupService extends WxBaseService {
-
+	
+	private static final String WX_GROUP_CREATE_API = ConfigUtil.getString("weixinmp_group_create_url");
+	private static final String WX_GROUP_LIST_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
+	private static final String WX_USER_GROUP_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
+	private static final String WX_GROUPNAME_UPDATE_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
+	private static final String WX_USER_GROUP_MOVE_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
+	
+	
+	
+	
 	@Autowired
 	private WxMpTokenService mpTokenService;
 
@@ -34,7 +43,7 @@ public class WxUserGroupService extends WxBaseService {
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		
-		String groupCreateResultStr = WxHttpUtil.sendPostRequest(ConfigUtil.getString("weixinmp_group_create_url"), params,  JsonUtil.gson.toJson(groupJsonBean));
+		String groupCreateResultStr = WxHttpUtil.postRequest(WX_GROUP_CREATE_API, params,  JsonUtil.gson.toJson(groupJsonBean));
 		
 		WxGroupInfo.Group wxGroupCreateResult = JsonUtil.gson.fromJson(groupCreateResultStr,  WxGroupInfo.Group.class);
 		if(wxGroupCreateResult!=null){
@@ -55,7 +64,7 @@ public class WxUserGroupService extends WxBaseService {
 		String accessToken = mpTokenService.getMpAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
-		String groupListResultStr = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_group_list_url"), params);
+		String groupListResultStr = WxHttpUtil.getRequest(WX_GROUP_LIST_API, params);
 		
 		WxGroupInfo.Groups wxGroupList = JsonUtil.gson.fromJson(groupListResultStr, WxGroupInfo.Groups.class);
 		return wxGroupList;
@@ -71,7 +80,7 @@ public class WxUserGroupService extends WxBaseService {
 		String accessToken = mpTokenService.getMpAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
-		String userGroupStr = WxHttpUtil.sendPostRequest(ConfigUtil.getString("weixinmp_user_group_url"), params, JsonUtil.gson.toJson(userJsonBean));
+		String userGroupStr = WxHttpUtil.postRequest(WX_USER_GROUP_API, params, JsonUtil.gson.toJson(userJsonBean));
 		
 		return JsonUtil.gson.fromJson(userGroupStr, WxGroupInfo.UserGroup.class);
 	}
@@ -86,7 +95,7 @@ public class WxUserGroupService extends WxBaseService {
 		String accessToken = mpTokenService.getMpAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
-		String updateResult = WxHttpUtil.sendPostRequest(ConfigUtil.getString("weixinmp_groupname_update_url"), params, JsonUtil.gson.toJson(groupJson));
+		String updateResult = WxHttpUtil.postRequest(WX_GROUPNAME_UPDATE_API, params, JsonUtil.gson.toJson(groupJson));
 		
 		return JsonUtil.gson.fromJson(updateResult, WxJsonResult.class);
 	}
@@ -101,7 +110,7 @@ public class WxUserGroupService extends WxBaseService {
 		String accessToken = mpTokenService.getMpAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
-		String moveResultStr = WxHttpUtil.sendGetRequest(ConfigUtil.getString("weixinmp_user_group_move_url"), params);
+		String moveResultStr = WxHttpUtil.getRequest(WX_USER_GROUP_MOVE_API, params);
 		
 		WxJsonResult wxMoveResult = JsonUtil.gson.fromJson(moveResultStr, WxUserInfoResult.class);
 		return wxMoveResult;
