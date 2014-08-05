@@ -59,7 +59,7 @@ public class WxMediaUploadService extends WxBaseService {
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		params.put("type", typeEnum.toString());
 		
-		String uploadResultStr = WxHttpUtil.postMultipartRequest(ConfigUtil.getString("weixinmp_upload_media_url"), params, data);
+		String uploadResultStr = WxHttpUtil.postMultipartRequest(ConfigUtil.getString("weixinmp_media_upload_url"), params, data);
 		if(uploadResultStr!=null){
 			return JsonUtil.gson.fromJson(uploadResultStr, WxMediaResult.class);
 		}else{

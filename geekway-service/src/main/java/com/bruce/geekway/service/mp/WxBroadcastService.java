@@ -3,6 +3,7 @@ package com.bruce.geekway.service.mp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.model.wx.json.WxBroadcastInfo;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
 
 /**
@@ -15,14 +16,13 @@ public class WxBroadcastService extends WxBaseService {
 
 	@Autowired
 	private WxMpTokenService mpTokenService;
-
 	
 	/**
 	 * 群发多图文消息
 	 * @param mediaId
 	 * @return
 	 */
-	public WxBroadcastResult broadcastNews(String mediaId) {
+	public WxBroadcastResult broadcastNews(WxBroadcastInfo broadcastInfo) {
 		return null;
 	}
 	
@@ -31,7 +31,7 @@ public class WxBroadcastService extends WxBaseService {
 	 * @param content
 	 * @return
 	 */
-	public WxBroadcastResult broadcastText(String content) {
+	public WxBroadcastResult broadcastText(WxBroadcastInfo broadcastInfo) {
 		return null;
 	}
 	
@@ -41,7 +41,7 @@ public class WxBroadcastService extends WxBaseService {
 	 * @param data
 	 * @return
 	 */
-	public WxBroadcastResult broadcastImage(String mediaId) {
+	public WxBroadcastResult broadcastImage(WxBroadcastInfo broadcastInfo) {
 		return null;
 	}
 	

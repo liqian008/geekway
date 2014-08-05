@@ -7,7 +7,7 @@ package com.bruce.geekway.model.wx;
  */
 public enum WxMsgTypeEnum {
 
-	TEXT("text"), IMAGE("image"), LOCATION("location"), LINK("link"), EVENT("event"), VIDEO("video"), VOICE("voice");
+	TEXT("text"), IMAGE("image"), LOCATION("location"), LINK("link"), EVENT("event"), VOICE("voice"), VIDEO("video");
 	
 	/**
 	 * @param messageType

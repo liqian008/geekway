@@ -23,6 +23,11 @@ import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.utils.WxXmlUtil;
 
+/**
+ * 处理微信消息的handler
+ * @author liqian
+ *
+ */
 //@Service
 public class MessageHandler {
 	// @Resource
@@ -65,43 +70,49 @@ public class MessageHandler {
 			}
 			WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.instance(event);
 			switch (eventTypeEnum) {
-			case SUBSCRIBE: {// 订阅关注
-				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				String fromOpenId = eventRequest.getFromUserName();
-				WxMpUser wxUser = mpUserService.loadByOpenId(fromOpenId);
-				if(wxUser==null){//全新用户关注
-					mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
-					return processEventFirstSubscribeRequest(eventRequest);
-				}else{//之前存在，属于重复关注
-					mpUserService.repeatSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
-					
-					eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
-					return processEventRepeatSubscribeRequest(eventRequest);
+				case SUBSCRIBE: {// 订阅关注
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					String fromOpenId = eventRequest.getFromUserName();
+					WxMpUser wxUser = mpUserService.loadByOpenId(fromOpenId);
+					if(wxUser==null){//全新用户关注
+						mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+						return processEventFirstSubscribeRequest(eventRequest);
+					}else{//之前存在过，属于重复关注
+						mpUserService.repeatSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+						eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
+						return processEventRepeatSubscribeRequest(eventRequest);
+					}
 				}
-			}
-			case UNSUBSCRIBE: {// 退订
-				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
-				mpUserService.unsubscribeUser(eventRequest.getFromUserName());
-				return processEventUnsubscribeRequest(eventRequest);
-			}
-			case CLICK: {// 点击菜单
-				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				return processEventClickRequest(eventRequest);
-			}
-//			case VIEW: {// 点击菜单，通常情况下无法进入该流程
-//				// do nothing
-//			}
-			case LOCATION: {// 上报location位置
-				LocationEventRequest locationEventRequest = new LocationEventRequest();
-				return processEventLocationRequest(locationEventRequest);
-			}
-			case SCAN: {
-				// TODO
-			}
-			default: {
-				// do nothing
-			}
+				case UNSUBSCRIBE: {// 退订
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
+					mpUserService.unsubscribeUser(eventRequest.getFromUserName());
+					return processEventUnsubscribeRequest(eventRequest);
+				}
+				case CLICK: {// 点击菜单
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					return processEventClickRequest(eventRequest);
+				}
+				case VIEW: {// 点击菜单链接跳转（wiki文档中写到会发送该消息，但实际未检测到该消息）
+					// do nothing
+					break;
+				}
+				case LOCATION: {// 上报location位置
+					LocationEventRequest locationEventRequest = new LocationEventRequest();
+					return processEventLocationRequest(locationEventRequest);
+				}
+				case SCAN: {
+					// do nothing
+					break;
+				}
+				case BROADCAST_FINISH: {
+					// TODO 回写群发结果数据
+					break;
+				}
+				default: {
+					// do nothing
+					break;
+				}
 			}
 		}
 		default:
