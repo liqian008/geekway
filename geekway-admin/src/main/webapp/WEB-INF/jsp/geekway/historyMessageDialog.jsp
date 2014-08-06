@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxBroadcast"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.utils.*"%>
+
+<%@ include file="../inc/include_tag.jsp" %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +16,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Geekway微信管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
+	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
 
@@ -31,6 +36,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/ckeditor/config.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
@@ -59,7 +66,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						群发消息管理
+						历史消息
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -71,7 +78,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">群发消息管理</li>
+					<li class="active">对话消息</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -79,75 +86,66 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
+			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
+				<h5>功能介绍</h5>
 				<p>
-					1、该接口暂时仅提供给已微信认证的服务号.<br/>
-					2、无论在公众平台网站上，还是使用接口群发，用户每月只能接收4条群发消息，多于4条的群发将对该用户发送失败。<br/>
-					3、管理后台支持3种类型的群发广播： 文本广播 / 图文广播 / 图片广播。
+					历史消息 <br/>
 				</p>
 			</div>
+			 -->
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>群发消息管理
-					</h5>
-					<a href="./broadcastAdd"><span class="label label-danger pull-right">群发消息</span></a>
-				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>消息类型</th>
-                                <th>群发状态</th>
-                                <th>发送数</th>
-                                <th>成功</th>
-                                <th>失败</th>
-                                <th class="team-links">操 作</th> 
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxBroadcast> broadcastList = (List<WxBroadcast>)request.getAttribute("broadcastList");
-                           	if(broadcastList!=null&&broadcastList.size()>0){
-                           		int i=0;
-                           		for(WxBroadcast broadcast: broadcastList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=broadcast.getMessageType()%></td>
-		                        <td><%=broadcast.getStatus()%></td>
-		                        <td><%=broadcast.getFilterCount()%>人</td>
-		                        <td><%=broadcast.getSentCount()%>人</td>
-		                        <td><%=broadcast.getErrorCount()%>人</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="./delBroadcast?broadcastId=<%=broadcast.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="取 消"><i class="icon-remove3"></i></a>
+			<%
+			List<WxHistoryMessage> userMessageList = (List<WxHistoryMessage>)request.getAttribute("userMessageList");
+			if(userMessageList!=null&&userMessageList.size()>0){
+			%>
+			<div class="block">
+				<h6>
+					<i class="icon-bubbles4"></i> 用户对话消息
+				</h6>
+				<ul class="message-list">
+					<li>
+						<div class="panel-collapse collapse in" id="duke_aaron" style="height: auto;">
+							<div class="chat">
+								<%
+								for(WxHistoryMessage userHistoryMessage: userMessageList){
+									if(userHistoryMessage.getInbox()!=null&&userHistoryMessage.getInbox()==0){
+								%> 
+								<div class="message">
+									<a class="message-img" href="javascript:void(0)"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
+									<div class="message-body">
+										<%=userHistoryMessage.getContent() %>  
+										<span class="attribution">发送时间: <%=userHistoryMessage.getCreateTime() %>  </span>
 									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
+								</div>
+								<%}else{ %>
+								<div class="message reversed">
+									<a class="message-img" href="contacts.html#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
+									<div class="message-body">
+										<%=userHistoryMessage.getContent() %>
+										<span class="attribution">回复时间: <%=userHistoryMessage.getCreateTime() %> </span>
+									</div>
+								</div>
+								<%}
+								}%>
+								<!-- 
+								<div class="moment">10 Nov, 2013</div>
+								 -->
+							</div>
+						</div>
+					</li>
+				</ul>
 			</div>
-			<!-- /table view -->
-
+			<%} %>
+			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
 </body>
 </html>
-
