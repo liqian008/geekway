@@ -29,6 +29,9 @@
 	<bean id="broadcastService" class="com.bruce.geekway.service.impl.WxBroadcastServiceImpl">
 		<property name="wxBroadcastMapper" ref="wxBroadcastMapper"></property>
 	</bean>
+	<bean id="historyMessageService" class="com.bruce.geekway.service.impl.WxHistoryMessageServiceImpl">
+		<property name="wxHistoryMessageMapper" ref="wxHistoryMessageMapper"></property>
+	</bean>
 	
 	<!-- weixin web oauth -->
 	<bean id="mpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">

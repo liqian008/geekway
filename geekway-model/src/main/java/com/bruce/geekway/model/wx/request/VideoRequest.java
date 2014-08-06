@@ -7,22 +7,41 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * 视频消息请求<br>
  * MsgType 语音为video
+ * 
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
 public class VideoRequest extends BaseRequest {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /** 语音消息媒体id，可以调用多媒体文件下载接口拉取数据。 */
-    public String mediaId;
+	/** 语音消息媒体id，可以调用多媒体文件下载接口拉取数据。 */
+	public String mediaId;
 
-    /** 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。 */
-    public String thumbMediaId;
+	/** 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。 */
+	public String thumbMediaId;
 
-    @Override
-    public String toString() {
-        return "VideoRequest [ToUserName=" + toUserName + ", FromUserName=" + fromUserName + ", CreateTime=" + createTime + ", MsgType=" + msgType + ", MsgId="
-                + msgId + ", MediaId=" + mediaId + ", ThumbMediaId=" + thumbMediaId + "]";
-    }
+	public String getMediaId() {
+		return mediaId;
+	}
+
+	public void setMediaId(String mediaId) {
+		this.mediaId = mediaId;
+	}
+
+	public String getThumbMediaId() {
+		return thumbMediaId;
+	}
+
+	public void setThumbMediaId(String thumbMediaId) {
+		this.thumbMediaId = thumbMediaId;
+	}
+
+	@Override
+	public String toString() {
+		return "VideoRequest [ToUserName=" + toUserName + ", FromUserName="
+				+ fromUserName + ", CreateTime=" + createTime + ", MsgType="
+				+ msgType + ", MsgId=" + msgId + ", MediaId=" + mediaId
+				+ ", ThumbMediaId=" + thumbMediaId + "]";
+	}
 
 }

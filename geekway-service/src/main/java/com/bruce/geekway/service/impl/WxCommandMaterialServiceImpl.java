@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxCommandMaterialMapper;
-import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.model.WxCommandMaterial;
 import com.bruce.geekway.model.WxCommandMaterialCriteria;
 import com.bruce.geekway.service.IWxCommandMaterialService;
@@ -51,15 +50,15 @@ public class WxCommandMaterialServiceImpl implements IWxCommandMaterialService {
 
 	@Override
 	public List<WxCommandMaterial> queryAll() {
-		return wxCommandMaterialMapper.selectByExample(null);
+		return queryAll(null);
 	}
 
 	@Override
 	public List<WxCommandMaterial> queryAll(String orderByClause) {
-		WxCommandCriteria criteria = new WxCommandCriteria();
+		WxCommandMaterialCriteria criteria = new WxCommandMaterialCriteria();
 		criteria.createCriteria();
 		criteria.setOrderByClause(orderByClause);
-		return wxCommandMaterialMapper.selectByExample(null);
+		return queryByCriteria(criteria);
 	}
 
 	@Override

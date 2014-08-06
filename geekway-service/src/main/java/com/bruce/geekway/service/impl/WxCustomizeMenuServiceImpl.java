@@ -55,7 +55,7 @@ public class WxCustomizeMenuServiceImpl implements IWxCustomizeMenuService, Init
 
 	@Override
 	public List<WxCustomizeMenu> queryAll() {
-		return wxCustomizeMenuMapper.selectByExample(null);
+		return queryAll(null);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class WxCustomizeMenuServiceImpl implements IWxCustomizeMenuService, Init
 		WxCustomizeMenuCriteria criteria = new WxCustomizeMenuCriteria();
 		criteria.createCriteria();
 		criteria.setOrderByClause(orderByClause);
-		return wxCustomizeMenuMapper.selectByExample(null);
+		return queryByCriteria(criteria);
 	}
 
 	@Override

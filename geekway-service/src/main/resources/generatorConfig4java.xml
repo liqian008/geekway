@@ -29,64 +29,18 @@
 		
 
 		<!-- geekway config -->
-
-		
-		<!--
-		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
-		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
-		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
-		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
-		<table schema="wx" tableName="wx_material_news" domainObjectName="WxMaterialNews"/>
-		<table schema="wx" tableName="wx_material_news_article" domainObjectName="WxMaterialNewsArticle"/>
-		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
-		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
-		<table schema="wx" tableName="wx_history_message" domainObjectName="WxHistorMessage"/>
-		<table schema="wx" tableName="wx_mp_user" domainObjectName="WxMpUser"/>
-		
-		<table schema="wx" tableName="wx_test" domainObjectName="WxTest"/>		
-		<table schema="wx" tableName="wx_event_code" domainObjectName="WxEventCode"/>
-		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
-		<table schema="wx" tableName="wx_article" domainObjectName="WxArticle"/>
-		<table schema="wx" tableName="wx_code_module_article" domainObjectName="WxCodeModuleArticle"/>
-		<table schema="wx" tableName="wx_code_module" domainObjectName="WxCodeModule"/>
-		
-		
-		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
-		<table schema="wx" tableName="wx_text_code" domainObjectName="WxTextCode"/> 
-		 -->
-		 
-		<!-- ito config  -->
-		<!--
-		<table schema="wx" tableName="ito_user_profile" domainObjectName="ItoUserProfile"/>
-		<table schema="wx" tableName="ito_product_bg" domainObjectName="ItoProductBg"/> 
-		<table schema="wx" tableName="ito_product_order" domainObjectName="ItoProductOrder"/>
-		<table schema="wx" tableName="ito_sku" domainObjectName="ItoSku"/>
-		<table schema="wx" tableName="ito_product" domainObjectName="ItoProduct"/> 
-		<table schema="wx" tableName="ito_sku_prop" domainObjectName="ItoSkuProp"/>
-		<table schema="wx" tableName="ito_product_sku_value" domainObjectName="ItoProductSkuValue"/>
-		<table schema="wx" tableName="ito_sku_image" domainObjectName="ItoSkuImage"/>
-		<table schema="wx" tableName="ito_sku_prop_value" domainObjectName="ItoSkuPropValue"/>
-		 <table schema="wx" tableName="ito_wwj_record" domainObjectName="ItoWwjRecord"/>
-		<table schema="wx" tableName="ito_system_status" domainObjectName="ItoSystemStatus"/>
-		 -->
-		
-		
-		<!-- klh config  -->
-		
-		<table schema="wx" tableName="klh_wall_image_log" domainObjectName="KlhWallImageLog"/>
+		<table schema="wx" tableName="wx_history_message" domainObjectName="WxHistoryMessage"/>
 		
 		<!-- 
-		<table schema="wx" tableName="klh_product" domainObjectName="KlhProduct"/>
-		<table schema="wx" tableName="klh_score_setting" domainObjectName="KlhScoreSetting"/>
-		<table schema="wx" tableName="klh_vote" domainObjectName="KlhVote"/>
-		<table schema="wx" tableName="klh_vote_option" domainObjectName="KlhVoteOption"/>
-		<table schema="wx" tableName="klh_user_score_history" domainObjectName="KlhUserScoreHistory"/>
-		<table schema="wx" tableName="klh_setting" domainObjectName="KlhSetting"/> 
-		<table schema="wx" tableName="klh_user_score_log" domainObjectName="KlhUserScoreLog"/>
-		<table schema="wx" tableName="klh_user_profile" domainObjectName="KlhUserProfile"/>
-		<table schema="wx" tableName="klh_daily_sign" domainObjectName="KlhDailySign"/>
-		<table schema="wx" tableName="klh_vote_result" domainObjectName="KlhVoteResult"/>
-		 -->
+		<table schema="wx" tableName="wx_broadcast" domainObjectName="WxBroadcast"/>
+		<table schema="wx" tableName="wx_default_reply" domainObjectName="WxDefaultReply"/>
+		<table schema="wx" tableName="wx_material_article" domainObjectName="WxMaterialArticle"/>
+		<table schema="wx" tableName="wx_command_material" domainObjectName="WxCommandMaterial"/>
+		<table schema="wx" tableName="wx_command" domainObjectName="WxCommand"/>
+		<table schema="wx" tableName="wx_customize_menu" domainObjectName="WxCustomizeMenu"/>
+		<table schema="wx" tableName="wx_mp_user" domainObjectName="WxMpUser"/>
+		<table schema="wx" tableName="wx_material" domainObjectName="WxMaterial"/>
+		-->
 		
 	</context>
 </generatorConfiguration>

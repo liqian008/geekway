@@ -22,6 +22,7 @@ import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxBroadcastService;
+import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.utils.WxXmlUtil;
 
@@ -54,6 +55,8 @@ public class MessageHandler {
 	private IWxMpUserService mpUserService;
 	@Autowired
 	private IWxBroadcastService broadcastService;
+	@Autowired
+	private IWxHistoryMessageService historyMessageService;
 	
 	public BaseResponse processMessage(String xml) throws Exception {
 		System.out.println("request xml: " + xml);
@@ -65,9 +68,22 @@ public class MessageHandler {
 		WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.instance(msgType);
 		switch (msgTypeEnum) {
 		case TEXT:
-			TextRequest textRequest = WxXmlUtil.getMsgText(ele);
+			TextRequest textRequest = WxXmlUtil.getMsgText(ele);//解析文本请求
+			//文本消息需要写入到历史消息中
+			historyMessageService.logRequestMessage(textRequest, xml);
 			return processTextRequest(textRequest);
+		case IMAGE:
+			ImageRequest imageRequest = WxXmlUtil.getMsgImage(ele);//解析图片消息
+			//图片消息需要写入历史消息中
+			historyMessageService.logRequestMessage(imageRequest, xml);
+			break;
+		case VOICE:
+			VoiceRequest voiceRequest = WxXmlUtil.getMsgVoice(ele);//解析voice消息
+			//语音消息需要写入历史消息中
+			historyMessageService.logRequestMessage(voiceRequest, xml);
+			break;
 		case EVENT: {
+			//Event消息暂不需要保存到历史消息
 			String event = ele.elementText("Event");
 			if (event == null) {
 				throw new Exception("cannot find Event Node!" + xml);
@@ -121,6 +137,7 @@ public class MessageHandler {
 		default:
 			return null;
 		}
+		return null;
 	}
 
 	/**
@@ -134,9 +151,17 @@ public class MessageHandler {
 		WxMsgRespTypeEnum responseType = WxMsgRespTypeEnum.instance(response.getMsgType());
 		switch (responseType) {
 		case NEWS:
-			return WxXmlUtil.buildNewsResponse((NewsResponse) response).asXML();
+			String newsResponse = WxXmlUtil.buildNewsResponse((NewsResponse) response).asXML();
+			//需要记录到历史消息中
+			historyMessageService.logResponseMessage(response, newsResponse);
+			
+			return newsResponse;
 		case TEXT:
-			return WxXmlUtil.buildTextResponse((TextResponse) response).asXML();
+			String textResponse = WxXmlUtil.buildTextResponse((TextResponse) response).asXML();
+			//需要记录到历史消息中
+			historyMessageService.logResponseMessage(response, textResponse);
+			return textResponse;
+			
 			// 以下功能暂不支持
 			// case IMAGE:
 			// return WxXmlUtil.getRespImage((WxRespImageEntity) resp);
@@ -287,4 +312,13 @@ public class MessageHandler {
 		this.broadcastService = broadcastService;
 	}
 
+	public IWxHistoryMessageService getHistoryMessageService() {
+		return historyMessageService;
+	}
+
+	public void setHistoryMessageService(
+			IWxHistoryMessageService historyMessageService) {
+		this.historyMessageService = historyMessageService;
+	}
+	
 }

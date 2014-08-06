@@ -74,17 +74,16 @@ public class GeekwayUploadController extends BaseController{
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 	
-	
-	
 	@ResponseBody
 	@RequestMapping(value = "/wxMediaUpload", method = RequestMethod.POST)
 	public JsonResultBean wxMediaUpload(Model model, @RequestParam("mediaFile") CommonsMultipartFile mediaFile) {
 		WebUserDetails userDetail = getUserInfo();
 		int userId = userDetail.getUserId();
-//			UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());
+//		UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());
+		System.out.println("contentType: "+mediaFile.getContentType());
 		
 		WxMediaUploadResult uploadResult = wxMediaUploadService.uploadImage(mediaFile.getBytes());
-			
+
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 

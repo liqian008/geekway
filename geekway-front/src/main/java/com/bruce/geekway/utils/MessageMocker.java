@@ -16,7 +16,7 @@ public class MessageMocker {
 			+ "<FromUserName><![CDATA[fromUser]]></FromUserName>"
 			+ "<CreateTime>1348831860</CreateTime>"
 			+ "<MsgType><![CDATA[image]]></MsgType>"
-			+ "<PicUrl><![CDATA[this is a url]]></PicUrl>"
+			+ "<PicUrl><![CDATA[this is a img url]]></PicUrl>"
 			+ "<MsgId>1234567890123456</MsgId>" + "</xml>";
 	
 	public static final String MSG_LOC_XML = "<xml>"

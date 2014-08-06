@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.mapper.WxDefaultReplyMapper;
-import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.model.WxDefaultReply;
 import com.bruce.geekway.model.WxDefaultReplyCriteria;
 import com.bruce.geekway.service.IWxDefaultReplyService;
@@ -49,15 +48,15 @@ public class WxDefaultReplyServiceImpl implements IWxDefaultReplyService {
 
 	@Override
 	public List<WxDefaultReply> queryAll() {
-		return wxDefaultReplyMapper.selectByExample(null);
+		return queryAll(null);
 	}
 
 	@Override
 	public List<WxDefaultReply> queryAll(String orderByClause) {
-		WxCommandCriteria criteria = new WxCommandCriteria();
+		WxDefaultReplyCriteria criteria = new WxDefaultReplyCriteria();
 		criteria.createCriteria();
 		criteria.setOrderByClause(orderByClause);
-		return wxDefaultReplyMapper.selectByExample(null);
+		return queryByCriteria(criteria);
 	}
 
 	@Override

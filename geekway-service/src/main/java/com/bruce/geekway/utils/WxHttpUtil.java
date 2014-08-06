@@ -19,6 +19,7 @@ import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.lang3.CharSet;
 
 //import org.apache.http.Consts;
@@ -121,35 +122,32 @@ public class WxHttpUtil {
 	 * @param bytes
 	 * @return
 	 */
-	public static final String postMultipartRequest(String url, Map<String, String> params, byte[] bytes) {
+	public static final String postMultipartRequest(String url, Map<String, String> params, byte[] bytes, String contentType) {
 		HttpClient httpClient = new HttpClient();
 		
 		setConnectionParam(httpClient);
 		PostMethod postMethod = new PostMethod(url);
 		
-		if (params == null) {
-			params = new HashMap<String, String>();
-		}
-//		if (files == null) {
-//			files = new File[0];
-//		}
+		String fileName = "media";
+		Part filePart = new FilePart(fileName, new ByteArrayPartSource(fileName, bytes));
 		
-		Part[] parts = new Part[params.size() + 1];
+		Part[] parts = new Part[params.size()+1];
+		
 		int i=0;
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			parts[i++] = new StringPart(entry.getKey(), entry.getValue());
+		HttpMethodParams methodParams = postMethod.getParams();
+		if (params != null) {
+			for (Map.Entry<String, String> entry : params.entrySet()) {
+				methodParams.setParameter(entry.getKey(), entry.getValue());
+				parts[i++] = new StringPart(entry.getKey(), entry.getValue());
+			}
 		}
-		
+		parts[i++] = filePart;
 		try {
-//			for (File file: files) {
-	//			parts[i++] = new FilePart(name, new ByteArrayPartSource());\
-//			}
-			
-			String fileName = String.valueOf(System.currentTimeMillis());
-			parts[i++] = new FilePart(fileName, new ByteArrayPartSource(fileName, bytes));
-			
+			postMethod.addRequestHeader("Content-Type", contentType);
 			postMethod.getParams().setContentCharset("utf-8");
-			MultipartRequestEntity multipartEntity = new MultipartRequestEntity(parts, postMethod.getParams());
+			
+			MultipartRequestEntity multipartEntity = new MultipartRequestEntity(parts, methodParams);
+			
 			postMethod.setRequestEntity(multipartEntity);
 			
 			int statusCode = httpClient.executeMethod(postMethod);

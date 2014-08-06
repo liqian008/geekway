@@ -21,6 +21,8 @@ public class WxMediaUploadService extends WxBaseService {
 
 	private static final String WX_MEDIA_UPLOAD_API = ConfigUtil.getString("weixinmp_media_upload_url");
 	
+	private static final String HTTP_CONTENT_TYPE_IMAGE = "image/jpeg";
+	
 	@Autowired
 	private WxMpTokenService mpTokenService;
 
@@ -30,21 +32,23 @@ public class WxMediaUploadService extends WxBaseService {
 	 * @return
 	 */
 	public WxMediaUploadResult uploadImage(byte[] data) {
-		return uploadMedia(WxMediaTypeEnum.IMAGE, data);
-	}
-	
-	public WxMediaUploadResult uploadVoice(byte[] data) {
-		return uploadMedia(WxMediaTypeEnum.VOICE, data);
+		return uploadMedia(WxMediaTypeEnum.IMAGE, HTTP_CONTENT_TYPE_IMAGE, data);
 	}
 	
 	public WxMediaUploadResult uploadThumb(byte[] data) {
-		return uploadMedia(WxMediaTypeEnum.THUMB, data);
+		return uploadMedia(WxMediaTypeEnum.THUMB, HTTP_CONTENT_TYPE_IMAGE, data);
 	}
 	
-	public WxMediaUploadResult uploadVideo(byte[] data) {
-		return uploadMedia(WxMediaTypeEnum.VIDEO, data);
-	}
+//	public WxMediaUploadResult uploadVoice(byte[] data) {
+//		return uploadMedia(WxMediaTypeEnum.VOICE, contentType, data);
+//	}
+//	
+//	
+//	public WxMediaUploadResult uploadVideo(byte[] data) {
+//		return uploadMedia(WxMediaTypeEnum.VIDEO, contentType, data);
+//	}
 	
+	String accessToken = null;
 	/**
 	 * 上传资源
 	 * 注意事项：
@@ -53,23 +57,26 @@ public class WxMediaUploadService extends WxBaseService {
 	 * 视频（video）：10MB，支持MP4格式
 	 * 缩略图（thumb）：64KB，支持JPG格式
 	 * @param typeEnum
+	 * @param contentType
 	 * @param data
 	 * @return
 	 */
-	private WxMediaUploadResult uploadMedia(WxMediaTypeEnum typeEnum, byte[] data) {
-		String accessToken = mpTokenService.getMpAccessToken();
+	private WxMediaUploadResult uploadMedia(WxMediaTypeEnum typeEnum, String contentType, byte[] data) {
+		if(accessToken==null){
+			accessToken = mpTokenService.getMpAccessToken();
+		}
+		System.out.println("accessToken:  "+ accessToken);
+		
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		params.put("type", typeEnum.toString());
 		
-		String uploadResultStr = WxHttpUtil.postMultipartRequest(WX_MEDIA_UPLOAD_API, params, data);
+		String uploadResultStr = WxHttpUtil.postMultipartRequest(WX_MEDIA_UPLOAD_API+"?type=image&access_token="+accessToken, params, data, contentType);
 		if(uploadResultStr!=null){
 			return JsonUtil.gson.fromJson(uploadResultStr, WxMediaUploadResult.class);
 		}else{
 			return null;
 		}
 	}
-	
-	
 	
 	public WxMpTokenService getMpTokenService() {
 		return mpTokenService;

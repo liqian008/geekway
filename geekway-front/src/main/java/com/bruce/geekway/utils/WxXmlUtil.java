@@ -12,7 +12,9 @@ import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
 import com.bruce.geekway.model.wx.request.BroadcastFinishEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
+import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
+import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
@@ -74,14 +76,12 @@ public class WxXmlUtil {
 	 * @return
 	 * @throws DocumentException
 	 */
-//	public static WxMsgImageEntity getMsgImage(Element ele) throws DocumentException {
-//		WxMsgImageEntity result = msgEntityFactory(WxMsgImageEntity.class, ele);
-//		WxItemImageEntity image = new WxItemImageEntity();
-//		image.setMediaId(strVal(ele, "MediaId"));
-//		image.setPicUrl(strVal(ele, "PicUrl"));
-//		result.setImage(image);
-//		return result;
-//	}
+	public static ImageRequest getMsgImage(Element ele) throws DocumentException {
+		ImageRequest imageRequest = populateRequest(ImageRequest.class, ele);
+		imageRequest.setMediaId(strVal(ele, "MediaId"));
+		imageRequest.setPicUrl(strVal(ele, "PicUrl"));
+		return imageRequest;
+	}
 	
 	/**
 	 * <code>
@@ -100,17 +100,15 @@ public class WxXmlUtil {
 	 * @return
 	 * @throws DocumentException
 	 */
-//	public static WxMsgVoiceEntity getMsgVoice(Element ele) throws DocumentException {
-//		WxMsgVoiceEntity result = msgEntityFactory(WxMsgVideoEntity.class, ele);
-//		WxItemVoiceEntity voice = new WxItemVoiceEntity();
-//		voice.setMediaId(strVal(ele, "MediaId"));
-//		voice.setFormat(strVal(ele, "Format"));
-//		if (!StringUtils.isEmpty(ele.elementText("Recognition"))) {
-//			voice.setRecognition(strVal(ele, "Recognition"));
-//		}
-//		result.setVoice(voice);
-//		return result;
-//	}
+	public static VoiceRequest getMsgVoice(Element ele) throws DocumentException {
+		VoiceRequest voiceRequest = populateRequest(ImageRequest.class, ele);
+		voiceRequest.setMediaId(strVal(ele, "MediaId"));
+		voiceRequest.setFormat(strVal(ele, "Format"));
+		if (!StringUtils.isEmpty(ele.elementText("Recognition"))) {
+			voiceRequest.setRecognition(strVal(ele, "Recognition"));
+		}
+		return voiceRequest;
+	}
 	
 	
 	/**

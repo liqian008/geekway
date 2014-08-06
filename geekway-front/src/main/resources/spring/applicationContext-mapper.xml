@@ -71,6 +71,9 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxBroadcastMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
+	<bean id="wxHistoryMessageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxHistoryMessageMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 
 </beans>

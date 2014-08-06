@@ -30,37 +30,18 @@ public class ErrorCode {
 	
 	/* 权限不够，需登陆 */
 	public static final int AUTHORIZE_NEED_LOGIN = 100; 
-	/* 用户权限不够，需设计师权限 */
-	public static final int AUTHORIZE_NEED_DESIGNER = 101;
+	
 	
 	/* 账户相关分配200-300的错误码 */
+	
 	
 	/* 获取用户失败 */
 	public static final int USER_ERROR = 200;
 	/* 用户已经被封禁 */
 	public static final int USER_FORBIDDEN = 201;
-	/* 用户名（email形式）格式错误 */
-	public static final int USER_USERNAME_FORMAT_ERROR = 202;
-	/* 用户名（email形式）已存在 */
-	public static final int USER_USERNAME_EXISTS = 203;
-	/* 昵称已存在 */
-	public static final int USER_NICKNAME_EXISTS = 204;
-	/* 账户密码不匹配，通常用于登录验证 */
-	public static final int USER_PASSWORD_NOT_MATCH = 205;
-	/* 旧密码输入错误，通常用与改密码情况 */
-	public static final int USER_OLD_PASSWORD_NOT_MATCH = 206;
-	/* 修改密码失败 */
-	public static final int USER_CHANGE_PASSWORD_FAILED = 207;
-	/* 用户不存在 */
-	public static final int USER_NOT_EXIST = 208;
-	/* 用户注册失败 */
-	public static final int USER_REGISTER_ERROR = 209;
-	/* 用户登录失败 */
-	public static final int USER_LOGIN_ERROR = 210;
-	/* 手机号已存在 */
-	public static final int USER_MOBILE_EXISTS = 211;
+	
 
-	/* 上传分配x00-x00的错误码 */
+	/* 上传分配600-700的错误码 */
 	/* 未知错误 */
 	public static final int UPLOAD_ERROR = 600;
 	/* 文件格式不支持 */
@@ -68,11 +49,6 @@ public class ErrorCode {
 	/* 图片上传未知错误 */
 	public static final int UPLOAD_IMAGE_ERROR = 602;
 	
-	
-	
-	/* WEB AJAX请求分配10000-19999的错误码 */
-
-	/* MCP请求分配20000-29999的错误码 */
 
 	private final static Map<Integer, String> msgMap = new HashMap<Integer, String>();
 

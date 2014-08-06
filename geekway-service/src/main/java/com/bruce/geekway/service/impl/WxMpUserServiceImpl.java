@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.mapper.WxMpUserMapper;
-import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.WxMpUserCriteria;
 import com.bruce.geekway.service.IWxMpUserService;
@@ -49,15 +48,15 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 
 	@Override
 	public List<WxMpUser> queryAll() {
-		return wxMpUserMapper.selectByExample(null);
+		return queryAll(null);
 	}
 
 	@Override
 	public List<WxMpUser> queryAll(String orderByClause) {
-		WxCommandCriteria criteria = new WxCommandCriteria();
+		WxMpUserCriteria criteria = new WxMpUserCriteria();
 		criteria.createCriteria();
 		criteria.setOrderByClause(orderByClause);
-		return wxMpUserMapper.selectByExample(null);
+		return queryByCriteria(criteria);
 	}
 
 	@Override

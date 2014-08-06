@@ -49,11 +49,8 @@ public class WxBroadcastService extends WxBaseService {
 	 * @return
 	 */
 	public WxBroadcastResult broadcastNews(String mediaId) {
-<<<<<<< HEAD
 		//TODO 先上传图文生成mediaId
 		
-=======
->>>>>>> branch 'tlw' of https://github.com/liqian008/geekway.git
 		return broadcastMedia(WxBroadcastTypeEnum.MPNEWS, mediaId);
 	}
 	

@@ -55,7 +55,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 
 	@Override
 	public List<WxBroadcast> queryAll() {
-		return wxBroadcastMapper.selectByExample(null);
+		return queryAll(null);
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		WxBroadcastCriteria criteria = new WxBroadcastCriteria();
 		criteria.createCriteria();
 		criteria.setOrderByClause(orderByClause);
-		return wxBroadcastMapper.selectByExample(null);
+		return queryByCriteria(criteria);
 	}
 
 	@Override

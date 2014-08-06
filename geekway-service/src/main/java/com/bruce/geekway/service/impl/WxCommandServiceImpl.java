@@ -52,7 +52,7 @@ public class WxCommandServiceImpl implements IWxCommandService {
 
 	@Override
 	public List<WxCommand> queryAll() {
-		return wxCommandMapper.selectByExample(null);
+		return queryAll(null);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class WxCommandServiceImpl implements IWxCommandService {
 		WxCommandCriteria criteria = new WxCommandCriteria();
 		criteria.createCriteria();
 		criteria.setOrderByClause(orderByClause);
-		return wxCommandMapper.selectByExample(null);
+		return wxCommandMapper.selectByExample(criteria);
 	}
 
 	@Override
