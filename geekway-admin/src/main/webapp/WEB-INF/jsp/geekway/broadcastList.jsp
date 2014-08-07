@@ -10,7 +10,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
@@ -79,7 +79,13 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
+			<%
+			Boolean isSenior = (Boolean)request.getAttribute("isSenior");
+			%>
+			
+			<%if(isSenior!=null&&isSenior){
+			%>
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
@@ -141,7 +147,18 @@
 				</div>
 			</div>
 			<!-- /table view -->
-
+			
+			<%}else{%>
+				<div class="callout callout-warning fade in">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+				<h5>抱歉：</h5>
+				<p> 
+					1、该接口暂时仅提供给已微信认证的服务号，您可以访问<a href="http://mp.weixin.qq.com/" target="_blank">微信公众平台系统</a>，使用其中的群发功能.<br/>
+				</p>
+			</div>
+			<%} %>
+			
+			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>

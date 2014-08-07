@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.TextMessage;
-import com.bruce.geekway.service.mp.WxReplyService;
+import com.bruce.geekway.service.mp.WxCustomReplyService;
 
 /**
  * 客服消息管理，目前仅支持文本、单图文、多图文三种方式
@@ -24,22 +24,22 @@ import com.bruce.geekway.service.mp.WxReplyService;
 public class GeekwayMpReplyController {
 	
 	@Autowired
-	private WxReplyService wxReplyService;
+	private WxCustomReplyService wxCustomReplyService;
 
 	@RequestMapping("/mpReplyText") 
-	public String mpReplyText(Model model, HttpServletRequest request, String toOpenId, String text) {
+	public String mpReplyText(Model model, HttpServletRequest request, String openId, String text) {
 		
-		if(!StringUtils.isBlank(toOpenId)&&!StringUtils.isBlank(text)){
+		if(!StringUtils.isBlank(openId)&&!StringUtils.isBlank(text)){
 			TextMessage textMessage = new TextMessage();
-			textMessage.touser = toOpenId;
+			textMessage.touser = openId;
 			textMessage.addContent(text);
 			//发送客服消息
-			WxJsonResult sendResult = wxReplyService.replyTextMessage(textMessage);
+			WxJsonResult sendResult = wxCustomReplyService.replyTextMessage(textMessage);
 			if(sendResult!=null){
 				
 			}
 		}
-		model.addAttribute("redirectUrl", "./mpUserListRemote");
+		model.addAttribute("redirectUrl", "./historyMessageDialog?openId="+openId);
 		return "forward:/home/operationRedirect";
 	}
 	
@@ -68,7 +68,7 @@ public class GeekwayMpReplyController {
 			newsMessage.touser = toOpenId;
 			
 			//发送客服消息
-			WxJsonResult sendResult = wxReplyService.replyNewsMessage(newsMessage);
+			WxJsonResult sendResult = wxCustomReplyService.replyNewsMessage(newsMessage);
 			if(sendResult!=null){
 			}
 		}

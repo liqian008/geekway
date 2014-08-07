@@ -23,7 +23,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -114,8 +114,8 @@
 			WxMpUser mpUser = (WxMpUser)request.getAttribute("mpUser");
 			%>
 
-			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
-
+			<form id="validate" action="<s:url value='./historyMessageDialog'/>" method="post"  class="form-horizontal form-bordered">
+				
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -150,6 +150,7 @@
 							</label>
 							<div class="col-sm-3">
 								<label class="control-label">
+									<input type="hidden" name="openId" value="${mpUser.openId}"/>
 									${mpUser.openId}
 								</label>
 							</div>
@@ -175,11 +176,9 @@
 							</div>
 						</div>
 						
-						<!-- <div class="modal-footer">
-							<input type="submit" value="发送文本" class="btn btn-info"/>
-							<input type="submit" value="发送单图文" class="btn btn-primary"/>
-							<input type="submit" value="发送多图文" class="btn btn-warning"/>
-						</div> -->
+						<div class="form-actions text-right">
+							<input type="submit" value="回复消息" class="btn btn-danger"/>
+						</div>
 						
 					</div>
 				</div>

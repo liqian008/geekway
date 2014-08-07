@@ -17,6 +17,16 @@ public class MessageMocker {
 			+ "<CreateTime>1348831860</CreateTime>"
 			+ "<MsgType><![CDATA[image]]></MsgType>"
 			+ "<PicUrl><![CDATA[this is a img url]]></PicUrl>"
+			+" <MediaId><![CDATA[media_id]]></MediaId>"
+			+ "<MsgId>1234567890123456</MsgId>" + "</xml>";
+	
+	public static final String MSG_VOICE_XML = "<xml>"
+			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
+			+ "<FromUserName><![CDATA[fromUser]]></FromUserName>"
+			+ "<CreateTime>1348831860</CreateTime>"
+			+ "<MsgType><![CDATA[voice]]></MsgType>"
+			+ "<Format><![CDATA[Format]]></Format>"
+			+" <MediaId><![CDATA[media_id]]></MediaId>"
 			+ "<MsgId>1234567890123456</MsgId>" + "</xml>";
 	
 	public static final String MSG_LOC_XML = "<xml>"
@@ -41,13 +51,21 @@ public class MessageMocker {
 			+ "</xml> ";
 	
 	
-	public static final String MSG_EVENT_CLICK_XML = "<xml>"
+	public static final String MSG_EVENT_MENU_CLICK_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
 			+ "<FromUserName><![CDATA[FromUser]]></FromUserName>"
 			+ "<CreateTime>123456789</CreateTime>"
 			+ "<MsgType><![CDATA[event]]></MsgType>"
 			+ "<Event><![CDATA[click]]></Event>"
 			+ "<EventKey><![CDATA[liqian]]></EventKey>" + "</xml>";
+	
+	public static final String MSG_EVENT_MENU_VIEW_XML = "<xml>"
+			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
+			+ "<FromUserName><![CDATA[FromUser]]></FromUserName>"
+			+ "<CreateTime>123456789</CreateTime>"
+			+ "<MsgType><![CDATA[event]]></MsgType>"
+			+ "<Event><![CDATA[VIEW]]></Event>"
+			+ "<EventKey><![CDATA[www.jinwanr.com.cn]]></EventKey>" + "</xml>";
 	
 	
 	public static final String MSG_EVENT_SUBSCRIBE_XML = "<xml>"

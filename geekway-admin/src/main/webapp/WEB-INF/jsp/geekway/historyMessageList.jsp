@@ -14,7 +14,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -86,37 +86,85 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
-			<%
-			List<WxHistoryMessage> historyMessageList = (List<WxHistoryMessage>)request.getAttribute("historyMessageList");
-			if(historyMessageList!=null&&historyMessageList.size()>0){
-			%>
-			<div class="block">
-				<h6>
-					<i class="icon-bubbles4"></i> 微信消息管理
-				</h6>
-				<ul class="message-list">
-					<%
-					for(WxHistoryMessage historyMessage: historyMessageList){
-					%> 
-					<li>
-						<div class="clearfix">
-							<div class="chat-member">
-								<a href="#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
-								<h6>
-									文本消息 <span class="status status-success"></span> &nbsp;
-										/&nbsp; <%=historyMessage.getContent()%>
-								</h6>
-							</div>
-							<div class="chat-actions">
-								<a class="btn btn-link btn-icon btn-xs" href="./historyMessageDialog?openId=<%=historyMessage.getOpenId()%>"><i class="icon-bubble3"></i></a>
-							</div>
-						</div>
+			
+			<div class="tabbable page-tabs">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="javascript:void(0)">
+							<i class="icon-hammer"></i>今日消息记录
+						</a>
 					</li>
-					<%}%>
+					<li>
+						<a href="./mpMenuList">
+							<i class="icon-table2"></i>全部消息记录
+						</a>
+					</li>
 				</ul>
+				
+				<!-- Table view -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h5 class="panel-title">
+							<i class="icon-people"></i>消息列表
+						</h5>
+					</div>
+					<div class="table-responsive">
+							<table class="table table-bordered table-striped table-check">
+							<thead>
+								<tr>
+									<th>ID</th>
+	                                <th>用户</th>
+	                                <th>消息</th>
+	                                <th>发送时间</th>
+	                                <th class="team-links">操作</th> 
+								</tr>
+							</thead>
+							<tbody>
+								<%
+								List<WxHistoryMessage> historyMessageList = (List<WxHistoryMessage>)request.getAttribute("historyMessageList");
+								if(historyMessageList!=null&&historyMessageList.size()>0){
+	                           		int i=0;
+	            					for(WxHistoryMessage historyMessage: historyMessageList){
+	                           			i++;
+	                           	%>
+								<tr>
+			                        <td><%=i%></td>
+			                        <td>
+			                        	<a href="javascript:void(0)" class="lightbox">
+			                        	<%if(historyMessage.getMpUser()!=null){%>
+			                        	<img src="<%=historyMessage.getMpUser().getHeadImgUrl()%>" class="img-media"/>
+			                        	<%}%>
+			                        	</a>
+			                        </td> 
+			                        <td>
+			                        	<%=historyMessage.getContent()%>
+			                        	<%if("image".equalsIgnoreCase(historyMessage.getMsgType())){%>
+			                        	<a href="javascript:void(0)" class="lightbox">
+			                        	<img src="<%=historyMessage.getPicUrl()%>" class="img-media"/>
+			                        	</a>
+			                        	<%}%>
+			                        </td>
+			                        <td><%=DateUtil.date2YMDHMS(historyMessage.getSendTime())%></td> 
+			                        <td class='text-center'>
+			                        	<div class="table-controls">
+			                        		<%String link = "./historyMessageDialog?openId="+historyMessage.getOpenId();%>
+											<a href="<%=link%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="回 复"><i class="icon-bubble3"></i></a>
+											
+										</div>
+									</td>
+	                               </tr>
+								<%}
+	                           	} %>
+							</tbody>
+						</table>
+					</div>
+					
+				</div>
+				<!-- /table view -->
+				
 			</div>
-			<%} %>
 			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

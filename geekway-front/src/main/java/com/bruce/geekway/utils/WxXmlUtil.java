@@ -101,7 +101,7 @@ public class WxXmlUtil {
 	 * @throws DocumentException
 	 */
 	public static VoiceRequest getMsgVoice(Element ele) throws DocumentException {
-		VoiceRequest voiceRequest = populateRequest(ImageRequest.class, ele);
+		VoiceRequest voiceRequest = populateRequest(VoiceRequest.class, ele);
 		voiceRequest.setMediaId(strVal(ele, "MediaId"));
 		voiceRequest.setFormat(strVal(ele, "Format"));
 		if (!StringUtils.isEmpty(ele.elementText("Recognition"))) {
@@ -449,7 +449,6 @@ public class WxXmlUtil {
 			baseRequest.setToUserName(strVal(ele, "ToUserName"));
 			baseRequest.setFromUserName(strVal(ele, "FromUserName"));
 			baseRequest.setCreateTime(strVal(ele, "CreateTime"));
-//			baseRequest.setCreatedDate(new Date());
 			baseRequest.setMsgType(strVal(ele, "MsgType"));
 			if (ele.element("MsgId") != null) {
 				baseRequest.setMsgId(strVal(ele, "MsgId"));

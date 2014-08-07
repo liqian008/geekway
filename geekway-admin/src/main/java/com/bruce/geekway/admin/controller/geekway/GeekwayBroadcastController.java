@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.service.IWxBroadcastService;
+import com.bruce.geekway.utils.ConfigUtil;
 
 /**
  * 消息群发controller
@@ -24,6 +25,10 @@ import com.bruce.geekway.service.IWxBroadcastService;
 @RequestMapping("/geekway") 
 public class GeekwayBroadcastController {
 
+	private static final String WX_ACCOUNT_TYPE = ConfigUtil.getString("weixinmp_account_type");
+	
+	
+	
 	@Autowired
 	private IWxBroadcastService wxBroadcastService;
 	
@@ -38,8 +43,17 @@ public class GeekwayBroadcastController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxBroadcast> broadcastList = wxBroadcastService.queryAll();
-		model.addAttribute("broadcastList", broadcastList);
+		
+		boolean isSenior = false;
+		//判断是否是服务号（只有服务号才支持群发功能）
+		if("senior".equalsIgnoreCase(WX_ACCOUNT_TYPE)){
+			isSenior = true;
+		}else{
+			List<WxBroadcast> broadcastList = wxBroadcastService.queryAll();
+			model.addAttribute("broadcastList", broadcastList);
+		}
+		model.addAttribute("isSenior", isSenior);
+		
 		return "geekway/broadcastList";
 	}
 	

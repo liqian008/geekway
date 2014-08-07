@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -96,8 +96,7 @@
 				<h5>功能介绍：</h5>
 				<p>
 					1、管理员可针对【首次关注】和【重复关注】的用户，配置不同的素材，以适应不同场景下的需求。<br/>
-					2、此模块下的素材，仅支持图文。<br/>
-					3、如果想使用【纯文本】方式进行回复，需要把此处素材清空，在<a href="./defaultReply">【默认回复管理】</a>中进行配置即可。<br/>
+					2、此模块下的素材，仅支持图文。如果想使用【纯文本】方式进行回复，需要把此处素材清空，在<a href="./defaultReply">【默认回复管理】</a>中进行配置即可。<br/>
 				</p>
 			</div>
 

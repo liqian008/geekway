@@ -22,7 +22,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -185,7 +185,7 @@
 									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
 								</a>
 								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
-								<input type="file" name="mediaFile" id="cover-image-file" class="styled">
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
 							</div> 
 						</div>
 
@@ -258,9 +258,9 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('mediaFile', $('input[type=file]')[0].files[0]);  
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
 	        $.ajax({
-	            url:'/geekway-admin/geekway/wxMediaUpload',
+	            url:'/geekway-admin/geekway/imageUpload',
 	            type:'POST',
 	            data:data,
 	            cache: false,
@@ -268,7 +268,7 @@
 	            processData: false,    //不可缺
 	            success:function(responseData){
 	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
+	                	var imageUrl = responseData.data.mediumImage.url;
 		                $('#cover-image').attr("src", imageUrl);
 		                $('#cover-image-link').attr("href", imageUrl);
 		                $('#cover-image-url').val(imageUrl);

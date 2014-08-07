@@ -28,7 +28,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -292,7 +292,7 @@
 	            processData: false,    //不可缺
 	            success:function(responseData){
 	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
+	                	var imageUrl = responseData.data.mediumImage.url;
 		                $('#cover-image').attr("src", imageUrl);
 		                $('#cover-image-link').attr("href", imageUrl);
 		                $('#cover-image-url').val(imageUrl);

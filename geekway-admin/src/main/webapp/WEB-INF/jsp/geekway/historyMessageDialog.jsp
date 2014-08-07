@@ -7,14 +7,13 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -86,57 +85,72 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
-			<!-- 
-			<div class="callout callout-info fade in">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
-				<p>
-					历史消息 <br/>
-				</p>
-			</div>
-			 -->
 
 			<%
 			List<WxHistoryMessage> userMessageList = (List<WxHistoryMessage>)request.getAttribute("userMessageList");
 			if(userMessageList!=null&&userMessageList.size()>0){
 			%>
+			<div class="tabbable page-tabs">
+			<ul class="nav nav-tabs">
+				<li class="active"><a href="javascript:void(0)" data-toggle="tab">
+					<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
+						class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
+			</ul> 
+
 			<div class="block">
-				<h6>
-					<i class="icon-bubbles4"></i> 用户对话消息
-				</h6>
 				<ul class="message-list">
 					<li>
 						<div class="panel-collapse collapse in" id="duke_aaron" style="height: auto;">
+							<%
+							//检查客服消息的时间间隔
+							Boolean customReply = (Boolean)request.getAttribute("customReply");
+							String openId = (String)request.getAttribute("openId");
+							if(customReply!=null&&customReply){
+							%>
+							<form id="validate" action="<s:url value='./mpReplyText'/>" method="post"  class="form-horizontal form-bordered">
+								<input type="hidden" name="openId" value="<%=openId%>"/>
+								<textarea name="text" class="form-control" rows="3"
+									cols="1" placeholder="请输入文本内容进行回复..."></textarea>
+								<div class="message-controls">
+									<div class="pull-right">
+										<input type="submit" value="发 送" class="btn btn-warning">
+									</div>
+								</div>
+							</form>
+							<%}%>
 							<div class="chat">
-								<%
-								for(WxHistoryMessage userHistoryMessage: userMessageList){
-									if(userHistoryMessage.getInbox()!=null&&userHistoryMessage.getInbox()==0){
-								%> 
+							<%
+							for(WxHistoryMessage userHistoryMessage: userMessageList){
+								if(userHistoryMessage.getInbox()!=null&&userHistoryMessage.getInbox()==0){
+							%> 	
 								<div class="message">
 									<a class="message-img" href="javascript:void(0)"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
 									<div class="message-body">
-										<%=userHistoryMessage.getContent() %>  
-										<span class="attribution">发送时间: <%=userHistoryMessage.getCreateTime() %>  </span>
+										<%=userHistoryMessage.getContent() %>
+										<%if("image".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>
+			                        	<a href="javascript:void(0)" class="lightbox">
+			                        	<img src="<%=userHistoryMessage.getPicUrl()%>" height="80px"/>
+			                        	</a>
+			                        	<%}%>
+										
+										<span class="attribution">发送时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %>  </span>
 									</div>
 								</div>
-								<%}else{ %>
+							<%}else{ %>
 								<div class="message reversed">
 									<a class="message-img" href="contacts.html#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
 									<div class="message-body">
 										<%=userHistoryMessage.getContent() %>
-										<span class="attribution">回复时间: <%=userHistoryMessage.getCreateTime() %> </span>
+										<span class="attribution">回复时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %> </span>
 									</div>
 								</div>
-								<%}
-								}%>
-								<!-- 
-								<div class="moment">10 Nov, 2013</div>
-								 -->
+							<%}
+							}%>
 							</div>
 						</div>
 					</li>
 				</ul>
+			</div>
 			</div>
 			<%} %>
 			

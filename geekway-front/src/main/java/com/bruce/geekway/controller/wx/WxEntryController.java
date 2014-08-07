@@ -39,9 +39,9 @@ public class WxEntryController {
 		String response =  "";
 		try {
 			System.out.println("wx xml: "+xml);
-			BaseResponse baseResponse = messageHandler.processMessage(xml);
-			if (baseResponse != null) {
-				response = messageHandler.parseXMLResp(baseResponse);
+			BaseResponse wxResponse = messageHandler.processMessage(xml);
+			if (wxResponse != null) {
+				response = messageHandler.parseXMLResp(wxResponse);
 				System.out.println("response: "+response);
 			}
 		} catch (Exception e) {
@@ -58,13 +58,17 @@ public class WxEntryController {
 		if ("text".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_TEXT_XML);
 		} else if ("click".equalsIgnoreCase(type)) {
-			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_CLICK_XML);
+			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_MENU_CLICK_XML);
+		} else if ("view".equalsIgnoreCase(type)) {
+			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_MENU_VIEW_XML);
 		} else if ("subscribe".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_SUBSCRIBE_XML);
 		} else if ("unsubscribe".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_UNSUBSCRIBE_XML);
 		} else if ("img".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_IMG_XML);
+		} else if ("voice".equalsIgnoreCase(type)) {
+			baseResponse = messageHandler.processMessage(MessageMocker.MSG_VOICE_XML); 
 		} else if ("broadcast".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_BROADCAST_XML);
 		}

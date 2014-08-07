@@ -22,26 +22,6 @@
 		<property name="historyMessageService" ref="historyMessageService"></property>
 	</bean>
 	
-	<!-- 对于文本请求的处理器列表 -->
-	<bean id="textProcessorList" class="java.util.ArrayList">
-		<constructor-arg>
-			<list>
-				<ref bean="keycodeCmsProcessor"/>
-				<ref bean="defaultReplyProcessor"/>
-			</list>
-		</constructor-arg>
-	</bean>
-	
-	<!-- 对于按钮事件请求的处理器列表 -->
-	<bean id="eventClickProcessorList" class="java.util.ArrayList"> 
-		<constructor-arg>
-			<list>
-				<ref bean="keycodeCmsProcessor"/>
-				<ref bean="defaultReplyProcessor"/>
-			</list>
-		</constructor-arg>
-	</bean>
-	
 	<!-- 对于首次关注请求的处理器列表 -->
 	<bean id="eventFirstSubscribeProcessorList" class="java.util.ArrayList"> 
 		<constructor-arg>
@@ -58,6 +38,73 @@
 			<list>
 				<ref bean="keycodeCmsProcessor"/>
 				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于文本请求的处理器列表 -->
+	<bean id="textProcessorList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="keycodeCmsProcessor"/>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于图片请求的处理器列表 -->
+	<bean id="imageProcessorList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于语音请求的处理器列表 -->
+	<bean id="voiceProcessorList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于视频请求的处理器列表 -->
+	<bean id="videoProcessorList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于LBS请求的处理器列表 -->
+	<bean id="eventLocationProcessorList" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于菜单点击事件请求的处理器列表 -->
+	<bean id="eventClickProcessorList" class="java.util.ArrayList"> 
+		<constructor-arg>
+			<list>
+				<ref bean="keycodeCmsProcessor"/>
+				<ref bean="defaultReplyProcessor"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 对于菜单链接事件的处理器列表 -->
+	<bean id="eventViewProcessorList" class="java.util.ArrayList"> 
+		<constructor-arg>
+			<list>
+				<!-- 菜单链接事件无需任何业务处理
+				<ref bean="defaultReplyProcessor"/>
+				-->
 			</list>
 		</constructor-arg>
 	</bean>

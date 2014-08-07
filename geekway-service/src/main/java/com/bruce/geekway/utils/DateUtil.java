@@ -23,6 +23,12 @@ public class DateUtil {
 		return null;
 	}
 	
+	public static String date2YMDHMS(Date date){
+		if(date!=null){
+			return DATE_FORMAT_YMDHMS.format(date);
+		}
+		return null;
+	}
 	
 	public static Date calcDate(Date date, int days){
 		if(date!=null){

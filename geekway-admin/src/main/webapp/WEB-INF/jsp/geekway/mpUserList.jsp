@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -151,6 +151,10 @@
 		                        <td class='text-center'>
 		                        	<%if(synced){%>
 		                        	<div class="table-controls">
+		                        		<%String link = "./historyMessageDialog?openId="+mpUser.getOpenId();%>
+											<a href="<%=link%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="回 复"><i class="icon-bubble3"></i></a>
 										<a href="./mpUserInfo?mpUserId=<%=mpUser.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="查看"><i class="icon-pencil3"></i></a> 
