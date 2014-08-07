@@ -149,11 +149,11 @@
 			<!-- /table view -->
 			
 			<%}else{%>
-				<div class="callout callout-warning fade in">
+				<div class="callout callout-danger fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>抱歉：</h5>
 				<p> 
-					1、该接口暂时仅提供给已微信认证的服务号，您可以访问<a href="http://mp.weixin.qq.com/" target="_blank">微信公众平台系统</a>，使用其中的群发功能.<br/>
+					1、该接口暂时仅提供给已微信认证的服务号，您可以访问<a href="http://mp.weixin.qq.com/" target="_blank">微信公众平台系统</a>，使用其中的群发功能。<br/>
 				</p>
 			</div>
 			<%} %>

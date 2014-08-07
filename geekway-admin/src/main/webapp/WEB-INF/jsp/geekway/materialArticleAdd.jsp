@@ -260,8 +260,8 @@
 	        //为FormData对象添加数据 
 	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
 	        $.ajax({
-	            url:'/geekway-admin/geekway/imageUpload',
-	            type:'POST',
+	            url:'${pageContext.request.contextPath}/geekway/imageUpload',
+	            type:'POST', 
 	            data:data,
 	            cache: false,
 	            contentType: false,    //不可缺
