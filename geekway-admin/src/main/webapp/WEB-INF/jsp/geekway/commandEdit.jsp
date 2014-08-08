@@ -272,26 +272,32 @@
 	<!-- /page container -->
 </body>
 
+
+
 <script>
+
+<%
+int operation = 0;//匹配command
+%>
 $(".modal-trigger").click(function(){
 	var materialUrl = "";
 	var modalTitle = "请选择素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入文本内容";	
-		$("#materialIframe").attr("height", "200px");
-		materialUrl = "./pickTextMaterial";
+		$("#materialIframe").attr("height", "200px"); 
+		materialUrl = "./pickTextMaterial?operation=<%=operation%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择单图文素材";
-		materialUrl = "./pickArticleMaterial";
+		materialUrl = "./pickArticleMaterial?operation=<%=operation%>";
 	}else if(this.id=='newsMaterial'){
 		modalTitle = "请选择多图文素材";
-		materialUrl = "./pickNewsMaterial";
+		materialUrl = "./pickNewsMaterial?operation=<%=operation%>";
 	}else if(this.id=='imageMaterial'){
 		modalTitle = "请选择图片素材";
-		materialUrl = "./pickImageMaterial";
+		materialUrl = "./pickImageMaterial?operation=<%=operation%>";
 	}else if(this.id=='voiceMaterial'){
 		modalTitle = "请选择语音素材";
-		materialUrl = "./pickVoiceMaterial";
+		materialUrl = "./pickVoiceMaterial?operation=<%=operation%>";
 	}
 	$("#modalTitle").text(modalTitle);
 	$("#materialIframe").attr("src", materialUrl);

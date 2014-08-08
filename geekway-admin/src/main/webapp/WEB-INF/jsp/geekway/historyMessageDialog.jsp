@@ -91,11 +91,11 @@
 			if(userMessageList!=null&&userMessageList.size()>0){
 			%>
 			<div class="tabbable page-tabs">
-				<ul class="nav nav-tabs">
+				<%-- <ul class="nav nav-tabs">
 					<li class="active"><a href="javascript:void(0)" data-toggle="tab">
 						<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
 							class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
-				</ul> 
+				</ul>  --%>
 			
 				<form id="validate" action="<s:url value='./mpReplyText'/>" method="post"  class="form-horizontal form-bordered">
 					<input type="hidden" name="openId" value="1"/>
@@ -228,25 +228,28 @@
 </body>
 
 <script>
+<%
+int operation = 1;//发送客服消息
+%>
 $(".modal-trigger").click(function(){
 	var materialUrl = "";
 	var modalTitle = "请选择要回复的素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入要回复的文本内容";	
 		$("#materialIframe").attr("height", "200px");
-		materialUrl = "./pickTextMaterial";
+		materialUrl = "./pickTextMaterial?operation=<%=operation%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择要回复的单图文";
-		materialUrl = "./pickArticleMaterial";
+		materialUrl = "./pickArticleMaterial?operation=<%=operation%>";
 	}else if(this.id=='newsMaterial'){
 		modalTitle = "请选择要回复的多图文";
-		materialUrl = "./pickNewsMaterial";
+		materialUrl = "./pickNewsMaterial?operation=<%=operation%>";
 	}else if(this.id=='imageMaterial'){
 		modalTitle = "请选择要回复的图片";
-		materialUrl = "./pickImageMaterial";
+		materialUrl = "./pickImageMaterial?operation=<%=operation%>";
 	}else if(this.id=='voiceMaterial'){
 		modalTitle = "请选择要回复的语音";
-		materialUrl = "./pickVoiceMaterial";
+		materialUrl = "./pickVoiceMaterial?operation=<%=operation%>";
 	}
 	$("#modalTitle").text(modalTitle);
 	$("#materialIframe").attr("src", materialUrl);

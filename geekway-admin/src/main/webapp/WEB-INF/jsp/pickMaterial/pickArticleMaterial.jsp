@@ -51,7 +51,6 @@
 		<!-- Page content -->
 		<div class="page-content">
 			
-			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -81,29 +80,30 @@
                            			i++;
                            	%>
 							<tr>
-		                        <td><%=i%></td>
-		                        <td>单图文</td>
-		                        <td>
-	                        		<a href="<%=materialArticle.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=materialArticle.getCoverImageUrl()%>' class="img-media"/>
-		                        	</a>
-		                        </td>
-		                        <td>
-		                        	<%=materialArticle.getShortContent()%>
-		                        </td>
-		                        <td>
+								<td><%=i%></td>
+								<td>单图文</td>
+								<td><a href="<%=materialArticle.getCoverImageUrl()%>"
+									class="lightbox"> <img
+										src='<%=materialArticle.getCoverImageUrl()%>'
+										class="img-media" />
+								</a></td>
+								<td><%=materialArticle.getShortContent()%></td>
+								<td>
 									<%
 									String meterialLink = ArticleLinkUtil.getArticleLink(materialArticle.getId());
 									%>
 									<a href="<%=meterialLink%>" target="_blank">预览</a>
 								</td>
-		                        <td>正常</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="javascript:pick(<%=materialArticle.getId()%>, '<%=materialArticle.getShortContent()%>')" class="material-picker btn btn-link btn-icon btn-xs tip" title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
+								<td>正常</td>
+								<td class='text-center'>
+									<div class="table-controls">
+										<a
+											href="javascript:pick(<%=materialArticle.getId()%>, '<%=materialArticle.getShortContent()%>')"
+											class="material-picker btn btn-link btn-icon btn-xs tip"
+											title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
 									</div>
 								</td>
-                               </tr>
+							</tr>
 							<%}
                            	} %>
 						</tbody>
@@ -118,16 +118,31 @@
 	<!-- /page container -->
 </body>
 
+
+<%
+Integer operation = (Integer)request.getAttribute("operation");
+%>
 <script>
 function pick(materialId, materialRemark){
-	if(confirm('确定要选择【'+materialRemark+'】的单图文素材吗？')){
-		$('#materialType', parent.document).val(1);//图文类型
-		$('#materialId', parent.document).val(materialId);
-		$('#materialTypeDesc', parent.document).text("单图文素材");
-		$('#remark', parent.document).text("素材名称: "+materialRemark);
-		//操作iframe的父元素
-		$('#materialModal', parent.document).modal('hide');
-	}
+	<%if(operation!=null){
+		if(operation==0){
+	%>
+		if(confirm('确定要选择【'+materialRemark+'】的单图文素材吗？')){
+			$('#materialType', parent.document).val(1);//图文类型
+			$('#materialId', parent.document).val(materialId);
+			$('#materialTypeDesc', parent.document).text("单图文素材");
+			$('#remark', parent.document).text("素材名称: "+materialRemark);
+			//操作iframe的父元素
+			$('#materialModal', parent.document).modal('hide');
+		}
+	<%}else if(operation==1){%>
+		if(confirm('确定要使用【'+materialRemark+'】的单图文素材作为消息回复吗？')){
+			//ajax post
+		}
+	<%}else if(operation==1){%>
+	
+	<%}
+	}%>
 }
 </script>
 

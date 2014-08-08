@@ -40,7 +40,7 @@ public class GeekwayMpReplyController {
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 	
-	@RequestMapping("/mpReplyText") 
+	@RequestMapping("/mpReplyText")
 	public String mpReplyText(Model model, HttpServletRequest request, String openId, String text) {
 		
 		if(!StringUtils.isBlank(openId)&&!StringUtils.isBlank(text)){
@@ -81,14 +81,14 @@ public class GeekwayMpReplyController {
 	 * 使用素材库中的素材进行回复
 	 * @param model
 	 * @param request
-	 * @param toOpenId
+	 * @param openId
 	 * @param materialType
 	 * @param materialId
 	 * @return
 	 */
-	private String mpReplyMaterial(Model model, HttpServletRequest request, String toOpenId, short materialType, int materialId) {
+	private String mpReplyMaterial(Model model, HttpServletRequest request, String openId, short materialType, int materialId) {
 		String redirectUrl = "";
-		if(!StringUtils.isBlank(toOpenId)){
+		if(!StringUtils.isBlank(openId)){
 			CustomMessage replyMessage = null;
 			if(materialType==1){//单图文
 				//构造单图文消息对象
@@ -132,11 +132,11 @@ public class GeekwayMpReplyController {
 			}
 			
 			if(replyMessage!=null){
-				replyMessage.touser = toOpenId;
+				replyMessage.touser = openId;
 				//发送客服消息
 				WxJsonResult sendResult = wxCustomReplyService.replyMessage(replyMessage);
 				if(sendResult!=null){
-					redirectUrl = "";
+					redirectUrl = "./historyMessageDialog?openId="+openId;
 				}
 				
 			}

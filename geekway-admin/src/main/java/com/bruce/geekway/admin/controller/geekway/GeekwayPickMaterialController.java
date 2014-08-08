@@ -15,9 +15,12 @@ import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialMultimediaService;
 import com.bruce.geekway.service.IWxMaterialNewsService;
-//import com.bruce.geekway.model.WxMaterialNews;
-//import com.bruce.geekway.service.IWxMaterialNewsService;
 
+/**
+ * 选择资源的controller
+ * @author liqian
+ *
+ */
 @Controller
 @RequestMapping("/geekway") 
 public class GeekwayPickMaterialController {
@@ -36,7 +39,8 @@ public class GeekwayPickMaterialController {
 	 * @return
 	 */
 	@RequestMapping("/pickTextMaterial")
-	public String pickTextMaterial(Model model, HttpServletRequest request){
+	public String pickTextMaterial(Model model, int operation, HttpServletRequest request){
+		model.addAttribute("operation", operation);
 		return "pickMaterial/pickTextMaterial";
 	}
 	
@@ -47,11 +51,13 @@ public class GeekwayPickMaterialController {
 	 * @return
 	 */
 	@RequestMapping("/pickArticleMaterial")
-	public String pickArticleMaterial(Model model, HttpServletRequest request){
+	public String pickArticleMaterial(Model model, int operation, HttpServletRequest request){
 		
 		List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryAll("id desc");
 		
 		model.addAttribute("materialArticleList", materialArticleList);
+		model.addAttribute("operation", operation);
+		
 		return "pickMaterial/pickArticleMaterial";
 	}
 	
@@ -62,11 +68,13 @@ public class GeekwayPickMaterialController {
 	 * @return
 	 */
 	@RequestMapping("/pickNewsMaterial")
-	public String pickNewsMaterial(Model model, HttpServletRequest request){
+	public String pickNewsMaterial(Model model, int operation, HttpServletRequest request){
 		
 		List<WxMaterialNews> materialNewsList = wxMaterialNewsService.queryAll("id desc");
 		
 		model.addAttribute("materialNewsList", materialNewsList);
+		model.addAttribute("operation", operation);
+		
 		return "pickMaterial/pickNewsMaterial";
 	}
 	
@@ -77,11 +85,13 @@ public class GeekwayPickMaterialController {
 	 * @return
 	 */
 	@RequestMapping("/pickImageMaterial")
-	public String pickImageMaterial(Model model, HttpServletRequest request){
+	public String pickImageMaterial(Model model, int operation, HttpServletRequest request){
 		
 		List<WxMaterialMultimedia> materialImageList = wxMaterialMultimediaService.queryImageMaterials();
 		
 		model.addAttribute("materialImageList", materialImageList);
+		model.addAttribute("operation", operation);
+		
 		return "pickMaterial/pickImageMaterial";
 	}
 	
@@ -92,11 +102,13 @@ public class GeekwayPickMaterialController {
 	 * @return
 	 */
 	@RequestMapping("/pickVoiceMaterial")
-	public String pickVoiceMaterial(Model model, HttpServletRequest request){
+	public String pickVoiceMaterial(Model model, int operation, HttpServletRequest request){
 		
 		List<WxMaterialMultimedia> materialVoiceList = wxMaterialMultimediaService.queryVoiceMaterials();
 		
 		model.addAttribute("materialVoiceList", materialVoiceList);
+		model.addAttribute("operation", operation);
+		
 		return "pickMaterial/pickVoiceMaterial";
 	}
 	
