@@ -107,6 +107,7 @@ public class QrcodeNewController {
 	 */
 	@RequestMapping(value = "/gameQrcodesXtd")
 	public String gameQrcodesXtd(Model model, HttpServletRequest request, HttpServletResponse response) {
+		logger.info("新天地店接入请求");
 		String subscribedQrcodeUrl = null;
 		
 		//检查cookie中的
@@ -235,16 +236,16 @@ public class QrcodeNewController {
 		}
 		//从第三方服务获取二维码&展示给用户
 		String qrcodeUrl = null;
-		String wwjUrl = "http://itocases.eicp.net:8733/design_time_addresses/qrgamecontrollerservice/qrurl";
+		String wwjUrl = "http://www.itocases.com:90/api/QRCode";
 		String result = WxHttpUtil.sendGetRequest(wwjUrl, null);
 		if(!StringUtils.isBlank(result)){
 			ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
 			if(wwjResult!=null&&wwjResult.getErrorCode()==0){
 				qrcodeUrl = wwjResult.getImageUrl();
-				logger.info("从发码中心获取二维码成功!["+qrcodeUrl+"]");
+				logger.info("从发码中心获取新二维码成功!["+qrcodeUrl+"]");
 			}
 		}else{
-			logger.error("从发码中心获取二维码失败!");
+			logger.error("从发码中心获取新二维码失败!");
 		}
 		
 		return qrcodeUrl;
