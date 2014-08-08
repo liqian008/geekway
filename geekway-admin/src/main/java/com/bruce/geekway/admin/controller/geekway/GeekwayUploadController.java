@@ -53,7 +53,7 @@ public class GeekwayUploadController extends BaseController{
 	}
 	
 	/**
-	 * 处理图片上传
+	 * 处理正常流程的图片上传
 	 * @param model
 	 * @param file
 	 * @return
@@ -74,9 +74,38 @@ public class GeekwayUploadController extends BaseController{
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 	
+	/**
+	 * 上传微信图片素材(需返回mediaId)
+	 * @param model
+	 * @param mediaFile
+	 * @return
+	 */
 	@ResponseBody
-	@RequestMapping(value = "/wxMediaUpload", method = RequestMethod.POST)
-	public JsonResultBean wxMediaUpload(Model model, @RequestParam("mediaFile") CommonsMultipartFile mediaFile) {
+	@RequestMapping(value = "/wxMediaImageUpload", method = RequestMethod.POST)
+	public JsonResultBean wxMediaImageUpload(Model model, @RequestParam("mediaFile") CommonsMultipartFile mediaFile) {
+		WebUserDetails userDetail = getUserInfo();
+		int userId = userDetail.getUserId();
+		try {
+			UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());
+			WxMediaUploadResult uploadResult = wxMediaUploadService.uploadImage(mediaFile.getBytes());
+//		System.out.println("contentType: "+mediaFile.getContentType());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+	}
+	
+	/**
+	 * 上传微信语音素材(需返回mediaId)
+	 * @param model
+	 * @param mediaFile
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/wxMediaFileUpload", method = RequestMethod.POST)
+	public JsonResultBean wxMediaFileUpload(Model model, @RequestParam("mediaFile") CommonsMultipartFile mediaFile) {
 		WebUserDetails userDetail = getUserInfo();
 		int userId = userDetail.getUserId();
 //		UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());

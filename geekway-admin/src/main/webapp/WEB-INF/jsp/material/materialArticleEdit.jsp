@@ -228,7 +228,7 @@
 									<%
 									String meterialLink = ArticleLinkUtil.getArticleLink(materialArticle.getId());%>
 									<%=meterialLink%>
-									<a href="<%=meterialLink%>" target="_blank">预览</a>
+									<a href="<%=meterialLink%>" target="_blank" id="changeMaterial"><span class="label label-info">预 览</span></a>
 								</label>
 							</div>
 						</div>

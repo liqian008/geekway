@@ -95,6 +95,31 @@ public interface WxMaterialArticleMapper {
     int updateByPrimaryKey(WxMaterialArticle record);
     
     /* 根据commandId查询素材列表 */
-    List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
+//    List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
+    
+    
+	/**
+	 * 根据查询newsId相关的文章
+	 * 
+	 * @param newsId
+	 * @return
+	 */
+	List<WxMaterialArticle> queryMaterialArticlesByNewsId(@Param("newsId") int newsId);
+
+	/**
+	 * 根据查询newsId相关的文章
+	 * 
+	 * @param newsId
+	 * @return
+	 */
+	List<WxMaterialArticle> queryMaterialArticlesByNewsId(@Param("newsId") int newsId, @Param("limit") int limit);
+
+	/**
+	 * 根据查询newsId不相关的文章
+	 * 
+	 * @param newsId
+	 * @return
+	 */
+	List<WxMaterialArticle> queryMaterialArticlesOutNewsId(@Param("newsId") int newsId);
     
 }

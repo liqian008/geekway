@@ -63,18 +63,17 @@ public class NewsMessage extends CustomMessage {
 		/**
 		 * 增加一条图文消息
 		 * 
-		 * @param Title
-		 *            图文消息标题
-		 * @param Description
-		 *            图文消息描述
-		 * @param PicUrl
-		 *            图片链接，支持JPG、PNG格式，较好的效果为大图720*400，小图100*100
+		 * @param Title 图文消息标题
+		 * @param Description 图文消息描述
+		 * @param url 图文消息链接
+		 * @param PicUrl 图片链接，支持JPG、PNG格式，较好的效果为大图720*400，小图100*100
 		 * @return 返回this对象，支持链式操作
 		 */
-		public News addArticle(String Title, String Description, String PicUrl) {
+		public News addArticle(String Title, String Description, String url, String PicUrl) {
 			Article item = new Article();
 			item.title = Title;
 			item.description = Description;
+			item.url = url;
 			item.picurl = PicUrl;
 			articles.add(item);
 			return this;

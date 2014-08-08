@@ -7,27 +7,35 @@ import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialArticleCriteria;
 
 public interface IWxMaterialArticleService extends IFoundationPagingService<WxMaterialArticle, Integer, WxMaterialArticleCriteria>{
-
+	
+	//VERSION 1.0
+	
 	/*查询commandId对应的素材列表*/
-	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
-	
-	public List<WxMaterialArticle> querySubscribedMaterials();
-
-	/**
-	 * 根据状态查询关注素材
-	 * @param subscribeStatus 1为首次关注，2为重复关注
-	 * @return
-	 */
-	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus);
-	
-	
-	
-	/*查询普通的素材列表*/
-	public List<WxMaterialArticle> queryGeneralMaterials();
-	
-//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId);
+//	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId);
 //	
-//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit);
+//	public List<WxMaterialArticle> querySubscribedMaterials();
 //
-//	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
+//	/**
+//	 * 根据状态查询关注素材
+//	 * @param subscribeStatus 1为首次关注，2为重复关注
+//	 * @return
+//	 */
+//	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus);
+//	
+//	
+//	
+//	/*查询普通的素材列表*/
+//	public List<WxMaterialArticle> queryGeneralMaterials();
+	
+	
+	
+	
+	
+	//VERSION 2.0，增加news与article的关系，修改接口
+	
+	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId);
+	
+	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit);
+
+	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId);
 }

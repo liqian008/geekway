@@ -42,7 +42,7 @@ public class WxMediaUploadService extends WxBaseService {
 //	public WxMediaUploadResult uploadVoice(byte[] data) {
 //		return uploadMedia(WxMediaTypeEnum.VOICE, contentType, data);
 //	}
-//	
+
 //	
 //	public WxMediaUploadResult uploadVideo(byte[] data) {
 //		return uploadMedia(WxMediaTypeEnum.VIDEO, contentType, data);

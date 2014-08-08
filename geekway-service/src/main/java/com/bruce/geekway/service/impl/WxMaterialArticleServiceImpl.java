@@ -69,48 +69,47 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService, 
 	}
 
 
-	/* 查询commandId对应的素材列表 */
-	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId) {
-		return wxMaterialArticleMapper.queryMaterialArticlesByCommandId(commandId);
+	
+	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId) {
+		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId);
+	}
+
+	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit) {
+		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId, limit);
+	}
+
+	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId) {
+		return wxMaterialArticleMapper.queryMaterialArticlesOutNewsId(newsId);
 	}
 	
-	
-//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId) {
-//		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId);
+//	/* 查询commandId对应的素材列表 */
+//	public List<WxMaterialArticle> queryMaterialArticlesByCommandId(int commandId) {
+//		return wxMaterialArticleMapper.queryMaterialArticlesByCommandId(commandId);
+//	}
+//	
+//	/* 查询普通的素材列表 */
+//	public List<WxMaterialArticle> queryGeneralMaterials() {
+//		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
+//		criteria.createCriteria().andSubscribeStatusEqualTo((short) 0);
+//		criteria.setOrderByClause("id desc");
+//		return wxMaterialArticleMapper.selectByExample(criteria);
 //	}
 //
-//	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId, int limit) {
-//		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId, limit);
+//	/* 查询关注时素材列表 */
+//	public List<WxMaterialArticle> querySubscribedMaterials() {
+//		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
+//		criteria.createCriteria().andSubscribeStatusNotEqualTo((short) 0);
+//		criteria.setOrderByClause("id desc");
+//		return wxMaterialArticleMapper.selectByExample(criteria);
 //	}
 //
-//	public List<WxMaterialArticle> queryMaterialArticlesOutNewsId(int newsId) {
-//		return wxMaterialArticleMapper.queryMaterialArticlesOutNewsId(newsId);
+//	/* 查询关注状态对应的素材列表 */
+//	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus) {
+//		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
+//		criteria.createCriteria().andSubscribeStatusEqualTo(subscribeStatus);
+//		criteria.setOrderByClause("id desc");
+//		return wxMaterialArticleMapper.selectByExample(criteria);
 //	}
-	
-
-	/* 查询普通的素材列表 */
-	public List<WxMaterialArticle> queryGeneralMaterials() {
-		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
-		criteria.createCriteria().andSubscribeStatusEqualTo((short) 0);
-		criteria.setOrderByClause("id desc");
-		return wxMaterialArticleMapper.selectByExample(criteria);
-	}
-
-	/* 查询关注时素材列表 */
-	public List<WxMaterialArticle> querySubscribedMaterials() {
-		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
-		criteria.createCriteria().andSubscribeStatusNotEqualTo((short) 0);
-		criteria.setOrderByClause("id desc");
-		return wxMaterialArticleMapper.selectByExample(criteria);
-	}
-
-	/* 查询关注状态对应的素材列表 */
-	public List<WxMaterialArticle> querySubscribedMaterials(short subscribeStatus) {
-		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
-		criteria.createCriteria().andSubscribeStatusEqualTo(subscribeStatus);
-		criteria.setOrderByClause("id desc");
-		return wxMaterialArticleMapper.selectByExample(criteria);
-	}
 
 	@Override
 	public List<WxMaterialArticle> fallloadByCriteria(int pageSize, WxMaterialArticleCriteria criteria) {

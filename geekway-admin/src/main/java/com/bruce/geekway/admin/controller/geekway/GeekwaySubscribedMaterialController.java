@@ -39,10 +39,10 @@ public class GeekwaySubscribedMaterialController extends BaseController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		List<WxMaterialArticle> subscribedMaterialList = wxMaterialArticleService.querySubscribedMaterials();
+		List<WxMaterialArticle> subscribedMaterialList = wxMaterialArticleService.queryAll();
 		model.addAttribute("subscribedMaterialList", subscribedMaterialList);
 
-		return "geekway/subscribedMaterialList";
+		return "material/subscribedMaterialList";
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class GeekwaySubscribedMaterialController extends BaseController {
 		
 		model.addAttribute("subscribedMaterial", subscribedMaterial);
 		
-		return "geekway/subscribedMaterialEdit";
+		return "material/subscribedMaterialEdit";
 	}
 	
 
@@ -71,7 +71,7 @@ public class GeekwaySubscribedMaterialController extends BaseController {
 		if(subscribedMaterial!=null){
 			model.addAttribute("subscribedMaterial", subscribedMaterial);
 		}
-		return "geekway/subscribedMaterialEdit";
+		return "material/subscribedMaterialEdit";
 	}
 	
 

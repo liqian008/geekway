@@ -20,6 +20,11 @@ import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 
+/**
+ * 图文管理controller
+ * @author liqian
+ *
+ */
 @Controller
 @RequestMapping("/geekway")
 public class GeekwayMaterialArticleController extends BaseController {
@@ -37,9 +42,9 @@ public class GeekwayMaterialArticleController extends BaseController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryGeneralMaterials();
+		List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryAll();
 		model.addAttribute("materialArticleList", materialArticleList);
-		return "geekway/materialArticleList";
+		return "material/materialArticleList";
 	}
 
 
@@ -57,7 +62,7 @@ public class GeekwayMaterialArticleController extends BaseController {
 		materialArticle.setMaterialType((short) 1);//1为图文素材
 		model.addAttribute("materialArticle", materialArticle);
 		
-		return "geekway/materialArticleAdd";
+		return "material/materialArticleAdd";
 	}
 	
 	/**
@@ -75,8 +80,8 @@ public class GeekwayMaterialArticleController extends BaseController {
 		materialArticle.setMaterialType((short) 0);//0为纯文本素材
 		model.addAttribute("materialArticle", materialArticle);
 		
-//		return "geekway/materialTextAdd";
-		return "geekway/materialArticleAdd";
+//		return "material/materialTextAdd";
+		return "material/materialArticleAdd";
 	}
 	
 
@@ -93,7 +98,7 @@ public class GeekwayMaterialArticleController extends BaseController {
 			List<WxCommand> commandList = wxCommandService.queryCommandsByMaterialId(articleId);
 			model.addAttribute("commandList", commandList);
 		}
-		return "geekway/materialArticleEdit";
+		return "material/materialArticleEdit";
 	}
 
 	@RequestMapping(value = "/saveMaterialArticle", method = RequestMethod.POST)

@@ -91,69 +91,132 @@
 			if(userMessageList!=null&&userMessageList.size()>0){
 			%>
 			<div class="tabbable page-tabs">
-			<ul class="nav nav-tabs">
-				<li class="active"><a href="javascript:void(0)" data-toggle="tab">
-					<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
-						class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
-			</ul> 
-
-			<div class="block">
-				<ul class="message-list">
-					<li>
-						<div class="panel-collapse collapse in" id="duke_aaron" style="height: auto;">
-							<%
-							//检查客服消息的时间间隔
-							Boolean customReply = (Boolean)request.getAttribute("customReply");
-							String openId = (String)request.getAttribute("openId");
-							if(customReply!=null&&customReply){
-							%>
-							<form id="validate" action="<s:url value='./mpReplyText'/>" method="post"  class="form-horizontal form-bordered">
-								<input type="hidden" name="openId" value="<%=openId%>"/>
-								<textarea name="text" class="form-control" rows="3"
-									cols="1" placeholder="请输入文本内容进行回复..."></textarea>
-								<div class="message-controls">
-									<div class="pull-right">
-										<input type="submit" value="发 送" class="btn btn-warning">
-									</div>
-								</div>
-							</form>
-							<%}%>
-							<div class="chat">
-							<%
-							for(WxHistoryMessage userHistoryMessage: userMessageList){
-								if(userHistoryMessage.getInbox()!=null&&userHistoryMessage.getInbox()==0){
-							%> 	
-								<div class="message">
-									<a class="message-img" href="javascript:void(0)"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
-									<div class="message-body">
-										<%=userHistoryMessage.getContent() %>
-										<%if("image".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>
-			                        	<br/>
-			                        	<a href="javascript:void(0)" class="lightbox">
-			                        	<img src="<%=userHistoryMessage.getPicUrl()%>" height="80px"/>
-			                        	</a>
-			                        	<%}%>
-										
-										<span class="attribution">发送时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %>  </span>
-									</div>
-								</div>
-							<%}else{ %>
-								<div class="message reversed">
-									<a class="message-img" href="contacts.html#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
-									<div class="message-body">
-										<%=userHistoryMessage.getContent() %>
-										<span class="attribution">回复时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %> </span>
-									</div>
-								</div>
-							<%}
-							}%>
-							</div>
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="javascript:void(0)" data-toggle="tab">
+						<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
+							class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
+				</ul> 
+			
+				<form id="validate" action="<s:url value='./mpReplyText'/>" method="post"  class="form-horizontal form-bordered">
+					<input type="hidden" name="openId" value="1"/>
+					<!-- 
+					<textarea name="text" class="form-control" rows="3"
+						cols="1" placeholder="请输入文本内容进行回复..."></textarea>
+					<div class="message-controls">
+						<div class="pull-right">
+							<input type="submit" value="发 送" class="btn btn-warning">
 						</div>
-					</li>
-				</ul>
+					</div>
+					 -->
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="col-sm-2 control-label text-right">选择要回复的素材:
+								</label>
+								<div class="col-sm-10">
+									<label class="control-label">
+										<a href="javascript:void(0)" id="textMaterial" class="modal-trigger">
+										<span class="label label-success">回复文字</span>
+										</a>
+										
+										<a href="javascript:void(0)" id="articleMaterial" class="modal-trigger">
+										<span class="label label-info">回复单图文</span>
+										</a>
+										
+										<a href="javascript:void(0)" id="newsMaterial" class="modal-trigger">
+										<span class="label label-danger">回复多图文</span>
+										</a>
+										
+										<a href="javascript:void(0)" id="imageMaterial" class="modal-trigger">
+										<span class="label label-primary">回复图片</span>
+										</a>
+										
+										<a href="javascript:void(0)" id="voiceMaterial" class="modal-trigger">
+										<span class="label label-info">回复语音</span>
+										</a>
+									</label> 
+								</div>
+							</div>
+							<!-- 
+							<div class="form-actions text-right">
+								<input type="reset" value="重 置" class="btn btn-danger">
+								<input type="submit" value="提 交" class="btn btn-primary">
+							</div>
+							 -->
+						</div>
+					</div>								
+				</form>
+			
+
+				<div class="block">
+					<ul class="message-list">
+						<li>
+							<div class="panel-collapse collapse in" id="duke_aaron" style="height: auto;">
+								<%
+								//检查客服消息的时间间隔
+								Boolean customReply = (Boolean)request.getAttribute("customReply");
+								String openId = (String)request.getAttribute("openId");
+								if(customReply!=null&&customReply){
+								%>
+								<%}%>
+								<div class="chat">
+								<%
+								for(WxHistoryMessage userHistoryMessage: userMessageList){
+									if(userHistoryMessage.getInbox()!=null&&userHistoryMessage.getInbox()==0){
+								%> 	
+									<div class="message">
+										<a class="message-img" href="javascript:void(0)"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
+										<div class="message-body">
+											<%=userHistoryMessage.getContent() %>
+											<%if("image".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>
+				                        	<br/>
+				                        	<a href="javascript:void(0)" class="lightbox">
+				                        	<img src="<%=userHistoryMessage.getPicUrl()%>" height="80px"/>
+				                        	</a>
+				                        	<%}%>
+											
+											<span class="attribution">发送时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %>  </span>
+										</div>
+									</div>
+								<%}else{ %>
+									<div class="message reversed">
+										<a class="message-img" href="contacts.html#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
+										<div class="message-body">
+											<%=userHistoryMessage.getContent() %>
+											<span class="attribution">回复时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %> </span>
+										</div>
+									</div>
+								<%}
+								}%>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
 			</div>
-			</div>
-			<%} %>
+			<%}%>
+			
+			
+			
+			<!-- Modal with remote path -->
+			<div id="materialModal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="modalTitle"><i class="icon-accessibility"></i>请选择要回复的素材</h4>
+						</div>
+						<div class="modal-body with-padding">
+							<!-- 
+							<p>One fine body&hellip;</p>
+							-->
+							
+							<iframe id="materialIframe" src="./modalTest" width="100%" height="360px" frameborder="no" border="0" allowtransparency="yes"></iframe>
+							
+						</div>
+					</div>
+				</div>
+			</div><!-- /modal with remote path -->
 			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -163,4 +226,31 @@
 	<!-- /page container -->
 	
 </body>
+
+<script>
+$(".modal-trigger").click(function(){
+	var materialUrl = "";
+	var modalTitle = "请选择要回复的素材";
+	if(this.id=='textMaterial'){
+		modalTitle = "请输入要回复的文本内容";	
+		$("#materialIframe").attr("height", "200px");
+		materialUrl = "./pickTextMaterial";
+	}else if(this.id=='articleMaterial'){
+		modalTitle = "请选择要回复的单图文";
+		materialUrl = "./pickArticleMaterial";
+	}else if(this.id=='newsMaterial'){
+		modalTitle = "请选择要回复的多图文";
+		materialUrl = "./pickNewsMaterial";
+	}else if(this.id=='imageMaterial'){
+		modalTitle = "请选择要回复的图片";
+		materialUrl = "./pickImageMaterial";
+	}else if(this.id=='voiceMaterial'){
+		modalTitle = "请选择要回复的语音";
+		materialUrl = "./pickVoiceMaterial";
+	}
+	$("#modalTitle").text(modalTitle);
+	$("#materialIframe").attr("src", materialUrl);
+	$("#materialModal").modal();
+})
+</script>
 </html>

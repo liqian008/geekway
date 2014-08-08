@@ -25,6 +25,11 @@ public class ImageMessage extends CustomMessage {
 	public void setImage(Media image) {
 		this.image = image;
 	}
+	
+	public void addImage(String media_id) {
+		this.image = new Media();
+		image.setMedia_id(media_id);
+	}
 
 	/** 媒体 */
 	public static class Media implements Serializable {

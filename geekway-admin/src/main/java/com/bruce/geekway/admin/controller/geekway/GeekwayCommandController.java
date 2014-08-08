@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxMaterialArticle;
@@ -33,6 +34,15 @@ public class GeekwayCommandController {
 //	@Autowired
 //	private IWxMaterialNewsService wxMaterialNewsService;
 	
+	
+	
+	@RequestMapping("/modalTest")
+	public String modalTest(Model model, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		return "modal/modalTest";
+	}
 	
 	@RequestMapping("/settings")
 	public String settings(Model model, HttpServletRequest request) {
@@ -59,16 +69,16 @@ public class GeekwayCommandController {
 		return "geekway/commandList";
 	}
 	
-//	@RequestMapping("/commandAdd")
-//	public String commandAdd(Model model, WxCommand command,  @RequestParam(value="type", required=false, defaultValue="1") short commandType, HttpServletRequest request) {
-//		String servletPath = request.getRequestURI();
-//		model.addAttribute("servletPath", servletPath);
-//		
-//		model.addAttribute("command", command);
-//		model.addAttribute("commandType", commandType);
-//		
-//		return "geekway/commandEdit";
-//	}
+	@RequestMapping("/commandAdd")
+	public String commandAdd(Model model, WxCommand command,  @RequestParam(value="type", required=false, defaultValue="1") short commandType, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("command", command);
+		model.addAttribute("commandType", commandType);
+		
+		return "geekway/commandEdit";
+	}
 	
 	
 	@RequestMapping("/commandEdit")
@@ -80,9 +90,9 @@ public class GeekwayCommandController {
 		
 		if(command!=null){
 			model.addAttribute("command", command);
-			//查询command对应的素材列表
-			List<WxMaterialArticle> materialList = wxMaterialArticleService.queryMaterialArticlesByCommandId(commandId);
-			model.addAttribute("materialList", materialList);
+			//TODO 查询command对应的素材列表
+//			List<WxMaterialArticle> materialList = wxMaterialArticleService.queryMaterialArticlesByCommandId(commandId);
+//			model.addAttribute("materialList", materialList);
 		}
 		return "geekway/commandEdit";
 	}
@@ -99,6 +109,9 @@ public class GeekwayCommandController {
 		
 		if(command!=null&&command.getId()!=null&&command.getId()>0){
 			result = wxCommandService.updateById(command);
+		}else{
+			command.setCreateTime(currentTime);
+			result = wxCommandService.save(command);
 		}
 		model.addAttribute("redirectUrl", "./commandList");
 		return "forward:/home/operationRedirect";

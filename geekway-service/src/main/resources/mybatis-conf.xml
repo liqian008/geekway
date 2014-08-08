@@ -8,16 +8,23 @@
 		<!-- geekway config -->
 
 		<mapper resource="com/bruce/geekway/model/xml/WxMpUserMapper.xml" /> 
+		
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandExtendMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleExtendMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMultimediaMapper.xml" />
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsArticleMapper.xml" />
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxCustomizeMenuMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxBroadcastMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxHistoryMessageMapper.xml" />
+		
+		
 		
 	</mappers>
 

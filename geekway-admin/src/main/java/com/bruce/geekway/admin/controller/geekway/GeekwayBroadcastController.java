@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxBroadcast;
-import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.service.IWxBroadcastService;
 import com.bruce.geekway.utils.ConfigUtil;
 
