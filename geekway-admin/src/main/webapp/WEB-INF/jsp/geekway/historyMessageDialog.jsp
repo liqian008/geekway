@@ -128,6 +128,7 @@
 									<div class="message-body">
 										<%=userHistoryMessage.getContent() %>
 										<%if("image".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>
+			                        	<br/>
 			                        	<a href="javascript:void(0)" class="lightbox">
 			                        	<img src="<%=userHistoryMessage.getPicUrl()%>" height="80px"/>
 			                        	</a>
