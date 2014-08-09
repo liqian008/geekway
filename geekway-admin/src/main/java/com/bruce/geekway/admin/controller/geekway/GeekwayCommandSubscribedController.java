@@ -1,5 +1,7 @@
 package com.bruce.geekway.admin.controller.geekway;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -12,19 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxCommand;
+import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
-import com.bruce.geekway.utils.ConfigUtil;
 
 /**
- * 普通指令controller
+ * 专为订阅操作配置的command
  * @author liqian
  *
  */
 @Controller
 @RequestMapping("/geekway") 
-public class GeekwayCommandController {
+public class GeekwayCommandSubscribedController {
 
 	@Autowired
 	private IWxCommandService wxCommandService;
@@ -35,74 +37,65 @@ public class GeekwayCommandController {
 //	@Autowired
 //	private IWxMaterialNewsService wxMaterialNewsService;
 	
-	/**
-	 * 接入信息
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/wxConfig")
-	public String config(Model model, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		//开发模式的配置
-		String devmodeUrl = ConfigUtil.getString("weixinmp_devmode_url");
-		String devmodeToken = ConfigUtil.getString("weixinmp_devmode_token");
-		
-		model.addAttribute("devmodeUrl", devmodeUrl);
-		model.addAttribute("devmodeToken", devmodeToken);
-		
-		return "geekway/wxConfig";
-	}
 	
-	@RequestMapping("/commandList")
+	@RequestMapping("/subscribedCommandList")
 	public String commandList(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxCommand> commandList = wxCommandService.queryAll();
+		List<WxCommand> commandList = new ArrayList<WxCommand>();
+		WxCommand newSubscribedCommand = wxCommandService.loadNewSubscribedCommand();
+		WxCommand reSubscribedCommand = wxCommandService.loadReSubscribedCommand();
+		if(newSubscribedCommand!=null){
+			commandList.add(newSubscribedCommand);
+			model.addAttribute("newSubscribedCommand", newSubscribedCommand);
+		}
+		if(reSubscribedCommand!=null){
+			commandList.add(reSubscribedCommand);
+			model.addAttribute("reSubscribedCommand", reSubscribedCommand);
+		}
+		
 		model.addAttribute("commandList", commandList);
-		return "geekway/commandList";
+		return "geekway/subscribedCommandList";
 	}
 	
 	/**
-	 * 创建文本接入指令
+	 * 创建新订阅的指令
 	 * @param model
 	 * @param command
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/textCommandAdd")
-	public String textCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
+	@RequestMapping("/newsubscribeCommandAdd")
+	public String subscribedCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		command.setCommandType((short) 0);
+		command.setCommandType((short) 2);
 		model.addAttribute("command", command);
 		
-		return "geekway/commandEdit";
+		return "geekway/subscribeCommandEdit";
 	}
 	
 	/**
-	 * 创建菜单接入指令
+	 * 创建重复关注的指令
 	 * @param model
 	 * @param command
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/menuCommandAdd")
+	@RequestMapping("/resubscribeCommandAdd")
 	public String menuCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		command.setCommandType((short) 1);
+		command.setCommandType((short) 3);
 		model.addAttribute("command", command);
 		
-		return "geekway/commandEdit";
+		return "geekway/subscribeCommandEdit";
 	}
 	
-	@RequestMapping("/commandEdit")
+	@RequestMapping("/subscribeCommandEdit")
 	public String commandEdit(Model model, HttpServletRequest request, int commandId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
@@ -115,10 +108,10 @@ public class GeekwayCommandController {
 //			List<WxMaterialArticle> materialList = wxMaterialArticleService.queryMaterialArticlesByCommandId(commandId);
 //			model.addAttribute("materialList", materialList);
 		}
-		return "geekway/commandEdit";
+		return "geekway/subscribeCommandEdit";
 	}
 	
-	@RequestMapping(value = "/saveCommand", method = RequestMethod.POST)
+	@RequestMapping(value = "/saveSubscribeCommand", method = RequestMethod.POST)
 	public String saveCommand(Model model, WxCommand command, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
@@ -134,19 +127,16 @@ public class GeekwayCommandController {
 			command.setCreateTime(currentTime);
 			result = wxCommandService.save(command);
 		}
-		model.addAttribute("redirectUrl", "./commandList");
+		model.addAttribute("redirectUrl", "./subscribedCommandList");
 		return "forward:/home/operationRedirect";
 	}
 	
-	@RequestMapping("/delCommand")
+	@RequestMapping("/delSubscribedCommand")
 	public String delCommand(Model model,  int commandId) {
-		//TODO 删除资源的关联
-//		wxCommandMaterialService.deleteByCommandId(commandId);
-		
 		//删除command实体
 		wxCommandService.deleteById(commandId);
 		
-		model.addAttribute("redirectUrl", "./commandList");
+		model.addAttribute("redirectUrl", "./subscribedCommandList");
 		return "forward:/home/operationRedirect";
 	}
 }

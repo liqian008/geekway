@@ -5,10 +5,10 @@
 <%@page import="java.text.SimpleDateFormat"%>
 
 <%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "菜单配置";
-	}else if(0==commandType){
-		return "文本输入";
+	if(2==commandType){
+		return "新用户关注指令";
+	}else if(3==commandType){
+		return "用户重复关注指令";
 	}
 	return "类型错误";
 } %>
@@ -29,8 +29,6 @@
 	}
 	return "未指定";
 } %>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -88,7 +86,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词管理
+						用户关注指令管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -100,7 +98,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">关键词管理</li>
+					<li class="active">用户关注指令管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -113,9 +111,9 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					本功能支持2种类型的关键词： <br/>
-					1、文本关键词（用户在微信中输入的关键词）<br/>
-					2、菜单关键词（微信中菜单对应的关键词）<br/>
+					本功能支持2种类型的接入指令： <br/>
+					1、用户新关注时的关注指令<br/>
+					2、用户重复关注（取消后重新关注）时的关注指令<br/>
 				</p>
 			</div>
 
@@ -123,10 +121,19 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>关键词管理
+						<i class="icon-people"></i>用户关注指令管理
 					</h5>
-					<a href="./menuCommandAdd"><span class="label label-danger pull-right">增加菜单关键词</span></a>
-					<a href="./textCommandAdd"><span class="label label-info pull-right">增加文本关键词</span></a>
+					<%
+					WxCommand newSubscribedCommand = (WxCommand)request.getAttribute("newSubscribedCommand");
+					WxCommand reSubscribedCommand = (WxCommand)request.getAttribute("reSubscribedCommand");
+					if(reSubscribedCommand==null){
+					%>
+					<a href="./resubscribeCommandAdd"><span class="label label-danger pull-right">创建用户重复关注指令</span></a>
+					<%}%>
+					<%
+					if(newSubscribedCommand==null){%>
+					<a href="./newsubscribeCommandAdd"><span class="label label-info pull-right">创建新用户关注指令</span></a>
+					<%}%>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -134,7 +141,6 @@
 							<tr>
 								<th>序号</th>
 								<th>类型</th>
-                                <th>关键词</th>
                                 <th>素材类型</th>
                                 <th>状态</th>
                                 <th class="team-links">操 作</th> 
@@ -151,15 +157,14 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=displayCommandType(command.getCommandType())%></td>
-		                        <td><%=command.getCommand()%></td>
 		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
 		                        <td>状态</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./commandEdit?commandId=<%=command.getId()%>"
+										<a href="./subscribeCommandEdit?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<a href="./delCommand?commandId=<%=command.getId()%>"
+										<a href="./delSubscribedCommand?commandId=<%=command.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="删除"><i class="icon-remove3"></i></a>
 									</div>

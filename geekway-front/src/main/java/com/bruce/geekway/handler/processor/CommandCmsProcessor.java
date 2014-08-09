@@ -52,11 +52,17 @@ public class CommandCmsProcessor extends AbstractProcessor{
 	protected BaseResponse processTextRequest(TextRequest request) {
 		String key = ((TextRequest) request).getContent();
 
-		WxCommand command = commandService.loadByCommandType((short) 0, key);
+//		WxCommand command = commandService.loadByCommandType((short) 0, key);
+//		if (command != null) {
+//			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByCommandId(command.getId());
+//			return processResponse(request, materialArticleList);
+//		}
+		
+		WxCommand command = commandService.loadByCommand(key);
 		if (command != null) {
-			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByCommandId(command.getId());
 			return processResponse(request, materialArticleList);
 		}
+		
 		return null;
 	}
 

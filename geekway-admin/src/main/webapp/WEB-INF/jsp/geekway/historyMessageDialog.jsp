@@ -93,7 +93,6 @@
 						<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
 							class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
 				</ul>  --%>
-<<<<<<< HEAD
 				<%
 				//检查客服消息的时间间隔
 				Boolean customReply = (Boolean)request.getAttribute("customReply");
@@ -101,20 +100,8 @@
 				if(customReply!=null&&customReply){
 				%>
 				
-=======
-			
->>>>>>> branch 'tlw' of https://github.com/liqian008/geekway.git
 				<form id="validate" action="<s:url value='./mpReplyText'/>" method="post"  class="form-horizontal form-bordered">
 					<input type="hidden" name="openId" value="<%=openId%>"/>
-					<!-- 
-					<textarea name="text" class="form-control" rows="3"
-						cols="1" placeholder="请输入文本内容进行回复..."></textarea>
-					<div class="message-controls">
-						<div class="pull-right">
-							<input type="submit" value="发 送" class="btn btn-warning">
-						</div>
-					</div>
-					 -->
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<div class="form-group">

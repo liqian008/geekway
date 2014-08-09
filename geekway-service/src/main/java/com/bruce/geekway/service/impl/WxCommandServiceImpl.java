@@ -78,36 +78,68 @@ public class WxCommandServiceImpl implements IWxCommandService {
 		return null;
 	}
 
-	/**
-	 * 加载或新建，确保返回有效的command数据
-	 */
+//	/**
+//	 * 加载或新建，确保返回有效的command数据
+//	 */
+//	@Override
+//	public synchronized WxCommand loadOrSave(short commandType, String command) {
+//		WxCommand commandBean = loadByCommandType(commandType, command);
+//		if (commandBean == null || commandBean.getId() == null) {
+//			commandBean = new WxCommand();
+//			commandBean.setCommand(command);
+//			commandBean.setCommandType(commandType);
+//			commandBean.setCreateTime(new Date());
+//			commandBean.setPublishStatus((short) 0);
+//			commandBean.setStatus((short) 0);
+//			int result = save(commandBean);
+//			if (result <= 0) {
+//				return null;
+//			}
+//		}
+//		return commandBean;
+//	}
+
+//	/**
+//	 * 查询materialId对应的关键词列表
+//	 * 
+//	 * @param materialId
+//	 * @return
+//	 */
+//	public List<WxCommand> queryCommandsByMaterialId(int materialId) {
+//		return wxCommandMapper.queryCommandsByMaterialId(materialId);
+//	}
+	
 	@Override
-	public synchronized WxCommand loadOrSave(short commandType, String command) {
-		WxCommand commandBean = loadByCommandType(commandType, command);
-		if (commandBean == null || commandBean.getId() == null) {
-			commandBean = new WxCommand();
-			commandBean.setCommand(command);
-			commandBean.setCommandType(commandType);
-			commandBean.setCreateTime(new Date());
-			commandBean.setPublishStatus((short) 0);
-			commandBean.setStatus((short) 0);
-			int result = save(commandBean);
-			if (result <= 0) {
-				return null;
-			}
+	public WxCommand loadByCommand(String command) {
+		WxCommandCriteria criteria = new WxCommandCriteria();
+		criteria.createCriteria().andCommandEqualTo(command);
+		List<WxCommand> commandList = wxCommandMapper.selectByExample(criteria);
+		if (commandList != null && commandList.size() > 0) {
+			return commandList.get(0);
 		}
-		return commandBean;
+		return null;
+	}
+	
+	public WxCommand loadNewSubscribedCommand(){
+		WxCommandCriteria criteria = new WxCommandCriteria();
+		criteria.createCriteria().andCommandTypeEqualTo((short) 2);
+		List<WxCommand> commandList = wxCommandMapper.selectByExample(criteria);
+		if (commandList != null && commandList.size() > 0) {
+			return commandList.get(0);
+		}
+		return null;
+	}
+	
+	public WxCommand loadReSubscribedCommand(){
+		WxCommandCriteria criteria = new WxCommandCriteria();
+		criteria.createCriteria().andCommandTypeEqualTo((short) 3);
+		List<WxCommand> commandList = wxCommandMapper.selectByExample(criteria);
+		if (commandList != null && commandList.size() > 0) {
+			return commandList.get(0);
+		}
+		return null;
 	}
 
-	/**
-	 * 查询materialId对应的关键词列表
-	 * 
-	 * @param materialId
-	 * @return
-	 */
-	public List<WxCommand> queryCommandsByMaterialId(int materialId) {
-		return wxCommandMapper.queryCommandsByMaterialId(materialId);
-	}
 
 	@Override
 	public List<WxCommand> fallloadByCriteria(int pageSize, WxCommandCriteria criteria) {
@@ -128,5 +160,6 @@ public class WxCommandServiceImpl implements IWxCommandService {
 	public void setWxCommandMapper(WxCommandMapper wxCommandMapper) {
 		this.wxCommandMapper = wxCommandMapper;
 	}
+
 
 }

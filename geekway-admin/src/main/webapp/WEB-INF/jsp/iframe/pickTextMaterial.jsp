@@ -94,7 +94,9 @@ $("#submit").click(function(){
 			$('#materialTypeDesc', parent.document).text("文本回复");
 			$('#remark', parent.document).text("文本回复: "+text);
 			
+			$('#replyContent', parent.document).val(text);
 			$('#replyContentContainer', parent.document).show();
+			
 			$('#remarkContainer', parent.document).hide();
 			
 			//操作iframe的父元素

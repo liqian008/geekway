@@ -7,12 +7,12 @@
 <%@ include file="../inc/include_tag.jsp" %>
 
 <%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "菜单配置关键词";
-	}else if(0==commandType){
-		return "文本输入关键词";
+	if(2==commandType){
+		return "用户新关注指令";
+	}else if(3==commandType){
+		return "用户重复关注指令";
 	}
-	return "其他关键词";
+	return "指令错误";
 } %>
 
 
@@ -132,13 +132,13 @@
 			WxCommand command = (WxCommand)request.getAttribute("command");
 			%>
 
-			<form id="validate" action="<s:url value='./saveCommand'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveSubscribeCommand'/>" method="post"  class="form-horizontal form-bordered">
 
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑关键词内容
+							<i class="icon-bubble4"></i>编辑用户关注指令
 						</h6>
 					</div>
 					<div class="panel-body">
@@ -147,19 +147,11 @@
 							<label class="col-sm-2 control-label text-right">关键词类型: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-							<form:select path="command.commandType" class="select-liquid">
-								<form:option value="0"  label="文本输入关键字"/>
-								<form:option value="1"  label="菜单配置关键字"/>
-							</form:select>
-							<form:hidden path="command.id"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关键词:
-							</label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
+								<label class="control-label">
+									<%=displayCommandType(command.getCommandType()) %>
+									<form:hidden path="command.id"/>
+									<form:hidden path="command.commandType"/> 
+								</label>
 							</div>
 						</div>
 						
@@ -169,7 +161,7 @@
 							<div class="col-sm-10">
 								<label class="control-label">
 									<span id="materialTypeDesc"><%=displayMaterialType(command.getMaterialType()) %></span>&nbsp;
-									<form:hidden path="command.materialType"/>
+									<form:hidden path="command.materialType"/> 
 									<form:hidden path="command.materialId"/> 
 								</label>
 							</div>
