@@ -28,7 +28,7 @@ public interface IWxHistoryMessageService extends IFoundationPagingService<WxHis
 	 * 记录客服回复给用户的微信消息
 	 * @return
 	 */
-	public int logCustomReplyMessage(CustomMessage customMessage, String fullMessage);
+	public int logCustomReplyMessage(CustomMessage customMessage);
 	
 	
 	/**

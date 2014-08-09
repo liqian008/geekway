@@ -51,36 +51,116 @@
 		<!-- Page content -->
 		<div class="page-content">
 			
-			<form id="validate" action="#" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>输入文本内容
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本内容:
-							</label>
-							<div class="col-sm-3">
-								
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-					</div>
+			
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>选择单图文素材
+					</h5>
 				</div>
-			</form>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th>序号</th>
+                                <th>类型</th>
+                                <th>封面</th>
+                                <th>内容</th>
+                                <th>预览</th>
+                                <th>状态</th>
+                                <th class="team-links">操作</th> 
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxMaterialNews> materialNewsList = (List<WxMaterialNews>)request.getAttribute("materialNewsList");
+                           	if(materialNewsList!=null&&materialNewsList.size()>0){
+                           		int i=0;
+                           		for(WxMaterialNews materialNews: materialNewsList){
+                           			i++;
+                           	%> 
+							<tr>
+		                        <td><%=i%></td>
+		                        <td>多图文</td>
+		                        <td>
+	                        		
+		                        </td>
+		                        <td>
+		                        	<%=materialNews.getTitle()%>
+		                        </td>
+		                        <td>
+									<%
+									String meterialLink = ArticleLinkUtil.getArticleLink(materialNews.getId());
+									%>
+									<a href="<%=meterialLink%>" target="_blank">预览</a>
+								</td>
+		                        <td>正常</td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="javascript:pick(<%=materialNews.getId()%>, '<%=materialNews.getLink()%>')" class="material-picker btn btn-link btn-icon btn-xs tip" title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /table view -->
+
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
 </body>
-</html>
 
+
+<%
+Integer operation = (Integer)request.getAttribute("operation");
+%>
+<script>
+function pick(materialId, materialRemark){
+	<%
+	if(operation==null){%>
+	
+	<%}else if(operation==0){//关联
+	%>
+		if(confirm('确定要选择【'+materialRemark+'】的多图文素材吗？')){
+			$('#materialType', parent.document).val(2);//图文类型
+			$('#materialId', parent.document).val(materialId);
+			$('#materialTypeDesc', parent.document).text("多图文素材");
+			$('#remark', parent.document).text("多图文素材名称: "+materialRemark);
+			
+			$('#replyContentContainer', parent.document).hide();
+			$('#remarkContainer', parent.document).show();
+			
+			//操作iframe的父元素
+			$('#materialModal', parent.document).modal('hide');
+		}
+	<%}else if(operation==1){//回复客服消息
+		String openId = (String)request.getAttribute("openId");
+		%>
+		if(confirm('确定要使用【'+materialRemark+'】的多图文素材作为消息回复吗？')){
+			//ajax post
+			var replyData = {"materialId": materialId, 'openId': '<%=openId%>'};
+			$.post("${pageContext.request.contextPath}/geekway/mpReplyNews.json", replyData, function(responseData) {
+    			var result = responseData.result;
+   				if(result==1){
+   					alert("客服消息回复成功，正在返回对话消息列表...");
+   				}else{
+   					alert("客服消息回复失败，正在返回对话消息列表...");
+   				}
+   				parent.location.reload();
+    		 }, "json"); 
+			
+		}
+	<%}else if(operation==2){//系统群发消息
+	%>
+	
+	<%}%>
+}
+</script>
+
+</html>

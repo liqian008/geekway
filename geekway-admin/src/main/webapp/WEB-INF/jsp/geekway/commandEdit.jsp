@@ -143,7 +143,7 @@
 					</div>
 					<div class="panel-body">
 						
-						<div class="form-group">
+						<%-- <div class="form-group">
 							<label class="col-sm-2 control-label text-right">关键词类型:
 							</label>
 							<div class="col-sm-3">
@@ -160,7 +160,21 @@
 								<input type="hidden" class="form-control" name="commandType" id="commandType" value="${commandType}"/>
 			                    <form:hidden path="command.id"/>
 							</div>
+						</div> --%>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">关键词类型: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+							<form:select path="command.commandType" class="select-liquid">
+								<form:option value="0"  label="文本关键字"/>
+								<form:option value="1"  label="菜单关键字"/>
+							</form:select>
+							<form:hidden path="command.id"/>
+							</div>
 						</div>
+						
 						
 						
 						<div class="form-group">
@@ -183,7 +197,15 @@
 							</div>
 						</div>
 						
-						<div class="form-group">
+						<div id="replyContentContainer" class="form-group" <%=command.getMaterialType()!=null&&command.getMaterialType()==0?"'":"style='display:none'"%>>
+							<label class="col-sm-2 control-label text-right">文本回复内容:
+							</label>
+							<div class="col-sm-8">
+								<textarea id="replyContent" name="replyContent" rows="3" cols="5" class="form-control" placeholder="上限100字">${command.replyContent}</textarea>
+							</div> 
+						</div>
+						
+						<div id="remarkContainer" class="form-group" <%=command.getMaterialType()!=null&&command.getMaterialType()==0?"style='display:none'":""%>>
 							<label class="col-sm-2 control-label text-right">备注:
 							</label>
 							<div class="col-sm-8">
@@ -238,7 +260,7 @@
 				</div>
 			</form>
 			
-			<!-- Modal with remote path -->
+			<!-- Modal -->
 			<div id="materialModal" class="modal fade" tabindex="-1" role="dialog">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
@@ -262,7 +284,8 @@
 						 -->
 					</div>
 				</div>
-			</div><!-- /modal with remote path -->
+			</div>
+			<!-- /modal -->
 			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 			
@@ -272,26 +295,32 @@
 	<!-- /page container -->
 </body>
 
+
+
 <script>
+
+<%
+int operation = 0;//匹配command
+%>
 $(".modal-trigger").click(function(){
 	var materialUrl = "";
 	var modalTitle = "请选择素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入文本内容";	
-		$("#materialIframe").attr("height", "200px");
-		materialUrl = "./pickTextMaterial";
+		$("#materialIframe").attr("height", "240px"); 
+		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择单图文素材";
-		materialUrl = "./pickArticleMaterial";
+		materialUrl = "./iframePickArticleMaterial?operation=<%=operation%>";
 	}else if(this.id=='newsMaterial'){
 		modalTitle = "请选择多图文素材";
-		materialUrl = "./pickNewsMaterial";
+		materialUrl = "./iframePickNewsMaterial?operation=<%=operation%>";
 	}else if(this.id=='imageMaterial'){
 		modalTitle = "请选择图片素材";
-		materialUrl = "./pickImageMaterial";
+		materialUrl = "./iframePickImageMaterial?operation=<%=operation%>";
 	}else if(this.id=='voiceMaterial'){
 		modalTitle = "请选择语音素材";
-		materialUrl = "./pickVoiceMaterial";
+		materialUrl = "./iframePickVoiceMaterial?operation=<%=operation%>";
 	}
 	$("#modalTitle").text(modalTitle);
 	$("#materialIframe").attr("src", materialUrl);

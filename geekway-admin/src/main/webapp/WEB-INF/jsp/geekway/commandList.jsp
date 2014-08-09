@@ -125,8 +125,8 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>关键词管理
 					</h5>
-					<a href="./commandAdd"><span class="label label-danger pull-right">增加菜单关键词</span></a>
-					<a href="./commandAdd"><span class="label label-info pull-right">增加文本关键词</span></a>
+					<a href="./menuCommandAdd"><span class="label label-danger pull-right">增加菜单关键词</span></a>
+					<a href="./textCommandAdd"><span class="label label-info pull-right">增加文本关键词</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">

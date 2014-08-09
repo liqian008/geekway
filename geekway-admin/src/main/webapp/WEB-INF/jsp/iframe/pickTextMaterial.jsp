@@ -51,78 +51,82 @@
 		<!-- Page content -->
 		<div class="page-content">
 			
-			
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>选择图片素材
-					</h5>
-				</div>
-				<div class="table-responsive">
-						<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>序号</th>
-                                <th>类型</th>
-                                <th>图片</th>
-                                <th>备注</th>
-                                <th>预览</th>
-                                <th class="team-links">操作</th> 
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMaterialMultimedia> materialImageList = (List<WxMaterialMultimedia>)request.getAttribute("materialImageList");
-                           	if(materialImageList!=null&&materialImageList.size()>0){
-                           		int i=0;
-                           		for(WxMaterialMultimedia materialImage: materialImageList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td>图片素材</td>
-		                        <td>
-	                        		<a href="<%=materialImage.getMediaUrl()%>" class="lightbox">
-		                        	<img src='<%=materialImage.getMediaUrl()%>' class="img-media"/>
-		                        	</a>
-		                        </td>
-		                        <td>
-		                        	<%=materialImage.getRemark()%>
-		                        </td>
-		                        <td>正常</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="javascript:pick(<%=materialImage.getId()%>, '<%=materialImage.getRemark()%>')" class="material-picker btn btn-link btn-icon btn-xs tip" title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+			<form id="textForm" role="form" action="#">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                <h6 class="panel-title"><i class="icon-page-break"></i>输入文本内容</h6></div>
+	                <div class="panel-body">
+				        <div class="form-group">
+				            <!-- <label>文本内容:</label> -->
+			            	<textarea id="text" rows="3" cols="5" name="message"
+									placeholder="请输入文本内容..."
+									class="elastic form-control required"></textarea>
+				        </div>
 
+                        <div class="form-actions text-right">
+                        	<a id="reset" class="btn btn-danger" href="javascript:void(0)">重 置</a>
+							<a id="submit" class="btn btn-primary" href="javascript:void(0)">确 认</a>
+                        </div>
+				    </div>
+				</div>
+			</form>
+			
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
 </body>
 
+
+<%
+Integer operation = (Integer)request.getAttribute("operation");
+%>
 <script>
-function pick(materialId, materialRemark){
-	if(confirm('确定要选择【'+materialRemark+'】的图片素材吗？')){
-		$('#materialType', parent.document).val(3);//图片类型
-		$('#materialId', parent.document).val(materialId);
-		$('#materialTypeDesc', parent.document).text("图片素材");
-		$('#remark', parent.document).text("素材名称: "+materialRemark);
-		
-		//操作iframe的父元素
-		$('#materialModal', parent.document).modal('hide');
-	}
-}
+$("#submit").click(function(){
+	var text = $("#text").val();
+	<%
+	if(operation==null){%>
+	
+	<%}else if(operation==0){//关联
+	%>
+		if(confirm('确定要使用文本【'+text+'】的作为回复内容吗？')){
+			$('#materialType', parent.document).val(0);//图文类型
+			$('#materialTypeDesc', parent.document).text("文本回复");
+			$('#remark', parent.document).text("文本回复: "+text);
+			
+			$('#replyContentContainer', parent.document).show();
+			$('#remarkContainer', parent.document).hide();
+			
+			//操作iframe的父元素
+			$('#materialModal', parent.document).modal('hide');
+		}
+	<%}else if(operation==1){//回复客服消息
+		String openId = (String)request.getAttribute("openId");
+		%>
+		if(confirm('确定要使用【'+text+'】的文本内容作为消息回复吗？')){
+			//ajax post
+			var replyData = {"text": text, 'openId': '<%=openId%>'};
+			$.post("${pageContext.request.contextPath}/geekway/mpReplyText.json", replyData, function(responseData) {
+    			var result = responseData.result;
+   				if(result==1){
+   					alert("客服消息回复成功，正在返回对话消息列表...");
+   				}else{
+   					alert("客服消息回复失败，正在返回对话消息列表...");
+   				}
+   				parent.location.reload();
+    		 }, "json");
+			
+		}
+	<%}else if(operation==2){//系统群发消息
+	%>
+	
+	<%}%>
+})
+
+$("#reset").click(function(){
+	$("#textForm")[0].reset();
+});
 </script>
 
 </html>
+

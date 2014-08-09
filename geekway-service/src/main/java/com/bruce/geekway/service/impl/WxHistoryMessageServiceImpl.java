@@ -12,8 +12,10 @@ import com.bruce.geekway.dao.mapper.WxHistoryMessageMapper;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
 import com.bruce.geekway.model.wx.message.CustomMessage;
+import com.bruce.geekway.model.wx.message.ImageMessage;
 import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.TextMessage;
+import com.bruce.geekway.model.wx.message.VoiceMessage;
 import com.bruce.geekway.model.wx.request.BaseRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationRequest;
@@ -24,6 +26,7 @@ import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxHistoryMessageService;
+import com.bruce.geekway.utils.JsonUtil;
 
 /**
  * 微信历史消息（需要记录接入消息与回复消息）
@@ -160,11 +163,11 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 	 * 记录客服回复给用户的微信消息(replyType=1)
 	 * @return
 	 */
-	public int logCustomReplyMessage(CustomMessage customMessage, String fullMessage){
+	public int logCustomReplyMessage(CustomMessage customMessage){
 		if(customMessage!=null){
 			WxHistoryMessage message = new WxHistoryMessage();
 			message.setReplyType((short) 1);
-			message.setFullMessage(fullMessage);
+			message.setFullMessage(JsonUtil.gson.toJson(customMessage));
 			message.setOpenId(customMessage.getTouser());
 			message.setInbox((short) 1);
 			Date currentTime = new Date();
@@ -173,21 +176,24 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 			if(customMessage instanceof TextMessage){//文本回复
 				message.setMsgType("text");
 				message.setContent(((TextMessage)customMessage).getText().getContent());
-			}else if(customMessage instanceof NewsMessage){//客服回复文本
+			}else if(customMessage instanceof NewsMessage){//客服回复图文
 				message.setMsgType("news");
-				message.setContent("客服回复了一条图文消息");
-			}
-			
-			//以下消息类型暂时不支持
-			/*
-			else if(customMessage instanceof ImageMessage){//客服回复图文
+				if(((NewsMessage) customMessage).getNews().getArticles().size()>1){
+					message.setContent("客服回复了一条多图文消息");
+				}else{
+					message.setContent("客服回复了一条单图文消息");
+				}
+			}else if(customMessage instanceof ImageMessage){//客服回复图片
 				message.setMsgType("image");
 				message.setContent("客服回复了一条图片消息");
 				message.setMediaId(((ImageMessage)customMessage).getImage().getMedia_id());
 			}else if(customMessage instanceof VoiceMessage){//客服回复语音
 				message.setMsgType("voice");
 				message.setContent("客服回复了一条语音消息");
-				message.setMediaId(((VoiceMessage)customMessage).getMedia_id());
+				message.setMediaId(((VoiceMessage)customMessage).getVoice().getMedia_id());
+			}
+			//以下消息类型暂时不支持
+			/*
 			}else if(customMessage instanceof VideoMessage){//客服回复视频
 				message.setMsgType("video");
 				message.setContent("客服回复了一条视频消息");

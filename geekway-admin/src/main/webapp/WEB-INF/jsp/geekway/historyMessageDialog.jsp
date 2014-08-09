@@ -86,19 +86,22 @@
 			</div>
 			<!-- /breadcrumbs line -->
 
-			<%
-			List<WxHistoryMessage> userMessageList = (List<WxHistoryMessage>)request.getAttribute("userMessageList");
-			if(userMessageList!=null&&userMessageList.size()>0){
-			%>
+			
 			<div class="tabbable page-tabs">
-				<ul class="nav nav-tabs">
+				<%-- <ul class="nav nav-tabs">
 					<li class="active"><a href="javascript:void(0)" data-toggle="tab">
 						<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
 							class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
-				</ul> 
-			
+				</ul>  --%>
+				<%
+				//检查客服消息的时间间隔
+				Boolean customReply = (Boolean)request.getAttribute("customReply");
+				String openId = (String)request.getAttribute("openId");
+				if(customReply!=null&&customReply){
+				%>
+				
 				<form id="validate" action="<s:url value='./mpReplyText'/>" method="post"  class="form-horizontal form-bordered">
-					<input type="hidden" name="openId" value="1"/>
+					<input type="hidden" name="openId" value="<%=openId%>"/>
 					<!-- 
 					<textarea name="text" class="form-control" rows="3"
 						cols="1" placeholder="请输入文本内容进行回复..."></textarea>
@@ -146,19 +149,18 @@
 						</div>
 					</div>								
 				</form>
-			
-
+				<%}%>
+				
+				
+				<%
+				List<WxHistoryMessage> userMessageList = (List<WxHistoryMessage>)request.getAttribute("userMessageList");
+				if(userMessageList!=null&&userMessageList.size()>0){
+				%>
 				<div class="block">
 					<ul class="message-list">
 						<li>
 							<div class="panel-collapse collapse in" id="duke_aaron" style="height: auto;">
-								<%
-								//检查客服消息的时间间隔
-								Boolean customReply = (Boolean)request.getAttribute("customReply");
-								String openId = (String)request.getAttribute("openId");
-								if(customReply!=null&&customReply){
-								%>
-								<%}%>
+								
 								<div class="chat">
 								<%
 								for(WxHistoryMessage userHistoryMessage: userMessageList){
@@ -193,8 +195,9 @@
 						</li>
 					</ul>
 				</div>
+				<%}%>
 			</div>
-			<%}%>
+			
 			
 			
 			
@@ -228,25 +231,28 @@
 </body>
 
 <script>
+<%
+int operation = 1;//发送客服消息
+%>
 $(".modal-trigger").click(function(){
 	var materialUrl = "";
 	var modalTitle = "请选择要回复的素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入要回复的文本内容";	
-		$("#materialIframe").attr("height", "200px");
-		materialUrl = "./pickTextMaterial";
+		$("#materialIframe").attr("height", "240px");
+		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>&openId=<%=openId%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择要回复的单图文";
-		materialUrl = "./pickArticleMaterial";
+		materialUrl = "./iframePickArticleMaterial?operation=<%=operation%>&openId=<%=openId%>";
 	}else if(this.id=='newsMaterial'){
 		modalTitle = "请选择要回复的多图文";
-		materialUrl = "./pickNewsMaterial";
+		materialUrl = "./iframePickNewsMaterial?operation=<%=operation%>&openId=<%=openId%>";
 	}else if(this.id=='imageMaterial'){
 		modalTitle = "请选择要回复的图片";
-		materialUrl = "./pickImageMaterial";
+		materialUrl = "./iframePickImageMaterial?operation=<%=operation%>&openId=<%=openId%>";
 	}else if(this.id=='voiceMaterial'){
 		modalTitle = "请选择要回复的语音";
-		materialUrl = "./pickVoiceMaterial";
+		materialUrl = "./iframePickVoiceMaterial?operation=<%=operation%>&openId=<%=openId%>";
 	}
 	$("#modalTitle").text(modalTitle);
 	$("#materialIframe").attr("src", materialUrl);

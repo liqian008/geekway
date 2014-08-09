@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialMultimedia;
+import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.CustomMessage;
 import com.bruce.geekway.model.wx.message.ImageMessage;
@@ -20,9 +22,12 @@ import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.NewsMessage.News;
 import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.model.wx.message.VoiceMessage;
+import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialMultimediaService;
 import com.bruce.geekway.service.mp.WxCustomReplyService;
+import com.bruce.geekway.utils.JsonResultBuilderUtil;
+import com.bruce.geekway.utils.JsonUtil;
 
 /**
  * 客服消息管理，目前仅支持文本、单图文、多图文三种方式
@@ -39,56 +44,61 @@ public class GeekwayMpReplyController {
 	private IWxMaterialMultimediaService wxMaterialMultimediaService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
+	@Autowired
+	private IWxHistoryMessageService wxHistoryMessageService;
 	
-	@RequestMapping("/mpReplyText") 
-	public String mpReplyText(Model model, HttpServletRequest request, String openId, String text) {
-		
+	@ResponseBody
+	@RequestMapping("/mpReplyText.json")
+	public JsonResultBean mpReplyText(Model model, HttpServletRequest request, String openId, String text) {
 		if(!StringUtils.isBlank(openId)&&!StringUtils.isBlank(text)){
 			TextMessage textMessage = new TextMessage();
 			textMessage.touser = openId;
 			textMessage.addContent(text);
 			//发送客服消息
-			WxJsonResult sendResult = wxCustomReplyService.replyTextMessage(textMessage);
-			if(sendResult!=null){
-				
+			WxJsonResult replyResult = new WxJsonResult();//wxCustomReplyService.replyTextMessage(textMessage);
+			replyResult.setErrcode(0);
+			if(replyResult!=null&&replyResult.getErrcode()!=null&&replyResult.getErrcode()==0){
+				return JsonResultBuilderUtil.buildSuccessJson();
 			}
 		}
-		model.addAttribute("redirectUrl", "./historyMessageDialog?openId="+openId);
-		return "forward:/home/operationRedirect";
+		return JsonResultBuilderUtil.buildErrorJson();
 	}
 	
-	@RequestMapping("/mpReplyArticle") 
-	public String mpReplyArticle(Model model, HttpServletRequest request, String toOpenId, int materialArticleId) {
-		return mpReplyMaterial(model, request, toOpenId, (short) 1,  materialArticleId);
+	@ResponseBody
+	@RequestMapping("/mpReplyArticle.json") 
+	public JsonResultBean mpReplyArticle(Model model, HttpServletRequest request, String openId, int materialId) {
+		return mpReplyMaterial(model, request, openId, (short) 1,  materialId);
 	}
 	
-	@RequestMapping("/mpReplyNews") 
-	public String mpReplyNews(Model model, HttpServletRequest request, String toOpenId, int materialNewsId) {
-		return mpReplyMaterial(model, request, toOpenId, (short) 2,  materialNewsId);
+	@ResponseBody
+	@RequestMapping("/mpReplyNews.json") 
+	public JsonResultBean mpReplyNews(Model model, HttpServletRequest request, String openId, int materialId) {
+		return mpReplyMaterial(model, request, openId, (short) 2,  materialId);
 	}
 	
-	@RequestMapping("/mpReplyImage") 
-	public String mpReplyImage(Model model, HttpServletRequest request, String toOpenId, int materialImageId) {
-		return mpReplyMaterial(model, request, toOpenId, (short) 3, materialImageId);
+	@ResponseBody
+	@RequestMapping("/mpReplyImage.json") 
+	public JsonResultBean mpReplyImage(Model model, HttpServletRequest request, String openId, int materialId) {
+		return mpReplyMaterial(model, request, openId, (short) 3, materialId);
 	}
 	
-	@RequestMapping("/mpReplyVoice") 
-	public String mpReplyVoice(Model model, HttpServletRequest request, String toOpenId, int materialVoiceId) {
-		return mpReplyMaterial(model, request, toOpenId, (short) 4, materialVoiceId);
+	@ResponseBody
+	@RequestMapping("/mpReplyVoice.json") 
+	public JsonResultBean mpReplyVoice(Model model, HttpServletRequest request, String openId, int materialId) {
+		return mpReplyMaterial(model, request, openId, (short) 4, materialId);
 	}
 	
 	/**
 	 * 使用素材库中的素材进行回复
 	 * @param model
 	 * @param request
-	 * @param toOpenId
+	 * @param openId
 	 * @param materialType
 	 * @param materialId
 	 * @return
 	 */
-	private String mpReplyMaterial(Model model, HttpServletRequest request, String toOpenId, short materialType, int materialId) {
-		String redirectUrl = "";
-		if(!StringUtils.isBlank(toOpenId)){
+	private JsonResultBean mpReplyMaterial(Model model, HttpServletRequest request, String openId, short materialType, int materialId) {
+		if(!StringUtils.isBlank(openId)){
 			CustomMessage replyMessage = null;
 			if(materialType==1){//单图文
 				//构造单图文消息对象
@@ -97,7 +107,9 @@ public class GeekwayMpReplyController {
 					replyMessage = new NewsMessage();
 					((NewsMessage)replyMessage).setMsgtype("news");
 					News news = new News();
-					news.addArticle(materialArticle.getTitle(), materialArticle.getShortContent(), "", materialArticle.getCoverThumbImageUrl());
+					//TODO 
+					String url = "";
+					news.addArticle(materialArticle.getTitle(), materialArticle.getShortContent(), url, materialArticle.getCoverThumbImageUrl());
 					((NewsMessage)replyMessage).setNews(news);
 				}
 			}else if(materialType==2){//多图文
@@ -108,7 +120,9 @@ public class GeekwayMpReplyController {
 					((NewsMessage)replyMessage).setMsgtype("news");
 					News news = new News();
 					for(WxMaterialArticle article: articleList){
-						news.addArticle(article.getTitle(), article.getShortContent(), "", article.getCoverThumbImageUrl());
+						//TODO 
+						String url = "";
+						news.addArticle(article.getTitle(), article.getShortContent(), url, article.getCoverThumbImageUrl());
 					}
 					((NewsMessage)replyMessage).setNews(news);
 				}
@@ -132,17 +146,16 @@ public class GeekwayMpReplyController {
 			}
 			
 			if(replyMessage!=null){
-				replyMessage.touser = toOpenId;
+				replyMessage.touser = openId;
 				//发送客服消息
-				WxJsonResult sendResult = wxCustomReplyService.replyMessage(replyMessage);
-				if(sendResult!=null){
-					redirectUrl = "";
+				WxJsonResult replyResult = new WxJsonResult();//wxCustomReplyService.replyMessage(replyMessage);
+				replyResult.setErrcode(0);
+				if(replyResult!=null&&replyResult.getErrcode()!=null&&replyResult.getErrcode()==0){
+					return JsonResultBuilderUtil.buildSuccessJson();
 				}
-				
 			}
 		}
-		model.addAttribute("redirectUrl", redirectUrl);
-		return "forward:/home/operationRedirect";
+		return JsonResultBuilderUtil.buildErrorJson();
 	}
 	
 }
