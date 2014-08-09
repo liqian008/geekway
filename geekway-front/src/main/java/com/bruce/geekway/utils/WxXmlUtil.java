@@ -16,6 +16,7 @@ import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 public class WxXmlUtil {
@@ -290,12 +291,12 @@ public class WxXmlUtil {
 	 * @return
 	 * @throws DocumentException
 	 */
-//	public static Element getRespImage(WxRespImageEntity respImage) throws DocumentException {
-//		Element ele = respEntityFactory(respImage);
-//		Element imageEle = ele.addElement("Image");
-//		imageEle.addElement("MediaId").addCDATA(respImage.getImage().getMediaId());
-//		return ele;
-//	}
+	public static Element buildImageResponse(ImageResponse imageResponse) throws DocumentException {
+		Element ele = buildBaseResponse(imageResponse);
+		Element imageNodeEle = ele.addElement("Image");
+		imageNodeEle.addElement("MediaId").addCDATA(imageResponse.getMediaId());
+		return ele;
+	}
 	
 	/**
 	 * <code>

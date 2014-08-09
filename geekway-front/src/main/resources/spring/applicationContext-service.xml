@@ -21,6 +21,12 @@
 	<bean id="materialArticleService" class="com.bruce.geekway.service.impl.WxMaterialArticleServiceImpl">
 		<property name="wxMaterialArticleMapper" ref="wxMaterialArticleMapper"></property>
 	</bean>
+	<bean id="materialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
+		<property name="wxMaterialNewsMapper" ref="wxMaterialNewsMapper"></property>
+	</bean>
+	<bean id="materialMultimediaService" class="com.bruce.geekway.service.impl.WxMaterialMultimediaServiceImpl">
+		<property name="wxMaterialMultimediaMapper" ref="wxMaterialMultimediaMapper"></property>
+	</bean>
 	<!-- 本地MpUserService -->
 	<bean id="mpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">
 		<property name="wxMpUserMapper" ref="wxMpUserMapper"></property>
@@ -36,7 +42,6 @@
 	<!-- weixin web oauth -->
 	<bean id="mpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
 	</bean>
-	
 	
 	
 	<!-- upload service -->

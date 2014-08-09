@@ -114,7 +114,8 @@
 	<bean id="keycodeCmsProcessor" class="com.bruce.geekway.handler.processor.CommandCmsProcessor">
 		<property name="commandService" ref="commandService"></property>
 		<property name="materialArticleService" ref="materialArticleService"></property> 
-		<!-- <property name="materialNewsService" ref="materialNewsService"></property>  -->
+		<property name="materialNewsService" ref="materialNewsService"></property>
+		<property name="materialMultimediaService" ref="materialMultimediaService"></property>
 		
 		<!-- 
 		<property name="eventCodeService" ref="eventCodeService"></property>

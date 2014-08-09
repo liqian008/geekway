@@ -19,6 +19,7 @@ import com.bruce.geekway.model.wx.request.LocationEventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxBroadcastService;
@@ -183,10 +184,10 @@ public class MessageHandler {
 		case TEXT:
 			responseStr = WxXmlUtil.buildTextResponse((TextResponse) wxResponse).asXML();
 			break;
-			
+		case IMAGE:
+			responseStr = WxXmlUtil.buildImageResponse((ImageResponse) wxResponse).asXML();
+			break;
 			// 以下功能暂不支持
-			// case IMAGE:
-			// return WxXmlUtil.getRespImage((WxRespImageEntity) resp);
 			// case MUSIC:
 			// return WxXmlUtil.getRespMusic((WxRespMusicEntity) resp,
 			// ((WxRespMusicEntity) resp).getThumb());

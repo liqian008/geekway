@@ -59,7 +59,7 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 	}
 	
 	@Override
-	protected BaseResponse processFirstSubscribeEventRequest(EventRequest request) {
+	protected BaseResponse processNewSubscribeEventRequest(EventRequest request) {
 		if(defaultReply!=null){
 			return textReply(request, defaultReply.getNewSubscribeReply());
 		}
@@ -67,7 +67,7 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 	}
 	
 	@Override
-	protected BaseResponse processRepeatSubscribeEventRequest(EventRequest request) {
+	protected BaseResponse processReSubscribeEventRequest(EventRequest request) {
 		if(defaultReply!=null){
 			return textReply(request, defaultReply.getReSubscribeReply());
 		}
