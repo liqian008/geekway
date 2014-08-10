@@ -84,8 +84,6 @@
 			Boolean isSenior = (Boolean)request.getAttribute("isSenior");
 			%>
 			
-			<%if(isSenior!=null&&isSenior){
-			%>
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
@@ -102,7 +100,10 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>群发消息管理
 					</h5>
-					<a href="./broadcastAdd"><span class="label label-danger pull-right">群发消息</span></a>
+					<a id="imageMaterial" class="modal-trigger" href="javascript:void(0)"><span class="label label-primary pull-right">群发图片消息</span></a>
+					<a id="newsMaterial"  class="modal-trigger" href="javascript:void(0)"><span class="label label-danger pull-right">群发多图文消息</span></a>
+					<a id="articleMaterial"  class="modal-trigger" href="javascript:void(0)"><span class="label label-info pull-right">群发单图文消息</span></a>
+					<a id="textMaterial"  class="modal-trigger" href="javascript:void(0)"><span class="label label-success pull-right">群发文本消息</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -148,16 +149,31 @@
 			</div>
 			<!-- /table view -->
 			
-			<%}else{%>
-				<div class="callout callout-danger fade in">
+			<!-- <div class="callout callout-danger fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>抱歉：</h5>
 				<p> 
 					1、该接口暂时仅提供给已微信认证的服务号，您可以访问<a href="http://mp.weixin.qq.com/" target="_blank">微信公众平台系统</a>，使用其中的群发功能。<br/>
 				</p>
-			</div>
-			<%} %>
+			</div> -->
 			
+			
+			<!-- Modal -->
+			<div id="materialModal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="modalTitle"><i class="icon-accessibility"></i>请选择素材</h4>
+						</div>
+						<div class="modal-body with-padding">
+							<iframe id="materialIframe" src="./modalTest" width="100%" height="360px" frameborder="no" border="0" allowtransparency="yes"></iframe>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /modal -->
 			
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -166,5 +182,35 @@
 	</div>
 	<!-- /page container -->
 </body>
+
+<script>
+<%
+int operation = 2;//匹配command
+%>
+$(".modal-trigger").click(function(){
+	var materialUrl = "";
+	var modalTitle = "请选择素材";
+	if(this.id=='textMaterial'){
+		modalTitle = "请输入文本内容";	
+		$("#materialIframe").attr("height", "240px");
+		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>";
+	}else if(this.id=='articleMaterial'){
+		modalTitle = "请选择单图文素材";
+		materialUrl = "./iframePickArticleMaterial?operation=<%=operation%>";
+	}else if(this.id=='newsMaterial'){
+		modalTitle = "请选择多图文素材";
+		materialUrl = "./iframePickNewsMaterial?operation=<%=operation%>";
+	}else if(this.id=='imageMaterial'){
+		modalTitle = "请选择图片素材";
+		materialUrl = "./iframePickImageMaterial?operation=<%=operation%>";
+	}else if(this.id=='voiceMaterial'){
+		modalTitle = "请选择语音素材";
+		materialUrl = "./iframePickVoiceMaterial?operation=<%=operation%>";
+	}
+	$("#modalTitle").text(modalTitle);
+	$("#materialIframe").attr("src", materialUrl);
+	$("#materialModal").modal();
+})
+</script>
 </html>
 

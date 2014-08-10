@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.wx.WxBroadcastTypeEnum;
 import com.bruce.geekway.model.wx.json.WxBroadcastInfo;
+import com.bruce.geekway.model.wx.json.WxGroupInfo;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
@@ -59,16 +60,17 @@ public class WxMpBroadcastService extends WxBaseService {
 	 * @return
 	 */
 	private WxBroadcastResult broadcastMessage(WxBroadcastTypeEnum broadcastTypeEnum, String content, String mediaId) {
-		if(mediaId!=null){
-			String accessToken = mpTokenService.getMpAccessToken();
-			Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
-			
-			WxBroadcastInfo broadcastInfo = new WxBroadcastInfo(broadcastTypeEnum, content, mediaId);
-			
-			String broadcastResultStr = WxHttpUtil.postRequest(WX_BROADCAST_API, params,  JsonUtil.gson.toJson(broadcastInfo));
-			WxBroadcastResult broadcastResult = JsonUtil.gson.fromJson(broadcastResultStr,  WxBroadcastResult.class);
-			return broadcastResult;
-		}return null;
+		String accessToken = mpTokenService.getMpAccessToken();
+		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		
+		WxBroadcastInfo broadcastInfo = new WxBroadcastInfo(broadcastTypeEnum, content, mediaId);
+		
+		WxBroadcastInfo.FilterGroup filterGroup = new WxBroadcastInfo.FilterGroup();
+		filterGroup.setGroup_id(0);
+		broadcastInfo.setFilter(filterGroup);
+		String broadcastResultStr = WxHttpUtil.postRequest(WX_BROADCAST_API, params,  JsonUtil.gson.toJson(broadcastInfo));
+		WxBroadcastResult broadcastResult = JsonUtil.gson.fromJson(broadcastResultStr,  WxBroadcastResult.class);
+		return broadcastResult;
 	}
 	
 	

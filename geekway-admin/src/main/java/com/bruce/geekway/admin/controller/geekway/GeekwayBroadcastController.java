@@ -122,9 +122,9 @@ public class GeekwayBroadcastController {
 				return JsonResultBuilderUtil.buildErrorJson(ErrorCode.WX_BROADCAST_OVERLOAD);
 			}else{
 				if(materialType==0){//群发文本
-					wxBroadcastService.broadcastMaterialArticle(materialId);
+					wxBroadcastService.broadcastMaterialText(content);
 				}else if(materialType==1){//群发单图文
-					wxBroadcastService.broadcastMaterialNews(materialId);
+					wxBroadcastService.broadcastMaterialArticle(materialId);
 				}else if(materialType==2){//群发多图文
 					wxBroadcastService.broadcastMaterialNews(materialId);
 				}else if(materialType==3){//群发图片

@@ -26,9 +26,6 @@ public class WxUserGroupService extends WxBaseService {
 	private static final String WX_GROUPNAME_UPDATE_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
 	private static final String WX_USER_GROUP_MOVE_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
 	
-	
-	
-	
 	@Autowired
 	private WxMpTokenService mpTokenService;
 

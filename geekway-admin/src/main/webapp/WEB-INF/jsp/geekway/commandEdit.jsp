@@ -304,7 +304,6 @@ $(".modal-trigger").click(function(){
 	$("#materialIframe").attr("src", materialUrl);
 	$("#materialModal").modal();
 })
-
 </script>
 
 </html>
