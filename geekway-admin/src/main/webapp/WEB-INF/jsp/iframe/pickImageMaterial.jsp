@@ -148,8 +148,21 @@ function pick(materialId, materialRemark){
 			
 		}
 	<%}else if(operation==2){//系统群发消息
-	%>
-	
+		%>
+		if(confirm('确定要群发图片消息【'+materialRemark+'】吗？')){
+			//ajax post
+			var broadcastData = {"materialId": materialId};
+			$.post("${pageContext.request.contextPath}/geekway/mpBroadcastImage.json", broadcastData, function(responseData) {
+    			var result = responseData.result;
+   				if(result==1){
+   					alert("图片消息群发成功，正在返回对话群发列表页面...");
+   				}else{
+   					alert("图片消息群发失败，正在返回对话群发列表页面...");
+   	   			}
+   				parent.location.reload();
+    		 }, "json");
+			
+		}
 	<%}%>
 }
 </script>

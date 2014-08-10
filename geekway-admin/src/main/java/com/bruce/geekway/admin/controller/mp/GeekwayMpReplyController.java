@@ -26,8 +26,8 @@ import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialMultimediaService;
 import com.bruce.geekway.service.mp.WxCustomReplyService;
+import com.bruce.geekway.utils.ArticleLinkUtil;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
-import com.bruce.geekway.utils.JsonUtil;
 
 /**
  * 客服消息管理，目前仅支持文本、单图文、多图文三种方式
@@ -55,7 +55,7 @@ public class GeekwayMpReplyController {
 			textMessage.touser = openId;
 			textMessage.addContent(text);
 			//发送客服消息
-			WxJsonResult replyResult = new WxJsonResult();//wxCustomReplyService.replyTextMessage(textMessage);
+			WxJsonResult replyResult = wxCustomReplyService.replyTextMessage(textMessage);
 			replyResult.setErrcode(0);
 			if(replyResult!=null&&replyResult.getErrcode()!=null&&replyResult.getErrcode()==0){
 				return JsonResultBuilderUtil.buildSuccessJson();
@@ -103,32 +103,29 @@ public class GeekwayMpReplyController {
 			if(materialType==1){//单图文
 				//构造单图文消息对象
 				WxMaterialArticle materialArticle = wxMaterialArticleService.loadById(materialId);
-				if(materialArticle!=null){//TODO 数据有效
+				if(materialArticle!=null){//TODO 检查数据有效性
 					replyMessage = new NewsMessage();
 					((NewsMessage)replyMessage).setMsgtype("news");
 					News news = new News();
-					//TODO 
-					String url = "";
-					news.addArticle(materialArticle.getTitle(), materialArticle.getShortContent(), url, materialArticle.getCoverThumbImageUrl());
+					news.addArticle(materialArticle.getTitle(), materialArticle.getShortContent(),  ArticleLinkUtil.getArticleLink(materialArticle.getId()), materialArticle.getCoverThumbImageUrl());
 					((NewsMessage)replyMessage).setNews(news);
 				}
 			}else if(materialType==2){//多图文
 				//构造单图文消息对象
 				List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(materialId, 10);
-				if(articleList!=null && articleList.size()>0){//TODO 数据有效
+				if(articleList!=null && articleList.size()>0){//TODO 检查数据有效性
 					replyMessage = new NewsMessage();
 					((NewsMessage)replyMessage).setMsgtype("news");
 					News news = new News();
 					for(WxMaterialArticle article: articleList){
-						//TODO 
-						String url = "";
+						String url = ArticleLinkUtil.getArticleLink(article.getId());
 						news.addArticle(article.getTitle(), article.getShortContent(), url, article.getCoverThumbImageUrl());
 					}
 					((NewsMessage)replyMessage).setNews(news);
 				}
 			}else if(materialType==3){//图片素材
 				WxMaterialMultimedia materialImage = wxMaterialMultimediaService.loadById(materialId);
-				if(materialImage!=null){//TODO 数据有效
+				if(materialImage!=null){//TODO 检查数据有效性
 					//构造图片消息对象
 					replyMessage = new ImageMessage();
 					((ImageMessage)replyMessage).setMsgtype("image");
@@ -137,7 +134,7 @@ public class GeekwayMpReplyController {
 				
 			}else if(materialType==4){//语音素材
 				WxMaterialMultimedia materialImage = wxMaterialMultimediaService.loadById(materialId);
-				if(materialImage!=null){//TODO 数据有效
+				if(materialImage!=null){//TODO 检查数据有效性
 					//构造语音消息对象
 					replyMessage = new VoiceMessage();
 					((VoiceMessage)replyMessage).setMsgtype("voice");
@@ -148,7 +145,7 @@ public class GeekwayMpReplyController {
 			if(replyMessage!=null){
 				replyMessage.touser = openId;
 				//发送客服消息
-				WxJsonResult replyResult = new WxJsonResult();//wxCustomReplyService.replyMessage(replyMessage);
+				WxJsonResult replyResult = wxCustomReplyService.replyMessage(replyMessage);
 				replyResult.setErrcode(0);
 				if(replyResult!=null&&replyResult.getErrcode()!=null&&replyResult.getErrcode()==0){
 					return JsonResultBuilderUtil.buildSuccessJson();

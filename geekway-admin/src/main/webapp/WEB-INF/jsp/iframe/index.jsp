@@ -51,67 +51,21 @@
 		<!-- Page content -->
 		<div class="page-content">
 			
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>选择单图文素材
-					</h5>
+			<form id="textForm" role="form" action="#">
+	            <div class="panel panel-default">
+	                <div class="panel-heading">
+	                <h6 class="panel-title"><i class="icon-page-break"></i>输入文本内容</h6></div>
+	                <div class="panel-body">
+				        <div class="form-group">
+				            <!-- <label>文本内容:</label> -->
+			            	<textarea id="text" rows="3" cols="5" name="message"
+									placeholder="请输入文本内容..."
+									class="elastic form-control required"></textarea>
+				        </div>
+				    </div>
 				</div>
-				<div class="table-responsive">
-						<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>序号</th>
-                                <th>类型</th>
-                                <th>封面</th>
-                                <th>内容</th>
-                                <th>预览</th>
-                                <th>状态</th>
-                                <th class="team-links">操作</th> 
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMaterialArticle> materialArticleList = (List<WxMaterialArticle>)request.getAttribute("materialArticleList");
-                           	if(materialArticleList!=null&&materialArticleList.size()>0){
-                           		int i=0;
-                           		for(WxMaterialArticle materialArticle: materialArticleList){
-                           			i++;
-                           	%>
-							<tr>
-								<td><%=i%></td>
-								<td>单图文</td>
-								<td><a href="<%=materialArticle.getCoverImageUrl()%>"
-									class="lightbox"> <img
-										src='<%=materialArticle.getCoverImageUrl()%>'
-										class="img-media" />
-								</a></td>
-								<td><%=materialArticle.getShortContent()%></td>
-								<td>
-									<%
-									String meterialLink = ArticleLinkUtil.getArticleLink(materialArticle.getId());
-									%>
-									<a href="<%=meterialLink%>" target="_blank">预览</a>
-								</td>
-								<td>正常</td>
-								<td class='text-center'>
-									<div class="table-controls">
-										<a
-											href="javascript:pick(<%=materialArticle.getId()%>, '<%=materialArticle.getShortContent()%>')"
-											class="material-picker btn btn-link btn-icon btn-xs tip"
-											title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
-									</div>
-								</td>
-							</tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
-
+			</form>
+			
 		</div>
 		<!-- /page content -->
 	</div>
@@ -123,20 +77,22 @@
 Integer operation = (Integer)request.getAttribute("operation");
 %>
 <script>
-function pick(materialId, materialRemark){
+$("#submit").click(function(){
+	var text = $("#text").val();
 	<%
 	if(operation==null){%>
 	
 	<%}else if(operation==0){//关联
 	%>
-		if(confirm('确定要选择【'+materialRemark+'】的单图文素材吗？')){
-			$('#materialType', parent.document).val(1);//图文类型
-			$('#materialId', parent.document).val(materialId);
-			$('#materialTypeDesc', parent.document).text("单图文素材");
-			$('#remark', parent.document).text("单图文素材名称: "+materialRemark);
+		if(confirm('确定要使用文本【'+text+'】的作为回复内容吗？')){
+			$('#materialType', parent.document).val(0);//图文类型
+			$('#materialTypeDesc', parent.document).text("文本回复");
+			$('#remark', parent.document).text("文本回复: "+text);
 			
-			$('#replyContentContainer', parent.document).hide();
-			$('#remarkContainer', parent.document).show();
+			$('#replyContent', parent.document).val(text);
+			$('#replyContentContainer', parent.document).show();
+			
+			$('#remarkContainer', parent.document).hide();
 			
 			//操作iframe的父元素
 			$('#materialModal', parent.document).modal('hide');
@@ -144,10 +100,10 @@ function pick(materialId, materialRemark){
 	<%}else if(operation==1){//回复客服消息
 		String openId = (String)request.getAttribute("openId");
 		%>
-		if(confirm('确定要使用【'+materialRemark+'】的单图文素材作为消息回复吗？')){
+		if(confirm('确定要使用【'+text+'】的文本内容作为消息回复吗？')){
 			//ajax post
-			var replyData = {"materialId": materialId, 'openId': '<%=openId%>'};
-			$.post("${pageContext.request.contextPath}/geekway/mpReplyArticle.json", replyData, function(responseData) {
+			var replyData = {"text": text, 'openId': '<%=openId%>'};
+			$.post("${pageContext.request.contextPath}/geekway/mpReplyText.json", replyData, function(responseData) {
     			var result = responseData.result;
    				if(result==1){
    					alert("客服消息回复成功，正在返回对话消息列表...");
@@ -155,27 +111,31 @@ function pick(materialId, materialRemark){
    					alert("客服消息回复失败，正在返回对话消息列表...");
    				}
    				parent.location.reload();
-    		 }, "json"); 
+    		 }, "json");
 			
 		}
 	<%}else if(operation==2){//系统群发消息
 		%>
-		if(confirm('确定要群发单图文消息【'+materialRemark+'】吗？')){
+		if(confirm('确定要群发文本消息【'+text+'】吗？')){
 			//ajax post
-			var broadcastData = {"materialId": materialId};
-			$.post("${pageContext.request.contextPath}/geekway/mpBroadcastArticle.json", broadcastData, function(responseData) {
+			var broadcastData = {"content": text};
+			$.post("${pageContext.request.contextPath}/geekway/mpBroadcastText.json", broadcastData, function(responseData) {
     			var result = responseData.result;
    				if(result==1){
-   					alert("单图文消息群发成功，正在返回对话群发列表页面...");
+   					alert("文本消息群发成功，正在返回对话群发列表页面...");
    				}else{
-   					alert("单图文消息群发失败，正在返回对话群发列表页面...");
+   					alert("文本消息群发失败，正在返回对话群发列表页面...");
    	   			}
    				parent.location.reload();
     		 }, "json");
 			
 		}
 	<%}%>
-}
+})
+
+$("#reset").click(function(){
+	$("#textForm")[0].reset();
+});
 </script>
 
 </html>

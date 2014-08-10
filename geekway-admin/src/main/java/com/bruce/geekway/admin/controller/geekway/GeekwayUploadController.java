@@ -1,5 +1,6 @@
 package com.bruce.geekway.admin.controller.geekway;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.IUploadService;
 import com.bruce.geekway.service.mp.WxMediaUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
+import com.bruce.geekway.utils.UploadUtil;
 
 @Controller
 @RequestMapping("/geekway")
@@ -87,7 +89,7 @@ public class GeekwayUploadController extends BaseController{
 		int userId = userDetail.getUserId();
 		try {
 			UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());
-			WxMediaUploadResult uploadResult = wxMediaUploadService.uploadImage(mediaFile.getBytes());
+//			WxMediaUploadResult uploadResult = wxMediaUploadService.uploadImage(mediaFile.getBytes());
 //		System.out.println("contentType: "+mediaFile.getContentType());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -100,19 +102,28 @@ public class GeekwayUploadController extends BaseController{
 	/**
 	 * 上传微信语音素材(需返回mediaId)
 	 * @param model
-	 * @param mediaFile
+	 * @param thumbImage
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/wxMediaFileUpload", method = RequestMethod.POST)
-	public JsonResultBean wxMediaFileUpload(Model model, @RequestParam("mediaFile") CommonsMultipartFile mediaFile) {
+	@RequestMapping(value = "/wxThumbUpload", method = RequestMethod.POST)
+	public JsonResultBean wxMediaFileUpload(Model model, @RequestParam("thumbImage") CommonsMultipartFile thumbImage) {
 		WebUserDetails userDetail = getUserInfo();
 		int userId = userDetail.getUserId();
-//		UploadImageResult imageUploadResult = uploadService.uploadImage(mediaFile.getBytes(), userId, mediaFile.getOriginalFilename());
-		System.out.println("contentType: "+mediaFile.getContentType());
+		UploadImageResult imageUploadResult;
+		try {
+			imageUploadResult = uploadService.uploadImage(thumbImage.getBytes(), userId, thumbImage.getOriginalFilename());
 		
-		WxMediaUploadResult uploadResult = wxMediaUploadService.uploadImage(mediaFile.getBytes());
-
+			if(imageUploadResult!=null && imageUploadResult.getMediumImage()!=null&&imageUploadResult.getMediumImage().getUrl()!=null){
+				File thumbFile = UploadUtil.loadFileByUrl(imageUploadResult.getMediumImage().getUrl());
+				if(thumbFile!=null){//文件存在，可以上传至微信服务器
+					WxMediaUploadResult uploadResult = wxMediaUploadService.uploadThumb(thumbFile);
+					System.out.println("uploadResult: "+uploadResult);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 

@@ -7,20 +7,6 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null&&1==materialType){
-		return "图文素材";
-	}
-	return "文本素材";
-} %>
-
-<%!String displayCommandType(Short comandType){
-	if(comandType!=null&&1==comandType){
-		return "菜单关键词";
-	}
-	return "文本关键词";
-} %>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -90,7 +76,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						图文内容
+						编辑单图文素材
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -102,7 +88,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">图文内容</li>
+					<li class="active">编辑单图文素材</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -130,7 +116,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑<%=displayMaterialType(materialArticle.getMaterialType()) %>
+							<i class="icon-bubble4"></i>编辑单图文素材
 						</h6>
 					</div>
 					<div class="panel-body">
@@ -141,30 +127,12 @@
 							
 							<div class="col-sm-3">
 								<label class="control-label">
-									<%=displayMaterialType(materialArticle.getMaterialType()) %>
+									单图文素材
 									<form:hidden path="materialArticle.id"/>
 								</label>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关键词: <span class="mandatory"></span></label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									<%
-									List<WxCommand> commandList = (List<WxCommand>)request.getAttribute("commandList");
-									if(commandList==null){%>
-										暂无关联
-									<%}else{
-										for(WxCommand command: commandList){%>
-										<%=displayCommandType(command.getCommandType()) %>:【<a href="./commandEdit?commandId=<%=command.getId()%>"><%=command.getCommand()%></a>】, 
-									<%}
-									}%>
-								</label>
-							</div>
-						</div>
-						
-						<%if(materialArticle.getMaterialType()==1){//图文素材 %>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图文标题: <span class="mandatory">*</span></label>
 							
@@ -182,19 +150,15 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文封面图:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">图片缩略图:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<!-- 
-								<input type="text" class="form-control" name="coverImageUrl" id="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
-								<img src="http://www.jinwanr.com.cn/staticFile/image/20140306/medium/100012_bb6d4f45aacd9b97a91063cda17cd3b3.jpg" width="160px"/>
-								-->
 								<a href="${materialArticle.coverImageUrl}" id="cover-image-link"  class="lightbox">
 									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
 								</a>
 								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
+								<input type="file" name="thumbImage" id="cover-image-file" class="styled">
+							</div>
 						</div>
 
 						<div class="form-group">
@@ -234,20 +198,6 @@
 						</div>
 						<%}%>
 						
-						<%}else{//文本素材 %>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">文本内容: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea name="textReply" rows="2" cols="5" class="elastic form-control" placeholder="上限200字">${materialArticle.textReply}</textarea>
-								</div>
-							</div>
-						</div>
-						
-						<%}%>
-						
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
 							</label>
@@ -282,9 +232,9 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        data.append('thumbImage', $('input[type=file]')[0].files[0]);  
 	        $.ajax({
-	            url:'${pageContext.request.contextPath}/geekway/imageUpload',
+	            url:'${pageContext.request.contextPath}/geekway/wxThumbUpload',
 	            type:'POST',
 	            data:data,
 	            cache: false,

@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -10,7 +11,14 @@ import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxBroadcastMapper;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.WxBroadcastCriteria;
+import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.model.WxMaterialMultimedia;
+import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
 import com.bruce.geekway.service.IWxBroadcastService;
+import com.bruce.geekway.service.IWxMaterialArticleService;
+import com.bruce.geekway.service.IWxMaterialMultimediaService;
+import com.bruce.geekway.service.mp.WxMpBroadcastService;
+import com.bruce.geekway.utils.ConfigUtil;
 
 /**
  * 
@@ -20,8 +28,16 @@ import com.bruce.geekway.service.IWxBroadcastService;
 @Service
 public class WxBroadcastServiceImpl implements IWxBroadcastService, InitializingBean {
 
+	private static final String WX_NEWS_UPLOAD_API = ConfigUtil.getString("weixinmp_news_upload_url");
+	
 	@Autowired
 	private WxBroadcastMapper wxBroadcastMapper;
+	@Autowired
+	private IWxMaterialMultimediaService wxMaterialMultimediaService;
+	@Autowired
+	private IWxMaterialArticleService wxMaterialArticleService;
+	@Autowired
+	private WxMpBroadcastService wxMpBroadcastService;
 
 	@Override
 	public int save(WxBroadcast t) {
@@ -88,7 +104,73 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		return wxBroadcastMapper.updateByExampleSelective(boardcast, criteria);
 	}
 
+	@Override
+	public WxBroadcastResult broadcastMaterialText(String content) {
+		if(content!=null){
+			return wxMpBroadcastService.broadcastText(content);
+		}
+		return null;
+	}
+
+
+	@Override
+	public WxBroadcastResult broadcastMaterialArticle(int materialId) {
+		//构造图文&上传生成mediaId
+		WxMaterialArticle materialArticle = wxMaterialArticleService.loadById(materialId);
+		
+		if(materialArticle!=null){
+			List<WxMaterialArticle> articleList = new ArrayList<WxMaterialArticle>();
+			String mediaId = uploadWxNews(articleList);//upload & getMediaId
+			return wxMpBroadcastService.broadcastNews(mediaId);
+		}
+		return null;
+	}
+
 	
+
+	@Override
+	public WxBroadcastResult broadcastMaterialNews(int materialId) {
+		//构造图文&上传生成mediaId
+		List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(materialId);
+		if(articleList!=null&&articleList.size()>0){
+			String mediaId = uploadWxNews(articleList);
+			return wxMpBroadcastService.broadcastNews(mediaId);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public WxBroadcastResult broadcastMaterialImage(int materialId) {
+		WxMaterialMultimedia materialImage = wxMaterialMultimediaService.loadImageById(materialId);
+		if(materialImage!=null&&materialImage.getMediaId()!=null){
+			return wxMpBroadcastService.broadcastImage(materialImage.getMediaId());
+		}
+		return null;
+	}
+
+//	@Override
+//	public WxBroadcastResult broadcastMaterialVoice(int materialId) {
+//		WxMaterialMultimedia materialVoice = wxMaterialMultimediaService.loadVoiceById(materialId);
+//		if(materialVoice!=null&&materialVoice.getMediaId()!=null){
+//			return wxMpBroadcastService.broadcastVoice(materialVoice.getMediaId());
+//		}
+//		return null;
+//	}
+	
+	/**
+	 * 上传图文数据生成mediaId
+	 * @param articleList
+	 * @return
+	 */
+	private String uploadWxNews(List<WxMaterialArticle> articleList) {
+		String mediaId = null;
+		if(articleList!=null&&articleList.size()>0){
+			mediaId = "";
+		}
+		return mediaId;
+	}
+
 
 	@Override
 	public List<WxBroadcast> fallloadByCriteria(int pageSize, WxBroadcastCriteria criteria) {
@@ -114,5 +196,6 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		this.wxBroadcastMapper = wxBroadcastMapper;
 	}
 
+	
 
 }

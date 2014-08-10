@@ -20,7 +20,6 @@ import com.bruce.geekway.service.IWxMaterialMultimediaService;
 @Service
 public class WxMaterialMultimediaServiceImpl implements IWxMaterialMultimediaService, InitializingBean {
 	
-	
 	@Autowired
 	private WxMaterialMultimediaMapper wxMaterialMultimediaMapper;
 
@@ -72,6 +71,27 @@ public class WxMaterialMultimediaServiceImpl implements IWxMaterialMultimediaSer
 		return wxMaterialMultimediaMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public WxMaterialMultimedia loadImageById(Integer id) {
+		WxMaterialMultimediaCriteria criteria = new WxMaterialMultimediaCriteria();
+		criteria.createCriteria().andIdEqualTo(id).andMaterialTypeEqualTo(MATERIAL_TYPE_IMAGE);
+		List<WxMaterialMultimedia> multimediaList =  queryByCriteria(criteria);
+		if(multimediaList!=null&&multimediaList.size()>0){
+			return multimediaList.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public WxMaterialMultimedia loadVoiceById(Integer id) {
+		WxMaterialMultimediaCriteria criteria = new WxMaterialMultimediaCriteria();
+		criteria.createCriteria().andIdEqualTo(id).andMaterialTypeEqualTo(MATERIAL_TYPE_VOICE);
+		List<WxMaterialMultimedia> multimediaList =  queryByCriteria(criteria);
+		if(multimediaList!=null&&multimediaList.size()>0){
+			return multimediaList.get(0);
+		}
+		return null;
+	}
 	
 	@Override
 	public List<WxMaterialMultimedia> queryImageMaterials() {
@@ -111,6 +131,8 @@ public class WxMaterialMultimediaServiceImpl implements IWxMaterialMultimediaSer
 	public void setWxMaterialMultimediaMapper(WxMaterialMultimediaMapper wxMaterialMultimediaMapper) {
 		this.wxMaterialMultimediaMapper = wxMaterialMultimediaMapper;
 	}
+
+	
 
 
 }

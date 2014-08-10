@@ -22,6 +22,7 @@ import com.bruce.geekway.service.IWxMaterialArticleService;
  * @author liqian
  *
  */
+@Deprecated
 @Controller
 @RequestMapping("/geekway")
 public class GeekwaySubscribedMaterialController extends BaseController {
@@ -95,26 +96,24 @@ public class GeekwaySubscribedMaterialController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/saveSubscribedMaterial", method = RequestMethod.POST)
-	public String saveSubscribedMaterial(Model model, WxMaterialArticle subscribedMaterial, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-
-		int result = 0;
-		
-		Date currentTime = new Date();
-		subscribedMaterial.setUpdateTime(currentTime);
-		if (subscribedMaterial != null && subscribedMaterial.getId() != null && subscribedMaterial.getId()>0) {//更新素材内容操作
-			result = wxMaterialArticleService.updateById(subscribedMaterial);
-		} else {//新增素材操作
-			subscribedMaterial.setMaterialType((short) 1);//关注类的素材均为图文素材
-			subscribedMaterial.setCreateTime(currentTime);
-			result = wxMaterialArticleService.save(subscribedMaterial);
-		}
-		model.addAttribute("redirectUrl", "./subscribedMaterialList");
-		return "forward:/home/operationRedirect";
-	}
-	
-	
+//	@RequestMapping(value = "/saveSubscribedMaterial", method = RequestMethod.POST)
+//	public String saveSubscribedMaterial(Model model, WxMaterialArticle subscribedMaterial, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//
+//		int result = 0;
+//		
+//		Date currentTime = new Date();
+//		subscribedMaterial.setUpdateTime(currentTime);
+//		if (subscribedMaterial != null && subscribedMaterial.getId() != null && subscribedMaterial.getId()>0) {//更新素材内容操作
+//			result = wxMaterialArticleService.updateById(subscribedMaterial);
+//		} else {//新增素材操作
+//			subscribedMaterial.setMaterialType((short) 1);//关注类的素材均为图文素材
+//			subscribedMaterial.setCreateTime(currentTime);
+//			result = wxMaterialArticleService.save(subscribedMaterial);
+//		}
+//		model.addAttribute("redirectUrl", "./subscribedMaterialList");
+//		return "forward:/home/operationRedirect";
+//	}
 
 }

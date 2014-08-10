@@ -1,7 +1,6 @@
 package com.bruce.geekway.model.wx.json;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * 群发广播对象

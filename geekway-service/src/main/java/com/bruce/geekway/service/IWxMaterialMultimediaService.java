@@ -24,6 +24,13 @@ public interface IWxMaterialMultimediaService extends IFoundationPagingService<W
 	/*语音素材*/
 	public static final Short MATERIAL_TYPE_VOICE = 4;
 	
+	/*根据id加载图片素材*/
+	public WxMaterialMultimedia loadImageById(Integer id);
+	
+	/*根据id加载语音素材*/
+	public WxMaterialMultimedia loadVoiceById(Integer id);
+	
+	
 	/*图片素材列表*/
 	public List<WxMaterialMultimedia> queryImageMaterials();
 	

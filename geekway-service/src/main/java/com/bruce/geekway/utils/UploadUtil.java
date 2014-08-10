@@ -122,18 +122,35 @@ public class UploadUtil {
     
     
     /**
-     * 判断文件是否存在
+     * 根据url判断文件是否存在
      * @param fileUrl
      * @return
      */
-    public static File fileExists(String fileUrl){
+    public static boolean fileExists(String fileUrl){
+    	File file = loadFileByUrl(fileUrl);
+    	if(file!=null){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    /**
+     * 根据url构造file
+     * @param fileUrl
+     * @return
+     */
+    public static File loadFileByUrl(String fileUrl){
     	if(fileUrl!=null){
     		String abFilePath = fileUrl.replace(getBaseUrl(), getBasePath());
     		File file = new File(abFilePath);
-    		return file;
+    		if(file.exists()){
+    			return file;
+    		}
     	}
     	return null;
     }
+    
+    
     
     
 	public static byte[] file2bytes(File file) throws Exception {

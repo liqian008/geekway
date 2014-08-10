@@ -34,11 +34,19 @@ public class ErrorCode {
 	
 	/* 账户相关分配200-300的错误码 */
 	
-	
 	/* 获取用户失败 */
 	public static final int USER_ERROR = 200;
 	/* 用户已经被封禁 */
 	public static final int USER_FORBIDDEN = 201;
+	
+	
+	/* 微信相关分配300-400的错误码 */
+	/* 非服务号 */
+	public static final int WX_BROADCAST_ERROR = 300;
+	/* 非服务号 */
+	public static final int WX_BROADCAST_NEED_SENIOR = 301;
+	/* 超过每月4次的群发限制 */
+	public static final int WX_BROADCAST_OVERLOAD = 302;
 	
 
 	/* 上传分配600-700的错误码 */

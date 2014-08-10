@@ -35,7 +35,7 @@ private static final String WX_ACCESS_TOKEN_API = ConfigUtil.getString("weixinmp
 	private WxAuthResult getAccessToken() {
 		
 		//如accessToken为null或accessToken过期，需要重取accessToken
-		if(authResult==null||authResult.getExpiresTime()<=System.currentTimeMillis()){
+//		if(authResult==null||authResult.getExpiresTime()<=System.currentTimeMillis()){
 			//需要通过网络获取新accessToken
 			Map<String, String> params = new HashMap<String, String>();
 			params.put("grant_type", "client_credential");
@@ -52,9 +52,9 @@ private static final String WX_ACCESS_TOKEN_API = ConfigUtil.getString("weixinmp
 			}else{
 				throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 			}
-		}else{
-			return authResult;
-		}
+//		}else{
+//			return authResult;
+//		}
 	}
 
 	

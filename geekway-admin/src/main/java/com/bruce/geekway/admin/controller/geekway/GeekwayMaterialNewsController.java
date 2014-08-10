@@ -84,6 +84,20 @@ public class GeekwayMaterialNewsController {
 		return "forward:/home/operationRedirect";
 	}
 	
+	@RequestMapping("/delMaterialNews")
+	public String delMaterialNews(Model model, int newsId) {
+		
+		//删除关联表
+		
+		//删除实体
+		wxMaterialNewsService.deleteById(newsId);
+
+		model.addAttribute("redirectUrl", "./materialNewsList");
+		return "forward:/home/operationRedirect";
+	}
+	
+	
+	
 	/**
 	 * 列出当前news对应的文章列表
 	 * @param model
@@ -104,7 +118,6 @@ public class GeekwayMaterialNewsController {
 		
 		return "material/materialNewsArticleSet";
 	}
-	
 	
 	/**
 	 * 

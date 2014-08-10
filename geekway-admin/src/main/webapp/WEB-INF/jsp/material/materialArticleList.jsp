@@ -5,13 +5,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
-<%!String displayMaterialType(short materialType){
-	if(1==materialType){
-		return "图文素材";
-	}
-	return "文本素材";
-} %>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -139,30 +132,23 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=displayMaterialType(material.getMaterialType())%></td> 
+		                        <td>单图文</td> 
 		                        <td>
-		                        	<%if(material.getMaterialType()==1){%>
-	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
+	                        		<a href="<%=material.getCoverThumbImageUrl()%>" class="lightbox">
+		                        	<img src='<%=material.getCoverThumbImageUrl()%>' class="img-media"/>
 		                        	</a>
-		                        	<%}else{ %>
-		                        		无
-		                        	<%} %>
 		                        </td>
 		                        <td>
-		                        	<%=material.getMaterialType()==1?material.getShortContent():material.getTextReply()%>
+		                        	<%=material.getShortContent()%>
 		                        </td>
 		                        <td>
-									<%if(material.getMaterialType()==1){%>
-										<%
-										String meterialLink = ArticleLinkUtil.getArticleLink(material.getId());%>
-										<a href="<%=meterialLink%>" target="_blank">预览</a>
-									<%}%>
+									<%
+									String meterialLink = ArticleLinkUtil.getArticleLink(material.getId());%>
+									<a href="<%=meterialLink%>" target="_blank">预览</a>
 								</td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        	
 										<a href="./materialArticleEdit?articleId=<%=material.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
