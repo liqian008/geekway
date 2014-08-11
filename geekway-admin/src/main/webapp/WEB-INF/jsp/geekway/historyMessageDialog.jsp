@@ -230,7 +230,6 @@ $(".modal-trigger").click(function(){
 	var modalTitle = "请选择要回复的素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入要回复的文本内容";	
-		$("#materialIframe").attr("height", "240px");
 		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>&openId=<%=openId%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择要回复的单图文";

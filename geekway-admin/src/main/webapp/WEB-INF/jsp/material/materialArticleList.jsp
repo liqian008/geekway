@@ -106,8 +106,7 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>图文素材管理
 					</h5>
-					<a href="./materialArticleAdd"><span class="label label-danger pull-right">新增图文素材</span></a>
-					<a href="./materialTextAdd"><span class="label label-info pull-right">新增文本素材</span></a>
+					<a href="./materialArticleAdd"><span class="label label-info pull-right">新增图文素材</span></a>
 				</div> 
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -134,8 +133,8 @@
 		                        <td><%=i%></td>
 		                        <td>单图文</td> 
 		                        <td>
-	                        		<a href="<%=material.getCoverThumbImageUrl()%>" class="lightbox">
-		                        	<img src='<%=material.getCoverThumbImageUrl()%>' class="img-media"/>
+	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
 		                        	</a>
 		                        </td>
 		                        <td>
@@ -144,7 +143,9 @@
 		                        <td>
 									<%
 									String meterialLink = ArticleLinkUtil.getArticleLink(material.getId());%>
-									<a href="<%=meterialLink%>" target="_blank">预览</a>
+									<a href="<%=meterialLink%>" target="_blank"> 
+									<span class="label label-success">预览</span> 
+									</a>
 								</td>
 		                        <td>正常</td>
 		                        <td class='text-center'>

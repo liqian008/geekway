@@ -100,7 +100,7 @@
 										<a
 											href="javascript:pick(<%=materialArticle.getId()%>, '<%=materialArticle.getShortContent()%>')"
 											class="material-picker btn btn-link btn-icon btn-xs tip"
-											title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
+											title="" data-original-title="选择"><i class="icon-heart2"></i></a>
 									</div>
 								</td>
 							</tr>

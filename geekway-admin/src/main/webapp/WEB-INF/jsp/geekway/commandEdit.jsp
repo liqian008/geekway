@@ -285,7 +285,6 @@ $(".modal-trigger").click(function(){
 	var modalTitle = "请选择素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入文本内容";	
-		$("#materialIframe").attr("height", "240px"); 
 		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择单图文素材";

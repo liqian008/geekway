@@ -50,8 +50,12 @@ public class GeekwayCommandController {
 		String devmodeUrl = ConfigUtil.getString("weixinmp_devmode_url");
 		String devmodeToken = ConfigUtil.getString("weixinmp_devmode_token");
 		
+		String qrcodeUrl = ConfigUtil.getString("weixinmp_qrcode_img_url");
+		
+		
 		model.addAttribute("devmodeUrl", devmodeUrl);
 		model.addAttribute("devmodeToken", devmodeToken);
+		model.addAttribute("qrcodeUrl", qrcodeUrl);
 		
 		return "geekway/wxConfig";
 	}
@@ -61,7 +65,8 @@ public class GeekwayCommandController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxCommand> commandList = wxCommandService.queryAll();
+		
+		List<WxCommand> commandList = wxCommandService.queryGeneralCommandList();
 		model.addAttribute("commandList", commandList);
 		return "geekway/commandList";
 	}

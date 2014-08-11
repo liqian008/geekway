@@ -51,7 +51,7 @@ public class WxMediaUploadService extends WxBaseService {
 	 * @return
 	 */
 	public WxMediaUploadResult uploadVoice(File mediaFile) {
-		return uploadMedia(WxMediaTypeEnum.THUMB, HTTP_CONTENT_TYPE_IMAGE, mediaFile);
+		return uploadMedia(WxMediaTypeEnum.VOICE, HTTP_CONTENT_TYPE_IMAGE, mediaFile);
 	}
 
 //	

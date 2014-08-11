@@ -74,6 +74,20 @@ public class WxMaterialNewsArticleServiceImpl implements IWxMaterialNewsArticleS
 		return deleteByCriteria(criteria);
 	}
 	
+
+	@Override
+	public int deleteByNewsId(int newsId) {
+		WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();
+		criteria.createCriteria().andNewsIdEqualTo(newsId);
+		return deleteByCriteria(criteria);
+	}
+	
+	@Override
+	public int deleteByArticleId(int articleId) {
+		WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();
+		criteria.createCriteria().andArticleIdEqualTo(articleId);
+		return deleteByCriteria(criteria);
+	}
 	
 	@Override
 	public List<WxMaterialNewsArticle> fallloadByCriteria(int pageSize,

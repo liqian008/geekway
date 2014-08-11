@@ -4,6 +4,7 @@ public class WxMediaUploadResult extends WxJsonResult {
 
 	private String type;
 	private String media_id;
+	private String thumb_media_id;
 	private Long created_at;
 
 	public String getType() {
@@ -29,5 +30,14 @@ public class WxMediaUploadResult extends WxJsonResult {
 	public void setCreated_at(Long created_at) {
 		this.created_at = created_at;
 	}
+
+	public String getThumb_media_id() {
+		return thumb_media_id;
+	}
+
+	public void setThumb_media_id(String thumb_media_id) {
+		this.thumb_media_id = thumb_media_id;
+	}
+	
 
 }

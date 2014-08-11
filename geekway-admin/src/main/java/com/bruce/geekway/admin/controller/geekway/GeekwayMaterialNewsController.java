@@ -88,6 +88,7 @@ public class GeekwayMaterialNewsController {
 	public String delMaterialNews(Model model, int newsId) {
 		
 		//删除关联表
+		wxMaterialNewsArticleService.deleteByNewsId(newsId);
 		
 		//删除实体
 		wxMaterialNewsService.deleteById(newsId);

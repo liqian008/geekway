@@ -93,7 +93,7 @@
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="javascript:pick(<%=materialImage.getId()%>, '<%=materialImage.getRemark()%>')" class="material-picker btn btn-link btn-icon btn-xs tip" title="" data-original-title="选择"><i class="icon-pencil3"></i></a>
+										<a href="javascript:pick(<%=materialImage.getId()%>, '<%=materialImage.getRemark()%>')" class="material-picker btn btn-link btn-icon btn-xs tip" title="" data-original-title="选择"><i class="icon-heart2"></i></a>
 									</div>
 								</td>
                                </tr>

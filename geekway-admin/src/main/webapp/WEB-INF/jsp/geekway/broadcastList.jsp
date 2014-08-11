@@ -1,3 +1,4 @@
+<%@page import="com.bruce.geekway.utils.DateUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -110,8 +111,9 @@
 						<thead>
 							<tr>
 								<th>序号</th>
-								<th>消息类型</th>
-                                <th>群发状态</th>
+								<th>群发类型</th>
+								<th>群发时间</th>
+                                <th>群发状态</th> 
                                 <th>发送数</th>
                                 <th>成功</th>
                                 <th>失败</th>
@@ -129,13 +131,14 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=broadcast.getMessageType()%></td>
+		                        <td><%=DateUtil.date2YMD(broadcast.getCreateTime())%></td>
 		                        <td><%=broadcast.getStatus()%></td>
 		                        <td><%=broadcast.getFilterCount()%>人</td>
 		                        <td><%=broadcast.getSentCount()%>人</td>
 		                        <td><%=broadcast.getErrorCount()%>人</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./delBroadcast?broadcastId=<%=broadcast.getId()%>"
+										<a href="javascript:void(0)"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="取 消"><i class="icon-remove3"></i></a>
 									</div>
@@ -192,7 +195,6 @@ $(".modal-trigger").click(function(){
 	var modalTitle = "请选择素材";
 	if(this.id=='textMaterial'){
 		modalTitle = "请输入文本内容";	
-		$("#materialIframe").attr("height", "240px");
 		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>";
 	}else if(this.id=='articleMaterial'){
 		modalTitle = "请选择单图文素材";

@@ -122,7 +122,11 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=materialNews.getTitle()%></td>
-		                        <td><a href='<%=ArticleLinkUtil.getArticlesLink(materialNews.getId())%>' target="_blank">预览</a></td>
+		                        <td>
+		                        	<a href="<%=ArticleLinkUtil.getArticlesLink(materialNews.getId())%>" target="_blank"> 
+									<span class="label label-success">预览</span> 
+									</a>	
+		                        </td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

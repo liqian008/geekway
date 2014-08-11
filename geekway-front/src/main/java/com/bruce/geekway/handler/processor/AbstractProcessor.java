@@ -169,9 +169,9 @@ public abstract class AbstractProcessor implements Processor{
 		if(materialArticleList!=null&&materialArticleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
 			for(WxMaterialArticle article: materialArticleList){
-				if(article.getMaterialType()!=null&&article.getMaterialType()==1){//过滤纯文本素材，保留图文素材
+//				if(article.getMaterialType()!=null&&article.getMaterialType()==1){//过滤纯文本素材，保留图文素材
 					newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(article.getId()));
-				}
+//				}
 			}
 			return newsResponse;
 		}

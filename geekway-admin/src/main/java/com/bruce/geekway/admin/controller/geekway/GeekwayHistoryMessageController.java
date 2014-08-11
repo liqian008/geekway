@@ -57,15 +57,15 @@ public class GeekwayHistoryMessageController {
 		if(historyMessageList!=null&&historyMessageList.size()>0){
 			//获取个人资料
 			Map<String, WxMpUser> userMap = new HashMap<String, WxMpUser>();
-			for(WxHistoryMessage message: historyMessageList){
-				String userOpenId = message.getOpenId();
+			for(WxHistoryMessage historyMessage: historyMessageList){
+				String userOpenId = historyMessage.getOpenId();
 				if(!StringUtils.isBlank(userOpenId)){
 					WxMpUser mpUser = userMap.get(userOpenId);//取缓存对象中的对象
 					if(mpUser==null){//用户对象未被缓存，需要从db中获取
 						mpUser = wxMpUserService.loadByOpenId(userOpenId);
 					}
 					if(mpUser!=null){
-						message.setMpUser(mpUser);
+						historyMessage.setMpUser(mpUser);
 					}
 				}
 			}

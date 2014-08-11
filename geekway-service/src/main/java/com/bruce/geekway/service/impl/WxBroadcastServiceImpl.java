@@ -1,6 +1,7 @@
 package com.bruce.geekway.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -107,7 +108,20 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 	@Override
 	public WxBroadcastResult broadcastMaterialText(String content) {
 		if(content!=null){
-			return wxMpBroadcastService.broadcastText(content);
+			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastText(content);
+			
+			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+				//构造群发记录
+				WxBroadcast broadcastLog = new WxBroadcast();
+				broadcastLog.setMessageType("");//文本
+				broadcastLog.setStatus((short) 0);//提交发送任务后的状态为0
+				broadcastLog.setContent(content);
+				broadcastLog.setMsgId(broadcastResult.getMsg_id());
+				broadcastLog.setCreateTime(new Date());
+				//save到群发历史记录
+				save(broadcastLog);
+				return broadcastResult;
+			}
 		}
 		return null;
 	}
@@ -121,12 +135,24 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		if(materialArticle!=null){
 			List<WxMaterialArticle> articleList = new ArrayList<WxMaterialArticle>();
 			String mediaId = uploadWxNews(articleList);//upload & getMediaId
-			return wxMpBroadcastService.broadcastNews(mediaId);
+			
+			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastNews(mediaId);
+			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+				//构造群发记录
+				WxBroadcast broadcastLog = new WxBroadcast();
+				broadcastLog.setMessageType("");//单图文
+				broadcastLog.setStatus((short) 0);//提交发送任务后的状态为0
+				broadcastLog.setMediaId(mediaId);
+				broadcastLog.setMsgId(broadcastResult.getMsg_id());
+				broadcastLog.setCreateTime(new Date());
+				//save到群发历史记录
+				save(broadcastLog);
+				return broadcastResult;
+			}
+			
 		}
 		return null;
 	}
-
-	
 
 	@Override
 	public WxBroadcastResult broadcastMaterialNews(int materialId) {
@@ -134,9 +160,20 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(materialId);
 		if(articleList!=null&&articleList.size()>0){
 			String mediaId = uploadWxNews(articleList);
-			return wxMpBroadcastService.broadcastNews(mediaId);
+			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastNews(mediaId);
+			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+				//构造群发记录
+				WxBroadcast broadcastLog = new WxBroadcast();
+				broadcastLog.setMessageType("");//多图文
+				broadcastLog.setStatus((short) 0);//提交发送任务后的状态为0
+				broadcastLog.setMediaId(mediaId);
+				broadcastLog.setMsgId(broadcastResult.getMsg_id());
+				broadcastLog.setCreateTime(new Date());
+				//save到群发历史记录
+				save(broadcastLog);
+				return broadcastResult;
+			}
 		}
-		
 		return null;
 	}
 
@@ -144,20 +181,23 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 	public WxBroadcastResult broadcastMaterialImage(int materialId) {
 		WxMaterialMultimedia materialImage = wxMaterialMultimediaService.loadImageById(materialId);
 		if(materialImage!=null&&materialImage.getMediaId()!=null){
-			return wxMpBroadcastService.broadcastImage(materialImage.getMediaId());
+			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastImage(materialImage.getMediaId());
+			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+				//构造群发记录
+				WxBroadcast broadcastLog = new WxBroadcast();
+				broadcastLog.setMessageType("");//图片
+				broadcastLog.setStatus((short) 0);//提交发送任务后的状态为0
+				broadcastLog.setMediaId(materialImage.getMediaId());
+				broadcastLog.setMsgId(broadcastResult.getMsg_id());
+				broadcastLog.setCreateTime(new Date());
+				//save到群发历史记录
+				save(broadcastLog);
+				return broadcastResult;
+			}
 		}
 		return null;
 	}
 
-//	@Override
-//	public WxBroadcastResult broadcastMaterialVoice(int materialId) {
-//		WxMaterialMultimedia materialVoice = wxMaterialMultimediaService.loadVoiceById(materialId);
-//		if(materialVoice!=null&&materialVoice.getMediaId()!=null){
-//			return wxMpBroadcastService.broadcastVoice(materialVoice.getMediaId());
-//		}
-//		return null;
-//	}
-	
 	/**
 	 * 上传图文数据生成mediaId
 	 * @param articleList

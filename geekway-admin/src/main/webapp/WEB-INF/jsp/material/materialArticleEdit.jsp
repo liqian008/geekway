@@ -156,6 +156,7 @@
 								<a href="${materialArticle.coverImageUrl}" id="cover-image-link"  class="lightbox">
 									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
 								</a>
+								<form:hidden path="materialArticle.thumbMediaId"/>
 								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
 								<input type="file" name="thumbImage" id="cover-image-file" class="styled">
 							</div>
@@ -234,7 +235,7 @@
 	        //为FormData对象添加数据 
 	        data.append('thumbImage', $('input[type=file]')[0].files[0]);  
 	        $.ajax({
-	            url:'${pageContext.request.contextPath}/geekway/wxThumbUpload',
+	        	url:'${pageContext.request.contextPath}/geekway/wxThumbUpload',
 	            type:'POST',
 	            data:data,
 	            cache: false,
@@ -243,6 +244,7 @@
 	            success:function(responseData){
 	                if(responseData.result==1){
 	                	var imageUrl = responseData.data.mediumImage.url;
+	                	$('#thumbMediaId').val(responseData.data.wxMediaResult.thumb_media_id);
 		                $('#cover-image').attr("src", imageUrl);
 		                $('#cover-image-link').attr("href", imageUrl);
 		                $('#cover-image-url').val(imageUrl);

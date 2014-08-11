@@ -16,6 +16,7 @@ import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
+import com.bruce.geekway.service.IWxMaterialNewsArticleService;
 
 /**
  * 图文管理controller
@@ -32,6 +33,8 @@ public class GeekwayMaterialArticleController extends BaseController {
 	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
 	private IWxCommandService wxCommandService;
+	@Autowired
+	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
 
 	
 	@RequestMapping("/materialArticleList")
@@ -122,8 +125,8 @@ public class GeekwayMaterialArticleController extends BaseController {
 	@RequestMapping("/delMaterialArticle")
 	public String delMaterialArticle(Model model, int articleId) {
 		
-//		// 删除多图文资源的关联
-//		wxCommandMaterialService.deleteByMaterialId(articleId);
+		//删除多图文资源的关联
+		wxMaterialNewsArticleService.deleteByNewsId(articleId);
 		
 		//删除实体&关联
 		wxMaterialArticleService.deleteById(articleId);

@@ -98,21 +98,21 @@ public class WxCommandServiceImpl implements IWxCommandService {
 //		}
 //		return commandBean;
 //	}
-
-//	/**
-//	 * 查询materialId对应的关键词列表
-//	 * 
-//	 * @param materialId
-//	 * @return
-//	 */
-//	public List<WxCommand> queryCommandsByMaterialId(int materialId) {
-//		return wxCommandMapper.queryCommandsByMaterialId(materialId);
-//	}
+	
+	
+	/**
+	 * 查询普通0,1（非订阅指令2,3）的指令列表
+	 */
+	public List<WxCommand> queryGeneralCommandList(){
+		WxCommandCriteria criteria = new WxCommandCriteria();
+		criteria.createCriteria().andCommandTypeLessThan((short) 2);//0和1为普通指令，2和3为关注指令
+		return queryByCriteria(criteria);
+	}
 	
 	@Override
-	public WxCommand loadByCommand(String command) {
+	public WxCommand loadByCommand(short commandType, String command) {
 		WxCommandCriteria criteria = new WxCommandCriteria();
-		criteria.createCriteria().andCommandEqualTo(command);
+		criteria.createCriteria().andCommandTypeEqualTo(commandType).andCommandEqualTo(command);
 		List<WxCommand> commandList = wxCommandMapper.selectByExample(criteria);
 		if (commandList != null && commandList.size() > 0) {
 			return commandList.get(0);
@@ -160,6 +160,7 @@ public class WxCommandServiceImpl implements IWxCommandService {
 	public void setWxCommandMapper(WxCommandMapper wxCommandMapper) {
 		this.wxCommandMapper = wxCommandMapper;
 	}
+
 
 
 }

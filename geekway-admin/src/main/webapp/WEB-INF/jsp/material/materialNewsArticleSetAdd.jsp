@@ -137,7 +137,9 @@
 		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
 		                        <td><%=materialArticle.getId()%></td> 
 		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_materialArticle_big.png' width="50px"></img> -->
+		                        	<a href="<%=materialArticle.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=materialArticle.getCoverImageUrl()%>' class="img-media"/>
+		                        	</a>
 		                        </td>
 		                        <td><%=materialArticle.getTitle()%></td>
 		                        <td>正常</td>
@@ -145,7 +147,7 @@
 		                        	<div class="table-controls">
 										<a href="./addMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=materialArticle.getId()%>"  
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="添加关联"><i class="icon-plus"></i></a> 
+											data-original-title="添加关联"><i class="icon-link"></i></a> 
 									</div> 
 								</td>
                                </tr>
@@ -155,11 +157,10 @@
 					</table>
 				</div>
 
+				<!-- 
 				<div class="table-footer">
 					<div class="table-actions">
-						<!-- 
 						<label>操作:</label>
-						-->
 						<input type="button" value="批量添加" class="btn btn-info btn-xs">
 					</div> 
 					<ul class="pagination">
@@ -170,6 +171,7 @@
 						<li><a href="#">Next</a></li>
 					</ul>
 				</div>
+				 -->
 
 			</div>
 			<!-- /table with checkboxes -->

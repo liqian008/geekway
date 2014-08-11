@@ -129,6 +129,21 @@
 								</label>
 							</div>
 						</div>
+						
+						<%
+						String qrcodeUrl = (String)request.getAttribute("qrcodeUrl");
+						if(qrcodeUrl!=null){
+						%>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">扫描二维码:
+							</label>
+							<div class="col-sm-6">
+								<label class="control-label">
+									<img id="cover-image" src="${qrcodeUrl}" width="200px" />
+								</label>
+							</div>
+						</div>
+						<%} %>
 					</div>
 				</div>
 			</form>

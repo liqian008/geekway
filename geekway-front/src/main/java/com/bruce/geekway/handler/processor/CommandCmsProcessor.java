@@ -56,7 +56,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 	protected BaseResponse processTextRequest(TextRequest request) {
 		String key = ((TextRequest)request).getContent();
         
-        WxCommand command = commandService.loadByCommand(key);
+        WxCommand command = commandService.loadByCommand((short) 0, key);
         return commandResponse(request, command);
 	}
 
@@ -67,7 +67,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 	@Override
 	protected BaseResponse processClickEventRequest(EventRequest request) {
 		String key = ((EventRequest)request).getEventKey();
-		WxCommand command = commandService.loadByCommand(key);
+		WxCommand command = commandService.loadByCommand((short) 1,key);
 		return commandResponse(request, command);
 	}
 	

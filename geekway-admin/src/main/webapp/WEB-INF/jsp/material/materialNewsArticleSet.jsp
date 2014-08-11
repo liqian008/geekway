@@ -104,7 +104,7 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>已关联文章
+						<i class="icon-people"></i>已关联的单图文列表
 					</h5>
 					<a href="./materialNewsArticleSetAdd?newsId=${materialNews.id}"><span class="label label-danger pull-right">关联单图文</span></a>
 				</div>
@@ -132,7 +132,9 @@
 		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
 		                        <td><%=materialArticle.getId()%></td>
 		                        <td>
-		                        	<!-- <img src='/designer-admin/img/demo/sidebar_materialArticle_big.png' width="50px"></img> -->
+		                        	<a href="<%=materialArticle.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=materialArticle.getCoverImageUrl()%>' class="img-media"/>
+		                        	</a>
 		                        </td>
 		                        <td><%=materialArticle.getTitle()%></td>
 		                        <td>正常</td>
@@ -140,7 +142,7 @@
 		                        	<div class="table-controls">
 		                        		<a href="./removeMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=materialArticle.getId()%>"  
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="移除关联"><i class="icon-remove3"></i></a>
+											data-original-title="移除关联"><i class="icon-link2"></i></a>
 									</div>
 								</td>
                                </tr>
@@ -150,11 +152,10 @@
 					</table>
 				</div>
 				
+				<!-- 
 				<div class="table-footer">
 					<div class="table-actions">
-						<!-- 
 						<label>操作:</label>
-						-->
 						<input type="button" value="批量移除" class="btn btn-danger btn-xs">
 					</div> 
 					<ul class="pagination">
@@ -165,7 +166,7 @@
 						<li><a href="#">Next</a></li>
 					</ul>
 				</div>
-				
+				 -->
 			</div>
 			<!-- /table view -->
 

@@ -202,11 +202,7 @@ public class WxHttpUtil {
 			}
 			parts[i++] = filePart;
 		
-			postMethod.addRequestHeader("Content-Type", contentType);
-//			postMethod.getParams().setContentCharset("utf-8");
-			
 			MultipartRequestEntity multipartEntity = new MultipartRequestEntity(parts, postMethod.getParams());
-			
 			postMethod.setRequestEntity(multipartEntity);
 			
 			int statusCode = httpClient.executeMethod(postMethod);

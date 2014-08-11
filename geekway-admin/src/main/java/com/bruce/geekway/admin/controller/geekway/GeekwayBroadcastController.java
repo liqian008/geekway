@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.service.IWxBroadcastService;
@@ -84,7 +85,7 @@ public class GeekwayBroadcastController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/mpBroadcastText.json", method = RequestMethod.POST)
-	public JsonResultBean mpBroadcastArticle(Model model, String content, HttpServletRequest request) {
+	public JsonResultBean mpBroadcastText(Model model, String content, HttpServletRequest request) {
 		return broadcastMaterialMedia(0, 0, content);
 	}
 	
@@ -121,14 +122,18 @@ public class GeekwayBroadcastController {
 				//超过本月群发次数（4次），无法再次广播
 				return JsonResultBuilderUtil.buildErrorJson(ErrorCode.WX_BROADCAST_OVERLOAD);
 			}else{
+				WxBroadcastResult broadcastResult = null;
 				if(materialType==0){//群发文本
-					wxBroadcastService.broadcastMaterialText(content);
+					broadcastResult = wxBroadcastService.broadcastMaterialText(content);
 				}else if(materialType==1){//群发单图文
-					wxBroadcastService.broadcastMaterialArticle(materialId);
+					broadcastResult = wxBroadcastService.broadcastMaterialArticle(materialId);
 				}else if(materialType==2){//群发多图文
-					wxBroadcastService.broadcastMaterialNews(materialId);
+					broadcastResult = wxBroadcastService.broadcastMaterialNews(materialId);
 				}else if(materialType==3){//群发图片
-					wxBroadcastService.broadcastMaterialImage(materialId);
+					broadcastResult = wxBroadcastService.broadcastMaterialImage(materialId);
+				}
+				if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+					return JsonResultBuilderUtil.buildSuccessJson(broadcastResult);
 				}
 			}
 		}else{
@@ -137,7 +142,6 @@ public class GeekwayBroadcastController {
 		}
 		//"微信群发消息失败"
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_ERROR);
-		
 	}
 	
 	
