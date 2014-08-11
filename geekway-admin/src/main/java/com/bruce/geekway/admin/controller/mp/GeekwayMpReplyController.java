@@ -107,7 +107,7 @@ public class GeekwayMpReplyController {
 					replyMessage = new NewsMessage();
 					((NewsMessage)replyMessage).setMsgtype("news");
 					News news = new News();
-					news.addArticle(materialArticle.getTitle(), materialArticle.getShortContent(),  ArticleLinkUtil.getArticleLink(materialArticle.getId()), materialArticle.getCoverThumbImageUrl());
+					news.addArticle(materialArticle.getTitle(), materialArticle.getShortContent(),  ArticleLinkUtil.getArticleLink(materialArticle.getId()), materialArticle.getCoverImageUrl());
 					((NewsMessage)replyMessage).setNews(news);
 				}
 			}else if(materialType==2){//多图文
@@ -119,7 +119,7 @@ public class GeekwayMpReplyController {
 					News news = new News();
 					for(WxMaterialArticle article: articleList){
 						String url = ArticleLinkUtil.getArticleLink(article.getId());
-						news.addArticle(article.getTitle(), article.getShortContent(), url, article.getCoverThumbImageUrl());
+						news.addArticle(article.getTitle(), article.getShortContent(), url, article.getCoverImageUrl());
 					}
 					((NewsMessage)replyMessage).setNews(news);
 				}
