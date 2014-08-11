@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.model.WxMaterialArticleCriteria;
 import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.model.WxMaterialNewsArticle;
+import com.bruce.geekway.model.WxMaterialNewsCriteria;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsService;
@@ -97,7 +99,17 @@ public class GeekwayMaterialNewsController {
 		return "forward:/home/operationRedirect";
 	}
 	
-	
+	@RequestMapping("/topMaterialArticle")
+	public String topMaterialArticle(Model model, int newsId, int articleId) {
+		//置顶操作
+		wxMaterialNewsArticleService.topArticle(newsId, articleId);
+		
+		//重新设置news的缩略图和摘要
+		reloadNewsDigest(newsId);
+
+		model.addAttribute("redirectUrl", "./materialNewsArticleSet?newsId="+newsId);
+		return "forward:/home/operationRedirect";
+	}
 	
 	/**
 	 * 列出当前news对应的文章列表
@@ -156,7 +168,11 @@ public class GeekwayMaterialNewsController {
 		WxMaterialNewsArticle obj = new WxMaterialNewsArticle();
 		obj.setNewsId(newsId);
 		obj.setArticleId(articleId);
+		obj.setTopTime(new Date());
 		wxMaterialNewsArticleService.save(obj);
+		
+		//设置news的缩略图和摘要
+		reloadNewsDigest(newsId);
 		
 		model.addAttribute("redirectUrl", "./materialNewsArticleSet?newsId="+newsId);
 		return "forward:/home/operationRedirect";
@@ -176,7 +192,35 @@ public class GeekwayMaterialNewsController {
 		
 		int result = wxMaterialNewsArticleService.delete(newsId, articleId); 
 		
+		//重新设置news的缩略图和摘要
+		reloadNewsDigest(newsId);
+		
+		
 		model.addAttribute("redirectUrl", "./materialNewsArticleSet?newsId="+newsId);
 		return "forward:/home/operationRedirect";
+	}
+	
+	/**
+	 * 重新加载news的显示（通常用于关联、取消关联、置顶图文时）
+	 * @param newsId
+	 */
+	private void reloadNewsDigest(int newsId){
+		if(newsId>0){
+			//设置news的缩略图和摘要
+			List<WxMaterialArticle> articleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(newsId);
+			WxMaterialNews materialNews = new WxMaterialNews();
+			if(articleList!=null&&articleList.size()>0){
+				WxMaterialArticle article = articleList.get(0);
+				
+				materialNews.setCoverImageUrl(article.getCoverImageUrl());
+				materialNews.setDigest(article.getTitle());
+			}else{
+				materialNews.setCoverImageUrl("");
+				materialNews.setDigest("");
+			}
+			WxMaterialNewsCriteria criteria = new WxMaterialNewsCriteria();
+			criteria.createCriteria().andIdEqualTo(newsId);
+			wxMaterialNewsService.updateByCriteria(materialNews, criteria);
+		}
 	}
 }

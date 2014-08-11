@@ -119,10 +119,15 @@
 						
 						<%if(materialNews!=null&&materialNews.getId()!=null){%>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">预览: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">图文链接: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="" value="<%=ArticleLinkUtil.getArticlesLink(materialNews.getId())%>"/>
+								<label class="control-label">
+									<%
+									String meterialLink = ArticleLinkUtil.getArticleLink(materialNews.getId());%>
+									<%=meterialLink%>
+									<a href="<%=meterialLink%>" target="_blank" id="changeMaterial"><span class="label label-info">预 览</span></a>
+								</label>
 							</div>
 						</div>
 						<%}%>

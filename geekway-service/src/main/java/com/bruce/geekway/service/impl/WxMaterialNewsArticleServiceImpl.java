@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -67,6 +68,19 @@ public class WxMaterialNewsArticleServiceImpl implements IWxMaterialNewsArticleS
 		return wxMaterialNewsArticleMapper.selectByExample(criteria);
 	}
 	
+	
+	@Override
+	public int topArticle(int newsId, int articleId) {
+		WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();
+		criteria.createCriteria().andNewsIdEqualTo(newsId).andArticleIdEqualTo(articleId);
+		
+		WxMaterialNewsArticle newsArticle = new WxMaterialNewsArticle();
+		newsArticle.setTopTime(new Date());
+		
+		return wxMaterialNewsArticleMapper.updateByExampleSelective(newsArticle, criteria);
+	}
+
+	
 	@Override
 	public int delete(int newsId, int articleId) {
 		WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();
@@ -117,6 +131,7 @@ public class WxMaterialNewsArticleServiceImpl implements IWxMaterialNewsArticleS
 		this.wxMaterialNewsArticleMapper = wxMaterialNewsArticleMapper;
 	}
 
+	
 	
 
 }

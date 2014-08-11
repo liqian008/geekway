@@ -9,7 +9,7 @@
 		<meta name="author" content="www.frebsite.nl" />
 		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
-		<title>ITO文章</title>
+		<title>文章</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
 		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css" />

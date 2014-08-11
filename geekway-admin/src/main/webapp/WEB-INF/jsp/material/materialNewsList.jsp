@@ -106,6 +106,7 @@
 							<tr>
 								<th>ID</th>
                                 <th>名称</th>
+                                <th>封面大图</th>
                                 <th>链接</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
@@ -123,7 +124,12 @@
 		                        <td><%=i%></td>
 		                        <td><%=materialNews.getTitle()%></td>
 		                        <td>
-		                        	<a href="<%=ArticleLinkUtil.getArticlesLink(materialNews.getId())%>" target="_blank"> 
+		                        	<a href="<%=materialNews.getCoverImageUrl()%>" class="lightbox">
+		                        	<img src='<%=materialNews.getCoverImageUrl()%>' class="img-media" title="摘要: <%=materialNews.getDigest()%>"/>
+		                        	</a> 
+		                        </td>
+		                        <td>
+		                        	<a href="<%=ArticleLinkUtil.getNewsLink(materialNews.getId())%>" target="_blank"> 
 									<span class="label label-success">预览</span> 
 									</a>	
 		                        </td>

@@ -11,6 +11,14 @@ import com.bruce.geekway.model.WxMaterialNewsArticleCriteria;
  */
 public interface IWxMaterialNewsArticleService extends IFoundationPagingService<WxMaterialNewsArticle, Integer, WxMaterialNewsArticleCriteria>{
 
+	/**
+	 * 排序置顶
+	 * @param newsId
+	 * @param articleId
+	 * @return
+	 */
+	public int topArticle(int newsId, int articleId);
+	
 	public int deleteByNewsId(int newsId);
 	
 	public int deleteByArticleId(int articleId);

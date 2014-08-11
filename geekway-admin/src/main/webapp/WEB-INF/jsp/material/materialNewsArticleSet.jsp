@@ -137,7 +137,11 @@
 		                        	</a>
 		                        </td>
 		                        <td><%=materialArticle.getTitle()%></td>
-		                        <td>正常</td>
+		                        <td>
+									<a href="./topMaterialArticle?newsId=${materialNews.id}&articleId=<%=materialArticle.getId()%>" target="_blank"> 
+									<span class="label label-success">置顶</span> 
+									</a>
+								</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 		                        		<a href="./removeMaterialNewsArticle?newsId=${materialNews.id}&articleId=<%=materialArticle.getId()%>"  

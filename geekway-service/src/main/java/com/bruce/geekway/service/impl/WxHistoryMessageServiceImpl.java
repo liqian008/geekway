@@ -11,18 +11,22 @@ import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxHistoryMessageMapper;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
+import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.message.CustomMessage;
 import com.bruce.geekway.model.wx.message.ImageMessage;
 import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.model.wx.message.VoiceMessage;
 import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.ClickEventRequest;
+import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VideoRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxHistoryMessageService;
@@ -107,28 +111,48 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 			sentTimeMillis = seconds*1000;
 		}catch(Exception e){
 		}
-		message.setSendTime(new Date(sentTimeMillis));
+		message.setSentTime(new Date(sentTimeMillis));
 		
 		if(requestMessage instanceof TextRequest){//文本消息
 			message.setContent(((TextRequest)requestMessage).getContent());
+			return save(message);
 		}else if(requestMessage instanceof ImageRequest){//图片消息
 			message.setContent("发来了一条图片消息");
 			message.setMediaId(((ImageRequest)requestMessage).getMediaId());
 			message.setPicUrl(((ImageRequest)requestMessage).getPicUrl());
+			return save(message);
 		}else if(requestMessage instanceof VoiceRequest){//语音消息
 			message.setContent("发来了一条语音消息");
 			message.setMediaId(((VoiceRequest)requestMessage).getMediaId());
 			message.setFormat(((VoiceRequest)requestMessage).getFormat());
+			return save(message);
 		}else if(requestMessage instanceof VideoRequest){//视频消息
 			message.setContent("发来了一条视频消息");
 			message.setMediaId(((VideoRequest)requestMessage).getMediaId());
 			message.setThumbMediaId(((VideoRequest)requestMessage).getThumbMediaId());
+			return save(message);
 		}else if(requestMessage instanceof LocationRequest){//lbs消息
 			message.setContent("发来了一条位置消息");
+			return save(message);
+		}else if(requestMessage instanceof EventRequest){//事件类的消息
+			
+			if(WxEventTypeEnum.SUBSCRIBE.equals(((EventRequest) requestMessage).getEvent())){//订阅消息
+				message.setContent("首次关注公众账户");
+				return save(message);
+			}else if(WxEventTypeEnum.RESUBSCRIBE.equals(((EventRequest) requestMessage).getEvent())){//订阅消息
+				message.setContent("重复关注公众账户");
+				return save(message);
+			}else if(WxEventTypeEnum.UNSUBSCRIBE.equals(((EventRequest) requestMessage).getEvent())){//订阅消息
+				message.setContent("取消关注公众账户");
+				return save(message);
+			}else if(WxEventTypeEnum.CLICK.equals(((EventRequest) requestMessage).getEvent())){//点击消息
+				message.setContent("点击菜单【"+((EventRequest)requestMessage).getEventKey()+"】");
+				return save(message);
+			}
 		}else{
-			message.setContent("发来了一条消息");
+			//do nothing
 		}
-		return save(message);
+		return 0;
 	}
 
 	/**
@@ -144,15 +168,27 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 			message.setOpenId(wxResponse.getToUserName());
 			message.setInbox((short) 1);
 			Date currentTime = new Date();
-			message.setSendTime(currentTime);
+			message.setSentTime(currentTime);
 			message.setCreateTime(currentTime);
 			
-			if(wxResponse instanceof TextResponse){//文本回复
+			if(wxResponse instanceof TextResponse){//自动回复文本
 				message.setMsgType("text");
-				message.setContent(((TextResponse)wxResponse).getContent());
-			}else if(wxResponse instanceof NewsResponse){//文本图文回复
+				message.setContent("自动回复文本: "+((TextResponse)wxResponse).getContent());
+			}else if(wxResponse instanceof NewsResponse){//自动回复图文
+				
+				int articleCount = ((NewsResponse)wxResponse).getArticleCount();
 				message.setMsgType("news");
-				message.setContent("回复了一条图文消息");
+				if(articleCount>1){
+					message.setContent("自动回复了一条多图文消息");	
+				}else{
+					message.setContent("自动回复了一条单图文消息");
+				}
+				message.setPicUrl(((NewsResponse)wxResponse).getArticles().get(0).getPicUrl());
+				message.setDigest(((NewsResponse)wxResponse).getArticles().get(0).getTitle());
+			}else if(wxResponse instanceof ImageResponse){//自动回复图片
+				message.setMsgType("image");
+				message.setContent("自动回复了一条图片消息");
+				message.setMediaId(((ImageResponse)wxResponse).getMediaId());
 			}
 			return save(message);
 		}
@@ -171,7 +207,7 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 			message.setOpenId(customMessage.getTouser());
 			message.setInbox((short) 1);
 			Date currentTime = new Date();
-			message.setSendTime(currentTime);
+			message.setSentTime(currentTime);
 			message.setCreateTime(currentTime);
 			if(customMessage instanceof TextMessage){//文本回复
 				message.setMsgType("text");
@@ -183,17 +219,21 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 				}else{
 					message.setContent("客服回复了一条单图文消息");
 				}
+				message.setPicUrl(((NewsMessage)customMessage).getNews().getArticles().get(0).getPicurl());
+				message.setDigest(((NewsMessage)customMessage).getNews().getArticles().get(0).getTitle());
+				
 			}else if(customMessage instanceof ImageMessage){//客服回复图片
 				message.setMsgType("image");
 				message.setContent("客服回复了一条图片消息");
 				message.setMediaId(((ImageMessage)customMessage).getImage().getMedia_id());
-			}else if(customMessage instanceof VoiceMessage){//客服回复语音
+			}
+			
+			//以下消息类型暂时不支持
+			/*
+			 * else if(customMessage instanceof VoiceMessage){//客服回复语音
 				message.setMsgType("voice");
 				message.setContent("客服回复了一条语音消息");
 				message.setMediaId(((VoiceMessage)customMessage).getVoice().getMedia_id());
-			}
-			//以下消息类型暂时不支持
-			/*
 			}else if(customMessage instanceof VideoMessage){//客服回复视频
 				message.setMsgType("video");
 				message.setContent("客服回复了一条视频消息");

@@ -7,6 +7,17 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
+<%!
+String activeTab(int interval, Integer requestInterval){ 
+	String result = "";
+	if(requestInterval!=null&&requestInterval==interval){
+		result=" class='active'";
+	}
+	return result;
+} 
+%>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,15 +99,27 @@
 
 			
 			<div class="tabbable page-tabs">
-				<%-- <ul class="nav nav-tabs">
-					<li class="active"><a href="javascript:void(0)" data-toggle="tab">
-						<img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""
-							class="tab-img"> 对话消息<span class="status status-danger"></span></a></li>
-				</ul>  --%>
+				<ul class="nav nav-tabs">
+					<%
+					String openId = (String)request.getAttribute("openId");
+					Integer interval = (Integer)request.getAttribute("interval");
+					%>
+				 
+					<li <%=activeTab(1, interval)%>>
+						<a href="./historyMessageDialog?interval=1&openId=<%=openId%>"> 
+							<i class="icon-hammer"></i>今日消息记录
+						</a>
+					</li>
+					<li <%=activeTab(5, interval)%>>
+						<a href="./historyMessageDialog?interval=5&openId=<%=openId%>"> 
+							<i class="icon-table2"></i>5日内消息记录 
+						</a>
+					</li>
+				</ul>
 				<%
 				//检查客服消息的时间间隔
 				Boolean customReply = (Boolean)request.getAttribute("customReply");
-				String openId = (String)request.getAttribute("openId");
+				
 				if(customReply!=null&&customReply){
 				%>
 				
@@ -176,6 +199,12 @@
 										<a class="message-img" href="contacts.html#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
 										<div class="message-body">
 											<%=userHistoryMessage.getContent() %>
+											<%if("news".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>
+				                        	<br/>
+				                        	<a href="javascript:void(0)" class="lightbox">
+				                        	<img src="<%=userHistoryMessage.getPicUrl()%>" height="80px"/>
+				                        	</a>
+				                        	<%}%>
 											<span class="attribution">回复时间: <%=DateUtil.date2YMDHMS(userHistoryMessage.getCreateTime()) %> </span>
 										</div>
 									</div>
@@ -188,8 +217,6 @@
 				</div>
 				<%}%>
 			</div>
-			
-			
 			
 			
 			<!-- Modal with remote path -->

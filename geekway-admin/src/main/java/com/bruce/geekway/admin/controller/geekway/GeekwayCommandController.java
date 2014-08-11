@@ -2,6 +2,7 @@ package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -137,7 +138,17 @@ public class GeekwayCommandController {
 			result = wxCommandService.updateById(command);
 		}else{
 			command.setCreateTime(currentTime);
-			result = wxCommandService.save(command);
+			
+			String fullKey = command.getCommand();
+			String[] keys = fullKey.split(",");
+			if(keys!=null&&keys.length>0){
+				for(String key: keys){
+					command.setId(null);
+					command.setCommand(key.trim());
+					result = wxCommandService.save(command); 
+				}
+			}
+			
 		}
 		model.addAttribute("redirectUrl", "./commandList");
 		return "forward:/home/operationRedirect";

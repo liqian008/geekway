@@ -30,9 +30,8 @@ public class DateUtil {
 		return null;
 	}
 	
-	public static Date calcDate(Date date, int days){
+	public static Date calcDatetime(Date date, int days){
 		if(date!=null){
-			Calendar calc = Calendar.getInstance();
 			long originTime = date.getTime();
 			long period  =(days*TIME_UNIT_DAY);
 			long result = originTime+period;
@@ -41,8 +40,7 @@ public class DateUtil {
 			System.out.println(period);
 			System.out.println(result);
 			
-			calc.setTime(new Date(result));
-			return calc.getTime();
+			return new Date(result);
 		}
 		return null;
 	}

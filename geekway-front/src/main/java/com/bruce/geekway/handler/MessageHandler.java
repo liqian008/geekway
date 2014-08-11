@@ -89,7 +89,6 @@ public class MessageHandler {
 			wxResponse =  processVoiceRequest(voiceRequest);
 			break;
 		case EVENT: {
-			//Event消息暂不需要保存到历史消息
 			String event = ele.elementText("Event");
 			if (event == null) {
 				throw new Exception("cannot find Event Node!" + xml);
@@ -159,7 +158,6 @@ public class MessageHandler {
 		}
 		if(wxRequest!=null){
 			//更新用户的消息时间，便于进行客服消息回复的判断
-			
 			
 			//将wx消息写入历史消息，便于查阅
 			historyMessageService.logRequestMessage(wxRequest, xml);

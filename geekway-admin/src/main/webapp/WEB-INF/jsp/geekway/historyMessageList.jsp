@@ -7,6 +7,16 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
+<%!
+String activeTab(int interval, Integer requestInterval){
+	String result = "";
+	if(requestInterval!=null&&requestInterval==interval){
+		result=" class='active'";
+	}
+	return result;
+}
+%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -89,16 +99,27 @@
 			
 			<div class="tabbable page-tabs">
 				<ul class="nav nav-tabs">
-					<li class="active">
-						<a href="javascript:void(0)">
+					<%
+					Integer interval = (Integer)request.getAttribute("interval");
+					%>
+				 
+					<li <%=activeTab(1, interval)%>>
+						<a href="./historyMessageList?interval=1">
 							<i class="icon-hammer"></i>今日消息记录
 						</a>
 					</li>
+					<li <%=activeTab(5, interval)%>>
+						<a href="./historyMessageList?interval=5">
+							<i class="icon-table2"></i>5日内消息记录 
+						</a>
+					</li>
+					<!-- 
 					<li>
 						<a href="javascript:void(0)">
 							<i class="icon-table2"></i>全部消息记录
 						</a>
 					</li>
+					 -->
 				</ul>
 				
 				<!-- Table view -->
@@ -144,7 +165,7 @@
 			                        	</a>
 			                        	<%}%>
 			                        </td>
-			                        <td><%=DateUtil.date2YMDHMS(historyMessage.getSendTime())%></td> 
+			                        <td><%=DateUtil.date2YMDHMS(historyMessage.getSentTime())%></td> 
 			                        <td class='text-center'>
 			                        	<div class="table-controls">
 			                        		<%String link = "./historyMessageDialog?openId="+historyMessage.getOpenId();%>
