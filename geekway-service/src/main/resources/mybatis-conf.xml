@@ -24,7 +24,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxBroadcastMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxHistoryMessageMapper.xml" />
 		
-		
+		<mapper resource="com/bruce/geekway/model/xml/WxAccessTokenMapper.xml" />
 		
 	</mappers>
 

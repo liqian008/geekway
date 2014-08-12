@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.dao.mapper.WxMpUserMapper;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.WxMpUserCriteria;
+import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.service.mp.WxUserService;
 import com.bruce.geekway.utils.ConfigUtil;
 
 @Service
@@ -19,7 +21,9 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 	
 	@Autowired
 	private WxMpUserMapper wxMpUserMapper;
-
+	@Autowired
+	private WxUserService wxUserService;
+	
 	@Override
 	public int save(WxMpUser t) {
 		return wxMpUserMapper.insertSelective(t);
@@ -69,25 +73,6 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 	}
 
 	/**
-	 * 新关注用户
-	 */
-	@Override
-	public int newSubscribeUser(String userOpenId) {
-		WxMpUser wxMpUser = loadByOpenId(userOpenId);
-		if (wxMpUser == null) {// 不为空，新关注
-			wxMpUser = new WxMpUser();
-			wxMpUser.setHeadImgUrl(DEFAULT_USER_AVATAR_URL);
-			wxMpUser.setNickname("新用户");
-			wxMpUser.setOpenId(userOpenId);
-			wxMpUser.setSubscribeStatus((short) 1);
-			wxMpUser.setSyncStatus((short) 0);
-			wxMpUser.setCreateTime(new Date());
-			return save(wxMpUser);
-		}
-		return 0;
-	}
-
-	/**
 	 * 
 	 */
 	public WxMpUser loadByOpenId(String userOpenId) {
@@ -100,11 +85,52 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 		return null;
 	}
 
+	
+	/**
+	 * 新关注用户
+	 */
+	@Override
+	public int newSubscribeUser(String userOpenId) {
+		WxUserInfoResult userInfoResult =  wxUserService.getUser(userOpenId);
+		//有效数据
+		if(userInfoResult!=null&&userInfoResult.getErrcode()==null){
+			WxMpUser mpUser = new WxMpUser();
+			mpUser.setOpenId(userOpenId);
+			mpUser.setNickname(userInfoResult.getNickname());
+			mpUser.setCity(userInfoResult.getCity());
+			mpUser.setCountry(userInfoResult.getCountry());
+			mpUser.setProvince(userInfoResult.getProvince());
+			mpUser.setHeadImgUrl(userInfoResult.getHeadimgurl());
+			mpUser.setLanguage(userInfoResult.getLanguage());
+			mpUser.setSubscribeStatus(userInfoResult.getSubscribe());
+			mpUser.setSex(userInfoResult.getSex());
+			mpUser.setCreateTime(new Date());
+			mpUser.setSyncStatus((short) 1);
+			int result = save(mpUser);
+			
+			if(result<=0){//获取用户资料失败后，则只存入openid，待后台重新获取
+				WxMpUser wxMpUser = loadByOpenId(userOpenId);
+				if (wxMpUser == null) {// 不为空，新关注
+					wxMpUser = new WxMpUser();
+					wxMpUser.setHeadImgUrl(DEFAULT_USER_AVATAR_URL);
+					wxMpUser.setNickname("新用户");
+					wxMpUser.setOpenId(userOpenId);
+					wxMpUser.setSubscribeStatus((short) 1);
+					wxMpUser.setSyncStatus((short) 0);
+					wxMpUser.setCreateTime(new Date());
+					return save(wxMpUser);
+				}
+			}
+		}
+		return 0;
+	}
+
+	
 	/**
 	 * 用户关注重复
 	 */
 	@Override
-	public int repeatSubscribeUser(String userOpenId) {
+	public int reSubscribeUser(String userOpenId) {
 		// 将订阅状态改为1
 		return updateUserSubscribeStatus(userOpenId, (short) 1);
 	}
@@ -119,6 +145,25 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 		return updateUserSubscribeStatus(userOpenId, (short) 0);
 	}
 
+	
+	/**
+	 * 根据用户所发消息中，找回用户openId（避免更服的时候遗漏用户）
+	 * @param userOpenId
+	 * @return
+	 */
+	@Override
+	public int logUserFromMessage(String userOpenId) {
+		WxMpUser wxMpUser = new WxMpUser();
+		wxMpUser.setHeadImgUrl(DEFAULT_USER_AVATAR_URL);
+		wxMpUser.setNickname("新用户");
+		wxMpUser.setOpenId(userOpenId);
+		wxMpUser.setSubscribeStatus((short) 1);
+		wxMpUser.setSyncStatus((short) 0);
+		wxMpUser.setCreateTime(new Date());
+		return save(wxMpUser);
+	}
+	
+	
 	/**
 	 * 根据同步状态获取用户列表
 	 */
@@ -128,6 +173,7 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 		criteria.createCriteria().andSyncStatusEqualTo(syncStatus);
 		return wxMpUserMapper.selectByExample(criteria);
 	}
+	
 	
 	private int updateUserSubscribeStatus(String userOpenId, short subscribeStatus) {
 		WxMpUser mpUser = new WxMpUser();
@@ -146,4 +192,13 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 		this.wxMpUserMapper = wxMpUserMapper;
 	}
 
+	public WxUserService getWxUserService() {
+		return wxUserService;
+	}
+
+	public void setWxUserService(WxUserService wxUserService) {
+		this.wxUserService = wxUserService;
+	}
+
+	
 }

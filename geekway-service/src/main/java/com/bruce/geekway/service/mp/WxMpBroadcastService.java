@@ -9,6 +9,7 @@ import com.bruce.geekway.model.wx.WxBroadcastTypeEnum;
 import com.bruce.geekway.model.wx.json.WxBroadcastInfo;
 import com.bruce.geekway.model.wx.json.WxGroupInfo;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
+import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
@@ -23,8 +24,11 @@ public class WxMpBroadcastService extends WxBaseService {
 
 	private static final String WX_BROADCAST_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
 	
+
+//	@Autowired
+//	private WxMpTokenService mpTokenService;
 	@Autowired
-	private WxMpTokenService mpTokenService;
+	private IWxAccessTokenService wxAccessTokenService;
 	
 	/**
 	 * 群发文本
@@ -60,7 +64,7 @@ public class WxMpBroadcastService extends WxBaseService {
 	 * @return
 	 */
 	private WxBroadcastResult broadcastMessage(WxBroadcastTypeEnum broadcastTypeEnum, String content, String mediaId) {
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		WxBroadcastInfo broadcastInfo = new WxBroadcastInfo(broadcastTypeEnum, content, mediaId);
@@ -74,12 +78,12 @@ public class WxMpBroadcastService extends WxBaseService {
 	}
 	
 	
-	public WxMpTokenService getMpTokenService() {
-		return mpTokenService;
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
 	}
 
-	public void setMpTokenService(WxMpTokenService mpTokenService) {
-		this.mpTokenService = mpTokenService;
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
 	}
 
 }

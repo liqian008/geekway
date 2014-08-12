@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
+import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.EmojiUtil;
 import com.bruce.geekway.utils.JsonUtil;
@@ -18,8 +19,11 @@ public class WxUserService extends WxBaseService {
 
 	private static final String WX_USER_INFO_API = ConfigUtil.getString("weixinmp_user_info_url");
 	
+
+//	@Autowired
+//	private WxMpTokenService mpTokenService;
 	@Autowired
-	private WxMpTokenService mpTokenService;
+	private IWxAccessTokenService wxAccessTokenService;
 
 	/**
 	 * 获取Wx用户列表
@@ -33,7 +37,7 @@ public class WxUserService extends WxBaseService {
 		// if(authResult!=null && authResult.getErrcode()==null){
 		// String accessToken = authResult.getAccess_token();
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		if (!StringUtils.isBlank(nextOpenId)) {
 			params.put("next_openid", nextOpenId);
@@ -57,7 +61,7 @@ public class WxUserService extends WxBaseService {
 	 */
 	public WxUserInfoResult getUser(String openId) {
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		params.put("OPENID", openId);
 		params.put("lang", "zh_CN");
@@ -69,17 +73,14 @@ public class WxUserService extends WxBaseService {
 		WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
 		return wxUserinfoResult;
 	}
-	
-	
-	
-	
 
-	public WxMpTokenService getMpTokenService() {
-		return mpTokenService;
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
 	}
 
-	public void setMpTokenService(WxMpTokenService mpTokenService) {
-		this.mpTokenService = mpTokenService;
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
 	}
+	
 
 }

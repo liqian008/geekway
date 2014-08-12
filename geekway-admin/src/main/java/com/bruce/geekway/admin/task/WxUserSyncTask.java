@@ -17,7 +17,6 @@ public class WxUserSyncTask implements Runnable{
 
 	@Autowired
 	private WxUserService wxUserService;
-	
 	@Autowired
 	private IWxMpUserService wxMpUserService;
 	

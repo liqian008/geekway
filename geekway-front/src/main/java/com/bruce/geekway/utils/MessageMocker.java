@@ -4,7 +4,7 @@ public class MessageMocker {
 
 	public static final String MSG_TEXT_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[fromUser]]></FromUserName> "
+			+ "<FromUserName><![CDATA[oAOTft7bJiGC-Kwbbc3WxDHLGJ8Q]]></FromUserName> "
 			+ "<CreateTime>1348831860</CreateTime>"
 			+ "<MsgType><![CDATA[text]]></MsgType>"
 			+ "<Content><![CDATA[liqian]]></Content>"
@@ -13,7 +13,7 @@ public class MessageMocker {
 	
 	public static final String MSG_IMG_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[fromUser]]></FromUserName>"
+			+ "<FromUserName><![CDATA[oAOTft7bJiGC-Kwbbc3WxDHLGJ8Q]]></FromUserName>"
 			+ "<CreateTime>1348831860</CreateTime>"
 			+ "<MsgType><![CDATA[image]]></MsgType>"
 			+ "<PicUrl><![CDATA[this is a img url]]></PicUrl>"
@@ -22,7 +22,7 @@ public class MessageMocker {
 	
 	public static final String MSG_VOICE_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[fromUser]]></FromUserName>"
+			+ "<FromUserName><![CDATA[oAOTft7bJiGC-Kwbbc3WxDHLGJ8Q]]></FromUserName>"
 			+ "<CreateTime>1348831860</CreateTime>"
 			+ "<MsgType><![CDATA[voice]]></MsgType>"
 			+ "<Format><![CDATA[Format]]></Format>"
@@ -31,7 +31,7 @@ public class MessageMocker {
 	
 	public static final String MSG_LOC_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[fromUser]]></FromUserName>"
+			+ "<FromUserName><![CDATA[oAOTft7bJiGC-Kwbbc3WxDHLGJ8Q]]></FromUserName>"
 			+ "<CreateTime>1351776360</CreateTime>"
 			+ "<MsgType><![CDATA[location]]></MsgType>"
 			+ "<Location_X>23.134521</Location_X>"
@@ -42,7 +42,7 @@ public class MessageMocker {
 	
 	public static final String MSG_LINK_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[fromUser]]></FromUserName>"
+			+ "<FromUserName><![CDATA[oAOTft7bJiGC-Kwbbc3WxDHLGJ8Q]]></FromUserName>"
 			+ "<CreateTime>1351776360</CreateTime>"
 			+ "<MsgType><![CDATA[link]]></MsgType>"
 			+ "<Title><![CDATA[公众平台官网链接]]></Title>"
@@ -70,7 +70,7 @@ public class MessageMocker {
 	
 	public static final String MSG_EVENT_SUBSCRIBE_XML = "<xml>"
 			+ "<ToUserName><![CDATA[toUser]]></ToUserName>"
-			+ "<FromUserName><![CDATA[oxGeHjg87dS82dsp4iP4SE1iVujA]]></FromUserName>"
+			+ "<FromUserName><![CDATA[oAOTft7bJiGC-Kwbbc3WxDHLGJ8Q]]></FromUserName>"
 			+ "<CreateTime>123456789</CreateTime>"
 			+ "<MsgType><![CDATA[event]]></MsgType>"
 			+ "<Event><![CDATA[subscribe]]></Event>"

@@ -50,10 +50,13 @@
 	
 	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
+	-->
 	<bean id="wxUserService" class="com.bruce.geekway.service.mp.WxUserService">
+	</bean>
+	<bean id="wxAccessTokenService" class="com.bruce.geekway.service.impl.WxAccessTokenServiceImpl">
 	</bean>
 	<bean id="mpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
-	-->
+	
 	
 </beans>

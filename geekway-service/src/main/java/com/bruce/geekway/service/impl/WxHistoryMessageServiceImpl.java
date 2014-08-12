@@ -211,7 +211,7 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 			message.setCreateTime(currentTime);
 			if(customMessage instanceof TextMessage){//文本回复
 				message.setMsgType("text");
-				message.setContent(((TextMessage)customMessage).getText().getContent());
+				message.setContent("客服回复文本消息: "+((TextMessage)customMessage).getText().getContent());
 			}else if(customMessage instanceof NewsMessage){//客服回复图文
 				message.setMsgType("news");
 				if(((NewsMessage) customMessage).getNews().getArticles().size()>1){
