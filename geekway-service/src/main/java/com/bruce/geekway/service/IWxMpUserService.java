@@ -16,21 +16,21 @@ public interface IWxMpUserService extends IFoundationService<WxMpUser, Integer, 
 	public WxMpUser loadByOpenId(String userOpenId);
 	
 	/**
-	 * 新订阅的用户处理
+	 * 用户新关注的处理
 	 * @param userOpenId
 	 * @return
 	 */
 	public int newSubscribeUser(String userOpenId);
 
 	/**
-	 * 重复订阅（关注后又退订）的用户处理
+	 * 用户重复订阅（关注后又退订）的处理
 	 * @param userOpenId
 	 * @return
 	 */
 	public int repeatSubscribeUser(String userOpenId);
 	
 	/**
-	 * 退订后的用户处理
+	 * 用户退订的处理
 	 * @param userOpenId
 	 * @return
 	 */

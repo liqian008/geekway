@@ -207,7 +207,8 @@
 									<a href="javascript:void(0)" id="newsMaterial" class="modal-trigger">
 									<span class="label label-danger">多图文素材</span>
 									</a>
-									
+									<!-- 
+										暂时不支持以下格式类型
 									<a href="javascript:void(0)" id="imageMaterial" class="modal-trigger">
 									<span class="label label-primary">图片素材</span>
 									</a>
@@ -215,6 +216,7 @@
 									<a href="javascript:void(0)" id="voiceMaterial" class="modal-trigger">
 									<span class="label label-info">语音素材</span>
 									</a>
+									-->
 								</label>
 							</div>
 						</div>

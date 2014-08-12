@@ -101,7 +101,10 @@ String activeTab(int interval, Integer requestInterval){
 			<div class="tabbable page-tabs">
 				<ul class="nav nav-tabs">
 					<%
-					String openId = (String)request.getAttribute("openId");
+					WxMpUser chatUser = (WxMpUser)request.getAttribute("chatUser");
+					String openId = chatUser.getOpenId();
+					//String accountDefaultAvatar = (String)request.getAttribute("accountDefaultAvatar");
+					
 					Integer interval = (Integer)request.getAttribute("interval");
 					%>
 				 
@@ -143,7 +146,8 @@ String activeTab(int interval, Integer requestInterval){
 										<a href="javascript:void(0)" id="newsMaterial" class="modal-trigger">
 										<span class="label label-danger">回复多图文</span>
 										</a>
-										
+										<!-- 
+										暂时不支持以下格式类型
 										<a href="javascript:void(0)" id="imageMaterial" class="modal-trigger">
 										<span class="label label-primary">回复图片</span>
 										</a>
@@ -151,6 +155,7 @@ String activeTab(int interval, Integer requestInterval){
 										<a href="javascript:void(0)" id="voiceMaterial" class="modal-trigger">
 										<span class="label label-info">回复语音</span>
 										</a>
+										 -->
 									</label> 
 								</div>
 							</div>
@@ -181,7 +186,7 @@ String activeTab(int interval, Integer requestInterval){
 									if(userHistoryMessage.getInbox()!=null&&userHistoryMessage.getInbox()==0){
 								%> 	
 									<div class="message">
-										<a class="message-img" href="javascript:void(0)"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
+										<a class="message-img" href="javascript:void(0)"><img src="${chatUser.headImgUrl}" alt=""></a>
 										<div class="message-body">
 											<%=userHistoryMessage.getContent() %>
 											<%if("image".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>
@@ -196,7 +201,7 @@ String activeTab(int interval, Integer requestInterval){
 									</div>
 								<%}else{ %>
 									<div class="message reversed">
-										<a class="message-img" href="contacts.html#"><img src="${pageContext.request.contextPath}/images/demo/users/default_avatar.jpg" alt=""></a>
+										<a class="message-img" href="contacts.html#"><img src="${accountDefaultAvatar}" alt=""></a>
 										<div class="message-body">
 											<%=userHistoryMessage.getContent() %>
 											<%if("news".equalsIgnoreCase(userHistoryMessage.getMsgType())){%>

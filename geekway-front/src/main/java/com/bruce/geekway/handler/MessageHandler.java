@@ -72,6 +72,7 @@ public class MessageHandler {
 		BaseRequest wxRequest = null;
 		BaseResponse wxResponse = null;
 		WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.instance(msgType);
+		boolean fromUser = true;
 		switch (msgTypeEnum) {
 		case TEXT:
 			TextRequest textRequest = WxXmlUtil.getMsgText(ele);//解析文本请求
@@ -141,6 +142,7 @@ public class MessageHandler {
 					break;
 				}
 				case BROADCAST_FINISH: {//群发广播
+					fromUser = false;//系统消息（非关注者发来的）
 					BroadcastFinishEventRequest broadcastFinishRrequest = WxXmlUtil.getBroadcastMsgEvent(ele);
 					wxRequest = broadcastFinishRrequest;
 					//作为系统级操作，向表中回写群发结果数据（脱离processor处理系统的订阅事件）
@@ -157,8 +159,9 @@ public class MessageHandler {
 			break;
 		}
 		if(wxRequest!=null){
-			//更新用户的消息时间，便于进行客服消息回复的判断
-			
+			if(fromUser){
+				mpUserService.newSubscribeUser(wxRequest.getFromUserName());//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+			}
 			//将wx消息写入历史消息，便于查阅
 			historyMessageService.logRequestMessage(wxRequest, xml);
 		}

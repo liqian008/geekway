@@ -19,6 +19,7 @@ import com.bruce.geekway.model.WxHistoryMessageCriteria;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.DateUtil;
 
 /**
@@ -29,6 +30,9 @@ import com.bruce.geekway.utils.DateUtil;
 @Controller
 @RequestMapping("/geekway") 
 public class GeekwayHistoryMessageController {
+	
+	private static final String DEFAULT_WEIXIN_ACCOUNT_AVATAR_URL = ConfigUtil.getString("weixinmp_account_avatar");
+	
 
 	@Autowired
 	private IWxHistoryMessageService wxHistoryMessageService;
@@ -93,7 +97,9 @@ public class GeekwayHistoryMessageController {
 		
 		WxMpUser chatUser = wxMpUserService.loadByOpenId(openId);
 		if(chatUser!=null){
-			model.addAttribute("openId", openId);
+			
+			model.addAttribute("chatUser", chatUser);
+			model.addAttribute("accountDefaultAvatar", DEFAULT_WEIXIN_ACCOUNT_AVATAR_URL);
 			
 			//检查是否可以给用户回复消息
 			boolean customReply = false;

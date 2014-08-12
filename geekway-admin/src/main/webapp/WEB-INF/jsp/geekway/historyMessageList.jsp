@@ -135,6 +135,7 @@ String activeTab(int interval, Integer requestInterval){
 								<tr>
 									<th>ID</th>
 	                                <th>用户</th>
+	                                <th>姓名</th>
 	                                <th>消息</th>
 	                                <th>发送时间</th>
 	                                <th class="team-links">操作</th> 
@@ -156,7 +157,8 @@ String activeTab(int interval, Integer requestInterval){
 			                        	<img src="<%=historyMessage.getMpUser().getHeadImgUrl()%>" class="img-media"/>
 			                        	<%}%>
 			                        	</a>
-			                        </td> 
+			                        </td>
+			                        <td><%=historyMessage.getMpUser().getNickname()%></td> 
 			                        <td>
 			                        	<%=historyMessage.getContent()%>
 			                        	<%if("image".equalsIgnoreCase(historyMessage.getMsgType())){%>
