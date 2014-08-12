@@ -106,7 +106,7 @@ public class MessageHandler {
 						wxResponse = processEventFirstSubscribeRequest(eventRequest);
 						break;
 					}else{//之前存在过，属于重复关注
-						mpUserService.repeatSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+						mpUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
 						eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
 						wxResponse = processEventRepeatSubscribeRequest(eventRequest);
 						break;
@@ -159,8 +159,8 @@ public class MessageHandler {
 			break;
 		}
 		if(wxRequest!=null){
-			if(fromUser){
-				mpUserService.newSubscribeUser(wxRequest.getFromUserName());//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+			if(fromUser){//对于普通消息类型，需要将消息中的openid写入用户表，避免因停服的时候导致用户遗漏
+				mpUserService.logUserFromMessage(wxRequest.getFromUserName());
 			}
 			//将wx消息写入历史消息，便于查阅
 			historyMessageService.logRequestMessage(wxRequest, xml);

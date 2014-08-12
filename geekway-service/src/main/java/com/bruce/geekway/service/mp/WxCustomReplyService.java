@@ -11,6 +11,7 @@ import com.bruce.geekway.model.wx.message.ImageMessage;
 import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.model.wx.message.VoiceMessage;
+import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
@@ -26,8 +27,12 @@ public class WxCustomReplyService extends WxBaseService {
 
 	private static final String WX_REPLY_MESSAGE_API = ConfigUtil.getString("weixinmp_reply_message_url");
 	
+//	@Autowired
+//	private WxMpTokenService mpTokenService;
+	
+	
 	@Autowired
-	private WxMpTokenService mpTokenService;
+	private IWxAccessTokenService wxAccessTokenService;
 	@Autowired
 	private IWxHistoryMessageService wxHistoryMessageService;
 
@@ -80,7 +85,7 @@ public class WxCustomReplyService extends WxBaseService {
 		if (customMessage != null) {
 			//TODO 48小时间隔检查
 			
-			String accessToken = mpTokenService.getMpAccessToken();
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
 			Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 			String customMessageStr = JsonUtil.gson.toJson(customMessage);
 			
@@ -103,11 +108,20 @@ public class WxCustomReplyService extends WxBaseService {
 		return null;
 	}
 
-	public WxMpTokenService getMpTokenService() {
-		return mpTokenService;
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
 	}
 
-	public void setMpTokenService(WxMpTokenService mpTokenService) {
-		this.mpTokenService = mpTokenService;
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
+	}
+
+	public IWxHistoryMessageService getWxHistoryMessageService() {
+		return wxHistoryMessageService;
+	}
+
+	public void setWxHistoryMessageService(
+			IWxHistoryMessageService wxHistoryMessageService) {
+		this.wxHistoryMessageService = wxHistoryMessageService;
 	}
 }

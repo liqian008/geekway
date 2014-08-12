@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.wx.WxMediaTypeEnum;
 import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
+import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
@@ -24,8 +25,10 @@ public class WxMediaUploadService extends WxBaseService {
 	
 	private static final String HTTP_CONTENT_TYPE_IMAGE = "image/jpeg";
 	
+//	@Autowired
+//	private WxMpTokenService mpTokenService;
 	@Autowired
-	private WxMpTokenService mpTokenService;
+	private IWxAccessTokenService wxAccessTokenService;
 
 	/**
 	 * 上传图片
@@ -59,7 +62,6 @@ public class WxMediaUploadService extends WxBaseService {
 //		return uploadMedia(WxMediaTypeEnum.VIDEO, contentType, data);
 //	}
 	
-	String accessToken = null;
 	/**
 	 * 上传资源
 	 * 注意事项：
@@ -73,10 +75,7 @@ public class WxMediaUploadService extends WxBaseService {
 	 * @return
 	 */
 	private WxMediaUploadResult uploadMedia(WxMediaTypeEnum typeEnum, String contentType, File file) {
-		if(accessToken==null){
-			accessToken = mpTokenService.getMpAccessToken();
-		}
-		System.out.println("accessToken:  "+ accessToken);
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		params.put("type", typeEnum.toString());
@@ -89,12 +88,22 @@ public class WxMediaUploadService extends WxBaseService {
 		}
 	}
 	
-	public WxMpTokenService getMpTokenService() {
-		return mpTokenService;
+//	public WxMpTokenService getMpTokenService() {
+//		return mpTokenService;
+//	}
+//
+//	public void setMpTokenService(WxMpTokenService mpTokenService) {
+//		this.mpTokenService = mpTokenService;
+//	}
+
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
 	}
 
-	public void setMpTokenService(WxMpTokenService mpTokenService) {
-		this.mpTokenService = mpTokenService;
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
 	}
 
+	
 }
+

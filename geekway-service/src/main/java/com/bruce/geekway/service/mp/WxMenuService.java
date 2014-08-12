@@ -14,6 +14,7 @@ import com.bruce.geekway.model.wx.json.request.WxMenuCreateJson;
 //import com.bruce.geekway.model.wx.json.response.WxAuthResult;
 import com.bruce.geekway.model.wx.json.response.WxMenuQueryResult;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
+import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
@@ -26,8 +27,11 @@ public class WxMenuService extends WxBaseService {
 	private static final String WX_MENU_DELETE_API = ConfigUtil.getString("weixinmp_menu_delete_url");
 	private static final String WX_MENU_GET_API = ConfigUtil.getString("weixinmp_menu_get_url");
 	private static final String WX_MENU_CREATE_API = ConfigUtil.getString("weixinmp_menu_create_url");
+
+//	@Autowired
+//	private WxMpTokenService mpTokenService;
 	@Autowired
-	private WxMpTokenService mpTokenService;
+	private IWxAccessTokenService wxAccessTokenService;
 	
 	/**
 	 * 创建自定义菜单
@@ -40,7 +44,7 @@ public class WxMenuService extends WxBaseService {
 //			if(authResult!=null && authResult.getErrcode()==null){
 //				String accessToken = authResult.getAccess_token();
 				
-				String accessToken = mpTokenService.getMpAccessToken(); 
+				String accessToken = wxAccessTokenService.getCachedAccessToken();
 				Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 				//创建菜单
 				String menuCreateResult = WxHttpUtil.postRequest(WX_MENU_CREATE_API, params, JsonUtil.gson.toJson(menuCreateJson));
@@ -69,7 +73,7 @@ public class WxMenuService extends WxBaseService {
 //			if(authResult!=null && authResult.getErrcode()==null){
 //				String accessToken = authResult.getAccess_token();
 				
-				String accessToken = mpTokenService.getMpAccessToken();
+				String accessToken = wxAccessTokenService.getCachedAccessToken();
 				
 				Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 				//构造菜单的json对象
@@ -96,7 +100,7 @@ public class WxMenuService extends WxBaseService {
 	 * @return
 	 */
 	public WxMenuQueryResult menuGet() {
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
@@ -115,7 +119,7 @@ public class WxMenuService extends WxBaseService {
 //		if(authResult!=null && authResult.getErrcode()==null){
 //			String accessToken = authResult.getAccess_token();
 		
-			String accessToken = mpTokenService.getMpAccessToken();
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
 		
 			Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
@@ -134,14 +138,14 @@ public class WxMenuService extends WxBaseService {
 //		System.out.println(result);
 //	}
 
-//	public String getAccessToken() {
-//		return accessToken;
-//	}
-//
-//	public void setAccessToken(String accessToken) {
-//		this.accessToken = accessToken;
-//	}
-	
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
+	}
+
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
+	}
+
 	
 	
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.model.wx.json.WxGroupInfo;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
+import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
@@ -26,8 +27,11 @@ public class WxUserGroupService extends WxBaseService {
 	private static final String WX_GROUPNAME_UPDATE_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
 	private static final String WX_USER_GROUP_MOVE_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
 	
+
+//	@Autowired
+//	private WxMpTokenService mpTokenService;
 	@Autowired
-	private WxMpTokenService mpTokenService;
+	private IWxAccessTokenService wxAccessTokenService;
 
 	/**
 	 * 创建组
@@ -36,7 +40,7 @@ public class WxUserGroupService extends WxBaseService {
 	 */
 	public boolean createGroup(WxGroupInfo.Group groupJsonBean) {
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		
@@ -58,7 +62,7 @@ public class WxUserGroupService extends WxBaseService {
 	 */
 	public WxGroupInfo.Groups listGroups() {
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		String groupListResultStr = WxHttpUtil.getRequest(WX_GROUP_LIST_API, params);
@@ -74,7 +78,7 @@ public class WxUserGroupService extends WxBaseService {
 	 */
 	public WxGroupInfo.UserGroup queryUserGroup(WxGroupInfo.UserGroup userJsonBean) {
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		String userGroupStr = WxHttpUtil.postRequest(WX_USER_GROUP_API, params, JsonUtil.gson.toJson(userJsonBean));
@@ -89,7 +93,7 @@ public class WxUserGroupService extends WxBaseService {
 	 */
 	public WxJsonResult updateGroupName(WxGroupInfo.Group groupJson) {
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		String updateResult = WxHttpUtil.postRequest(WX_GROUPNAME_UPDATE_API, params, JsonUtil.gson.toJson(groupJson));
@@ -104,7 +108,7 @@ public class WxUserGroupService extends WxBaseService {
 	 */
 	public WxJsonResult moveUserGroup(WxGroupInfo.UserGroup userGroupJson) {
 
-		String accessToken = mpTokenService.getMpAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		
 		String moveResultStr = WxHttpUtil.getRequest(WX_USER_GROUP_MOVE_API, params);
@@ -113,12 +117,20 @@ public class WxUserGroupService extends WxBaseService {
 		return wxMoveResult;
 	}
 
-	public WxMpTokenService getMpTokenService() {
-		return mpTokenService;
+//	public WxMpTokenService getMpTokenService() {
+//		return mpTokenService;
+//	}
+//
+//	public void setMpTokenService(WxMpTokenService mpTokenService) {
+//		this.mpTokenService = mpTokenService;
+//	}
+	
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
 	}
 
-	public void setMpTokenService(WxMpTokenService mpTokenService) {
-		this.mpTokenService = mpTokenService;
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
 	}
 
 }

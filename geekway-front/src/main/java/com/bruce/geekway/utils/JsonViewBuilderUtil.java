@@ -8,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.model.data.JsonResultBean;
-import com.bruce.geekway.model.exception.ErrorCode;
 
 
 public final class JsonViewBuilderUtil {
