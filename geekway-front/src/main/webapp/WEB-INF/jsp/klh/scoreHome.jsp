@@ -47,7 +47,7 @@ width:50%;
 			<div class="header_menu">
 				<a class="back" href="javascript:history.back();"></a>
 				<span>我的积分</span>
-				<a class="home" href="./home.htm"></a>
+				<a class="home" href="./home"></a>
 			</div>	
 		</div>		
 	</div>
@@ -55,17 +55,19 @@ width:50%;
 		<div class="main main_border">
 
 			<div class="score">
+				<!-- 
 				<h4>您总共获得的可乐惠积分</h4>
 				<h4>xxx分</h4>
-				<h4>您目前拥有的可乐惠积分</h4>
-				<h4>xxx分</h4>
-				<a href="javascript:void(0)" class="klh-button radius lock">签 到</a>
+				 -->
+				<h4>您当前可用的可乐惠积分</h4>
+				<h4><%=request.getAttribute("userCurrentScore") %>分</h4>
+				<a id="dailySignBtn" href="./dailySign" class="klh-button radius lock">签 到</a>
 			</div>
 			<div class="seperator"> </div>
 			<div class="score">
 				<ul>
-					<li><a href="javascript:void(0)" class="klh-button radius lock">兑换记录</a></li>
-					<li><a href="./scoreProductList" class="klh-button radius">兑换礼品</a></li>
+					<li><a id="scoreLogBtn" href="javascript:void(0)" class="klh-button radius lock">积分记录</a></li>
+					<li><a id="productsBtn" href="javascript:void(0)" class="klh-button radius">兑换礼品</a></li>
 				</ul>
 				<div class="clearfix"></div>
 			</div>
@@ -75,8 +77,22 @@ width:50%;
 </body>
 
 <script>
+
+$("#dailySign").click(function(){
+	location.href="./dailySign";
+});
+
+$("#scoreLogBtn").click(function(){
+	location.href="./userScoreLogList";
+});
+
+$("#productsBtn").click(function(){
+	location.href="./scoreProductList";
+});
+
+
 $(".lock").click(function(){
-	alert("因可乐惠系统未开放用户注册，此功能暂时予以屏蔽");
+	//alert("因可乐惠系统未开放用户注册，此功能暂时予以屏蔽");
 })
 
 </script>

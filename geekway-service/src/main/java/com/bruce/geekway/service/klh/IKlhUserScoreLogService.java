@@ -8,5 +8,9 @@ import com.bruce.geekway.service.IBaseService;
 public interface IKlhUserScoreLogService extends IBaseService<KlhUserScoreLog, Integer> {
 
 	public List<KlhUserScoreLog> queryByUserOpenId(String userOpenId);
+	
+//	public int queryTotalScoreByUserOpenId(String userOpenId);
+	
+	public int queryCurrentScoreByUserOpenId(String userOpenId);
 
 }

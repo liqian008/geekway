@@ -44,6 +44,21 @@ public class KlhUserScoreLogServiceImpl implements IKlhUserScoreLogService{
 	public List<KlhUserScoreLog> queryByUserOpenId(String userOpenId) { 
 		return klhUserScoreLogDao.queryByUserOpenId(userOpenId);
 	}
+	
+
+	@Override
+	public int queryCurrentScoreByUserOpenId(String userOpenId) {
+		int currentScore = 0;
+		 List<KlhUserScoreLog> userScoreLogList =  queryByUserOpenId(userOpenId);
+		 if(userScoreLogList!=null&&userScoreLogList.size()>0){
+			 for(KlhUserScoreLog userScoreLog: userScoreLogList){
+				 currentScore = currentScore+userScoreLog.getScoreChange();
+			 }
+		 }
+		 return currentScore<0?0:currentScore;
+	}
+	
+	
 
 	public IKlhUserScoreLogDao getKlhUserScoreLogDao() {
 		return klhUserScoreLogDao;
@@ -52,5 +67,6 @@ public class KlhUserScoreLogServiceImpl implements IKlhUserScoreLogService{
 	public void setKlhUserScoreLogDao(IKlhUserScoreLogDao klhUserScoreLogDao) {
 		this.klhUserScoreLogDao = klhUserScoreLogDao;
 	}
+
 	
 }

@@ -52,17 +52,9 @@ public class KlhUserScoreLogDaoImpl implements IKlhUserScoreLogDao, Initializing
 	public List<KlhUserScoreLog> queryByUserOpenId(String userOpenId) { 
     	KlhUserScoreLogCriteria criteria = new KlhUserScoreLogCriteria();
     	criteria.createCriteria().andUserOpenIdEqualTo(userOpenId);
-    	criteria.setOrderByClause(" sign_date desc");
     	return klhUserScoreLogMapper.selectByExample(criteria);
 	}
 
-	@Override
-	public int queryUserScore(String userOpenId) {
-		//TODO realize
-		return 0;
-	}
-
-    
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -77,6 +69,7 @@ public class KlhUserScoreLogDaoImpl implements IKlhUserScoreLogDao, Initializing
 		this.klhUserScoreLogMapper = klhUserScoreLogMapper;
 	}
 
+	
 	
 	
 

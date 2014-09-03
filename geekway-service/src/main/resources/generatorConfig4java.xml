@@ -2,12 +2,12 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
 <generatorConfiguration>
 	
-	<classPathEntry
-		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 	<!-- 
 	<classPathEntry
-		location="/home/liqian/data/mysql.jar" />		
+		location="/Users/liqian/.m2/repository_lican/mysql/mysql-connector-java/5.1.23/mysql-connector-java-5.1.23.jar" />
 		 -->
+	<classPathEntry
+		location="/home/liqian/data/mysql.jar" />		
 	
 	<context id="context1">
 		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
@@ -73,10 +73,10 @@
 		
 		<!-- klh config  -->
 		
-		<table schema="wx" tableName="klh_wall_image_log" domainObjectName="KlhWallImageLog"/>
 		
-		<!-- 
 		<table schema="wx" tableName="klh_product" domainObjectName="KlhProduct"/>
+		<!-- 
+		<table schema="wx" tableName="klh_wall_image_log" domainObjectName="KlhWallImageLog"/>
 		<table schema="wx" tableName="klh_score_setting" domainObjectName="KlhScoreSetting"/>
 		<table schema="wx" tableName="klh_vote" domainObjectName="KlhVote"/>
 		<table schema="wx" tableName="klh_vote_option" domainObjectName="KlhVoteOption"/>

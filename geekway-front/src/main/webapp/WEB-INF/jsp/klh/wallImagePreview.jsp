@@ -27,7 +27,7 @@ height:100%;
 			<div class="header_menu">
 				<a class="back" href="javascript:history.back();"></a>
 				<span>随手拍</span>
-				<a class="home" href="./home.htm"></a>
+				<a class="home" href="./home"></a>
 			</div>	
 		</div>
 	</div>

@@ -24,12 +24,17 @@ color: darkred;
 }
 
 </style>
+
+<%
+KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserProfile");
+%>
+
 <body>
 	<div class="header">
 		<div class="header_menu">
 			<div class="header_menu">
 				<a class="back" href="javascript:history.back();"></a>
-				<span>积分规则</span>
+				<span>个人信息</span>
 				<a class="home" href="./home"></a>
 			</div>	
 		</div>		
@@ -38,18 +43,10 @@ color: darkred;
 		<div class="main main_border">
 
 			<div class="score">
-				<a href="./scoreHome" class="klh-button radius">获取积分</a>	
-<p>	1. 注册可获得50积分；</p>
-<p>	2. 填写调查问卷可获得50积分；</p>
-<p>	3. 签到可获得5分积分；</p>
-<p>	4. 分享到朋友圈可获得20分积分；</p>
-<p>	5. “微论坛”发帖可获得20分积分；</p>
-<p>	6. “微论坛”回复可获得5分积分；</p>
-<p>	7. “随手拍”发照片可获得20分积分；</p>
-<p>	8. “随手拍”点赞可获得5分积分；</p>
-<p>	9. 推荐好友关注可乐惠可获得20积分<br/>
-（每个会员最多可推荐5人）；</p>
-<p>	10.购物获得积分，1元得1积分。</p>
+			<p>	昵称: <%=userProfile.getNickname()%></p>
+			<p>	姓名: <%=userProfile.getRealname()%></p>
+			<p>	地址: <%=userProfile.getAddress()%></p>
+			<p>	Email: <%=userProfile.getEmail()%></p>
 
 			</div>
 		</div>

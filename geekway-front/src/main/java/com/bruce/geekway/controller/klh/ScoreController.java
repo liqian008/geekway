@@ -27,8 +27,6 @@ public class ScoreController {
 	@Autowired
 	private IKlhDailySignService klhDailySignService;
 	
-	
-
 	/**
 	 * 积分介绍
 	 * 
@@ -48,6 +46,16 @@ public class ScoreController {
 	 */
 	@RequestMapping(value = "/scoreHome")
 	public String scoreHome(Model model, HttpServletRequest request) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+
+		KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
+		
+		int userCurrentScore = klhUserScoreLogService.queryCurrentScoreByUserOpenId(sessionUserProfile.getUserOpenId());
+		model.addAttribute("userCurrentScore", userCurrentScore);
+		
 		return "klh/scoreHome";
 	}
 	
@@ -60,7 +68,7 @@ public class ScoreController {
 	@RequestMapping(value = "/userScoreLogList")
 	public String userScoreList(Model model, HttpServletRequest request) {
 		if (!KlhUtil.sessionValid(request)) {// 页面流程
-			// TODO 跳转auth界面
+			//跳转auth界面
 			return KlhUtil.redirectToOauth(model);
 		}
 

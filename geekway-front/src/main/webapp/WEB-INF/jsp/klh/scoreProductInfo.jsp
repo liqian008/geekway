@@ -37,7 +37,7 @@ margin: 10px 0px;
 			<div class="header_menu">
 				<a class="back" href="javascript:history.back();"></a>
 				<span>我的积分</span>
-				<a class="home" href="./home.htm"></a>
+				<a class="home" href="./home"></a>
 			</div>	
 		</div>		
 	</div>

@@ -31,7 +31,7 @@ background-color: darkred;
 
 .score ul li{
 float:left;
-width:33%;
+width:50%;
 }
 
 .score ul li div{
@@ -40,8 +40,9 @@ overflow:hidden;
 }
 
 .score ul li img{
-width:120px;
-height:90px;
+width:auto;
+height:auto;
+max-width:100%;
 }
 
 .score p{
@@ -57,7 +58,7 @@ margin:2px 0px;
 			<div class="header_menu">
 				<a class="back" href="javascript:history.back();"></a>
 				<span>积分产品</span>
-				<a class="home" href="./home.htm"></a>
+				<a class="home" href="./home"></a>
 			</div>	
 		</div>		
 	</div>

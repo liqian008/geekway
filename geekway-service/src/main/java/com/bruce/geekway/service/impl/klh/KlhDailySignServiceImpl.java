@@ -81,8 +81,7 @@ public class KlhDailySignServiceImpl implements IKlhDailySignService{
 					userScoreLog.setScoreChange(signScore);
 					userScoreLog.setCreateTime(currentTime);
 					userScoreLog.setReason("用户签到，增加【"+signScore+"】积分, "+DateUtil.DATE_FORMAT_YMDHMS.format(currentTime));
-					klhUserScoreLogService.save(userScoreLog);
-					return 1; 
+					return klhUserScoreLogService.save(userScoreLog);
 				}
 			}
 		}

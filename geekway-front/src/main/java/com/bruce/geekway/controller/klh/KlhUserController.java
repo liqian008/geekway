@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserProfile;
-import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.service.klh.IKlhSettingService;
 import com.bruce.geekway.service.klh.IKlhUserProfileService;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
@@ -32,24 +31,26 @@ public class KlhUserController {
 	private IKlhSettingService klhSettingService;
 	@Autowired
 	private IKlhUserScoreLogService klhUserScoreLogService;
-
-	@RequestMapping(value = "/bindProfile", method = RequestMethod.GET)
-	public String bindProfile(Model model, HttpServletRequest request) {
+	
+	
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
+	public String profile(Model model, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
 			//TODO 跳转auth界面
 			return KlhUtil.redirectToOauth(model);
 		}else{
-			return "klh/bindProfile";
+			return "klh/profile";
 		}
 	}
-
+	
+	
 	/**
 	 * 绑定操作
 	 * @param model
 	 * @param userProfile
 	 * @return
 	 */
-	@RequestMapping(value = "/bindProfile", method = RequestMethod.POST)
+	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
 	public String bindProfileGo(Model model, KlhUserProfile userProfile, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
 			//TODO 跳转auth界面
