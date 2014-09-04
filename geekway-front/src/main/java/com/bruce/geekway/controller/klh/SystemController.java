@@ -90,14 +90,16 @@ public class SystemController {
 	public String home(Model model, @RequestParam(value = "code", required = false, defaultValue = "") String code, HttpServletRequest request) {
 
 		if (!StringUtils.isEmpty(code)) {//回调地址进来的
+			System.out.println("==========oauthResult.code========="+code);
 			WxOauthTokenResult oauthResult = mpOauthService.getOauthAccessToken(code);
 			if (oauthResult != null && oauthResult.getAccess_token() != null) {
-				System.out.println("==========1=========");
+				System.out.println("==========oauthResult.getAccess_token()========="+oauthResult.getAccess_token());
 				String userOpenId = oauthResult.getOpenid();
+				System.out.println("==========oauthResult.getOpenid()()========="+userOpenId);
 				//使用accessToken获取userInfo
 				WxUserInfoResult authUserInfoResult = mpOauthService.getOauthUserinfo(oauthResult.getAccess_token(), oauthResult.getOpenid());
 				if (authUserInfoResult != null) {
-					System.out.println("==========2=========");
+					System.out.println("==========getNickname========="+authUserInfoResult.getNickname());
 					KlhUserProfile userProfile = klhUserProfileService.loadByOpenid(userOpenId);
 					int result = 0;
 					if (userProfile== null) {//全新用户
@@ -112,7 +114,7 @@ public class SystemController {
 						klhUserProfileService.save(userProfile);
 						//新增用户变化积分记录
 						KlhSetting klhSetting = klhSettingService.loadKlhSetting();
-						if(klhSetting!=null&&klhSetting.getSignScore()!=null&&klhSetting.getSignScore()>0){
+						if(klhSetting!=null&&klhSetting.getBindScore()!=null){
 							int bindScore = klhSetting.getBindScore();
 							KlhUserScoreLog scoreLog = new KlhUserScoreLog();
 							scoreLog.setUserOpenId(userOpenId);
@@ -130,7 +132,7 @@ public class SystemController {
 					return "klh/index";
 				}
 			}
-			System.out.println("===oauthResult==" + oauthResult.getOpenid());
+			System.out.println("=============");
 		}else{
 			if(KlhUtil.sessionValid(request)){// 页面流程
 				return "klh/index";

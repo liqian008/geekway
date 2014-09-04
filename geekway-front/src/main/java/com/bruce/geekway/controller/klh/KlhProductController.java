@@ -66,35 +66,39 @@ public class KlhProductController {
 		KlhProduct productInfo = klhProductService.loadById(productId);
 		if(productInfo!=null&&productInfo.getId()>0){
 			model.addAttribute("productInfo", productInfo);
+			
+			KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
+			int userScore = klhUserScoreLogService.queryCurrentScoreByUserOpenId(sessionUserProfile.getUserOpenId());
+			model.addAttribute("userScore", userScore);
 		}
 		return "klh/scoreProductInfo";
 	}
 	
 	
-	/**
-	 * 确认兑换物品（输入邮寄地址等）
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/applyInfo", method=RequestMethod.POST)
-	public String applyInfo(Model model, int productId, HttpServletRequest request) {
-		if(!KlhUtil.sessionValid(request)){// 页面流程
-			//TODO 跳转auth界面
-			return KlhUtil.redirectToOauth(model);
-		}
-		//TODO 检查用户积分
-		KlhProduct productInfo = klhProductService.loadById(productId);
-		if(productInfo!=null&&productInfo.getId()>0&&productInfo.getStatus()!=null&&productInfo.getStatus()==1){//兑换产品可用
-			Integer leftNum = productInfo.getLeftNum();//库存数
-			if(leftNum!=null&&leftNum>0){
-				model.addAttribute("productInfo", productInfo);
-				return "klh/applyInfo";
-			}else{
-				//库存不足，不可兑换
-			}
-		}
-		return "";
-	}
+//	/**
+//	 * 确认兑换物品（输入邮寄地址等）
+//	 * @param model
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/applyInfo", method=RequestMethod.POST)
+//	public String applyInfo(Model model, int productId, HttpServletRequest request) {
+//		if(!KlhUtil.sessionValid(request)){// 页面流程
+//			//TODO 跳转auth界面
+//			return KlhUtil.redirectToOauth(model);
+//		}
+//		//TODO 检查用户积分
+//		KlhProduct productInfo = klhProductService.loadById(productId);
+//		if(productInfo!=null&&productInfo.getId()>0&&productInfo.getStatus()!=null&&productInfo.getStatus()==1){//兑换产品可用
+//			Integer leftNum = productInfo.getLeftNum();//库存数
+//			if(leftNum!=null&&leftNum>0){
+//				model.addAttribute("productInfo", productInfo);
+//				return "klh/applyInfo";
+//			}else{
+//				//库存不足，不可兑换
+//			}
+//		}
+//		return "";
+//	}
 	
 	/**
 	 * 兑换产品
@@ -102,7 +106,7 @@ public class KlhProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/productApply", method=RequestMethod.POST)
-	public synchronized String productApply(Model model, int productId, HttpServletRequest request) {
+	public synchronized String productApply(Model model, int productId, String postName, String postMobile, String postAddress, String postCode, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
 			//TODO 跳转auth界面
 			return KlhUtil.redirectToOauth(model);
@@ -111,32 +115,32 @@ public class KlhProductController {
 		//TODO 扣减用户积分
 		KlhProduct productInfo = klhProductService.loadById(productId);
 		if(productInfo!=null&&productInfo.getId()>0&&productInfo.getStatus()!=null&&productInfo.getStatus()==1){//兑换产品可用
-			int leftNum = 0;
-			if(leftNum>0){//可以兑换
+			Integer leftNum = productInfo.getLeftNum() ;
+			if(leftNum!=null && leftNum>0){//可以兑换
 				Integer productScore = productInfo.getScore();
 				KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
 				int userScore = klhUserScoreLogService.queryCurrentScoreByUserOpenId(sessionUserProfile.getUserOpenId());
-				if(productScore!=null&&userScore<userScore){//可以兑换
+				if(productScore!=null&&productScore<userScore){//可以兑换
 					Date currentTime = new Date();
 					//扣减用户积分
 					KlhUserScoreLog scoreLog = new KlhUserScoreLog();
 					scoreLog.setUserOpenId(sessionUserProfile.getUserOpenId());
 					scoreLog.setScoreChange(0-productScore);
 					scoreLog.setCreateTime(currentTime);
-					scoreLog.setReason("兑换积分产品，扣减【"+productScore+"】积分, "+DateUtil.DATE_FORMAT_YMDHMS.format(currentTime));
+					scoreLog.setReason("兑换积分产品【"+productInfo.getTitle()+"】，扣减【"+productScore+"】积分");
 					int result =  klhUserScoreLogService.save(scoreLog);
 					
-					//TODO 扣减库存数量
+					// 扣减库存数量
 					if(result>0){
-						
+						productInfo.setLeftNum(leftNum-1);
+						klhProductService.updateById(productInfo);
 					}
 				}
-				return "redirect:./userScoreLogList";
+				return "redirect:./scoreHome";
 			}else{
 				//不可兑换
 			}
 		}
-		
-		return "redirect:./userScoreLogList";
+		return "redirect:./scoreHome";
 	}
 }

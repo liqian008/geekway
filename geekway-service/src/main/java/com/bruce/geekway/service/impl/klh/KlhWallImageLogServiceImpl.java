@@ -63,5 +63,7 @@ public class KlhWallImageLogServiceImpl implements IKlhWallImageLogService{
 	public void setKlhWallImageLogDao(IKlhWallImageLogDao klhWallImageLogDao) {
 		this.klhWallImageLogDao = klhWallImageLogDao;
 	}
+	
+	
 
 }

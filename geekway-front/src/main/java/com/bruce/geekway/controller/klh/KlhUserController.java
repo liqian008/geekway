@@ -53,37 +53,21 @@ public class KlhUserController {
 	@RequestMapping(value = "/updateProfile", method = RequestMethod.POST)
 	public String bindProfileGo(Model model, KlhUserProfile userProfile, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
-			//TODO 跳转auth界面
+			//跳转auth界面
 			return KlhUtil.redirectToOauth(model);
 		}
 		
 		if(userProfile!=null){
-			
-			//检查绑定信息
-			KlhSetting klhSetting = klhSettingService.loadKlhSetting();
-			if(klhSetting.getBindRealname()==1){//需要绑定realanme
-				
-			}
-			
-			
-			String userOpenId = userProfile.getUserOpenId();
-			if(!StringUtils.isEmpty(userOpenId)){
-				KlhUserProfile dbProfile = klhUserProfileService.loadByOpenid(userOpenId);
-				Date currentTime = new Date();
-				if(dbProfile!=null){//原纪录存在，修改绑定
-					userProfile.setUpdateTime(currentTime);
-					userProfile.setId(dbProfile.getId());
-					int result = klhUserProfileService.updateById(userProfile);
-				}else{
-					userProfile.setCreateTime(currentTime);
-					int result = klhUserProfileService.bindProfile(userOpenId, userProfile);
-				}
-			}else{
-				//异常流程
-				System.out.println("====bindProfile 绑定出错====");
+			KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
+			KlhUserProfile dbProfile = klhUserProfileService.loadByOpenid(sessionUserProfile.getUserOpenId());
+			Date currentTime = new Date();
+			if(dbProfile!=null){//原纪录存在，修改绑定
+				userProfile.setUpdateTime(currentTime);
+				userProfile.setId(dbProfile.getId());
+				klhUserProfileService.updateById(userProfile);
 			}
 		}
-		return "redirect:./bindProfile";
+		return "redirect:./profile";
 	}
 	
 //	@RequestMapping(value = "/login", method = RequestMethod.GET)

@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.data.PagingData;
+import com.bruce.geekway.model.KlhUserProfile;
 import com.bruce.geekway.model.KlhWallImage;
 import com.bruce.geekway.service.klh.IKlhWallImageLogService;
 import com.bruce.geekway.service.klh.IKlhWallImageService;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
+import com.bruce.geekway.utils.KlhUtil;
 /**
  * 可乐惠相片墙
  * @author liqian
@@ -45,6 +47,11 @@ public class KlhWallController {
 
 	@RequestMapping(value = "/latestWallImages")
 	public String latestWallImages(Model model, @RequestParam(value="pageNo", defaultValue="1") int pageNo, HttpServletRequest request) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
 		Cookie[] cookies = request.getCookies();
 		int tabType = 0;
 		List<KlhWallImage> wallImageList = null;
@@ -70,6 +77,11 @@ public class KlhWallController {
 	
 	@RequestMapping(value = "/hotestWallImages")
 	public String hotestWallImages(Model model, @RequestParam(value="pageNo", defaultValue="1") int pageNo, HttpServletRequest request) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
 		Cookie[] cookies = request.getCookies();
 		int tabType = 1;
 		List<KlhWallImage> wallImageList = null;
@@ -94,8 +106,14 @@ public class KlhWallController {
 	
 	@RequestMapping(value = "/imagePreview")
 	public String imagePreview(Model model, int wallImageId, String imgUrl, HttpServletRequest request) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
+		KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
 		//增加浏览记录
-		klhWallImageService.increaseBrowse(wallImageId);
+		klhWallImageService.increaseBrowse(wallImageId, sessionUserProfile.getUserOpenId());
 		model.addAttribute("imgUrl", imgUrl);
 		return "klh/wallImagePreview";
 	}
@@ -103,6 +121,11 @@ public class KlhWallController {
 	
 	@RequestMapping(value = "/newImage")
 	public String newImage(Model model, HttpServletRequest request) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
 		//检查cookie中的
 		Cookie[] cookies = request.getCookies();
 		if(cookies!=null&&cookies.length>0){
@@ -120,6 +143,11 @@ public class KlhWallController {
 	
 	@RequestMapping(value = "/saveWallImage", method=RequestMethod.POST)
 	public String saveWallImage(Model model, KlhWallImage wallImage, HttpServletRequest request, HttpServletResponse response) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
 		if(wallImage!=null){
 			wallImage.setLikeCount(0);
 			wallImage.setCreateTime(new Date());
@@ -159,7 +187,9 @@ public class KlhWallController {
 		}
 		
 		if(!hasLike){//如果之前未like过
-			int result = klhWallImageService.increaseLike(wallImageId);
+			KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
+			//增加like记录
+			int result = klhWallImageService.increaseLike(wallImageId, sessionUserProfile.getUserOpenId());
 			if(result>0){
 				//重新写入cookie
 				Cookie cookie = new Cookie(getImageCookieKey(wallImageId), "true");

@@ -48,5 +48,5 @@ public class KlhProductServiceImpl implements IKlhProductService{
 	public void setKlhProductDao(IKlhProductDao klhProductDao) {
 		this.klhProductDao = klhProductDao;
 	}
-	
+
 }

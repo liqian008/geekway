@@ -14,15 +14,18 @@
 <style>
 
 .score{
-margin: 30px 20px 30px 40px;
-text-align:left;
+margin:20px;
+text-align:center;
 }
 
-.score p{
-font-size:13px;
-color: darkred;
-}
 
+label { text-align:left;font-size: 12px; color: #4d4d4d; cursor: pointer; display: block; font-weight: 500; margin-bottom: 3px; }
+label.center { text-align:center }
+label.inline { line-height: 30px; margin: 0 0 12px 0; }
+
+input[type="text"]{
+width:100%;
+}
 </style>
 
 <%
@@ -40,15 +43,25 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 		</div>		
 	</div>
 	<div class="content">
-		<div class="main main_border">
-
-			<div class="score">
-			<p>	昵称: <%=userProfile.getNickname()%></p>
-			<p>	姓名: <%=userProfile.getRealname()%></p>
-			<p>	地址: <%=userProfile.getAddress()%></p>
-			<p>	Email: <%=userProfile.getEmail()%></p>
-
+		<div class="main">
+			<form action="./updateProfile" method="post" name="profileForm"> 
+			<div class="userProfile">
+				<label>昵称</label>
+				<input type="text" id="nickname" name="nickname" value="<%=userProfile.getNickname()==null?"":userProfile.getNickname()%>">
+				<label>真实姓名</label>
+				<input type="text" id="realname" name="realname" value="<%=userProfile.getRealname()==null?"":userProfile.getRealname()%>">
+				<label>手机号码</label>
+				<input type="text" id="mobile" name="mobile" value="<%=userProfile.getMobile()==null?"":userProfile.getMobile()%>">
+				<label>Email</label>
+				<input type="text" id="email" name="email" value="<%=userProfile.getEmail()==null?"":userProfile.getEmail()%>">
+				<label>通讯地址</label>
+				<input type="text" id="address" name="address" value="<%=userProfile.getAddress()==null?"":userProfile.getAddress()%>">
 			</div>
+			<div class="seperator"> </div>
+			<div class="score">
+				<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">修改</a>
+			</div>
+			</form>
 		</div>
 	</div>
 		
@@ -56,6 +69,9 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 
 <script>
 
+$("#submitBtn").click(function (){
+	document.forms[0].submit();
+});
 </script>
 
 </html>
