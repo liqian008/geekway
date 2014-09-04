@@ -24,25 +24,15 @@ public class KlhUserProfileController {
 	@Autowired
 	private IKlhUserProfileService klhUserProfileService;
 	
-	@RequestMapping("/userList")
-	public String userList(Model model, HttpServletRequest request) {
+	@RequestMapping("/userProfileList")
+	public String userProfileList(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<KlhUserProfile> userList = klhUserProfileService.queryAll();
-		model.addAttribute("userList", userList);
-		return "klh/userList";
+		List<KlhUserProfile> userProfileList = klhUserProfileService.queryAll();
+		model.addAttribute("userProfileList", userProfileList);
+		return "klh/userProfileList";
 	}
-	
-	
-//	@RequestMapping("/userAdd")
-//	public String userAdd(Model model, KlhUserProfile user, HttpServletRequest request) {
-//		String servletPath = request.getRequestURI();
-//		model.addAttribute("servletPath", servletPath);
-//		
-//		model.addAttribute("user", user);
-//		return "klh/userEdit";
-//	}
 	
 	
 	/**
@@ -53,17 +43,38 @@ public class KlhUserProfileController {
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping("/userEdit")
-	public String userEdit(Model model, HttpServletRequest request, int userId) {
+	@RequestMapping("/userProfileDisplay")
+	public String userProfileDisplay(Model model, HttpServletRequest request, String userOpenId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		KlhUserProfile user = klhUserProfileService.loadById(userId);
+		KlhUserProfile user = klhUserProfileService.loadByOpenid(userOpenId);
 		if(user!=null){
 			model.addAttribute("user", user);
 		}
-		return "klh/userEdit";
+		return "klh/userProfileDisplay";
 	}
+	
+	
+//	/**
+//	 * 编辑UserProfile信息
+//	 * @param model
+//	 * @param request
+//	 * @param userId
+//	 * @param userId
+//	 * @return
+//	 */
+//	@RequestMapping("/userEdit")
+//	public String userEdit(Model model, HttpServletRequest request, int userId) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		KlhUserProfile user = klhUserProfileService.loadById(userId);
+//		if(user!=null){
+//			model.addAttribute("user", user);
+//		}
+//		return "klh/userEdit";
+//	}
 	
 //	/**
 //	 * 保存单个user信息

@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserProfile;
 import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.service.klh.IKlhDailySignService;
+import com.bruce.geekway.service.klh.IKlhSettingService;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
 import com.bruce.geekway.utils.KlhUtil;
 
@@ -26,6 +28,9 @@ public class ScoreController {
 	private IKlhUserScoreLogService klhUserScoreLogService;
 	@Autowired
 	private IKlhDailySignService klhDailySignService;
+	@Autowired
+	private IKlhSettingService klhSettingService;
+	
 	
 	/**
 	 * 积分介绍
@@ -35,6 +40,10 @@ public class ScoreController {
 	 */
 	@RequestMapping(value = "/scoreIntro")
 	public String scoreIntro(Model model, HttpServletRequest request) {
+		
+		
+		KlhSetting klhSetting = klhSettingService.loadKlhSetting();
+		model.addAttribute("klhSetting", klhSetting);
 		return "klh/scoreIntro";
 	}
 	

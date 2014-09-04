@@ -44,7 +44,8 @@ public class KlhProductController {
 //			return KlhUtil.redirectToOauth(model);
 //		}
 		
-		List<KlhProduct> productList =  klhProductService.queryAll();
+		
+		List<KlhProduct> productList =  klhProductService.queryAvailableProducts();
 		if(productList!=null&&productList.size()>0){
 			model.addAttribute("productList", productList);
 		}

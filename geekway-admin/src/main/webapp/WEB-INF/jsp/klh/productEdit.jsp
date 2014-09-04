@@ -102,7 +102,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、兑换产品列表<br/>
 				</p>
 			</div>
 
@@ -153,12 +153,31 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">兑换积分: <span class="mandatory">*</span></label>
-							<div class="col-sm-8"> 
+							<div class="col-sm-2"> 
 								<div class="block-inner">
 									<input type="text" class="form-control" name="score" id="score" value="${product.score}"/>
 								</div>
 							</div>
 						</div> 
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">库存数量: <span class="mandatory">*</span></label>
+							<div class="col-sm-2"> 
+								<div class="block-inner">
+									<input type="text" class="form-control" name="leftNum" id="leftNum" value="${product.leftNum}"/>
+								</div>
+							</div>
+						</div> 
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态:
+							</label>
+							<div class="col-sm-4">
+								<form:select path="product.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
+							</div>
+						</div>
 						
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
@@ -192,7 +211,7 @@
 	            processData: false,    //不可缺
 	            success:function(responseData){
 	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
+	                	var imageUrl = responseData.data.mediumImage.url;
 		                $('#cover-image').attr("src", imageUrl);
 		                $('#cover-image-link').attr("href", imageUrl);
 		                $('#cover-image-url').val(imageUrl);

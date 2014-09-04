@@ -65,6 +65,9 @@ public class KlhUserController {
 				userProfile.setUpdateTime(currentTime);
 				userProfile.setId(dbProfile.getId());
 				klhUserProfileService.updateById(userProfile);
+				
+				sessionUserProfile = klhUserProfileService.loadByOpenid(sessionUserProfile.getUserOpenId());
+				request.getSession().setAttribute("sessionUserProfile", sessionUserProfile); 
 			}
 		}
 		return "redirect:./profile";

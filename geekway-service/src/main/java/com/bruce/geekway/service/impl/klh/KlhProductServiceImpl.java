@@ -40,6 +40,10 @@ public class KlhProductServiceImpl implements IKlhProductService{
 		return klhProductDao.queryAll();
 	}
 	
+	@Override
+	public List<KlhProduct> queryAvailableProducts() {
+		return klhProductDao.queryAvailableProducts();
+	}
 
 	public IKlhProductDao getKlhProductDao() {
 		return klhProductDao;
@@ -48,5 +52,7 @@ public class KlhProductServiceImpl implements IKlhProductService{
 	public void setKlhProductDao(IKlhProductDao klhProductDao) {
 		this.klhProductDao = klhProductDao;
 	}
+
+	
 
 }

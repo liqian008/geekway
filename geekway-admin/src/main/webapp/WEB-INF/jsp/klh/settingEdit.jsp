@@ -117,7 +117,8 @@
 						</h6>
 					</div>
 					<div class="panel-body">
-					 
+					 	
+					 	<!-- 
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">必填姓名: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
@@ -168,11 +169,27 @@
 								</form:select>
 							</div>
 						</div>
+						 -->
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">签到积分: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
 								<input type="text" class="form-control" name="signScore" id="signScore" value="${setting.signScore}"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">照片墙发图积分: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="postScore" id="postScore" value="${setting.postScore}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">照片墙赞积分: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="likeScore" id="likeScore" value="${setting.likeScore}"/>
 							</div>
 						</div>
 						

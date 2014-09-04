@@ -115,6 +115,8 @@
 								<th>图片</th>
                                 <th>标题</th>
                                 <th>积分</th>
+                                <th>库存</th>
+                                <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
@@ -135,6 +137,8 @@
 		                        </td>
 		                        <td title="<%=product.getDescription()%>"><%=product.getTitle()%></td>
 		                        <td><%=product.getScore()%>分</td>
+		                        <td><%=product.getLeftNum()%></td>
+		                        <td><%=product.getStatus()==1?"启用":"禁用"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./productEdit?productId=<%=product.getId()%>"
