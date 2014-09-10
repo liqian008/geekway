@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.foundation.admin.controller.BaseController;
 import com.bruce.geekway.model.WxMaterialArticle;
-import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsArticleService;
@@ -29,8 +28,6 @@ public class GeekwayMaterialArticleController extends BaseController {
 
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
-	@Autowired
-	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
 	private IWxCommandService wxCommandService;
 	@Autowired

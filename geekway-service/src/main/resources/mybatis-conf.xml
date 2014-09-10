@@ -11,7 +11,9 @@
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandExtendMapper.xml" />
+		<!-- 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
+		 -->
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleExtendMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMultimediaMapper.xml" />

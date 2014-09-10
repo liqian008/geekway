@@ -1,7 +1,6 @@
 package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.model.WxCommandCriteria;
-import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 
@@ -30,8 +27,6 @@ public class GeekwayCommandSubscribedController {
 
 	@Autowired
 	private IWxCommandService wxCommandService;
-	@Autowired
-	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 //	@Autowired

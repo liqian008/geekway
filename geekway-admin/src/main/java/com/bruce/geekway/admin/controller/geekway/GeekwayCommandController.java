@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.utils.ConfigUtil;
@@ -29,8 +28,6 @@ public class GeekwayCommandController {
 
 	@Autowired
 	private IWxCommandService wxCommandService;
-	@Autowired
-	private IWxCommandMaterialService wxCommandMaterialService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 //	@Autowired
