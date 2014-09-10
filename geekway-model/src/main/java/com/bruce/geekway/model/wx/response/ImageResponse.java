@@ -21,8 +21,17 @@ public class ImageResponse extends BaseResponse {
 
     /** 通过上传多媒体文件，得到的id。 */
     public String MediaId;
+    
 
-    @Override
+    public String getMediaId() {
+		return MediaId;
+	}
+
+	public void setMediaId(String mediaId) {
+		MediaId = mediaId;
+	}
+
+	@Override
     public String toString() {
         return "ImageResponse [ToUserName=" + ToUserName + ", FromUserName=" + FromUserName + ", CreateTime=" + CreateTime + ", MsgType=" + MsgType
                 + ", MediaId=" + MediaId + "]";

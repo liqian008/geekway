@@ -1,11 +1,10 @@
 package com.bruce.geekway.service.ito;
 
-import java.util.List;
-
+import com.bruce.foundation.service.IFoundationService;
+import com.bruce.geekway.model.ItoUserProfileCriteria;
 import com.bruce.geekway.model.ItoWwjRecord;
-import com.bruce.geekway.service.IBaseService;
 
-public interface IItoWwjRecordService extends IBaseService<ItoWwjRecord, Integer>{
+public interface IItoWwjRecordService extends IFoundationService<ItoWwjRecord, Integer, ItoUserProfileCriteria>{
 
 	
 }

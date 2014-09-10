@@ -12,7 +12,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -95,7 +95,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、用户资料的同步策略为每小时一次。即新关注的用户资料，一小时内可以同步回来。
+					1、用户资料的同步策略为每小时一次。即新关注的用户资料，一小时内可以同步回来。<br/>
 					2、点击【查看】按钮，可查看用户详情<br/>
 				</p>
 			</div>
@@ -149,13 +149,17 @@
 		                        	<%}%>
 		                        </td>
 		                        <td class='text-center'>
-		                        	<%if(synced){%>
 		                        	<div class="table-controls">
+		                        		<%String link = "./historyMessageDialog?openId="+mpUser.getOpenId();%>
+											<a href="<%=link%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="回 复"><i class="icon-bubble3"></i></a>
+		                        		<%if(synced){%>
 										<a href="./mpUserInfo?mpUserId=<%=mpUser.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="查看"><i class="icon-pencil3"></i></a> 
+										<%} %>
 									</div>
-									<%} %>
 								</td>
                                </tr>
 							<%}

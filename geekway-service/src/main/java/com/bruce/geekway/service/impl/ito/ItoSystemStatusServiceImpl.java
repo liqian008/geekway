@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.ito.IItoSystemStatusDao;
 import com.bruce.geekway.model.ItoSystemStatus;
+import com.bruce.geekway.model.ItoSystemStatusCriteria;
 import com.bruce.geekway.service.ito.IItoSystemStatusService;
 
 @Service
@@ -46,6 +47,32 @@ public class ItoSystemStatusServiceImpl implements IItoSystemStatusService{
 
 	public void setItoSystemStatusDao(IItoSystemStatusDao itoSystemStatusDao) {
 		this.itoSystemStatusDao = itoSystemStatusDao;
+	}
+
+	@Override
+	public int updateByCriteria(ItoSystemStatus t,
+			ItoSystemStatusCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(ItoSystemStatusCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<ItoSystemStatus> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ItoSystemStatus> queryByCriteria(
+			ItoSystemStatusCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

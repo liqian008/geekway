@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhDailySignDao;
 import com.bruce.geekway.model.KlhDailySign;
+import com.bruce.geekway.model.KlhDailySignCriteria;
 import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.service.klh.IKlhDailySignService;
@@ -123,6 +124,30 @@ public class KlhDailySignServiceImpl implements IKlhDailySignService{
 
 	public void setKlhUserScoreLogService(IKlhUserScoreLogService klhUserScoreLogService) {
 		this.klhUserScoreLogService = klhUserScoreLogService;
+	}
+
+	@Override
+	public int updateByCriteria(KlhDailySign t, KlhDailySignCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhDailySignCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhDailySign> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhDailySign> queryByCriteria(KlhDailySignCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

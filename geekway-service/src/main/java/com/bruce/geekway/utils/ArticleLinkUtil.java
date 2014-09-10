@@ -5,7 +5,7 @@ public class ArticleLinkUtil {
 
 	private static final String ARTICLE_INFO_URL = ConfigUtil.getString("geekway_article_link");
 	
-	private static final String ARTICLE_MODULE_URL = ConfigUtil.getString("geekway_module_link");
+	private static final String ARTICLE_NEWS_URL = ConfigUtil.getString("geekway_news_link");
 	
 	/**
 	 * 获取article链接
@@ -19,12 +19,12 @@ public class ArticleLinkUtil {
 	
 	
 	/**
-	 * 获取article链接
-	 * @param articleId
+	 * 获取news链接
+	 * @param newsId
 	 * @return
 	 */
-	public static String getArticlesLink(int moduleId){
-		String link = String.format(ARTICLE_MODULE_URL, moduleId);
+	public static String getNewsLink(int newsId){
+		String link = String.format(ARTICLE_NEWS_URL, newsId);
 		return link;
 	}
 	

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhSettingDao;
 import com.bruce.geekway.model.KlhSetting;
+import com.bruce.geekway.model.KlhSettingCriteria;
 import com.bruce.geekway.service.klh.IKlhSettingService;
 
 @Service
@@ -63,6 +64,30 @@ public class KlhSettingServiceImpl implements IKlhSettingService{
 
 	public void setKlhSettingDao(IKlhSettingDao klhSettingDao) {
 		this.klhSettingDao = klhSettingDao;
+	}
+
+	@Override
+	public int updateByCriteria(KlhSetting t, KlhSettingCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhSettingCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhSetting> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhSetting> queryByCriteria(KlhSettingCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

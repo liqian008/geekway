@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.constants.ConstIto;
 import com.bruce.geekway.dao.ito.IItoProductOrderDao;
 import com.bruce.geekway.model.ItoProductOrder;
+import com.bruce.geekway.model.ItoProductOrderCriteria;
 import com.bruce.geekway.service.ito.IItoProductOrderService;
 
 @Service
@@ -98,6 +99,32 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 
 	public void setItoProductOrderDao(IItoProductOrderDao itoProductOrderDao) {
 		this.itoProductOrderDao = itoProductOrderDao;
+	}
+
+	@Override
+	public int updateByCriteria(ItoProductOrder t,
+			ItoProductOrderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(ItoProductOrderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<ItoProductOrder> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ItoProductOrder> queryByCriteria(
+			ItoProductOrderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

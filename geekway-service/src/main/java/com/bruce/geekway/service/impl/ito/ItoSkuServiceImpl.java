@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.ito.IItoSkuDao;
 import com.bruce.geekway.model.ItoSku;
+import com.bruce.geekway.model.ItoSkuCriteria;
 import com.bruce.geekway.service.ito.IItoSkuService;
 
 @Service
@@ -68,6 +69,30 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 
 	public void setItoSkuDao(IItoSkuDao itoSkuDao) {
 		this.itoSkuDao = itoSkuDao;
+	}
+
+	@Override
+	public int updateByCriteria(ItoSku t, ItoSkuCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(ItoSkuCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<ItoSku> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ItoSku> queryByCriteria(ItoSkuCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

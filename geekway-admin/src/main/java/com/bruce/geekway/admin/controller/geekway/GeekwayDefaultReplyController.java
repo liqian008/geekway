@@ -1,7 +1,6 @@
 package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 

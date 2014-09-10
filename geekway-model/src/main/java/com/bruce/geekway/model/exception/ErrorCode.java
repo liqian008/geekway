@@ -107,6 +107,14 @@ public class ErrorCode {
 	public static final int ITO_PRODUCT_ORDER_ALIPAY_NOTIFY_ERROR = 331;
 	
 	
+	/* 微信相关分配500-600的错误码 */
+	/* 非服务号 */
+	public static final int WX_BROADCAST_ERROR = 500;
+	/* 非服务号 */
+	public static final int WX_BROADCAST_NEED_SENIOR = 501;
+	/* 超过每月4次的群发限制 */
+	public static final int WX_BROADCAST_OVERLOAD = 502;
+	
 	
 	/* WEB AJAX请求分配10000-19999的错误码 */
 

@@ -8,19 +8,29 @@
 
 <%!String displayCommandType(short commandType){
 	if(1==commandType){
-		return "菜单关键词";
+		return "菜单配置关键词";
 	}else if(0==commandType){
-		return "文本关键词";
+		return "文本输入关键词";
 	}
 	return "其他关键词";
 } %>
 
 
-<%!String displayMaterialType(short materialType){
-	if(1==materialType){
-		return "图文素材";
+<%!String displayMaterialType(Short materialType){
+	if(materialType!=null){
+		if(0==materialType){
+			return "文本素材";
+		}else if(1==materialType){
+			return "单图文素材";
+		}else if(2==materialType){
+			return "多图文素材";
+		}else if(3==materialType){
+			return "图片素材";
+		}else if(4==materialType){
+			return "语音素材";
+		}
 	}
-	return "文本素材";
+	return "未选择";
 } %>
 
 
@@ -31,7 +41,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -114,7 +124,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、管理员可修改关键词的名称，以便于调整关键词。<br/>
+					1、管理员可修改关键词的名称，以便于调整返回的数据。<br/>
 				</p>
 			</div>
 			
@@ -134,40 +144,82 @@
 					<div class="panel-body">
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关键词类型:
+							<label class="col-sm-2 control-label text-right">关键词类型: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-3">
-								<%
-								short commandType = (short)1;
-								if(command!=null&&command.getId()!=null){//<!-- 编辑状态下 -->
-									commandType = command.getCommandType();
-								}else{//<!-- 新增状态下 -->
-									commandType = (Short)request.getAttribute("commandType");
-								}%>
-								<label class="control-label">
-									<%=displayCommandType(commandType) %>
-								</label>
-								<input type="hidden" class="form-control" name="commandType" id="commandType" value="${commandType}"/>
-			                    <form:hidden path="command.id"/>
+							<div class="col-sm-4">
+							<form:select path="command.commandType" class="select-liquid">
+								<form:option value="0"  label="文本输入关键字"/>
+								<form:option value="1"  label="菜单配置关键字"/>
+							</form:select>
+							<form:hidden path="command.id"/>
 							</div>
 						</div>
-						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">关键词名称:
+							<label class="col-sm-2 control-label text-right">关键词:
 							</label>
 							<div class="col-sm-3">
-								<%if(command!=null&&command.getCommandType()<2) {//文本接入&菜单接入%>
-									<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
-								<%}else{ %>
-									<label class="control-label">
-										${command.command}
-									</label>
-								<%} %>
+								<input type="text" class="form-control" name="command" id="command" value="${command.command}"/>
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">素材类型:
+							</label>
+							<div class="col-sm-10">
+								<label class="control-label">
+									<span id="materialTypeDesc"><%=displayMaterialType(command.getMaterialType()) %></span>&nbsp;
+									<form:hidden path="command.materialType"/>
+									<form:hidden path="command.materialId"/> 
+								</label>
+							</div>
+						</div>
 						
+						<div id="replyContentContainer" class="form-group" <%=command.getMaterialType()!=null&&command.getMaterialType()==0?"'":"style='display:none'"%>>
+							<label class="col-sm-2 control-label text-right">文本回复内容:
+							</label>
+							<div class="col-sm-8">
+								<textarea id="replyContent" name="replyContent" rows="3" cols="5" class="form-control" placeholder="上限100字">${command.replyContent}</textarea>
+							</div> 
+						</div>
+						
+						<div id="remarkContainer" class="form-group" <%=command.getMaterialType()!=null&&command.getMaterialType()==0?"style='display:none'":""%>>
+							<label class="col-sm-2 control-label text-right">备注:
+							</label>
+							<div class="col-sm-8">
+								<textarea id="remark" name="remark" rows="3" cols="5" class="elastic form-control" placeholder="上限100字">${command.remark}</textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">变更素材内容:
+							</label>
+							<div class="col-sm-10">
+								<label class="control-label">
+									<a href="javascript:void(0)" id="textMaterial" class="modal-trigger">
+									<span class="label label-success">文本素材</span>
+									</a>
+									
+									<a href="javascript:void(0)" id="articleMaterial" class="modal-trigger">
+									<span class="label label-info">单图文素材</span>
+									</a>
+									
+									<a href="javascript:void(0)" id="newsMaterial" class="modal-trigger">
+									<span class="label label-danger">多图文素材</span>
+									</a>
+									<!-- 
+										暂时不支持以下格式类型
+									<a href="javascript:void(0)" id="imageMaterial" class="modal-trigger">
+									<span class="label label-primary">图片素材</span>
+									</a>
+									
+									<a href="javascript:void(0)" id="voiceMaterial" class="modal-trigger">
+									<span class="label label-info">语音素材</span>
+									</a>
+									-->
+								</label>
+							</div>
+						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态:
@@ -188,76 +240,71 @@
 				</div>
 			</form>
 			
-			<%if(command!=null&&command.getCommandType()!=3) {%>
-			
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>已匹配的素材
-					</h5>
+			<!-- Modal -->
+			<div id="materialModal" class="modal fade" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="modalTitle"><i class="icon-accessibility"></i>请选择素材</h4>
+						</div>
+						<div class="modal-body with-padding">
+							<!-- 
+							<p>One fine body&hellip;</p>
+							-->
+							
+							<iframe id="materialIframe" src="./modalTest" width="100%" height="360px" frameborder="no" border="0" allowtransparency="yes"></iframe>
+							
+						</div>
+						<!-- 
+						<div class="modal-footer">
+							<button class="btn btn-warning" data-dismiss="modal">关 闭</button>
+							<button class="btn btn-primary">确 认</button>
+						</div>
+						 -->
+					</div>
 				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>类型</th>
-                                <th>封面</th>
-                                <th>内容</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxMaterialArticle> materialList = (List<WxMaterialArticle>)request.getAttribute("materialList");
-                           	if(materialList!=null&&materialList.size()>0){
-                           		int i=0;
-                           		for(WxMaterialArticle material: materialList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=material.getId()%></td>
-		                        <td><%=displayMaterialType(material.getMaterialType())%></td>
-		                       	<td>
-		                        	<%if(material.getMaterialType()==1){%>
-	                        		<a href="<%=material.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=material.getCoverImageUrl()%>' class="img-media"/>
-		                        	</a>
-		                        	<%}else{ %>
-		                        		无
-		                        	<%} %>
-		                        </td>
-		                        <td>
-		                        	<%=material.getMaterialType()==1?material.getShortContent():material.getTextReply()%>
-		                        </td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        		<a href="./materialArticleEdit?articleId=<%=material.getId()%>"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="修改素材"><i class="icon-pencil3"></i></a>
-		                        		<a href="javascript:void(0)"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="解除匹配"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-				
 			</div>
-			<!-- /table view -->
-			<%}%>
+			<!-- /modal -->
 			
-
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
-
+			
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
 </body>
+
+
+
+<script>
+
+<%
+int operation = 0;//匹配command
+%>
+$(".modal-trigger").click(function(){
+	var materialUrl = "";
+	var modalTitle = "请选择素材";
+	if(this.id=='textMaterial'){
+		modalTitle = "请输入文本内容";	
+		materialUrl = "./iframePickTextMaterial?operation=<%=operation%>";
+	}else if(this.id=='articleMaterial'){
+		modalTitle = "请选择单图文素材";
+		materialUrl = "./iframePickArticleMaterial?operation=<%=operation%>";
+	}else if(this.id=='newsMaterial'){
+		modalTitle = "请选择多图文素材";
+		materialUrl = "./iframePickNewsMaterial?operation=<%=operation%>";
+	}else if(this.id=='imageMaterial'){
+		modalTitle = "请选择图片素材";
+		materialUrl = "./iframePickImageMaterial?operation=<%=operation%>";
+	}else if(this.id=='voiceMaterial'){
+		modalTitle = "请选择语音素材";
+		materialUrl = "./iframePickVoiceMaterial?operation=<%=operation%>";
+	}
+	$("#modalTitle").text(modalTitle);
+	$("#materialIframe").attr("src", materialUrl);
+	$("#materialModal").modal();
+})
+</script>
+
 </html>

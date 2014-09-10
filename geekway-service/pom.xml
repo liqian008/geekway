@@ -17,6 +17,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+	
+		<dependency> 
+			<groupId>com.bruce</groupId>
+			<artifactId>foundation-service</artifactId>
+			<version>1.0.0-BUILD-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency> 
+			<groupId>com.bruce</groupId>
+			<artifactId>geekway-model</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 		
 		<!-- httpclient 4 
 		<dependency>
@@ -44,11 +56,8 @@
 			<type>jar</type>
 		</dependency>
 		
-		 <dependency> 
-			<groupId>com.bruce</groupId>
-			<artifactId>geekway-model</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
+		
+		
 
 		<!-- Mysql -->
 		<dependency>

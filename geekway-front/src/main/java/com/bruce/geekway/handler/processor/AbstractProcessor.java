@@ -3,6 +3,7 @@ package com.bruce.geekway.handler.processor;
 import java.util.List;
 
 import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.model.WxMaterialMultimedia;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
@@ -12,6 +13,7 @@ import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VideoRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.utils.MaterialLinkUtil;
@@ -45,10 +47,10 @@ public abstract class AbstractProcessor implements Processor{
         	WxEventTypeEnum eventType = ((EventRequest)request).getEvent();
         	if(WxEventTypeEnum.SUBSCRIBE.equals(eventType)){//新订阅事件
         		//全新关注事件
-            	return processFirstSubscribeEventRequest(eventRequest);
+            	return processNewSubscribeEventRequest(eventRequest);
         	}if(WxEventTypeEnum.RESUBSCRIBE.equals(eventType)){//重复订阅事件(此消息类型是自行构造的，非原生系统中给出的)
         		//重复关注事件
-            	return processRepeatSubscribeEventRequest(eventRequest);
+            	return processReSubscribeEventRequest(eventRequest);
         	}else if(WxEventTypeEnum.UNSUBSCRIBE.equals(eventType)){//退订事件
         		//退订事件
             	return processUnsubscribeEventRequest(eventRequest);
@@ -88,7 +90,7 @@ public abstract class AbstractProcessor implements Processor{
 	 * @param request
 	 * @return
 	 */
-	protected BaseResponse processFirstSubscribeEventRequest(EventRequest request) {
+	protected BaseResponse processNewSubscribeEventRequest(EventRequest request) {
 		return null;
 	}
 	
@@ -97,7 +99,7 @@ public abstract class AbstractProcessor implements Processor{
 	 * @param request
 	 * @return
 	 */
-	protected BaseResponse processRepeatSubscribeEventRequest(EventRequest request) {
+	protected BaseResponse processReSubscribeEventRequest(EventRequest request) {
 		return null;
 	}
 	
@@ -167,11 +169,41 @@ public abstract class AbstractProcessor implements Processor{
 		if(materialArticleList!=null&&materialArticleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
 			for(WxMaterialArticle article: materialArticleList){
-				if(article.getMaterialType()!=null&&article.getMaterialType()==1){//过滤纯文本素材，保留图文素材
+//				if(article.getMaterialType()!=null&&article.getMaterialType()==1){//过滤纯文本素材，保留图文素材
 					newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(article.getId()));
-				}
+//				}
 			}
 			return newsResponse;
+		}
+		return null;
+	}
+	
+	 
+    /**
+     * 图片回复
+     * @param request
+     * @param materialImage
+     * @return
+     */
+	public static ImageResponse imageReply(BaseRequest request, WxMaterialMultimedia materialImage){
+        String fromUserName = request.getFromUserName();
+        String toUserName = request.getToUserName();
+        //交换fromUserName和toUserName
+        return imageReply(fromUserName, toUserName, materialImage);
+    }
+	
+	/**
+	 * 
+	 * @param toUserName
+	 * @param fromUserName
+	 * @param materialImage
+	 * @return
+	 */
+	private static ImageResponse imageReply(String toUserName, String fromUserName, WxMaterialMultimedia materialImage){
+		if(materialImage!=null){
+			ImageResponse imageResponse = new ImageResponse(toUserName, fromUserName);
+			imageResponse.setMediaId(materialImage.getMediaId());
+			return imageResponse;
 		}
 		return null;
 	}

@@ -23,10 +23,15 @@ public class DateUtil {
 		return null;
 	}
 	
-	
-	public static Date calcDate(Date date, int days){
+	public static String date2YMDHMS(Date date){
 		if(date!=null){
-			Calendar calc = Calendar.getInstance();
+			return DATE_FORMAT_YMDHMS.format(date);
+		}
+		return null;
+	}
+	
+	public static Date calcDatetime(Date date, int days){
+		if(date!=null){
 			long originTime = date.getTime();
 			long period  =(days*TIME_UNIT_DAY);
 			long result = originTime+period;
@@ -35,8 +40,7 @@ public class DateUtil {
 			System.out.println(period);
 			System.out.println(result);
 			
-			calc.setTime(new Date(result));
-			return calc.getTime();
+			return new Date(result);
 		}
 		return null;
 	}

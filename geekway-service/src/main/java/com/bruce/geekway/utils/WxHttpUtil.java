@@ -1,14 +1,27 @@
 package com.bruce.geekway.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.ByteArrayPartSource;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.lang3.CharSet;
+import org.omg.CORBA.FREE_MEM;
 
 //import org.apache.http.Consts;
 //import org.apache.http.HttpEntity;
@@ -34,7 +47,7 @@ public class WxHttpUtil {
 	 * @param params
 	 * @return
 	 */
-	public static final String sendGetRequest(String url, Map<String, String> params) {
+	public static final String getRequest(String url, Map<String, String> params) {
 		HttpClient httpClient = new HttpClient();
 		
 		setConnectionParam(httpClient);
@@ -59,6 +72,8 @@ public class WxHttpUtil {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			getMethod.releaseConnection();
 		}
 		return null;
 	}
@@ -68,10 +83,10 @@ public class WxHttpUtil {
 	 * Httpclient Post
 	 * @param url
 	 * @param params
-	 * @param requestEntity
+	 * @param data
 	 * @return
 	 */
-	public static final String sendPostRequest(String url, Map<String, String> params, String data) {
+	public static final String postRequest(String url, Map<String, String> params, String data) {
 		HttpClient httpClient = new HttpClient();
 		
 		setConnectionParam(httpClient);
@@ -99,12 +114,113 @@ public class WxHttpUtil {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally{
+			postMethod.releaseConnection();
 		}
 		return null;
 	}
 	
+	/**
+	 * post multipart data
+	 * @param url
+	 * @param params
+	 * @param bytes
+	 * @return
+	 */
+	public static final String postMultipartRequest(String url, Map<String, String> params, byte[] bytes, String contentType) {
+		HttpClient httpClient = new HttpClient();
+		
+		setConnectionParam(httpClient);
+		PostMethod postMethod = new PostMethod(url);
+		
+		String fileName = "media";
+		Part filePart = new FilePart(fileName, new ByteArrayPartSource(fileName, bytes));
+		
+		Part[] parts = new Part[params.size()+1];
+		
+		int i=0;
+		HttpMethodParams methodParams = postMethod.getParams();
+		if (params != null) {
+			for (Map.Entry<String, String> entry : params.entrySet()) {
+				methodParams.setParameter(entry.getKey(), entry.getValue());
+				parts[i++] = new StringPart(entry.getKey(), entry.getValue());
+			}
+		}
+		parts[i++] = filePart;
+		try {
+			postMethod.addRequestHeader("Content-Type", contentType);
+			postMethod.getParams().setContentCharset("utf-8");
+			
+			MultipartRequestEntity multipartEntity = new MultipartRequestEntity(parts, methodParams);
+			
+			postMethod.setRequestEntity(multipartEntity);
+			
+			int statusCode = httpClient.executeMethod(postMethod);
+			if (statusCode == HttpStatus.SC_OK) {
+				String response = postMethod.getResponseBodyAsString();
+				return response;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			postMethod.releaseConnection();
+		}
+		return null;
+	}
 	
 
+	
+	
+	
+	/**
+	 * post multipart data
+	 * @param url
+	 * @param params
+	 * @param bytes
+	 * @return
+	 */
+	public static final String postMultipartRequest(String url, Map<String, String> params, File file, String contentType) {
+		HttpClient httpClient = new HttpClient();
+		
+		setConnectionParam(httpClient);
+		PostMethod postMethod = new PostMethod(url);
+		
+		String fileName = "media";
+		try {
+			Part filePart = new FilePart(fileName, file);
+			
+			Part[] parts = new Part[params.size()+1];
+			
+			int i=0;
+//			HttpMethodParams methodParams = postMethod.getParams();
+			if (params != null) {
+				for (Map.Entry<String, String> entry : params.entrySet()) {
+					String key = entry.getKey();
+					String value = entry.getValue();
+					parts[i++] = new StringPart(key, value);
+				}
+			}
+			parts[i++] = filePart;
+		
+			MultipartRequestEntity multipartEntity = new MultipartRequestEntity(parts, postMethod.getParams());
+			postMethod.setRequestEntity(multipartEntity);
+			
+			int statusCode = httpClient.executeMethod(postMethod);
+			if (statusCode == HttpStatus.SC_OK) {
+				String response = postMethod.getResponseBodyAsString();
+				return response;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			postMethod.releaseConnection();
+		}
+		
+		return null;
+	}
+	
+	
+	
 	
 	//for httpclient 4.0
 //	/**
@@ -182,8 +298,7 @@ public class WxHttpUtil {
 	public static final long currentTimeInSec() {
 		return System.currentTimeMillis() / 1000;
 	}
-	
-	
+
 	
 	public static Map<String, String> buildAccessTokenParams(String accessToken) {
 		Map<String, String> result = buildParams();

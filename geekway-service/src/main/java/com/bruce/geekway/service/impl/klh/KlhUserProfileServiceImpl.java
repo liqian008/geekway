@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.dao.klh.IKlhUserProfileDao;
 import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserProfile;
+import com.bruce.geekway.model.KlhUserProfileCriteria;
 import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.service.klh.IKlhSettingService;
 import com.bruce.geekway.service.klh.IKlhUserProfileService;
@@ -99,6 +100,31 @@ public class KlhUserProfileServiceImpl implements IKlhUserProfileService{
 
 	public void setKlhUserScoreLogService(IKlhUserScoreLogService klhUserScoreLogService) {
 		this.klhUserScoreLogService = klhUserScoreLogService;
+	}
+
+	@Override
+	public int updateByCriteria(KlhUserProfile t,
+			KlhUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhUserProfile> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhUserProfile> queryByCriteria(KlhUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

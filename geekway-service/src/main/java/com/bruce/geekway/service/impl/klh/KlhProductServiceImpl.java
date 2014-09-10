@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhProductDao;
 import com.bruce.geekway.model.KlhProduct;
+import com.bruce.geekway.model.KlhProductCriteria;
 import com.bruce.geekway.service.klh.IKlhProductService;
 
 @Service
@@ -51,6 +52,30 @@ public class KlhProductServiceImpl implements IKlhProductService{
 
 	public void setKlhProductDao(IKlhProductDao klhProductDao) {
 		this.klhProductDao = klhProductDao;
+	}
+
+	@Override
+	public int updateByCriteria(KlhProduct t, KlhProductCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhProductCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhProduct> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhProduct> queryByCriteria(KlhProductCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

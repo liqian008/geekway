@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhWallImageLogDao;
 import com.bruce.geekway.model.KlhWallImageLog;
+import com.bruce.geekway.model.KlhWallImageLogCriteria;
 import com.bruce.geekway.model.KlhWallImageStatBean;
 import com.bruce.geekway.service.klh.IKlhWallImageLogService;
 
@@ -62,6 +63,32 @@ public class KlhWallImageLogServiceImpl implements IKlhWallImageLogService{
 
 	public void setKlhWallImageLogDao(IKlhWallImageLogDao klhWallImageLogDao) {
 		this.klhWallImageLogDao = klhWallImageLogDao;
+	}
+
+	@Override
+	public int updateByCriteria(KlhWallImageLog t,
+			KlhWallImageLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhWallImageLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhWallImageLog> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhWallImageLog> queryByCriteria(
+			KlhWallImageLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

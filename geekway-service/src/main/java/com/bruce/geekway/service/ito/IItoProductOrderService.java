@@ -2,10 +2,11 @@ package com.bruce.geekway.service.ito;
 
 import java.util.List;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.ItoProductOrder;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.ItoProductOrderCriteria;
 
-public interface IItoProductOrderService extends IBaseService<ItoProductOrder, Integer>{
+public interface IItoProductOrderService extends IFoundationService<ItoProductOrder, Integer,ItoProductOrderCriteria>{
 
 	
 	/**

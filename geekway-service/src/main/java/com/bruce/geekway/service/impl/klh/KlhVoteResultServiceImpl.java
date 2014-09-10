@@ -11,6 +11,7 @@ import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.model.KlhVote;
 import com.bruce.geekway.model.KlhVoteResult;
+import com.bruce.geekway.model.KlhVoteResultCriteria;
 import com.bruce.geekway.service.klh.IKlhSettingService;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
 import com.bruce.geekway.service.klh.IKlhVoteResultService;
@@ -130,6 +131,30 @@ public class KlhVoteResultServiceImpl implements IKlhVoteResultService{
 	public void setKlhUserScoreLogService(
 			IKlhUserScoreLogService klhUserScoreLogService) {
 		this.klhUserScoreLogService = klhUserScoreLogService;
+	}
+
+	@Override
+	public int updateByCriteria(KlhVoteResult t, KlhVoteResultCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhVoteResultCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhVoteResult> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhVoteResult> queryByCriteria(KlhVoteResultCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

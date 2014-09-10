@@ -1,9 +1,10 @@
 package com.bruce.geekway.service.ito;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.ItoProductBg;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.ItoProductBgCriteria;
 
-public interface IItoProductBgService extends IBaseService<ItoProductBg, Integer>{
+public interface IItoProductBgService extends IFoundationService<ItoProductBg, Integer, ItoProductBgCriteria>{
 	
 	
 }

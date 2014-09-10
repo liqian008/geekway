@@ -1,9 +1,10 @@
 package com.bruce.geekway.service.klh;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.KlhUserProfile;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.KlhUserProfileCriteria;
 
-public interface IKlhUserProfileService extends IBaseService<KlhUserProfile, Integer> {
+public interface IKlhUserProfileService extends IFoundationService<KlhUserProfile, Integer, KlhUserProfileCriteria> {
 
 	public KlhUserProfile loadByOpenid(String openid);
 	

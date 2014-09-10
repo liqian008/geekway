@@ -237,7 +237,7 @@ public class QrcodeNewController {
 		//从第三方服务获取二维码&展示给用户
 		String qrcodeUrl = null;
 		String wwjUrl = "http://www.itocases.com:90/api/QRCode";
-		String result = WxHttpUtil.sendGetRequest(wwjUrl, null);
+		String result = WxHttpUtil.getRequest(wwjUrl, null);
 		if(!StringUtils.isBlank(result)){
 			ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
 			if(wwjResult!=null&&wwjResult.getErrorCode()==0){

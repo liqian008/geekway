@@ -9,7 +9,7 @@
 <%@ include file="../inc/include_tag.jsp" %>
 
 <%
-//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 %>
 
 
@@ -124,15 +124,15 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">变更用户ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-1">
-								<input type="text" class="form-control" name="klhUserId" id="klhUserId" value="${userScoreLog.klhUserId}"/>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="userOpenId" id="userOpenId" value="${userScoreLog.userOpenId}"/>
 								<form:hidden path="userScoreLog.id"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">积分变更(分): <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
+							<div class="col-sm-1">
 								<input type="text" class="form-control" name="socreChange" id="scoreChange" value="${userScoreLog.scoreChange}"/>
 							</div>
 						</div>
@@ -141,7 +141,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">变更时间: <span class="mandatory">*</span></label>
 							<div class="col-sm-3">
-								<input type="text" class="form-control" name="createTime" id="createTime" value="${userScoreLog.createTime}" placeholder="格式为: 2014-01-01 23:59:59"/>
+								<input type="text" class="form-control" name="createTime" id="createTime" value="<%=sdf.format(userScoreLog.getCreateTime())%>" placeholder="格式为: 2014-01-01 23:59:59"/>
 							</div>
 						</div>
 						

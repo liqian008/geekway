@@ -12,38 +12,6 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<!-- <bean id="wxArticleDao" class="com.bruce.geekway.dao.impl.WxArticleDaoImpl">
-	</bean>
-	<bean id="wxEventCodeDao" class="com.bruce.geekway.dao.impl.WxEventCodeDaoImpl">
-	</bean>
-	<bean id="wxCodeModuleDao" class="com.bruce.geekway.dao.impl.WxCodeModuleDaoImpl">
-	</bean>
-	<bean id="wxMaterialDao" class="com.bruce.geekway.dao.impl.WxMaterialDaoImpl">
-	</bean> -->
-
-	<bean id="wxDefaultReplyDao" class="com.bruce.geekway.dao.impl.WxDefaultReplyDaoImpl">
-	</bean>
-	<bean id="wxCommandDao" class="com.bruce.geekway.dao.impl.WxCommandDaoImpl">
-	</bean>
-	<bean id="wxCommandMaterialDao" class="com.bruce.geekway.dao.impl.WxCommandMaterialDaoImpl">
-	</bean>
-	<bean id="wxMaterialArticleDao" class="com.bruce.geekway.dao.impl.WxMaterialArticleDaoImpl">
-	</bean>
-	<bean id="wxMpUserDao" class="com.bruce.geekway.dao.impl.WxMpUserDaoImpl">
-	</bean>
-	
-	<!-- 
-	<bean id="wxMaterialNewsDao" class="com.bruce.geekway.dao.impl.WxMaterialNewsDaoImpl">
-	</bean>
-	<bean id="wxMaterialNewsArticleDao" class="com.bruce.geekway.dao.impl.WxMaterialNewsArticleDaoImpl">
-	</bean>
-	 -->
-	
-	<!-- 
-	<bean id="wxCustomizeMenuDao" class="com.bruce.geekway.dao.impl.WxCustomizeMenuDaoImpl">
-	</bean>
-	 -->
-	 
 	 
 	<!-- ito dao config -->
 	<bean id="itoProductBgDao" class="com.bruce.geekway.dao.impl.ito.ItoProductBgDaoImpl">

@@ -1,9 +1,10 @@
 package com.bruce.geekway.service.klh;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.KlhDailySign;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.KlhDailySignCriteria;
 
-public interface IKlhDailySignService extends IBaseService<KlhDailySign, Integer> {
+public interface IKlhDailySignService extends IFoundationService<KlhDailySign, Integer, KlhDailySignCriteria> {
 	
 	
 	/**

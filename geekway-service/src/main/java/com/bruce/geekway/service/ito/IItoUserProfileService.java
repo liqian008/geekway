@@ -1,9 +1,10 @@
 package com.bruce.geekway.service.ito;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.ItoUserProfile;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.ItoUserProfileCriteria;
 
-public interface IItoUserProfileService extends IBaseService<ItoUserProfile, Integer> {
+public interface IItoUserProfileService extends IFoundationService<ItoUserProfile, Integer, ItoUserProfileCriteria> {
 	
 	
 	public boolean usernameExists(String username);

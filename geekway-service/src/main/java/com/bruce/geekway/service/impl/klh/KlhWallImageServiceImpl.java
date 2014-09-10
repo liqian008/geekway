@@ -12,6 +12,7 @@ import com.bruce.geekway.model.KlhDailySign;
 import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.model.KlhWallImage;
+import com.bruce.geekway.model.KlhWallImageCriteria;
 import com.bruce.geekway.service.klh.IKlhSettingService;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
 import com.bruce.geekway.service.klh.IKlhWallImageLogService;
@@ -150,6 +151,30 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 	public void setKlhUserScoreLogService(
 			IKlhUserScoreLogService klhUserScoreLogService) {
 		this.klhUserScoreLogService = klhUserScoreLogService;
+	}
+
+	@Override
+	public int updateByCriteria(KlhWallImage t, KlhWallImageCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhWallImageCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhWallImage> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhWallImage> queryByCriteria(KlhWallImageCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 //	@Override

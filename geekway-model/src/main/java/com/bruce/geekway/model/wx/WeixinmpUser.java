@@ -7,6 +7,7 @@ import java.io.Serializable;
  * 
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
+@Deprecated
 public class WeixinmpUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.ito.IItoUserProfileDao;
 import com.bruce.geekway.model.ItoUserProfile;
+import com.bruce.geekway.model.ItoUserProfileCriteria;
 import com.bruce.geekway.service.ito.IItoUserProfileService;
 import com.bruce.geekway.utils.DateUtil;
 
@@ -58,6 +59,31 @@ public class ItoUserProfileServiceImpl implements IItoUserProfileService{
 
 	public void setItoUserProfileDao(IItoUserProfileDao itoUserProfileDao) {
 		this.itoUserProfileDao = itoUserProfileDao;
+	}
+
+	@Override
+	public int updateByCriteria(ItoUserProfile t,
+			ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<ItoUserProfile> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ItoUserProfile> queryByCriteria(ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

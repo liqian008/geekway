@@ -5,49 +5,69 @@ import java.io.Serializable;
 /**
  * 主动文本消息<br>
  * msgtype = "text"
- * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
+ * 
  */
-public class TextMessage extends AbstractMessage {
+public class TextMessage extends CustomMessage {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    public TextMessage() {
-        msgtype = "text";
-    }
+	public TextMessage() {
+		msgtype = "text";
+	}
 
-    /** 文本消息内容 */
-    public Content text;
+	/** 文本消息内容 */
+	private Content text;
 
-    @Override
-    public String toString() {
-        return "TextMessage [touser=" + touser + ", msgtype=" + msgtype + ", text=" + text + "]";
-    }
+	@Override
+	public String toString() {
+		return "TextMessage [touser=" + touser + ", msgtype=" + msgtype
+				+ ", text=" + text + "]";
+	}
 
-    /**
-     * 设置消息内容
-     * @param content
-     */
-    public void addContent(String content) {
-        text = new Content();
-        text.content = content;
-    }
+	/**
+	 * 设置消息内容
+	 * 
+	 * @param content
+	 */
+	public void addContent(String content) {
+		text = new Content();
+		text.content = content;
+	}
 
-    /**
-     * 内容
-     * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
-     */
-    public static class Content implements Serializable {
+	public Content getText() {
+		return text;
+	}
 
-        private static final long serialVersionUID = 1L;
+	public void setText(Content text) {
+		this.text = text;
+	}
 
-        /** 文本消息内容 */
-        public String content;
+	/**
+	 * 内容
+	 * 
+	 * @author jianqing.cai@qq.com,
+	 *         https://github.com/caijianqing/weixinmp4java/
+	 */
+	public static class Content implements Serializable {
 
-        @Override
-        public String toString() {
-            return "Content [content=" + content + "]";
-        }
+		private static final long serialVersionUID = 1L;
 
-    }
+		/** 文本消息内容 */
+		private String content;
+
+		public String getContent() {
+			return content;
+		}
+
+		public void setContent(String content) {
+			this.content = content;
+		}
+
+		@Override
+		public String toString() {
+			return "Content [content=" + content + "]";
+		}
+
+	}
 
 }

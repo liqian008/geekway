@@ -2,11 +2,12 @@ package com.bruce.geekway.service.klh;
 
 import java.util.List;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.KlhWallImageLog;
+import com.bruce.geekway.model.KlhWallImageLogCriteria;
 import com.bruce.geekway.model.KlhWallImageStatBean;
-import com.bruce.geekway.service.IBaseService;
 
-public interface IKlhWallImageLogService extends IBaseService<KlhWallImageLog, Integer> {
+public interface IKlhWallImageLogService extends IFoundationService<KlhWallImageLog, Integer, KlhWallImageLogCriteria> {
 
 
 	public int increaseBrowse(int wallImageId);

@@ -5,37 +5,59 @@ import java.io.Serializable;
 /**
  * 主动图片消息<br>
  * msgtype = "image"
- * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
+ * 
  */
-public class ImageMessage extends AbstractMessage {
+public class ImageMessage extends CustomMessage {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /** 图片 */
-    public Media image = new Media();
+	/** 图片 */
+	public Media image = new Media();
 
-    public ImageMessage() {
-        msgtype = "image";
-    }
+	public ImageMessage() {
+		msgtype = "image";
+	}
 
-    /** 媒体 */
-    public static class Media implements Serializable {
+	public Media getImage() {
+		return image;
+	}
 
-        private static final long serialVersionUID = 1L;
+	public void setImage(Media image) {
+		this.image = image;
+	}
+	
+	public void addImage(String media_id) {
+		this.image = new Media();
+		image.setMedia_id(media_id);
+	}
 
-        /** 发送的图片的媒体ID */
-        public String media_id;
+	/** 媒体 */
+	public static class Media implements Serializable {
 
-        @Override
-        public String toString() {
-            return "Media [media_id=" + media_id + "]";
-        }
+		private static final long serialVersionUID = 1L;
 
-    }
+		/** 发送的图片的媒体ID */
+		private String media_id;
 
-    @Override
-    public String toString() {
-        return "ImageMessage [touser=" + touser + ", msgtype=" + msgtype + ", image=" + image + "]";
-    }
+		public String getMedia_id() {
+			return media_id;
+		}
+
+		public void setMedia_id(String media_id) {
+			this.media_id = media_id;
+		}
+
+		@Override
+		public String toString() {
+			return "Media [media_id=" + media_id + "]";
+		}
+
+	}
+
+	@Override
+	public String toString() {
+		return "ImageMessage [touser=" + touser + ", msgtype=" + msgtype
+				+ ", image=" + image + "]";
+	}
 
 }

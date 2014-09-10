@@ -1,7 +1,7 @@
 package com.bruce.geekway.model.wx;
 
 public enum WxMsgRespTypeEnum {
-	TEXT("text"), IMAGE("image"), MUSIC("music"), 
+	TEXT("text"), IMAGE("image"), MUSIC("music"),
 	NEWS("news"), VIDEO("video"), VOICE("voice");
 	
 	

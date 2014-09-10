@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhVoteOptionDao;
 import com.bruce.geekway.model.KlhVoteOption;
+import com.bruce.geekway.model.KlhVoteOptionCriteria;
 import com.bruce.geekway.service.klh.IKlhVoteOptionService;
 
 @Service
@@ -51,6 +52,30 @@ public class KlhVoteOptionServiceImpl implements IKlhVoteOptionService{
 
 	public void setKlhVoteOptionDao(IKlhVoteOptionDao klhVoteOptionDao) {
 		this.klhVoteOptionDao = klhVoteOptionDao;
+	}
+
+	@Override
+	public int updateByCriteria(KlhVoteOption t, KlhVoteOptionCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhVoteOptionCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhVoteOption> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhVoteOption> queryByCriteria(KlhVoteOptionCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

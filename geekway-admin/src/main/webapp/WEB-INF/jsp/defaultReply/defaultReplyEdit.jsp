@@ -14,7 +14,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Geekway微信管理平台</title>
+<title>后台管理系统</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -159,7 +159,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">按钮事件的默认回复: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">菜单点击事件的默认回复: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8">
 								<textarea name="menuClickReply" rows="3" cols="5" class="elastic form-control" placeholder="上限200字">${defaultReply.menuClickReply}</textarea>

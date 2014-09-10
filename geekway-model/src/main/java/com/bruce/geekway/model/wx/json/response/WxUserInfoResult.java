@@ -8,36 +8,34 @@ package com.bruce.geekway.model.wx.json.response;
 public class WxUserInfoResult extends WxJsonResult {
 
 	/** 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。 */
-	private short subscribe;
+	public short subscribe;
 
 	/** 用户的标识，对当前公众号唯一 */
-	private String openid;
+	public String openid;
 
 	/** 用户的昵称 */
-	private String nickname;
+	public String nickname;
 
 	/** 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知 */
-	private short sex;
+	public short sex;
 
 	/** 用户所在城市 */
-	private String city;
+	public String city;
 
 	/** 用户所在国家 */
-	private String country;
+	public String country;
 
 	/** 用户所在省份 */
-	private String province;
+	public String province;
 
 	/** 用户的语言，简体中文为zh_CN（zh_CN 简体，zh_TW 繁体，en 英语 ） */
-	private String language;
+	public String language;
 
 	/** 用户头像，最后一个数值代表正方形头像大小（有0、46、64、96、132数值可选，0代表640*640正方形头像），用户没有头像时该项为空 */
-	private String headimgurl;
+	public String headimgurl;
 
 	/** 用户关注时间，为时间戳。如果用户曾多次关注，则取最后关注时间 */
-	private String subscribe_time;
-	
-	private String unionid;
+	public String subscribe_time;
 
 	public short getSubscribe() {
 		return subscribe;
@@ -118,14 +116,5 @@ public class WxUserInfoResult extends WxJsonResult {
 	public void setSubscribe_time(String subscribe_time) {
 		this.subscribe_time = subscribe_time;
 	}
-
-	public String getUnionid() {
-		return unionid;
-	}
-
-	public void setUnionid(String unionid) {
-		this.unionid = unionid;
-	}
-	
 	
 }

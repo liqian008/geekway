@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * </pre>
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/, 2013-10-21 下午2:16:29
  */
+
+@Deprecated
 @XmlRootElement(name = "helps")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Helps implements Serializable {

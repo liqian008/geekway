@@ -30,6 +30,8 @@
 	<!-- 集中调度列表 -->
 	<util:map id="scheduleTaskMap" key-type="java.lang.String"
 		value-type="java.lang.Integer">
+		<!--
 		<entry key-ref="wxUserSyncTask" value="60"/>
+		 --> 
 	</util:map>
 </beans>

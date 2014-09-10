@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.ito.IItoWwjRecordDao;
+import com.bruce.geekway.model.ItoUserProfileCriteria;
 import com.bruce.geekway.model.ItoWwjRecord;
 import com.bruce.geekway.service.ito.IItoWwjRecordService;
 
@@ -48,6 +49,30 @@ public class ItoWwjRecordServiceImpl implements IItoWwjRecordService{
 
 	public void setItoWwjRecordDao(IItoWwjRecordDao itoWwjRecordDao) {
 		this.itoWwjRecordDao = itoWwjRecordDao;
+	}
+
+	@Override
+	public int updateByCriteria(ItoWwjRecord t, ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<ItoWwjRecord> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ItoWwjRecord> queryByCriteria(ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

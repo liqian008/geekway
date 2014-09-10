@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.klh.IKlhUserScoreLogDao;
 import com.bruce.geekway.model.KlhUserScoreLog;
+import com.bruce.geekway.model.KlhUserScoreLogCriteria;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
 
 @Service
@@ -66,6 +67,32 @@ public class KlhUserScoreLogServiceImpl implements IKlhUserScoreLogService{
 
 	public void setKlhUserScoreLogDao(IKlhUserScoreLogDao klhUserScoreLogDao) {
 		this.klhUserScoreLogDao = klhUserScoreLogDao;
+	}
+
+	@Override
+	public int updateByCriteria(KlhUserScoreLog t,
+			KlhUserScoreLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(KlhUserScoreLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<KlhUserScoreLog> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<KlhUserScoreLog> queryByCriteria(
+			KlhUserScoreLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

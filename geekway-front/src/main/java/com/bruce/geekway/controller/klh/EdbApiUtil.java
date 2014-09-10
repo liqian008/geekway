@@ -84,7 +84,7 @@ public class EdbApiUtil {
 		TreeMap<String, String> dataMap = new TreeMap<String, String>();
 		dataMap.put("date_type", "建档日期");
 		Date currentTime = new Date();
-		dataMap.put("begin_time", DateUtil.date2YMD(DateUtil.calcDate(currentTime, -daysPeriod)));
+		dataMap.put("begin_time", DateUtil.date2YMD(DateUtil.calcDatetime(currentTime, -daysPeriod)));
 		dataMap.put("end_time", DateUtil.date2YMD(currentTime));
 		dataMap.put("page_size", "100");
 		

@@ -19,7 +19,10 @@ public enum WxEventTypeEnum {
 	/** 自定义菜单链接事件 */
 	VIEW("view"),
 	/** 自定义菜单点击事件 */
-	CLICK("click");
+	CLICK("click"),
+	/** 群发完毕的通知消息 */
+	BROADCAST_FINISH("MASSSENDJOBFINISH")
+	;
 
 	private final String eventType;
 

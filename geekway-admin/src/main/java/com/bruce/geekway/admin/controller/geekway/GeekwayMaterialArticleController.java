@@ -5,22 +5,23 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.baseAdmin.controller.BaseController;
-import com.bruce.geekway.constants.ConstConfig;
-import com.bruce.geekway.model.WxCommand;
-import com.bruce.geekway.model.WxCommandMaterial;
+import com.bruce.foundation.admin.controller.BaseController;
 import com.bruce.geekway.model.WxMaterialArticle;
-import com.bruce.geekway.service.IWxCommandMaterialService;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
+import com.bruce.geekway.service.IWxMaterialNewsArticleService;
 
+/**
+ * 图文管理controller
+ * @author liqian
+ *
+ */
 @Controller
 @RequestMapping("/geekway")
 public class GeekwayMaterialArticleController extends BaseController {
@@ -28,9 +29,9 @@ public class GeekwayMaterialArticleController extends BaseController {
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 	@Autowired
-	private IWxCommandMaterialService wxCommandMaterialService;
-	@Autowired
 	private IWxCommandService wxCommandService;
+	@Autowired
+	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
 
 	
 	@RequestMapping("/materialArticleList")
@@ -38,9 +39,9 @@ public class GeekwayMaterialArticleController extends BaseController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryGeneralMaterials();
+		List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryAll();
 		model.addAttribute("materialArticleList", materialArticleList);
-		return "geekway/materialArticleList";
+		return "material/materialArticleList";
 	}
 
 
@@ -55,30 +56,30 @@ public class GeekwayMaterialArticleController extends BaseController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		materialArticle.setMaterialType((short) 1);//1为图文素材
+//		materialArticle.setMaterialType((short) 1);//1为图文素材
 		model.addAttribute("materialArticle", materialArticle);
 		
-		return "geekway/materialArticleAdd";
+		return "material/materialArticleEdit";
 	}
 	
-	/**
-	 * 新增文本素材
-	 * @param model
-	 * @param materialArticle
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/materialTextAdd")
-	public String materialTextAdd(Model model, WxMaterialArticle materialArticle, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-
-		materialArticle.setMaterialType((short) 0);//0为纯文本素材
-		model.addAttribute("materialArticle", materialArticle);
-		
-//		return "geekway/materialTextAdd";
-		return "geekway/materialArticleAdd";
-	}
+//	/**
+//	 * 新增文本素材
+//	 * @param model
+//	 * @param materialArticle
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/materialTextAdd")
+//	public String materialTextAdd(Model model, WxMaterialArticle materialArticle, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//
+//		materialArticle.setMaterialType((short) 0);//0为纯文本素材
+//		model.addAttribute("materialArticle", materialArticle);
+//		
+////		return "material/materialTextAdd";
+//		return "material/materialArticleAdd";
+//	}
 	
 
 	@RequestMapping("/materialArticleEdit")
@@ -90,11 +91,11 @@ public class GeekwayMaterialArticleController extends BaseController {
 		if(materialArticle!=null){
 			model.addAttribute("materialArticle", materialArticle);
 			
-			//TODO 查询引用了该素材的command列表
-			List<WxCommand> commandList = wxCommandService.queryCommandsByMaterialId(articleId);
-			model.addAttribute("commandList", commandList);
+//			//TODO 查询引用了该素材的command列表
+//			List<WxCommand> commandList = wxCommandService.queryCommandsByMaterialId(articleId);
+//			model.addAttribute("commandList", commandList);
 		}
-		return "geekway/materialArticleEdit";
+		return "material/materialArticleEdit";
 	}
 
 	@RequestMapping(value = "/saveMaterialArticle", method = RequestMethod.POST)
@@ -103,37 +104,17 @@ public class GeekwayMaterialArticleController extends BaseController {
 		model.addAttribute("servletPath", servletPath);
 
 		int result = 0;
-
+		
 		Date currentTime = new Date();
 		materialArticle.setUpdateTime(currentTime);
-		materialArticle.setSubscribeStatus((short) 0);//设置为普通素材（非关注素材）
-		if (materialArticle != null && materialArticle.getId() != null && materialArticle.getId()>0) {//更新素材内容操作
+		
+		if(materialArticle!=null&&materialArticle.getId()!=null&&materialArticle.getId()>0){
 			result = wxMaterialArticleService.updateById(materialArticle);
-		} else {//新增素材操作
+		}else{
 			materialArticle.setCreateTime(currentTime);
 			result = wxMaterialArticleService.save(materialArticle);
-			
-			String command = request.getParameter("command");
-			if(!StringUtils.isBlank(command)){//用户输入了关键词
-				String[] commandTypeArray = request.getParameterValues("commandTypes");
-				if(commandTypeArray!=null&&commandTypeArray.length>0){
-					for(String commandTypeStr: commandTypeArray){
-						short commandType = Short.parseShort(commandTypeStr);
-						//查询相应command是否存在，不存在则创建
-						WxCommand commandBean = wxCommandService.loadOrSave(commandType, command);
-						if(commandBean!=null){
-							//插入中间表记录
-							WxCommandMaterial commandMaterial = new WxCommandMaterial();
-							commandMaterial.setCommandId(commandBean.getId());
-							commandMaterial.setMaterialId(materialArticle.getId());
-							commandMaterial.setCreateTime(currentTime);
-							commandMaterial.setTopTime(currentTime);
-							wxCommandMaterialService.save(commandMaterial);
-						}
-					}
-				}
-			}
 		}
+		
 		model.addAttribute("redirectUrl", "./materialArticleList");
 		return "forward:/home/operationRedirect";
 	}
@@ -141,15 +122,14 @@ public class GeekwayMaterialArticleController extends BaseController {
 	@RequestMapping("/delMaterialArticle")
 	public String delMaterialArticle(Model model, int articleId) {
 		
-		// 删除资源的关联
-		wxCommandMaterialService.deleteByMaterialId(articleId);
-
+		//删除多图文资源的关联
+		wxMaterialNewsArticleService.deleteByNewsId(articleId);
+		
 		//删除实体&关联
 		wxMaterialArticleService.deleteById(articleId);
 
 		model.addAttribute("redirectUrl", "./materialArticleList");
 		return "forward:/home/operationRedirect";
 	}
-	
 
 }

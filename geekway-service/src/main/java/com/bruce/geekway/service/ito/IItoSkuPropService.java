@@ -2,10 +2,11 @@ package com.bruce.geekway.service.ito;
 
 import java.util.HashMap;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.ItoSkuProp;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.ItoSkuPropCriteria;
 
-public interface IItoSkuPropService extends IBaseService<ItoSkuProp, Integer>{
+public interface IItoSkuPropService extends IFoundationService<ItoSkuProp, Integer, ItoSkuPropCriteria>{
 
 	public HashMap<Integer, ItoSkuProp> queryMap();
 }

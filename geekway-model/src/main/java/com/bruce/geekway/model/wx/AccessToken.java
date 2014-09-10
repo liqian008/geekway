@@ -6,6 +6,7 @@ import java.io.Serializable;
  * 公众号全局唯一票据
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
+@Deprecated
 public class AccessToken implements Serializable {
 
     private static final long serialVersionUID = 1L;

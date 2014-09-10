@@ -1,10 +1,11 @@
 package com.bruce.geekway.service.klh;
 
+import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.data.PagingData;
 import com.bruce.geekway.model.KlhWallImage;
-import com.bruce.geekway.service.IBaseService;
+import com.bruce.geekway.model.KlhWallImageCriteria;
 
-public interface IKlhWallImageService extends IBaseService<KlhWallImage, Integer> {
+public interface IKlhWallImageService extends IFoundationService<KlhWallImage, Integer, KlhWallImageCriteria> {
 
 //	public List<KlhWallImage> queryLatestImages(int pageSize);
 //

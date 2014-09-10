@@ -88,7 +88,7 @@ public class QrcodeController {
 		String wwjUrl = "http://itocases.eicp.net:8733/design_time_addresses/qrgamecontrollerservice/qrurl";
 		StringBuilder sb = new StringBuilder();
 		for(int i=0;i<number;i++){
-			String result = WxHttpUtil.sendGetRequest(wwjUrl, null);
+			String result = WxHttpUtil.getRequest(wwjUrl, null);
 			ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
 			if(wwjResult!=null&&wwjResult.getErrorCode()==0){
 				String qrcodeUrl = wwjResult.getImageUrl();

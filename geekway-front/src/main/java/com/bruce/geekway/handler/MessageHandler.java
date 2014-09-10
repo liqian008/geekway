@@ -73,7 +73,7 @@ public class MessageHandler {
 					mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
 					return processEventFirstSubscribeRequest(eventRequest);
 				}else{//之前存在，属于重复关注
-					mpUserService.repeatSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+					mpUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
 					
 					eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
 					return processEventRepeatSubscribeRequest(eventRequest);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.ito.IItoSliderDao;
 import com.bruce.geekway.model.ItoSlider;
+import com.bruce.geekway.model.ItoSliderCriteria;
 import com.bruce.geekway.service.ito.IItoSliderService;
 
 @Service
@@ -51,6 +52,30 @@ public class ItoSliderServiceImpl implements IItoSliderService{
 
 	public void setItoSliderDao(IItoSliderDao itoSliderDao) {
 		this.itoSliderDao = itoSliderDao;
+	}
+
+	@Override
+	public int updateByCriteria(ItoSlider t, ItoSliderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int deleteByCriteria(ItoSliderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<ItoSlider> queryAll(String orderByClause) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ItoSlider> queryByCriteria(ItoSliderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
