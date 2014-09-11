@@ -12,17 +12,26 @@ import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgRespTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.BroadcastFinishEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationEventRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
 import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
+import com.bruce.geekway.service.IWxBroadcastService;
+import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.utils.WxXmlUtil;
 
+/**
+ * 处理微信消息的handler
+ * @author liqian
+ *
+ */
 //@Service
 public class MessageHandler {
 	// @Resource
@@ -35,6 +44,8 @@ public class MessageHandler {
 	private List<Processor> voiceProcessorList;
 	// @Autowired
 	private List<Processor> eventClickProcessorList;
+	
+	private List<Processor> eventViewProcessorList;
 	@Autowired
 	private List<Processor> eventFirstSubscribeProcessorList;
 	@Autowired
@@ -45,6 +56,10 @@ public class MessageHandler {
 	private List<Processor> eventLocationProcessorList;
 	@Autowired
 	private IWxMpUserService mpUserService;
+	@Autowired
+	private IWxBroadcastService broadcastService;
+	@Autowired
+	private IWxHistoryMessageService historyMessageService;
 	
 	public BaseResponse processMessage(String xml) throws Exception {
 		System.out.println("request xml: " + xml);
@@ -53,11 +68,27 @@ public class MessageHandler {
 		if (msgType == null) {
 			throw new Exception("cannot find MsgType Node!" + xml);
 		}
+		
+		BaseRequest wxRequest = null;
+		BaseResponse wxResponse = null;
 		WxMsgTypeEnum msgTypeEnum = WxMsgTypeEnum.instance(msgType);
+		boolean fromUser = true;
 		switch (msgTypeEnum) {
 		case TEXT:
-			TextRequest textRequest = WxXmlUtil.getMsgText(ele);
-			return processTextRequest(textRequest);
+			TextRequest textRequest = WxXmlUtil.getMsgText(ele);//解析文本请求
+			wxRequest = textRequest;
+			wxResponse =  processTextRequest(textRequest);
+			break;
+		case IMAGE:
+			ImageRequest imageRequest = WxXmlUtil.getMsgImage(ele);//解析图片消息
+			wxRequest = imageRequest;
+			wxResponse = processImageRequest(imageRequest);
+			break;
+		case VOICE:
+			VoiceRequest voiceRequest = WxXmlUtil.getMsgVoice(ele);//解析voice消息
+			wxRequest = voiceRequest;
+			wxResponse =  processVoiceRequest(voiceRequest);
+			break;
 		case EVENT: {
 			String event = ele.elementText("Event");
 			if (event == null) {
@@ -65,66 +96,99 @@ public class MessageHandler {
 			}
 			WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.instance(event);
 			switch (eventTypeEnum) {
-			case SUBSCRIBE: {// 订阅关注
-				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				String fromOpenId = eventRequest.getFromUserName();
-				WxMpUser wxUser = mpUserService.loadByOpenId(fromOpenId);
-				if(wxUser==null){//全新用户关注
-					mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
-					return processEventFirstSubscribeRequest(eventRequest);
-				}else{//之前存在，属于重复关注
-					mpUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
-					
-					eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
-					return processEventRepeatSubscribeRequest(eventRequest);
+				case SUBSCRIBE: {// 订阅关注
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					wxRequest = eventRequest;
+					String fromOpenId = eventRequest.getFromUserName();
+					WxMpUser wxUser = mpUserService.loadByOpenId(fromOpenId);
+					if(wxUser==null){//全新用户关注
+						mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+						wxResponse = processEventFirstSubscribeRequest(eventRequest);
+						break;
+					}else{//之前存在过，属于重复关注
+						mpUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+						eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
+						wxResponse = processEventRepeatSubscribeRequest(eventRequest);
+						break;
+					}
 				}
-			}
-			case UNSUBSCRIBE: {// 退订
-				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
-				mpUserService.unsubscribeUser(eventRequest.getFromUserName());
-				return processEventUnsubscribeRequest(eventRequest);
-			}
-			case CLICK: {// 点击菜单
-				EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
-				return processEventClickRequest(eventRequest);
-			}
-//			case VIEW: {// 点击菜单，通常情况下无法进入该流程
-//				// do nothing
-//			}
-			case LOCATION: {// 上报location位置
-				LocationEventRequest locationEventRequest = new LocationEventRequest();
-				return processEventLocationRequest(locationEventRequest);
-			}
-			case SCAN: {
-				// TODO
-			}
-			default: {
-				// do nothing
-			}
+				case UNSUBSCRIBE: {// 退订
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					wxRequest = eventRequest;
+					//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
+					mpUserService.unsubscribeUser(eventRequest.getFromUserName());
+					wxResponse = processEventUnsubscribeRequest(eventRequest);
+					break;
+				}
+				case CLICK: {// 点击菜单
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					wxRequest = eventRequest;
+					wxResponse = processEventClickRequest(eventRequest);
+					break;
+				}
+				case VIEW: {// 点击菜单链接跳转（wiki文档中写到会发送该消息，但实际未检测到该消息）
+					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
+					wxRequest = eventRequest;
+					wxResponse = null;//点击菜单链接跳转，无需返回数据（此处作为特殊处理）
+					break;
+				}
+				case LOCATION: {// 上报location位置
+					LocationEventRequest locationEventRequest = new LocationEventRequest();
+					wxRequest = locationEventRequest;
+					wxResponse = processEventLocationRequest(locationEventRequest);
+					break;
+				}
+				case SCAN: {
+					break;
+				}
+				case BROADCAST_FINISH: {//群发广播
+					fromUser = false;//系统消息（非关注者发来的）
+					BroadcastFinishEventRequest broadcastFinishRrequest = WxXmlUtil.getBroadcastMsgEvent(ele);
+					wxRequest = broadcastFinishRrequest;
+					//作为系统级操作，向表中回写群发结果数据（脱离processor处理系统的订阅事件）
+					broadcastService.broadcastNofify(broadcastFinishRrequest.getMsgID(), broadcastFinishRrequest.getTotalCount(), broadcastFinishRrequest.getFilterCount(), broadcastFinishRrequest.getSentCount(), broadcastFinishRrequest.getErrorCount());
+					wxResponse = null;//系统群发广播，无需返回数据（此处作为特殊处理）
+					break;
+				}
+				default: {
+					break;
+				}
 			}
 		}
 		default:
-			return null;
+			break;
 		}
+		if(wxRequest!=null){
+			if(fromUser){//对于普通消息类型，需要将消息中的openid写入用户表，避免因停服的时候导致用户遗漏
+				mpUserService.logUserFromMessage(wxRequest.getFromUserName());
+			}
+			//将wx消息写入历史消息，便于查阅
+			historyMessageService.logRequestMessage(wxRequest, xml);
+		}
+		return wxResponse;
 	}
 
 	/**
 	 * 解析生成响应数据
 	 * 
-	 * @param response
+	 * @param wxResponse
 	 * @return
 	 * @throws Exception
 	 */
-	public String parseXMLResp(BaseResponse response) throws Exception {
-		WxMsgRespTypeEnum responseType = WxMsgRespTypeEnum.instance(response.getMsgType());
+	public String parseXMLResp(BaseResponse wxResponse) throws Exception {
+		WxMsgRespTypeEnum responseType = WxMsgRespTypeEnum.instance(wxResponse.getMsgType());
+		String responseStr = "";
 		switch (responseType) {
 		case NEWS:
-			return WxXmlUtil.buildNewsResponse((NewsResponse) response).asXML();
+			responseStr = WxXmlUtil.buildNewsResponse((NewsResponse) wxResponse).asXML();
+			break;
 		case TEXT:
-			return WxXmlUtil.buildTextResponse((TextResponse) response).asXML();
-			// case IMAGE:
-			// return WxXmlUtil.getRespImage((WxRespImageEntity) resp);
+			responseStr = WxXmlUtil.buildTextResponse((TextResponse) wxResponse).asXML();
+			break;
+		case IMAGE:
+			responseStr = WxXmlUtil.buildImageResponse((ImageResponse) wxResponse).asXML();
+			break;
+			// 以下功能暂不支持
 			// case MUSIC:
 			// return WxXmlUtil.getRespMusic((WxRespMusicEntity) resp,
 			// ((WxRespMusicEntity) resp).getThumb());
@@ -135,7 +199,8 @@ public class MessageHandler {
 		default:
 			break;
 		}
-		return null;
+		historyMessageService.logResponseMessage(wxResponse, responseStr);
+		return responseStr;
 	}
 
 	/**
@@ -186,6 +251,10 @@ public class MessageHandler {
 	protected BaseResponse processEventClickRequest(EventRequest request) {
 		return process(request, eventClickProcessorList);
 	}
+	
+	protected BaseResponse processEventViewRequest(EventRequest request) {
+		return process(request, eventViewProcessorList);
+	}
 
 	protected BaseResponse processEventLocationRequest(EventRequest request) {
 		return process(request, eventLocationProcessorList);
@@ -221,6 +290,14 @@ public class MessageHandler {
 
 	public void setEventClickProcessorList(List<Processor> eventClickProcessorList) {
 		this.eventClickProcessorList = eventClickProcessorList;
+	}
+
+	public List<Processor> getEventViewProcessorList() {
+		return eventViewProcessorList;
+	}
+
+	public void setEventViewProcessorList(List<Processor> eventViewProcessorList) {
+		this.eventViewProcessorList = eventViewProcessorList;
 	}
 
 	public List<Processor> getEventFirstSubscribeProcessorList() {
@@ -264,4 +341,21 @@ public class MessageHandler {
 		this.mpUserService = mpUserService;
 	}
 
+	public IWxBroadcastService getBroadcastService() {
+		return broadcastService;
+	}
+
+	public void setBroadcastService(IWxBroadcastService broadcastService) {
+		this.broadcastService = broadcastService;
+	}
+
+	public IWxHistoryMessageService getHistoryMessageService() {
+		return historyMessageService;
+	}
+
+	public void setHistoryMessageService(
+			IWxHistoryMessageService historyMessageService) {
+		this.historyMessageService = historyMessageService;
+	}
+	
 }

@@ -10,9 +10,13 @@ import com.bruce.geekway.model.wx.WxAuth;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
+import com.bruce.geekway.model.wx.request.BroadcastFinishEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
+import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.TextRequest;
+import com.bruce.geekway.model.wx.request.VoiceRequest;
 import com.bruce.geekway.model.wx.response.BaseResponse;
+import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 public class WxXmlUtil {
@@ -73,14 +77,12 @@ public class WxXmlUtil {
 	 * @return
 	 * @throws DocumentException
 	 */
-//	public static WxMsgImageEntity getMsgImage(Element ele) throws DocumentException {
-//		WxMsgImageEntity result = msgEntityFactory(WxMsgImageEntity.class, ele);
-//		WxItemImageEntity image = new WxItemImageEntity();
-//		image.setMediaId(strVal(ele, "MediaId"));
-//		image.setPicUrl(strVal(ele, "PicUrl"));
-//		result.setImage(image);
-//		return result;
-//	}
+	public static ImageRequest getMsgImage(Element ele) throws DocumentException {
+		ImageRequest imageRequest = populateRequest(ImageRequest.class, ele);
+		imageRequest.setMediaId(strVal(ele, "MediaId"));
+		imageRequest.setPicUrl(strVal(ele, "PicUrl"));
+		return imageRequest;
+	}
 	
 	/**
 	 * <code>
@@ -99,17 +101,15 @@ public class WxXmlUtil {
 	 * @return
 	 * @throws DocumentException
 	 */
-//	public static WxMsgVoiceEntity getMsgVoice(Element ele) throws DocumentException {
-//		WxMsgVoiceEntity result = msgEntityFactory(WxMsgVideoEntity.class, ele);
-//		WxItemVoiceEntity voice = new WxItemVoiceEntity();
-//		voice.setMediaId(strVal(ele, "MediaId"));
-//		voice.setFormat(strVal(ele, "Format"));
-//		if (!StringUtils.isEmpty(ele.elementText("Recognition"))) {
-//			voice.setRecognition(strVal(ele, "Recognition"));
-//		}
-//		result.setVoice(voice);
-//		return result;
-//	}
+	public static VoiceRequest getMsgVoice(Element ele) throws DocumentException {
+		VoiceRequest voiceRequest = populateRequest(VoiceRequest.class, ele);
+		voiceRequest.setMediaId(strVal(ele, "MediaId"));
+		voiceRequest.setFormat(strVal(ele, "Format"));
+		if (!StringUtils.isEmpty(ele.elementText("Recognition"))) {
+			voiceRequest.setRecognition(strVal(ele, "Recognition"));
+		}
+		return voiceRequest;
+	}
 	
 	
 	/**
@@ -222,6 +222,36 @@ public class WxXmlUtil {
 		return eventRequest;
 	}
 	
+	
+	/**
+	 * 解析出群发结果的request对象
+	 * @param ele
+	 * @return
+	 * @throws DocumentException
+	 */
+	public static BroadcastFinishEventRequest getBroadcastMsgEvent(Element ele) throws DocumentException {
+		BroadcastFinishEventRequest eventRequest = populateRequest(BroadcastFinishEventRequest.class, ele);
+		eventRequest.setEvent(WxEventTypeEnum.instance(strVal(ele, "Event")));
+		if (ele.elementText("TotalCount") != null) {
+			eventRequest.setMsgID(strVal(ele, "MsgID"));
+		}
+		if (ele.elementText("TotalCount") != null) {
+			eventRequest.setTotalCount(intVal(ele, "TotalCount"));
+		}
+		if (ele.elementText("FilterCount") != null) {
+			eventRequest.setFilterCount(intVal(ele, "FilterCount"));
+		}
+		if (ele.elementText("SentCount") != null) {
+			eventRequest.setSentCount(intVal(ele, "SentCount"));
+		}
+		if (ele.elementText("ErrorCount") != null) {
+			eventRequest.setErrorCount(intVal(ele, "ErrorCount"));
+		}
+		return eventRequest;
+	}
+	
+	
+	
 	/**
 	 * <code>
 	 * &lt;xml&gt;<br />
@@ -261,12 +291,12 @@ public class WxXmlUtil {
 	 * @return
 	 * @throws DocumentException
 	 */
-//	public static Element getRespImage(WxRespImageEntity respImage) throws DocumentException {
-//		Element ele = respEntityFactory(respImage);
-//		Element imageEle = ele.addElement("Image");
-//		imageEle.addElement("MediaId").addCDATA(respImage.getImage().getMediaId());
-//		return ele;
-//	}
+	public static Element buildImageResponse(ImageResponse imageResponse) throws DocumentException {
+		Element ele = buildBaseResponse(imageResponse);
+		Element imageNodeEle = ele.addElement("Image");
+		imageNodeEle.addElement("MediaId").addCDATA(imageResponse.getMediaId());
+		return ele;
+	}
 	
 	/**
 	 * <code>
@@ -420,7 +450,6 @@ public class WxXmlUtil {
 			baseRequest.setToUserName(strVal(ele, "ToUserName"));
 			baseRequest.setFromUserName(strVal(ele, "FromUserName"));
 			baseRequest.setCreateTime(strVal(ele, "CreateTime"));
-//			baseRequest.setCreatedDate(new Date());
 			baseRequest.setMsgType(strVal(ele, "MsgType"));
 			if (ele.element("MsgId") != null) {
 				baseRequest.setMsgId(strVal(ele, "MsgId"));
@@ -451,6 +480,9 @@ public class WxXmlUtil {
 		return ele;
 	}
 	
+	private static Integer intVal(Element ele, String name) {
+		return Integer.valueOf(ele.element(name).getStringValue());
+	}
 	
 	private static String strVal(Element ele, String name) {
 		return ele.element(name).getStringValue();
