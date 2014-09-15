@@ -51,6 +51,8 @@
 	</bean>
 	<bean id="klhProductDao" class="com.bruce.geekway.dao.impl.klh.KlhProductDaoImpl">
 	</bean>
+	<bean id="klhProductOrderDao" class="com.bruce.geekway.dao.impl.klh.KlhProductOrderDaoImpl">
+	</bean>
 	<bean id="klhUserProfileDao" class="com.bruce.geekway.dao.impl.klh.KlhUserProfileDaoImpl">
 	</bean>
 	<bean id="klhDailySignDao" class="com.bruce.geekway.dao.impl.klh.KlhDailySignDaoImpl">

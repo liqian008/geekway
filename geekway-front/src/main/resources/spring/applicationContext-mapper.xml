@@ -155,6 +155,10 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhProductMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<bean id="klhProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhProductOrderMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	<bean id="klhSettingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhSettingMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />

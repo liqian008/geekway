@@ -12,7 +12,7 @@
 	default-lazy-init="false" default-autowire="byName">
 
 	<context:property-placeholder location="classpath:conf/geekway_jdbc.properties"
-		ignore-unresolvable="true" />
+		ignore-unresolvable="true" /> 
 	
 	<bean id="geekway_datasource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -158,6 +158,10 @@
 	</bean>
 	<bean id="klhProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhProductMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="klhProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.KlhProductOrderMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	<bean id="klhSettingMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">

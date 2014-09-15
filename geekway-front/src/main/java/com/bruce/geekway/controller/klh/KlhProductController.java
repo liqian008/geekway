@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.KlhProduct;
+import com.bruce.geekway.model.KlhProductOrder;
 import com.bruce.geekway.model.KlhUserProfile;
 import com.bruce.geekway.model.KlhUserScoreLog;
+import com.bruce.geekway.service.klh.IKlhProductOrderService;
 import com.bruce.geekway.service.klh.IKlhProductService;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
-import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.KlhUtil;
 
 /**
@@ -29,6 +30,8 @@ public class KlhProductController {
 	
 	@Autowired
 	private IKlhProductService klhProductService;
+	@Autowired
+	private IKlhProductOrderService klhProductOrderService;
 	@Autowired
 	private IKlhUserScoreLogService klhUserScoreLogService;
 	
@@ -123,6 +126,23 @@ public class KlhProductController {
 				int userScore = klhUserScoreLogService.queryCurrentScoreByUserOpenId(sessionUserProfile.getUserOpenId());
 				if(productScore!=null&&productScore<userScore){//可以兑换
 					Date currentTime = new Date();
+					
+					KlhProductOrder order = new KlhProductOrder();
+					order.setNum(1);
+					order.setUserOpenid(sessionUserProfile.getUserOpenId());
+					order.setPostAddress(postAddress);
+					order.setPostCode(postCode);
+//					order.setPostMobile(postMobile);
+					order.setPostName(postName);
+					order.setScore(productScore);
+					order.setProductId(productId);
+					order.setTitle(productInfo.getTitle());
+					order.setDescription(productInfo.getDescription());
+					order.setCreateTime(currentTime);
+					
+					klhProductOrderService.save(order);
+					
+					
 					//扣减用户积分
 					KlhUserScoreLog scoreLog = new KlhUserScoreLog();
 					scoreLog.setUserOpenId(sessionUserProfile.getUserOpenId());
@@ -136,6 +156,10 @@ public class KlhProductController {
 						productInfo.setLeftNum(leftNum-1);
 						klhProductService.updateById(productInfo);
 					}
+					
+					
+					
+					
 				}
 				return "redirect:./scoreHome";
 			}else{

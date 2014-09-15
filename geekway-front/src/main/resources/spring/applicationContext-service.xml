@@ -92,6 +92,8 @@
 	</bean>
 	<bean id="klhProductService" class="com.bruce.geekway.service.impl.klh.KlhProductServiceImpl">
 	</bean>
+	<bean id="klhProductOrderService" class="com.bruce.geekway.service.impl.klh.KlhProductOrderServiceImpl">
+	</bean>
 	<bean id="klhUserProfileService" class="com.bruce.geekway.service.impl.klh.KlhUserProfileServiceImpl">
 	</bean>
 	<bean id="klhDailySignService" class="com.bruce.geekway.service.impl.klh.KlhDailySignServiceImpl">

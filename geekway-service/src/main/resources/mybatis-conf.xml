@@ -51,6 +51,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/KlhVoteOptionMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhVoteResultMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhProductMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/KlhProductOrderMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhSettingMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhUserScoreLogMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/KlhUserProfileMapper.xml" />
