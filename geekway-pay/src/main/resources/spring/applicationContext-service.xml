@@ -13,8 +13,8 @@
 	default-lazy-init="false" default-autowire="byName">
 
 	<!-- 本地MpUserService 
-	<bean id="wxMpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">
-		<property name="wxMpUserMapper" ref="wxMpUserMapper"></property>
+	<bean id="wxUserService" class="com.bruce.geekway.service.impl.WxUserServiceImpl">
+		<property name="wxUserMapper" ref="wxUserMapper"></property>
 	</bean>
 	-->
 

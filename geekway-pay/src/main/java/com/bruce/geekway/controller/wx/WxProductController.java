@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.service.pay.IWxPayProductService;
-import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.Md5Util;
 import com.bruce.geekway.utils.Sha1Util;

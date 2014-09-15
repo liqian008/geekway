@@ -3,18 +3,17 @@ package com.bruce.geekway.service;
 import java.util.List;
 
 import com.bruce.foundation.service.IFoundationService;
-import com.bruce.geekway.model.WxMpUser;
-import com.bruce.geekway.model.WxMpUserCriteria;
-import com.bruce.geekway.utils.ConfigUtil;
+import com.bruce.geekway.model.WxUser;
+import com.bruce.geekway.model.WxUserCriteria;
 
-public interface IWxMpUserService extends IFoundationService<WxMpUser, Integer, WxMpUserCriteria> {
+public interface IWxUserService extends IFoundationService<WxUser, Integer, WxUserCriteria> {
 	
 	/**
 	 * 根据用户的openId获取用户对象
 	 * @param userOpenId
 	 * @return
 	 */
-	public WxMpUser loadByOpenId(String userOpenId);
+	public WxUser loadByOpenId(String userOpenId);
 	
 	/**
 	 * 用户新关注的处理(获取详细资料后写入)
@@ -50,7 +49,7 @@ public interface IWxMpUserService extends IFoundationService<WxMpUser, Integer, 
 	 * @param syncStatus
 	 * @return
 	 */
-	public List<WxMpUser> getMpUserListBySyncStatus(short syncStatus);
+	public List<WxUser> getUserListBySyncStatus(short syncStatus);
 	
 	
 }

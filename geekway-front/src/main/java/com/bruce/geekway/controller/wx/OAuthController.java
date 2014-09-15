@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.bruce.geekway.model.WxMpUser;
+import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
-import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.service.IWxUserService;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.WxMpUtil;
 
@@ -22,9 +22,9 @@ import com.bruce.geekway.utils.WxMpUtil;
 public class OAuthController {
 	
 	@Autowired
-	private WxMpOauthService mpOauthService;
+	private WxMpOauthService wxMpOauthService;
 	@Autowired
-	private IWxMpUserService wxMpUserService;
+	private IWxUserService wxUserService;
 
 
 	/**
@@ -38,7 +38,7 @@ public class OAuthController {
 	public String home(Model model, @RequestParam(required = false, defaultValue = "") String code, HttpServletRequest request) {
 		if (!StringUtils.isEmpty(code)) {//回调地址进来的
 			System.out.println("==========2=========");
-			WxOauthTokenResult oauthResult = mpOauthService.getOauthAccessToken(code);
+			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
 			System.out.println("==========3=========");
 			if (oauthResult != null && oauthResult.getAccess_token() != null) {
 				System.out.println("==========4=========");
@@ -48,9 +48,9 @@ public class OAuthController {
 				System.out.println("==========6========="+openId);
 				model.addAttribute("openId", openId);
 				
-				WxMpUser wxMpUser = wxMpUserService.loadByOpenId(openId);
-				System.out.println("==========7========="+wxMpUser);
-				model.addAttribute("wxMpUser", wxMpUser);
+				WxUser wxUser = wxUserService.loadByOpenId(openId);
+				System.out.println("==========7========="+wxUser);
+				model.addAttribute("wxUser", wxUser);
 				
 				//使用accessToken获取userInfo
 //				WxUserInfoResult authUserInfoResult = mpOauthService.getOauthUserinfo(oauthResult.getAccess_token(), oauthResult.getOpenid());
@@ -104,25 +104,26 @@ public class OAuthController {
 		System.out.println("oauth url: "+WxMpUtil.AUTHORIZE_USERINFO_URL);
 		return "redirect:"+WxMpUtil.AUTHORIZE_USERINFO_URL;
 		
-//		System.out.println("oauth url: "+WxMpUtil.AUTHORIZE_BASE_URL);
-//		return "redirect:"+WxMpUtil.AUTHORIZE_BASE_URL;
+//		System.out.println("oauth url: "+WxUtil.AUTHORIZE_BASE_URL);
+//		return "redirect:"+WxUtil.AUTHORIZE_BASE_URL;
 	}
 
-	public WxMpOauthService getMpOauthService() {
-		return mpOauthService;
+	public WxMpOauthService getWxMpOauthService() {
+		return wxMpOauthService;
 	}
 
-	public void setMpOauthService(WxMpOauthService mpOauthService) {
-		this.mpOauthService = mpOauthService;
+	public void setWxMpOauthService(WxMpOauthService wxMpOauthService) {
+		this.wxMpOauthService = wxMpOauthService;
 	}
 
-	public IWxMpUserService getWxMpUserService() {
-		return wxMpUserService;
+	public IWxUserService getWxUserService() {
+		return wxUserService;
 	}
 
-	public void setWxMpUserService(IWxMpUserService wxMpUserService) {
-		this.wxMpUserService = wxMpUserService;
+	public void setWxUserService(IWxUserService wxUserService) {
+		this.wxUserService = wxUserService;
 	}
+
 	
 	
 }

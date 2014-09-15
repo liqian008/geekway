@@ -43,12 +43,13 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxCommandMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<!-- 
 	<bean id="wxCommandMaterialMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.WxCommandMaterialMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-
+	 -->
 
 	<bean id="wxCustomizeMenuArticleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
@@ -73,8 +74,8 @@
 	</bean>
 	
 
-	<bean id="wxMpUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMpUserMapper" />
+	<bean id="wxUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxUserMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	

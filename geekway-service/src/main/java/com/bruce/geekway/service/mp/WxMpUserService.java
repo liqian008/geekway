@@ -23,10 +23,6 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @Service
 public class WxMpUserService extends WxBaseService {
 
-	
-
-//	@Autowired
-//	private WxMpTokenService mpTokenService;
 	@Autowired
 	private IWxAccessTokenService wxAccessTokenService;
 

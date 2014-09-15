@@ -41,13 +41,13 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 //	@Autowired
 //	private IWxMaterialService materialService;
 	@Autowired
-    private IWxMaterialArticleService materialArticleService;
+    private IWxMaterialArticleService wxMaterialArticleService;
 	@Autowired
-    private IWxMaterialNewsService materialNewsService;
+    private IWxMaterialNewsService wxMaterialNewsService;
 	@Autowired
-    private IWxMaterialMultimediaService materialMultimediaService;
+    private IWxMaterialMultimediaService wxMaterialMultimediaService;
 	@Autowired
-    private IWxCommandService commandService;
+    private IWxCommandService wxCommandService;
     
 	/**
 	 * 处理文本指令
@@ -56,7 +56,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 	protected BaseResponse processTextRequest(TextRequest request) {
 		String key = ((TextRequest)request).getContent();
         
-        WxCommand command = commandService.loadByCommand((short) 0, key);
+        WxCommand command = wxCommandService.loadByCommand((short) 0, key);
         return commandResponse(request, command);
 	}
 
@@ -67,7 +67,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 	@Override
 	protected BaseResponse processClickEventRequest(EventRequest request) {
 		String key = ((EventRequest)request).getEventKey();
-		WxCommand command = commandService.loadByCommand((short) 1,key);
+		WxCommand command = wxCommandService.loadByCommand((short) 1,key);
 		return commandResponse(request, command);
 	}
 	
@@ -77,7 +77,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 	@Override
 	protected BaseResponse processNewSubscribeEventRequest(EventRequest request) { 
 //		String key = "subscribe";
-		WxCommand command = commandService.loadNewSubscribedCommand();
+		WxCommand command = wxCommandService.loadNewSubscribedCommand();
 		return commandResponse(request, command);
 	}
 	/**
@@ -85,7 +85,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 	 */
 	@Override
 	protected BaseResponse processReSubscribeEventRequest(EventRequest request) {
-		WxCommand command = commandService.loadReSubscribedCommand();
+		WxCommand command = wxCommandService.loadReSubscribedCommand();
 		return commandResponse(request, command);
 	}
 	
@@ -102,7 +102,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
         	}else if(command.getMaterialType()==1){//单图文回复
         		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
         			//取单图文的数据
-	        		WxMaterialArticle materialArticle = materialArticleService.loadById(command.getMaterialId());
+	        		WxMaterialArticle materialArticle = wxMaterialArticleService.loadById(command.getMaterialId());
 	        		if(materialArticle!=null){
 	        			List<WxMaterialArticle> articleList = new ArrayList<WxMaterialArticle>();
 	        			articleList.add(materialArticle);
@@ -112,9 +112,9 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
         	}else if(command.getMaterialType()==2){//多图文回复
         		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
         			//取多图文的组合数据
-        			WxMaterialNews materialNews = materialNewsService.loadById(command.getMaterialId());
+        			WxMaterialNews materialNews = wxMaterialNewsService.loadById(command.getMaterialId());
 	        		if(materialNews!=null){
-	        			List<WxMaterialArticle> materialArticleList = materialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId());
+	        			List<WxMaterialArticle> materialArticleList = wxMaterialArticleService.queryMaterialArticlesByNewsId(command.getMaterialId());
 		        		return newsReply(request, materialArticleList);
 		        	}
         		}
@@ -122,7 +122,7 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
         		if(command.getMaterialId()!=null&&command.getMaterialId()>0){
         			//取多图文的组合数据
         			//取单图文的数据
-	        		WxMaterialMultimedia materialImage = materialMultimediaService.loadById(command.getMaterialId());
+	        		WxMaterialMultimedia materialImage = wxMaterialMultimediaService.loadById(command.getMaterialId());
 	        		if(materialImage!=null){
 	        			return imageReply(request, materialImage);
 	        		}
@@ -134,44 +134,51 @@ public class CommandCmsProcessor extends AbstractProcessor implements Initializi
 		return null;
 	}
 	
-	public IWxCommandService getCommandService() {
-		return commandService;
-	}
-
-	public void setCommandService(IWxCommandService commandService) {
-		this.commandService = commandService;
-	}
-
-	public IWxMaterialArticleService getMaterialArticleService() {
-		return materialArticleService;
-	}
-
-	public void setMaterialArticleService(IWxMaterialArticleService materialArticleService) {
-		this.materialArticleService = materialArticleService;
-	}
-
-	public IWxMaterialNewsService getMaterialNewsService() {
-		return materialNewsService;
-	}
-
-
-	public void setMaterialNewsService(IWxMaterialNewsService materialNewsService) {
-		this.materialNewsService = materialNewsService;
-	}
 	
-	public IWxMaterialMultimediaService getMaterialMultimediaService() {
-		return materialMultimediaService;
+	public IWxMaterialArticleService getWxMaterialArticleService() {
+		return wxMaterialArticleService;
 	}
 
-	public void setMaterialMultimediaService(IWxMaterialMultimediaService materialMultimediaService) {
-		this.materialMultimediaService = materialMultimediaService;
+
+	public void setWxMaterialArticleService(IWxMaterialArticleService wxMaterialArticleService) {
+		this.wxMaterialArticleService = wxMaterialArticleService;
+	}
+
+
+	public IWxMaterialNewsService getWxMaterialNewsService() {
+		return wxMaterialNewsService;
+	}
+
+
+	public void setWxMaterialNewsService(IWxMaterialNewsService wxMaterialNewsService) {
+		this.wxMaterialNewsService = wxMaterialNewsService;
+	}
+
+
+	public IWxMaterialMultimediaService getWxMaterialMultimediaService() {
+		return wxMaterialMultimediaService;
+	}
+
+
+	public void setWxMaterialMultimediaService(IWxMaterialMultimediaService wxMaterialMultimediaService) {
+		this.wxMaterialMultimediaService = wxMaterialMultimediaService;
+	}
+
+
+	public IWxCommandService getWxCommandService() {
+		return wxCommandService;
+	}
+
+
+	public void setWxCommandService(IWxCommandService wxCommandService) {
+		this.wxCommandService = wxCommandService;
 	}
 
 
 	public void afterPropertiesSet() throws Exception {
-		System.out.println("========commandService========"+commandService);
-		System.out.println("========materialArticleService========"+materialArticleService);
-		System.out.println("========materialNewsService========"+materialNewsService);
+		System.out.println("========commandService========"+wxCommandService);
+		System.out.println("========materialArticleService========"+wxMaterialArticleService);
+		System.out.println("========materialNewsService========"+wxMaterialNewsService);
 		
 	
 	

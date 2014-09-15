@@ -1,14 +1,15 @@
 package com.bruce.geekway.model;
 
 public class WxHistoryMessageBase {
-	
-	private WxMpUser mpUser;
 
-	public WxMpUser getMpUser() {
-		return mpUser;
+	private WxUser user;
+
+	public WxUser getUser() {
+		return user;
 	}
 
-	public void setMpUser(WxMpUser mpUser) {
-		this.mpUser = mpUser;
+	public void setUser(WxUser user) {
+		this.user = user;
 	}
+
 }

@@ -7,7 +7,7 @@
 	
 		<!-- geekway config -->
 
-		<mapper resource="com/bruce/geekway/model/xml/WxMpUserMapper.xml" /> 
+		<mapper resource="com/bruce/geekway/model/xml/WxUserMapper.xml" /> 
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandExtendMapper.xml" />

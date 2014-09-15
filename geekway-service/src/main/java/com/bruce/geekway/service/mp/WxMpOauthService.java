@@ -9,7 +9,6 @@ import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
-import com.bruce.geekway.utils.WxMpUtil;
 
 /**
  * OauthService (mp包下的service均为对weixin api的封装)

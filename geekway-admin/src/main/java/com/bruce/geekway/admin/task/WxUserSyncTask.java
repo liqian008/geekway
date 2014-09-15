@@ -7,18 +7,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bruce.geekway.model.WxMpUser;
+import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
-import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.service.IWxUserService;
 import com.bruce.geekway.service.mp.WxMpUserService;
 
 @Component
 public class WxUserSyncTask implements Runnable{
 
 	@Autowired
-	private WxMpUserService wxUserService;
+	private WxMpUserService wxMpUserService;
 	@Autowired
-	private IWxMpUserService wxMpUserService;
+	private IWxUserService wxUserService;
 	
 	private boolean running;
 	
@@ -29,26 +29,26 @@ public class WxUserSyncTask implements Runnable{
 			System.out.println("==========wxMpUserService====="+wxMpUserService+"=======wxUserService========="+wxUserService);
 			System.out.println("=================sync mp userinfo from wx");
 			try{
-				List<WxMpUser> mpUserList = wxMpUserService.getMpUserListBySyncStatus((short) 0);
-				if(mpUserList!=null&&mpUserList.size()>0){
-					for(WxMpUser mpUser: mpUserList){
-						String userOpenId = mpUser.getOpenId();
-						WxUserInfoResult userInfoResult =  wxUserService.getUser(userOpenId);
+				List<WxUser> userList = wxUserService.getUserListBySyncStatus((short) 0);
+				if(userList!=null&&userList.size()>0){
+					for(WxUser user: userList){
+						String userOpenId = user.getOpenId();
+						WxUserInfoResult userInfoResult =  wxMpUserService.getUser(userOpenId);
 						//有效数据
 						if(userInfoResult!=null&&userInfoResult.getErrcode()==null){
-							mpUser.setOpenId(userOpenId);
-							mpUser.setNickname(userInfoResult.getNickname());
-							mpUser.setCity(userInfoResult.getCity());
-							mpUser.setCountry(userInfoResult.getCountry());
-							mpUser.setProvince(userInfoResult.getProvince());
-							mpUser.setHeadImgUrl(userInfoResult.getHeadimgurl());
-							mpUser.setLanguage(userInfoResult.getLanguage());
-							mpUser.setSubscribeStatus(userInfoResult.getSubscribe());
-							mpUser.setSex(userInfoResult.getSex());
-							mpUser.setUpdateTime(new Date());
+							user.setOpenId(userOpenId);
+							user.setNickname(userInfoResult.getNickname());
+							user.setCity(userInfoResult.getCity());
+							user.setCountry(userInfoResult.getCountry());
+							user.setProvince(userInfoResult.getProvince());
+							user.setHeadImgUrl(userInfoResult.getHeadimgurl());
+							user.setLanguage(userInfoResult.getLanguage());
+							user.setSubscribeStatus(userInfoResult.getSubscribe());
+							user.setSex(userInfoResult.getSex());
+							user.setUpdateTime(new Date());
 							
-							mpUser.setSyncStatus((short) 1);
-							int result = wxMpUserService.updateById(mpUser);
+							user.setSyncStatus((short) 1);
+							int result = wxUserService.updateById(user);
 						}
 						//休息5秒，避免被微信当做恶意攻击
 						Thread.sleep(5000);

@@ -1,11 +1,15 @@
 package com.bruce.geekway.handler.processor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.model.WxDefaultReply;
-import com.bruce.geekway.model.wx.request.*;
-import com.bruce.geekway.model.wx.response.*;
+import com.bruce.geekway.model.wx.request.EventRequest;
+import com.bruce.geekway.model.wx.request.ImageRequest;
+import com.bruce.geekway.model.wx.request.LocationRequest;
+import com.bruce.geekway.model.wx.request.TextRequest;
+import com.bruce.geekway.model.wx.request.VideoRequest;
+import com.bruce.geekway.model.wx.request.VoiceRequest;
+import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.service.IWxDefaultReplyService;
 
 
@@ -19,7 +23,7 @@ import com.bruce.geekway.service.IWxDefaultReplyService;
 public class DefaultReplyProcessor extends AbstractProcessor{ 
     
     @Autowired
-    private IWxDefaultReplyService defaultReplyService;
+    private IWxDefaultReplyService wxDefaultReplyService;
     
     private WxDefaultReply defaultReply = null;
     
@@ -29,7 +33,7 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 	protected synchronized void preProcess() {
     	long currentTime = System.currentTimeMillis();
     	if(defaultReply==null||currentTime-lastLoadTime>1000*60*60){//每小时刷新一次默认值
-    		defaultReply = defaultReplyService.loadById(1);
+    		defaultReply = wxDefaultReplyService.loadById(1);
     		lastLoadTime = currentTime;
     	}
 	}
@@ -98,11 +102,13 @@ public class DefaultReplyProcessor extends AbstractProcessor{
 		return null;
 	}
 
-	public IWxDefaultReplyService getDefaultReplyService() {
-		return defaultReplyService;
+	public IWxDefaultReplyService getWxDefaultReplyService() {
+		return wxDefaultReplyService;
 	}
 
-	public void setDefaultReplyService(IWxDefaultReplyService defaultReplyService) {
-		this.defaultReplyService = defaultReplyService;
+	public void setWxDefaultReplyService(IWxDefaultReplyService wxDefaultReplyService) {
+		this.wxDefaultReplyService = wxDefaultReplyService;
 	}
+
+	
 }

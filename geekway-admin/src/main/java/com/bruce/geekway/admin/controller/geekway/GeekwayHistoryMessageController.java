@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
-import com.bruce.geekway.model.WxMpUser;
+import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.service.IWxHistoryMessageService;
-import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.service.IWxUserService;
 import com.bruce.geekway.utils.DateUtil;
 
 /**
@@ -34,7 +34,7 @@ public class GeekwayHistoryMessageController {
 	@Autowired
 	private IWxHistoryMessageService wxHistoryMessageService;
 	@Autowired
-	private IWxMpUserService wxMpUserService;
+	private IWxUserService userrService;
 	
 	/**
 	 * 历史消息列表
@@ -59,16 +59,16 @@ public class GeekwayHistoryMessageController {
 		
 		if(historyMessageList!=null&&historyMessageList.size()>0){
 			//获取个人资料
-			Map<String, WxMpUser> userMap = new HashMap<String, WxMpUser>();
+			Map<String, WxUser> userMap = new HashMap<String, WxUser>();
 			for(WxHistoryMessage historyMessage: historyMessageList){
 				String userOpenId = historyMessage.getOpenId();
 				if(!StringUtils.isBlank(userOpenId)){
-					WxMpUser mpUser = userMap.get(userOpenId);//取缓存对象中的对象
+					WxUser mpUser = userMap.get(userOpenId);//取缓存对象中的对象
 					if(mpUser==null){//用户对象未被缓存，需要从db中获取
-						mpUser = wxMpUserService.loadByOpenId(userOpenId);
+						mpUser = userrService.loadByOpenId(userOpenId);
 					}
 					if(mpUser!=null){
-						historyMessage.setMpUser(mpUser);
+						historyMessage.setUser(mpUser);
 					}
 				}
 			}
@@ -92,7 +92,7 @@ public class GeekwayHistoryMessageController {
 		model.addAttribute("interval", interval);
 		Date queryTimeFrom = DateUtil.calcDatetime(new Date(), 0-interval);
 		
-		WxMpUser chatUser = wxMpUserService.loadByOpenId(openId);
+		WxUser chatUser = userrService.loadByOpenId(openId);
 		if(chatUser!=null){
 			
 			model.addAttribute("chatUser", chatUser);

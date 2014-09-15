@@ -7,7 +7,7 @@ import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.geekway.handler.processor.Processor;
-import com.bruce.geekway.model.WxMpUser;
+import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgRespTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
@@ -24,7 +24,7 @@ import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxBroadcastService;
 import com.bruce.geekway.service.IWxHistoryMessageService;
-import com.bruce.geekway.service.IWxMpUserService;
+import com.bruce.geekway.service.IWxUserService;
 import com.bruce.geekway.utils.WxXmlUtil;
 
 /**
@@ -55,11 +55,11 @@ public class MessageHandler {
 	@Autowired
 	private List<Processor> eventLocationProcessorList;
 	@Autowired
-	private IWxMpUserService mpUserService;
+	private IWxUserService wxUserService;
 	@Autowired
-	private IWxBroadcastService broadcastService;
+	private IWxBroadcastService wxBroadcastService;
 	@Autowired
-	private IWxHistoryMessageService historyMessageService;
+	private IWxHistoryMessageService wxHistoryMessageService;
 	
 	public BaseResponse processMessage(String xml) throws Exception {
 		System.out.println("request xml: " + xml);
@@ -100,13 +100,13 @@ public class MessageHandler {
 					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 					wxRequest = eventRequest;
 					String fromOpenId = eventRequest.getFromUserName();
-					WxMpUser wxUser = mpUserService.loadByOpenId(fromOpenId);
+					WxUser wxUser = wxUserService.loadByOpenId(fromOpenId);
 					if(wxUser==null){//全新用户关注
-						mpUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+						wxUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
 						wxResponse = processEventFirstSubscribeRequest(eventRequest);
 						break;
 					}else{//之前存在过，属于重复关注
-						mpUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+						wxUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
 						eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
 						wxResponse = processEventRepeatSubscribeRequest(eventRequest);
 						break;
@@ -116,7 +116,7 @@ public class MessageHandler {
 					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 					wxRequest = eventRequest;
 					//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
-					mpUserService.unsubscribeUser(eventRequest.getFromUserName());
+					wxUserService.unsubscribeUser(eventRequest.getFromUserName());
 					wxResponse = processEventUnsubscribeRequest(eventRequest);
 					break;
 				}
@@ -146,7 +146,7 @@ public class MessageHandler {
 					BroadcastFinishEventRequest broadcastFinishRrequest = WxXmlUtil.getBroadcastMsgEvent(ele);
 					wxRequest = broadcastFinishRrequest;
 					//作为系统级操作，向表中回写群发结果数据（脱离processor处理系统的订阅事件）
-					broadcastService.broadcastNofify(broadcastFinishRrequest.getMsgID(), broadcastFinishRrequest.getTotalCount(), broadcastFinishRrequest.getFilterCount(), broadcastFinishRrequest.getSentCount(), broadcastFinishRrequest.getErrorCount());
+					wxBroadcastService.broadcastNofify(broadcastFinishRrequest.getMsgID(), broadcastFinishRrequest.getTotalCount(), broadcastFinishRrequest.getFilterCount(), broadcastFinishRrequest.getSentCount(), broadcastFinishRrequest.getErrorCount());
 					wxResponse = null;//系统群发广播，无需返回数据（此处作为特殊处理）
 					break;
 				}
@@ -160,10 +160,10 @@ public class MessageHandler {
 		}
 		if(wxRequest!=null){
 			if(fromUser){//对于普通消息类型，需要将消息中的openid写入用户表，避免因停服的时候导致用户遗漏
-				mpUserService.logUserFromMessage(wxRequest.getFromUserName());
+				wxUserService.logUserFromMessage(wxRequest.getFromUserName());
 			}
 			//将wx消息写入历史消息，便于查阅
-			historyMessageService.logRequestMessage(wxRequest, xml);
+			wxHistoryMessageService.logRequestMessage(wxRequest, xml);
 		}
 		return wxResponse;
 	}
@@ -199,7 +199,7 @@ public class MessageHandler {
 		default:
 			break;
 		}
-		historyMessageService.logResponseMessage(wxResponse, responseStr);
+		wxHistoryMessageService.logResponseMessage(wxResponse, responseStr);
 		return responseStr;
 	}
 
@@ -333,29 +333,28 @@ public class MessageHandler {
 		this.eventUnsubscribeProcessorList = eventUnsubscribeProcessorList;
 	}
 
-	public IWxMpUserService getMpUserService() {
-		return mpUserService;
+	public IWxUserService getWxUserService() {
+		return wxUserService;
 	}
 
-	public void setMpUserService(IWxMpUserService mpUserService) {
-		this.mpUserService = mpUserService;
+	public void setWxUserService(IWxUserService wxUserService) {
+		this.wxUserService = wxUserService;
 	}
 
-	public IWxBroadcastService getBroadcastService() {
-		return broadcastService;
+	public IWxBroadcastService getWxBroadcastService() {
+		return wxBroadcastService;
 	}
 
-	public void setBroadcastService(IWxBroadcastService broadcastService) {
-		this.broadcastService = broadcastService;
+	public void setWxBroadcastService(IWxBroadcastService wxBroadcastService) {
+		this.wxBroadcastService = wxBroadcastService;
 	}
 
-	public IWxHistoryMessageService getHistoryMessageService() {
-		return historyMessageService;
+	public IWxHistoryMessageService getWxHistoryMessageService() {
+		return wxHistoryMessageService;
 	}
 
-	public void setHistoryMessageService(
-			IWxHistoryMessageService historyMessageService) {
-		this.historyMessageService = historyMessageService;
+	public void setWxHistoryMessageService(IWxHistoryMessageService wxHistoryMessageService) {
+		this.wxHistoryMessageService = wxHistoryMessageService;
 	}
-	
+
 }

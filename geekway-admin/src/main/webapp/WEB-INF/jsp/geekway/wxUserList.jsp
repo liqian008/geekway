@@ -1,21 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="com.bruce.geekway.model.WxUser"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.utils.*"%>
 
-<%@ include file="../inc/include_tag.jsp" %>
-
-
-<%!String displayCheckedStatus(Integer dataId, Integer itemId){
-	if(dataId!=null&&itemId!=null&&dataId==itemId){
-		return "checked='checked'";
-	}else{
-		return "";
-	}
-}
-
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +70,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						用户资料
+						用户管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -93,7 +82,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">用户资料</li>
+					<li class="active">用户管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -101,89 +90,86 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、用户详细资料<br/>
+					1、用户资料的同步策略为每小时一次。即新关注的用户资料，一小时内可以同步回来。<br/>
+					2、点击【查看】按钮，可查看用户详情<br/>
 				</p>
 			</div>
-			
-			<%
-			WxMpUser mpUser = (WxMpUser)request.getAttribute("mpUser");
-			%>
 
-			<form id="validate" action="<s:url value='./historyMessageDialog'/>" method="post"  class="form-horizontal form-bordered">
-				
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>用户资料
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">头 像:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${mpUser.headImgUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${mpUser.headImgUrl}" width="100px" />
-								</a>
-							</div> 
-						</div>
-					
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">昵 称:
-							</label>
-							<div class="col-sm-3">
-								<label class="control-label">
-									${mpUser.nickname}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">OPENID:
-							</label>
-							<div class="col-sm-3">
-								<label class="control-label">
-									<input type="hidden" name="openId" value="${mpUser.openId}"/>
-									${mpUser.openId}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">性 别:
-							</label>
-							<div class="col-sm-2">
-								<label class="control-label">
-									<%=mpUser.getSex()==1?"男":"女"%>
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">地 区:
-							</label>
-							<div class="col-sm-6">
-								<label class="control-label">
-									<%=mpUser.getCountry()%>-<%=mpUser.getProvince()%>-<%=mpUser.getCity()%>
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="submit" value="回复消息" class="btn btn-danger"/>
-						</div>
-						
-					</div>
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>用户管理
+					</h5>
+					<a href="./syncRemoteUser"><span class="label label-danger pull-right">用户数据同步</span></a>
+				</div> 
+				<div class="datatable-media">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>头像</th>
+								<th>状态</th>
+								<th>昵称</th>
+								<th>OPENID</th>
+								<th>区域</th>
+                               <!--  <th>关注时间</th> -->
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxUser> wxUserList = (List<WxUser>)request.getAttribute("wxUserList");
+                           	if(wxUserList!=null&&wxUserList.size()>0){
+                           		int i=0;
+                           		for(WxUser wxUser: wxUserList){
+                           			boolean synced = wxUser.getSyncStatus()>0;
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td>
+		                        	<%if(synced){ %>
+	                        		<a href="javascript:void(0)" class="lightbox">
+		                        	<img src="<%=wxUser.getHeadImgUrl()%>" class="img-media"/>
+		                        	</a>
+		                        	<%}%>
+		                        </td>
+		                        <td><%=wxUser.getSubscribeStatus()==1?"已关注":"已取消"%></td>
+		                        <td><%=synced?wxUser.getNickname():"详细信息未同步"%></td>
+		                        <td><%=wxUser.getOpenId()%></td>
+		                        <td>
+		                        	<%if(synced){%>
+		                        	<%=wxUser.getCountry()+"-"+wxUser.getProvince()+"-"+wxUser.getProvince()%>
+		                        	<%}%>
+		                        </td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+		                        		<%String link = "./historyMessageDialog?openId="+wxUser.getOpenId();%>
+											<a href="<%=link%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="回 复"><i class="icon-bubble3"></i></a>
+		                        		<%if(synced){%>
+										<a href="./wxUserInfo?wxUserId=<%=wxUser.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="查看"><i class="icon-pencil3"></i></a> 
+										<%} %>
+									</div>
+								</td>
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
 				</div>
 				
-			</form>
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -193,3 +179,4 @@
 	<!-- /page container -->
 </body>
 </html>
+
