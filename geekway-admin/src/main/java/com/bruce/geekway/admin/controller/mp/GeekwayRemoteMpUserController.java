@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
-import com.bruce.geekway.service.mp.WxUserService;
+import com.bruce.geekway.service.mp.WxMpUserService;
 
 
 @Controller
@@ -22,7 +22,7 @@ import com.bruce.geekway.service.mp.WxUserService;
 public class GeekwayRemoteMpUserController {
 
 	@Autowired
-	private WxUserService wxUserService;
+	private WxMpUserService wxUserService;
 	
 	@RequestMapping("/mpUserListRemote") 
 	public String mpUserList(Model model, HttpServletRequest request, String nextOpenId, @RequestParam(value="pageSize", required=false, defaultValue="1") int pageSize) {

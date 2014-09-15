@@ -1,11 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.wx.json.WxMenuBtnEntity"%>
+<%@page import="com.bruce.geekway.model.wx.json.WxMenuBtn"%>
 <%@page import="java.text.SimpleDateFormat"%>
 
-<%!
-public String displayMenuName(String name, int level){
+<%!public String displayMenuName(String name, int level){
 	StringBuilder sb = new StringBuilder();
 	if(level>1){
 		sb.append("|");
@@ -16,8 +15,7 @@ public String displayMenuName(String name, int level){
 	}
 	sb.append(name);
 	return sb.toString();
-}
-%>
+}%>
 
 
 
@@ -149,12 +147,12 @@ public String displayMenuName(String name, int level){
 							</thead>
 							<tbody>
 								<%
-	                           	List<WxMenuBtnEntity> menuButtonList = (List<WxMenuBtnEntity>)request.getAttribute("menuButtonList");
-	                           	if(menuButtonList!=null&&menuButtonList.size()>0){
-	                           		int i=0;
-	                           		for(WxMenuBtnEntity menuButton: menuButtonList){ 
-	                           			i++;
-	                           	%>
+									List<WxMenuBtn> menuButtonList = (List<WxMenuBtn>)request.getAttribute("menuButtonList");
+									                           	if(menuButtonList!=null&&menuButtonList.size()>0){
+									                           		int i=0;
+									                           		for(WxMenuBtn menuButton: menuButtonList){ 
+									                           			i++;
+								%>
 								<tr>
 			                        <td><%=menuButton.getLevel()%>级</td>
 			                        <td><%=displayMenuName(menuButton.getName(), menuButton.getLevel())%></td>

@@ -25,7 +25,7 @@ import com.bruce.geekway.model.wx.message.VoiceMessage;
 import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialMultimediaService;
-import com.bruce.geekway.service.mp.WxCustomReplyService;
+import com.bruce.geekway.service.mp.WxMpCustomReplyService;
 import com.bruce.geekway.utils.ArticleLinkUtil;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 
@@ -39,7 +39,7 @@ import com.bruce.geekway.utils.JsonResultBuilderUtil;
 public class GeekwayMpReplyController {
 	
 	@Autowired
-	private WxCustomReplyService wxCustomReplyService;
+	private WxMpCustomReplyService wxCustomReplyService;
 	@Autowired
 	private IWxMaterialMultimediaService wxMaterialMultimediaService;
 	@Autowired

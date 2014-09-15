@@ -14,15 +14,15 @@ import com.bruce.geekway.model.wx.json.WxGroupInfo;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult.OpenIdList;
 import com.bruce.geekway.service.IWxMpUserService;
-import com.bruce.geekway.service.mp.WxUserGroupService;
-import com.bruce.geekway.service.mp.WxUserService;
+import com.bruce.geekway.service.mp.WxMpUserGroupService;
+import com.bruce.geekway.service.mp.WxMpUserService;
 
 @Controller
 @RequestMapping("/geekway")
 public class GeekwayMpUserGroupController {
 
 	@Autowired
-	private WxUserGroupService wxUserGroupService;
+	private WxMpUserGroupService wxUserGroupService;
 	
 
 	@RequestMapping("/mpUserGroupList")

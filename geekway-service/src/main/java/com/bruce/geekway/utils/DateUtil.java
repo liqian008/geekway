@@ -1,7 +1,6 @@
 package com.bruce.geekway.utils;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -43,6 +42,18 @@ public class DateUtil {
 			return new Date(result);
 		}
 		return null;
+	}
+	
+	/**
+	 * 获取linux时间
+	 * @param date
+	 * @return
+	 */
+	public static long getUnixTime(Date date) {
+		if( null == date ) {
+			return 0;
+		}
+		return date.getTime()/1000;
 	}
 	
 //	public static void main(String[] args) {

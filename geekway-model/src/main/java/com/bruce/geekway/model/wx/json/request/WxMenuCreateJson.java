@@ -2,22 +2,22 @@ package com.bruce.geekway.model.wx.json.request;
 
 import java.util.List;
 
-import com.bruce.geekway.model.wx.json.WxMenuBtnEntity;
+import com.bruce.geekway.model.wx.json.WxMenuBtn;
 
 
 public class WxMenuCreateJson {
 
-	private List<WxMenuBtnEntity> button;
+	private List<WxMenuBtn> button;
 
-	public WxMenuCreateJson(List<WxMenuBtnEntity> menuList) {
+	public WxMenuCreateJson(List<WxMenuBtn> menuList) {
 		this.button = menuList;
 	}
 
-	public List<WxMenuBtnEntity> getButton() {
+	public List<WxMenuBtn> getButton() {
 		return button;
 	}
 
-	public void setButton(List<WxMenuBtnEntity> button) {
+	public void setButton(List<WxMenuBtn> button) {
 		this.button = button;
 	}
 

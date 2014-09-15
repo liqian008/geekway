@@ -19,7 +19,7 @@ import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.IUploadService;
-import com.bruce.geekway.service.mp.WxMediaUploadService;
+import com.bruce.geekway.service.mp.WxMpMediaUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.UploadUtil;
 
@@ -31,7 +31,7 @@ public class GeekwayUploadController extends BaseController{
 	private IUploadService uploadService;
 	
 	@Autowired
-	private WxMediaUploadService wxMediaUploadService;
+	private WxMpMediaUploadService wxMediaUploadService;
 	
 	/**
 	 * 处理ckEditor文件上传

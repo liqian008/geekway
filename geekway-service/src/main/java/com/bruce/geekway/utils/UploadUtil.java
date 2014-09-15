@@ -36,7 +36,7 @@ public class UploadUtil {
         StringBuffer sb = new StringBuffer();
         sb.append(userId);
         sb.append("_");
-        sb.append(Md5Utils.md5Encode(userId + "_" + time));
+        sb.append(Md5Util.md5Encode(userId + "_" + time));
         if (StringUtils.isNotEmpty(placeHolder)) {
             sb.append("_");
             sb.append(placeHolder);

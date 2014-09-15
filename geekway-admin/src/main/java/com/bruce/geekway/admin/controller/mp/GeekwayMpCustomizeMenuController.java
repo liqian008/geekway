@@ -12,11 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.model.WxCustomizeMenu;
-import com.bruce.geekway.model.wx.json.WxMenuBtnEntity;
+import com.bruce.geekway.model.wx.json.WxMenuBtn;
 import com.bruce.geekway.model.wx.json.request.WxMenuCreateJson;
 import com.bruce.geekway.model.wx.json.response.WxMenuQueryResult;
 import com.bruce.geekway.service.IWxCustomizeMenuService;
-import com.bruce.geekway.service.mp.WxMenuService;
+import com.bruce.geekway.service.mp.WxMpMenuService;
 
 
 @Controller
@@ -24,7 +24,7 @@ import com.bruce.geekway.service.mp.WxMenuService;
 public class GeekwayMpCustomizeMenuController {
 
 	@Autowired
-	private WxMenuService wxMenuService;
+	private WxMpMenuService wxMenuService;
 	@Autowired
 	private IWxCustomizeMenuService wxCustomizeMenuService;
 	
@@ -34,7 +34,7 @@ public class GeekwayMpCustomizeMenuController {
 		if(menuQueryResult!=null){
 			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
 			if(menuJsonObj!=null){
-				List<WxMenuBtnEntity> menuButtonList = buildMenuList(new ArrayList<WxMenuBtnEntity>(), menuJsonObj.getButton(), 1);
+				List<WxMenuBtn> menuButtonList = buildMenuList(new ArrayList<WxMenuBtn>(), menuJsonObj.getButton(), 1);
 				model.addAttribute("menuButtonList", menuButtonList);
 			}
 		}
@@ -51,7 +51,7 @@ public class GeekwayMpCustomizeMenuController {
 		
 		List<WxCustomizeMenu> customizeMenuList = wxCustomizeMenuService.querySortedMenus();
 		
-		List<WxMenuBtnEntity> mpMenuList = groupMpMenuList(customizeMenuList);
+		List<WxMenuBtn> mpMenuList = groupMpMenuList(customizeMenuList);
 		if(mpMenuList!=null&&mpMenuList.size()>0){
 			WxMenuCreateJson menuCreateJson = new WxMenuCreateJson(mpMenuList);
 			wxMenuService.menuCreate(menuCreateJson);
@@ -66,20 +66,20 @@ public class GeekwayMpCustomizeMenuController {
 	 * @param customizeMenuList
 	 * @return
 	 */
-	private List<WxMenuBtnEntity> groupMpMenuList(List<WxCustomizeMenu> customizeMenuList) {
+	private List<WxMenuBtn> groupMpMenuList(List<WxCustomizeMenu> customizeMenuList) {
 		if(customizeMenuList!=null&&customizeMenuList.size()>0){
-			List<WxMenuBtnEntity> groupedList = new ArrayList<WxMenuBtnEntity>();
+			List<WxMenuBtn> groupedList = new ArrayList<WxMenuBtn>();
 			for(WxCustomizeMenu loopMenu1: customizeMenuList){
 				int level1MenuId = 0;
 				if(0==loopMenu1.getParentId()){
 					level1MenuId = loopMenu1.getId();
 					//构造一级菜单
-					WxMenuBtnEntity level1MpMenu = new WxMenuBtnEntity(loopMenu1.getMenuKey(), loopMenu1.getMenuName(), loopMenu1.getMenuType(), loopMenu1.getUrl());
+					WxMenuBtn level1MpMenu = new WxMenuBtn(loopMenu1.getMenuKey(), loopMenu1.getMenuName(), loopMenu1.getMenuType(), loopMenu1.getUrl());
 					groupedList.add(level1MpMenu);
 					for(WxCustomizeMenu loopMenu2: customizeMenuList){
 						if(level1MenuId==loopMenu2.getParentId()){
 							//向一级菜单中加入二级菜单项
-							WxMenuBtnEntity level2MpMenu = new WxMenuBtnEntity(loopMenu2.getMenuKey(), loopMenu2.getMenuName(), loopMenu2.getMenuType(), loopMenu2.getUrl());
+							WxMenuBtn level2MpMenu = new WxMenuBtn(loopMenu2.getMenuKey(), loopMenu2.getMenuName(), loopMenu2.getMenuType(), loopMenu2.getUrl());
 							level1MpMenu.addSubButton(level2MpMenu);
 						}
 					}
@@ -100,9 +100,9 @@ public class GeekwayMpCustomizeMenuController {
 	}
 	
 	
-	private List<WxMenuBtnEntity> buildMenuList(List<WxMenuBtnEntity> container, List<WxMenuBtnEntity> menus, int level){
+	private List<WxMenuBtn> buildMenuList(List<WxMenuBtn> container, List<WxMenuBtn> menus, int level){
 		if(menus!=null&&menus!=null){
-			for(WxMenuBtnEntity loopItem: menus){
+			for(WxMenuBtn loopItem: menus){
 				loopItem.setLevel(level);
 				container.add(loopItem);
 				if(loopItem!=null&&loopItem.getSub_button()!=null&&loopItem.getSub_button().size()>0){
@@ -133,37 +133,37 @@ public class GeekwayMpCustomizeMenuController {
 	public static void main(String[] args) {
 		GeekwayMpCustomizeMenuController instance = new GeekwayMpCustomizeMenuController();
 		
-		WxMenuService wxMenuService = new WxMenuService();
+		WxMpMenuService wxMenuService = new WxMpMenuService();
 		WxMenuQueryResult menuQueryResult = wxMenuService.menuGet();
 		if(menuQueryResult!=null){
 			WxMenuCreateJson menuJsonObj = menuQueryResult.getMenu();
 			if(menuJsonObj!=null){
-				List<WxMenuBtnEntity> menuList = instance.buildMenuList(new ArrayList<WxMenuBtnEntity>(), menuJsonObj.getButton(), 1);
+				List<WxMenuBtn> menuList = instance.buildMenuList(new ArrayList<WxMenuBtn>(), menuJsonObj.getButton(), 1);
 				System.out.println(menuList);
 			}
 		}
 		
-		List<WxMenuBtnEntity> container = new ArrayList<WxMenuBtnEntity>();
-		List<WxMenuBtnEntity> total = instance.buildMenuList(container, getMockMenuList(), 1);
+		List<WxMenuBtn> container = new ArrayList<WxMenuBtn>();
+		List<WxMenuBtn> total = instance.buildMenuList(container, getMockMenuList(), 1);
 //		System.out.println(total);
 	}
 
 
-	private static List<WxMenuBtnEntity> getMockMenuList() {
-		WxMenuBtnEntity root1 = new WxMenuBtnEntity("menu1","menu1", "click");
-		WxMenuBtnEntity root2 = new WxMenuBtnEntity("menu2","menu2", "click");
+	private static List<WxMenuBtn> getMockMenuList() {
+		WxMenuBtn root1 = new WxMenuBtn("menu1","menu1", "click");
+		WxMenuBtn root2 = new WxMenuBtn("menu2","menu2", "click");
 		
-		WxMenuBtnEntity level21 = new WxMenuBtnEntity("menu21","menu21", "click");
-		WxMenuBtnEntity level22 = new WxMenuBtnEntity("menu22","menu22", "click");
-		WxMenuBtnEntity level23 = new WxMenuBtnEntity("menu23","menu23", "click");
+		WxMenuBtn level21 = new WxMenuBtn("menu21","menu21", "click");
+		WxMenuBtn level22 = new WxMenuBtn("menu22","menu22", "click");
+		WxMenuBtn level23 = new WxMenuBtn("menu23","menu23", "click");
 		
-		WxMenuBtnEntity level211 = new WxMenuBtnEntity("menu211","menu211", "click");
-		WxMenuBtnEntity level212 = new WxMenuBtnEntity("menu212","menu212", "click");
-		WxMenuBtnEntity level213 = new WxMenuBtnEntity("menu213","menu213", "click");
+		WxMenuBtn level211 = new WxMenuBtn("menu211","menu211", "click");
+		WxMenuBtn level212 = new WxMenuBtn("menu212","menu212", "click");
+		WxMenuBtn level213 = new WxMenuBtn("menu213","menu213", "click");
 		
-		WxMenuBtnEntity level231 = new WxMenuBtnEntity("menu231","menu231", "click");
-		WxMenuBtnEntity level232 = new WxMenuBtnEntity("menu232","menu232", "click");
-		WxMenuBtnEntity level233 = new WxMenuBtnEntity("menu233","menu233", "click");
+		WxMenuBtn level231 = new WxMenuBtn("menu231","menu231", "click");
+		WxMenuBtn level232 = new WxMenuBtn("menu232","menu232", "click");
+		WxMenuBtn level233 = new WxMenuBtn("menu233","menu233", "click");
 		
 		root1.addSubButton(level21);
 		root1.addSubButton(level22);
@@ -178,7 +178,7 @@ public class GeekwayMpCustomizeMenuController {
 		level23.addSubButton(level233);
 		
 		
-		List<WxMenuBtnEntity> menus = new ArrayList<WxMenuBtnEntity>();
+		List<WxMenuBtn> menus = new ArrayList<WxMenuBtn>();
 		menus.add(root2);
 		menus.add(root1);
 		

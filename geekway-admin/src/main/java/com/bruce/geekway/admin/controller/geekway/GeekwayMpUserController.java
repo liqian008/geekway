@@ -13,7 +13,7 @@ import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult.OpenIdList;
 import com.bruce.geekway.service.IWxMpUserService;
-import com.bruce.geekway.service.mp.WxUserService;
+import com.bruce.geekway.service.mp.WxMpUserService;
 
 @Controller
 @RequestMapping("/geekway")
@@ -22,7 +22,7 @@ public class GeekwayMpUserController {
 	@Autowired
 	private IWxMpUserService wxMpUserService;
 	@Autowired
-	private WxUserService wxUserService;
+	private WxMpUserService wxUserService;
 	
 
 	@RequestMapping("/mpUserList")

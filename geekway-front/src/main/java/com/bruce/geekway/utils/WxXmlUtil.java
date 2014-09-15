@@ -6,7 +6,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import com.bruce.geekway.model.wx.WxAuth;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
 import com.bruce.geekway.model.wx.request.BaseRequest;
@@ -22,16 +21,6 @@ import com.bruce.geekway.model.wx.response.TextResponse;
 public class WxXmlUtil {
 	
 	private WxXmlUtil() {
-	}
-
-	public static WxAuth getAuthReq(String signature, String timestamp,
-			String nonce, String echostr) {
-		WxAuth result = new WxAuth(); 
-		result.setSignature(signature);
-		result.setTimestamp(timestamp);
-		result.setNonce(nonce);
-		result.setEchostr(echostr);
-		return result;
 	}
 
 	/**

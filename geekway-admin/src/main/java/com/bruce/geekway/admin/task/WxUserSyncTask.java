@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.service.IWxMpUserService;
-import com.bruce.geekway.service.mp.WxUserService;
+import com.bruce.geekway.service.mp.WxMpUserService;
 
 @Component
 public class WxUserSyncTask implements Runnable{
 
 	@Autowired
-	private WxUserService wxUserService;
+	private WxMpUserService wxUserService;
 	@Autowired
 	private IWxMpUserService wxMpUserService;
 	

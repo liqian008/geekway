@@ -11,7 +11,7 @@ import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.WxMpUserCriteria;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.service.IWxMpUserService;
-import com.bruce.geekway.service.mp.WxUserService;
+import com.bruce.geekway.service.mp.WxMpUserService;
 import com.bruce.geekway.utils.ConfigUtil;
 
 @Service
@@ -22,7 +22,7 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 	@Autowired
 	private WxMpUserMapper wxMpUserMapper;
 	@Autowired
-	private WxUserService wxUserService;
+	private WxMpUserService wxUserService;
 	
 	@Override
 	public int save(WxMpUser t) {
@@ -192,11 +192,11 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 		this.wxMpUserMapper = wxMpUserMapper;
 	}
 
-	public WxUserService getWxUserService() {
+	public WxMpUserService getWxUserService() {
 		return wxUserService;
 	}
 
-	public void setWxUserService(WxUserService wxUserService) {
+	public void setWxUserService(WxMpUserService wxUserService) {
 		this.wxUserService = wxUserService;
 	}
 

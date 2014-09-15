@@ -28,7 +28,7 @@ public class WxEntryController {
 	@RequestMapping(value="/api", method = { RequestMethod.GET})
 	public String authGet(@RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce,
 			@RequestParam("echostr") String echostr) {
-		if (WxAuthUtil.validateAuth(signature, timestamp, nonce, echostr)) {
+		if (WxAuthUtil.wxMessageAuth(signature, timestamp, nonce, echostr)) {
 			return echostr;
 		}
 		return "";
