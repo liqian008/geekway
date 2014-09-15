@@ -6,18 +6,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.dao.mapper.WxMpUserMapper;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.model.WxMpUserCriteria;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.service.IWxMpUserService;
 import com.bruce.geekway.service.mp.WxMpUserService;
-import com.bruce.geekway.utils.ConfigUtil;
 
 @Service
 public class WxMpUserServiceImpl implements IWxMpUserService {
 	
-	private static final String DEFAULT_USER_AVATAR_URL = ConfigUtil.getString("weixinmp_anonymous_user_avatar");
+	
 	
 	@Autowired
 	private WxMpUserMapper wxMpUserMapper;
@@ -112,7 +112,7 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 				WxMpUser wxMpUser = loadByOpenId(userOpenId);
 				if (wxMpUser == null) {// 不为空，新关注
 					wxMpUser = new WxMpUser();
-					wxMpUser.setHeadImgUrl(DEFAULT_USER_AVATAR_URL);
+					wxMpUser.setHeadImgUrl(ConstWeixin.DEFAULT_USER_AVATAR_URL);
 					wxMpUser.setNickname("新用户");
 					wxMpUser.setOpenId(userOpenId);
 					wxMpUser.setSubscribeStatus((short) 1);
@@ -154,7 +154,7 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 	@Override
 	public int logUserFromMessage(String userOpenId) {
 		WxMpUser wxMpUser = new WxMpUser();
-		wxMpUser.setHeadImgUrl(DEFAULT_USER_AVATAR_URL);
+		wxMpUser.setHeadImgUrl(ConstWeixin.DEFAULT_USER_AVATAR_URL);
 		wxMpUser.setNickname("新用户");
 		wxMpUser.setOpenId(userOpenId);
 		wxMpUser.setSubscribeStatus((short) 1);

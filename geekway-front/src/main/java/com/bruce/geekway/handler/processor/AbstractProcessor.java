@@ -16,7 +16,7 @@ import com.bruce.geekway.model.wx.response.BaseResponse;
 import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
-import com.bruce.geekway.utils.MaterialLinkUtil;
+import com.bruce.geekway.utils.ArticleLinkUtil;
 //import com.bruce.geekway.model.WxMaterial;
 
 
@@ -169,9 +169,7 @@ public abstract class AbstractProcessor implements Processor{
 		if(materialArticleList!=null&&materialArticleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
 			for(WxMaterialArticle article: materialArticleList){
-//				if(article.getMaterialType()!=null&&article.getMaterialType()==1){//过滤纯文本素材，保留图文素材
-					newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), MaterialLinkUtil.getMaterialLink(article.getId()));
-//				}
+				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), ArticleLinkUtil.getArticleLink(article.getId()));
 			}
 			return newsResponse;
 		}

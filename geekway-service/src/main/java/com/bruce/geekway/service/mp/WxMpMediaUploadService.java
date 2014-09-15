@@ -6,22 +6,22 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.WxMediaTypeEnum;
 import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
-import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**
- * 微信多媒体上传service
+ * 微信多媒体上传service(mp包下的service均为对weixin api的封装)
  * @author liqian
  *
  */
 @Service
 public class WxMpMediaUploadService extends WxBaseService {
 
-	private static final String WX_MEDIA_UPLOAD_API = ConfigUtil.getString("weixinmp_media_upload_url");
+	
 	
 	private static final String HTTP_CONTENT_TYPE_IMAGE = "image/jpeg";
 	
@@ -80,7 +80,7 @@ public class WxMpMediaUploadService extends WxBaseService {
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
 		params.put("type", typeEnum.toString());
 		
-		String uploadResultStr = WxHttpUtil.postMultipartRequest(WX_MEDIA_UPLOAD_API, params, file, contentType);
+		String uploadResultStr = WxHttpUtil.postMultipartRequest(ConstWeixin.WX_MEDIA_UPLOAD_API, params, file, contentType);
 		if(uploadResultStr!=null){
 			return JsonUtil.gson.fromJson(uploadResultStr, WxMediaUploadResult.class);
 		}else{

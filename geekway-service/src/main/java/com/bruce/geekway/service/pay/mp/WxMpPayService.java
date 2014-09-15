@@ -5,31 +5,27 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
 import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.mp.WxBaseService;
-import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**
- * 微信群发service
+ * 微信群发service(mp包下的service均为对weixin api的封装)
  * 
  * @author liqian
  * 
  */
 @Service
 public class WxMpPayService extends WxBaseService {
-	// 发货通知api
-	private static final String WX_DELIVER_NOTIFY_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
-	// 维权处理api
-	private static final String WX_COMPLAINT_DEAL_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
-
+	
+	
 	@Autowired
 	private IWxAccessTokenService wxAccessTokenService;
 
-	
-	
 	/**
 	 * 查询订单状态
 	 * 
@@ -41,38 +37,44 @@ public class WxMpPayService extends WxBaseService {
 	
 	/**
 	 * 发货后通知微信
-	 * 
+	 * TODO 修改参数对象
 	 * @return
 	 */
-	public int deliverNotify(WxDeliverInfo deliverInfo) {
+	public WxJsonResult deliverNotify(WxDeliverInfo deliverInfo) {
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
-		
-		
 		
 		String postInfoStr = JsonUtil.gson.toJson(deliverInfo);
 		
-		//发送至微信
-		String sendResultStr = WxHttpUtil.postRequest(WX_DELIVER_NOTIFY_API, params, postInfoStr);
+		//提交发货请求至微信
+		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
 		
-		
-		return 1;
+		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
+		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()!=null && wxpayDeliverResult.getErrcode()==0){//自定义菜单创建成功
+			return wxpayDeliverResult;
+		}
+		return null;
 	}
 
+	
 	/**
-	 * 维权处理完毕后，需要通知微信
+	 * 维权处理完毕后，通知微信
 	 * @return
 	 */
-	public int dealComplaint() {
+	public WxJsonResult dealComplaint(String openId, String feedbackId) {
 		
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		params.put("openid", openId);
+		params.put("feedbackid", feedbackId);
 		
 		//发送至微信
-		String sendResultStr = WxHttpUtil.postRequest(WX_COMPLAINT_DEAL_API, params, "");
-		
-		
-		return 1;
+		String complaintResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
+		WxJsonResult wxpayComplaintResult = JsonUtil.gson.fromJson(complaintResultStr, WxJsonResult.class);
+		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()!=null && wxpayComplaintResult.getErrcode()==0){//自定义菜单创建成功
+			return wxpayComplaintResult;
+		}
+		return null;
 	}
 
 	public IWxAccessTokenService getWxAccessTokenService() {

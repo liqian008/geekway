@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class WxAuthUtil {
 	
-	public static String weixinToken = ConfigUtil.getString("weixinmp_devmode_token");
+//	public static String weixinToken = ConfigUtil.getString("weixinmp_devmode_token");
 	
 	private static final Logger log = LoggerFactory.getLogger(WxAuthUtil.class);
 
@@ -28,7 +29,7 @@ public class WxAuthUtil {
 	 * @return
 	 */
 	public static boolean wxMessageAuth(String signature, String timestamp, String nonce, String echostr) {
-		String excepted = Sha1Util.getSha1(combineWxMessageParam(timestamp, nonce, weixinToken));
+		String excepted = Sha1Util.getSha1(combineWxMessageParam(timestamp, nonce, ""));
 		if (signature == null || !signature.equals(excepted)) {
 			log.error("Authentication failed! excepted echostr ->" + excepted);
 			log.error("actual ->" + signature);
@@ -129,5 +130,23 @@ public class WxAuthUtil {
 		return "";
 	}
 	
+	public static void main(String[] args) {
+		
+		TreeMap<String,String> paramMap = new TreeMap<String, String>();
+		
+		paramMap.put("appId", "wx24e31a5fd464b35c");
+		paramMap.put("openId", "oLpWZjtmQzS1xYSaIQA3QCkUuehg");
+		paramMap.put("appKey", "4jrKLk1I6Ng9snRvPVBpjUfHeecyttHNMtmRPseZ7fZgDCsU9L51AR2QlgR6kVPlVC0Se4iVv72UTA3j0WORFoZwYbyuvSyMJ7Q4pYyS6RWnmU1CU80siecT0FBkW4ER");
+		paramMap.put("isSubscribe", "1");
+		paramMap.put("timeStamp", "1410514517");
+		paramMap.put("nonceStr", "otmNm11FbnPqkFEK");
+		
+		String flatStr = combineWxPaySignText(paramMap);
+		System.out.println(flatStr);
+		
+		String sign = Sha1Util.getSha1(flatStr);
+		
+		System.out.println(sign);
+	}
 	
 }

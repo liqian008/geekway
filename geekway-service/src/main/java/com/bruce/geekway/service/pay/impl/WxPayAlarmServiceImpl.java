@@ -61,6 +61,16 @@ public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 	public List<WxPayAlarm> queryByCriteria(WxPayAlarmCriteria criteria) {
 		return wxPayAlarmMapper.selectByExample(criteria);
 	}
+
+	public WxPayAlarmMapper getWxPayAlarmMapper() {
+		return wxPayAlarmMapper;
+	}
+
+	public void setWxPayAlarmMapper(WxPayAlarmMapper wxPayAlarmMapper) {
+		this.wxPayAlarmMapper = wxPayAlarmMapper;
+	}
+	
+	
 	
 	
 }

@@ -62,4 +62,39 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		return wxPayComplaintMapper.selectByExample(criteria);
 	}
 
+	@Override
+	public int markFinish(String openId, String feedbackId) {
+		return markDealStatus(openId, feedbackId, (short)0);
+	}
+	
+	@Override
+	public int markWait4Confirm(String openId, String feedbackId) {
+		return markDealStatus(openId, feedbackId, (short)2);
+	}
+	
+	/**
+	 * 
+	 * @param openId
+	 * @param feedbackId
+	 * @param dealStatus 0为处理完毕，1为新投诉，2为沟通完毕&提交标记，等待用户确认
+	 * @return
+	 */
+	private int markDealStatus(String openId, String feedbackId, short dealStatus) {
+		WxPayComplaintCriteria criteria = new WxPayComplaintCriteria();
+		criteria.createCriteria().andOpenIdEqualTo(openId).andFeedbackIdEqualTo(feedbackId);
+		WxPayComplaint t = new WxPayComplaint();
+		t.setDealStatus(dealStatus);
+		return updateByCriteria(t, criteria);
+	}
+
+	public WxPayComplaintMapper getWxPayComplaintMapper() {
+		return wxPayComplaintMapper;
+	}
+
+	public void setWxPayComplaintMapper(WxPayComplaintMapper wxPayComplaintMapper) {
+		this.wxPayComplaintMapper = wxPayComplaintMapper;
+	}
+
+
+	
 }

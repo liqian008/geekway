@@ -5,26 +5,23 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.WxBroadcastTypeEnum;
 import com.bruce.geekway.model.wx.json.WxBroadcastInfo;
-import com.bruce.geekway.model.wx.json.WxGroupInfo;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
-import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**
- * 微信群发service
+ * 微信群发service(mp包下的service均为对weixin api的封装)
  * @author liqian
  *
  */
 @Service
 public class WxMpBroadcastService extends WxBaseService {
 
-	private static final String WX_BROADCAST_API = ConfigUtil.getString("weixinmp_message_broadcast_url");
 	
-
 //	@Autowired
 //	private WxMpTokenService mpTokenService;
 	@Autowired
@@ -72,7 +69,7 @@ public class WxMpBroadcastService extends WxBaseService {
 		WxBroadcastInfo.FilterGroup filterGroup = new WxBroadcastInfo.FilterGroup();
 		filterGroup.setGroup_id(0);
 		broadcastInfo.setFilter(filterGroup);
-		String broadcastResultStr = WxHttpUtil.postRequest(WX_BROADCAST_API, params,  JsonUtil.gson.toJson(broadcastInfo));
+		String broadcastResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_BROADCAST_API, params,  JsonUtil.gson.toJson(broadcastInfo));
 		WxBroadcastResult broadcastResult = JsonUtil.gson.fromJson(broadcastResultStr,  WxBroadcastResult.class);
 		return broadcastResult;
 	}

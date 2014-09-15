@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
@@ -14,10 +15,14 @@ import com.bruce.geekway.utils.EmojiUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
+/**
+ * 微信用户管理service(mp包下的service均为对weixin api的封装)
+ * @author liqian
+ *
+ */
 @Service
 public class WxMpUserService extends WxBaseService {
 
-	private static final String WX_USER_INFO_API = ConfigUtil.getString("weixinmp_user_info_url");
 	
 
 //	@Autowired
@@ -47,7 +52,7 @@ public class WxMpUserService extends WxBaseService {
 		// String menuQueryResult =
 		// WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"),
 		// params);
-		String userListResult = WxHttpUtil.getRequest(ConfigUtil.getString("https://api.weixin.qq.com/cgi-bin/user/get"), params);
+		String userListResult = WxHttpUtil.getRequest(ConstWeixin.WX_USER_INFO_API, params);
 
 		WxUserListResult wxUserListResult = JsonUtil.gson.fromJson(userListResult, WxUserListResult.class);
 		return wxUserListResult;
@@ -66,7 +71,7 @@ public class WxMpUserService extends WxBaseService {
 		params.put("OPENID", openId);
 		params.put("lang", "zh_CN");
 
-		String userinfoResult = WxHttpUtil.getRequest(WX_USER_INFO_API, params);
+		String userinfoResult = WxHttpUtil.getRequest(ConstWeixin.WX_USER_INFO_API, params);
 		
 		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResult);
 		

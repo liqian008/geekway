@@ -61,6 +61,16 @@ public class WxPayProductServiceImpl implements IWxPayProductService {
 	public List<WxPayProduct> queryByCriteria(WxPayProductCriteria criteria) {
 		return wxPayProductMapper.selectByExample(criteria);
 	}
+
+	public WxPayProductMapper getWxPayProductMapper() {
+		return wxPayProductMapper;
+	}
+
+	public void setWxPayProductMapper(WxPayProductMapper wxPayProductMapper) {
+		this.wxPayProductMapper = wxPayProductMapper;
+	}
+	
+	
 	
 	
 }

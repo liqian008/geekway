@@ -29,7 +29,7 @@ import com.bruce.geekway.utils.ConfigUtil;
 @Service
 public class WxBroadcastServiceImpl implements IWxBroadcastService, InitializingBean {
 
-	private static final String WX_NEWS_UPLOAD_API = ConfigUtil.getString("weixinmp_news_upload_url");
+	//private static final String WX_NEWS_UPLOAD_API = ConfigUtil.getString("weixinmp_news_upload_url");
 	
 	@Autowired
 	private WxBroadcastMapper wxBroadcastMapper;

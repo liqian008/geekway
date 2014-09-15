@@ -3,7 +3,7 @@ package com.bruce.geekway.admin.controller.geekway;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map; 
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,12 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
 import com.bruce.geekway.model.WxMpUser;
 import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxMpUserService;
-import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.DateUtil;
 
 /**
@@ -31,9 +31,6 @@ import com.bruce.geekway.utils.DateUtil;
 @RequestMapping("/geekway") 
 public class GeekwayHistoryMessageController {
 	
-	private static final String DEFAULT_WEIXIN_ACCOUNT_AVATAR_URL = ConfigUtil.getString("weixinmp_account_avatar");
-	
-
 	@Autowired
 	private IWxHistoryMessageService wxHistoryMessageService;
 	@Autowired
@@ -99,7 +96,7 @@ public class GeekwayHistoryMessageController {
 		if(chatUser!=null){
 			
 			model.addAttribute("chatUser", chatUser);
-			model.addAttribute("accountDefaultAvatar", DEFAULT_WEIXIN_ACCOUNT_AVATAR_URL);
+			model.addAttribute("accountDefaultAvatar", ConstWeixin.DEFAULT_WEIXIN_ACCOUNT_AVATAR_URL);
 			
 			//检查是否可以给用户回复消息
 			boolean customReply = false;

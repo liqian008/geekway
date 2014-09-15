@@ -2,7 +2,6 @@ package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
@@ -44,16 +44,10 @@ public class GeekwayCommandController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		//开发模式的配置
-		String devmodeUrl = ConfigUtil.getString("weixinmp_devmode_url");
-		String devmodeToken = ConfigUtil.getString("weixinmp_devmode_token");
 		
-		String qrcodeUrl = ConfigUtil.getString("weixinmp_qrcode_img_url");
-		
-		
-		model.addAttribute("devmodeUrl", devmodeUrl);
-		model.addAttribute("devmodeToken", devmodeToken);
-		model.addAttribute("qrcodeUrl", qrcodeUrl);
+		model.addAttribute("devmodeUrl", ConstWeixin.WX_DEV_MODE_URL);
+		model.addAttribute("devmodeToken", ConstWeixin.WX_DEV_MODE_TOKEN);
+		model.addAttribute("qrcodeUrl", ConstWeixin.WX_MP_ACCOUNT_QRCODE_URL);
 		
 		return "geekway/wxConfig";
 	}

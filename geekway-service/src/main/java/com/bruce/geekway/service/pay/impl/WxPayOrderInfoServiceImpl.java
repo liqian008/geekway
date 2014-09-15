@@ -61,6 +61,16 @@ public class WxPayOrderInfoServiceImpl implements IWxPayOrderInfoService {
 	public List<WxPayOrderInfo> queryByCriteria(WxPayOrderInfoCriteria criteria) {
 		return wxPayOrderInfoMapper.selectByExample(criteria);
 	}
+
+	public WxPayOrderInfoMapper getWxPayOrderInfoMapper() {
+		return wxPayOrderInfoMapper;
+	}
+
+	public void setWxPayOrderInfoMapper(WxPayOrderInfoMapper wxPayOrderInfoMapper) {
+		this.wxPayOrderInfoMapper = wxPayOrderInfoMapper;
+	}
+	
+	
 	
 	
 }

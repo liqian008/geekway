@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.service.pay.IWxPayProductService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.DateUtil;
@@ -25,9 +26,6 @@ import com.bruce.geekway.utils.WxAuthUtil;
 @Controller
 @RequestMapping("/wx")
 public class WxProductController {
-	
-	private static final String WX_APP_ID = ConfigUtil.getString("weixinmp_appid");
-	private static final String WX_APP_KEY = ConfigUtil.getString("weixinmp_pay_appkey");
 	
 	@Autowired
 	private IWxPayProductService wxPayProductService;
@@ -63,7 +61,7 @@ public class WxProductController {
 			String timestamp = String.valueOf(DateUtil.getUnixTime(new Date()));
 			String nonceStr = timestamp;
 			
-			model.addAttribute("appId",WX_APP_ID);
+			model.addAttribute("appId", ConstWeixin.WX_APP_ID);
 			model.addAttribute("timeStamp", timestamp);
 			model.addAttribute("nonceStr", nonceStr);
 			model.addAttribute("package", wxPayPackageText);
@@ -82,7 +80,7 @@ public class WxProductController {
 		//文档描述： 对所有传入参数按照字段名的 ASCII 码从小到大排序(字典序) 后,使用 URL 键值 对的格式(即 key1=value1&key2=value2...)拼接成字符串 string1,注意:值为空的参数不参与签名;
 		String packageText = WxAuthUtil.combineWxPayPackageText(paramMap);//得到string1
 		//文档描述： 在string1 最后拼接上key=paternerKey得到stringSignTemp 字符串,并对stringSignTemp进行md5运算 ,再将得到的字符串所有字符转换为大写,得到sign值signValue。
-		packageText = packageText+"&key="+WX_APP_KEY;
+		packageText = packageText+"&key="+ConstWeixin.WX_PAY_SIGN_KEY;
 		String md5Package = Md5Util.md5Encode(packageText).toUpperCase();//得到signValue
 		//然后第二步，对每个参数进行url转码
 
@@ -103,8 +101,8 @@ public class WxProductController {
 		
 		//第一步，对所有需要传入的参数加上appkey作一次key＝value字典序的排序
 		TreeMap<String, String> paramMap = new TreeMap<String, String>();
-		paramMap.put("appid", WX_APP_ID);
-		paramMap.put("appkey", WX_APP_KEY);
+		paramMap.put("appid", ConstWeixin.WX_APP_ID);
+		paramMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);
 		paramMap.put("noncestr", noncestr);
 		paramMap.put("package", packageText);
 		paramMap.put("timestamp", timestamp);

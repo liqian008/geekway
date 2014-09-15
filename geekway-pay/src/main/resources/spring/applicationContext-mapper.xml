@@ -27,12 +27,10 @@
 		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
 	</bean>
 
-
 	<bean id="geekway_sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:mybatis-conf.xml" />
 		<property name="dataSource" ref="geekway_datasource" />
 	</bean>
-
 
 	<bean id="wxMpUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxMpUserMapper" />
@@ -44,4 +42,28 @@
 			value="com.bruce.geekway.dao.mapper.WxAccessTokenMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	
+	<bean id="wxPayAlarmMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxPayAlarmMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	
+	<bean id="wxPayComplaintMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxPayComplaintMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	
+	<bean id="wxPayOrderInfoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxPayOrderInfoMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="wxPayProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxPayProductMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	
 </beans>

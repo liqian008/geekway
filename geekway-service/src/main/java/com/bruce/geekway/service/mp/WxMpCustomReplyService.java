@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.CustomMessage;
 import com.bruce.geekway.model.wx.message.ImageMessage;
@@ -18,14 +19,13 @@ import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**
- * 客服消息service，主要用于回复客服消息
+ * 客服消息service，主要用于回复客服消息(mp包下的service均为对weixin api的封装)
  * @author liqian
  *
  */
 @Service
 public class WxMpCustomReplyService extends WxBaseService {
 
-	private static final String WX_REPLY_MESSAGE_API = ConfigUtil.getString("weixinmp_reply_message_url");
 	
 	
 	@Autowired
@@ -93,7 +93,7 @@ public class WxMpCustomReplyService extends WxBaseService {
 //			}
 			
 			// 回复客服消息
-			String sendResultStr = WxHttpUtil.postRequest(WX_REPLY_MESSAGE_API, params, customMessageStr);
+			String sendResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_REPLY_MESSAGE_API, params, customMessageStr);
 			
 			WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
 			if (wxSendResult != null && wxSendResult.getErrcode() != null && wxSendResult.getErrcode() == 0) {//消息回复成功

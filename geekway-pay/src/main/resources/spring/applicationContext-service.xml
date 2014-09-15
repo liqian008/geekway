@@ -12,24 +12,38 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<!-- 本地MpUserService -->
+	<!-- 本地MpUserService 
 	<bean id="wxMpUserService" class="com.bruce.geekway.service.impl.WxMpUserServiceImpl">
 		<property name="wxMpUserMapper" ref="wxMpUserMapper"></property>
 	</bean>
-	
-	
+	-->
+
 	<!-- weixin web oauth -->
 	<bean id="wxMpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
 	</bean>
-	
-	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
-	-->
+
+	<!-- 访问微信api接口的userService，供订阅后添加用户使用 -->
 	<bean id="wxUserService" class="com.bruce.geekway.service.mp.WxMpUserService">
 	</bean>
 	<bean id="wxAccessTokenService" class="com.bruce.geekway.service.impl.WxAccessTokenServiceImpl">
 	</bean>
 	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
+
+
+	<!-- wxpay service -->
 	
-	
+	<bean id="wxPayService" class="com.bruce.geekway.service.pay.IWxPayService">
+	</bean>
+	<bean id="wxPayComplaintService" class="com.bruce.geekway.service.pay.impl.WxPayComplaintServiceImpl">
+	</bean>
+	<bean id="wxPayAlarmService" class="com.bruce.geekway.service.pay.impl.WxPayAlarmServiceImpl">
+	</bean>
+	<bean id="wxPayOrderInfoService" class="com.bruce.geekway.service.pay.impl.WxPayOrderInfoServiceImpl">
+	</bean>
+	<bean id="wxMpPayProductService" class="com.bruce.geekway.service.pay.impl.WxPayProductServiceImpl">
+	</bean>
+	<bean id="wxMpPayService" class="com.bruce.geekway.service.pay.mp.WxMpPayService">
+	</bean>
+
 </beans>

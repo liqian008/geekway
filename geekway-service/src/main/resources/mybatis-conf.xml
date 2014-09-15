@@ -28,6 +28,12 @@
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxAccessTokenMapper.xml" />
 		
+		<!-- weixin pay -->
+		<mapper resource="com/bruce/geekway/model/xml/WxPayOrderInfoMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxPayAlarmMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxPayComplaintMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxPayProductMapper.xml" />
+		
 	</mappers>
 
 </configuration>

@@ -1,11 +1,9 @@
 package com.bruce.geekway.admin.controller.geekway;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,14 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
-import com.bruce.geekway.model.wx.json.response.WxJsonResult;
-import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.service.IWxBroadcastService;
-import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 
 /**
@@ -32,10 +28,6 @@ import com.bruce.geekway.utils.JsonResultBuilderUtil;
 @RequestMapping("/geekway") 
 public class GeekwayBroadcastController {
 
-	private static final String WX_ACCOUNT_TYPE = ConfigUtil.getString("weixinmp_account_type");
-	
-	
-	
 	@Autowired
 	private IWxBroadcastService wxBroadcastService;
 	
@@ -53,7 +45,7 @@ public class GeekwayBroadcastController {
 		
 //		boolean isSenior = false;
 		//判断是否是服务号（只有服务号才支持群发功能）
-		if("senior".equalsIgnoreCase(WX_ACCOUNT_TYPE)){
+		if("senior".equalsIgnoreCase(ConstWeixin.WX_ACCOUNT_TYPE)){
 			List<WxBroadcast> broadcastList = wxBroadcastService.queryAll();
 			model.addAttribute("broadcastList", broadcastList);
 			return "geekway/broadcastList";
@@ -73,7 +65,7 @@ public class GeekwayBroadcastController {
 	public String broadcastAdd(Model model, WxBroadcast broadcast, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
-		if("senior".equalsIgnoreCase(WX_ACCOUNT_TYPE)){
+		if("senior".equalsIgnoreCase(ConstWeixin.WX_ACCOUNT_TYPE)){
 			model.addAttribute("broadcast", broadcast);
 			return "geekway/broadcastEdit";
 		}else{
@@ -115,7 +107,7 @@ public class GeekwayBroadcastController {
 	 * @return
 	 */
 	private JsonResultBean broadcastMaterialMedia(int materialType, int materialId, String content) {
-		if("senior".equalsIgnoreCase(WX_ACCOUNT_TYPE)){
+		if("senior".equalsIgnoreCase(ConstWeixin.WX_ACCOUNT_TYPE)){
 			//TODO 检查每月发送<4次
 			boolean canBroadcast = true;
 			if(!canBroadcast){
