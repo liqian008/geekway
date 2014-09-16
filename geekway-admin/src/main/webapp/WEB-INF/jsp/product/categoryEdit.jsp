@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxSkuProp"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
+<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -71,7 +72,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						SKU属性管理
+						编辑产品分类
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -82,8 +83,8 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="#">首页</a></li>
-					<li class="active">SKU属性管理</li>
+					<li><a href="javascript:void(0)">首页</a></li>
+					<li class="active">编辑产品分类</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -91,65 +92,53 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、xxxxx<br/>
+					<br/>
 				</p>
 			</div>
+			
+			<%
+			WxProductCategory category = (WxProductCategory)request.getAttribute("category");
+			%>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>SKU属性管理
-					</h5>
-					<a href="./skuPropAdd"><span class="label label-danger pull-right">新增Sku属性</span></a>
+			<form id="validate" action="<s:url value='./saveCategory'/>" method="post"  class="form-horizontal form-bordered">
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>编辑产品分类
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="title" id="title" value="${category.title}"/>
+	                            <form:hidden path="category.id"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">描述: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="description" id="description" value="${category.description}"/>
+							</div>
+						</div>
+						
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="提 交" class="btn btn-primary">
+						</div>
+					</div>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-                                <th>属性</th>
-                                <th>描述</th>
-                                <th>状态</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<WxSkuProp> skuPropList = (List<WxSkuProp>)request.getAttribute("skuPropList");
-                           	if(skuPropList!=null&&skuPropList.size()>0){
-                           		int i=0;
-                           		for(WxSkuProp skuProp: skuPropList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td><%=skuProp.getName()%></td>
-		                        <td><%=skuProp.getDescription()%></td>
-		                        <td>正常</td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        		<a href="./skuPropEdit?skuPropId=<%=skuProp.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编辑"><i class="icon-pencil3"></i></a>
-										<a href="./skuPropValueAdd"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="添加属性值"><i class="icon-plus-circle"></i></a> 
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -158,5 +147,5 @@
 	</div>
 	<!-- /page container -->
 </body>
-</html>
 
+</html>

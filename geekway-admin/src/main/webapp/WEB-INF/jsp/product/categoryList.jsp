@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxSkuProp"%>
+<%@page import="com.bruce.geekway.model.WxProductCategory"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
@@ -71,7 +71,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						SKU属性管理
+						产品分类管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -83,7 +83,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="#">首页</a></li>
-					<li class="active">SKU属性管理</li>
+					<li class="active">产品分类管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -104,16 +104,16 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>SKU属性管理
+						<i class="icon-people"></i>产品分类管理
 					</h5>
-					<a href="./skuPropAdd"><span class="label label-danger pull-right">新增Sku属性</span></a>
+					<a href="./categoryAdd"><span class="label label-danger pull-right">新增产品分类</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>序号</th>
-                                <th>属性</th>
+                                <th>分类</th>
                                 <th>描述</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
@@ -121,23 +121,20 @@
 						</thead>
 						<tbody>
 							<%
-                           	List<WxSkuProp> skuPropList = (List<WxSkuProp>)request.getAttribute("skuPropList");
-                           	if(skuPropList!=null&&skuPropList.size()>0){
+                           	List<WxProductCategory> categoryList = (List<WxProductCategory>)request.getAttribute("categoryList");
+                           	if(categoryList!=null&&categoryList.size()>0){
                            		int i=0;
-                           		for(WxSkuProp skuProp: skuPropList){
+                           		for(WxProductCategory category: categoryList){
                            			i++;
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=skuProp.getName()%></td>
-		                        <td><%=skuProp.getDescription()%></td>
+		                        <td><%=category.getTitle()%></td> 
+		                        <td><%=category.getDescription()%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        		<a href="./skuPropEdit?skuPropId=<%=skuProp.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编辑"><i class="icon-pencil3"></i></a>
-										<a href="./skuPropValueAdd"
+										<a href="./categoryAdd"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="添加属性值"><i class="icon-plus-circle"></i></a> 
 									</div>

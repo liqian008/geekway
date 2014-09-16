@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.product.impl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.mapper.WxSkuPropValueMapper;
+import com.bruce.geekway.model.WxProductSkuRelation;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.WxSkuPropValueCriteria;
+import com.bruce.geekway.service.product.IWxProductSkuRelationService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 
 @Service
@@ -16,6 +19,9 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 	
 	@Autowired
 	private WxSkuPropValueMapper wxSkuPropValueMapper;
+	@Autowired
+	private IWxProductSkuRelationService wxProductSkuRelationService;
+	
 	
 	@Override
 	public int save(WxSkuPropValue t) {
@@ -91,7 +97,21 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 
 	@Override
 	public int saveProductSkuValues(int productId, List<Integer> productSkuValueIdList) {
-		return 0;
+		int result = 0;
+		if(productId>0&&productSkuValueIdList!=null&&productSkuValueIdList.size()>0){
+			Date currentTime = new Date();
+			for(Integer skuPropValueId: productSkuValueIdList){
+				if(skuPropValueId!=null){
+					WxProductSkuRelation relation = new WxProductSkuRelation();
+					relation.setProductId(productId);
+					relation.setSkuPropValueId(skuPropValueId);
+					relation.setCreateTime(currentTime);
+					int rows = wxProductSkuRelationService.save(relation);
+					result +=rows;
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override

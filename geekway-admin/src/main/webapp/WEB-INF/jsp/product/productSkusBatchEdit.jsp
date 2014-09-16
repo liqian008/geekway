@@ -15,7 +15,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITO管理平台</title>
+<title>后台管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -100,7 +100,7 @@
 			</div>
 
 			<%
-			ItoProduct product = (ItoProduct)request.getAttribute("product");
+			WxProduct product = (WxProduct)request.getAttribute("product");
 			%>
 
 			<form id="validate" action="<s:url value='./batchSaveProductSkus'/>" method="post"  class="form-horizontal form-bordered">
@@ -118,7 +118,7 @@
 							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<label class="control-label">
-									${product.title}
+									${product.name}
 								</label>
 								<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
 							</div>
@@ -135,23 +135,22 @@
 						</div>
 						
 						<%
+						List<WxProductSku> productSkuList = (List<WxProductSku>)request.getAttribute("productSkuList");
 						
-						List<ItoSku> skuList = (List<ItoSku>)request.getAttribute("skuList");
-						
-						for(ItoSku sku: skuList){
+						for(WxProductSku productSku: productSkuList){
 						%>
 						<div class="form-group has-error sku-info">
-							<label class="col-sm-2 control-label text-right"><%=sku.getName()%>: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right"><%=productSku.getName()%>: <span class="mandatory">*</span>
 							</label>
 							
-							<input type="hidden" name="skuIds" value="<%=sku.getId()%>">
+							<input type="hidden" name="skuIds" value="<%=productSku.getId()%>">
 							
 							<div class="col-sm-3">
 								<div class="input-group">
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">原价(元)</button>
 									</span>
-									<input type="text" class="form-control" name="skuOriginPrice_<%=sku.getId()%>" value="<%=sku.getOriginPrice()%>">
+									<input type="text" class="form-control" name="skuOriginPrice_<%=productSku.getId()%>" value="<%=productSku.getOriginPrice()%>">
 								</div>
 							</div>
 							
@@ -160,7 +159,7 @@
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">售价(元)</button>
 									</span>
-									<input type="text" class="form-control" name="skuPrice_<%=sku.getId()%>" value="<%=sku.getPrice()%>">
+									<input type="text" class="form-control" name="skuPrice_<%=productSku.getId()%>" value="<%=productSku.getPrice()%>">
 								</div>
 							</div>
 							
@@ -169,7 +168,7 @@
 									<span class="input-group-btn">
 										<button class="btn btn-default" type="button">数量(个)</button>
 									</span>
-									<input type="text" class="form-control" name="skuNum_<%=sku.getId()%>" value="<%=sku.getNum()%>">
+									<input type="text" class="form-control" name="skuNum_<%=productSku.getId()%>" value="<%=productSku.getNum()%>">
 								</div>
 							</div>
 							

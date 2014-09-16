@@ -22,7 +22,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITO管理平台</title>
+<title>后台管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -138,7 +138,7 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${product.title}"/>
+								<input type="text" class="form-control" name="name" id="name" value="${product.name}"/>
 								<form:hidden path="product.id"/>
 							</div>
 						</div>
@@ -189,33 +189,6 @@
 						</div>
 						<%}
 						}%>
-						
-						<!-- 
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">单品基础信息: <span class="mandatory">*</span>
-							</label>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" id="originPrice" value="${product.originPrice}"/>
-								<span class="label label-info label-block">原价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${product.price}"/>
-								<span class="label label-danger label-block">现价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="postFee" id="postFee" value="${product.postFee}"/>
-								<span class="label label-success label-block">运费(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" id="num" value="${product.num}"/>
-								<span class="label label-primary label-block">库存(个)</span>
-							</div>
-						</div>
-						-->
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>

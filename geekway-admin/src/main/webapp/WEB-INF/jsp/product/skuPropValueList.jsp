@@ -25,7 +25,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ITO管理平台</title>
+<title>后台管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -142,7 +142,7 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=displaySkuType(itoSkuPropValue.getSkuPropId())%></td>
+		                        <td><%=itoSkuPropValue.getSkuPropId()%></td>
 		                        <td><%=itoSkuPropValue.getName()%></td>
 		                        <td><%=itoSkuPropValue.getDescription()%></td>
 		                        <td><%=itoSkuPropValue.getSort()%></td>

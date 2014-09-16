@@ -14,7 +14,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wx管理平台</title>
+<title>后台管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
@@ -126,51 +126,10 @@
 							</div>
 						</div>
 						
-						<%if(skuPropValue!=null&&skuPropValue.getSkuPropId()!=null&&skuPropValue.getSkuPropId()==2){%>
-						
-						<!-- 颜色选项时，需要区分材质，做两套图片 start-->
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">光面图片:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${skuPropValue.skuPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${skuPropValue.skuPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuPropValue.skuPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">条纹图片:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${skuPropValue.skuThumbPicUrl}" id="cover-image-link2"  class="lightbox">
-									<img id="cover-image2" src="${skuPropValue.skuThumbPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url2" type="hidden" name="skuThumbPicUrl" value="${skuPropValue.skuThumbPicUrl}"/>
-								<input type="file" name="imageFile2" id="cover-image-file2" class="styled">
-							</div> 
-						</div>
-						<%}else{%>
-							
-							<!-- 其他情况只显示正常图片即可 -->
-							<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图 片:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${skuPropValue.skuPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${skuPropValue.skuPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${skuPropValue.skuPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
-						</div>
-							
-						<%}%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
+							<div class="col-sm-4">
 								<input type="text" class="form-control" name="name" id="name" value="${skuPropValue.name}"/>
 	                            <form:hidden path="skuPropValue.id"/>
 							</div>
@@ -178,14 +137,14 @@
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">描述: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
+							<div class="col-sm-6">
 								<input type="text" class="form-control" name="description" id="description" value="${skuPropValue.description}"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">排 序: <span class="mandatory">*</span></label>
-							<div class="col-sm-1">
+							<div class="col-sm-2">
 								<input type="text" class="form-control" name="sort" id="sort" value="${skuPropValue.sort}"/>
 							</div>
 						</div>

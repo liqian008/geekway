@@ -3,12 +3,14 @@ package com.bruce.geekway.service.product.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.mapper.WxProductCategoryMapper;
 import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductCategoryCriteria;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 
+@Service
 public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
 
 	@Autowired

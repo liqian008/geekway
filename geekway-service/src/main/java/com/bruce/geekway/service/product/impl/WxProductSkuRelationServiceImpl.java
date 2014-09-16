@@ -38,7 +38,7 @@ public class WxProductSkuRelationServiceImpl implements IWxProductSkuRelationSer
 	}
 
 	@Override
-	public int deleteById(Integer id) {
+	public int deleteById(Long id) {
 		return wxProductSkuRelationMapper.deleteByPrimaryKey(id);
 	}
 
@@ -48,7 +48,7 @@ public class WxProductSkuRelationServiceImpl implements IWxProductSkuRelationSer
 	}
 
 	@Override
-	public WxProductSkuRelation loadById(Integer id) {
+	public WxProductSkuRelation loadById(Long id) {
 		return wxProductSkuRelationMapper.selectByPrimaryKey(id);
 	}
 
