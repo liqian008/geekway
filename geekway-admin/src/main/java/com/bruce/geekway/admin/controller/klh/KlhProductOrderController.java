@@ -52,7 +52,7 @@ public class KlhProductOrderController {
 		if(productOrder!=null){
 			model.addAttribute("productOrder", productOrder);
 		}
-		return "klh/productOrderEdit";
+		return "klh/productOrderDisplay";
 	}
 	
 	

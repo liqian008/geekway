@@ -132,7 +132,7 @@ public class KlhProductController {
 					order.setUserOpenid(sessionUserProfile.getUserOpenId());
 					order.setPostAddress(postAddress);
 					order.setPostCode(postCode);
-//					order.setPostMobile(postMobile);
+					order.setPostMobile(postMobile);
 					order.setPostName(postName);
 					order.setScore(productScore);
 					order.setProductId(productId);
