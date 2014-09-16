@@ -8,7 +8,9 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +18,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.pay.WxComplaintRequest;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmRequest;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayOrderRequest;
+import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.pay.IWxPayService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.Md5Util;
 import com.bruce.geekway.utils.Sha1Util;
 import com.bruce.geekway.utils.WxAuthUtil;
+import com.bruce.geekway.utils.WxMpUtil;
 
 /**
  * Handles requests for the application home page.
@@ -38,9 +44,35 @@ public class WxPayController {
 
 	@Autowired
 	private IWxPayService wxPayService;
+	@Autowired
+	private WxMpOauthService wxMpOauthService;
+	
+	@RequestMapping(value = "/oauth")
+	public String oauth(Model model, HttpServletRequest request) {
+		return "redirect:"+WxMpUtil.buildOauthUrl(1, "http://wxmp.1758.com/wxpay/oauthResult", "");
+	}
+	
+	@RequestMapping(value = "/oauthResult")
+	public String oauthResult(Model model, @RequestParam(required = false, defaultValue = "") String code, HttpServletRequest request) {
+		if (!StringUtils.isEmpty(code)) {//回调地址进来的
+			System.out.println("==========2=========");
+			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
+			System.out.println("==========3=========");
+			if (oauthResult != null && oauthResult.getAccess_token() != null) {
+				String userAccessToken = oauthResult.getAccess_token();
+				System.out.println("=========userAccessToken========="+userAccessToken);
+		        HttpSession session = request.getSession();
+				session.setAttribute("userAccessToken", userAccessToken);
+			}
+		}
+		return "wxpay/oauthResult";
+	}
 	
 	@RequestMapping(value = "/buy")
 	public String buy(Model model, HttpServletRequest request, HttpServletResponse response) {
+		
+		
+		
 
 		String banktype = "WX";
 		String body = "包笑公堂-爆破镖";// 商品名称信息，这里由测试网页填入。
@@ -101,6 +133,20 @@ public class WxPayController {
 		itemJsObj.setSignType("SHA1");
 		itemJsObj.setPaySign(Sha1Util.getSha1(sign));
         model.addAttribute("itemJsObj", itemJsObj);
+        
+        //构造address
+        HttpSession session = request.getSession();
+		String userAccessToken = (String)session.getAttribute("userAccessToken");
+		
+		SortedMap<String, String> addressMap = new TreeMap<String, String>();
+		addressMap.put("appid", ConstWeixin.WX_APP_ID);
+		addressMap.put("accessToken", userAccessToken);
+		addressMap.put("timestamp", timestamp);
+		addressMap.put("noncestr", noncestr);
+		addressMap.put("url", "http://wxmp.1758.com/wxpay/buy");
+		String addressSign = WxAuthUtil.combineWxPaySignText(addressMap);
+		model.addAttribute("addressSign", addressSign);
+		
 		return "wxpay/buy";
 	}	
 
@@ -301,4 +347,22 @@ public class WxPayController {
 		return alarmRequest;
 	}
 
+	
+	public static void main(String[] args) {
+		SortedMap<String, String> addressMap = new TreeMap<String, String>();
+		
+		addressMap.put("appid", "wx17ef1eaef46752cb");
+		addressMap.put("accessToken", "OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA");
+		addressMap.put("timestamp", "1384841012");
+		addressMap.put("noncestr", "123456");
+		addressMap.put("url", "http://open.weixin.qq.com/");
+		String addressSign = WxAuthUtil.combineWxPaySignText(addressMap);
+		
+		
+		String example = "accesstoken=OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA&appid=wx17ef1eaef46752cb&noncestr=123456&timestamp=1384841012&url=http://open.weixin.qq.com/";
+		System.out.println("example: "+example);
+		System.out.println(example.equals(addressSign));
+		System.out.println("addressSign: "+addressSign);
+		System.out.println("addressSign: "+ Sha1Util.getSha1(example));
+	}
 }

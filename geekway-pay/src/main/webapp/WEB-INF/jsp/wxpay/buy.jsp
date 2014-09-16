@@ -36,6 +36,24 @@ WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("itemJsObj");
 				//因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
 			});
 		});
+		
+		jQuery('a#getWxAddressRequest').click(function(e) {
+			WeixinJSBridge.invoke('editAddress',{
+				"appId" : "<%=itemJsObj.getAppId()%>",
+				"scope" : "jsapi_address",
+				"signType" : "SHA1",
+				"addrSign" : "<%=itemJsObj.getSignType()%>",
+				"timeStamp" : "<%=itemJsObj.getTimeStamp()%>",
+				"nonceStr" : "<%=itemJsObj.getNonceStr()%>",
+				},function(res){
+				//若res 中所带的返回值不为空,则表示用户选择该返回值作为收货地址。否则若返回空,则表示用户取消了这一次编辑收货地址。
+					alert(res.proviceFirstStageName);
+					alert(res.addressCitySecondStageName);
+					alert(res.addressCountiesThirdStageName);
+					alert(res.addressDetailInfo);
+					alert(res.telNumber);
+					});
+				});
 		WeixinJSBridge.log('yo~ ready.');
 	}, false)
 
@@ -52,6 +70,9 @@ WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("itemJsObj");
 		<p></p>
 		<a id="getBrandWCPayRequest" href="javascript:void(0);"><h1
 				class="title">点击提交测试</h1></a>
+				
+		<a id="getWxAddressRequest" href="javascript:void(0);"><h1
+		class="title">点击获取收货地址</h1></a>
 	</div>
 
 </body>
