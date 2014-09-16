@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.service.pay.IWxPayProductService;
+import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.Md5Util;
 import com.bruce.geekway.utils.Sha1Util;
@@ -27,7 +27,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
 public class WxProductController {
 	
 	@Autowired
-	private IWxPayProductService wxPayProductService;
+	private IWxProductService wxProductService;
 	
 	/**
 	 * 产品信息
@@ -48,7 +48,7 @@ public class WxProductController {
 	@RequestMapping(value = "/postOrder", method=RequestMethod.POST)
 	public String postOrder(Model model, int productId,  HttpServletRequest request) {
 		//加载产品信息
-		//WxPayProduct productInfo = wxPayProductService.loadById(productId);
+		//WxPayProduct productInfo = wxProductService.loadById(productId);
 		//检查产品状态
 		boolean valid = true;
 		if(valid){

@@ -41,9 +41,11 @@
 	</bean>
 	<bean id="wxPayOrderInfoService" class="com.bruce.geekway.service.pay.impl.WxPayOrderInfoServiceImpl">
 	</bean>
-	<bean id="wxMpPayProductService" class="com.bruce.geekway.service.pay.impl.WxPayProductServiceImpl">
-	</bean>
 	<bean id="wxMpPayService" class="com.bruce.geekway.service.pay.mp.WxMpPayService">
+	</bean>
+	
+	<!-- wx product service -->
+	<bean id="wxMpProductService" class="com.bruce.geekway.service.product.impl.WxProductServiceImpl">
 	</bean>
 
 </beans>

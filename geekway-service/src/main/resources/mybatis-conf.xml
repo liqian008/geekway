@@ -32,8 +32,15 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxPayOrderInfoMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxPayAlarmMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxPayComplaintMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxPayProductMapper.xml" />
 		
+		
+		<!-- weixin product -->
+		<mapper resource="com/bruce/geekway/model/xml/WxProductCategoryMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxProductMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxSkuPropMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxSkuPropValueMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuRelationMapper.xml" />
 	</mappers>
 
 </configuration>
