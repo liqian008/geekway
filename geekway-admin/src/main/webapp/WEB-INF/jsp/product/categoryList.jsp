@@ -71,7 +71,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						产品分类管理
+						商品分类管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -83,7 +83,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="#">首页</a></li>
-					<li class="active">产品分类管理</li>
+					<li class="active">商品分类管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -104,9 +104,9 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>产品分类管理
+						<i class="icon-people"></i>商品分类管理
 					</h5>
-					<a href="./categoryAdd"><span class="label label-danger pull-right">新增产品分类</span></a>
+					<a href="./categoryAdd"><span class="label label-danger pull-right">新增商品分类</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -129,14 +129,14 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=category.getTitle()%></td> 
-		                        <td><%=category.getDescription()%></td>
+		                        <td><%=category.getName()%></td> 
+		                        <td><%=category.getDescription()%></td> 
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./categoryAdd"
+										<a href="./productAdd?categoryId=<%=category.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="添加属性值"><i class="icon-plus-circle"></i></a> 
+											data-original-title="添加商品"><i class="icon-plus-circle"></i></a> 
 									</div>
 								</td>
                                </tr>

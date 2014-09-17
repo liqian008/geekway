@@ -45,7 +45,16 @@
 	</bean>
 	
 	<!-- wx product service -->
-	<bean id="wxMpProductService" class="com.bruce.geekway.service.product.impl.WxProductServiceImpl">
+	<bean id="wxProductCategoryService" class="com.bruce.geekway.service.product.impl.WxProductCategoryServiceImpl">
 	</bean>
-
+	<bean id="wxProductService" class="com.bruce.geekway.service.product.impl.WxProductServiceImpl">
+	</bean>
+	<bean id="wxProductSkuService" class="com.bruce.geekway.service.product.impl.WxProductSkuServiceImpl">
+	</bean>
+	<bean id="wxProductSkuRelationService" class="com.bruce.geekway.service.product.impl.WxProductSkuRelationServiceImpl">
+	</bean>
+	<bean id="wxSkuPropService" class="com.bruce.geekway.service.product.impl.WxSkuPropServiceImpl">
+	</bean>
+	<bean id="wxSkuPropValueService" class="com.bruce.geekway.service.product.impl.WxSkuPropValueServiceImpl">
+	</bean>
 </beans>

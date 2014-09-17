@@ -106,7 +106,7 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>SKU属性管理
 					</h5>
-					<a href="./skuPropAdd"><span class="label label-danger pull-right">新增Sku属性</span></a>
+					<a href="./skuPropPreAdd"><span class="label label-danger pull-right">新增Sku属性</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">

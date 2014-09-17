@@ -1,6 +1,6 @@
 package com.bruce.geekway.service.product.impl;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,7 +70,21 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 	public List<WxSkuPropValue> queryByCriteria(WxSkuPropValueCriteria criteria) {
 		return wxSkuPropValueMapper.selectByExample(criteria);
 	}
+	
+	
+	@Override
+	public List<WxSkuPropValue> querySkuPropValueListByPropIdList(List<Integer> skuPropIdList) {
+		WxSkuPropValueCriteria criteria = new WxSkuPropValueCriteria();
+    	criteria.createCriteria().andSkuPropIdIn(skuPropIdList);
+		return queryByCriteria(criteria);
+	}
+	
+	@Override
+	public List<WxSkuPropValue> querySkuPropValueListByCategoryId(int categoryId) {
+		return null;
+	}
 
+	
 	@Override
 	public List<WxSkuPropValue> querySortedSkuPropValues() {
 		WxSkuPropValueCriteria criteria = new WxSkuPropValueCriteria();
@@ -79,40 +93,42 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
     	return wxSkuPropValueMapper.selectByExample(criteria);
 		
 	}
-
+	
 	@Override
-	public List<Integer> querySkuValueIdListByProductId(int productId) {
-		return null;
+	public List<WxSkuPropValue> querySkuValueListByIdList(List<Integer> idList) {
+		WxSkuPropValueCriteria criteria = new WxSkuPropValueCriteria();
+    	criteria.createCriteria().andIdIn(idList);
+    	return wxSkuPropValueMapper.selectByExample(criteria);
 	}
 
-	@Override
-	public List<WxSkuPropValue> querySkuValueListByProductId(int productId) {
-		return null;
-	}
 
 	@Override
-	public int deleteSkuValuesByProductId(int productId) {
-		return 0;
-	}
-
-	@Override
-	public int saveProductSkuValues(int productId, List<Integer> productSkuValueIdList) {
-		int result = 0;
-		if(productId>0&&productSkuValueIdList!=null&&productSkuValueIdList.size()>0){
-			Date currentTime = new Date();
-			for(Integer skuPropValueId: productSkuValueIdList){
-				if(skuPropValueId!=null){
-					WxProductSkuRelation relation = new WxProductSkuRelation();
-					relation.setProductId(productId);
-					relation.setSkuPropValueId(skuPropValueId);
-					relation.setCreateTime(currentTime);
-					int rows = wxProductSkuRelationService.save(relation);
-					result +=rows;
-				}
+	public List<Integer> querySkuPropValueIdListByProductId(int productId) {
+		List<WxProductSkuRelation> relationList = wxProductSkuRelationService.queryByProductId(productId);
+		if(relationList!=null&&relationList.size()>0){
+			List<Integer> valueIdList = new ArrayList<Integer>();
+			for(WxProductSkuRelation relation: relationList){
+				valueIdList.add(relation.getSkuPropValueId());
 			}
+			return valueIdList;
 		}
-		return result;
+		return null;
 	}
+
+	
+	@Override
+	public List<WxSkuPropValue> querySkuPropValueListByProductId(int productId) {
+		List<Integer> valueIdList = querySkuPropValueIdListByProductId(productId);
+		if(valueIdList!=null&&valueIdList.size()>0){
+			WxSkuPropValueCriteria criteria = new WxSkuPropValueCriteria();
+			criteria.createCriteria().andIdIn(valueIdList);
+			criteria.setOrderByClause(" sort ");
+			return queryByCriteria(criteria);
+		}
+		return null;
+	}
+
+	
 
 	@Override
 	public HashMap<Integer, WxSkuPropValue> queryMap() {
@@ -125,6 +141,29 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 			return skuPropValueHm;
 		}
 		return skuPropValueHm;
+	}
+	
+	
+	
+	
+	
+	
+
+	public WxSkuPropValueMapper getWxSkuPropValueMapper() {
+		return wxSkuPropValueMapper;
+	}
+
+	public void setWxSkuPropValueMapper(WxSkuPropValueMapper wxSkuPropValueMapper) {
+		this.wxSkuPropValueMapper = wxSkuPropValueMapper;
+	}
+
+	public IWxProductSkuRelationService getWxProductSkuRelationService() {
+		return wxProductSkuRelationService;
+	}
+
+	public void setWxProductSkuRelationService(
+			IWxProductSkuRelationService wxProductSkuRelationService) {
+		this.wxProductSkuRelationService = wxProductSkuRelationService;
 	}
 
 }

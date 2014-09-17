@@ -14,36 +14,36 @@ import com.bruce.geekway.service.product.IWxProductCategoryService;
 public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
 
 	@Autowired
-	private WxProductCategoryMapper wxPayProductCategoryMapper;
+	private WxProductCategoryMapper wxProductCategoryMapper;
 
 	@Override
 	public int save(WxProductCategory t) {
-		return wxPayProductCategoryMapper.insertSelective(t);
+		return wxProductCategoryMapper.insertSelective(t);
 	}
 
 	@Override
 	public int updateById(WxProductCategory t) {
-		return wxPayProductCategoryMapper.updateByPrimaryKeySelective(t);
+		return wxProductCategoryMapper.updateByPrimaryKeySelective(t);
 	}
 
 	@Override
 	public int updateByCriteria(WxProductCategory t, WxProductCategoryCriteria criteria) {
-		return wxPayProductCategoryMapper.updateByExampleSelective(t, criteria);
+		return wxProductCategoryMapper.updateByExampleSelective(t, criteria);
 	}
 
 	@Override
 	public int deleteById(Integer id) {
-		return wxPayProductCategoryMapper.deleteByPrimaryKey(id);
+		return wxProductCategoryMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int deleteByCriteria(WxProductCategoryCriteria criteria) {
-		return wxPayProductCategoryMapper.deleteByExample(criteria);
+		return wxProductCategoryMapper.deleteByExample(criteria);
 	}
 
 	@Override
 	public WxProductCategory loadById(Integer id) {
-		return wxPayProductCategoryMapper.selectByPrimaryKey(id);
+		return wxProductCategoryMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
@@ -61,15 +61,16 @@ public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
 
 	@Override
 	public List<WxProductCategory> queryByCriteria(WxProductCategoryCriteria criteria) {
-		return wxPayProductCategoryMapper.selectByExample(criteria);
+		return wxProductCategoryMapper.selectByExample(criteria);
 	}
+	
 
 	public WxProductCategoryMapper getWxProductCategoryMapper() {
-		return wxPayProductCategoryMapper;
+		return wxProductCategoryMapper;
 	}
 
 	public void setWxProductCategoryMapper(WxProductCategoryMapper wxPayProductCategoryMapper) {
-		this.wxPayProductCategoryMapper = wxPayProductCategoryMapper;
+		this.wxProductCategoryMapper = wxPayProductCategoryMapper;
 	}
 
 }

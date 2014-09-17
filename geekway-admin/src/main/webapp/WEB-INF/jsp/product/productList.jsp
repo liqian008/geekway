@@ -106,7 +106,7 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>商品管理
 					</h5>
-					<a href="./productAdd"><span class="label label-danger pull-right">新增商品</span></a>
+					<a href="./productPreAdd"><span class="label label-danger pull-right">新增商品</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">

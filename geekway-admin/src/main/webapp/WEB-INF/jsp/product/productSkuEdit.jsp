@@ -121,7 +121,7 @@
 							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<label class="control-label">
-									${product.title}
+									${product.name}
 									<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
 									<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
 								</label>
@@ -180,25 +180,6 @@
 							<div class="col-sm-2">
 								<input type="text" class="form-control" name="num" id="num" value="${productSku.num}"/>
 								<span class="label label-primary label-block">库存(个)</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付宝二维码链接: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<a href="${productSku.alipaySkuUrl}" id="ali-image-link"  class="lightbox">
-									<img id="cover-image" src="${productSku.alipaySkuUrl}" width="200px" />
-								</a>
-								<input type="text" class="form-control" name="alipaySkuUrl" value="${productSku.alipaySkuUrl}" >
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">口袋通产品链接: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="koudaitongSkuUrl" value="${productSku.koudaitongSkuUrl}" >
 							</div>
 						</div>
 						

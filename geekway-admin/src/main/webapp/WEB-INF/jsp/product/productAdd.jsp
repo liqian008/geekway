@@ -172,7 +172,7 @@
 								%>
 									<div class="checkbox-inline checkbox-info">
 										<label>
-											<input class="styled" type="checkbox" name="productSkuValueIds" value="<%=skuPropValue.getId()%>" />
+											<input class="styled" type="checkbox" name="skuPropValueIds" value="<%=skuPropValue.getId()%>" />
 											<%=skuPropValue.getName()%>
 										</label>
 									</div>

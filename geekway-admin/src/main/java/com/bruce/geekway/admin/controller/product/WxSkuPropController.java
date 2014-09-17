@@ -11,8 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxSkuProp;
 import com.bruce.geekway.model.WxSkuProp;
+import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxSkuPropService;
 
 
@@ -22,7 +25,9 @@ public class WxSkuPropController {
 
 	@Autowired
 	private IWxSkuPropService wxSkuPropService;
-	
+	@Autowired
+	private IWxProductCategoryService wxProductCategoryService;
+
 	
 	@RequestMapping("/skuPropList")
 	public String skuPropList(Model model, HttpServletRequest request) {
@@ -34,10 +39,34 @@ public class WxSkuPropController {
 		return "product/skuPropList";
 	}
 	
-	@RequestMapping("/skuPropAdd")
-	public String skuPropAdd(Model model, WxSkuProp skuProp, HttpServletRequest request) {
+	/**
+	 * 添加产品的预操作（需要先选择产品分类）
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/skuPropPreAdd")
+	public String skuPropPreAdd(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
+		
+		//查询出所有分类，以供用户选择产品所属分类
+		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
+		
+		model.addAttribute("skuProp", new WxSkuProp());
+		model.addAttribute("categoryList", categoryList);
+		return "product/skuPropPreAdd";
+	}
+	
+	@RequestMapping("/skuPropAdd")
+	public String skuPropAdd(Model model, int categoryId, WxSkuProp skuProp, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		if(skuProp!=null){
+			skuProp.setCategoryId(categoryId);
+		}
+		
 		
 		model.addAttribute("skuProp", skuProp);
 		return "product/skuPropEdit";

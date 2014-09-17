@@ -51,12 +51,12 @@ public class WxProductSkuController {
 		model.addAttribute("product", wxProduct);
 		
 		//获取产品对应的sku列表
-		List<WxProductSku> skuProductList = wxProductSkuService.queryAllByProductId(productId);
-		if(skuProductList!=null&&skuProductList.size()>0){
+		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
+		if(productSkuList!=null&&productSkuList.size()>0){
 			
 			//获取propValue的map，供构造skuName
 			HashMap<Integer, WxSkuPropValue> propValueMap = wxSkuPropValueService.queryMap();
-			for(WxProductSku productSku: skuProductList){
+			for(WxProductSku productSku: productSkuList){
 				//根据propName动态计算sku显示name，TODO与edit时进行合并
 				String skuPropName = productSku.getPropertiesName();
 				String[] skuPropNameArray = skuPropName.split(";");
@@ -76,7 +76,7 @@ public class WxProductSkuController {
 				if(sb.length()>0)sb.setLength(sb.length()-1);
 				productSku.setName(sb.toString());
 			}
-			model.addAttribute("skuList", skuProductList);
+			model.addAttribute("productSkuList", productSkuList);
 		}
 		
 		return "product/productSkuList";

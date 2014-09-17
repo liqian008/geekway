@@ -79,6 +79,14 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 		}
 		return null;
 	}
+
+	public WxProductSkuMapper getWxProductSkuMapper() {
+		return wxProductSkuMapper;
+	}
+
+	public void setWxProductSkuMapper(WxProductSkuMapper wxProductSkuMapper) {
+		this.wxProductSkuMapper = wxProductSkuMapper;
+	}
 	
 	
 }

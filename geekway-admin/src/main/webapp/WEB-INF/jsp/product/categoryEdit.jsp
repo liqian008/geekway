@@ -72,7 +72,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						编辑产品分类
+						编辑商品分类
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -84,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">编辑产品分类</li>
+					<li class="active">编辑商品分类</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -105,22 +105,22 @@
 			WxProductCategory category = (WxProductCategory)request.getAttribute("category");
 			%>
 
-			<form id="validate" action="<s:url value='./saveCategory'/>" method="post"  class="form-horizontal form-bordered">
+			<form id="validate" action="<s:url value='./saveProductCategory'/>" method="post"  class="form-horizontal form-bordered">
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑产品分类
+							<i class="icon-bubble4"></i>编辑商品分类 
 						</h6>
 					</div>
 					<div class="panel-body">
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">分类名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-3">
-								<input type="text" class="form-control" name="title" id="title" value="${category.title}"/>
-	                            <form:hidden path="category.id"/>
+								<input type="text" class="form-control" name="name" id="name" value="${category.name}"/>
+	                            <form:hidden path="category.id"/> 
 							</div>
 						</div>
 						

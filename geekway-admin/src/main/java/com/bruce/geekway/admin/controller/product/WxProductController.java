@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,10 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxSkuProp;
+import com.bruce.geekway.model.WxSkuPropCriteria;
 import com.bruce.geekway.model.WxSkuPropValue;
+import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
+import com.bruce.geekway.service.product.IWxProductSkuRelationService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxSkuPropService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
@@ -36,9 +41,14 @@ public class WxProductController {
 	private IWxSkuPropService wxSkuPropService;
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
+	
+	@Autowired
+	private IWxProductSkuRelationService wxProductSkuRelationService;
+	
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
-	
+	@Autowired
+	private IWxProductCategoryService wxProductCategoryService;
 	
 	@RequestMapping("/productList")
 	public String productList(Model model, HttpServletRequest request) {
@@ -50,40 +60,101 @@ public class WxProductController {
 		return "product/productList";
 	}
 	
-	@RequestMapping("/productAdd")
-	public String productAdd(Model model, WxProduct product, HttpServletRequest request) {
+	/**
+	 * 添加产品的预操作（需要先选择产品分类）
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/productPreAdd")
+	public String productAdd(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		//计算所有可用的SKU value列表
-		List<WxSkuPropValue> skuPropValueList = wxSkuPropValueService.queryAll();
-		model.addAttribute("skuPropValueList", skuPropValueList);
-		//计算的SKU prop分组
-		List<WxSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
+		//查询出所有分类，以供用户选择产品所属分类
+		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
+		
+		model.addAttribute("product", new WxProduct());
+		model.addAttribute("categoryList", categoryList);
+		return "product/productPreAdd";
+	}
+	
+	/**
+	 * 添加产品品(需要在上一步将分类id传入)
+	 * @param model
+	 * @param product
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/productAdd")
+	public String productAdd(Model model, int categoryId, WxProduct product, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		if(product!=null){
+			product.setCategoryId(categoryId);
+		}
+		
+		//TODO 需要与edit中的方法重构
+		//查询categoryId隶属下的skuPropList
+		WxSkuPropCriteria skuPpropCriteria = new WxSkuPropCriteria();
+		skuPpropCriteria.createCriteria().andCategoryIdEqualTo(categoryId);
+		List<WxSkuProp> skuPropList = wxSkuPropService.queryByCriteria(skuPpropCriteria);
 		model.addAttribute("skuPropList", skuPropList);
+		
+		List<Integer> skuPropIdList = null;
+		if(skuPropList!=null&&skuPropList.size()>0){
+			skuPropIdList = new ArrayList<Integer>();
+			for(WxSkuProp skuProp: skuPropList){
+				skuPropIdList.add(skuProp.getId());
+			}
+		}
+		
+		//根据以上的skuPropList查询所对应的propValueList
+		List<WxSkuPropValue> skuPropValueList = wxSkuPropValueService.querySkuPropValueListByPropIdList(skuPropIdList);
+		model.addAttribute("skuPropValueList", skuPropValueList);
+		
+//		//查询所有可用的SKU value列表
+//		//TODO 修改为所选分类下的sku列表
+//		List<WxSkuPropValue> skuPropValueList = wxSkuPropValueService.queryAll();
+//		model.addAttribute("skuPropValueList", skuPropValueList);
+//		//计算的SKU prop分组
+//		List<WxSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
+//		model.addAttribute("skuPropList", skuPropList);
 		
 		model.addAttribute("product", product);
 		return "product/productAdd";
 	}
-	
 	
 	@RequestMapping("/productEdit")
 	public String productEdit(Model model, HttpServletRequest request, int productId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProduct Product = wxProductService.loadById(productId);
-		model.addAttribute("product", Product);
+		WxProduct product = wxProductService.loadById(productId);
+		model.addAttribute("product", product);
 		
-		//获取所有的sku数据列表
-		List<WxSkuPropValue> skuPropValueList =  wxSkuPropValueService.queryAll();
-		model.addAttribute("skuPropValueList", skuPropValueList);
-		//根据数据计算出sku属性列表
-		List<WxSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
+		//TODO 需要与save中的方法重构
+		//查询categoryId隶属下的skuPropList
+		WxSkuPropCriteria skuPpropCriteria = new WxSkuPropCriteria();
+		skuPpropCriteria.createCriteria().andCategoryIdEqualTo(product.getCategoryId());
+		List<WxSkuProp> skuPropList = wxSkuPropService.queryByCriteria(skuPpropCriteria);
 		model.addAttribute("skuPropList", skuPropList);
 		
+		List<Integer> skuPropIdList = null;
+		if(skuPropList!=null&&skuPropList.size()>0){
+			skuPropIdList = new ArrayList<Integer>();
+			for(WxSkuProp skuProp: skuPropList){
+				skuPropIdList.add(skuProp.getId());
+			}
+		}
+		
+		//根据以上的skuPropList查询所对应的propValueList
+		List<WxSkuPropValue> skuPropValueList = wxSkuPropValueService.querySkuPropValueListByPropIdList(skuPropIdList);
+		model.addAttribute("skuPropValueList", skuPropValueList);
+		
 		//获取产品关联的skuValue的idList数据
-		List<Integer> productSkuValueIdList =  wxSkuPropValueService.querySkuValueIdListByProductId(productId);
+		List<Integer> productSkuValueIdList =  wxSkuPropValueService.querySkuPropValueIdListByProductId(productId);
 		model.addAttribute("productSkuValueIdList", productSkuValueIdList);
 		
 		return "product/productEdit";
@@ -98,7 +169,7 @@ public class WxProductController {
 	 * @return
 	 */
 	@RequestMapping(value = "/saveProduct", method = RequestMethod.POST)
-	public String saveProduct(Model model, WxProduct product, Integer[] productSkuValueIds, HttpServletRequest request) {
+	public String saveProduct(Model model, WxProduct product, Integer[] skuPropValueIds, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -121,18 +192,18 @@ public class WxProductController {
 				model.addAttribute("product", product);
 				
 			    //创建新SKU配置
-				if(productSkuValueIds!=null && productSkuValueIds.length>0){
+				if(skuPropValueIds!=null && skuPropValueIds.length>0){
 					
-					//清除原productSku数据
-					wxSkuPropValueService.deleteSkuValuesByProductId(productId);
-					
-					List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
-					result = wxSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
+					//清除原productSkuRelation数据
+					wxProductSkuRelationService.deleteByProductId(productId);
+					//新增productSkuRelation数据集
+					List<Integer> skuPropValueIdList = Arrays.asList(skuPropValueIds);
+					result = wxProductSkuRelationService.saveProductSkuRelations(productId, skuPropValueIdList);
 
 					// Step2，填写sku属性数据
 
 					// 获取产品关联的skuValue的List数据
-					List<WxSkuPropValue> productSkuValueList =  wxSkuPropValueService.querySkuValueListByProductId(productId);
+					List<WxSkuPropValue> productSkuValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
 					model.addAttribute("productSkuValueList", productSkuValueList);
 					//sku属性列表
 					List<WxSkuProp> skuPropList = new ArrayList<WxSkuProp>();
@@ -151,84 +222,64 @@ public class WxProductController {
 					
 					//计算对应的sku矩阵
 					if(productSkuValueList!=null&&productSkuValueList.size()>0){
-						HashMap<Integer, List<WxSkuPropValue>> skuGroupMap = new HashMap<Integer, List<WxSkuPropValue>>();
+						//map的key为skuPropId, value为选定的skuPropValueList
+						HashMap<Integer, List<WxSkuPropValue>> skuPropGroupMap = new HashMap<Integer, List<WxSkuPropValue>>();
 						for(WxSkuPropValue skuPropValue: productSkuValueList){
 							int skuPropId = skuPropValue.getSkuPropId();
 							
-							List<WxSkuPropValue> skuGroupList = skuGroupMap.get(skuPropId);
+							List<WxSkuPropValue> skuGroupList = skuPropGroupMap.get(skuPropId);
 							if(skuGroupList==null || skuGroupList.size()<=0){//不存在则初始化（默认值1）
 								skuGroupList = new ArrayList<WxSkuPropValue>();
-								skuGroupMap.put(skuPropId, skuGroupList);
+								skuPropGroupMap.put(skuPropId, skuGroupList);
 							} 
 							skuGroupList.add(skuPropValue);
 						}
 						
-						List<WxSkuPropValue> sizeSkuList = new ArrayList<WxSkuPropValue>();
-						List<WxSkuPropValue> colorSkuList = new ArrayList<WxSkuPropValue>();
-						List<WxSkuPropValue> materialSkuList = new ArrayList<WxSkuPropValue>();
-						
-						
-						if(skuGroupMap!=null&&skuGroupMap.size()==3){
-							sizeSkuList = skuGroupMap.get(1);
-							colorSkuList = skuGroupMap.get(2);
-							materialSkuList = skuGroupMap.get(3);
-						}
-
-						List<String> skuPropertiesNameList = new ArrayList<String>();
-						
-						for(WxSkuPropValue materialSkuPropValue: materialSkuList){//材质SKU
-//							skuNameList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName()+"+"+materialSkuPropValue.getName());
-//							skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId()+"+"+materialSkuPropValue.getId());
-							//构造skuCode
-							int materialSkuPropId = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getId();
-//							String materialSkuPropName = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getName();
-							String materialSkuCode = getSkuCode(materialSkuPropId, materialSkuPropValue.getId());
-							
-							
-							for(WxSkuPropValue colorSkuPropValue: colorSkuList){//颜色SKU
-								//构造skuCode
-								int colorSkuPropId = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getId();
-//								String colorSkuPropName = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getName();
-								String colorSkuCode = getSkuCode(colorSkuPropId, colorSkuPropValue.getId());
-								
-								for(WxSkuPropValue sizeSkuPropValue: sizeSkuList){//尺码SKU
-									int sizeSkuPropId = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getId();
-//									String sizeSkuPropName = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getName();
-									String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId());
-									
-									//最后生成的SKUCode，格式为 —— 3:6;2:3;1:1;
-									skuPropertiesNameList.add(materialSkuCode + colorSkuCode + sizeSkuCode);
+						if(skuPropGroupMap!=null&&skuPropGroupMap.size()>0){
+							SkuPropertyTree root = null;
+							//遍历map，以构造tree
+							for(Entry<Integer, List<WxSkuPropValue>> skuPropEntry: skuPropGroupMap.entrySet()){
+								Integer skuPropId = skuPropEntry.getKey();
+								List<WxSkuPropValue> skuPropValueList = skuPropEntry.getValue();
+								if(skuPropValueList!=null&&skuPropValueList.size()>0){
+									List<String> skuPropertyList = new ArrayList<String>();
+									for(WxSkuPropValue skuPropValue: skuPropValueList){
+										skuPropertyList.add(getSkuCode(skuPropId, skuPropValue.getId()));
+									}
+									SkuPropertyTree tempNode = new SkuPropertyTree(skuPropertyList);
+									if(root==null){//第一次遍历
+										root = tempNode;
+									}else{//添加子，构造一棵父子树，供递归遍历生成skuProperties
+										root.addChildToTail(tempNode);
+									}
 								}
 							}
-						}
-						
-						//根据商品的sku配置，生成sku数据，填写价格
-						//创建新sku数据
-						int i=0;
-						for(String skuPropertiesName: skuPropertiesNameList){
-							WxProductSku wxProductSku = new WxProductSku();
-							wxProductSku.setProductId(productId);
-							//设置各sku的缩略图
-							wxProductSku.setSkuPicUrl(product.getProductPicUrl());
-							wxProductSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
 							
-							wxProductSku.setOriginPrice((long) 0);
-							wxProductSku.setPrice((long) 0);
-							wxProductSku.setNum(0);
+							List<String> skuPropertiesNameList = SkuPropertyTree.recursiveBuildSkuProperties(root);
 							
-							wxProductSku.setPropertiesName(skuPropertiesName);
-							
-							wxProductSku.setCreateTime(currentTime);
-							wxProductSku.setUpdateTime(currentTime);
-							i++;
-							//保存sku
-							wxProductSkuService.save(wxProductSku);
+							//根据商品的sku配置，生成sku数据，填写价格
+							//创建新商品sku数据
+							for(String skuPropertiesName: skuPropertiesNameList){
+								WxProductSku wxProductSku = new WxProductSku();
+								wxProductSku.setProductId(productId);
+								//设置各sku的缩略图
+								wxProductSku.setSkuPicUrl(product.getProductPicUrl());
+								wxProductSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
+								
+								wxProductSku.setOriginPrice(product.getOriginPrice());
+								wxProductSku.setPrice(product.getPrice());
+								wxProductSku.setNum(0);
+								
+								wxProductSku.setPropertiesName(skuPropertiesName);
+								
+								wxProductSku.setCreateTime(currentTime);
+								//保存sku
+								wxProductSkuService.save(wxProductSku);
+							}
 						}
 					}
 				}
 			}
-//			return "product/productAddSkus";
-			
 			model.addAttribute("redirectUrl", "./batchEditProductSkus?productId="+productId);
 			return "forward:/home/operationRedirect";
 		}
@@ -310,27 +361,6 @@ public class WxProductController {
 	}
 	
 	
-	//TODO，与WxProductSkuValueController中的getPropListByValueList方法整合
-	/**
-	 * 获取sku属性列表
-	 * @param skuPropValueList
-	 * @return 
-	 */
-	private List<WxSkuProp> getPropListByValueList(List<WxSkuPropValue> skuPropValueList) {
-		List<WxSkuProp> skuPropList = new ArrayList<WxSkuProp>();
-		if(skuPropValueList!=null&&skuPropValueList.size()>0){
-			HashMap<Integer, WxSkuProp> skuPropHm = wxSkuPropService.queryMap();
-			for(WxSkuPropValue skuPropValue :skuPropValueList){
-				WxSkuProp skuProp = skuPropHm.get(skuPropValue.getSkuPropId());
-				if(skuProp!=null&&!skuPropList.contains(skuProp)){
-					skuPropList.add(skuProp);
-				}
-			}
-		}
-		return skuPropList;
-	}
-	
-	
 	/**
 	 * 拼装skuCode，格式为propId:propValueId;
 	 * @param pid
@@ -367,7 +397,7 @@ public class WxProductController {
 	
 	
 	public static void main(String[] args) {
-		WxProductController x=  new WxProductController();
+		WxProductController x =  new WxProductController();
 		System.out.println(getSkuCode(1, 3, "颜色","红色"));
 	}
 }

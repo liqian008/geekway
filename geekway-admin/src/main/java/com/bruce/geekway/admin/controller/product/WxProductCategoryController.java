@@ -29,7 +29,7 @@ public class WxProductCategoryController {
 		model.addAttribute("servletPath", servletPath);
 		
 		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
-		model.addAttribute("IWxProductCategory", categoryList);
+		model.addAttribute("categoryList", categoryList);
 		return "product/categoryList";
 	}
 	

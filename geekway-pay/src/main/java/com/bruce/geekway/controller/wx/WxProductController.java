@@ -1,6 +1,7 @@
 package com.bruce.geekway.controller.wx;
 
 import java.util.Date;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -9,25 +10,43 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductSku;
+import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.service.product.IWxProductService;
+import com.bruce.geekway.service.product.IWxProductSkuService;
+import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.Md5Util;
 import com.bruce.geekway.utils.Sha1Util;
 import com.bruce.geekway.utils.WxAuthUtil;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
-@RequestMapping("/wx")
+@RequestMapping(value = "/product")
 public class WxProductController {
 	
 	@Autowired
 	private IWxProductService wxProductService;
+	@Autowired
+	private IWxProductSkuService wxProductSkuService;
+	@Autowired
+	private IWxSkuPropValueService wxSkuPropValueService;
+	
+	/**
+	 * 首页
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = {"/","/index"})
+	public String index(Model model, HttpServletRequest request) {
+		return "product/index";
+	}
 	
 	/**
 	 * 产品信息
@@ -35,9 +54,33 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/productInfo")
-	public String productInfo(Model model, HttpServletRequest request) {
-		return "wx/productInfo";
+	@RequestMapping(value = "/products")
+	public String productList(Model model, HttpServletRequest request) {
+		List<WxProduct> productList = wxProductService.queryAvailableList();
+		model.addAttribute("productList", productList);
+		return "product/productList";
+	}
+	
+	
+	/**
+	 * 产品信息
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/product/{productSkuId}")
+	public String productInfo(Model model, @PathVariable int productSkuId, HttpServletRequest request) {
+		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
+		model.addAttribute("productSku", productSku);
+		
+		int productId = productSku.getProductId();
+		//获取该商品其他sku信息，以便用户选择
+		List<WxSkuPropValue> skuPropValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
+		
+		
+		model.addAttribute("skuPropValueList", skuPropValueList);
+		
+		return "product/productInfo";
 	}
 	
 	/**

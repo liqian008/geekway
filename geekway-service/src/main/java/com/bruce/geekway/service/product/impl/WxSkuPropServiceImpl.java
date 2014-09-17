@@ -79,4 +79,19 @@ public class WxSkuPropServiceImpl implements IWxSkuPropService{
 	}
 
 	
+	
+	
+	
+	
+	
+	public WxSkuPropMapper getWxSkuPropMapper() {
+		return wxSkuPropMapper;
+	}
+
+	public void setWxSkuPropMapper(WxSkuPropMapper wxSkuPropMapper) {
+		this.wxSkuPropMapper = wxSkuPropMapper;
+	}
+
+	
+	
 }

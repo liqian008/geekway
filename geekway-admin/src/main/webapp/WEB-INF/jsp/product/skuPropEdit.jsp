@@ -115,6 +115,13 @@
 					</div>
 					<div class="panel-body">
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">所属分类: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<form:select path="skuProp.categoryId"  items="${categoryList}"  itemValue="id"  itemLabel="name" class="select-liquid"></form:select>
+							</div>
+						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>

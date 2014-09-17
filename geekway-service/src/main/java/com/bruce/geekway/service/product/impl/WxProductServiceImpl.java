@@ -14,36 +14,36 @@ import com.bruce.geekway.service.product.IWxProductService;
 public class WxProductServiceImpl implements IWxProductService {
 
 	@Autowired
-	private WxProductMapper wxPayProductMapper;
+	private WxProductMapper wxProductMapper;
 
 	@Override
 	public int save(WxProduct t) {
-		return wxPayProductMapper.insertSelective(t);
+		return wxProductMapper.insertSelective(t);
 	}
 
 	@Override
 	public int updateById(WxProduct t) {
-		return wxPayProductMapper.updateByPrimaryKeySelective(t);
+		return wxProductMapper.updateByPrimaryKeySelective(t);
 	}
 
 	@Override
 	public int updateByCriteria(WxProduct t, WxProductCriteria criteria) {
-		return wxPayProductMapper.updateByExampleSelective(t, criteria);
+		return wxProductMapper.updateByExampleSelective(t, criteria);
 	}
 
 	@Override
 	public int deleteById(Integer id) {
-		return wxPayProductMapper.deleteByPrimaryKey(id);
+		return wxProductMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int deleteByCriteria(WxProductCriteria criteria) {
-		return wxPayProductMapper.deleteByExample(criteria);
+		return wxProductMapper.deleteByExample(criteria);
 	}
 
 	@Override
 	public WxProduct loadById(Integer id) {
-		return wxPayProductMapper.selectByPrimaryKey(id);
+		return wxProductMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
@@ -61,22 +61,25 @@ public class WxProductServiceImpl implements IWxProductService {
 
 	@Override
 	public List<WxProduct> queryByCriteria(WxProductCriteria criteria) {
-		return wxPayProductMapper.selectByExample(criteria);
+		return wxProductMapper.selectByExample(criteria);
 	}
 
 	@Override
 	public List<WxProduct> queryAvailableList() {
 		WxProductCriteria criteria = new WxProductCriteria();
 		criteria.createCriteria().andStatusEqualTo((short) 1);
-		return wxPayProductMapper.selectByExample(criteria);
+		return wxProductMapper.selectByExample(criteria);
 	}
 
 	public WxProductMapper getWxProductMapper() {
-		return wxPayProductMapper;
+		return wxProductMapper;
 	}
 
 	public void setWxProductMapper(WxProductMapper wxPayProductMapper) {
-		this.wxPayProductMapper = wxPayProductMapper;
+		this.wxProductMapper = wxPayProductMapper;
 	}
 
+
+	
+	
 }
