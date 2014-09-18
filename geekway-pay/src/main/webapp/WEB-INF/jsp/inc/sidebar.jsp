@@ -16,20 +16,18 @@
 
 		<div class="navigation-items">
 			<div class="nav-item">
-				<a href="./" class="home-nav">Home<em class="selected-nav"></em></a>
+				<a href="./index" class="home-nav">分类1<em class="selected-nav"></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="./#" class="features-nav submenu-deploy">Features<em
-					class="dropdown-nav"></em></a>
+				<a href="./#" class="features-nav submenu-deploy">分类2<em class="dropdown-nav"></em></a>
 				<div class="nav-item-submenu">
-					<a href="intro.html">Introduction <em
-						class="unselected-sub-nav"></em></a> <a href="type.html">Typography
-						<em class="unselected-sub-nav"></em>
-					</a> <a href="jquery.html">jQuery <em class="unselected-sub-nav"></em></a>
+					<a href="intro.html">Introduction <em class="unselected-sub-nav"></em></a> 
+					<a href="type.html">Typography<em class="unselected-sub-nav"></em></a>
+					<a href="jquery.html">jQuery <em class="unselected-sub-nav"></em></a>
 				</div>
 			</div>
 			<div class="nav-item">
-				<a href="./#" class="media-nav submenu-deploy">Media<em
+				<a href="./#" class="media-nav submenu-deploy">分类3<em
 					class="dropdown-nav"></em></a>
 				<div class="nav-item-submenu">
 					<a href="widefolio.html">Wide Portfolio <em
@@ -45,57 +43,16 @@
 				</div>
 			</div>
 			<div class="nav-item">
-				<a href="contact.html" class="contact-nav">意见与反馈<em
-					class="unselected-nav"></em></a>
+				<a href="contact.html" class="contact-nav">意见反馈<em class="unselected-nav"></em></a>
 			</div>
+			<!-- 
 			<div class="nav-item">
-				<a href="./#" class="close-nav">Close<em class="unselected-nav"></em></a>
+				<a href="./#" class="close-nav">关 闭<em class="unselected-nav"></em></a>
 			</div>
+			 -->
 			<div class="sidebar-decoration"></div>
 		</div>
 
-		<div class="sidebar-section">
-			<p>Get social</p>
-			<a href="./#" class="sidebar-social"></a>
-		</div>
-		<div class="navigation-items">
-			<div class="nav-item">
-				<a href="http://www.facebook.com/enabled.labs" class="facebook-nav">Facebook<em
-					class="link-nav"></em></a>
-			</div>
-			<div class="nav-item">
-				<a href="https://twitter.com/iEnabled" class="twitter-nav">Twitter<em
-					class="link-nav"></em></a>
-			</div>
-			<div class="sidebar-decoration"></div>
-		</div>
-
-		<div class="sidebar-section">
-			<p>Page Updates</p>
-			<a href="./#" class="sidebar-updates"></a>
-		</div>
-		<div class="sidebar-notifications">
-			<div class="sidebar-red">
-				<h3>Update title one</h3>
-				<p>Something interesting you'd like to say?</p>
-			</div>
-			<div class="sidebar-decoration"></div>
-			<div class="sidebar-green">
-				<h3>Update title one</h3>
-				<p>Something interesting you'd like to say?</p>
-			</div>
-			<div class="sidebar-decoration"></div>
-			<div class="sidebar-blue">
-				<h3>Update title one</h3>
-				<p>Something interesting you'd like to say?</p>
-			</div>
-			<div class="sidebar-decoration"></div>
-			<div class="sidebar-yellow">
-				<h3>Update title one</h3>
-				<p>Something interesting you'd like to say?</p>
-			</div>
-			<div class="sidebar-decoration"></div>
-		</div>
 
 		<div class="sidebar-section copyright-sidebar">
 			<p>Copyright 2013. All rights reserved.</p>

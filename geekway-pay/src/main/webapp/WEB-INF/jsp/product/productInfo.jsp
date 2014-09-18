@@ -6,7 +6,6 @@
 String contextPath = request.getContextPath();
 %>
 
-
 <!DOCTYPE HTML>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -14,7 +13,7 @@ String contextPath = request.getContextPath();
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>美妞儿</title>
+<title>支付</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -22,6 +21,7 @@ String contextPath = request.getContextPath();
 <link href="${pageContext.request.contextPath}/slideby/styles/owl.theme.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/swipebox.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/colorbox.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/slideby/styles/meiniu.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jqueryui.js"></script>
@@ -44,7 +44,7 @@ String contextPath = request.getContextPath();
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">introduction</p>
+            <p class="bread-crumb">${product.name}</p>
             <a href="contact.html" class="deploy-contact"></a>
         </div>
         <div class="content-header">
@@ -53,131 +53,129 @@ String contextPath = request.getContextPath();
             <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
-        <div class="content">
-        	<div class="decoration"></div>
+        <div class="content"> 
+        	
+        	<div class="container">
+                <div class="slider-controls" data-snap-ignore="true">                
+                    <div>
+                        <img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image" alt="img">
+                    </div>
+                
+                    <div>
+                        <img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image" alt="img">
+                    </div>
 
+                </div>
+                <a href="./#" class="next-slider"></a>
+                <a href="./#" class="prev-slider"></a>
+            </div>
+            
+            <div class="decoration"></div> 
+           
             <div class="container no-bottom">
             	<div class="section-title">
-                	<h4>${productSku.name}</h4> 
-                    <em>${productSku.description}</em>
-                    <strong><img src="images/misc/icons/flag.png" width="20" alt="img"></strong>
+                	<h4 class="center-text">${product.name}</h4> 
                 </div>
-                <p>
-					${productSku.description}
-                </p>
+            </div> 
+            
+            <div class="container" id="product-intro">
+            	<ul id="choose">
+            		<li><span class="text-highlight highlight-dark">原 价</span><del>20.00元</del></li>
+	            	<li><span class="text-highlight highlight-red">现 价</span>10.00元</li>
+	            	<li id="choose-color" class="choose-color-shouji">
+	            		<div class="dt">选择颜色：</div>
+	            		<div class="dd">
+	            			<div class="item selected">
+	            			<b></b>
+	            			<a href="#none" title="ML574OLG/米白色/红色">
+	            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="ML574OLG/米白色/红色 ">
+	            			<i>ML574OLG/米白色/红色</i></a>
+	            			</div>
+	            			
+	            			<div class="item">
+	            			<b></b><a href="#none" title="ML574OLR/红色"><img data-img="1" src="http://img10.360buyimg.com/n9/jfs/t205/213/573130451/97843/15cd1e0b/53912e95Nf2578f80.jpg" width="25" height="25" alt="ML574OLR/红色 "><i>ML574OLR/红色</i></a></div></div>
+	            	
+	            	</li>
+	            	
+	            	<li id="choose-version" class="choose-version-shouji">
+	            		<div class="dt">选择尺码：</div>
+	            		<div class="dd"><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">40.5</a></div><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">41.5</a></div><div class="item"><b></b><a href="#none" title="36" style="cursor: pointer;">36</a></div><div class="item"><b></b><a href="#none" title="37" style="cursor: pointer;">37</a></div><div class="item"><b></b><a href="#none" title="37.5" style="cursor: pointer;">37.5</a></div><div class="item"><b></b><a href="#none" title="38" style="cursor: pointer;">38</a></div><div class="item"><b></b><a href="#none" title="38.5" style="cursor: pointer;">38.5</a></div><div class="item  selected"><b></b><a href="#none" title="39.5" style="cursor: pointer;">39.5</a></div><div class="item"><b></b><a href="#none" title="40" style="cursor: pointer;">40</a></div><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">42</a></div><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">42.5</a></div><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">43</a></div><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">44</a></div><div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">45</a></div></div>
+	            	</li>
+	            	
+	            	
+	            	<li><span class="text-highlight highlight-blue">购买数量</span>1件</li>
+	            	
+            	</ul>
+                <a href="javascript:void(0)" class="button-big button-red">点击购买</a> 
             </div>
             
             <div class="decoration"></div>
             
-            <div class="container no-bottom">
-            	<img class="responsive-image" src="images/misc/intro.png" alt="img">
+            <div class="container">
+            	<div class="section-title">
+                	<h4>商品详情</h4>
+                </div>
+                <div class="tabs">
+                    <a href="#" class="tab-but tab-but-1 tab-active">商品描述</a>
+                    <a href="#" class="tab-but tab-but-2">规格参数</a>
+                </div>
+                <div class="tab-content tab-content-1">
+                    <p>
+                        <img src="images/general-nature/1s.jpg" class="float-left" width="70" alt="img">
+                        Sed sed gravida turpis. Suspendisse quis lacus non lacus fermentum lobortis non et orci. Nullam bibendum non ligula ut viverra.
+                    </p>
+                </div>
+                <div class="tab-content tab-content-2">
+                    <p>
+                        <img src="images/general-nature/2s.jpg" class="float-left" width="70" alt="img">
+                        Sed sed gravida turpis. Suspendisse quis lacus non lacus fermentum lobortis non et orci. Nullam bibendum non ligula ut viverra.                    
+                    </p>
+                </div>
             </div>
-            
+			
+			                
             <div class="decoration"></div>
             
             <div class="container no-bottom">
             	<div class="section-title">
-                	<h4>Page features</h4>
-                    <em>some of the features we've included</em>
-                    <strong><img src="images/misc/icons/applications.png" width="20" alt="img"></strong>
+                	<h4>推荐商品</h4>
                 </div>
-                <p>
-					These are just a few of the awesome features we've included in this template! For more features,
-                    swipe the body to the right, and check out the pages! You'll love em!
-                </p>
-            </div>
-            
-            <div class="decoration"></div>
-            
-            <div class="container no-bottom">
-                <div class="one-half-responsive">
-                    <h4>General Features</h4>
-                    <ul>
-                      <li>1, 2, 3 text columns</li>
-                      <li>1, 2, 3 image columns</li>
-                      <li>1, 2, 3 icon columns</li>
-                      <li>CSS3 8 text highlight variations</li>
-                      <li>CSS3 Code structures</li>
-                      <li>CSS3 Table</li>
-                      <li>CSS3 Speach bubbles</li>
-                      <li>CSS3 Fields</li>
-                      <li>CSS3 8 Color variation small buttons</li>
-                      <li>CSS3 8 Color variation big buttons</li>
-                      <li>CSS3 8 Buttons with 400 retina ready icons</li>
-                      <li>CSS3 Hoirzontal square and rounded charts</li>
-                      <li>4 different testimonial variations</li>
-                      <li>48 icon lists</li>
-                      <li>PSD Files Included</li>
-                      <li>High DPI screen ready ( retina included )</li>
-                      <li>Very well documented and explained</li>
-                      <li>24/7 support for our buyers!</li>
-                    </ul> 
+            	<div class="one-half-responsive">
+                	<p class="quote-item">
+                    	<img src="images/general-nature/6s.jpg" alt="img">
+                        Great product and awesome help to get for this! Many thanks mate!
+                        <em>John Doe - ThemeForest Customer</em>
+                    </p>
                 </div>
-                <div class="decoration hide-if-responsive"></div>
                 <div class="one-half-responsive last-column">
-                    <h4>jQuery Features</h4>
-                    <ul>
-                        <li>Custom jQuery Code!</li>
-                        <li>CSS3, AJAX, PHP contact form with validation</li>
-                        <li>jQuery Page Preloader</li>
-                        <li>jQuery Device detection</li>
-                        <li>jQuery Tap sliding door</li>
-                        <li>jQuery Submenus</li>
-                        <li>jQuery 4 Toggle Variations</li>
-                        <li>jQuery Tabs</li>
-                        <li>jQuery Big Notifications</li>
-                        <li>jQuery Small Notifications</li>
-                        <li>jQuery Checkboxes</li>
-                        <li>jQuery Radioboxes</li>
-                        <li>jQuery Image Slider</li>
-                        <li>jQuery Qute Slider</li>
-                        <li>jQuery Text Slider</li>
-                        <li>jQuery Thumbnail Slider</li>
-                        <li>jQuery Colorbox Portofolio</li>
-                        <li>jQuery Swipebox Touch Swipe Gallery</li>
-                    </ul>
-                </div> 
-                <div class="clear"></div>
+                	<p class="quote-item">
+                    	<img src="images/general-nature/2s.jpg" alt="img">
+                        Fast support, awesome file, good  docs, this rocks! Thank you for all!
+                        <em>John Doe - ThemeForest Customer</em>
+                    </p>                
+                </div>
+            	<div class="one-half-responsive">
+                	<p class="quote-item">
+                    	<img src="images/general-nature/3s.jpg" alt="img">
+                        Thanks for the awesome item, just what I was searching for all along!
+                        <em>John Doe - ThemeForest Customer</em>
+                    </p>
+                </div>
+                <div class="one-half-responsive last-column">
+                	<p class="quote-item">
+                    	<img src="images/general-nature/4s.jpg" alt="img">
+                        Fast loading, great support, easy to use, everything I asked for!
+                        <em>John Doe - ThemeForest Customer</em>
+                    </p>                
+                </div>
             </div>
+             
+            <div class="decoration"></div>
+            <jsp:include page="../inc/footer.jsp"></jsp:include>
             
-            <div class="decoration"></div>      
-            <div class="content-footer">
-            	<p class="copyright-content">Copyright 2013.<br> All rights reserved</p>
-                <a href="#" class="go-up-footer"></a>
-                <a href="#" class="facebook-footer"></a>
-                <a href="#" class="twitter-footer"></a>
-                <div class="clear"></div>
-            </div>
-            
-              
         </div>                
     </div>  
 </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

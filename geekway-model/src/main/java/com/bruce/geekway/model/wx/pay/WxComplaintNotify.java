@@ -8,7 +8,7 @@ import java.util.List;
  * @author liqian
  * 
  */
-public class WxComplaintRequest {
+public class WxComplaintNotify {
 
 	public String openId;
 	public String appId;

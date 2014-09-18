@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
+import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.mp.WxBaseService;
 import com.bruce.geekway.utils.JsonUtil;
@@ -28,11 +29,23 @@ public class WxMpPayService extends WxBaseService {
 
 	/**
 	 * 查询订单状态
-	 * 
+	 * @param orderData  订单的json串
 	 * @return
 	 */
-	public int query() {
-		return 1;
+	public WxJsonResult queryOrder(WxOrderQueryRequest orderRequest) {
+		String accessToken = wxAccessTokenService.getCachedAccessToken();
+		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		
+		String queryJson = JsonUtil.gson.toJson(orderRequest);
+		
+		//提交查询请求至微信
+		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_QUERY_ORDER_API, params, queryJson);
+		
+		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
+		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()!=null && wxpayDeliverResult.getErrcode()==0){//订单查询成功
+			return wxpayDeliverResult;
+		}
+		return null;
 	}
 	
 	/**
@@ -50,13 +63,12 @@ public class WxMpPayService extends WxBaseService {
 		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
 		
 		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
-		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()!=null && wxpayDeliverResult.getErrcode()==0){//自定义菜单创建成功
+		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()!=null && wxpayDeliverResult.getErrcode()==0){//发货操作成功
 			return wxpayDeliverResult;
 		}
 		return null;
 	}
 
-	
 	/**
 	 * 维权处理完毕后，通知微信
 	 * @return
@@ -71,7 +83,7 @@ public class WxMpPayService extends WxBaseService {
 		//发送至微信
 		String complaintResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
 		WxJsonResult wxpayComplaintResult = JsonUtil.gson.fromJson(complaintResultStr, WxJsonResult.class);
-		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()!=null && wxpayComplaintResult.getErrcode()==0){//自定义菜单创建成功
+		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()!=null && wxpayComplaintResult.getErrcode()==0){//维权处理成功
 			return wxpayComplaintResult;
 		}
 		return null;

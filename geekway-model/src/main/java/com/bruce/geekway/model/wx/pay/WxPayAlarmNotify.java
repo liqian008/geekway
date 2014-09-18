@@ -6,7 +6,7 @@ package com.bruce.geekway.model.wx.pay;
  * @author liqian
  * 
  */
-public class WxPayAlarmRequest {
+public class WxPayAlarmNotify {
 
 	private String appid;
 	private String errorType;

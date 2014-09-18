@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+
+#product-intro li {
+	list-style:none;
+	margin-bottom:15px;
+}
+
+
+#product-intro .dt{
+	float:left;
+	margin-top:10px;
+}
+
+#product-intro .item{
+	float:left;
+	margin:2px 8px 2px 0;
+}
+
+
+#product-intro .item a{
+	color:#666
+}
+
+#choose .item a:link, #choose .item a:visited{ 
+	border:1px solid #ccc;
+	padding:1px;
+}
+
+#choose .item a:hover, #choose .item a:active, #choose .selected a:link, #choose .selected a:visited{
+	border:2px solid #e4393c;
+}
+
+
+#choose-color.choose-color-shouji .item a img{
+	float:left;
+	margin: 1px 3px 1px 1px;
+}
+
+#choose-color.choose-color-shouji i{
+	display:inline-block;
+	font-style:normal;
+	padding-top:4px;
+	margin-right:3px;
+	cursor:pointer;
+}
+
+
+
+#choose-version .item a:link, #choose-version .item a:visited{
+	float:left;
+	padding:4px 6px;
+}
+
+#choose-version .item a:hover, #choose-version .item a:active, #choose-version .selected a:link, #choose-version .selected a:visited{
+	padding: 3px 5px;
+}
+
+
+#choose #choose-version .disabled a, #choose #choose-version .disabled a:visited, #choose #choose-type .disabled a, #choose #choose-type .disabled a:visited{
+	color:#999;
+}
+
+#choose #choose-version .disabled a, #choose #choose-type .disabled a{
+	border: 1px dashed #ccc;
+	padding: 4px;
+}
+
+
+#choose .selected b {
+position: absolute;
+bottom: 0;
+right: 0;
+width: 12px;
+height: 12px;
+overflow: hidden;
+background-position: -202px -224px;
+}
+
+
+#choose .selected b{
+	background-image: url(http://misc.360buyimg.com/product/skin/2012/i/newicon20140417.png);
+	background-repeat: no-repeat;
+}
+
+/*订单css*/
+#orderTable td img{ 
+	float: left !important;
+	width: 60px !important;
+	margin-right: 5px;
+}
+}

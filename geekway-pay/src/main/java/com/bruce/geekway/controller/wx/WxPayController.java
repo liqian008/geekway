@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
-import com.bruce.geekway.model.wx.pay.WxComplaintRequest;
-import com.bruce.geekway.model.wx.pay.WxPayAlarmRequest;
+import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
+import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
-import com.bruce.geekway.model.wx.pay.WxPayOrderRequest;
+import com.bruce.geekway.model.wx.pay.WxPayOrderNotify;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.pay.IWxPayService;
 import com.bruce.geekway.utils.DateUtil;
@@ -85,25 +85,19 @@ public class WxPayController {
 		String total_fee = "1";// 总金额。
 		String partnerKey = ConstWeixin.WX_PAY_PARTERN_KEY;// 这个值和以上其他值不一样是：签名需要它，而最后组成的传输字符串不能含有它。这个key是需要商户好好保存的。
 
-		SortedMap<String, String> paramMap = new TreeMap<String, String>();
-		paramMap.put("bank_type", banktype);
-		paramMap.put("body", body);
-		paramMap.put("fee_type", fee_type);
-		paramMap.put("input_charset", input_charset);
-		paramMap.put("notify_url", notify_url);
-		paramMap.put("out_trade_no", out_trade_no);
-		paramMap.put("partner", partner);
-		paramMap.put("spbill_create_ip", spbill_create_ip);
-		paramMap.put("total_fee", total_fee);
+		SortedMap<String, String> packageMap = new TreeMap<String, String>();
+		packageMap.put("bank_type", banktype);
+		packageMap.put("body", body);
+		packageMap.put("fee_type", fee_type);
+		packageMap.put("input_charset", input_charset);
+		packageMap.put("notify_url", notify_url);
+		packageMap.put("out_trade_no", out_trade_no);
+		packageMap.put("partner", partner);
+		packageMap.put("spbill_create_ip", spbill_create_ip);
+		packageMap.put("total_fee", total_fee);
 
-		String packageText = WxAuthUtil.combineWxPayPackageText(paramMap) + "&key=" + partnerKey;
-
-		// System.out.println(packageText);
-		String signValue = Md5Util.md5Encode(packageText).toUpperCase();
-
-		String urlencodedPackageText = WxAuthUtil.combineWxPayUrlEncodeText(paramMap, true);
-		// 加密后package的值
-		String finalPackageText = urlencodedPackageText + "&sign=" + signValue;
+		//生成package的串
+		String finalPackageText = WxAuthUtil.packageSign(packageMap); 
 		System.out.println(finalPackageText);
 
 		// 参与 paySign 签名的字段包括:appid、timestamp、noncestr、package 以及
@@ -112,17 +106,14 @@ public class WxPayController {
 		String timestamp = String.valueOf(DateUtil.getUnixTime(new Date()));
 		String noncestr = timestamp;
 
-		SortedMap<String, String> signMap = new TreeMap<String, String>();
-		signMap.put("appid", ConstWeixin.WX_APP_ID);
-		signMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);
-		signMap.put("timestamp", timestamp);
-		signMap.put("noncestr", noncestr);
-		signMap.put("package", finalPackageText);
+		SortedMap<String, String> paySignMap = new TreeMap<String, String>();
+		paySignMap.put("appid", ConstWeixin.WX_APP_ID);
+		paySignMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);
+		paySignMap.put("timestamp", timestamp);
+		paySignMap.put("noncestr", noncestr);
+		paySignMap.put("package", finalPackageText);
 
-		String sign = WxAuthUtil.combineWxPaySignText(signMap);
-
-		System.out.println("sign: " + sign);
-		System.out.println("sign: " + Sha1Util.getSha1(sign));
+		String paySign = WxAuthUtil.paySign(paySignMap);
 		
 		
 		WxPayItemJsObj itemJsObj = new WxPayItemJsObj();
@@ -131,7 +122,7 @@ public class WxPayController {
 		itemJsObj.setNonceStr(noncestr);
 		itemJsObj.setPackageValue(finalPackageText);
 		itemJsObj.setSignType("SHA1");
-		itemJsObj.setPaySign(Sha1Util.getSha1(sign));
+		itemJsObj.setPaySign(paySign);
         model.addAttribute("itemJsObj", itemJsObj);
         
         //构造address
@@ -144,7 +135,7 @@ public class WxPayController {
 		addressMap.put("timestamp", timestamp);
 		addressMap.put("noncestr", noncestr);
 		addressMap.put("url", "http://wxmp.1758.com/wxpay/buy");
-		String addressSign = WxAuthUtil.combineWxPaySignText(addressMap);
+		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
 		model.addAttribute("addressSign", addressSign);
 		
 		return "wxpay/buy";
@@ -155,7 +146,7 @@ public class WxPayController {
 	////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "/jspayNotify")
-	public String jspayNotify(Model model, WxPayOrderRequest wxOrderRequest, @RequestBody String xml, HttpServletRequest request, HttpServletResponse response) {
+	public String jspayNotify(Model model, WxPayOrderNotify wxOrderRequest, @RequestBody String xml, HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("=====jspayNotify====");
 		System.out.println("=====jspayNotify xml===="+xml);
 		@SuppressWarnings("unchecked")
@@ -167,7 +158,7 @@ public class WxPayController {
 			}
 		}
 		if(wxOrderRequest!=null && xml!=null){
-			WxPayOrderRequest tempXmlOrder = parseWxOrderXml(xml);
+			WxPayOrderNotify tempXmlOrder = parseWxOrderXml(xml);
 			if(tempXmlOrder!=null){
 				wxOrderRequest.setOpenId(tempXmlOrder.getOpenId());
 			}
@@ -213,7 +204,7 @@ public class WxPayController {
 		System.out.println("=====alarm====");
 		System.out.println("=====alarm xml===="+xml);
 		//TODO 解析告警的数据
-		WxPayAlarmRequest alarmRequest = parseWxAlarmXml(xml);
+		WxPayAlarmNotify alarmRequest = parseWxAlarmXml(xml);
 		int result = wxPayService.receiverAlarm(alarmRequest);
 		if(result>0){
 			return "success";
@@ -233,7 +224,7 @@ public class WxPayController {
 	public String rights(Model model, @RequestBody String xml, HttpServletRequest request) {
 		System.out.println("=====rights====");
 		//解析投诉的数据
-		WxComplaintRequest complaintRequest = parseWxComplaintXml(xml);
+		WxComplaintNotify complaintRequest = parseWxComplaintXml(xml);
 		int result = wxPayService.receiverComplaint(complaintRequest);
 		if(result>0){
 			return "success";
@@ -269,15 +260,15 @@ public class WxPayController {
 	 * @param xml
 	 * @return
 	 */
-	private static WxPayOrderRequest parseWxOrderXml(String xml){
-		WxPayOrderRequest orderRequest = null;
+	private static WxPayOrderNotify parseWxOrderXml(String xml){
+		WxPayOrderNotify orderRequest = null;
 		Element ele;
 		try {
 			ele = DocumentHelper.parseText(xml).getRootElement();
 			String openId = ele.elementText("OpenId");
 //			String IsSubscribe = ele.elementText("IsSubscribe");
 			
-			orderRequest = new WxPayOrderRequest();
+			orderRequest = new WxPayOrderNotify();
 			orderRequest.setOpenId(openId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -291,8 +282,8 @@ public class WxPayController {
 	 * @param xml
 	 * @return
 	 */
-	private static WxComplaintRequest parseWxComplaintXml(String xml){
-		WxComplaintRequest complaintRequest = null;
+	private static WxComplaintNotify parseWxComplaintXml(String xml){
+		WxComplaintNotify complaintRequest = null;
 		Element ele;
 		try {
 			ele = DocumentHelper.parseText(xml).getRootElement();
@@ -306,7 +297,7 @@ public class WxPayController {
 			String solution = ele.elementText("Solution");
 			String extInfo = ele.elementText("ExtInfo");
 			
-			complaintRequest = new WxComplaintRequest();
+			complaintRequest = new WxComplaintNotify();
 			complaintRequest.setAppId(appId);
 			complaintRequest.setOpenId(openId);
 			complaintRequest.setTimestamp(timeStamp);
@@ -328,8 +319,8 @@ public class WxPayController {
 	 * @param xml
 	 * @return
 	 */
-	private static WxPayAlarmRequest parseWxAlarmXml(String xml){
-		WxPayAlarmRequest alarmRequest = null;
+	private static WxPayAlarmNotify parseWxAlarmXml(String xml){
+		WxPayAlarmNotify alarmRequest = null;
 		Element ele;
 		try {
 			ele = DocumentHelper.parseText(xml).getRootElement();
@@ -337,7 +328,7 @@ public class WxPayController {
 			String description = ele.elementText("Description");
 			String alarmContent = ele.elementText("AlarmContent");
 			
-			alarmRequest = new WxPayAlarmRequest();
+			alarmRequest = new WxPayAlarmNotify();
 			alarmRequest.setErrorType(errorType);
 			alarmRequest.setDescription(description);
 			alarmRequest.setAlarmContent(alarmContent);
@@ -356,7 +347,7 @@ public class WxPayController {
 		addressMap.put("timestamp", "1384841012");
 		addressMap.put("noncestr", "123456");
 		addressMap.put("url", "http://open.weixin.qq.com/");
-		String addressSign = WxAuthUtil.combineWxPaySignText(addressMap);
+		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
 		
 		
 		String example = "accesstoken=OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA&appid=wx17ef1eaef46752cb&noncestr=123456&timestamp=1384841012&url=http://open.weixin.qq.com/";

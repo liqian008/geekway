@@ -1,4 +1,4 @@
-package com.tenpay.util;
+package com.wxap.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,10 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class TenpayUtil {
 	
+	private static Object Server;
+	private static String QRfromGoogle;
+
 	/**
-	 * °Ñ¶ÔÏó×ª»»³É×Ö·û´®
+	 * æŠŠå¯¹è±¡è½¬æ¢æˆå­—ç¬¦ä¸²
 	 * @param obj
-	 * @return String ×ª»»³É×Ö·û´®,Èô¶ÔÏóÎªnull,Ôò·µ»Ø¿Õ×Ö·û´®.
+	 * @return String è½¬æ¢æˆå­—ç¬¦ä¸²,è‹¥å¯¹è±¡ä¸ºnull,åˆ™è¿”å›ç©ºå­—ç¬¦ä¸².
 	 */
 	public static String toString(Object obj) {
 		if(obj == null)
@@ -22,11 +25,11 @@ public class TenpayUtil {
 	}
 	
 	/**
-	 * °Ñ¶ÔÏó×ª»»ÎªintÊıÖµ.
+	 * æŠŠå¯¹è±¡è½¬æ¢ä¸ºintæ•°å€¼.
 	 * 
 	 * @param obj
-	 *            °üº¬Êı×ÖµÄ¶ÔÏó.
-	 * @return int ×ª»»ºóµÄÊıÖµ,¶Ô²»ÄÜ×ª»»µÄ¶ÔÏó·µ»Ø0¡£
+	 *            åŒ…å«æ•°å­—çš„å¯¹è±¡.
+	 * @return int è½¬æ¢åçš„æ•°å€¼,å¯¹ä¸èƒ½è½¬æ¢çš„å¯¹è±¡è¿”å›0ã€‚
 	 */
 	public static int toInt(Object obj) {
 		int a = 0;
@@ -40,7 +43,7 @@ public class TenpayUtil {
 	}
 	
 	/**
-	 * »ñÈ¡µ±Ç°Ê±¼ä yyyyMMddHHmmss
+	 * è·å–å½“å‰æ—¶é—´ yyyyMMddHHmmss
 	 * @return String
 	 */ 
 	public static String getCurrTime() {
@@ -51,7 +54,7 @@ public class TenpayUtil {
 	}
 	
 	/**
-	 * »ñÈ¡µ±Ç°ÈÕÆÚ yyyyMMdd
+	 * è·å–å½“å‰æ—¥æœŸ yyyyMMdd
 	 * @param date
 	 * @return String
 	 */
@@ -62,11 +65,11 @@ public class TenpayUtil {
 	}
 	
 	/**
-	 * È¡³öÒ»¸öÖ¸¶¨³¤¶È´óĞ¡µÄËæ»úÕıÕûÊı.
+	 * å–å‡ºä¸€ä¸ªæŒ‡å®šé•¿åº¦å¤§å°çš„éšæœºæ­£æ•´æ•°.
 	 * 
 	 * @param length
-	 *            int Éè¶¨ËùÈ¡³öËæ»úÊıµÄ³¤¶È¡£lengthĞ¡ÓÚ11
-	 * @return int ·µ»ØÉú³ÉµÄËæ»úÊı¡£
+	 *            int è®¾å®šæ‰€å–å‡ºéšæœºæ•°çš„é•¿åº¦ã€‚lengthå°äº11
+	 * @return int è¿”å›ç”Ÿæˆçš„éšæœºæ•°ã€‚
 	 */
 	public static int buildRandom(int length) {
 		int num = 1;
@@ -81,11 +84,12 @@ public class TenpayUtil {
 	}
 	
 	/**
-	 * »ñÈ¡±àÂë×Ö·û¼¯
+	 * è·å–ç¼–ç å­—ç¬¦é›†
 	 * @param request
 	 * @param response
 	 * @return String
 	 */
+
 	public static String getCharacterEncoding(HttpServletRequest request,
 			HttpServletResponse response) {
 		
@@ -105,8 +109,21 @@ public class TenpayUtil {
 		return enc;
 	}
 	
+	public  static String URLencode(String content){
+		
+		String URLencode;
+		
+		URLencode= replace(Server.equals(content), "+", "%20");
+		
+		return URLencode;
+	}
+	private static String replace(boolean equals, String string, String string2) {
+		
+		return null;
+	}
+
 	/**
-	 * »ñÈ¡unixÊ±¼ä£¬´Ó1970-01-01 00:00:00¿ªÊ¼µÄÃëÊı
+	 * è·å–unixæ—¶é—´ï¼Œä»1970-01-01 00:00:00å¼€å§‹çš„ç§’æ•°
 	 * @param date
 	 * @return long
 	 */
@@ -117,16 +134,41 @@ public class TenpayUtil {
 		
 		return date.getTime()/1000;
 	}
-		
+	
+	 public static String QRfromGoogle(String chl)
+	    {
+	        int widhtHeight = 300;
+	        String EC_level = "L";
+	        int margin = 0;
+	        String QRfromGoogle;
+	        chl = URLencode(chl);
+	        
+	        QRfromGoogle = "http://chart.apis.google.com/chart?chs=" + widhtHeight + "x" + widhtHeight + "&cht=qr&chld=" + EC_level + "|" + margin + "&chl=" + chl;
+	       
+	        return QRfromGoogle;
+	    }
+
 	/**
-	 * Ê±¼ä×ª»»³É×Ö·û´®
-	 * @param date Ê±¼ä
-	 * @param formatType ¸ñÊ½»¯ÀàĞÍ
+	 * æ—¶é—´è½¬æ¢æˆå­—ç¬¦ä¸²
+	 * @param date æ—¶é—´
+	 * @param formatType æ ¼å¼åŒ–ç±»å‹
 	 * @return String
 	 */
 	public static String date2String(Date date, String formatType) {
 		SimpleDateFormat sdf = new SimpleDateFormat(formatType);
 		return sdf.format(date);
 	}
-
+	
 }
+	
+	
+
+
+
+
+
+
+
+
+
+

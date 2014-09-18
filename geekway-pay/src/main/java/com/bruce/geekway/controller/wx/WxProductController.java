@@ -27,7 +27,6 @@ import com.bruce.geekway.utils.Sha1Util;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 @Controller
-@RequestMapping(value = "/product")
 public class WxProductController {
 	
 	@Autowired
@@ -68,20 +67,37 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/product/{productSkuId}")
-	public String productInfo(Model model, @PathVariable int productSkuId, HttpServletRequest request) {
-		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
-		model.addAttribute("productSku", productSku);
+	@RequestMapping(value = "/product/{productId}")
+	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
+		WxProduct product = wxProductService.loadById(productId);
+		model.addAttribute("product", product);
 		
-		int productId = productSku.getProductId();
 		//获取该商品其他sku信息，以便用户选择
 		List<WxSkuPropValue> skuPropValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
-		
-		
 		model.addAttribute("skuPropValueList", skuPropValueList);
 		
 		return "product/productInfo";
 	}
+	
+	
+//	/**
+//	 * 产品sku信息
+//	 * @param model
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/product/{productId}_{productSkuId}")
+//	public String productSkuInfo(Model model,  @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
+//		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
+//		model.addAttribute("productSku", productSku);
+//		
+//		//获取该商品其他sku信息，以便用户选择
+//		List<WxSkuPropValue> skuPropValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
+//		
+//		model.addAttribute("skuPropValueList", skuPropValueList);
+//		
+//		return "product/productInfo";
+//	}
 	
 	/**
 	 * 提交订单
@@ -120,14 +136,14 @@ public class WxProductController {
 	private String getWxPayPackage(SortedMap<String, String> paramMap) {
 		//首先第一步：对原串进行签名，注意这里不要对任何字段进行编码。这里是将参数按照key=value进行字典排序后组成下面的字符串,在这个字符串最后拼接上key=XXXX。由于这里的字段固定，因此只需要按照这个顺序进行排序即可。
 		//文档描述： 对所有传入参数按照字段名的 ASCII 码从小到大排序(字典序) 后,使用 URL 键值 对的格式(即 key1=value1&key2=value2...)拼接成字符串 string1,注意:值为空的参数不参与签名;
-		String packageText = WxAuthUtil.combineWxPayPackageText(paramMap);//得到string1
+		String packageText = WxAuthUtil.formatWxPayPackageText(paramMap);//得到string1
 		//文档描述： 在string1 最后拼接上key=paternerKey得到stringSignTemp 字符串,并对stringSignTemp进行md5运算 ,再将得到的字符串所有字符转换为大写,得到sign值signValue。
 		packageText = packageText+"&key="+ConstWeixin.WX_PAY_SIGN_KEY;
 		String md5Package = Md5Util.md5Encode(packageText).toUpperCase();//得到signValue
 		//然后第二步，对每个参数进行url转码
 
 		//然后进行最后一步，这里按照key＝value除了sign外进行字典序排序后组成下列的字符串,最后再串接sign=value
-		String encodedPackage = WxAuthUtil.combineWxPayUrlEncodeText(paramMap, true);
+		String encodedPackage = WxAuthUtil.formatWxPayUrlEncodeText(paramMap, true);
 		String finalPackage = encodedPackage + "&sign=" + md5Package;
 		return finalPackage;
 	}
@@ -149,7 +165,7 @@ public class WxProductController {
 		paramMap.put("package", packageText);
 		paramMap.put("timestamp", timestamp);
 		
-		String signText = WxAuthUtil.combineWxPayPackageText(paramMap);
+		String signText = WxAuthUtil.formatWxPayPackageText(paramMap);
 		
 		String finalSign = Sha1Util.getSha1(signText);
 		return finalSign;

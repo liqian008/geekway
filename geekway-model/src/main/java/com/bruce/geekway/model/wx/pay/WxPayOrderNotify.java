@@ -10,7 +10,7 @@ import com.bruce.geekway.model.WxPayOrderInfo;
  * @author liqian
  * 
  */
-public class WxPayOrderRequest {
+public class WxPayOrderNotify {
 
 	// 签名类型,取值:MD5、RSA,默 认:MD5
 	private String sign_type;
@@ -50,6 +50,17 @@ public class WxPayOrderRequest {
 	private int product_fee;
 	// 折扣价格,单位分,如果有值,通 知的total_fee + discount = 请求 的 total_fee
 	private int discount;
+	
+	private String is_split;
+	private String is_refund;
+	//查询结果状态码,0 表明成功,其他表明错误;
+	private String ret_code;
+	//查询结果出错信息
+	private String ret_msg;
+	//换算成人民币之后的总金额,单位为分,一般看 total_fee 即可
+	private String rmb_total_fee;
+
+
 
 	// 用户openid
 	private String openId;
@@ -65,7 +76,7 @@ public class WxPayOrderRequest {
 	// 签名方法
 	private String signMethod;
 
-	public static WxPayOrderInfo convert2WxPayOrderInfo(WxPayOrderRequest wxOrderInfo) {
+	public static WxPayOrderInfo convert2WxPayOrderInfo(WxPayOrderNotify wxOrderInfo) {
 		WxPayOrderInfo wxPayOrderInfo = null;
 		if (wxOrderInfo != null) {
 			wxPayOrderInfo = new WxPayOrderInfo();

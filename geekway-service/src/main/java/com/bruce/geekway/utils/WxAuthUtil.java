@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstWeixin;
+
 @Service
 public class WxAuthUtil {
 	
@@ -60,19 +62,54 @@ public class WxAuthUtil {
 		return result;
 	}
 	
+	/**
+	 * package的方式进行签名(先根据参数map先生成sign，再将sign拼接到package最后)
+	 * @param paramMap
+	 * @return
+	 */
+	public static String packageSign(SortedMap<String, String> paramMap){
+		if(paramMap!=null&&paramMap.size()>0){
+			//根据参数map先生成sign
+			String unsignPackageText = formatWxPayPackageText(paramMap) + "&key="+ConstWeixin.WX_PAY_PARTERN_KEY;//最后拼接key
+			String sign = Md5Util.md5Encode(unsignPackageText).toUpperCase();
+			//urlencode
+			String encodedPackageText = WxAuthUtil.formatWxPayUrlEncodeText(paramMap, true);
+			// 将sign拼接到package最后
+			return encodedPackageText + "&sign=" + sign;
+		}
+		return "";
+	}
+	
+	
+	/**
+	 * paySign的方式进行签名，无需额外提供
+	 * @param paramMap
+	 * @return
+	 */
+	public static String paySign(SortedMap<String, String> paramMap){
+		if(paramMap!=null&&paramMap.size()>0){
+			String unsignedStr = WxAuthUtil.formatWxPaySignText(paramMap);
+			return Sha1Util.getSha1(unsignedStr);
+		}
+		return "";
+	}
+	
+	
+	
 	
 	/**
 	 * 构造wxpay的原始package字符串（去除名为sign的参数）
 	 * @param paramMap
 	 * @return
 	 */
-	public static String combineWxPayPackageText(SortedMap<String, String> paramMap){
+	public static String formatWxPayPackageText(SortedMap<String, String> paramMap){
 		if(paramMap!=null&&paramMap.size()>0){
+			paramMap.remove("key");//key不参与package的生成
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: paramMap.entrySet()){
 				String key = entry.getKey();
 				String value = entry.getValue();
-				if(StringUtils.isBlank(value)||"sign".equals(key)){
+				if(StringUtils.isBlank(value)||"sign".equals(key)){////不参与签名的参数
 					continue;
 				}else{
 					sb.append(key+"="+value+"&");
@@ -91,14 +128,17 @@ public class WxAuthUtil {
 	 * @param urlEncode  value是否需要做urlencode
 	 * @return
 	 */
-	public static String combineWxPayUrlEncodeText(SortedMap<String, String> paramMap, boolean urlEncode) {
+	public static String formatWxPayUrlEncodeText(SortedMap<String, String> paramMap, boolean urlEncode) {
 		if(paramMap!=null&&paramMap.size()>0){
+			paramMap.remove("key");//key不参与package的生成
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: paramMap.entrySet()){
 				String key = entry.getKey();
 				String value = entry.getValue();
 				if(urlEncode){//需要urlencode
-					value = URLEncoder.encode(value);
+					if("sign".equals(key)){////不参与签名的参数
+						value = URLEncoder.encode(value);
+					}
 				}
 				sb.append(key.toLowerCase()+"="+value+"&");
 			}
@@ -116,13 +156,16 @@ public class WxAuthUtil {
 	 * @param paramMap
 	 * @return
 	 */
-	public static String combineWxPaySignText(SortedMap<String, String> paramMap) {
+	public static String formatWxPaySignText(SortedMap<String, String> paramMap) {
 		if(paramMap!=null&&paramMap.size()>0){
+			paramMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);//外部无需传入appkey
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: paramMap.entrySet()){
 				String key = entry.getKey();
 				String value = entry.getValue();
-				sb.append(key.toLowerCase()+"="+value+"&");
+				if(!"sign_method".equals(key)&&!"app_signature".equals(key)){//不参与签名的参数
+					sb.append(key.toLowerCase()+"="+value+"&");
+				}
 			}
 			sb.setLength(sb.length()-1);
 			return sb.toString();
@@ -141,7 +184,7 @@ public class WxAuthUtil {
 		paramMap.put("timeStamp", "1410514517");
 		paramMap.put("nonceStr", "otmNm11FbnPqkFEK");
 		
-		String flatStr = combineWxPaySignText(paramMap);
+		String flatStr = formatWxPaySignText(paramMap);
 		System.out.println(flatStr);
 		
 		String sign = Sha1Util.getSha1(flatStr);

@@ -14,7 +14,7 @@ String contextPath = request.getContextPath();
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 
-<title>美妞儿</title>
+<title>支付</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -55,6 +55,7 @@ String contextPath = request.getContextPath();
         
         <div class="content">
         	<div class="decoration"></div>
+            
             
             <div class="container">
                 <div class="slider-controls" data-snap-ignore="true">                
@@ -236,14 +237,7 @@ String contextPath = request.getContextPath();
             </div>
             
             <div class="decoration"></div>
-            
-            <div class="content-footer">
-            	<p class="copyright-content">Copyright 2013.<br> All rights reserved</p>
-                <a href="./#" class="go-up-footer"></a>
-                <a href="./#" class="facebook-footer"></a>
-                <a href="./#" class="twitter-footer"></a>
-                <div class="clear"></div>
-            </div> 
+            <jsp:include page="../inc/footer.jsp"></jsp:include>
             
               
         </div>                

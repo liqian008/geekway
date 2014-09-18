@@ -1,4 +1,4 @@
-package com.tenpay.util;
+package com.wxap.util;
 
 import java.security.MessageDigest;
 

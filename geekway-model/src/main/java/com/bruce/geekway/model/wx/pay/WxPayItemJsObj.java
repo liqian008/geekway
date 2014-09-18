@@ -1,7 +1,7 @@
 package com.bruce.geekway.model.wx.pay;
 
 /**
- * 商品js对象对象
+ * 商品js对象，在提交微信支付时构造
  * 
  * @author liqian
  * 

@@ -1,18 +1,24 @@
 package com.bruce.geekway.service.pay;
 
 import java.util.Date;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayOrderInfo;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
-import com.bruce.geekway.model.wx.pay.WxComplaintRequest;
+import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
-import com.bruce.geekway.model.wx.pay.WxPayOrderRequest;
-import com.bruce.geekway.model.wx.pay.WxPayAlarmRequest;
+import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
+import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
+import com.bruce.geekway.model.wx.pay.WxPayOrderNotify;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
+import com.bruce.geekway.utils.DateUtil;
+import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
  * 微信支付service
@@ -36,7 +42,7 @@ public class IWxPayService{
 	 * @param wxOrderInfo 
 	 * @return
 	 */
-	public int receiverOrder(WxPayOrderRequest wxOrderInfo){
+	public int receiverOrder(WxPayOrderNotify wxOrderInfo){
 		
 		int result = 0;
 		
@@ -44,7 +50,7 @@ public class IWxPayService{
 		boolean signValid = true;
 		if(signValid){
 			//保存订单，TODO 检查重复订单
-			WxPayOrderInfo orderInfo = WxPayOrderRequest.convert2WxPayOrderInfo(wxOrderInfo);
+			WxPayOrderInfo orderInfo = WxPayOrderNotify.convert2WxPayOrderInfo(wxOrderInfo);
 			if(orderInfo!=null){
 				result = wxPayOrderInfoService.save(orderInfo);
 			}
@@ -55,10 +61,41 @@ public class IWxPayService{
 	
 	/**
 	 * 查询微信订单
+	 * @param outTradeNo
 	 * @return
 	 */
-	public int queryWxOrder(){
+	public int queryWxOrder(String outTradeNo){
+		
+		SortedMap<String, String> packageMap = new TreeMap<String, String>();
+		packageMap.put("out_trade_no", outTradeNo);
+		packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);
+		
+		String packageValue = WxAuthUtil.packageSign(packageMap);
+		String timestamp = String.valueOf(DateUtil.getUnixTime(new Date()));
+		
+		WxOrderQueryRequest orderRequest= new WxOrderQueryRequest();
+		orderRequest.setAppid(ConstWeixin.WX_APP_ID);
+		orderRequest.setTimestamp(timestamp);
+		orderRequest.setPackageValue(packageValue);
+		orderRequest.setSign_method("SHA1");
+		
+		SortedMap<String, String> paySignMap = new TreeMap<String, String>();
+		paySignMap.put("appid", outTradeNo);
+		paySignMap.put("package", packageValue);
+		paySignMap.put("timestamp", timestamp);
+		//使用paySign签名生成appSignature
+		String appSignature = WxAuthUtil.paySign(paySignMap);
+		
+		orderRequest.setApp_signature(appSignature);
+		
+		//提交微信查询
+		WxJsonResult result = wxMpPayService.queryOrder(orderRequest);
+		if(result!=null){
+			//微信提交成功，解析返回结果
+		}
 		return 0;
+		
+		
 	}
 	
 	
@@ -66,7 +103,7 @@ public class IWxPayService{
 	 * 接收微信的投诉消息
 	 * @return
 	 */
-	public int receiverComplaint(WxComplaintRequest wxComplateRequest){
+	public int receiverComplaint(WxComplaintNotify wxComplateRequest){
 		int result = 0;
 		if(wxComplateRequest!=null){
 			String msgType = wxComplateRequest.getMsgType();
@@ -107,7 +144,7 @@ public class IWxPayService{
 	 * 接收微信的告警消息
 	 * @return 
 	 */
-	public int receiverAlarm(WxPayAlarmRequest alarmRequest){
+	public int receiverAlarm(WxPayAlarmNotify alarmRequest){
 		if(alarmRequest!=null){
 			WxPayAlarm wxPayAlarm = new WxPayAlarm();
 			
