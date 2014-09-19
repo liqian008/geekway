@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.service.product.IWxProductService;
 
+/**
+ * 个人订单
+ * @author liqian
+ *
+ */
 @Controller
 public class WxProductOrderController {
 	

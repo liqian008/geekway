@@ -11,10 +11,17 @@ public class DateUtil {
 	public static long TIME_UNIT_DAY = TIME_UNIT_HOUR*24;
 	
 	public static final SimpleDateFormat DATE_FORMAT_YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public static final SimpleDateFormat DATE_FORMAT_YMDHMS_COMPACT = new SimpleDateFormat("yyyyMMddHHmmss");
 	
 	public static final SimpleDateFormat DATE_FORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
+	public static final SimpleDateFormat DATE_FORMAT_YMD_COMPACT = new SimpleDateFormat("yyyyMMdd");
 	
 	
+	/**
+	 * 返回格式 yyyy-MM-dd
+	 * @param date
+	 * @return
+	 */
 	public static String date2YMD(Date date){
 		if(date!=null){
 			return DATE_FORMAT_YMD.format(date);
@@ -22,12 +29,71 @@ public class DateUtil {
 		return null;
 	}
 	
-	public static String date2YMDHMS(Date date){
+	/**
+	 * 返回格式 yyyyMMdd
+	 * @param date
+	 * @return
+	 */
+	public static String date2CompactYMD(Date date){
 		if(date!=null){
-			return DATE_FORMAT_YMDHMS.format(date);
+			return DATE_FORMAT_YMD_COMPACT.format(date);
 		}
 		return null;
 	}
+	
+	/**
+	 * 返回格式为yyyy-MM-dd HH:mm:ss
+	 * @param date
+	 * @return
+	 */
+	public static String date2YMDHMS(Date date){
+		if(date!=null){
+			return DATE_FORMAT_YMDHMS_COMPACT.format(date);
+		}
+		return null;
+	}
+	
+	/**
+	 * 返回格式为yyyyMMddHHmmss
+	 * @param date
+	 * @return
+	 */
+	public static String date2CompactYMDHMS(Date date){
+		if(date!=null){
+			return DATE_FORMAT_YMDHMS_COMPACT.format(date);
+		}
+		return null;
+	}
+	
+	/**
+	 * 格式化时间
+	 * @param date
+	 * @param formatter
+	 * @return
+	 */
+	public static String formatDate(Date date, String formatter){
+		SimpleDateFormat sdf = new SimpleDateFormat(formatter);
+		try{
+			return sdf.format(date);
+		}catch(Exception e){
+			return null;
+		}
+	}
+	
+	/**
+	 * 格式化现在时间
+	 * @param formatter
+	 * @return
+	 */
+	public static String formatNow(String formatter){
+		SimpleDateFormat sdf = new SimpleDateFormat(formatter);
+		try{
+			return sdf.format(new Date());
+		}catch(Exception e){
+			return null;
+		}
+	}
+	
 	
 	public static Date calcDatetime(Date date, int days){
 		if(date!=null){

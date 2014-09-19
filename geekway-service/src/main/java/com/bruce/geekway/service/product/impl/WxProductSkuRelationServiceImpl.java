@@ -87,6 +87,9 @@ public class WxProductSkuRelationServiceImpl implements IWxProductSkuRelationSer
 	
 	@Override
 	public int saveProductSkuRelations(int productId, List<Integer> skuPropValueIds) {
+		//清除原productSkuRelation数据
+		deleteByProductId(productId);
+		
 		int result = 0;
 		if(productId>0&&skuPropValueIds!=null&&skuPropValueIds.size()>0){
 			Date currentTime = new Date();

@@ -71,9 +71,6 @@ public class WxPayController {
 	@RequestMapping(value = "/buy")
 	public String buy(Model model, HttpServletRequest request, HttpServletResponse response) {
 		
-		
-		
-
 		String banktype = "WX";
 		String body = "包笑公堂-爆破镖";// 商品名称信息，这里由测试网页填入。
 		String fee_type = "1";// 费用类型，这里1为默认的人民币
@@ -130,11 +127,9 @@ public class WxPayController {
 		String userAccessToken = (String)session.getAttribute("userAccessToken");
 		
 		SortedMap<String, String> addressMap = new TreeMap<String, String>();
-		addressMap.put("appid", ConstWeixin.WX_APP_ID);
 		addressMap.put("accessToken", userAccessToken);
 		addressMap.put("timestamp", timestamp);
 		addressMap.put("noncestr", noncestr);
-		addressMap.put("url", "http://wxmp.1758.com/wxpay/buy");
 		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
 		model.addAttribute("addressSign", addressSign);
 		
@@ -237,7 +232,7 @@ public class WxPayController {
 	// //////////////////////////////////////////////////////
 
 	/**
-	 * 调用发货接口
+	 * 调用发货接口(通常应在后台服务中调用)
 	 * 
 	 * @param model
 	 * @param xml

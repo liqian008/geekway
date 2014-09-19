@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -17,8 +18,6 @@ import com.bruce.geekway.constants.ConstWeixin;
 
 @Service
 public class WxAuthUtil {
-	
-//	public static String weixinToken = ConfigUtil.getString("weixinmp_devmode_token");
 	
 	private static final Logger log = LoggerFactory.getLogger(WxAuthUtil.class);
 
@@ -95,18 +94,17 @@ public class WxAuthUtil {
 	}
 	
 	
-	
-	
 	/**
 	 * 构造wxpay的原始package字符串（去除名为sign的参数）
-	 * @param paramMap
+	 * @param packageMap
 	 * @return
 	 */
-	public static String formatWxPayPackageText(SortedMap<String, String> paramMap){
-		if(paramMap!=null&&paramMap.size()>0){
-			paramMap.remove("key");//key不参与package的生成
+	public static String formatWxPayPackageText(SortedMap<String, String> packageMap){
+		if(packageMap!=null&&packageMap.size()>0){
+			packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);//无需外部传入partner
+			packageMap.remove("key");//key不参与package的生成
 			StringBuilder sb = new StringBuilder();
-			for(Entry<String, String> entry: paramMap.entrySet()){
+			for(Entry<String, String> entry: packageMap.entrySet()){
 				String key = entry.getKey();
 				String value = entry.getValue();
 				if(StringUtils.isBlank(value)||"sign".equals(key)){////不参与签名的参数
@@ -123,16 +121,17 @@ public class WxAuthUtil {
 	
 	/**
 	 * 将所有参数字典表排序，做urlencode后组成一个串（参数名改为小写）
-	 * @param paramMap
+	 * @param packageMap
 	 * @param ignoreBlankValue  是否忽略空数据的字段
 	 * @param urlEncode  value是否需要做urlencode
 	 * @return
 	 */
-	public static String formatWxPayUrlEncodeText(SortedMap<String, String> paramMap, boolean urlEncode) {
-		if(paramMap!=null&&paramMap.size()>0){
-			paramMap.remove("key");//key不参与package的生成
+	public static String formatWxPayUrlEncodeText(SortedMap<String, String> packageMap, boolean urlEncode) {
+		if(packageMap!=null&&packageMap.size()>0){
+			packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);//无需外部传入partner
+			packageMap.remove("key");//key不参与package的生成
 			StringBuilder sb = new StringBuilder();
-			for(Entry<String, String> entry: paramMap.entrySet()){
+			for(Entry<String, String> entry: packageMap.entrySet()){
 				String key = entry.getKey();
 				String value = entry.getValue();
 				if(urlEncode){//需要urlencode
@@ -159,6 +158,7 @@ public class WxAuthUtil {
 	public static String formatWxPaySignText(SortedMap<String, String> paramMap) {
 		if(paramMap!=null&&paramMap.size()>0){
 			paramMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);//外部无需传入appkey
+			paramMap.put("appid", ConstWeixin.WX_APP_ID);//外部无需传入appid
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: paramMap.entrySet()){
 				String key = entry.getKey();
@@ -172,6 +172,30 @@ public class WxAuthUtil {
 		}
 		return "";
 	}
+	
+	/**
+	 * 生成指定长度的nonce随机串
+	 * @param length
+	 * @return
+	 */
+	public static String createNoncestr(int length) {
+		String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		String res = "";
+		for (int i = 0; i < length; i++) {
+			Random rd = new Random();
+			res += chars.indexOf(rd.nextInt(chars.length() - 1));
+		}
+		return res;
+	}
+	
+	/**
+	 * 生成长度16的nonce随机串
+	 * @return
+	 */
+	public static String createNoncestr() {
+		return createNoncestr(16);
+	}
+	
 	
 	public static void main(String[] args) {
 		

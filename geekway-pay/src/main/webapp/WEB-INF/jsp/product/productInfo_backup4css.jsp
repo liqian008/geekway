@@ -35,7 +35,7 @@ String contextPath = request.getContextPath();
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/custom.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
+
 
 </head>
 <body>
@@ -82,9 +82,8 @@ String contextPath = request.getContextPath();
             
             <div class="container" id="product-intro">
             	<ul id="choose">
-            		<li><span id="originPrice" class="text-highlight highlight-dark">原 价</span><del>20.00元</del></li>
-	            	<li><span id="price" class="text-highlight highlight-red">现 价</span>10.00元</li>
-	            	<li><span id="leftAmount" class="text-highlight highlight-yellow">库 存</span>1 件</li>
+            		<li><span class="text-highlight highlight-dark">原 价</span><del>20.00元</del></li>
+	            	<li><span class="text-highlight highlight-red">现 价</span>10.00元</li>
 	            	
 	            	<%
 	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
@@ -97,9 +96,8 @@ String contextPath = request.getContextPath();
 							List<WxSkuPropValue> colorSkuValueList = skuGroupMap.get(1);
 							for(WxSkuPropValue skuPropValue : colorSkuValueList){
 								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
 							%>	            		
-	            			<div class="item" data="<%=propertyName%>">
+	            			<div class="item">
 	            				<b></b>
 	            				<a href="#none" title="<%=displayName%>">
 			            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="<%=displayName%> ">
@@ -121,10 +119,18 @@ String contextPath = request.getContextPath();
 							List<WxSkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
 							for(WxSkuPropValue skuPropValue : sizeSkuValueList){
 								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";"; 
 							%>	  
-	            			<div class="item" data="<%=propertyName%>"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
+	            			<div class="item"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
 	            			<%}%>
+	            			<!-- 
+	            			<div class="item"><b></b><a href="#none" title="38" style="cursor: pointer;">38</a></div>
+	            			<div class="item"><b></b><a href="#none" title="38.5" style="cursor: pointer;">38.5</a></div>
+	            			<div class="item  selected"><b></b><a href="#none" title="39.5" style="cursor: pointer;">39.5</a></div>
+	            			<div class="item"><b></b><a href="#none" title="40" style="cursor: pointer;">40</a></div>
+	            			<div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">42</a></div>
+	            			<div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">42.5</a></div>
+	            			<div class="item disabled"><b style="display: none;"></b><i></i><a href="#none" title="所选颜色该尺码商品在该地区无货" style="cursor: not-allowed;">43</a></div>
+	            			 -->
 	            		</div>
 	            	</li>
 	            	<%}%>
@@ -138,48 +144,15 @@ String contextPath = request.getContextPath();
 								String key = productSkuEntry.getKey();
 								String value = productSkuEntry.getValue();
 						%>
-						var skuPropValueJson = <%=value%>;
-						skuMap.put('<%=key%>', skuPropValueJson);
+						var skuJson = <%=value%>;
+						skuMap.put('<%=key%>', value);
 						<%}
 						}%>
 						//选定时检查二维数组的数据
 						//var skuObj = skuMap.get("selectedKey");//根据选定的key查询
-						
-						$("#choose-color .item").click(function(){
-							$("#choose-color .item").removeClass("selected");
-							$(this).addClass("selected");
-							
-							var colorProperty = $(this).attr("data");
-							var sizeProperty = $("#choose-version .selected").attr("data");
-							if(colorProperty!=null && sizeProperty!=null){
-								var propertiesName = colorProperty + sizeProperty;
-								var productJson = skuMap.get(propertiesName);
-								reloadProductInfo(productJson);
-							}
-						});
-						
-						$("#choose-version .item").click(function(){
-							$("#choose-version .item").removeClass("selected");
-							$(this).addClass("selected");
-							
-							var colorProperty = $("#choose-color .selected").attr("data");
-							var sizeProperty = $(this).attr("data");
-							if(colorProperty!=null && sizeProperty!=null){
-								var propertiesName = colorProperty + sizeProperty;
-								var productJson = skuMap.get(propertiesName);
-								reloadProductInfo(productJson);
-							}
-						});
-						
-						function reloadProductInfo(productJson){
-							if(productJson!=null){
-								$("#price").text(productJson.price);//刷新价格
-								$("#leftAmount").text(productJson.num);//刷新库存 
-								if(productJson.num>0&&productJson.price>0){//刷新购买&购物车按钮
-									
-								}
-							}
-						}
+						//刷新价格
+						//刷新库存
+						//刷新购买按钮
 					</script>
 	            	
 	            	<li><span class="text-highlight highlight-blue">购买数量</span>1件</li>
