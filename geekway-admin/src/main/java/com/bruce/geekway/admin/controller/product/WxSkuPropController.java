@@ -39,32 +39,32 @@ public class WxSkuPropController {
 		return "product/skuPropList";
 	}
 	
-	/**
-	 * 添加产品的预操作（需要先选择产品分类）
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/skuPropPreAdd")
-	public String skuPropPreAdd(Model model, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		//查询出所有分类，以供用户选择产品所属分类
-		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
-		
-		model.addAttribute("skuProp", new WxSkuProp());
-		model.addAttribute("categoryList", categoryList);
-		return "product/skuPropPreAdd";
-	}
+//	/**
+//	 * 添加产品的预操作（需要先选择产品分类）
+//	 * @param model
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/skuPropPreAdd")
+//	public String skuPropPreAdd(Model model, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		//查询出所有分类，以供用户选择产品所属分类
+//		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
+//		
+//		model.addAttribute("skuProp", new WxSkuProp());
+//		model.addAttribute("categoryList", categoryList);
+//		return "product/skuPropPreAdd";
+//	}
 	
 	@RequestMapping("/skuPropAdd")
-	public String skuPropAdd(Model model, int categoryId, WxSkuProp skuProp, HttpServletRequest request) {
+	public String skuPropAdd(Model model,  WxSkuProp skuProp, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
 		if(skuProp!=null){
-			skuProp.setCategoryId(categoryId);
+			skuProp.setSkuCategoryId(1);
 		}
 		
 		

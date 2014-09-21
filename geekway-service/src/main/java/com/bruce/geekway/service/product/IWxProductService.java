@@ -13,4 +13,5 @@ public interface IWxProductService extends IFoundationService<WxProduct, Integer
 	 * @return
 	 */
 	public List<WxProduct> queryAvailableList();
+
 }

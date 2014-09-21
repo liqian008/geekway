@@ -47,6 +47,8 @@
 	<!-- wx product service -->
 	<bean id="wxProductCategoryService" class="com.bruce.geekway.service.product.impl.WxProductCategoryServiceImpl">
 	</bean>
+	<bean id="wxProductTagService" class="com.bruce.geekway.service.product.impl.WxProductTagServiceImpl">
+	</bean>
 	<bean id="wxProductService" class="com.bruce.geekway.service.product.impl.WxProductServiceImpl">
 	</bean>
 	<bean id="wxProductSkuService" class="com.bruce.geekway.service.product.impl.WxProductSkuServiceImpl">

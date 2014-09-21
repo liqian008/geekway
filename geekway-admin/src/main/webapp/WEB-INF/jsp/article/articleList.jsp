@@ -139,7 +139,7 @@
 		                        </td>
 		                        <td><%=article.getTitle()%></td>
 		                        <td><%=article.getShortTitle()%></td>
-		                        <td><a href='<%=ArticleLinkUtil.getArticleLink(article.getId())%>' target="_blank">预览</a></td>
+		                        <td><a href='<%=ProductLinkUtil.getArticleLink(article.getId())%>' target="_blank">预览</a></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bruce.geekway.dao.mapper.WxProductSkuMapper">
+
+	<select id="fallLoadCategoryProductSkuList" resultMap="BaseResultMap">
+		select id, product_id, name, origin_price, price, amount, sku_pic_url,
+		sku_thumb_pic_url, create_time, update_time
+		from wx_product_sku
+		where
+		<if test="categoryId > 0">
+			category_id=#{categoryId,jdbcType=INTEGER} and
+		</if>
+		<if test="productTailId > 0">
+			product_id&lt;#{productTailId, jdbcType=INTEGER} and 
+		</if>
+		price>0 and
+		amount>0
+		group by product_id
+		having sum(amount)>0 order by product_id desc limit #{limit};
+	</select>
+
+
+	<select id="fallLoadTagProductSkuList" resultMap="BaseResultMap">
+		select id, product_id, name, origin_price, price, amount, sku_pic_url,
+		sku_thumb_pic_url, create_time, update_time
+		from wx_product_sku
+		where price>0 and amount>0
+		group by product_id having sum(amount)>0
+		order by create_time desc;
+	</select>
+</mapper>

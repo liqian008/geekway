@@ -38,9 +38,14 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxProductCategoryMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxProductMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuExtendMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxSkuPropMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxSkuPropValueMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuRelationMapper.xml" />
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxProductTagMapper.xml" />
+		
+		
 	</mappers>
 
 </configuration>

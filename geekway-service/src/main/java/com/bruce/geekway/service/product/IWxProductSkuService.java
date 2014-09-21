@@ -11,6 +11,13 @@ public interface IWxProductSkuService extends IFoundationService<WxProductSku, I
 	public List<WxProductSku> queryAllByProductId(int productId);
 	
 	public WxProductSku loadProductSku(int productId, int skuId);
+
+	/**
+	 * 组查询productSku，供搜索使用
+	 * @param example
+	 * @return
+	 */
+	List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit);
 	
 //	public int queryCountBySkuPropValueId(int skuPropValueId);
 	

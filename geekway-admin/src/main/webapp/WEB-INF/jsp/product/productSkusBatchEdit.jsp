@@ -166,9 +166,9 @@
 							<div class="col-sm-3">
 								<div class="input-group">
 									<span class="input-group-btn">
-										<button class="btn btn-default" type="button">数量(个)</button>
+										<button class="btn btn-default" type="button">库存(个)</button>
 									</span>
-									<input type="text" class="form-control" name="skuNum_<%=productSku.getId()%>" value="<%=productSku.getNum()%>">
+									<input type="text" class="form-control" name="skuAmount_<%=productSku.getId()%>" value="<%=productSku.getAmount()%>">
 								</div>
 							</div>
 							

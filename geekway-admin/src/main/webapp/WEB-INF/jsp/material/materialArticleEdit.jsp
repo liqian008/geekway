@@ -191,7 +191,8 @@
 							<div class="col-sm-6">
 								<label class="control-label">
 									<%
-									String meterialLink = ArticleLinkUtil.getArticleLink(materialArticle.getId());%>
+										String meterialLink = ProductLinkUtil.getArticleLink(materialArticle.getId());
+									%>
 									<%=meterialLink%>
 									<a href="<%=meterialLink%>" target="_blank" id="changeMaterial"><span class="label label-info">预 览</span></a>
 								</label>

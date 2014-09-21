@@ -2,6 +2,10 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 
+<%
+String contextPath = request.getContextPath();
+%>
+
 
 <!DOCTYPE HTML>
 <head>
@@ -36,11 +40,19 @@
 
 <div class="all-elements">
 	<jsp:include page="../inc/sidebar.jsp"></jsp:include>
-
+	
+	<%
+	int tagId = 0;
+	WxProductTag productTag = (WxProductTag)request.getAttribute("productTag");
+	if(productTag!=null){
+		tagId = productTag.getId();
+	}
+	%>
+	
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">three column folio</p>
+            <p class="bread-crumb"><%=productTag.getName()%></p>
             <a href="contact.html" class="deploy-contact"></a>
         </div>
         <div class="content-header">
@@ -52,73 +64,54 @@
         <div class="content">
         	<div class="decoration"></div>
 
-        	<div class="container no-bottom">
-                <div class="portfolio-item-thumb one-third">
-                    <a href="images/general-nature/2s.jpg">
-                        <img class="responsive-image" src="images/general-nature/1s.jpg" alt="img">
-                    </a>
-                    <h4>One</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consecr adipiscing elit. 
-                    </p>
-                </div>
-                <div class="portfolio-item-thumb one-third">
-                    <a href="images/general-nature/2s.jpg">
-                        <img class="responsive-image" src="images/general-nature/2s.jpg" alt="img">
-                    </a>
-                    <h4>Two</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consecr adipiscing elit. 
-                    </p>
-                </div>
-                <div class="portfolio-item-thumb one-third last-column">
-                    <a href="images/general-nature/1s.jpg">
-                        <img class="responsive-image" src="images/general-nature/3s.jpg" alt="img">
-                    </a>
-                    <h4>Three</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consecr adipiscing elit.  
-                    </p>
-                </div>
-                
-                <div class="decoration"></div>
-                
-                <div class="portfolio-item-thumb one-third">
-                    <a href="images/general-nature/2s.jpg">
-                        <img class="responsive-image" src="images/general-nature/4s.jpg" alt="img">
-                    </a>
-                    <h4>Four</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consecr adipiscing elit. 
-                    </p>
-                </div>
-                <div class="portfolio-item-thumb one-third">
-                    <a href="images/general-nature/2s.jpg">
-                        <img class="responsive-image" src="images/general-nature/5s.jpg" alt="img">
-                    </a>
-                    <h4>Five</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consecr adipiscing elit. 
-                    </p>
-                </div>
-                <div class="portfolio-item-thumb one-third last-column">
-                    <a href="images/general-nature/1s.jpg">
-                        <img class="responsive-image" src="images/general-nature/6s.jpg" alt="img">
-                    </a>
-                    <h4>Six</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consecr adipiscing elit.  
-                    </p>
-                </div> 
+        	<div class="container no-bottom" id="productsContainer">
         	</div>
-            
-            <div class="decoration"></div>      
+        	
+        	<div id="moreProductsContainer" class="container center-text">
+        		<a href="javascript:void(0)" id="moreProductsBtn" class="button button-turqoise">加载更多</a>
+        		
+        		<input type="hidden" id="tagId" name="tagId" value="<%=tagId%>"/>
+        		<input type="hidden" id="tailId" name="tailId" value="0"/>
+        	</div>
+        	
+            <div class="decoration"></div>
+
            	<jsp:include page="../inc/footer.jsp"></jsp:include>
            	
-           	 
-        </div>                
+        </div>
     </div>  
 </div>
 
 </body>
+
+<script>
+	fallLoad();
+
+  	$('#moreProductsBtn').click(function(){
+  		fallLoad();
+  	});
+  	
+  	function fallLoad(){
+  		//置为数据加载状态
+  		$('#moreProductsBtn').val("努力加载中...");
+  		$('#moreAlbumsBtn').attr("disabled","disabled");
+  		var tailId = $("#tailId").val();
+  		var jsonData = {'tagId' : '1', 'tailId' : tailId};
+  		$.post('<%=contextPath%>/moreProducts.json', jsonData, function(data) {
+  			var result = data.result;
+			if(result==1){
+				$("#productsContainer").append(data.data.html);
+ 				var nextTailId = data.data.tailId;
+   				$("#tailId").val(nextTailId);
+   				if(nextTailId<=0){//无更多数据，则隐藏按钮
+  					$('#moreProductsContainer').attr("style","display:none");
+  				}else{//还有更多数据，启用加载按钮
+  					$('#moreProductsBtn').removeAttr("disabled");
+  					$('#moreProductsBtn').val("加载更多...");
+  				}
+			}
+		})
+	}
+</script>
+
 </html>

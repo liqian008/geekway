@@ -178,7 +178,7 @@
 							</div> --%>
 							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="num" id="num" value="${productSku.num}"/>
+								<input type="text" class="form-control" name="amount" id="amount" value="${productSku.amount}"/>
 								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>

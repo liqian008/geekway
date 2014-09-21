@@ -129,7 +129,7 @@
 		                        	</a> 
 		                        </td>
 		                        <td>
-		                        	<a href="<%=ArticleLinkUtil.getNewsLink(materialNews.getId())%>" target="_blank"> 
+		                        	<a href="<%=ProductLinkUtil.getNewsLink(materialNews.getId())%>" target="_blank"> 
 									<span class="label label-success">预览</span> 
 									</a>	
 		                        </td>

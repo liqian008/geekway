@@ -82,12 +82,15 @@ String contextPath = request.getContextPath();
             
             <div class="container" id="product-intro">
             	<ul id="choose">
-            		<li><span id="originPrice" class="text-highlight highlight-dark">原 价</span><del>20.00元</del></li>
-	            	<li><span id="price" class="text-highlight highlight-red">现 价</span>10.00元</li>
-	            	<li><span id="leftAmount" class="text-highlight highlight-yellow">库 存</span>1 件</li>
+            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>20.00</del></span>元</li>
+	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">10.00</span>元</li>
+	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">1</span>件</li>
 	            	
 	            	<%
+	            	//选中的sku属性map
+	            	Map<String, String> selectedSkuValueMap = (Map<String, String>)request.getAttribute("selectedSkuValueMap");
 	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
+	            	
 	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
 	            	%>
 	            	<li id="choose-color" class="choose-color-shouji">
@@ -98,8 +101,10 @@ String contextPath = request.getContextPath();
 							for(WxSkuPropValue skuPropValue : colorSkuValueList){
 								String displayName = skuPropValue.getName();
 								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
+								
+								boolean selected = selectedSkuValueMap!=null&&String.valueOf(skuPropValue.getId()).equals(selectedSkuValueMap.get("1"));
 							%>	            		
-	            			<div class="item" data="<%=propertyName%>">
+	            			<div class="item <%=selected?"selected":""%>" data="<%=propertyName%>">
 	            				<b></b>
 	            				<a href="#none" title="<%=displayName%>">
 			            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="<%=displayName%> ">
@@ -121,9 +126,11 @@ String contextPath = request.getContextPath();
 							List<WxSkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
 							for(WxSkuPropValue skuPropValue : sizeSkuValueList){
 								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";"; 
-							%>	  
-	            			<div class="item" data="<%=propertyName%>"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
+								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
+								
+								boolean selected = selectedSkuValueMap!=null&&String.valueOf(skuPropValue.getId()).equals(selectedSkuValueMap.get("2"));
+							%>
+	            			<div class="item <%=selected?"selected":""%>" data="<%=propertyName%>"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
 	            			<%}%>
 	            		</div>
 	            	</li>
@@ -171,21 +178,35 @@ String contextPath = request.getContextPath();
 							}
 						});
 						
+						//点击购买操作
+						$("#buyEnable").click(function(){
+							alert("123");
+						});
+						
 						function reloadProductInfo(productJson){
 							if(productJson!=null){
+								$("#originPrice").html("<del>"+productJson.originPrice+"</del>");//刷新价格
 								$("#price").text(productJson.price);//刷新价格
-								$("#leftAmount").text(productJson.num);//刷新库存 
-								if(productJson.num>0&&productJson.price>0){//刷新购买&购物车按钮
-									
+								$("#leftAmount").text(productJson.amount);//刷新库存 
+								if(productJson.amount>0&&productJson.price>0){//刷新购买&购物车按钮
+									$("#buyEnable").show();
+									$("#buyDisable").hide();
+								}else{
+									$("#buyEnable").hide();
+									$("#buyDisable").show();
 								}
 							}
 						}
+						
+						
 					</script>
 	            	
 	            	<li><span class="text-highlight highlight-blue">购买数量</span>1件</li>
-	            	
             	</ul>
-                <a href="javascript:void(0)" class="button-big button-red">点击购买</a> 
+                <a href="javascript:void(0)" id="buyEnable" class="button-big button-green">点击购买</a>
+                <div class="static-notification-red" id="buyDisable">
+                    <p class="center-text uppercase">本品暂时缺货</p>
+                </div>
             </div>
             
             <div class="decoration"></div>

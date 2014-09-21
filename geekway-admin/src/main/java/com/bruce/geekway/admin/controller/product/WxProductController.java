@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxSkuProp;
 import com.bruce.geekway.model.WxSkuPropCriteria;
@@ -60,24 +58,24 @@ public class WxProductController {
 		return "product/productList";
 	}
 	
-	/**
-	 * 添加产品的预操作（需要先选择产品分类）
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/productPreAdd")
-	public String productAdd(Model model, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		//查询出所有分类，以供用户选择产品所属分类
-		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
-		
-		model.addAttribute("product", new WxProduct());
-		model.addAttribute("categoryList", categoryList);
-		return "product/productPreAdd";
-	}
+//	/**
+//	 * 添加产品的预操作（需要先选择产品分类）
+//	 * @param model
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping("/productPreAdd")
+//	public String productAdd(Model model, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		//查询出所有分类，以供用户选择产品所属分类
+//		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
+//		
+//		model.addAttribute("product", new WxProduct());
+//		model.addAttribute("categoryList", categoryList);
+//		return "product/productPreAdd";
+//	}
 	
 	/**
 	 * 添加产品品(需要在上一步将分类id传入)
@@ -87,18 +85,18 @@ public class WxProductController {
 	 * @return
 	 */
 	@RequestMapping("/productAdd")
-	public String productAdd(Model model, int categoryId, WxProduct product, HttpServletRequest request) {
+	public String productAdd(Model model, WxProduct product, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
 		if(product!=null){
-			product.setCategoryId(categoryId);
+			product.setSkuCategoryId(1);
 		}
 		
 		//TODO 需要与edit中的方法重构
 		//查询categoryId隶属下的skuPropList
 		WxSkuPropCriteria skuPpropCriteria = new WxSkuPropCriteria();
-		skuPpropCriteria.createCriteria().andCategoryIdEqualTo(categoryId);
+		skuPpropCriteria.createCriteria().andSkuCategoryIdEqualTo(1);
 		List<WxSkuProp> skuPropList = wxSkuPropService.queryByCriteria(skuPpropCriteria);
 		model.addAttribute("skuPropList", skuPropList);
 		
@@ -130,7 +128,7 @@ public class WxProductController {
 		//TODO 需要与save中的方法重构
 		//查询categoryId隶属下的skuPropList
 		WxSkuPropCriteria skuPpropCriteria = new WxSkuPropCriteria();
-		skuPpropCriteria.createCriteria().andCategoryIdEqualTo(product.getCategoryId());
+		skuPpropCriteria.createCriteria().andSkuCategoryIdEqualTo(product.getSkuCategoryId());
 		List<WxSkuProp> skuPropList = wxSkuPropService.queryByCriteria(skuPpropCriteria);
 		model.addAttribute("skuPropList", skuPropList);
 		
@@ -242,7 +240,7 @@ public class WxProductController {
 							
 //							wxSku.setOriginPrice((double) 0);
 //							wxSku.setPrice((double) 0);
-							wxProductSku.setNum(0);
+							wxProductSku.setAmount(0);
 							wxProductSku.setPropertiesName(skuPropertiesName);
 							
 							wxProductSku.setCreateTime(currentTime);
@@ -317,13 +315,13 @@ public class WxProductController {
 //				
 				double skuOriginPrice = NumberUtils.toDouble(request.getParameter("skuOriginPrice_"+skuIdStr), 0);
 				double skuPrice = NumberUtils.toDouble(request.getParameter("skuPrice_"+skuIdStr), 0);
-				int skuNum = NumberUtils.toInt(request.getParameter("skuNum_"+skuIdStr), 0);
+				int skuAmount = NumberUtils.toInt(request.getParameter("skuAmount_"+skuIdStr), 0);
 				//保存
 				WxProductSku wxSku = new WxProductSku();
 				wxSku.setId(skuId);
-				wxSku.setOriginPrice((long)skuOriginPrice);
-				wxSku.setPrice((long)skuPrice);
-				wxSku.setNum(skuNum);
+				wxSku.setOriginPrice(skuOriginPrice); 
+				wxSku.setPrice(skuPrice);
+				wxSku.setAmount(skuAmount);
 				wxSku.setUpdateTime(currentTime);
 				wxProductSkuService.updateById(wxSku);
 			}

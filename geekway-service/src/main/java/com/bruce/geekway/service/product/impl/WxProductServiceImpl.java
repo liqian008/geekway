@@ -9,12 +9,15 @@ import com.bruce.geekway.dao.mapper.WxProductMapper;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCriteria;
 import com.bruce.geekway.service.product.IWxProductService;
+import com.bruce.geekway.service.product.IWxProductSkuService;
 
 @Service
 public class WxProductServiceImpl implements IWxProductService {
 
 	@Autowired
 	private WxProductMapper wxProductMapper;
+	@Autowired
+	private IWxProductSkuService wxProductSkuService;
 
 	@Override
 	public int save(WxProduct t) {
@@ -79,6 +82,7 @@ public class WxProductServiceImpl implements IWxProductService {
 		this.wxProductMapper = wxPayProductMapper;
 	}
 
+	
 
 	
 	

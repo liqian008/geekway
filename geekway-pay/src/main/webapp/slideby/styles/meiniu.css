@@ -1,11 +1,13 @@
 @charset "utf-8";
 
-
-#product-intro li {
-	list-style:none;
-	margin-bottom:15px;
+.container li {
+list-style: none;
+margin-bottom: 15px;
 }
 
+#productsContainer li a {
+color:#666;
+}
 
 #product-intro .dt{
 	float:left;
@@ -89,4 +91,8 @@ background-position: -202px -224px;
 	width: 60px !important;
 	margin-right: 5px;
 }
+
+.del{
+	text-decoration:line-through;
+	vertical-align: middle;
 }
