@@ -13,8 +13,7 @@
 		<if test="productTailId > 0">
 			product_id&lt;#{productTailId, jdbcType=INTEGER} and 
 		</if>
-		price>0 and
-		amount>0
+		price>0 
 		group by product_id
 		having sum(amount)>0 order by product_id desc limit #{limit};
 	</select>

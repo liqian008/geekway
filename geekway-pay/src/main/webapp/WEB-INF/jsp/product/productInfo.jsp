@@ -88,7 +88,7 @@ String contextPath = request.getContextPath();
 	            	
 	            	<%
 	            	//选中的sku属性map
-	            	Map<String, String> selectedSkuValueMap = (Map<String, String>)request.getAttribute("selectedSkuValueMap");
+	            	WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
 	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
 	            	
 	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
@@ -102,9 +102,9 @@ String contextPath = request.getContextPath();
 								String displayName = skuPropValue.getName();
 								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
 								
-								boolean selected = selectedSkuValueMap!=null&&String.valueOf(skuPropValue.getId()).equals(selectedSkuValueMap.get("1"));
+								boolean colorSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuColorValueId());
 							%>	            		
-	            			<div class="item <%=selected?"selected":""%>" data="<%=propertyName%>">
+	            			<div class="item <%=colorSelected?"selected":""%>" data="<%=propertyName%>">
 	            				<b></b>
 	            				<a href="#none" title="<%=displayName%>">
 			            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="<%=displayName%> ">
@@ -128,9 +128,9 @@ String contextPath = request.getContextPath();
 								String displayName = skuPropValue.getName();
 								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
 								
-								boolean selected = selectedSkuValueMap!=null&&String.valueOf(skuPropValue.getId()).equals(selectedSkuValueMap.get("2"));
+								boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
 							%>
-	            			<div class="item <%=selected?"selected":""%>" data="<%=propertyName%>"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
+	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
 	            			<%}%>
 	            		</div>
 	            	</li>
@@ -189,22 +189,26 @@ String contextPath = request.getContextPath();
 								$("#price").text(productJson.price);//刷新价格
 								$("#leftAmount").text(productJson.amount);//刷新库存 
 								if(productJson.amount>0&&productJson.price>0){//刷新购买&购物车按钮
-									$("#buyEnable").show();
-									$("#buyDisable").hide();
+									$("#buyEnable").removeClass("gone");
+									$("#buyDisable").addClass("gone");
 								}else{
-									$("#buyEnable").hide();
-									$("#buyDisable").show();
+									$("#buyDisable").removeClass("gone");
+									$("#buyEnable").addClass("gone");
 								}
 							}
 						}
-						
-						
 					</script>
 	            	
 	            	<li><span class="text-highlight highlight-blue">购买数量</span>1件</li>
             	</ul>
-                <a href="javascript:void(0)" id="buyEnable" class="button-big button-green">点击购买</a>
-                <div class="static-notification-red" id="buyDisable">
+            	<%
+            	boolean buyEnable = false;
+            	if(currentProductSku!=null && currentProductSku.getPrice()!=null&&currentProductSku.getPrice()>0&&currentProductSku.getAmount()!=null&&currentProductSku.getAmount()>0){
+            		buyEnable = true;
+            	}
+            	%>
+                <a href="javascript:void(0)" id="buyEnable" class="button-big button-green <%=buyEnable?"":"gone"%>">点击购买</a>
+                <div class="static-notification-red <%=buyEnable?"gone":""%>" id="buyDisable">
                     <p class="center-text uppercase">本品暂时缺货</p>
                 </div>
             </div>
@@ -221,14 +225,12 @@ String contextPath = request.getContextPath();
                 </div>
                 <div class="tab-content tab-content-1">
                     <p>
-                        <img src="images/general-nature/1s.jpg" class="float-left" width="70" alt="img">
-                        Sed sed gravida turpis. Suspendisse quis lacus non lacus fermentum lobortis non et orci. Nullam bibendum non ligula ut viverra.
+                        ${product.description}
                     </p>
                 </div>
                 <div class="tab-content tab-content-2">
                     <p>
-                        <img src="images/general-nature/2s.jpg" class="float-left" width="70" alt="img">
-                        Sed sed gravida turpis. Suspendisse quis lacus non lacus fermentum lobortis non et orci. Nullam bibendum non ligula ut viverra.                    
+                        ${product.param}                    
                     </p>
                 </div>
             </div>

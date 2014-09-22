@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.WxSkuPropValue;
-import com.bruce.geekway.service.product.IWxProductSkuRelationService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 
 
@@ -23,8 +22,8 @@ public class WxSkuPropValueController {
 
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
-	@Autowired
-	private IWxProductSkuRelationService wxProductSkuRelationService;
+//	@Autowired
+//	private IWxProductSkuRelationService wxProductSkuRelationService;
 	
 	
 	@RequestMapping("/skuPropValueList")
@@ -77,33 +76,33 @@ public class WxSkuPropValueController {
 	}
 	
 	
-	/**
-	 * 删除skuPropValue
-	 * @param model
-	 * @param sliderId
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = "/delSkuPropValue")
-	public String delSkuImage(Model model, int skuPropValueId, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		//先检查该skuPropValue是否被使用
-		boolean propValueUsed = true;//默认为使用中，不能被删除
-		int usedCount = wxProductSkuRelationService.queryCountBySkuPropValueId(skuPropValueId);
-		if(usedCount<=0){
-			propValueUsed = false;//未使用，则可以删除
-		}
-		if(propValueUsed){//被使用的情况下，删除会导致数据异常
-			model.addAttribute("message", "该Sku属性已经被产品关联，无法删除");
-			return "forward:/home/operationResult"; 
-		}else{//未被使用，可以删除
-			int result = wxSkuPropValueService.deleteById(skuPropValueId);
-			
-			model.addAttribute("redirectUrl", "./skuPropValueList");
-			return "forward:/home/operationRedirect"; 
-		}
-		
-	}
+//	/**
+//	 * 删除skuPropValue
+//	 * @param model
+//	 * @param sliderId
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/delSkuPropValue")
+//	public String delSkuImage(Model model, int skuPropValueId, HttpServletRequest request) {
+//		String servletPath = request.getRequestURI();
+//		model.addAttribute("servletPath", servletPath);
+//		
+//		//先检查该skuPropValue是否被使用
+//		boolean propValueUsed = true;//默认为使用中，不能被删除
+//		int usedCount = wxProductSkuRelationService.queryCountBySkuPropValueId(skuPropValueId);
+//		if(usedCount<=0){
+//			propValueUsed = false;//未使用，则可以删除
+//		}
+//		if(propValueUsed){//被使用的情况下，删除会导致数据异常
+//			model.addAttribute("message", "该Sku属性已经被产品关联，无法删除");
+//			return "forward:/home/operationResult"; 
+//		}else{//未被使用，可以删除
+//			int result = wxSkuPropValueService.deleteById(skuPropValueId);
+//			
+//			model.addAttribute("redirectUrl", "./skuPropValueList");
+//			return "forward:/home/operationRedirect"; 
+//		}
+//		
+//	}
 }

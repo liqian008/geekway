@@ -106,7 +106,7 @@
 					<h5 class="panel-title">
 						<i class="icon-people"></i>商品管理
 					</h5>
-					<a href="./productPreAdd"><span class="label label-danger pull-right">新增商品</span></a>
+					<a href="./productAdd"><span class="label label-danger pull-right">新增商品</span></a>
 				</div>
 				<div class="datatable-media">
 					<table class="table table-bordered table-striped">
@@ -137,8 +137,6 @@
 		                        	</a> 
 		                        </td>
 		                        <td title="SN：<%=product.getOutId()%>"><%=product.getName()%></td>
-		                        <%-- <td title="原价：<%=product.getOriginPrice()%>元"><%=product.getPrice()%>元</td>
-		                        <td><%=product.getNum()%>个</td> --%>
 		                        <td><%=product.getStatus()==1?"上架":"下架"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

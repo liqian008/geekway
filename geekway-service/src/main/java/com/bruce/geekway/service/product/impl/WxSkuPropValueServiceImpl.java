@@ -3,15 +3,17 @@ package com.bruce.geekway.service.product.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.mapper.WxSkuPropValueMapper;
-import com.bruce.geekway.model.WxProductSkuRelation;
+import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.WxSkuPropValueCriteria;
-import com.bruce.geekway.service.product.IWxProductSkuRelationService;
+import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 
 @Service
@@ -20,7 +22,7 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 	@Autowired
 	private WxSkuPropValueMapper wxSkuPropValueMapper;
 	@Autowired
-	private IWxProductSkuRelationService wxProductSkuRelationService;
+	private IWxProductSkuService wxProductSkuService;
 	
 	
 	@Override
@@ -71,6 +73,13 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 		return wxSkuPropValueMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public List<WxSkuPropValue> querySkuPropValueListByIdList(List<Integer> idList) {
+		WxSkuPropValueCriteria criteria = new WxSkuPropValueCriteria();
+    	criteria.createCriteria().andIdIn(idList); 
+		return queryByCriteria(criteria);
+	}
+	
 	
 	@Override
 	public List<WxSkuPropValue> querySkuPropValueListByPropIdList(List<Integer> skuPropIdList) {
@@ -78,6 +87,8 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
     	criteria.createCriteria().andSkuPropIdIn(skuPropIdList);
 		return queryByCriteria(criteria);
 	}
+	
+	
 	
 	@Override
 	public List<WxSkuPropValue> querySkuPropValueListByCategoryId(int categoryId) {
@@ -104,13 +115,22 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 
 	@Override
 	public List<Integer> querySkuPropValueIdListByProductId(int productId) {
-		List<WxProductSkuRelation> relationList = wxProductSkuRelationService.queryByProductId(productId);
-		if(relationList!=null&&relationList.size()>0){
-			List<Integer> valueIdList = new ArrayList<Integer>();
-			for(WxProductSkuRelation relation: relationList){
-				valueIdList.add(relation.getSkuPropValueId());
+		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
+		if(productSkuList!=null&&productSkuList.size()>0){
+			Set<Integer> valueIdSet = new TreeSet<Integer>();
+			for(WxProductSku productSku: productSkuList){
+				Integer skuColorValueId = productSku.getSkuColorValueId();
+				if(skuColorValueId!=null&&skuColorValueId>0){
+					valueIdSet.add(skuColorValueId);
+				}
+				
+				Integer skuSizeValueId = productSku.getSkuSizeValueId();
+				if(skuSizeValueId!=null&&skuSizeValueId>0){
+					valueIdSet.add(skuSizeValueId);
+				}
+				
 			}
-			return valueIdList;
+			return new ArrayList<Integer>(valueIdSet);
 		}
 		return null;
 	}
@@ -157,13 +177,14 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 		this.wxSkuPropValueMapper = wxSkuPropValueMapper;
 	}
 
-	public IWxProductSkuRelationService getWxProductSkuRelationService() {
-		return wxProductSkuRelationService;
+	public IWxProductSkuService getWxProductSkuService() {
+		return wxProductSkuService;
 	}
 
-	public void setWxProductSkuRelationService(
-			IWxProductSkuRelationService wxProductSkuRelationService) {
-		this.wxProductSkuRelationService = wxProductSkuRelationService;
+	public void setWxProductSkuService(IWxProductSkuService wxProductSkuService) {
+		this.wxProductSkuService = wxProductSkuService;
 	}
 
+	
+	
 }

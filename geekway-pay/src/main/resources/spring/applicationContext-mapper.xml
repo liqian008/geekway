@@ -83,11 +83,6 @@
 			value="com.bruce.geekway.dao.mapper.WxProductSkuMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductSkuRelationMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductSkuRelationMapper" />
-		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
-	</bean>
 	<bean id="wxSkuPropMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.WxSkuPropMapper" />

@@ -42,28 +42,22 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/validate.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/tags.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/moment.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/jgrowl.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/colorpicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/application.js"></script>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
 </head>
 <body class="sidebar-wide">
 
@@ -150,11 +144,25 @@
 							</div>
 						</div>
 						
+						
+						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
 							</label>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea class="ckeditor" name="description" id="description">
+										${product.description}
+									</textarea>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">参数规格: <span class="mandatory">*</span>
+							</label>
 							<div class="col-sm-6">
-								<textarea name="description" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${product.description}</textarea>
+								<textarea name="param" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${product.param}</textarea>
 							</div>
 						</div>
 						
@@ -246,5 +254,32 @@
 	});
 	</script>
 	
+	
+	<script type="text/javascript">
+	CKEDITOR.replace( 'content', {
+		toolbar :
+            [
+					['Source', 'newPage'],
+	//图片    flash    表格       水平线            表情       特殊字符        分页符
+	                ['Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+	//超链接  取消超链接 锚点
+	                ['Link','Unlink','Anchor'],
+	// 数字列表          实体列表            减小缩进    增大缩进
+	                ['NumberedList','BulletedList','-','Outdent','Indent'],
+	//左对 齐             居中对齐          右对齐          两端对齐
+	                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+	'/',
+	//加粗     斜体，     下划线      穿过线      下标字        上标字
+    ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
+	// 样式       格式      字体    字体大小 
+	                ['Styles','Format','Font','FontSize'],
+	//文本颜色     背景颜色
+	                ['TextColor','BGColor'],
+	//全屏           显示区块
+	                ['Maximize', 'ShowBlocks','-']
+             ]
+         }
+    );
+   </script>
 </body>
 </html>

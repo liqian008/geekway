@@ -8,7 +8,10 @@ import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.WxSkuPropValueCriteria;
 
 public interface IWxSkuPropValueService extends IFoundationService<WxSkuPropValue, Integer, WxSkuPropValueCriteria>{
-
+	
+	/*查询sku属性值列表*/
+	public List<WxSkuPropValue> querySkuPropValueListByIdList(List<Integer> idList);
+	
 	/*根据sku属性列表查询其对应的sku属性值列表*/
 	public List<WxSkuPropValue> querySkuPropValueListByPropIdList(List<Integer> skuPropIdList);
 	

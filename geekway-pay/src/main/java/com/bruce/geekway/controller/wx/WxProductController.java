@@ -170,7 +170,6 @@ public class WxProductController {
 				//置空无用的字段（json序列化时不需要）
 				productSku.setCreateTime(null);
 				productSku.setUpdateTime(null);
-				productSku.setDescription(null);
 				
 				//设定第一条或选定的那条数据为current
 				if((productSkuId==0 && currentProductSku==null)||(productSkuId>0 && productSkuId == productSku.getId())){
@@ -184,9 +183,7 @@ public class WxProductController {
 
 			//解析当前sku商品对应的属性值，以便在前端高亮显示
 			if(currentProductSku!=null){
-				String property = currentProductSku.getPropertiesName();
-				Map<String, String> selectedSkuValueMap = parseSkuProperties(property);
-				model.addAttribute("selectedSkuValueMap", selectedSkuValueMap);
+				model.addAttribute("currentProductSku", currentProductSku);
 			}
 		}
 		
@@ -206,8 +203,6 @@ public class WxProductController {
 			}
 			model.addAttribute("skuGroupMap", skuGroupMap);
 		}
-		
-		
 		return "product/productInfo";
 	}
 

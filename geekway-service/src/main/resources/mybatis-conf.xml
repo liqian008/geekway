@@ -41,8 +41,9 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuExtendMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxSkuPropMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxSkuPropValueMapper.xml" />
+		<!-- 
 		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuRelationMapper.xml" />
-		
+		-->
 		<mapper resource="com/bruce/geekway/model/xml/WxProductTagMapper.xml" />
 		
 		
