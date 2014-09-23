@@ -36,5 +36,17 @@ public class WxProductOrderController {
 		return "product/myOrderList";
 	}
 	
-	
+	/**
+	 * 我的订单
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/vouchers")
+	public String vouchers(Model model, HttpServletRequest request) {
+//		List<WxProduct> productList = wxProductService.queryAvailableList();
+//		model.addAttribute("productList", productList);
+		
+		return "product/myVouchers";
+	}
 }

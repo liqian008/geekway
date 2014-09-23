@@ -82,15 +82,16 @@ String contextPath = request.getContextPath();
             
             <div class="container" id="product-intro">
             	<ul id="choose">
-            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>20.00</del></span>元</li>
-	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">10.00</span>元</li>
-	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">1</span>件</li>
-	            	
-	            	<%
+            		<%
 	            	//选中的sku属性map
 	            	WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
 	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
+	            	%>
+            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>${product.originPrice}</del></span>元</li>
+	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">${product.price}</span>元</li>
+	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">${product.amount}</span>件</li>
 	            	
+	            	<%
 	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
 	            	%>
 	            	<li id="choose-color" class="choose-color-shouji">
