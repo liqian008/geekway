@@ -17,6 +17,7 @@ import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
+import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
@@ -35,24 +36,34 @@ public class IWxPayService{
 	private IWxPayComplaintService wxPayComplaintService;
 	@Autowired
 	private WxMpPayService wxMpPayService;
+	@Autowired
+	private IWxProductOrderService wxProductOrderService;
 	
 	
 	/**
-	 * 支付成功，保存订单信息，修改库存
+	 * 支付成功，记录微信订单流水表，且更新系统订单状态+库存
 	 * @param wxNotifyOrder 
 	 * @return
 	 */
-	public int receiverOrder(WxPayNotifyOrderRequest wxOrderRequest){
+	public int receiveWxOrder(WxPayNotifyOrderRequest wxOrderRequest){
 		
 		int result = 0;
 		
 		//检查签名是否合法
 		boolean signValid = true;
 		if(signValid){
-			//保存订单，TODO 检查重复订单
+			//TODO 检查重复订单
+			
 			WxPayNotifyOrder wxNotifyOrder = WxPayNotifyOrderRequest.convert2WxPayNotifyOrder(wxOrderRequest);
 			if(wxNotifyOrder!=null){
+				//TODO 处理微信支付成功的业务
+				
+				//需要事务操作
+				//TODO 保存微信订单流水表
 				result = wxPayNotifyOrderService.save(wxNotifyOrder);
+				//TODO 更新订单表中的订单状态为支付完毕
+				//wxProductOrderService
+				//TODO 更新sku的库存数
 			}
 		}
 		return result;
@@ -103,7 +114,7 @@ public class IWxPayService{
 	 * 接收微信的投诉消息
 	 * @return
 	 */
-	public int receiverComplaint(WxComplaintNotify wxComplateRequest){
+	public int receiverWxComplaint(WxComplaintNotify wxComplateRequest){
 		int result = 0;
 		if(wxComplateRequest!=null){
 			String msgType = wxComplateRequest.getMsgType();
@@ -144,7 +155,7 @@ public class IWxPayService{
 	 * 接收微信的告警消息
 	 * @return 
 	 */
-	public int receiverAlarm(WxPayAlarmNotify alarmRequest){
+	public int receiverWxAlarm(WxPayAlarmNotify alarmRequest){
 		if(alarmRequest!=null){
 			WxPayAlarm wxPayAlarm = new WxPayAlarm();
 			
@@ -164,7 +175,7 @@ public class IWxPayService{
 	 * 发货
 	 * @return
 	 */
-	public int dealDeliver(WxDeliverInfo deliverInfo){
+	public int dealWxDeliver(WxDeliverInfo deliverInfo){
 		//提交微信
 		WxJsonResult result = wxMpPayService.deliverNotify(deliverInfo);
 		if(result!=null){
@@ -177,7 +188,7 @@ public class IWxPayService{
 	 * 向微信提交用户维权的处理结果
 	 * @return
 	 */
-	public int dealComplaint(String openId, String feedbackId){
+	public int dealWxComplaint(String openId, String feedbackId){
 		//提交微信
 		WxJsonResult wxResult = wxMpPayService.dealComplaint(openId, feedbackId);
 		if(wxResult!=null){
@@ -192,7 +203,7 @@ public class IWxPayService{
 	 * 查询用户地址
 	 * @return
 	 */
-	public int queryUserAddress(int userOpenId){
+	public int queryWxUserAddress(int userOpenId){
 		return 0;
 	}
 	
@@ -200,7 +211,7 @@ public class IWxPayService{
 	 * 查询订单状态
 	 * @return
 	 */
-	public int queryOrderStatus(){
+	public int queryWxOrderStatus(){
 		return 0;
 	}
 
@@ -210,8 +221,7 @@ public class IWxPayService{
 	}
 
 
-	public void setWxPayNotifyOrderService(
-			IWxPayNotifyOrderService wxPayNotifyOrderService) {
+	public void setWxPayNotifyOrderService(IWxPayNotifyOrderService wxPayNotifyOrderService) {
 		this.wxPayNotifyOrderService = wxPayNotifyOrderService;
 	}
 
