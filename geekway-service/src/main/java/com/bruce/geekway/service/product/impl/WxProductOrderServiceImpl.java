@@ -107,6 +107,5 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	public void setWxProductOrderMapper(WxProductOrderMapper wxPayProductOrderMapper) {
 		this.wxProductOrderMapper = wxPayProductOrderMapper;
 	}
-
 	
 }
