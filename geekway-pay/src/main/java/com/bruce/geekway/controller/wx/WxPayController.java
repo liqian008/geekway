@@ -158,7 +158,7 @@ public class WxPayController {
 				wxOrderRequest.setOpenId(tempXmlOrder.getOpenId());
 			}
 			// 调用支付service，保存订单信息
-			int result = wxPayService.receiverOrder(wxOrderRequest);
+			int result = wxPayService.receiveWxOrder(wxOrderRequest);
 		}
 		return "wxpay/jspayNotify";
 	}
@@ -200,7 +200,7 @@ public class WxPayController {
 		System.out.println("=====alarm xml===="+xml);
 		//TODO 解析告警的数据
 		WxPayAlarmNotify alarmRequest = parseWxAlarmXml(xml);
-		int result = wxPayService.receiverAlarm(alarmRequest);
+		int result = wxPayService.receiverWxAlarm(alarmRequest);
 		if(result>0){
 			return "success";
 		}
@@ -220,7 +220,7 @@ public class WxPayController {
 		System.out.println("=====rights====");
 		//解析投诉的数据
 		WxComplaintNotify complaintRequest = parseWxComplaintXml(xml);
-		int result = wxPayService.receiverComplaint(complaintRequest);
+		int result = wxPayService.receiverWxComplaint(complaintRequest);
 		if(result>0){
 			return "success";
 		}

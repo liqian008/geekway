@@ -80,6 +80,10 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 		return null;
 	}
 	
+	@Override
+	public int reduceAmount(int num) {
+	}
+	
 	
 	@Override
 	public List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit) {
@@ -93,5 +97,7 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	public void setWxProductSkuMapper(WxProductSkuMapper wxProductSkuMapper) {
 		this.wxProductSkuMapper = wxProductSkuMapper;
 	}
+
+	
 	
 }

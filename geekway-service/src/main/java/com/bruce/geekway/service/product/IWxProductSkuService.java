@@ -17,7 +17,9 @@ public interface IWxProductSkuService extends IFoundationService<WxProductSku, I
 	 * @param example
 	 * @return
 	 */
-	List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit);
+	public List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit);
+
+	public int reduceAmount(int num);
 	
 //	public int queryCountBySkuPropValueId(int skuPropValueId);
 	
