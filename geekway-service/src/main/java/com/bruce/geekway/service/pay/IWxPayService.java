@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayComplaint;
-import com.bruce.geekway.model.WxPayOrderInfo;
+import com.bruce.geekway.model.WxPayNotifyOrder;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
 import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
-import com.bruce.geekway.model.wx.pay.WxPayOrderNotify;
+import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
@@ -28,7 +28,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
 public class IWxPayService{
 	
 	@Autowired
-	private IWxPayOrderInfoService wxPayOrderInfoService;
+	private IWxPayNotifyOrderService wxPayNotifyOrderService;
 	@Autowired
 	private IWxPayAlarmService wxPayAlarmService;
 	@Autowired
@@ -39,10 +39,10 @@ public class IWxPayService{
 	
 	/**
 	 * 支付成功，保存订单信息，修改库存
-	 * @param wxOrderInfo 
+	 * @param wxNotifyOrder 
 	 * @return
 	 */
-	public int receiverOrder(WxPayOrderNotify wxOrderInfo){
+	public int receiverOrder(WxPayNotifyOrderRequest wxOrderRequest){
 		
 		int result = 0;
 		
@@ -50,9 +50,9 @@ public class IWxPayService{
 		boolean signValid = true;
 		if(signValid){
 			//保存订单，TODO 检查重复订单
-			WxPayOrderInfo orderInfo = WxPayOrderNotify.convert2WxPayOrderInfo(wxOrderInfo);
-			if(orderInfo!=null){
-				result = wxPayOrderInfoService.save(orderInfo);
+			WxPayNotifyOrder wxNotifyOrder = WxPayNotifyOrderRequest.convert2WxPayNotifyOrder(wxOrderRequest);
+			if(wxNotifyOrder!=null){
+				result = wxPayNotifyOrderService.save(wxNotifyOrder);
 			}
 		}
 		return result;
@@ -205,14 +205,14 @@ public class IWxPayService{
 	}
 
 
-	public IWxPayOrderInfoService getWxPayOrderInfoService() {
-		return wxPayOrderInfoService;
+	public IWxPayNotifyOrderService getWxPayNotifyOrderService() {
+		return wxPayNotifyOrderService;
 	}
 
 
-	public void setWxPayOrderInfoService(
-			IWxPayOrderInfoService wxPayOrderInfoService) {
-		this.wxPayOrderInfoService = wxPayOrderInfoService;
+	public void setWxPayNotifyOrderService(
+			IWxPayNotifyOrderService wxPayNotifyOrderService) {
+		this.wxPayNotifyOrderService = wxPayNotifyOrderService;
 	}
 
 

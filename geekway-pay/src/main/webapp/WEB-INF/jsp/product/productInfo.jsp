@@ -56,6 +56,8 @@ String contextPath = request.getContextPath();
         </div>
         
         <div class="content"> 
+        	<div class="decoration"></div> 
+        	<jsp:include page="../inc/weixinShareNotification.jsp"></jsp:include>
         	
         	<div class="container">
                 <div class="slider-controls" data-snap-ignore="true">                
@@ -281,4 +283,45 @@ String contextPath = request.getContextPath();
 </div>
 
 </body>
+
+<!-- 微信分享 -->
+<jsp:include page="../inc/weixinShareJs.jsp"></jsp:include>
+
+<script>
+var imgUrl = "http://images.1758.com/article/image/2014/08/27/25831409142359848.jpg";
+var pageUrl = "网址";
+var descContent = '爱在五月，\n\n妈咪爱1+1亲子健康之旅开启全国行首站----重庆站妈咪爱活性益生菌';
+var shareTitle = '标题';
+var imageHeight = '120';//图片高度
+var imageWidth = '120';//图片宽度
+
+
+function shareTimeline() {
+    WeixinJSBridge.invoke('shareTimeline',{
+		"img_height": imageHeight,
+        "img_width": imageWidth,
+        "img_url": imgUrl,
+        "link": pageUrl,
+        "desc": descContent,
+        "title": shareTitle
+    }, function(res) {//朋友圈分享成功后的回调
+		//ajax方式增加礼券
+		
+    });
+}
+
+function shareFriend() {
+    WeixinJSBridge.invoke('sendAppMessage',{
+    	"img_height": imageHeight,
+        "img_width": imageWidth,
+    	"img_url": imgUrl,
+        "link": pageUrl,
+        "desc": descContent,
+        "title": shareTitle
+    }, function(res) {//分享给朋友成功后的回调
+        
+    });
+}
+</script>
+
 </html>

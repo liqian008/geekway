@@ -36,7 +36,7 @@ import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.OrderUtil;
-import com.bruce.geekway.utils.ProductHtmlUtils;
+import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
@@ -129,7 +129,7 @@ public class WxProductController {
 	                logger.debug("还有更多商品，tailId： "+nextTailId);
 	            }
 			}
-			String productListHtml = ProductHtmlUtils.buildFallLoadHtml(productSkuList);
+			String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productSkuList);
 			Map<String, String> dataMap = new HashMap<String, String>();
 			dataMap.put("html", productListHtml);
 			dataMap.put("tailId", String.valueOf(nextTailId));

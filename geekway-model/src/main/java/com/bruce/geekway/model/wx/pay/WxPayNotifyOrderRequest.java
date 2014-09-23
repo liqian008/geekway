@@ -2,7 +2,7 @@ package com.bruce.geekway.model.wx.pay;
 
 import java.util.Date;
 
-import com.bruce.geekway.model.WxPayOrderInfo;
+import com.bruce.geekway.model.WxPayNotifyOrder;
 
 /**
  * 微信发来的订单信息
@@ -10,7 +10,7 @@ import com.bruce.geekway.model.WxPayOrderInfo;
  * @author liqian
  * 
  */
-public class WxPayOrderNotify {
+public class WxPayNotifyOrderRequest {
 
 	// 签名类型,取值:MD5、RSA,默 认:MD5
 	private String sign_type;
@@ -76,32 +76,32 @@ public class WxPayOrderNotify {
 	// 签名方法
 	private String signMethod;
 
-	public static WxPayOrderInfo convert2WxPayOrderInfo(WxPayOrderNotify wxOrderInfo) {
-		WxPayOrderInfo wxPayOrderInfo = null;
-		if (wxOrderInfo != null) {
-			wxPayOrderInfo = new WxPayOrderInfo();
+	public static WxPayNotifyOrder convert2WxPayNotifyOrder(WxPayNotifyOrderRequest wxOrderRequest) {
+		WxPayNotifyOrder wxPayNotifyOrder = null;
+		if (wxOrderRequest != null) {
+			wxPayNotifyOrder = new WxPayNotifyOrder();
 
-			wxPayOrderInfo.setBankType(wxOrderInfo.bank_type);
-			wxPayOrderInfo.setBankBillno(wxOrderInfo.bank_billno);
-			wxPayOrderInfo.setFeeType(wxOrderInfo.fee_type);
+			wxPayNotifyOrder.setBankType(wxOrderRequest.bank_type);
+			wxPayNotifyOrder.setBankBillno(wxOrderRequest.bank_billno);
+			wxPayNotifyOrder.setFeeType(wxOrderRequest.fee_type);
 
-			wxPayOrderInfo.setTotalFee(wxOrderInfo.total_fee);
-			wxPayOrderInfo.setProductFee(wxOrderInfo.product_fee);
-			wxPayOrderInfo.setDiscount(wxOrderInfo.discount);
-			wxPayOrderInfo.setTransportFee(wxOrderInfo.transport_fee);
+			wxPayNotifyOrder.setTotalFee(wxOrderRequest.total_fee);
+			wxPayNotifyOrder.setProductFee(wxOrderRequest.product_fee);
+			wxPayNotifyOrder.setDiscount(wxOrderRequest.discount);
+			wxPayNotifyOrder.setTransportFee(wxOrderRequest.transport_fee);
 
-			wxPayOrderInfo.setAttach(wxOrderInfo.attach);
-			wxPayOrderInfo.setNotifyId(wxOrderInfo.notify_id);
-			wxPayOrderInfo.setTransactionId(wxOrderInfo.transaction_id);
-			wxPayOrderInfo.setOutTradeNo(wxOrderInfo.out_trade_no);
+			wxPayNotifyOrder.setAttach(wxOrderRequest.attach);
+			wxPayNotifyOrder.setNotifyId(wxOrderRequest.notify_id);
+			wxPayNotifyOrder.setTransactionId(wxOrderRequest.transaction_id);
+			wxPayNotifyOrder.setOutTradeNo(wxOrderRequest.out_trade_no);
 			
-			wxPayOrderInfo.setOpenId(wxOrderInfo.openId);
+			wxPayNotifyOrder.setOpenId(wxOrderRequest.openId);
 
 			Date timeEnd = new Date();// TODO time_end
-			wxPayOrderInfo.setTimeEnd(timeEnd);
-			wxPayOrderInfo.setCreateTime(new Date());
+			wxPayNotifyOrder.setTimeEnd(timeEnd);
+			wxPayNotifyOrder.setCreateTime(new Date());
 		}
-		return wxPayOrderInfo;
+		return wxPayNotifyOrder;
 	}
 
 	public String getSign_type() {

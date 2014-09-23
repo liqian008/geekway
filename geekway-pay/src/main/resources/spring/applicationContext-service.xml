@@ -39,7 +39,7 @@
 	</bean>
 	<bean id="wxPayAlarmService" class="com.bruce.geekway.service.pay.impl.WxPayAlarmServiceImpl">
 	</bean>
-	<bean id="wxPayOrderInfoService" class="com.bruce.geekway.service.pay.impl.WxPayOrderInfoServiceImpl">
+	<bean id="wxPayNotifyOrderService" class="com.bruce.geekway.service.pay.impl.WxPayNotifyOrderServiceImpl">
 	</bean>
 	<bean id="wxMpPayService" class="com.bruce.geekway.service.pay.mp.WxMpPayService">
 	</bean>
@@ -56,5 +56,7 @@
 	<bean id="wxSkuPropService" class="com.bruce.geekway.service.product.impl.WxSkuPropServiceImpl">
 	</bean>
 	<bean id="wxSkuPropValueService" class="com.bruce.geekway.service.product.impl.WxSkuPropValueServiceImpl">
+	</bean>
+	<bean id="wxProductVoucherService" class="com.bruce.geekway.service.product.impl.WxProductVoucherServiceImpl">
 	</bean>
 </beans>

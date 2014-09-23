@@ -48,7 +48,7 @@ public class DateUtil {
 	 */
 	public static String date2YMDHMS(Date date){
 		if(date!=null){
-			return DATE_FORMAT_YMDHMS_COMPACT.format(date);
+			return DATE_FORMAT_YMDHMS.format(date);
 		}
 		return null;
 	}

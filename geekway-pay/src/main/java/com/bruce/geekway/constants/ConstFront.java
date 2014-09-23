@@ -10,6 +10,10 @@ public interface ConstFront {
 	/* 用户对象的Attribute*/
     public static final String REQUEST_USER_ATTRIBUTE = "_user";
     
+    /* 微信openId在cookie的key*/
+	public static final String COOKIE_KEY_WX_OPENID = "wx_user_open_id";
+    
+    
     /* 用户对象的Attribute*/
     public static final String MESSAGE_TARGET_USER_ATTRIBUTE = "_message_target_user";
 
@@ -38,5 +42,5 @@ public interface ConstFront {
 	
 	public static final String YYYY_MM_DD_HH_MM_FORMAT = "yyyy-MM-dd HH:mm";
 	
-
+	
 }

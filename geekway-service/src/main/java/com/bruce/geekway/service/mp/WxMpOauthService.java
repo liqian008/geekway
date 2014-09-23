@@ -18,12 +18,6 @@ import com.bruce.geekway.utils.WxHttpUtil;
 @Service
 public class WxMpOauthService extends WxBaseService {
 	
-	
-//	protected static final String REDIRECT_URI = ConfigUtil.getString("weixinmp_oauth_redirect_url");
-//	
-//	protected static final String AUTHORIZE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+APPID+"&redirect_uri="+REDIRECT_URI+"&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
-	
-	
 //	@Autowired
 //	private WxMpTokenService mpTokenService;
 	
@@ -48,7 +42,10 @@ public class WxMpOauthService extends WxBaseService {
 		String oauthResult = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_ACCESS_TOKEN_API, params);
 		
 		WxOauthTokenResult wxOauthTokenResult = JsonUtil.gson.fromJson(oauthResult, WxOauthTokenResult.class);
-		return wxOauthTokenResult;
+		if(wxOauthTokenResult!=null && wxOauthTokenResult.getErrcode()!=null && wxOauthTokenResult.getErrcode()==0){//成功
+			return wxOauthTokenResult;
+		}
+		return null;
 	}
 	
 	/**
@@ -66,6 +63,9 @@ public class WxMpOauthService extends WxBaseService {
 		String userinfoResultStr = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_USER_INFO_API, params); 
 		
 		WxUserInfoResult userinfoResult = JsonUtil.gson.fromJson(userinfoResultStr, WxUserInfoResult.class);
-		return userinfoResult;
+		if(userinfoResult!=null && userinfoResult.getErrcode()!=null && userinfoResult.getErrcode()==0){//成功
+			return userinfoResult;
+		}
+		return null;
 	}
 }

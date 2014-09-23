@@ -1,7 +1,5 @@
 package com.bruce.geekway.utils;
 
-import java.net.URLEncoder;
-
 import com.bruce.geekway.constants.ConstWeixin;
 
 
@@ -18,8 +16,7 @@ public class WxMpUtil {
 
 	
 	
-	public static String buildOauthUrl(int scopeType, String redirectUrl, String state){
-//		String encodedRedirectUrl = URLEncoder.encode(redirectUrl);
+	public static String buildWeixinOauthUrl(int scopeType, String redirectUrl, String state){
 		String scope = "snsapi_base";
 		if(scopeType==1){
 			scope = "snsapi_userinfo";

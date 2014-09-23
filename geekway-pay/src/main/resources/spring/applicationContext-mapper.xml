@@ -55,9 +55,9 @@
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	
-	<bean id="wxPayOrderInfoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="wxPayNotifyOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxPayOrderInfoMapper" />
+			value="com.bruce.geekway.dao.mapper.WxPayNotifyOrderMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	
@@ -93,5 +93,13 @@
 			value="com.bruce.geekway.dao.mapper.WxSkuPropValueMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	
+	<!-- 订单相关 -->
+	<bean id="wxProductVoucherMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxProductVoucherMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	
 	
 </beans>

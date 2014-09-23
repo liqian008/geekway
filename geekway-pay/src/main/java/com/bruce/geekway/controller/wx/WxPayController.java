@@ -26,7 +26,7 @@ import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
-import com.bruce.geekway.model.wx.pay.WxPayOrderNotify;
+import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.pay.IWxPayService;
 import com.bruce.geekway.utils.DateUtil;
@@ -49,7 +49,7 @@ public class WxPayController {
 	
 	@RequestMapping(value = "/oauth")
 	public String oauth(Model model, HttpServletRequest request) {
-		return "redirect:"+WxMpUtil.buildOauthUrl(1, "http://wxmp.1758.com/wxpay/oauthResult", "");
+		return "redirect:"+WxMpUtil.buildWeixinOauthUrl(1, "http://wxmp.1758.com/wxpay/oauthResult", "");
 	}
 	
 	@RequestMapping(value = "/oauthResult")
@@ -141,7 +141,7 @@ public class WxPayController {
 	////////////////////////////////////////////////////////
 
 	@RequestMapping(value = "/jspayNotify")
-	public String jspayNotify(Model model, WxPayOrderNotify wxOrderRequest, @RequestBody String xml, HttpServletRequest request, HttpServletResponse response) {
+	public String jspayNotify(Model model, WxPayNotifyOrderRequest wxOrderRequest, @RequestBody String xml, HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("=====jspayNotify====");
 		System.out.println("=====jspayNotify xml===="+xml);
 		@SuppressWarnings("unchecked")
@@ -153,7 +153,7 @@ public class WxPayController {
 			}
 		}
 		if(wxOrderRequest!=null && xml!=null){
-			WxPayOrderNotify tempXmlOrder = parseWxOrderXml(xml);
+			WxPayNotifyOrderRequest tempXmlOrder = parseWxOrderXml(xml);
 			if(tempXmlOrder!=null){
 				wxOrderRequest.setOpenId(tempXmlOrder.getOpenId());
 			}
@@ -255,15 +255,15 @@ public class WxPayController {
 	 * @param xml
 	 * @return
 	 */
-	private static WxPayOrderNotify parseWxOrderXml(String xml){
-		WxPayOrderNotify orderRequest = null;
+	private static WxPayNotifyOrderRequest parseWxOrderXml(String xml){
+		WxPayNotifyOrderRequest orderRequest = null;
 		Element ele;
 		try {
 			ele = DocumentHelper.parseText(xml).getRootElement();
 			String openId = ele.elementText("OpenId");
 //			String IsSubscribe = ele.elementText("IsSubscribe");
 			
-			orderRequest = new WxPayOrderNotify();
+			orderRequest = new WxPayNotifyOrderRequest();
 			orderRequest.setOpenId(openId);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -142,6 +142,9 @@ String contextPath = request.getContextPath();
         </div>
     </div>  
 </div>
-
 </body>
+
+<!-- 微信分享 -->
+<jsp:include page="../inc/weixinShareJs.jsp"></jsp:include>
+
 </html>

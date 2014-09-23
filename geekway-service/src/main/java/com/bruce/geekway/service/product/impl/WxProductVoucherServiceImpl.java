@@ -64,7 +64,20 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		return wxProductVoucherMapper.selectByExample(criteria);
 	}
 	
-
+	@Override
+	public List<WxProductVoucher> fallLoadUserVoucherList(String userOpenId, long voucherTailId, int limit) {
+		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
+		WxProductVoucherCriteria.Criteria subCriteria =  criteria.createCriteria();
+		subCriteria.andUserOpenIdEqualTo(userOpenId);
+		if(voucherTailId>0){
+			subCriteria.andIdLessThan(voucherTailId);
+		}
+		criteria.setLimitRows(limit);
+		criteria.setOrderByClause(" id desc");
+		return queryByCriteria(criteria);
+	}
+	
+	
 	public WxProductVoucherMapper getWxProductVoucherMapper() {
 		return wxProductVoucherMapper;
 	}
@@ -73,4 +86,5 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		this.wxProductVoucherMapper = wxPayProductVoucherMapper;
 	}
 
+	
 }
