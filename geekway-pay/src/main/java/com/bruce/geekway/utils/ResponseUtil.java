@@ -1,13 +1,15 @@
 package com.bruce.geekway.utils;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bruce.geekway.constants.ConstFront;
+
 /**
- * Comments for ResponseUtil.java
  * 
- * @author <a href="mailto:jun.liu1209@gmail.com">刘军</a>
- * @createTime 2013-3-18 下午06:07:33
+ * @author liqian
+ *
  */
 public class ResponseUtil {
 
@@ -30,6 +32,19 @@ public class ResponseUtil {
 	}
 
 	public static String getForwardReirect() {
+		return "forward:/redirect";
+	}
+	
+	/**
+	 * 跳转页的处理
+	 * @param prompt 提示信息
+	 * @param redirectUrl 跳转地址
+	 * @param request
+	 * @return
+	 */
+	public static String getForwardReirect(String prompt, String redirectUrl, HttpServletRequest request) {
+		request.setAttribute(ConstFront.REDIRECT_PROMPT, prompt);
+		request.setAttribute(ConstFront.REDIRECT_URL, redirectUrl);
 		return "forward:/redirect";
 	}
 	

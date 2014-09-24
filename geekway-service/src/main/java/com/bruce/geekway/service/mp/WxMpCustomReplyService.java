@@ -96,7 +96,7 @@ public class WxMpCustomReplyService extends WxBaseService {
 			String sendResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_REPLY_MESSAGE_API, params, customMessageStr);
 			
 			WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
-			if (wxSendResult != null && wxSendResult.getErrcode() != null && wxSendResult.getErrcode() == 0) {//消息回复成功
+			if (wxSendResult != null &&wxSendResult.getErrcode() == 0) {//消息回复成功
 				//回复成功，将回复消息写入历史记录
 				int result = wxHistoryMessageService.logCustomReplyMessage(customMessage);
 				return wxSendResult;

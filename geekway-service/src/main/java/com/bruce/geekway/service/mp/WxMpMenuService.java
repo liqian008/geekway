@@ -55,7 +55,7 @@ public class WxMpMenuService extends WxBaseService {
 				//String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(menuCreateJson), Consts.UTF_8));
 				
 				WxJsonResult wxMenuCreateResult = JsonUtil.gson.fromJson(menuCreateResult, WxJsonResult.class);
-				if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
+				if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
 					return wxMenuCreateResult;
 				}
 //			}
@@ -87,7 +87,7 @@ public class WxMpMenuService extends WxBaseService {
 				//for httpclient 4.0
 //				String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(wrapper), Consts.UTF_8));
 				WxJsonResult wxMenuCreateResult = JsonUtil.gson.fromJson(menuCreateResult, WxJsonResult.class);
-				if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
+				if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
 					return wxMenuCreateResult;
 				}
 //			}

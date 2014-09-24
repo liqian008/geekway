@@ -57,7 +57,7 @@ public class GeekwayMpReplyController {
 			//发送客服消息
 			WxJsonResult replyResult = wxCustomReplyService.replyTextMessage(textMessage);
 			replyResult.setErrcode(0);
-			if(replyResult!=null&&replyResult.getErrcode()!=null&&replyResult.getErrcode()==0){
+			if(replyResult!=null&&replyResult.getErrcode()==0){
 				return JsonResultBuilderUtil.buildSuccessJson();
 			}
 		}
@@ -147,7 +147,7 @@ public class GeekwayMpReplyController {
 				//发送客服消息
 				WxJsonResult replyResult = wxCustomReplyService.replyMessage(replyMessage);
 				replyResult.setErrcode(0);
-				if(replyResult!=null&&replyResult.getErrcode()!=null&&replyResult.getErrcode()==0){
+				if(replyResult!=null&&replyResult.getErrcode()==0){
 					return JsonResultBuilderUtil.buildSuccessJson();
 				}
 			}

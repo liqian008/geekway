@@ -35,7 +35,7 @@ public class WxUserSyncTask implements Runnable{
 						String userOpenId = user.getOpenId();
 						WxUserInfoResult userInfoResult =  wxMpUserService.getUser(userOpenId);
 						//有效数据
-						if(userInfoResult!=null&&userInfoResult.getErrcode()==null){
+						if(userInfoResult!=null&&userInfoResult.getErrcode()==0){
 							user.setOpenId(userOpenId);
 							user.setNickname(userInfoResult.getNickname());
 							user.setCity(userInfoResult.getCity());

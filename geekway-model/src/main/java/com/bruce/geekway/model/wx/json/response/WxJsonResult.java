@@ -1,10 +1,10 @@
 package com.bruce.geekway.model.wx.json.response;
 
 public class WxJsonResult {
-	private Integer errcode;
+	private int errcode;
 	private String errmsg;
 
-	public Integer getErrcode() {
+	public int getErrcode() {
 		return errcode;
 	}
 

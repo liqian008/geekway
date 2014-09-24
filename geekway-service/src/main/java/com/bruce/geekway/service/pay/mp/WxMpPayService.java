@@ -42,7 +42,7 @@ public class WxMpPayService extends WxBaseService {
 		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_QUERY_ORDER_API, params, queryJson);
 		
 		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
-		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()!=null && wxpayDeliverResult.getErrcode()==0){//订单查询成功
+		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//订单查询成功
 			return wxpayDeliverResult;
 		}
 		return null;
@@ -63,7 +63,7 @@ public class WxMpPayService extends WxBaseService {
 		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
 		
 		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
-		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()!=null && wxpayDeliverResult.getErrcode()==0){//发货操作成功
+		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//发货操作成功
 			return wxpayDeliverResult;
 		}
 		return null;
@@ -83,7 +83,7 @@ public class WxMpPayService extends WxBaseService {
 		//发送至微信
 		String complaintResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
 		WxJsonResult wxpayComplaintResult = JsonUtil.gson.fromJson(complaintResultStr, WxJsonResult.class);
-		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()!=null && wxpayComplaintResult.getErrcode()==0){//维权处理成功
+		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()==0){//维权处理成功
 			return wxpayComplaintResult;
 		}
 		return null;

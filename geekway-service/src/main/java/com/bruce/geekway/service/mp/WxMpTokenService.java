@@ -40,7 +40,7 @@ public class WxMpTokenService {
 		
 		String authResultStr = WxHttpUtil.getRequest(ConstWeixin.WX_ACCESS_TOKEN_API, params);
 		WxAuthResult wxAuthRes = JsonUtil.gson.fromJson(authResultStr, WxAuthResult.class);
-		if(wxAuthRes!=null && wxAuthRes.getErrcode()==null){//正常的响应结果
+		if(wxAuthRes!=null && wxAuthRes.getErrcode()==0){//正常的响应结果
 //			WxAuthResult authResult = wxAuthRes;
 			long expireTime = System.currentTimeMillis() + (wxAuthRes.getExpires_in() - ACCESS_TOKEN_REQUEST_TIME) * 1000;
 			wxAuthRes.setExpiresTime(expireTime);

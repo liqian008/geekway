@@ -42,7 +42,7 @@ public class WxMpOauthService extends WxBaseService {
 		String oauthResult = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_ACCESS_TOKEN_API, params);
 		
 		WxOauthTokenResult wxOauthTokenResult = JsonUtil.gson.fromJson(oauthResult, WxOauthTokenResult.class);
-		if(wxOauthTokenResult!=null && wxOauthTokenResult.getErrcode()!=null && wxOauthTokenResult.getErrcode()==0){//成功
+		if(wxOauthTokenResult!=null && wxOauthTokenResult.getErrcode()==0){//成功
 			return wxOauthTokenResult;
 		}
 		return null;
@@ -63,9 +63,16 @@ public class WxMpOauthService extends WxBaseService {
 		String userinfoResultStr = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_USER_INFO_API, params); 
 		
 		WxUserInfoResult userinfoResult = JsonUtil.gson.fromJson(userinfoResultStr, WxUserInfoResult.class);
-		if(userinfoResult!=null && userinfoResult.getErrcode()!=null && userinfoResult.getErrcode()==0){//成功
+		if(userinfoResult!=null && userinfoResult.getErrcode()==0){//成功
 			return userinfoResult;
 		}
 		return null;
+	}
+	
+	public static void main(String[] args) {
+		
+		WxOauthTokenResult wxOauthTokenResult = JsonUtil.gson.fromJson("{\"access_token\":\"OezXcEiiBSKSxW0eoylIeNBzZXE3G7p6CKBs5AoNdMl7k_pRbM-5NE1JBbXo6zP3CZDqkkvJnkSPLXBsW6dhRZp57xqmnwR35_OHqCQ9Rs2RlrKtHSA4mKCQZ4i9g9PCLQXuhlIGqQmW8nkoMYTj0A\",\"expires_in\":7200,\"refresh_token\":\"OezXcEiiBSKSxW0eoylIeNBzZXE3G7p6CKBs5AoNdMl7k_pRbM-5NE1JBbXo6zP3R8rZXQHuE-atqESfC2K-c0EUrP5JlDvLagoEqbCdNoe0KCirUssq3jF6qa8A9_1nRFXUXMwGsMwRrpzh6A4Aeg\",\"openid\":\"oxGeHjg87dS82dsp4iP4SE1iVujA\",\"scope\":\"snsapi_base\"}", WxOauthTokenResult.class);
+		System.out.println(wxOauthTokenResult);
+		
 	}
 }

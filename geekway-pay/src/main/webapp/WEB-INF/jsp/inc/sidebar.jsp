@@ -36,10 +36,10 @@
 			</div>
 			 -->
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/orders" class="home-nav">我的订单<em></em></a>
+				<a href="${pageContext.request.contextPath}/orders?code=1" class="home-nav">我的订单<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/vouchers" class="home-nav">我的优惠券<em></em></a>
+				<a href="${pageContext.request.contextPath}/vouchers?code=1" class="home-nav">我的优惠券<em></em></a>
 			</div>
 			<!-- 
 			<div class="nav-item">

@@ -68,73 +68,73 @@ public class WxPayController {
 		return "wxpay/oauthResult";
 	}
 	
-	@RequestMapping(value = "/buy")
-	public String buy(Model model, HttpServletRequest request, HttpServletResponse response) {
-		
-		String banktype = "WX";
-		String body = "包笑公堂-爆破镖";// 商品名称信息，这里由测试网页填入。
-		String fee_type = "1";// 费用类型，这里1为默认的人民币
-		String input_charset = "UTF-8";// 字符集，可以使用GBK或者UTF-8
-		String notify_url = "http://wxmp.1758.com/wxpay/jspayNotify";// 支付成功后将通知该地址
-		String out_trade_no = "12345";// 订单号，商户需要保证该字段对于本商户的唯一性
-		String partner = ConstWeixin.WX_PAY_PARTERN_ID;// 测试商户号
-		String spbill_create_ip = "127.0.0.1";// 用户浏览器的ip，这个需要在前端获取。这里使用127.0.0.1测试值
-		String total_fee = "1";// 总金额。
-		String partnerKey = ConstWeixin.WX_PAY_PARTERN_KEY;// 这个值和以上其他值不一样是：签名需要它，而最后组成的传输字符串不能含有它。这个key是需要商户好好保存的。
-
-		SortedMap<String, String> packageMap = new TreeMap<String, String>();
-		packageMap.put("bank_type", banktype);
-		packageMap.put("body", body);
-		packageMap.put("fee_type", fee_type);
-		packageMap.put("input_charset", input_charset);
-		packageMap.put("notify_url", notify_url);
-		packageMap.put("out_trade_no", out_trade_no);
-		packageMap.put("partner", partner);
-		packageMap.put("spbill_create_ip", spbill_create_ip);
-		packageMap.put("total_fee", total_fee);
-
-		//生成package的串
-		String finalPackageText = WxAuthUtil.packageSign(packageMap); 
-		System.out.println(finalPackageText);
-
-		// 参与 paySign 签名的字段包括:appid、timestamp、noncestr、package 以及
-		// appkey(即paySignkey)。这里 signType 并不参与签名。
-
-		String timestamp = String.valueOf(DateUtil.getUnixTime(new Date()));
-		String noncestr = timestamp;
-
-		SortedMap<String, String> paySignMap = new TreeMap<String, String>();
-		paySignMap.put("appid", ConstWeixin.WX_APP_ID);
-		paySignMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);
-		paySignMap.put("timestamp", timestamp);
-		paySignMap.put("noncestr", noncestr);
-		paySignMap.put("package", finalPackageText);
-
-		String paySign = WxAuthUtil.paySign(paySignMap);
-		
-		
-		WxPayItemJsObj itemJsObj = new WxPayItemJsObj();
-		itemJsObj.setAppId(ConstWeixin.WX_APP_ID);
-		itemJsObj.setTimeStamp(timestamp);
-		itemJsObj.setNonceStr(noncestr);
-		itemJsObj.setPackageValue(finalPackageText);
-		itemJsObj.setSignType("SHA1");
-		itemJsObj.setPaySign(paySign);
-        model.addAttribute("itemJsObj", itemJsObj);
-        
-        //构造address
-        HttpSession session = request.getSession();
-		String userAccessToken = (String)session.getAttribute("userAccessToken");
-		
-		SortedMap<String, String> addressMap = new TreeMap<String, String>();
-		addressMap.put("accessToken", userAccessToken);
-		addressMap.put("timestamp", timestamp);
-		addressMap.put("noncestr", noncestr);
-		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
-		model.addAttribute("addressSign", addressSign);
-		
-		return "wxpay/buy";
-	}	
+//	@RequestMapping(value = "/buy")
+//	public String buy(Model model, HttpServletRequest request, HttpServletResponse response) {
+//		
+//		String banktype = "WX";
+//		String body = "包笑公堂-爆破镖";// 商品名称信息，这里由测试网页填入。
+//		String fee_type = "1";// 费用类型，这里1为默认的人民币
+//		String input_charset = "UTF-8";// 字符集，可以使用GBK或者UTF-8
+//		String notify_url = "http://wxmp.1758.com/wxpay/jspayNotify";// 支付成功后将通知该地址
+//		String out_trade_no = "12345";// 订单号，商户需要保证该字段对于本商户的唯一性
+//		String partner = ConstWeixin.WX_PAY_PARTERN_ID;// 测试商户号
+//		String spbill_create_ip = "127.0.0.1";// 用户浏览器的ip，这个需要在前端获取。这里使用127.0.0.1测试值
+//		String total_fee = "1";// 总金额。
+//		String partnerKey = ConstWeixin.WX_PAY_PARTERN_KEY;// 这个值和以上其他值不一样是：签名需要它，而最后组成的传输字符串不能含有它。这个key是需要商户好好保存的。
+//
+//		SortedMap<String, String> packageMap = new TreeMap<String, String>();
+//		packageMap.put("bank_type", banktype);
+//		packageMap.put("body", body);
+//		packageMap.put("fee_type", fee_type);
+//		packageMap.put("input_charset", input_charset);
+//		packageMap.put("notify_url", notify_url);
+//		packageMap.put("out_trade_no", out_trade_no);
+//		packageMap.put("partner", partner);
+//		packageMap.put("spbill_create_ip", spbill_create_ip);
+//		packageMap.put("total_fee", total_fee);
+//
+//		//生成package的串
+//		String finalPackageText = WxAuthUtil.packageSign(packageMap); 
+//		System.out.println(finalPackageText);
+//
+//		// 参与 paySign 签名的字段包括:appid、timestamp、noncestr、package 以及
+//		// appkey(即paySignkey)。这里 signType 并不参与签名。
+//
+//		String timestamp = String.valueOf(DateUtil.getUnixTime(new Date()));
+//		String noncestr = timestamp;
+//
+//		SortedMap<String, String> paySignMap = new TreeMap<String, String>();
+//		paySignMap.put("appid", ConstWeixin.WX_APP_ID);
+//		paySignMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);
+//		paySignMap.put("timestamp", timestamp);
+//		paySignMap.put("noncestr", noncestr);
+//		paySignMap.put("package", finalPackageText);
+//
+//		String paySign = WxAuthUtil.paySign(paySignMap);
+//		
+//		
+//		WxPayItemJsObj itemJsObj = new WxPayItemJsObj();
+//		itemJsObj.setAppId(ConstWeixin.WX_APP_ID);
+//		itemJsObj.setTimeStamp(timestamp);
+//		itemJsObj.setNonceStr(noncestr);
+//		itemJsObj.setPackageValue(finalPackageText);
+//		itemJsObj.setSignType("SHA1");
+//		itemJsObj.setPaySign(paySign);
+//        model.addAttribute("itemJsObj", itemJsObj);
+//        
+//        //构造address
+//        HttpSession session = request.getSession();
+//		String userAccessToken = (String)session.getAttribute("userAccessToken");
+//		
+//		SortedMap<String, String> addressMap = new TreeMap<String, String>();
+//		addressMap.put("accessToken", userAccessToken);
+//		addressMap.put("timestamp", timestamp);
+//		addressMap.put("noncestr", noncestr);
+//		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
+//		model.addAttribute("addressSign", addressSign);
+//		
+//		return "wxpay/buy";
+//	}	
 
 	////////////////////////////////////////////////////////
 	/////////////////来自微信的回调通知开始/////////////////////
@@ -337,7 +337,7 @@ public class WxPayController {
 	public static void main(String[] args) {
 		SortedMap<String, String> addressMap = new TreeMap<String, String>();
 		
-		addressMap.put("appid", "wx17ef1eaef46752cb");
+//		addressMap.put("appid", "wx17ef1eaef46752cb");
 		addressMap.put("accessToken", "OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA");
 		addressMap.put("timestamp", "1384841012");
 		addressMap.put("noncestr", "123456");

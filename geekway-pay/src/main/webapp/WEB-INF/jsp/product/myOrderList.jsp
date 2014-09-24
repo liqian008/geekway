@@ -41,7 +41,7 @@
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">three column folio</p>
-            <a href="contact.html" class="deploy-contact"></a>
+            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>

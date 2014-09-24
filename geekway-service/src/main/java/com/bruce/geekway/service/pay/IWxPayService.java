@@ -1,6 +1,7 @@
 package com.bruce.geekway.service.pay;
 
 import java.util.Date;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -11,6 +12,7 @@ import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayNotifyOrder;
 import com.bruce.geekway.model.WxProductOrder;
+import com.bruce.geekway.model.WxProductOrderItem;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
@@ -18,6 +20,7 @@ import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
+import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.utils.DateUtil;
@@ -40,6 +43,8 @@ public class IWxPayService{
 	private WxMpPayService wxMpPayService;
 	@Autowired
 	private IWxProductOrderService wxProductOrderService;
+	@Autowired
+	private IWxProductOrderItemService wxProductOrderItemService;
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
 	
@@ -70,10 +75,18 @@ public class IWxPayService{
 				String outTradeNo = wxNotifyOrder.getOutTradeNo();
 				WxProductOrder productOrder = wxProductOrderService.loadByTradeNo(outTradeNo);
 				if(productOrder!=null&&productOrder.getId()!=null){//有效的订单信息
+					List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
+					//遍历单条订单，扣减sku商品的库存数
+					if(orderItemList!=null&&orderItemList.size()>0){
+						for(WxProductOrderItem orderItem: orderItemList){
+							long productSkuId = orderItem.getProductSkuId();
+							int amount = orderItem.getAmount();
+							//执行扣减
+							wxProductSkuService.reduceAmount(productSkuId, amount);
+						}
+					}
 					// 更新订单表中的订单状态为支付完毕
 					wxProductOrderService.changeOrderStatus(outTradeNo, IWxProductOrderService.OrderStatus.PAYED.getStatus());
-					//TODO 更新sku的库存数
-					//wxProductSkuService.reduceAmount(1);
 				}
 			}
 		}

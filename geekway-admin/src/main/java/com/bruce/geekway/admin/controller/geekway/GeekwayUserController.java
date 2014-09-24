@@ -57,7 +57,7 @@ public class GeekwayUserController {
 		model.addAttribute("servletPath", servletPath);
 
 		WxUserListResult userListResult =   wxMpUserService.getUsers(null);
-		if(userListResult!=null&&userListResult.getErrcode()==null){
+		if(userListResult!=null&&userListResult.getErrcode()==0){
 			OpenIdList openIdList = userListResult.getData();
 			if(openIdList!=null&&openIdList.getOpenid()!=null){
 				for(String userOpenId: openIdList.getOpenid()){

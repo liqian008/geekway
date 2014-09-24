@@ -124,7 +124,7 @@ public class GeekwayBroadcastController {
 				}else if(materialType==3){//群发图片
 					broadcastResult = wxBroadcastService.broadcastMaterialImage(materialId);
 				}
-				if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+				if(broadcastResult!=null&&broadcastResult.getErrcode()==0){
 					return JsonResultBuilderUtil.buildSuccessJson(broadcastResult);
 				}
 			}

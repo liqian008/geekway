@@ -14,13 +14,29 @@ import com.bruce.geekway.model.WxProductVoucherCriteria;
 public interface IWxProductVoucherService extends IFoundationService<WxProductVoucher, Long, WxProductVoucherCriteria>{
 	
 	/**
-	 * 查询我的优惠券
+	 * 加载我的所有优惠券
 	 * @param userOpenId
 	 * @param voucherTailId
 	 * @param limit
 	 * @return
 	 */
 	public List<WxProductVoucher> fallLoadUserVoucherList(String userOpenId, long voucherTailId, int limit);
+	
+	/**
+	 * 加载我的可用优惠券
+	 * @param userOpenId
+	 * @param limit
+	 * @return
+	 */
+	public List<WxProductVoucher> queryUserAvailableVoucherList(String userOpenId, int limit);
+	
+	/**
+	 * 验证优惠券是否可用
+	 * @param voucherId
+	 * @param userOpenId
+	 * @return
+	 */
+	public boolean verifyVoucher(long voucherId, String userOpenId);
 	
 	
 }

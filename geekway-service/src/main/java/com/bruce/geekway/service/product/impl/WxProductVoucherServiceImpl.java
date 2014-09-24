@@ -77,6 +77,22 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		return queryByCriteria(criteria);
 	}
 	
+	public List<WxProductVoucher> queryUserAvailableVoucherList(String userOpenId, int limit){
+		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
+		WxProductVoucherCriteria.Criteria subCriteria = criteria.createCriteria();
+		subCriteria.andUserOpenIdEqualTo(userOpenId).andStatusEqualTo((short) 1);
+		criteria.setLimitRows(limit);
+		criteria.setOrderByClause(" id desc");
+		return queryByCriteria(criteria);
+	}
+	
+	public boolean verifyVoucher(long voucherId, String userOpenId){
+		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
+		criteria.createCriteria().andIdEqualTo(voucherId).andUserOpenIdEqualTo(userOpenId).andStatusEqualTo((short) 1);
+		return wxProductVoucherMapper.countByExample(criteria) >=1;
+	}
+	
+	
 	
 	public WxProductVoucherMapper getWxProductVoucherMapper() {
 		return wxProductVoucherMapper;

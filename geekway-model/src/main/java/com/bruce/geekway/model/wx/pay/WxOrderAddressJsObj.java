@@ -1,19 +1,19 @@
 package com.bruce.geekway.model.wx.pay;
 
 /**
- * 商品js对象，在提交微信支付时构造
+ * 微信共享地址对象，下订单时构造
  * 
  * @author liqian
  * 
  */
-public class WxPayItemJsObj {
+public class WxOrderAddressJsObj {
 
 	private String appId;
 	private String timeStamp;
 	private String nonceStr;
-	private String packageValue;
-	private String signType="SHA1";
-	private String paySign;
+	private String scope = "jsapi_address";
+	private String signType = "SHA1";
+	private String addrSign;
 
 	public String getAppId() {
 		return appId;
@@ -39,14 +39,12 @@ public class WxPayItemJsObj {
 		this.nonceStr = nonceStr;
 	}
 
-
-
-	public String getPackageValue() {
-		return packageValue;
+	public String getScope() {
+		return scope;
 	}
 
-	public void setPackageValue(String packageValue) {
-		this.packageValue = packageValue;
+	public void setScope(String scope) {
+		this.scope = scope;
 	}
 
 	public String getSignType() {
@@ -57,13 +55,12 @@ public class WxPayItemJsObj {
 		this.signType = signType;
 	}
 
-	public String getPaySign() {
-		return paySign;
+	public String getAddrSign() {
+		return addrSign;
 	}
 
-	public void setPaySign(String paySign) {
-		this.paySign = paySign;
+	public void setAddrSign(String addrSign) {
+		this.addrSign = addrSign;
 	}
-
 
 }

@@ -157,8 +157,9 @@ public class WxAuthUtil {
 	 */
 	public static String formatWxPaySignText(SortedMap<String, String> paramMap) {
 		if(paramMap!=null&&paramMap.size()>0){
-			paramMap.put("appkey", ConstWeixin.WX_PAY_SIGN_KEY);//外部无需传入appkey
-			paramMap.put("appid", ConstWeixin.WX_APP_ID);//外部无需传入appid
+			if(paramMap.get("appid")==null){
+				paramMap.put("appid", ConstWeixin.WX_APP_ID);//外部无需传入appid
+			}
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: paramMap.entrySet()){
 				String key = entry.getKey();
@@ -199,21 +200,35 @@ public class WxAuthUtil {
 	
 	public static void main(String[] args) {
 		
-		TreeMap<String,String> paramMap = new TreeMap<String, String>();
+		TreeMap<String,String> addressMap = new TreeMap<String, String>();
+		addressMap.put("appid", "wx17ef1eaef46752cb");
+		addressMap.put("accessToken", "OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA");
+		addressMap.put("timestamp", "1384841012");
+		addressMap.put("noncestr", "123456");
+		addressMap.put("url", "http://open.weixin.qq.com/");
+		String addressStr = WxAuthUtil.formatWxPaySignText(addressMap);
+		System.out.println("addressStr: "+addressStr);
+		String example = "accesstoken=OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA&appid=wx17ef1eaef46752cb&noncestr=123456&timestamp=1384841012&url=http://open.weixin.qq.com/";
+		System.out.println(example.equals(addressStr));
+		String addressSign = Sha1Util.getSha1(example);
+		System.out.println(addressSign);
 		
-		paramMap.put("appId", "wx24e31a5fd464b35c");
-		paramMap.put("openId", "oLpWZjtmQzS1xYSaIQA3QCkUuehg");
-		paramMap.put("appKey", "4jrKLk1I6Ng9snRvPVBpjUfHeecyttHNMtmRPseZ7fZgDCsU9L51AR2QlgR6kVPlVC0Se4iVv72UTA3j0WORFoZwYbyuvSyMJ7Q4pYyS6RWnmU1CU80siecT0FBkW4ER");
-		paramMap.put("isSubscribe", "1");
-		paramMap.put("timeStamp", "1410514517");
-		paramMap.put("nonceStr", "otmNm11FbnPqkFEK");
 		
-		String flatStr = formatWxPaySignText(paramMap);
-		System.out.println(flatStr);
-		
-		String sign = Sha1Util.getSha1(flatStr);
-		
-		System.out.println(sign);
+//		TreeMap<String,String> paramMap = new TreeMap<String, String>();
+//		
+//		paramMap.put("appId", "wx24e31a5fd464b35c");
+//		paramMap.put("openId", "oLpWZjtmQzS1xYSaIQA3QCkUuehg");
+//		paramMap.put("appKey", "4jrKLk1I6Ng9snRvPVBpjUfHeecyttHNMtmRPseZ7fZgDCsU9L51AR2QlgR6kVPlVC0Se4iVv72UTA3j0WORFoZwYbyuvSyMJ7Q4pYyS6RWnmU1CU80siecT0FBkW4ER");
+//		paramMap.put("isSubscribe", "1");
+//		paramMap.put("timeStamp", "1410514517");
+//		paramMap.put("nonceStr", "otmNm11FbnPqkFEK");
+//		
+//		String flatStr = formatWxPaySignText(paramMap);
+//		System.out.println(flatStr);
+//		
+//		String sign = Sha1Util.getSha1(flatStr);
+//		
+//		System.out.println(sign);
 	}
 	
 }

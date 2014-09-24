@@ -77,7 +77,7 @@ public class HtmlBuildUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div>");
 			sb.append("<p class='quote-item'>");
-			sb.append("优惠券信息： 编号 "+productVoucher.getCode()+" | 金额 "+productVoucher.getPrice()+"元 "+" | 状态 "+productVoucher.getStatus());
+			sb.append("优惠券信息： 编号 "+productVoucher.getVoucherCode()+" | 金额 "+productVoucher.getPrice()+"元 "+" | 状态 "+productVoucher.getStatus());
 			sb.append("<em>使用有效期: "+DateUtil.date2YMDHMS(productVoucher.getExpireTime())+"前</em>");
 			sb.append("</p>");
 			sb.append("</div>");
@@ -85,6 +85,5 @@ public class HtmlBuildUtils {
 		}
 		return null;
 	}
-
 
 }

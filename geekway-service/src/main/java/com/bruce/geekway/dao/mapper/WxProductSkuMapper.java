@@ -80,6 +80,7 @@ public interface WxProductSkuMapper {
 	 * @param example
 	 * @return
 	 */
-	List<WxProductSku> fallLoadCategoryProductSkuList(@Param("categoryId") int categoryId, @Param("productTailId") int productTailId, @Param("limit") int limit);
+	public List<WxProductSku> fallLoadCategoryProductSkuList(@Param("categoryId") int categoryId, @Param("productTailId") int productTailId, @Param("limit") int limit);
 	
+	public int reduceAmount(@Param("id") long id, @Param("amount") int amount);
 }

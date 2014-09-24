@@ -110,7 +110,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		if(content!=null){
 			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastText(content);
 			
-			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+			if(broadcastResult!=null&&broadcastResult.getErrcode()==0){
 				//构造群发记录
 				WxBroadcast broadcastLog = new WxBroadcast();
 				broadcastLog.setMessageType("");//文本
@@ -137,7 +137,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 			String mediaId = uploadWxNews(articleList);//upload & getMediaId
 			
 			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastNews(mediaId);
-			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+			if(broadcastResult!=null&&broadcastResult.getErrcode()==0){
 				//构造群发记录
 				WxBroadcast broadcastLog = new WxBroadcast();
 				broadcastLog.setMessageType("");//单图文
@@ -161,7 +161,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		if(articleList!=null&&articleList.size()>0){
 			String mediaId = uploadWxNews(articleList);
 			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastNews(mediaId);
-			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+			if(broadcastResult!=null&&broadcastResult.getErrcode()==0){
 				//构造群发记录
 				WxBroadcast broadcastLog = new WxBroadcast();
 				broadcastLog.setMessageType("");//多图文
@@ -182,7 +182,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		WxMaterialMultimedia materialImage = wxMaterialMultimediaService.loadImageById(materialId);
 		if(materialImage!=null&&materialImage.getMediaId()!=null){
 			WxBroadcastResult broadcastResult =  wxMpBroadcastService.broadcastImage(materialImage.getMediaId());
-			if(broadcastResult!=null&&(broadcastResult.getErrcode()==null||broadcastResult.getErrcode()==0)){
+			if(broadcastResult!=null&&broadcastResult.getErrcode()==0){
 				//构造群发记录
 				WxBroadcast broadcastLog = new WxBroadcast();
 				broadcastLog.setMessageType("");//图片

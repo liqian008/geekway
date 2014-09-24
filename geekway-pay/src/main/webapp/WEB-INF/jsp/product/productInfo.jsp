@@ -4,10 +4,6 @@
 <%@ page import="com.bruce.geekway.model.*" %>
 
 
-<%
-String contextPath = request.getContextPath();
-%>
-
 <!DOCTYPE HTML>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -47,7 +43,7 @@ String contextPath = request.getContextPath();
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">${product.name}</p>
-            <a href="contact.html" class="deploy-contact"></a>
+            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>
@@ -56,8 +52,15 @@ String contextPath = request.getContextPath();
         </div>
         
         <div class="content"> 
-        	<div class="decoration"></div> 
+	
+			<div class="decoration"></div> 
         	<jsp:include page="../inc/weixinShareNotification.jsp"></jsp:include>
+
+        	<div class="container no-bottom">
+            	<div class="section-title">
+                	<h4><a href="">首页</a>&nbsp;/&nbsp;<a href="">热销</a></h4>
+                </div>
+            </div>
         	
         	<div class="container">
                 <div class="slider-controls" data-snap-ignore="true">                
@@ -89,9 +92,9 @@ String contextPath = request.getContextPath();
 	            	WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
 	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
 	            	%>
-            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>${product.originPrice}</del></span>元</li>
-	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">${product.price}</span>元</li>
-	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">${product.amount}</span>件</li>
+            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>${currentProductSku.originPrice}</del></span>元</li>
+	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">${currentProductSku.price}</span>元</li>
+	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">${currentProductSku.amount}</span>件</li>
 	            	
 	            	<%
 	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
@@ -138,82 +141,87 @@ String contextPath = request.getContextPath();
 	            		</div>
 	            	</li>
 	            	<%}%>
-	            	
-					<script>
-						var skuMap = new Map();
-						<%
-						Map<String, String> productSkuMap = (Map<String, String>)request.getAttribute("productSkuMap");
-						if(productSkuMap!=null&&productSkuMap.size()>0){
-							for(Entry<String, String> productSkuEntry: productSkuMap.entrySet()){
-								String key = productSkuEntry.getKey();
-								String value = productSkuEntry.getValue();
-						%>
-						var skuPropValueJson = <%=value%>;
-						skuMap.put('<%=key%>', skuPropValueJson);
-						<%}
-						}%>
-						//选定时检查二维数组的数据
-						//var skuObj = skuMap.get("selectedKey");//根据选定的key查询
-						
-						$("#choose-color .item").click(function(){
-							$("#choose-color .item").removeClass("selected");
-							$(this).addClass("selected");
-							
-							var colorProperty = $(this).attr("data");
-							var sizeProperty = $("#choose-version .selected").attr("data");
-							if(colorProperty!=null && sizeProperty!=null){
-								var propertiesName = colorProperty + sizeProperty;
-								var productJson = skuMap.get(propertiesName);
-								reloadProductInfo(productJson);
-							}
-						});
-						
-						$("#choose-version .item").click(function(){
-							$("#choose-version .item").removeClass("selected");
-							$(this).addClass("selected");
-							
-							var colorProperty = $("#choose-color .selected").attr("data");
-							var sizeProperty = $(this).attr("data");
-							if(colorProperty!=null && sizeProperty!=null){
-								var propertiesName = colorProperty + sizeProperty;
-								var productJson = skuMap.get(propertiesName);
-								reloadProductInfo(productJson);
-							}
-						});
-						
-						//点击购买操作
-						$("#buyEnable").click(function(){
-							alert("123");
-						});
-						
-						function reloadProductInfo(productJson){
-							if(productJson!=null){
-								$("#originPrice").html("<del>"+productJson.originPrice+"</del>");//刷新价格
-								$("#price").text(productJson.price);//刷新价格
-								$("#leftAmount").text(productJson.amount);//刷新库存 
-								if(productJson.amount>0&&productJson.price>0){//刷新购买&购物车按钮
-									$("#buyEnable").removeClass("gone");
-									$("#buyDisable").addClass("gone");
-								}else{
-									$("#buyDisable").removeClass("gone");
-									$("#buyEnable").addClass("gone");
-								}
-							}
-						}
-					</script>
-	            	
-	            	<li><span class="text-highlight highlight-blue">购买数量</span>1件</li>
+	            	<li>购买数量: <span id="buyAmount" class="text-highlight highlight-blue">1</span>件</li> 
             	</ul>
+            	<input type="hidden" id="productSkuId" name="productSkuId" value="${currentProductSku.id}"/> 
+            	
             	<%
-            	boolean buyEnable = false;
+            	boolean buyNow = false;
             	if(currentProductSku!=null && currentProductSku.getPrice()!=null&&currentProductSku.getPrice()>0&&currentProductSku.getAmount()!=null&&currentProductSku.getAmount()>0){
-            		buyEnable = true;
+            		buyNow = true;
             	}
             	%>
-                <a href="javascript:void(0)" id="buyEnable" class="button-big button-green <%=buyEnable?"":"gone"%>">点击购买</a>
-                <div class="static-notification-red <%=buyEnable?"gone":""%>" id="buyDisable">
+                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=buyNow?"":"gone"%>">点击购买</a>
+                <div class="static-notification-red <%=buyNow?"gone":""%>" id="buyDisable">
                     <p class="center-text uppercase">本品暂时缺货</p>
                 </div>
+                
+                
+                <script>
+					var skuMap = new Map();
+					<%
+					Map<String, String> productSkuMap = (Map<String, String>)request.getAttribute("productSkuMap");
+					if(productSkuMap!=null&&productSkuMap.size()>0){
+						for(Entry<String, String> productSkuEntry: productSkuMap.entrySet()){
+							String key = productSkuEntry.getKey();
+							String value = productSkuEntry.getValue();
+					%>
+					var skuPropValueJson = <%=value%>;
+					skuMap.put('<%=key%>', skuPropValueJson);
+					<%}
+					}%>
+					//选定时检查二维数组的数据
+					//var skuObj = skuMap.get("selectedKey");//根据选定的key查询
+					
+					$("#choose-color .item").click(function(){
+						$("#choose-color .item").removeClass("selected");
+						$(this).addClass("selected");
+						
+						var colorProperty = $(this).attr("data");
+						var sizeProperty = $("#choose-version .selected").attr("data");
+						if(colorProperty!=null && sizeProperty!=null){
+							var propertiesName = colorProperty + sizeProperty;
+							var productSkuJson = skuMap.get(propertiesName);
+							reloadProductInfo(productSkuJson);
+						}
+					});
+					
+					$("#choose-version .item").click(function(){
+						$("#choose-version .item").removeClass("selected");
+						$(this).addClass("selected");
+						
+						var colorProperty = $("#choose-color .selected").attr("data");
+						var sizeProperty = $(this).attr("data");
+						if(colorProperty!=null && sizeProperty!=null){
+							var propertiesName = colorProperty + sizeProperty;
+							var productSkuJson = skuMap.get(propertiesName);
+							reloadProductInfo(productSkuJson);
+						}
+					});
+					
+					//点击购买操作
+					$("#buyNow").click(function(){
+						var buyAmount = $("#buyAmount").text();
+						var productSkuId = $("#productSkuId").val();
+						location.href= "${pageContext.request.contextPath}/buyNow?code=1&amount="+buyAmount+"&productSkuId="+productSkuId;						
+					});
+					
+					function reloadProductInfo(productSkuJson){
+						if(productSkuJson!=null){
+							$("#productSkuId").val(productSkuJson.id);//刷新库存
+							$("#originPrice").html("<del>"+productSkuJson.originPrice+"</del>");//刷新价格
+							$("#price").text(productSkuJson.price);//刷新价格
+							$("#leftAmount").text(productSkuJson.amount);//刷新库存
+							if(productSkuJson.amount>0&&productSkuJson.price>0){//刷新购买&购物车按钮
+								$("#buyNow").removeClass("gone");
+								$("#buyDisable").addClass("gone");
+							}else{
+								$("#buyDisable").removeClass("gone");
+								$("#buyNow").addClass("gone");
+							}
+						}
+					}
+				</script>
             </div>
             
             <div class="decoration"></div>
@@ -241,37 +249,37 @@ String contextPath = request.getContextPath();
 			                
             <div class="decoration"></div>
             
-            <div class="container no-bottom">
+            <div class="container">
             	<div class="section-title">
                 	<h4>推荐商品</h4>
                 </div>
-            	<div class="one-half-responsive">
-                	<p class="quote-item">
-                    	<img src="images/general-nature/6s.jpg" alt="img">
-                        Great product and awesome help to get for this! Many thanks mate!
-                        <em>John Doe - ThemeForest Customer</em>
-                    </p>
-                </div>
-                <div class="one-half-responsive last-column">
-                	<p class="quote-item">
-                    	<img src="images/general-nature/2s.jpg" alt="img">
-                        Fast support, awesome file, good  docs, this rocks! Thank you for all!
-                        <em>John Doe - ThemeForest Customer</em>
-                    </p>                
-                </div>
-            	<div class="one-half-responsive">
-                	<p class="quote-item">
-                    	<img src="images/general-nature/3s.jpg" alt="img">
-                        Thanks for the awesome item, just what I was searching for all along!
-                        <em>John Doe - ThemeForest Customer</em>
-                    </p>
-                </div>
-                <div class="one-half-responsive last-column">
-                	<p class="quote-item">
-                    	<img src="images/general-nature/4s.jpg" alt="img">
-                        Fast loading, great support, easy to use, everything I asked for!
-                        <em>John Doe - ThemeForest Customer</em>
-                    </p>                
+                <a href="index.html#" class="next-quote"></a>
+                <a href="index.html#" class="prev-quote"></a>
+                <div class="quote-slider" data-snap-ignore="true">
+                    <div>
+                        <div class="services-item">
+                            <img src="images/general-nature/3s.jpg" alt="img">
+                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
+                        </div>
+                    </div>
+                    <div>
+                        <div class="services-item">
+                            <img src="images/general-nature/4s.jpg" alt="img">
+                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
+                        </div>
+                    </div>
+                    <div>
+                        <div class="services-item">
+                            <img src="images/general-nature/5s.jpg" alt="img">
+                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
+                        </div>
+                    </div>
+                    <div>
+                        <div class="services-item">
+                            <img src="images/general-nature/6s.jpg" alt="img">
+                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
+                        </div>
+                    </div>
                 </div>
             </div>
              

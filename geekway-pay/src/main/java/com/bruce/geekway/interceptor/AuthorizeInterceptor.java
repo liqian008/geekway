@@ -40,6 +40,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				for(Cookie cookie: cookieArray){
 					if(ConstFront.COOKIE_KEY_WX_OPENID.equals(cookie.getName())){
 						userOpenId = cookie.getValue();
+						System.out.println("userOpenId from cookie: "+userOpenId);
 						break;
 					}
 				}
