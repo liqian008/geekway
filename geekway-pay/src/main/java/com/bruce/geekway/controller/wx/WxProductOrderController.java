@@ -7,22 +7,27 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
+import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
+import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -30,8 +35,10 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.utils.DateUtil;
+import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
+import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -43,17 +50,13 @@ import com.bruce.geekway.utils.WxAuthUtil;
 public class WxProductOrderController {
 	
 	@Autowired
-	private IWxProductCategoryService wxProductCategoryService;
-	@Autowired
-	private IWxProductTagService wxProductTagService;
-	@Autowired
 	private IWxProductService wxProductService;
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
 	@Autowired
 	private IWxProductVoucherService wxProductVoucherService;
 	@Autowired
-	private IWxSkuPropValueService wxSkuPropValueService;
+	private WxMpOauthService wxMpOauthService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
 
@@ -66,9 +69,22 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/buyNow")
-	public String buyNow(Model model, int productSkuId, int amount, HttpServletRequest request) {
+	public String buyNow(Model model, @RequestParam(required=true)String code,int productSkuId, int amount, HttpServletRequest request) {
+		
 		//获取userAccessToken，用于获取微信的共享地址address
-		String userAccessToken = "";
+		String userAccessToken = null;
+
+		if(StringUtils.isNotBlank(code)){//oauth回调后
+//			//根据code换取openId
+//			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
+//			System.out.println("oauthResult: "+oauthResult);
+//			if(oauthResult!=null){
+//				String userOpenId = oauthResult.getOpenid();
+//				userAccessToken = oauthResult.getAccess_token();
+//				System.out.println("OAUTH openId: "+userOpenId);
+//				//ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId); 
+//			}
+		}
 		
 		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
 		//检查订单的有效性
@@ -86,6 +102,7 @@ public class WxProductOrderController {
 		
 		//获取当前页面url，用于构造地址签名
 		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
+		System.out.println("userAccessToken: "+userAccessToken);
 		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
 		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
 		
@@ -213,6 +230,7 @@ public class WxProductOrderController {
 		addressJsObj.setTimeStamp(timestamp);
 		addressJsObj.setNonceStr(noncestr);
 		addressJsObj.setAddrSign(addressSign);
+//		System.out.println("addressJsObj: "+JsonUtil.gson.toJson(addressJsObj));
 		return addressJsObj;
 	}
 	

@@ -56,13 +56,15 @@
 			<div class="decoration"></div> 
         	<jsp:include page="../inc/weixinShareNotification.jsp"></jsp:include>
 
-        	<div class="container no-bottom">
-            	<div class="section-title">
-                	<h4><a href="">首页</a>&nbsp;/&nbsp;<a href="">热销</a></h4>
-                </div>
-            </div>
-        	
-        	<div class="container">
+				<div class="container no-bottom">
+					<div class="section-title">
+						<h4>
+							<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">热销</a>
+						</h4>
+					</div>
+				</div>
+
+				<div class="container">
                 <div class="slider-controls" data-snap-ignore="true">                
                     <div>
                         <img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image" alt="img">

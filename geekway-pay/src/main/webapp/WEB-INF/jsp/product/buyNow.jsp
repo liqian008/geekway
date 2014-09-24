@@ -118,26 +118,30 @@
 
 </body>
 
+
 <script>
-//获取微信共享地址
-WeixinJSBridge.invoke('editAddress',{
-	"appId" : getAppId(),
-	"scope" : "jsapi_address",
-	"signType" : "sha1",
-	"addrSign" : "xxxxx",
-	"timeStamp" : "12345",
-	"nonceStr" : "10000",
-	},function(res){
-		//若res 中所带的返回值不为空,则表示用户选择该返回值作为收货地址。否则若返回空,则表示用户取消了这一次编辑收货地址。
-		alert(res.proviceFirstStageName);
-		alert(res.addressCitySecondStageName);
-		//document.form1.address1.value =res.proviceFirstStageName;
-		//document.form1.address2.value =res.addressCitySecondStageName;
-		//document.form1.address3.value =res.addressCountiesThirdStageName;
-		//document.form1.detail.value = res.addressDetailInfo;
-		//document.form1.phone.value = res.telNumber;
-	}
-);
+$("#chooseAddress").click(function(){
+	alert("choose");
+	//获取微信共享地址
+	WeixinJSBridge.invoke('editAddress',{
+		"appId" : getAppId(),
+		"scope" : "jsapi_address",
+		"signType" : "sha1",
+		"addrSign" : "xxxxx",
+		"timeStamp" : "12345",
+		"nonceStr" : "10000",
+		},function(res){
+			//若res 中所带的返回值不为空,则表示用户选择该返回值作为收货地址。否则若返回空,则表示用户取消了这一次编辑收货地址。
+			alert(res.proviceFirstStageName);
+			alert(res.addressCitySecondStageName);
+			//document.form1.address1.value =res.proviceFirstStageName;
+			//document.form1.address2.value =res.addressCitySecondStageName;
+			//document.form1.address3.value =res.addressCountiesThirdStageName;
+			//document.form1.detail.value = res.addressDetailInfo;
+			//document.form1.phone.value = res.telNumber;
+		}
+	);
+})
 </script>
 
 </html>
