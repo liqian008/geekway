@@ -57,7 +57,6 @@ String contextPath = request.getContextPath();
         <div class="content">
         	<div class="decoration"></div>
         	
-        	
 			<div class="container no-bottom">
 				<div class="big-notification blue-notification"> 
 					<h4 class="uppercase">优惠券使用介绍</h4>
@@ -68,8 +67,19 @@ String contextPath = request.getContextPath();
 				</div>
 			</div>
         	
-			
+			<div class="container no-bottom">
+            	<div class="section-title">
+                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">我的优惠券</a></h4>
+                </div>
+            </div>
+            <div class="decoration"></div>
+        	
 			<div id="vouchersContainer" class="container no-bottom">
+				<div class="section-title">
+                	<h4>我的优惠券</h4>
+                    <em>......</em>
+                </div>
+			
             </div>
 			
             

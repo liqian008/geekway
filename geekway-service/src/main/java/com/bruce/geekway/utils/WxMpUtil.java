@@ -1,5 +1,7 @@
 package com.bruce.geekway.utils;
 
+import java.net.URLEncoder;
+
 import com.bruce.geekway.constants.ConstWeixin;
 
 
@@ -15,13 +17,21 @@ public class WxMpUtil {
 			+ "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 
 	
-	
+	/**
+	 * redirectUrl需要urlEncode
+	 * @param scopeType
+	 * @param redirectUrl
+	 * @param state
+	 * @return
+	 */
 	public static String buildWeixinOauthUrl(int scopeType, String redirectUrl, String state){
 		String scope = "snsapi_base";
 		if(scopeType==1){
 			scope = "snsapi_userinfo";
 		}
-		String oauthUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + ConstWeixin.WX_APP_ID + "&redirect_uri=" + redirectUrl+ "&response_type=code&scope="+scope+"&state="+state+"#wechat_redirect";
+		String encodedUrl = URLEncoder.encode(redirectUrl);
+		
+		String oauthUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + ConstWeixin.WX_APP_ID + "&redirect_uri=" + encodedUrl+ "&response_type=code&scope="+scope+"&state="+state+"#wechat_redirect";
 		System.out.println("oauthUrl: "+ oauthUrl);
 		return oauthUrl;
 	}
