@@ -1,5 +1,12 @@
 @charset "utf-8";
 
+.home-voucher {
+background-image: url(../images/misc/sidebar-voucher.png);
+}
+.home-order {
+background-image: url(../images/misc/sidebar-order.png);
+}
+
 .deploy-refresh{
 	position:relative;
 	right:0px;

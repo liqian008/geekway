@@ -35,6 +35,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		boolean fromWeixinOAuth = StringUtils.isNotBlank(code);
 		boolean needAuthorize = !fromWeixinOAuth && getNeedAuthorize(request, handlerMethod);//非微信回调且需要登录
 		if (needAuthorize) {//需要授权才能访问
+			//检查cookie中是否存在用户信息
 			Cookie[] cookieArray = request.getCookies();
 			if(cookieArray!=null&&cookieArray.length>0){
 				for(Cookie cookie: cookieArray){
@@ -51,6 +52,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				String wxOauthUrl = null;
 				if (RequestUtil.isGet(request)) {
 					// Get跳回请求地址，增加redirectUrl
+					
 					String redirectUrl = UrlUtil.getRequestUrl(request);
 					System.out.println("redirectUrl: "+redirectUrl);
 					wxOauthUrl = WxMpUtil.buildWeixinOauthUrl(0, redirectUrl, "");

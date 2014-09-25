@@ -47,8 +47,7 @@
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
+            <a href="javascript:void(0)" id="shareToTimeline" class="facebook-content"></a>
         </div>
         
         <div class="content"> 
@@ -332,6 +331,10 @@ function shareFriend() {
         
     });
 }
+
+$("#shareToTimeline").click(function(){
+	shareTimeline();
+});
 </script>
 
 </html>

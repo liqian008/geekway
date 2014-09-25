@@ -101,8 +101,11 @@ public class WxAuthUtil {
 	 */
 	public static String formatWxPayPackageText(SortedMap<String, String> packageMap){
 		if(packageMap!=null&&packageMap.size()>0){
-			packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);//无需外部传入partner
+			if(packageMap.get("partner")==null){
+				packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);//无需外部传入partner
+			}
 			packageMap.remove("key");//key不参与package的生成
+			
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: packageMap.entrySet()){
 				String key = entry.getKey();
@@ -114,7 +117,12 @@ public class WxAuthUtil {
 				}
 			}
 			sb.setLength(sb.length()-1);
-			return sb.toString();
+			String result = sb.toString();
+			if(log.isDebugEnabled()){
+				log.debug("final packageMap: " + packageMap);
+				log.debug("final package text : " + result);
+			}
+			return result;
 		}
 		return "";
 	}
@@ -128,8 +136,11 @@ public class WxAuthUtil {
 	 */
 	public static String formatWxPayUrlEncodeText(SortedMap<String, String> packageMap, boolean urlEncode) {
 		if(packageMap!=null&&packageMap.size()>0){
-			packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);//无需外部传入partner
+			if(packageMap.get("partner")==null){
+				packageMap.put("partner", ConstWeixin.WX_PAY_PARTERN_ID);//无需外部传入partner
+			}
 			packageMap.remove("key");//key不参与package的生成
+			
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: packageMap.entrySet()){
 				String key = entry.getKey();
@@ -142,7 +153,12 @@ public class WxAuthUtil {
 				sb.append(key.toLowerCase()+"="+value+"&");
 			}
 			sb.setLength(sb.length()-1);
-			return sb.toString();
+			String result = sb.toString();
+			if(log.isDebugEnabled()){
+				log.debug("final encode packageMap: " + packageMap);
+				log.debug("final encoded text : " + result);
+			}
+			return result;
 		}
 		return "";
 	}
@@ -160,6 +176,7 @@ public class WxAuthUtil {
 			if(paramMap.get("appid")==null){
 				paramMap.put("appid", ConstWeixin.WX_APP_ID);//外部无需传入appid
 			}
+			
 			StringBuilder sb = new StringBuilder();
 			for(Entry<String, String> entry: paramMap.entrySet()){
 				String key = entry.getKey();
@@ -169,7 +186,12 @@ public class WxAuthUtil {
 				}
 			}
 			sb.setLength(sb.length()-1);
-			return sb.toString();
+			String result = sb.toString();
+			if(log.isDebugEnabled()){
+				log.debug("final sign map : " + paramMap);
+				log.debug("final formated signStr : " + result);
+			}
+			return result;
 		}
 		return "";
 	}

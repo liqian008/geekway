@@ -69,21 +69,21 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/buyNow")
-	public String buyNow(Model model, @RequestParam(required=true)String code,int productSkuId, int amount, HttpServletRequest request) {
+	public String buyNow(Model model, @RequestParam(required=false)String code,int productSkuId, int amount, HttpServletRequest request) {
 		
 		//获取userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = null;
 
 		if(StringUtils.isNotBlank(code)){//oauth回调后
-//			//根据code换取openId
-//			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
-//			System.out.println("oauthResult: "+oauthResult);
-//			if(oauthResult!=null){
-//				String userOpenId = oauthResult.getOpenid();
-//				userAccessToken = oauthResult.getAccess_token();
-//				System.out.println("OAUTH openId: "+userOpenId);
-//				//ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId); 
-//			}
+			//根据code换取openId
+			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
+			System.out.println("oauthResult: "+JsonUtil.gson.toJson(oauthResult));
+			if(oauthResult!=null){
+				String userOpenId = oauthResult.getOpenid();
+				userAccessToken = oauthResult.getAccess_token();
+				System.out.println("OAUTH openId: "+userOpenId);
+				//ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId); 
+			}
 		}
 		
 		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
@@ -100,15 +100,30 @@ public class WxProductOrderController {
 		List<WxProductVoucher> availableVoucherList = wxProductVoucherService.queryUserAvailableVoucherList(userOpenId, limit);
 		model.addAttribute("availableVoucherList", availableVoucherList);
 		
-		//获取当前页面url，用于构造地址签名
-		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
-		System.out.println("userAccessToken: "+userAccessToken);
-		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
-		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
+//		//获取当前页面url，用于构造地址签名
+//		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
+//		System.out.println("userAccessToken: "+userAccessToken);
+//		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
+//		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
 		
 		return "product/buyNow";
 	}
 
+	@RequestMapping("address")
+	public String address(Model model, String token, HttpServletRequest request) {
+		//获取当前页面url，用于构造地址签名
+		String queryString = request.getQueryString();
+		String currentUrl = request.getRequestURL().toString();
+		if(StringUtils.isNotBlank(queryString)){
+			currentUrl = currentUrl + "&" + queryString;
+		}
+		System.out.println("userAccessToken: "+token);
+		System.out.println("currentUrl: " + currentUrl);
+		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(token, currentUrl);
+		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
+		return "product/address";
+	}
+	
 	
 	
 //	/**
