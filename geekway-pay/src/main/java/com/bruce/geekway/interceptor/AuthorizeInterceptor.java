@@ -55,12 +55,14 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 					
 					String redirectUrl = UrlUtil.getRequestUrl(request);
 					System.out.println("redirectUrl: "+redirectUrl);
-					wxOauthUrl = WxMpUtil.buildWeixinOauthUrl(0, redirectUrl, "");
+//					wxOauthUrl = WxMpUtil.buildWeixinOauthUrl(0, redirectUrl, "");
+					
+					wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
 				} else {
 					// 其他方法取referer，增加redirectUrl
 					String redirectUrl = UrlUtil.getRefererUrl(request);
 					System.out.println("redirectUrl: "+redirectUrl);
-					wxOauthUrl = WxMpUtil.buildWeixinOauthUrl(0, redirectUrl, "");
+					wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
 				}
 				response.sendRedirect(wxOauthUrl);
 				return false;

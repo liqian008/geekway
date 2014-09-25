@@ -27,20 +27,25 @@ public class WxSystemController {
 	}
 	
 	/**
-	 * oauth请求后的redirect，需要再进行跳转
+	 * 微信oauth请求后的redirect代理，需要根据其中的proxyUrl参数再进行跳转
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/oauthRedirect")
-	public String redirect(String code, String state, String proxyUrl, HttpServletRequest request) {
-		logger.debug("oauth code: "+code);
-		logger.debug("oauth state: "+state);
-		logger.debug("oauth proxyUrl: "+proxyUrl);
+	@RequestMapping(value = "/wxOauthRedirect")
+	public String wxOauthRedirect(HttpServletRequest request) {
+		String code = request.getParameter("code");
+		String state = request.getParameter("state");
+		String proxyUrl = request.getParameter("proxyUrl");
 		
 		String redirectFullUrl = UrlUtil.addParameter(proxyUrl, "code", code);
-		redirectFullUrl = UrlUtil.addParameter(proxyUrl, "state", state);
-		logger.debug("redirectFullUrl: "+ redirectFullUrl);
-		return "redirect:"+redirectFullUrl;
+		redirectFullUrl = UrlUtil.addParameter(redirectFullUrl, "state", state); 
+		if(logger.isDebugEnabled()){
+			logger.debug("oauth proxyUrl: "+proxyUrl);
+			logger.debug("oauth code: "+code);
+			logger.debug("oauth state: "+state);
+			logger.debug("redirectFullUrl: "+ redirectFullUrl);
+		}
+		return "redirect:"+redirectFullUrl; 
 	}
 	
 }

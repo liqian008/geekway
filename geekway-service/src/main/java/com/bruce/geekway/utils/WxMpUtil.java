@@ -3,13 +3,16 @@ package com.bruce.geekway.utils;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bruce.geekway.constants.ConstWeixin;
 
 
 public class WxMpUtil {
 
-
+	private static final Logger logger = LoggerFactory.getLogger(WxMpUtil.class);
+	
 	public static final String REDIRECT_URI = ConfigUtil.getString("weixinmp_oauth_redirect_url");
 
 	public static final String AUTHORIZE_BASE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + ConstWeixin.WX_APP_ID + "&redirect_uri=" + REDIRECT_URI
@@ -36,7 +39,6 @@ public class WxMpUtil {
 		return oauthUrl;
 	}
 	
-	
 
 	/**
 	 * 构造代理的回调地址，但其中参数不同，从而跳转的不同的地址上
@@ -49,13 +51,18 @@ public class WxMpUtil {
 		//获取scope
 		String scope = getScopeType(scopeType);
 		
-		String redirectUrl = "http://wxpay.geekway.com.cn/oauthRedirect";
+		String redirectUrl = ConstWeixin.WX_OAUTH_REDIRECT_PROXY_URL;
 		if(StringUtils.isNotBlank(proxyUrl)){
 			redirectUrl = UrlUtil.addParameter(redirectUrl, "proxyUrl", proxyUrl);
-		} 
+		}
 		String encodedUrl = URLEncoder.encode(redirectUrl);
 		
-		String oauthUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=1&redirect_uri=" + encodedUrl+ "&response_type=code&scope="+scope+"&state="+state+"#wechat_redirect";
+		String oauthUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ConstWeixin.WX_APP_ID+"&redirect_uri=" + encodedUrl+ "&response_type=code&scope="+scope+"&state="+state+"#wechat_redirect";
+		if(logger.isDebugEnabled()){
+			logger.debug("redirectUrl: "+redirectUrl);
+			logger.debug("oauthUrl: "+oauthUrl);
+		}
+		
 		return oauthUrl;
 	}
 

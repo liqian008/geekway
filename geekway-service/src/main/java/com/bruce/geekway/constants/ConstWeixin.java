@@ -69,8 +69,8 @@ public interface ConstWeixin {
 	public static final String WX_PAY_QUERY_ORDER_API = ConfigUtil.getString("weixinmp_pay_query_order_url");
 	
 	
-	
-	
+	//微信oauth redirect回调的代理地址
+	public static final String WX_OAUTH_REDIRECT_PROXY_URL = ConfigUtil.getString("weixinmp_oauth_redirect_proxy_url");
 	
 	
 }
