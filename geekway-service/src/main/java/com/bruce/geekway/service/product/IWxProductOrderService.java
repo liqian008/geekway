@@ -44,8 +44,18 @@ public interface IWxProductOrderService extends IFoundationService<WxProductOrde
 		
 	}
 	
+	
 	/**
-	 * 查询我的订单
+	 * 查询我的订单详情
+	 * @param userOpenId
+	 * @param orderId
+	 * @param tradeNo
+	 * @return
+	 */
+	public WxProductOrder loadUserOrderInfo(String userOpenId, long orderId, String tradeNo);
+	
+	/**
+	 * 查询我的订单列表
 	 * @param userOpenId
 	 * @param voucherTailId
 	 * @param limit

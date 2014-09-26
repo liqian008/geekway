@@ -31,12 +31,20 @@ public interface IWxProductVoucherService extends IFoundationService<WxProductVo
 	public List<WxProductVoucher> queryUserAvailableVoucherList(String userOpenId, int limit);
 	
 	/**
-	 * 验证优惠券是否可用
-	 * @param voucherId
+	 * 加载单个优惠券信息
 	 * @param userOpenId
+	 * @param voucherId 
 	 * @return
 	 */
-	public boolean verifyVoucher(long voucherId, String userOpenId);
+	public WxProductVoucher loadUserVoucherById(String userOpenId, long voucherId);
+	
+	/**
+	 * 验证优惠券是否可用
+	 * @param userOpenId
+	 * @param voucherId
+	 * @return
+	 */
+	public boolean verifyVoucher(String userOpenId, long voucherId);
 	
 	
 }

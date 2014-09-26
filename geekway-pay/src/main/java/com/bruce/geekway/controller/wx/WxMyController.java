@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductVoucher;
@@ -59,7 +60,7 @@ public class WxMyController {
 	public String orders(Model model, HttpServletRequest request) {
 		List<WxProduct> productList = wxProductService.queryAvailableList();
 		model.addAttribute("productList", productList);
-		return "product/myOrderList";
+		return "order/myOrderList";
 	}
 	
 	/**
@@ -68,10 +69,13 @@ public class WxMyController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
+	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/vouchers")
 	public String vouchers(Model model, @RequestParam(required=false)String code, HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("code: "+code);
+		
+		System.out.println("currentUser: "+request.getAttribute(ConstFront.CURRENT_USER));
+		
 		if(!StringUtils.isBlank(code)){//oauth回调后
 			//根据code换取openId
 			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
@@ -83,7 +87,7 @@ public class WxMyController {
 		}else{
 			
 		}
-		return "product/myVoucherList";
+		return "order/myVoucherList";
 	}
 	
 	@RequestMapping(value = "/moreVouchers.json")

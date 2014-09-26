@@ -59,4 +59,9 @@
 	</bean>
 	<bean id="wxProductVoucherService" class="com.bruce.geekway.service.product.impl.WxProductVoucherServiceImpl">
 	</bean>
+	<bean id="wxProductOrderService" class="com.bruce.geekway.service.product.impl.WxProductOrderServiceImpl">
+	</bean>
+	<bean id="wxUserAddressService" class="com.bruce.geekway.service.product.impl.WxUserAddressServiceImpl">
+	</bean>
+	
 </beans>

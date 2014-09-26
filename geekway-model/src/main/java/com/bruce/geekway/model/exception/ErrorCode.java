@@ -62,13 +62,22 @@ public class ErrorCode {
 //	public static final int WX_PRODUCT_ORDER_TOTAL_PRICE_ERROR = 309;
 	
 	/*收件人姓名错误*/
-	public static final int WX_PRODUCT_ORDER_POST_NAME_ERROR = 310;
+	public static final int WX_PRODUCT_ORDER_POSTINFO_ERROR = 310;
+	/*收件人姓名错误*/
+	public static final int WX_PRODUCT_ORDER_POST_NAME_ERROR = 311;
 	/*收件人电话错误*/
-	public static final int WX_PRODUCT_ORDER_POST_MOBILE_ERROR = 311;
+	public static final int WX_PRODUCT_ORDER_POST_MOBILE_ERROR = 312;
 	/*收件地址错误*/
-	public static final int WX_PRODUCT_ORDER_POST_ADDRESS_ERROR = 312;
+	public static final int WX_PRODUCT_ORDER_POST_ADDRESS_ERROR = 313;
 	/*收件email错误*/
-	public static final int WX_PRODUCT_ORDER_POST_EMAIL_ERROR = 313;
+	public static final int WX_PRODUCT_ORDER_POST_EMAIL_ERROR = 314;
+	
+	/*优惠券错误*/
+	public static final int WX_PRODUCT_ORDER_VOUCHER_ERROR = 320;
+	/*优惠券不可用*/
+	public static final int WX_PRODUCT_ORDER_VOUCHER_UNAVAILABLE_ERROR = 321;
+	/*优惠券已过期*/
+	public static final int WX_PRODUCT_ORDER_VOUCHER_EXPIRED_ERROR = 322;
 	
 	
 	/* 微信相关分配500-600的错误码 */

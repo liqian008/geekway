@@ -1,7 +1,9 @@
 package com.bruce.geekway.controller.wx;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -15,30 +17,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductVoucher;
+import com.bruce.geekway.model.WxUserAddress;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.mp.WxMpOauthService;
-import com.bruce.geekway.service.product.IWxProductCategoryService;
+import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
-import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
-import com.bruce.geekway.service.product.IWxSkuPropValueService;
+import com.bruce.geekway.service.product.IWxUserAddressService;
 import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
-import com.bruce.geekway.utils.ResponseUtil;
+import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -56,6 +59,10 @@ public class WxProductOrderController {
 	@Autowired
 	private IWxProductVoucherService wxProductVoucherService;
 	@Autowired
+	private IWxProductOrderService wxProductOrderService;
+	@Autowired
+	private IWxUserAddressService wxUserAddressService;
+	@Autowired
 	private WxMpOauthService wxMpOauthService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
@@ -69,7 +76,7 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/buyNow")
-	public String buyNow(Model model, @RequestParam(required=false)String code,int productSkuId, int amount, HttpServletRequest request) {
+	public String buyNow(Model model, @RequestParam(required=false)String code, int productSkuId, int amount, HttpServletRequest request) {
 		
 		//获取userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = null;
@@ -100,15 +107,16 @@ public class WxProductOrderController {
 		List<WxProductVoucher> availableVoucherList = wxProductVoucherService.queryUserAvailableVoucherList(userOpenId, limit);
 		model.addAttribute("availableVoucherList", availableVoucherList);
 		
-//		//获取当前页面url，用于构造地址签名
-//		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
-//		System.out.println("userAccessToken: "+userAccessToken);
-//		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
-//		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
+		//获取当前页面url，用于构造地址签名
+		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
+		System.out.println("userAccessToken: "+userAccessToken);
+		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
+		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
 		
-		return "product/buyNow";
+		return "order/buyNow";
 	}
 
+	@Deprecated
 	@RequestMapping("address")
 	public String address(Model model, String token, HttpServletRequest request) {
 		//获取当前页面url，用于构造地址签名
@@ -121,25 +129,8 @@ public class WxProductOrderController {
 		System.out.println("currentUrl: " + currentUrl);
 		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(token, currentUrl);
 		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
-		return "product/address";
+		return "order/address";
 	}
-	
-	
-	
-//	/**
-//	 * 确认订单（此步需要用户选择邮寄地址）
-//	 * @param model
-//	 * @param productId
-//	 * @param request
-//	 * @return
-//	 */
-//	@RequestMapping(value = "/confirmOrder")
-//	public String confirmOrder(Model model, int productId,  HttpServletRequest request) {
-//		//加载商品信息
-//		WxProduct productInfo = wxProductService.loadById(productId);
-//		//需要在页面中增加地址的处理
-//		return "product/confirmOrder";
-//	}
 	
 	
 	/**
@@ -147,23 +138,78 @@ public class WxProductOrderController {
 	 * @param model
 	 * @param request
 	 */
-	@RequestMapping(value = "/submitOrder")
-	public String submitOrder(Model model, int productId,  HttpServletRequest request) {
+	@NeedAuthorize
+	@RequestMapping(value = "/submitOrder.json")
+	public ModelAndView submitOrder(Model model, int productSkuId, int amount, long voucherId, 
+			WxUserAddress addressInfo, HttpServletRequest request) {
+		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		
+		//检查地址的有效性
+		checkAddress(addressInfo);
+		//验证优惠券有效性
+		WxProductVoucher voucher = wxProductVoucherService.loadUserVoucherById(userOpenId, voucherId);
+		checkUserVoucher(voucher);
 		//加载商品信息
-		WxProduct productInfo = wxProductService.loadById(productId);
-		//检查商品状态
-		boolean valid = true;
-		if(valid){
-			//先根据订单内容生成本地的预支付订单对象
-			
-			
-			//再开始构造微信所需的订单对象
-			String remoteIp = RequestUtil.getRemoteIP(request);
-			WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(remoteIp);
-			model.addAttribute("wxPayJsObj", wxPayJsObj);
+		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
+		//检查订单的有效性
+		checkOrder(productSku, amount);
+		
+		
+		//构造预购买的订单数据
+		Date currentTime = new Date();
+		WxProductOrder productOrder = new WxProductOrder();
+		productOrder.setUserOpenId(userOpenId);//用户身份
+		productOrder.setVoucherId(voucherId);//优惠券id
+		productOrder.setProductFee(productFee);//商品费用
+		productOrder.setDiscountFee(discountFee);//折扣费用
+		productOrder.setTransportFee(transportFee);//运费
+		productOrder.setTotalFee(totalFee);//总费用
+		//组装邮寄地址
+		populatePostInfo(productOrder, addressInfo);
+		int result = 0;
+		//保存订单
+		//标记优惠码状态为正在使用
+		if(result>0){
+			//保存用户邮寄地址信息
+			addressInfo.setUserOpenId(userOpenId);
+			addressInfo.setCreateTime(currentTime);
+			wxUserAddressService.save(addressInfo);
 		}
-		return "product/orderConfirm";
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("outTradeNo", productOrder.getOutTradeNo());
+		dataMap.put("orderId", String.valueOf(productOrder.getId()));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
+
+	
+	/**
+	 * 订单详情
+	 * @param model
+	 * @param orderId
+	 * @param tradeNo
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/orderInfo")
+	public String orderInfo(Model model, long orderId, String tradeNo,  HttpServletRequest request) {
+		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		
+		//加载商品信息
+		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		model.addAttribute("orderInfo", orderInfo);
+		//检查订单状态
+		
+		//如果是未付款状态，需要构造支付js对象
+		//再开始构造微信所需的订单对象
+		String remoteIp = RequestUtil.getRemoteIP(request);
+		WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(remoteIp);
+		model.addAttribute("wxPayJsObj", wxPayJsObj);
+		
+		//需要在页面中增加地址的处理
+		return "order/orderInfo";
+	}
+	
 	
 	/**
 	 * 
@@ -205,7 +251,6 @@ public class WxProductOrderController {
 		//生成paySign
 		String paySign = WxAuthUtil.paySign(paySignMap);
 		
-		
 		//构造支付js对象，传到前端，供调起微信支付
 		WxPayItemJsObj itemJsObj = new WxPayItemJsObj();
 		itemJsObj.setAppId(ConstWeixin.WX_APP_ID);
@@ -215,8 +260,6 @@ public class WxProductOrderController {
 		itemJsObj.setPaySign(paySign);
 		return itemJsObj;
 	}
-	
-	
 	
 	/**
 	 * 构造地址对象
@@ -274,4 +317,58 @@ public class WxProductOrderController {
 		}
 	}
 	
+	/**
+	 * 验证地址的有效性
+	 * @param userAddress
+	 */
+	private void checkAddress(WxUserAddress userAddress) {
+		if(userAddress==null){
+			//地址对象为空
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
+		}
+		if(StringUtils.isBlank(userAddress.getPostName())){
+			//收件人姓名错误
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_NAME_ERROR);
+		}
+		if(StringUtils.isBlank(userAddress.getPostMobile())){
+			//收件人手机错误
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_MOBILE_ERROR);
+		}
+		if(StringUtils.isBlank(userAddress.getPostAddress())){
+			//收件人地址信息错误
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_ADDRESS_ERROR);
+		}
+		//postCode、nationalCode、省、市、县等信息不做检查
+	}
+	
+	
+	
+	/**
+	 * 验证地址的有效性
+	 * @param userAddress
+	 */
+	private void checkUserVoucher(WxProductVoucher voucher) {
+		if(voucher==null){
+			//地址对象为空
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_VOUCHER_ERROR);
+		}
+		if(voucher.getStatus()==null||voucher.getStatus()!=1){
+			//优惠券不可用
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_VOUCHER_UNAVAILABLE_ERROR);
+		}
+		if(voucher.getExpireTime()==null||voucher.getExpireTime().getTime()<System.currentTimeMillis()){
+			//优惠券已过期
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_VOUCHER_EXPIRED_ERROR);
+		}
+	}
+	
+	
+
+	private void populatePostInfo(WxProductOrder productOrder, WxUserAddress addressInfo) {
+		productOrder.setPostName(addressInfo.getPostName());
+		productOrder.setPostMobile(addressInfo.getPostMobile());
+		productOrder.setPostAddress(addressInfo.getPostAddress());
+		productOrder.setPostCode(addressInfo.getPostCode());
+		productOrder.setPostNationalCode(addressInfo.getNationalCode()); 
+	}
 }

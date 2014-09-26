@@ -4,7 +4,7 @@ public interface ConstFront {
 	/*jsonView*/
 	public static final String JSON_VIEW = "jsonView";
 	
-	/* 登录的sessionAttribute*/
+	/* 登录用户的sessionAttribute*/
 	public static final String CURRENT_USER = "_currentUser";
 	
 	/* 用户对象的Attribute*/

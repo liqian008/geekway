@@ -4,6 +4,8 @@
 <%@ page import=" com.bruce.geekway.model.wx.pay.*" %>
 <%@ page import=" com.bruce.geekway.utils.*" %>
 
+<!-- 临时测试使用的jsp -->
+
 <html>
 <body>
 <%

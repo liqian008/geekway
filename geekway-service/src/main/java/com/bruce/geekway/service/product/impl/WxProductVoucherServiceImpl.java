@@ -86,7 +86,20 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		return queryByCriteria(criteria);
 	}
 	
-	public boolean verifyVoucher(long voucherId, String userOpenId){
+	
+	@Override
+	public WxProductVoucher loadUserVoucherById(String userOpenId, long voucherId) {
+		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
+		criteria.createCriteria().andIdEqualTo(voucherId).andUserOpenIdEqualTo(userOpenId);
+		
+		List<WxProductVoucher> voucherList =  queryByCriteria(criteria);
+		if(voucherList!=null&&voucherList.size()>0){
+			return voucherList.get(0);
+		}
+		return null;
+	}
+	
+	public boolean verifyVoucher(String userOpenId, long voucherId){
 		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
 		criteria.createCriteria().andIdEqualTo(voucherId).andUserOpenIdEqualTo(userOpenId).andStatusEqualTo((short) 1);
 		return wxProductVoucherMapper.countByExample(criteria) >=1;

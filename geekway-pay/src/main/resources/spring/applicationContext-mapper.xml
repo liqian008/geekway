@@ -100,6 +100,14 @@
 			value="com.bruce.geekway.dao.mapper.WxProductVoucherMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	
-	
+	<bean id="wxProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxProductOrderMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="wxUserAddressMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxUserAddressMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 </beans>

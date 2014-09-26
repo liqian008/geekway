@@ -100,6 +100,17 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		return null;
 	}
 	
+	@Override
+	public WxProductOrder loadUserOrderInfo(String userOpenId, long orderId, String tradeNo) {
+		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
+		criteria.createCriteria().andIdEqualTo(orderId).andUserOpenIdEqualTo(userOpenId).andOutTradeNoEqualTo(tradeNo);
+		List<WxProductOrder> productOrderList = queryByCriteria(criteria);
+		if(productOrderList!=null&&productOrderList.size()>0){
+			return productOrderList.get(0);
+		}
+		return null;
+	}
+	
 	public WxProductOrderMapper getWxProductOrderMapper() {
 		return wxProductOrderMapper;
 	}
@@ -107,5 +118,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	public void setWxProductOrderMapper(WxProductOrderMapper wxPayProductOrderMapper) {
 		this.wxProductOrderMapper = wxPayProductOrderMapper;
 	}
+
+	
 	
 }

@@ -46,7 +46,9 @@
 		-->
 		<mapper resource="com/bruce/geekway/model/xml/WxProductTagMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxProductVoucherMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxProductOrderMapper.xml" />
 		
+		<mapper resource="com/bruce/geekway/model/xml/WxUserAddressMapper.xml" />
 		
 	</mappers>
 
