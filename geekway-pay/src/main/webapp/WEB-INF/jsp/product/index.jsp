@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
-
+<%@ page import="com.bruce.geekway.constants.*" %>
 <%
 String contextPath = request.getContextPath();
 %>
@@ -13,7 +13,6 @@ String contextPath = request.getContextPath();
 <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-
 
 <title>支付</title>
 
@@ -65,7 +64,7 @@ String contextPath = request.getContextPath();
                     <em>最时尚的韩流服饰</em>
                 </div>
             
-                <div class="slider-controls" data-snap-ignore="true">                
+                <div class="slider-controls" data-snap-ignore="true">
                     <div>
                         <a href="http://www.jinwanr.com"><img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image"/></a>
                     </div>
@@ -77,7 +76,6 @@ String contextPath = request.getContextPath();
                 <a href="./#" class="next-slider"></a>
                 <a href="./#" class="prev-slider"></a>
             </div>
-
             
             
             <div class="decoration"></div>

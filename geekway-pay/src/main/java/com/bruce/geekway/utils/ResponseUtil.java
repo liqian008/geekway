@@ -55,7 +55,7 @@ public class ResponseUtil {
 	 * @param value
 	 */
 	public static void addCookie(HttpServletResponse response, String key, String value){
-		Cookie cookie = new Cookie(value, value);
+		Cookie cookie = new Cookie(key, value);
 		cookie.setMaxAge(Integer.MAX_VALUE);
 		response.addCookie(cookie);
 	}

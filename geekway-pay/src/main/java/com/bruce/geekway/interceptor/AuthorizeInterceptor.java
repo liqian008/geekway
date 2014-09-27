@@ -8,16 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.UrlUtil;
 import com.bruce.geekway.utils.WxMpUtil;
 import com.google.gson.Gson;
@@ -29,24 +35,33 @@ import com.google.gson.Gson;
  */
 public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements InitializingBean {
 
+	@Autowired
+	private WxMpOauthService wxMpOauthService;
+
+	private static final Logger logger = LoggerFactory.getLogger(AuthorizeInterceptor.class);
+	
 	/**
 	 * 用户操作拦截检查，需区别登陆base与userinfo
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		System.out.println("进入拦截器");
+		logger.debug("进入拦截器");
+
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-		
+		String userOpenId = null;
+		logger.debug("weixin oauth debug: " +ConstWeixin.WX_OAUTH_DEBUG);
+		if((ConstWeixin.WX_OAUTH_DEBUG)){//微信调试模式
+			userOpenId = "1234";
+			request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
+			return true;
+		}
 		String code = request.getParameter("code");//对微信oauth回调的redirect不加限制
 		boolean fromWeixinOAuth = StringUtils.isNotBlank(code);
 		
 		AuthorizeStrategy authorizeStrategy = getNeedAuthorize(request, handlerMethod);
-		
-		boolean needAuthorize = !fromWeixinOAuth && authorizeStrategy!=null;//非微信回调且需要登录
+		boolean needAuthorize = !fromWeixinOAuth && (authorizeStrategy!=null);//非微信回调且需要登录
 		if (needAuthorize) {//需要授权才能访问
-			String userOpenId = null;
-			
 			if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//可以使用cookie中的信息
 				//检查cookie中是否存在用户信息
 				Cookie[] cookieArray = request.getCookies();
@@ -54,7 +69,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 					for(Cookie cookie: cookieArray){
 						if(ConstFront.COOKIE_KEY_WX_OPENID.equals(cookie.getName())){
 							userOpenId = cookie.getValue();
-							System.out.println("userOpenId from cookie: "+userOpenId);
+							logger.debug("userOpenId from cookie:: " +userOpenId);
 							break;
 						}
 					}
@@ -124,4 +139,15 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		writer.flush();
 		writer.close();
 	}
+
+
+	public WxMpOauthService getWxMpOauthService() {
+		return wxMpOauthService;
+	}
+
+
+	public void setWxMpOauthService(WxMpOauthService wxMpOauthService) {
+		this.wxMpOauthService = wxMpOauthService;
+	}
+	
 }

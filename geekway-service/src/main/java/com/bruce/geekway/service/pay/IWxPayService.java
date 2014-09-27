@@ -13,6 +13,8 @@ import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayNotifyOrder;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderItem;
+import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
@@ -55,21 +57,20 @@ public class IWxPayService{
 	 * @return
 	 */
 	public int receiveWxOrder(WxPayNotifyOrderRequest wxOrderRequest){
+		if(wxOrderRequest==null){
+		}
 		
 		int result = 0;
-		
 		//检查签名是否合法
 		boolean signValid = true;
 		if(signValid){
-			//TODO 检查重复订单
+			//重复订单的检查
 			
 			WxPayNotifyOrder wxNotifyOrder = WxPayNotifyOrderRequest.convert2WxPayNotifyOrder(wxOrderRequest);
-			if(wxNotifyOrder!=null){
-				//处理微信支付成功的业务
-				
+			if(wxNotifyOrder!=null){//处理微信支付成功的业务
 				//需要事务操作
 				
-				//TODO 保存微信订单流水表
+				//保存微信订单流水表
 				result = wxPayNotifyOrderService.save(wxNotifyOrder);
 				//加载订单数据
 				String outTradeNo = wxNotifyOrder.getOutTradeNo();
@@ -82,11 +83,11 @@ public class IWxPayService{
 							long productSkuId = orderItem.getProductSkuId();
 							int amount = orderItem.getAmount();
 							//执行扣减
-							wxProductSkuService.reduceAmount(productSkuId, amount);
+							result = wxProductSkuService.reduceAmount(productSkuId, amount);
 						}
 					}
 					// 更新订单表中的订单状态为支付完毕
-					wxProductOrderService.changeOrderStatus(outTradeNo, IWxProductOrderService.OrderStatus.PAYED.getStatus());
+					result = wxProductOrderService.changeOrderStatus(outTradeNo, IWxProductOrderService.StatusEnum.PAYED.getStatus());
 				}
 			}
 		}
@@ -168,7 +169,7 @@ public class IWxPayService{
 				//更新投诉状态为已处理完毕
 				wxPayComplaintService.markFinish(openId, feedbackId);
 			}else if("reject".equals(msgType)){//用户不同意消除投诉
-				
+				//TODO 继续沟通
 			}
 		}
 		return result;
@@ -200,10 +201,14 @@ public class IWxPayService{
 	 * @return
 	 */
 	public int dealWxDeliver(WxDeliverInfo deliverInfo){
-		//提交微信
-		WxJsonResult result = wxMpPayService.deliverNotify(deliverInfo);
-		if(result!=null){
-			//微信提交成功后，更改db中的状态
+		if(deliverInfo!=null){
+			//提交微信处理
+			WxJsonResult jsonResult = wxMpPayService.deliverNotify(deliverInfo);
+			if(jsonResult!=null){
+				//微信提交成功后，更改db中的状态
+				int result = wxProductOrderService.changeOrderStatus(deliverInfo.out_trade_no, IWxProductOrderService.StatusEnum.DELIVERED.getStatus());
+				return result;
+			}
 		}
 		return 0;
 	}
@@ -222,14 +227,6 @@ public class IWxPayService{
 		return 0;
 	}
 	
-	
-	/**
-	 * 查询用户地址
-	 * @return
-	 */
-	public int queryWxUserAddress(int userOpenId){
-		return 0;
-	}
 	
 	/**
 	 * 查询订单状态

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
+import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.exception.ErrorCode;
@@ -38,7 +38,7 @@ import com.bruce.geekway.utils.ResponseUtil;
  *
  */
 @Controller
-public class WxMyController {
+public class WxMyController{
 	
 	@Autowired
 	private IWxProductService wxProductService;
@@ -69,45 +69,44 @@ public class WxMyController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
+	@NeedAuthorize
 	@RequestMapping(value = "/vouchers")
 	public String vouchers(Model model, @RequestParam(required=false)String code, HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("code: "+code);
+		if(logger.isDebugEnabled()){
+			logger.debug("进入[我的优惠券] code: "+code+", debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
+		}
+		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
 		
-		System.out.println("currentUser: "+request.getAttribute(ConstFront.CURRENT_USER));
-		
-		if(!StringUtils.isBlank(code)){//oauth回调后
-			//根据code换取openId
-			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
-			if(oauthResult!=null){
-				String userOpenId = oauthResult.getOpenid();
-				System.out.println("OAUTH openId: "+userOpenId);
-				ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
+		if(!ConstWeixin.WX_OAUTH_DEBUG){
+			if(!StringUtils.isBlank(code)){//oauth回调后
+				if(logger.isDebugEnabled()){
+					logger.debug("微信oauth回调后进入[我的优惠券], code: "+code);
+				}
+				//根据code换取openId
+				WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
+				if(oauthResult!=null){
+					userOpenId = oauthResult.getOpenid();
+					if(logger.isDebugEnabled()){
+						logger.debug("微信oauth回调后进入[我的优惠券], 换取的userOpenId，并写入cookie: "+userOpenId);
+					}
+					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
+				}
 			}
-		}else{
-			
 		}
 		return "order/myVoucherList";
 	}
 	
+	@NeedAuthorize
 	@RequestMapping(value = "/moreVouchers.json")
 	public ModelAndView moreVouchers(Model model, @RequestParam("tailId") long tailId, HttpServletRequest request) {
+		String userOpenId = (String)request.getAttribute(ConstFront.CURRENT_USER);
+		
 		if(logger.isDebugEnabled()){
-            logger.debug("ajax加载更多【我的优惠券】，tailId: "+tailId);
+            logger.debug("ajax加载更多【我的优惠券】，userOpenId: "+userOpenId+" , tailId: "+tailId);
         }
 	    int limit = 2;
 		List<WxProductVoucher> productVoucherList = null;
 		
-	    String userOpenId = "1";
-		Cookie[] cookieArray = request.getCookies();
-		if(cookieArray!=null&&cookieArray.length>0){
-			for(Cookie cookie: cookieArray){
-				if(ConstFront.COOKIE_KEY_WX_OPENID.equals(cookie.getName())){
-					userOpenId = cookie.getValue();
-					break;
-				}
-			}
-		}
 		//用户有效
 		if(!StringUtils.isBlank(userOpenId)){
 			productVoucherList = wxProductVoucherService.fallLoadUserVoucherList(userOpenId, tailId, limit+1);
@@ -134,6 +133,21 @@ public class WxMyController {
 			dataMap.put("tailId", String.valueOf(nextTailId));
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 		}
+	}
+	
+	
+	@NeedAuthorize
+	@RequestMapping(value = "/applyVoucher.json")
+	public ModelAndView moreVouchers(Model model, HttpServletRequest request) {
+		String userOpenId = (String)request.getAttribute(ConstFront.CURRENT_USER);
+		if (logger.isDebugEnabled()) {
+			logger.debug("ajax获得优惠券，userOpenId: " + userOpenId);
+		}
+		WxProductVoucher voucher = wxProductVoucherService.applyVoucher(userOpenId);
+		if(voucher!=null){//成功
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(voucher));
+		}
+		return ResponseBuilderUtil.SUBMIT_FAILED_VIEW;
 	}
 	
 }

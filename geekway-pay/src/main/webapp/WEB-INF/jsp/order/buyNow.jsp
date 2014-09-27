@@ -165,16 +165,18 @@ $("#submitOrder").click(function(){
 	var productSkuId = $("#productSkuId").val();
 	var amount = $("#amount").text();
 	
-	var paramData = {'code':'1234','productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'country':countryName, 'addressDetail':addressDetail, 'postCode':postCode, 'nationalCode':postNationalCode};
+	var paramData = {'productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'country':countryName, 'addressDetail':addressDetail, 'postCode':postCode, 'nationalCode':postNationalCode};
 	$.post('<%=contextPath%>/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
 			alert("订单创建成功");
-			//成功下单，跳转到详情页
+			var tradeNo = responseData.data.tradeNo;
+			var orderId = responseData.data.orderId;
+			location.href= "<%=contextPath%>/orderInfo?orderId="+orderId+"&tradeNo="+tradeNo;
 		}else{
 			alert(responseData.message);
-		}
-	}, "json");
+		} 
+	} , "json");
 });
 
 

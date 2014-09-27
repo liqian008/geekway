@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.product.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 	public List<WxProductVoucher> queryUserAvailableVoucherList(String userOpenId, int limit){
 		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
 		WxProductVoucherCriteria.Criteria subCriteria = criteria.createCriteria();
-		subCriteria.andUserOpenIdEqualTo(userOpenId).andStatusEqualTo((short) 1);
+		subCriteria.andUserOpenIdEqualTo(userOpenId).andStatusEqualTo(IWxProductVoucherService.StatusEnum.AVAILABLE.getStatus());
 		criteria.setLimitRows(limit);
 		criteria.setOrderByClause(" id desc");
 		return queryByCriteria(criteria);
@@ -91,7 +92,6 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 	public WxProductVoucher loadUserVoucherById(String userOpenId, long voucherId) {
 		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
 		criteria.createCriteria().andIdEqualTo(voucherId).andUserOpenIdEqualTo(userOpenId);
-		
 		List<WxProductVoucher> voucherList =  queryByCriteria(criteria);
 		if(voucherList!=null&&voucherList.size()>0){
 			return voucherList.get(0);
@@ -115,7 +115,23 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		return updateByCriteria(productVoucher, criteria);
 	}
 
-	
+
+	@Override
+	public WxProductVoucher applyVoucher(String userOpenId) {
+		WxProductVoucher voucher = new WxProductVoucher();
+		voucher.setUserOpenId(userOpenId);
+		Date currentTime = new Date();
+		voucher.setStatus(IWxProductVoucherService.StatusEnum.AVAILABLE.getStatus());
+		//TODO 配置文件化
+		voucher.setPrice(5d);//5元优惠券
+		voucher.setVoucherCode("");//展示用，无具体意义
+		voucher.setCreateTime(currentTime);
+		int result =  save(voucher);
+		if(result>0){
+			return voucher;
+		}
+		return null;
+	}
 	
 	
 	public WxProductVoucherMapper getWxProductVoucherMapper() {
@@ -125,5 +141,6 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 	public void setWxProductVoucherMapper(WxProductVoucherMapper wxPayProductVoucherMapper) {
 		this.wxProductVoucherMapper = wxPayProductVoucherMapper;
 	}
+
 
 }

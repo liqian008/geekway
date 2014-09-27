@@ -8,6 +8,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductOrder;
@@ -42,6 +44,7 @@ import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -69,27 +72,37 @@ public class WxProductOrderController {
 
 	/**
 	 * 不使用购物车，直接点击购买（呈现所购商品&列出优惠券&订单价格）
+	 * 强制用户使用oauth，以刷最新的userToken，用于获取地址信息
 	 * @param model
 	 * @param productSkuId
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
+	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/buyNow")
-	public String buyNow(Model model, @RequestParam(required=false)String code, int productSkuId, int amount, HttpServletRequest request) {
+	public String buyNow(Model model, @RequestParam(required=false)String code, int productSkuId, int amount, HttpServletRequest request, HttpServletResponse response) {
+		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
+		if(logger.isDebugEnabled()){
+			logger.debug("进入[购买信息页面] code: "+code+", debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
+		}
 		
-		//获取userAccessToken，用于获取微信的共享地址address
+		//定义userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = null;
 
-		if(StringUtils.isNotBlank(code)){//oauth回调后
-			//根据code换取openId
-			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
-			System.out.println("oauthResult: "+JsonUtil.gson.toJson(oauthResult));
-			if(oauthResult!=null){
-				String userOpenId = oauthResult.getOpenid();
-				userAccessToken = oauthResult.getAccess_token();
-				System.out.println("OAUTH openId: "+userOpenId);
-				//ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId); 
+		if(!ConstWeixin.WX_OAUTH_DEBUG){
+			if(!StringUtils.isBlank(code)){//oauth回调后
+				if(logger.isDebugEnabled()){
+					logger.debug("微信oauth回调后进入[购买信息页面], code: "+code);
+				}
+				//根据code换取openId
+				WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
+				if(oauthResult!=null){
+					userOpenId = oauthResult.getOpenid();
+					if(logger.isDebugEnabled()){
+						logger.debug("微信oauth回调后进入[购买信息页面], 换取的userOpenId，并写入cookie: "+userOpenId);
+					}
+					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
+				}
 			}
 		}
 		
@@ -101,7 +114,6 @@ public class WxProductOrderController {
 		model.addAttribute("amount", amount);
 		model.addAttribute("totalPrice", amount*productSku.getPrice());
 		
-		String userOpenId = "1";
 		int limit = 3;
 		//加载优惠券列表&供用户选择使用
 		List<WxProductVoucher> availableVoucherList = wxProductVoucherService.queryUserAvailableVoucherList(userOpenId, limit);
@@ -140,12 +152,13 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(Model model, int productSkuId, int amount, @RequestParam(required=false, defaultValue="0")long voucherId, 
-			WxUserAddress addressInfo, HttpServletRequest request) {
-		String userOpenId = "1234";//(String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+	public ModelAndView submitOrder(Model model, int productSkuId, int amount, @RequestParam(required = false, defaultValue = "0") long voucherId, HttpServletRequest request) {
+		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
 		//检查地址的有效性
+		WxUserAddress addressInfo = populateAddressInfoFromRequest(request);
+		
 		checkAddress(addressInfo);
 		WxProductVoucher voucher = null;
 		if(voucherId>0){
@@ -180,10 +193,10 @@ public class WxProductOrderController {
 		//保存订单
 		int result = wxProductOrderService.createOrder(productOrder, addressInfo);
 		if(result>0){
-//			Map<String, String> dataMap = new HashMap<String, String>();
-//			dataMap.put("outTradeNo", productOrder.getOutTradeNo());
-//			dataMap.put("orderId", String.valueOf(productOrder.getId()));
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson("123"));
+			Map<String, String> dataMap = new HashMap<String, String>();
+			dataMap.put("tradeNo", productOrder.getOutTradeNo());
+			dataMap.put("orderId", String.valueOf(productOrder.getId()));
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR));
 	}
@@ -200,7 +213,8 @@ public class WxProductOrderController {
 	@NeedAuthorize
 	@RequestMapping(value = "/orderInfo")
 	public String orderInfo(Model model, long orderId, String tradeNo,  HttpServletRequest request) {
-		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		checkUserOpenId(userOpenId);
 		
 		//加载商品信息
 		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
@@ -380,13 +394,40 @@ public class WxProductOrderController {
 		}
 	}
 	
-	
+	/**
+	 * 从request中组装用户地址信息
+	 * @param request
+	 * @return
+	 */
+	private WxUserAddress populateAddressInfoFromRequest(HttpServletRequest request) {
+		if(request!=null){
+			WxUserAddress addressInfo = new WxUserAddress();
+			addressInfo.setPostName(request.getParameter("postName"));
+			addressInfo.setPostMobile(request.getParameter("postMobile"));
+			addressInfo.setPostAddress(request.getParameter("postAddress"));
+			addressInfo.setPostCode(request.getParameter("postCode"));
+			addressInfo.setProvince(request.getParameter("province"));
+			addressInfo.setCity(request.getParameter("city"));
+			addressInfo.setCountry(request.getParameter("country"));
+			addressInfo.setNationalCode(request.getParameter("addressDetail"));
+			addressInfo.setAddressDetail(request.getParameter("nationalCode"));
+			return addressInfo;
+		}
+		return null;
+	}
 
+	/**
+	 * 将地址信息填写到订单对象中
+	 * @param productOrder
+	 * @param addressInfo
+	 */
 	private void populatePostInfo(WxProductOrder productOrder, WxUserAddress addressInfo) {
-		productOrder.setPostName(addressInfo.getPostName());
-		productOrder.setPostMobile(addressInfo.getPostMobile());
-		productOrder.setPostAddress(addressInfo.getPostAddress());
-		productOrder.setPostCode(addressInfo.getPostCode());
-		productOrder.setPostNationalCode(addressInfo.getNationalCode()); 
+		if(productOrder!=null&&addressInfo!=null){
+			productOrder.setPostName(addressInfo.getPostName());
+			productOrder.setPostMobile(addressInfo.getPostMobile());
+			productOrder.setPostAddress(addressInfo.getPostAddress());
+			productOrder.setPostCode(addressInfo.getPostCode());
+			productOrder.setPostNationalCode(addressInfo.getNationalCode());
+		}
 	}
 }

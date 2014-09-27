@@ -48,7 +48,7 @@
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>
-            <a href="javascript:void(0)" id="shareToTimeline" class="facebook-content"></a>
+            <a href="javascript:void(0)" id="shareToFriend" class="facebook-content"></a>
         </div>
         
         <div class="content"> 
@@ -205,7 +205,7 @@
 					$("#buyNow").click(function(){
 						var buyAmount = $("#buyAmount").text();
 						var productSkuId = $("#productSkuId").val();
-						location.href= "${pageContext.request.contextPath}/buyNow?code=1&amount="+buyAmount+"&productSkuId="+productSkuId;						
+						location.href= "${pageContext.request.contextPath}/buyNow?amount="+buyAmount+"&productSkuId="+productSkuId;						
 					});
 					
 					function reloadProductInfo(productSkuJson){
@@ -315,8 +315,9 @@ function shareTimeline() {
         "desc": descContent,
         "title": shareTitle
     }, function(res) {//朋友圈分享成功后的回调
-		//ajax方式增加礼券
-		
+    	if(res.err_msg=="share_timeline:ok"){
+    		applyVoucher();
+    	}
     });
 }
 
@@ -329,11 +330,26 @@ function shareFriend() {
         "desc": descContent,
         "title": shareTitle
     }, function(res) {//分享给朋友成功后的回调
-        
+    	if(res.err_msg=="send_app_msg:ok"){
+    		applyVoucher();
+    	}
     });
 }
 
-$("#shareToTimeline").click(function(){
+//ajax方式增加礼券
+function applyVoucher(){
+	alert("调用申请优惠券接口");
+	var paramData = {};
+	$.post('${pageContext.request.contextPath}/applyVoucher.json', paramData, function(responseData) {
+		var result = responseData.result;
+		if(result==1){
+			var price = responseData.data.price;
+			alert("分享成功，获得【"+price+"元兑换券】");
+		}
+	}, "json");
+}
+
+$("#shareToFriend").click(function(){
 	shareTimeline();
 });
 </script>

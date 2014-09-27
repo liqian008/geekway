@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
@@ -65,6 +66,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
+	@NeedAuthorize
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) {
 		return "product/index";
@@ -76,6 +78,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
+	@NeedAuthorize
 	@RequestMapping(value = "products/c-{categoryId}")
 	public String productListByCategory(Model model, @PathVariable int categoryId, HttpServletRequest request) {
 		WxProductCategory productCategory = wxProductCategoryService.loadById(categoryId);
@@ -145,6 +148,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
+	@NeedAuthorize
 	@RequestMapping(value = "/product/{productId}")
 	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
 		return productInfo(model, productId, 0, request);
@@ -156,6 +160,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
+	@NeedAuthorize
 	@RequestMapping(value = "/product/{productId}/${productSkuId}")
 	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
 		WxProduct product = wxProductService.loadById(productId);

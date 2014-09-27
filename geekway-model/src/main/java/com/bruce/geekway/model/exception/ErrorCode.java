@@ -84,6 +84,7 @@ public class ErrorCode {
 	
 	
 	
+	
 	/* 微信相关分配500-600的错误码 */
 	/* 非服务号 */
 	public static final int WX_BROADCAST_ERROR = 500;

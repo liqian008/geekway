@@ -3,6 +3,10 @@ package com.bruce.geekway.constants;
 import com.bruce.geekway.utils.ConfigUtil;
 
 public interface ConstWeixin {
+	
+	/*weixin oauth debug switcher*/
+	public static final boolean WX_OAUTH_DEBUG = "true".equalsIgnoreCase(ConfigUtil.getString("wx_oauth_debug"));
+	
 	/*开发者的id&key*/
 	public static final String WX_APP_ID = ConfigUtil.getString("weixinmp_appid");
 	public static final String WX_APP_SECRET_KEY = ConfigUtil.getString("weixinmp_appsecret");

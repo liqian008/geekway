@@ -14,20 +14,20 @@ import com.bruce.geekway.model.WxUserAddress;
  */
 public interface IWxProductOrderService extends IFoundationService<WxProductOrder, Long, WxProductOrderCriteria>{
 	
-	public static enum OrderStatus{
+	public static enum StatusEnum{
 		//可能还需要其他流程，如维权，退款等
 		SUBMITED((short)1, "待支付"), PAYED((short)2, "待发货"), DELIVERED((short)3, "待收货"), COMPLETED((short)100, "完成"), UNKNOWN((short)0, "未知");
 		
 		private short status;
 		private String name;
-		OrderStatus(short status, String name){
+		StatusEnum(short status, String name){
 			this.status = status;
 			this.name = name;
 		}
 
-		public OrderStatus valueOf(short status){
-			OrderStatus[] statusArray  = OrderStatus.values();
-			for(OrderStatus orderStatus : statusArray){
+		public StatusEnum valueOf(short status){
+			StatusEnum[] statusArray  = StatusEnum.values();
+			for(StatusEnum orderStatus : statusArray){
 				if(status == orderStatus.status){
 					return orderStatus;
 				}

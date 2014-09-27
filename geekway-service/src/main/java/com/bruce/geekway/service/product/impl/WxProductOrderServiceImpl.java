@@ -135,10 +135,11 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		String tradeNo = OrderUtil.generateOrderSn4Wx();
 		//保存订单
 		productOrder.setOutTradeNo(tradeNo);
+		
 		int result = save(productOrder);
 		//标记优惠码状态为正在使用
 		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
-			result = wxProductVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), (short) 1);
+			result = wxProductVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), IWxProductVoucherService.StatusEnum.USED.getStatus());
 		}
 		if(addressInfo!=null&&result>0){
 			//保存用户邮寄地址信息
