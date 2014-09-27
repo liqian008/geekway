@@ -46,5 +46,12 @@ public interface IWxProductVoucherService extends IFoundationService<WxProductVo
 	 */
 	public boolean verifyVoucher(String userOpenId, long voucherId);
 	
-	
+	/**
+	 * 修改优惠券的状态
+	 * @param userOpenId
+	 * @param voucherId
+	 * @param status
+	 * @return
+	 */
+	public int changeStatus(String userOpenId, long voucherId, short status);
 }

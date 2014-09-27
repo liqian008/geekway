@@ -5,6 +5,7 @@ import java.util.List;
 import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
+import com.bruce.geekway.model.WxUserAddress;
 
 /**
  * 订单service
@@ -62,6 +63,16 @@ public interface IWxProductOrderService extends IFoundationService<WxProductOrde
 	 * @return
 	 */
 	public List<WxProductOrder> fallLoadUserOrderList(String userOpenId, long orderTailId, int limit);
+	
+	
+	/**
+	 * 创建订单，等待用户支付
+	 * @param outTradeNo
+	 * @param status
+	 * @return
+	 */
+	public int createOrder(WxProductOrder productOrder, WxUserAddress userAddressInfo);
+	
 	
 	/**
 	 * 更新订单状态

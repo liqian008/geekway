@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.product.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,25 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.dao.mapper.WxProductOrderMapper;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
+import com.bruce.geekway.model.WxUserAddress;
+import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.service.product.IWxProductOrderService;
+import com.bruce.geekway.service.product.IWxProductVoucherService;
+import com.bruce.geekway.service.product.IWxUserAddressService;
+import com.bruce.geekway.utils.OrderUtil;
 
 @Service
 public class WxProductOrderServiceImpl implements IWxProductOrderService {
 
 	@Autowired
 	private WxProductOrderMapper wxProductOrderMapper;
-
+	@Autowired
+	private IWxProductVoucherService wxProductVoucherService;
+	@Autowired
+	private IWxUserAddressService wxUserAddressService;
+	
+	
 	@Override
 	public int save(WxProductOrder t) {
 		return wxProductOrderMapper.insertSelective(t);
@@ -111,6 +123,32 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		return null;
 	}
 	
+	/**
+	 * 生成订单，供用户进行支付
+	 */
+	@Override
+	public int createOrder(WxProductOrder productOrder, WxUserAddress addressInfo) {
+		if(productOrder==null){
+			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR);
+		}
+		Date currentTime = new Date();
+		String tradeNo = OrderUtil.generateOrderSn4Wx();
+		//保存订单
+		productOrder.setOutTradeNo(tradeNo);
+		int result = save(productOrder);
+		//标记优惠码状态为正在使用
+		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
+			result = wxProductVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), (short) 1);
+		}
+		if(addressInfo!=null&&result>0){
+			//保存用户邮寄地址信息
+			addressInfo.setUserOpenId(productOrder.getUserOpenId());
+			addressInfo.setCreateTime(currentTime);
+			wxUserAddressService.save(addressInfo);
+		}
+		return result;
+	}
+
 	public WxProductOrderMapper getWxProductOrderMapper() {
 		return wxProductOrderMapper;
 	}
@@ -119,6 +157,20 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		this.wxProductOrderMapper = wxPayProductOrderMapper;
 	}
 
-	
-	
+	public IWxProductVoucherService getWxProductVoucherService() {
+		return wxProductVoucherService;
+	}
+
+	public void setWxProductVoucherService(IWxProductVoucherService wxProductVoucherService) {
+		this.wxProductVoucherService = wxProductVoucherService;
+	}
+
+	public IWxUserAddressService getWxUserAddressService() {
+		return wxUserAddressService;
+	}
+
+	public void setWxUserAddressService(IWxUserAddressService wxUserAddressService) {
+		this.wxUserAddressService = wxUserAddressService;
+	}
+
 }

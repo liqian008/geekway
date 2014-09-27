@@ -4,6 +4,10 @@
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
 
+<%
+String contextPath = request.getContextPath();
+%>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -62,8 +66,6 @@
 				</div>
             </div> 
             
-           
-            
             <div class="decoration"></div>
         	<div id="vouchersContainer" class="container no-bottom">
 				<%
@@ -93,8 +95,10 @@
                 	<img src="${pageContext.request.contextPath}/slideby/images/general-nature/6s.jpg" alt="img">
                     <em>${productSku.name}——${productSku.skuName}</em>
                     单价：&nbsp;<span class="text-highlight highlight-red">${productSku.price}</span>元&nbsp;|&nbsp;
-                    数量：&nbsp;<span class="text-highlight highlight-blue">${amount}</span>件
-                </p> 
+                    数量：&nbsp;<span id="amount" class="text-highlight highlight-blue">${amount}</span>件
+                </p>
+                <input type="hidden" id="productSkuId" name="productSkuId" value="${productSku.id}"/>
+	            
                 <div class="decoration"></div> 
                 <p class="quote-item">
                     <h5 class="center-text"> 
@@ -116,20 +120,24 @@
             	<ul id="choose">
             		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">无</span></li>
 	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">无</span></li>
-	            	<li>邮寄地址：&nbsp;<span id="postAddress" class="text-highlight highlight-dark">无</span></li>
+	            	<li>邮寄地址：&nbsp;
+	            	<span id="provinceName" class="text-highlight highlight-dark">省</span>
+	            	<span id="cityName" class="text-highlight highlight-dark">市</span>
+	            	<span id="countryName" class="text-highlight highlight-dark">区/县</span>
+	            	<span id="addressDetail" class="text-highlight highlight-dark"></span>
+	            	</li>
 	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">无</span></li>
 	            </ul>
 	            <input type="hidden" id="postNationalCode" name="postNationalCode" value=""/>
 	            <div class="center-text">
-	            	<a href="javascript:void(0)" id="chooseAddress" class="button-big button-dark">请选择收获地址</a>
-	            </div>
+					<a href="javascript:void(0)" id="chooseAddress" class="button-big button-dark">请选择收获地址</a>
+				</div>
             </div>
             
             <div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
-            
-        </div>                
-    </div>  
+		</div>
+	</div>  
 </div>
 
 </body>
@@ -138,8 +146,39 @@ WxOrderAddressJsObj orderAddressJsObj = (WxOrderAddressJsObj)request.getAttribut
 if(orderAddressJsObj!=null){
 %>
 <script>
+$("#submitOrder").click(function(){
+	//检查输入有效性
+	$('#chooseAddress').hide();//隐藏地址按钮
+	$('#submitOrder').text("订单提交中...");
+	$('#submitOrder').attr("disabled","disabled");
+	
+	var postName = $("#postName").text();
+	var postMobile = $("#postMobile").text();
+	
+	var provinceName = $("#provinceName").text();
+	var cityName = $("#cityName").text();
+	var countryName = $("#countryName").text();
+	var addressDetail = $("#addressDetail").text();
+	var postCode = $("#postCode").text();
+	var postNationalCode = $("#postNationalCode").val();
+	
+	var productSkuId = $("#productSkuId").val();
+	var amount = $("#amount").text();
+	
+	var paramData = {'code':'1234','productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'country':countryName, 'addressDetail':addressDetail, 'postCode':postCode, 'nationalCode':postNationalCode};
+	$.post('<%=contextPath%>/submitOrder.json', paramData, function(responseData) {
+		var result = responseData.result;
+		if(result==1){
+			alert("订单创建成功");
+			//成功下单，跳转到详情页
+		}else{
+			alert(responseData.message);
+		}
+	}, "json");
+});
+
+
 $("#chooseAddress").click(function(){
-	alert("choose");
 	try{
 	//获取微信共享地址
 	WeixinJSBridge.invoke('editAddress',{
@@ -155,22 +194,31 @@ $("#chooseAddress").click(function(){
 				$("#postName").text(res.userName);
 				$("#postMobile").text(res.telNumber);
 				$("#postCode").text(res.addressPostalCode);
-				$("#postNationalCode").text(res.nationalCode);
-				var postAddress = res.proviceFirstStageName +"-"+ res.addressCitySecondStageName +"-"+ addressCountiesThirdStageName +"_"+res.addressDetailInfo;
-				$("#postAddress").text(postAddress);
-				$("#chooseAddress").val("重新选择收货地址");
+				$("#postNationalCode").val(res.nationalCode);
+				
+				$("#provice").text(res.proviceFirstStageName);
+				$("#city").text(res.addressCitySecondStageName);
+				$("#country").text(res.addressCountiesThirdStageName);
+				$("#addressDetail").text(res.addressDetailInfo);
+				
+				$("#chooseAddress").text("重新选择收货地址");
 			}else{
 				alert("获取用户收货地址失败");
 			}
 		}
 	);
 	}catch(e){
-		//$("#postName").text("fail: name");
-		//$("#postMobile").text("fail: mobile");
-		//$("#postCode").text("fail: code");
-		//$("#postNationalCode").text("fail: name");
-		//$("#postAddress").text("fail: address");
-		//$("#chooseAddress").val("重新选择收货地址");
+		$("#postName").text("fail: name");
+		$("#postMobile").text("fail: mobile");
+		$("#postCode").text("fail: code");
+		$("#postNationalCode").val("fail: nationalCode");
+		
+		$("#provinceName").text("fail:province");
+		$("#cityName").text("fail:city");
+		$("#countryName").text("fail: country");
+		$("#addressDetail").text("fail:addressDetail");
+		
+		$("#chooseAddress").text("重新选择收货地址");
 	}
 })
 </script>

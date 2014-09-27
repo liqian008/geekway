@@ -79,6 +79,10 @@ public class ErrorCode {
 	/*优惠券已过期*/
 	public static final int WX_PRODUCT_ORDER_VOUCHER_EXPIRED_ERROR = 322;
 	
+	/*创建订单失败*/
+	public static final int WX_PRODUCT_ORDER_CREATE_ERROR = 330;
+	
+	
 	
 	/* 微信相关分配500-600的错误码 */
 	/* 非服务号 */

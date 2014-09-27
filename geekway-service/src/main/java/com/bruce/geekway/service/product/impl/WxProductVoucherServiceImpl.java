@@ -105,6 +105,17 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		return wxProductVoucherMapper.countByExample(criteria) >=1;
 	}
 	
+
+	@Override
+	public int changeStatus(String userOpenId, long voucherId, short status) {
+		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
+		criteria.createCriteria().andIdEqualTo(voucherId).andUserOpenIdEqualTo(userOpenId);
+		WxProductVoucher productVoucher = new WxProductVoucher();
+		productVoucher.setStatus(status);
+		return updateByCriteria(productVoucher, criteria);
+	}
+
+	
 	
 	
 	public WxProductVoucherMapper getWxProductVoucherMapper() {
@@ -115,5 +126,4 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		this.wxProductVoucherMapper = wxPayProductVoucherMapper;
 	}
 
-	
 }

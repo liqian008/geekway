@@ -140,45 +140,52 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(Model model, int productSkuId, int amount, long voucherId, 
+	public ModelAndView submitOrder(Model model, int productSkuId, int amount, @RequestParam(required=false, defaultValue="0")long voucherId, 
 			WxUserAddress addressInfo, HttpServletRequest request) {
-		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		String userOpenId = "1234";//(String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		checkUserOpenId(userOpenId);
 		
 		//检查地址的有效性
 		checkAddress(addressInfo);
-		//验证优惠券有效性
-		WxProductVoucher voucher = wxProductVoucherService.loadUserVoucherById(userOpenId, voucherId);
-		checkUserVoucher(voucher);
+		WxProductVoucher voucher = null;
+		if(voucherId>0){
+			//验证优惠券有效性
+			voucher = wxProductVoucherService.loadUserVoucherById(userOpenId, voucherId);
+			checkUserVoucher(voucher);
+		}
 		//加载商品信息
 		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
 		//检查订单的有效性
 		checkOrder(productSku, amount);
-		
 		
 		//构造预购买的订单数据
 		Date currentTime = new Date();
 		WxProductOrder productOrder = new WxProductOrder();
 		productOrder.setUserOpenId(userOpenId);//用户身份
 		productOrder.setVoucherId(voucherId);//优惠券id
-		productOrder.setProductFee(productFee);//商品费用
+		
+		double productFee = productSku.getPrice() * amount;//商品金额
+		double discountFee = voucher==null?0:voucher.getPrice();
+		double transportFee = 0;
+		
+		productOrder.setProductFee(productFee);
 		productOrder.setDiscountFee(discountFee);//折扣费用
 		productOrder.setTransportFee(transportFee);//运费
+		double totalFee = productFee - discountFee + transportFee;
 		productOrder.setTotalFee(totalFee);//总费用
+		productOrder.setStatus((short) 0);//预支付状态
+		productOrder.setCreateTime(currentTime);
 		//组装邮寄地址
 		populatePostInfo(productOrder, addressInfo);
-		int result = 0;
 		//保存订单
-		//标记优惠码状态为正在使用
+		int result = wxProductOrderService.createOrder(productOrder, addressInfo);
 		if(result>0){
-			//保存用户邮寄地址信息
-			addressInfo.setUserOpenId(userOpenId);
-			addressInfo.setCreateTime(currentTime);
-			wxUserAddressService.save(addressInfo);
+//			Map<String, String> dataMap = new HashMap<String, String>();
+//			dataMap.put("outTradeNo", productOrder.getOutTradeNo());
+//			dataMap.put("orderId", String.valueOf(productOrder.getId()));
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson("123"));
 		}
-		Map<String, String> dataMap = new HashMap<String, String>();
-		dataMap.put("outTradeNo", productOrder.getOutTradeNo());
-		dataMap.put("orderId", String.valueOf(productOrder.getId()));
-		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR));
 	}
 
 	
@@ -292,6 +299,17 @@ public class WxProductOrderController {
 		return addressJsObj;
 	}
 	
+
+	/**
+	 * 验证地址的有效性
+	 * @param userAddress
+	 */
+	private void checkUserOpenId(String userOpenId) {
+		if(StringUtils.isBlank(userOpenId)){
+			//用户身份为空
+			throw new GeekwayException(ErrorCode.USER_ERROR);
+		}
+	}
 	
 	/**
 	 * 检查订单有效性
@@ -334,10 +352,10 @@ public class WxProductOrderController {
 			//收件人手机错误
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_MOBILE_ERROR);
 		}
-		if(StringUtils.isBlank(userAddress.getPostAddress())){
-			//收件人地址信息错误
-			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_ADDRESS_ERROR);
-		}
+//		if(StringUtils.isBlank(userAddress.getPostAddress())){
+//			//收件人地址信息错误
+//			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_ADDRESS_ERROR);
+//		}
 		//postCode、nationalCode、省、市、县等信息不做检查
 	}
 	
