@@ -4,10 +4,6 @@
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
 
-<%
-String contextPath = request.getContextPath();
-%>
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -166,13 +162,15 @@ $("#submitOrder").click(function(){
 	var amount = $("#amount").text();
 	
 	var paramData = {'productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'country':countryName, 'addressDetail':addressDetail, 'postCode':postCode, 'nationalCode':postNationalCode};
-	$.post('<%=contextPath%>/submitOrder.json', paramData, function(responseData) {
+	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
-			alert("订单创建成功");
+			$('#submitOrder').text("订单提交成功");
+			$('#submitOrder').removeClass("");
+			
 			var tradeNo = responseData.data.tradeNo;
 			var orderId = responseData.data.orderId;
-			location.href= "<%=contextPath%>/orderInfo?orderId="+orderId+"&tradeNo="+tradeNo;
+			location.href= "${pageContext.request.contextPath}/orderInfo?orderId="+orderId+"&tradeNo="+tradeNo;
 		}else{
 			alert(responseData.message);
 		} 

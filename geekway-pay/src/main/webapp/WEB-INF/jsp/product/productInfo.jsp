@@ -315,9 +315,10 @@ function shareTimeline() {
         "desc": descContent,
         "title": shareTitle
     }, function(res) {//朋友圈分享成功后的回调
-    	if(res.err_msg=="share_timeline:ok"){
-    		applyVoucher();
-    	}
+    	alert("系统测试阶段，分享到朋友圈暂时不予奖励优惠券");
+//    	if(res.err_msg=="share_timeline:ok"){
+//    		applyVoucher();
+//    	}
     });
 }
 

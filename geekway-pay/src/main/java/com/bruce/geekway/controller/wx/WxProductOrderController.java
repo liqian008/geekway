@@ -30,7 +30,6 @@ import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.WxUserAddress;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
-import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.mp.WxMpOauthService;
@@ -40,11 +39,9 @@ import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxUserAddressService;
 import com.bruce.geekway.utils.DateUtil;
-import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
-import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -82,28 +79,11 @@ public class WxProductOrderController {
 	@RequestMapping(value = "/buyNow")
 	public String buyNow(Model model, @RequestParam(required=false)String code, int productSkuId, int amount, HttpServletRequest request, HttpServletResponse response) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
+		//userAccessToken，用于获取微信的共享地址address
+		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
 		if(logger.isDebugEnabled()){
 			logger.debug("进入[购买信息页面] code: "+code+", debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
-		}
-		
-		//定义userAccessToken，用于获取微信的共享地址address
-		String userAccessToken = null;
-
-		if(!ConstWeixin.WX_OAUTH_DEBUG){
-			if(!StringUtils.isBlank(code)){//oauth回调后
-				if(logger.isDebugEnabled()){
-					logger.debug("微信oauth回调后进入[购买信息页面], code: "+code);
-				}
-				//根据code换取openId
-				WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
-				if(oauthResult!=null){
-					userOpenId = oauthResult.getOpenid();
-					if(logger.isDebugEnabled()){
-						logger.debug("微信oauth回调后进入[购买信息页面], 换取的userOpenId，并写入cookie: "+userOpenId);
-					}
-					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
-				}
-			}
+			logger.debug("进入[购买信息页面] userOpenId: "+userOpenId+", userAccessToken: "+userAccessToken);
 		}
 		
 		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);

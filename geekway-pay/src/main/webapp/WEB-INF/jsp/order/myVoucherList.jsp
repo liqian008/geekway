@@ -2,9 +2,6 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 
-<%
-String contextPath = request.getContextPath();
-%>
 
 <!DOCTYPE HTML>
 <html>
@@ -107,10 +104,10 @@ String contextPath = request.getContextPath();
   	function fallLoad(){
   		//置为数据加载状态
   		$('#moreVouchersBtn').val("努力加载中...");
-  		$('#moreAlbumsBtn').attr("disabled","disabled");
+  		$('#moreVouchersBtn').attr("disabled","disabled");
   		var tailId = $("#tailId").val();
   		var jsonData = {'tailId' : tailId};
-  		$.post('<%=contextPath%>/moreVouchers.json', jsonData, function(data) {
+  		$.post('${pageContext.request.contextPath}/moreVouchers.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){
 				$("#vouchersContainer").append(data.data.html);

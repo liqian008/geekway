@@ -92,6 +92,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
+	@NeedAuthorize
 	@RequestMapping(value = "products/t-{tagId}")
 	public String productListByTag(Model model, @PathVariable int tagId, HttpServletRequest request) {
 		WxProductTag productTag = wxProductTagService.loadById(tagId);
@@ -106,6 +107,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
+	@NeedAuthorize
 	@RequestMapping(value = "moreProducts.json")
 	public ModelAndView moreProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam("tailId") int tailId) {
 	    if(logger.isDebugEnabled()){

@@ -2,6 +2,7 @@ package com.bruce.geekway.utils;
 
 import java.util.List;
 
+import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductVoucher;
 
@@ -79,6 +80,40 @@ public class HtmlBuildUtils {
 			sb.append("<p class='quote-item'>");
 			sb.append("优惠券信息： 编号 "+productVoucher.getVoucherCode()+" | 金额 "+productVoucher.getPrice()+"元 "+" | 状态 "+productVoucher.getStatus());
 			sb.append("<em>使用有效期: "+DateUtil.date2YMDHMS(productVoucher.getExpireTime())+"前</em>");
+			sb.append("</p>");
+			sb.append("</div>");
+			return sb.toString();
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 构造优惠券的html
+	 * @param productSkuList
+	 * @return
+	 */
+	public static String buildFallLoadOrdersHtml(List<WxProductOrder> productOrderList) {
+		// TODO freemarker template
+		if (productOrderList != null && productOrderList.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			int i = 0;
+			for (WxProductOrder productOrder : productOrderList) {
+				i++;
+				sb.append(buildOrderItemHtml(productOrder));
+			}
+			return sb.toString();
+		}
+		return "";
+	}
+	
+	private static String buildOrderItemHtml(WxProductOrder productOrder) {
+		if (productOrder != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<div>");
+			sb.append("<p class='quote-item'>");
+			sb.append("订单信息： 编号 "+productOrder.getTitle()+" | 金额 "+productOrder.getTotalFee()+"元");
+			sb.append("<em></em>");
 			sb.append("</p>");
 			sb.append("</div>");
 			return sb.toString();

@@ -20,6 +20,8 @@ import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.model.exception.GeekwayException;
+import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
@@ -45,7 +47,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		logger.debug("进入拦截器");
+		logger.debug("进入拦截器, requestURI: "+request.getRequestURI());
 
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 
@@ -57,46 +59,79 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			return true;
 		}
 		String code = request.getParameter("code");//对微信oauth回调的redirect不加限制
-		boolean fromWeixinOAuth = StringUtils.isNotBlank(code);
-		
-		AuthorizeStrategy authorizeStrategy = getNeedAuthorize(request, handlerMethod);
-		boolean needAuthorize = !fromWeixinOAuth && (authorizeStrategy!=null);//非微信回调且需要登录
-		if (needAuthorize) {//需要授权才能访问
-			if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//可以使用cookie中的信息
-				//检查cookie中是否存在用户信息
-				Cookie[] cookieArray = request.getCookies();
-				if(cookieArray!=null&&cookieArray.length>0){
-					for(Cookie cookie: cookieArray){
-						if(ConstFront.COOKIE_KEY_WX_OPENID.equals(cookie.getName())){
-							userOpenId = cookie.getValue();
-							logger.debug("userOpenId from cookie:: " +userOpenId);
-							break;
+		boolean wxOAuthCallback = StringUtils.isNotBlank(code);
+		if(wxOAuthCallback){//处理来自微信oauth回调
+			if(logger.isDebugEnabled()){
+				logger.debug("微信oauth回调后进入[拦截器], code: "+code);
+			}
+			//排除例外，如处理redirectUrl的proxy接口
+			if(request.getRequestURI().endsWith("wxOauthRedirect")){
+				if(logger.isDebugEnabled()){
+					logger.debug("微信oauth回调后进入[拦截器]，进入代理proxyUrl"+request.getRequestURI());
+				}
+				return true;
+			}
+			
+			//根据code换取openId
+			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
+			if(oauthResult!=null){
+				userOpenId = oauthResult.getOpenid();
+				String userAccessToken = oauthResult.getAccess_token();
+				if(logger.isDebugEnabled()){
+					logger.debug("微信oauth回调后进入[拦截器], 换取的userOpenId，并写入cookie: "+userOpenId);
+				}
+				if(StringUtils.isNotBlank(userOpenId)){
+					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
+					request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
+					if(logger.isDebugEnabled()){
+						logger.debug("微信oauth回调后进入[拦截器], 换取的userAccessToken，并置入Attribute: "+userAccessToken);
+					}
+					request.setAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN, userAccessToken);
+					return true;
+				}
+			}else{
+				throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+			}
+		}else{//自己业务系统内的处理
+			AuthorizeStrategy authorizeStrategy = getNeedAuthorize(request, handlerMethod);
+			boolean needAuthorize = authorizeStrategy!=null;//调用的接口需要进行登录
+			if (needAuthorize) {//需要用户身份才能访问
+				if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//允许从cookie中读取用户信息
+					//检查cookie中是否存在用户信息
+					Cookie[] cookieArray = request.getCookies();
+					if(cookieArray!=null&&cookieArray.length>0){
+						for(Cookie cookie: cookieArray){
+							if(ConstFront.COOKIE_KEY_WX_OPENID.equals(cookie.getName())){
+								userOpenId = cookie.getValue();
+								logger.debug("userOpenId from cookie:: " +userOpenId);
+								break;
+							}
 						}
 					}
 				}
-			}
-			
-			if (StringUtils.isNotBlank(userOpenId)) {//用户信息存在，写入request，供controller获取使用
-				request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
-			}else{//用户身份信息不存在，无法访问
-				if (RequestUtil.isJsonRequest(request)) {//来路为json请求
-					writeJson(response, ErrorCode.AUTHORIZE_NEED_LOGIN);
-					return false;
-				}else{//来路为webpage页
-					// 构造oauth的请求
-					String wxOauthUrl = null;
-					if (RequestUtil.isGet(request)) {
-						// Get跳回请求地址，增加redirectUrl
-						String redirectUrl = UrlUtil.getRequestUrl(request);
-						wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
-					} else {
-						// 其他方法取referer，增加redirectUrl
-						String redirectUrl = UrlUtil.getRefererUrl(request);
-						System.out.println("redirectUrl: "+redirectUrl);
-						wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
+				
+				if (StringUtils.isNotBlank(userOpenId)) {//用户信息存在，写入request，供controller获取使用
+					request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
+				}else{//用户身份信息不存在，无法访问
+					if (RequestUtil.isJsonRequest(request)) {//来路为json请求
+						writeJson(response, ErrorCode.AUTHORIZE_NEED_LOGIN);
+						return false;
+					}else{//来路为webpage页
+						// 构造oauth的请求
+						String wxOauthUrl = null;
+						if (RequestUtil.isGet(request)) {
+							// Get跳回请求地址，增加redirectUrl
+							String redirectUrl = UrlUtil.getRequestUrl(request);
+							wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
+						} else {
+							// 其他方法取referer，增加redirectUrl
+							String redirectUrl = UrlUtil.getRefererUrl(request);
+							System.out.println("redirectUrl: "+redirectUrl);
+							wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
+						}
+						response.sendRedirect(wxOauthUrl);
+						return false;
 					}
-					response.sendRedirect(wxOauthUrl);
-					return false;
 				}
 			}
 		}

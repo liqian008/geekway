@@ -20,7 +20,7 @@ public @interface NeedAuthorize {
 	public enum AuthorizeStrategy{
 		//允许检查cookie中的认证信息
 		COOKIE_ALLOW,
-		//忽略cookie的内容（强制使用oauth登录，以获取最新的用户信息）
+		//忽略cookie的内容（强制使用oauth登录，以获取最新的用户信息&accessToken）
 		COOKIE_DENY
 	}
 }

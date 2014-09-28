@@ -6,6 +6,8 @@ public interface ConstFront {
 	
 	/* 登录用户的sessionAttribute*/
 	public static final String CURRENT_USER = "_currentUser";
+	/* 登录用户的userAccessToken Attribute*/
+	public static final String CURRENT_USER_ACCESS_TOKEN = "_currentUserAccessToken";
 	
 	/* 用户对象的Attribute*/
     public static final String REQUEST_USER_ATTRIBUTE = "_user";
