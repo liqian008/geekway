@@ -228,8 +228,8 @@ public class WxProductController {
 								wxProductSku.setSkuName(skuPropertyName);
 								
 								//设置各sku的缩略图
-								wxProductSku.setSkuPicUrl(product.getProductPicUrl());
-								wxProductSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
+//								wxProductSku.setSkuPicUrl(product.getProductPicUrl());
+//								wxProductSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
 								
 								wxProductSku.setOriginPrice((double) 0);
 								wxProductSku.setPrice((double) 0);

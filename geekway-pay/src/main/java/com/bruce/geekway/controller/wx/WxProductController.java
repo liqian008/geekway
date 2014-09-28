@@ -1,5 +1,6 @@
 package com.bruce.geekway.controller.wx;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,12 +27,15 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
+import com.bruce.geekway.service.upload.IUploadService;
+import com.bruce.geekway.service.upload.impl.QiniuUploadServiceImpl;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
@@ -56,6 +60,9 @@ public class WxProductController {
 	private IWxProductVoucherService wxProductVoucherService;
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
+	@Autowired
+	private QiniuUploadServiceImpl qiniuUploadService;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
 
@@ -69,6 +76,15 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) {
+		try {
+//			String result = qiniuUploadService.uploadFile("", new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"));
+//			System.out.println(result);
+			
+			UploadImageResult uploadResult = qiniuUploadService.uploadImage(new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"), "", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
+			System.out.println(uploadResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return "product/index";
 	}
 	

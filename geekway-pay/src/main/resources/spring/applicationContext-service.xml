@@ -11,7 +11,12 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 
 	default-lazy-init="false" default-autowire="byName">
-
+	
+	
+	<bean id="qiniuUploadServiceImpl" class="com.bruce.geekway.service.upload.impl.QiniuUploadServiceImpl">
+	</bean>
+	
+	
 	<!-- 本地MpUserService 
 	<bean id="wxUserService" class="com.bruce.geekway.service.impl.WxUserServiceImpl">
 		<property name="wxUserMapper" ref="wxUserMapper"></property>

@@ -18,8 +18,8 @@ import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
-import com.bruce.geekway.service.IUploadService;
 import com.bruce.geekway.service.mp.WxMpMediaUploadService;
+import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.UploadUtil;
 
@@ -45,7 +45,7 @@ public class GeekwayUploadController extends BaseController{
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
-			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), userId, file.getOriginalFilename());
+			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			model.addAttribute("imageUploadResult", imageUploadResult);
 			model.addAttribute("callback", callback);
 		} catch (IOException e) {
@@ -66,7 +66,7 @@ public class GeekwayUploadController extends BaseController{
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
-			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), userId, file.getOriginalFilename());
+			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			if(imageUploadResult!=null){
 				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 			}
@@ -89,10 +89,10 @@ public class GeekwayUploadController extends BaseController{
 		int userId = userDetail.getUserId();
 		UploadImageResult imageUploadResult;
 		try {
-			imageUploadResult = uploadService.uploadImage(image.getBytes(), userId, image.getOriginalFilename());
+			imageUploadResult = uploadService.uploadImage(image.getBytes(), String.valueOf(userId), image.getOriginalFilename(), IUploadService.IMAGE_SPEC_MEDIUM);
 			
-			if(imageUploadResult!=null && imageUploadResult.getMediumImage()!=null&&imageUploadResult.getOriginalImage().getUrl()!=null){
-				File imageFile = UploadUtil.loadFileByUrl(imageUploadResult.getOriginalImage().getUrl());
+			if(imageUploadResult!=null && imageUploadResult.getUploadImageList().size()>0){
+				File imageFile = UploadUtil.loadFileByUrl(imageUploadResult.getUploadImageList().get(1).getUrl());//第0条为originalUrl的数据
 				if(imageFile!=null){//文件存在，可以上传至微信服务器
 					WxMediaUploadResult wxImageUploadResult = wxMediaUploadService.uploadImage(imageFile);
 					imageUploadResult.setWxMediaResult(wxImageUploadResult);
@@ -120,10 +120,11 @@ public class GeekwayUploadController extends BaseController{
 		int userId = userDetail.getUserId();
 		UploadImageResult imageUploadResult;
 		try {
-			imageUploadResult = uploadService.uploadImage(thumbImage.getBytes(), userId, thumbImage.getOriginalFilename());
+			//缩略图上传小尺寸
+			imageUploadResult = uploadService.uploadImage(thumbImage.getBytes(), String.valueOf(userId), thumbImage.getOriginalFilename(), IUploadService.IMAGE_SPEC_SMALL);
 		
-			if(imageUploadResult!=null && imageUploadResult.getMediumImage()!=null&&imageUploadResult.getMediumImage().getUrl()!=null){
-				File thumbFile = UploadUtil.loadFileByUrl(imageUploadResult.getMediumImage().getUrl());
+			if(imageUploadResult!=null && imageUploadResult.getUploadImageList().size()>0){
+				File thumbFile = UploadUtil.loadFileByUrl(imageUploadResult.getUploadImageList().get(1).getUrl());//第0条为originalUrl的数据
 				if(thumbFile!=null){//文件存在，可以上传至微信服务器
 					WxMediaUploadResult wxThumbUploadResult = wxMediaUploadService.uploadThumb(thumbFile);
 					imageUploadResult.setWxMediaResult(wxThumbUploadResult);

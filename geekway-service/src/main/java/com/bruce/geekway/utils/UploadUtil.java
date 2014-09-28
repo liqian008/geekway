@@ -30,12 +30,14 @@ public class UploadUtil {
      * @param time
      * @return
      */
-    public static String getFileNameWithPlaceHolder(int userId, String fileName, String placeHolder, long time) {
+    public static String getFileNameWithPlaceHolder(String userId, String fileName, String placeHolder, long time) {
         String extName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
         StringBuffer sb = new StringBuffer();
-        sb.append(userId);
-        sb.append("_");
+        if(StringUtils.isNotBlank(userId)){
+			sb.append(userId);
+			sb.append("_");
+        }
         sb.append(Md5Util.md5Encode(userId + "_" + time));
         if (StringUtils.isNotEmpty(placeHolder)) {
             sb.append("_");
@@ -46,8 +48,14 @@ public class UploadUtil {
 
         return sb.toString();
     }
-
-    public static String getFileName(int userId, String fileName) {
+    
+    /**
+     * 生成文件名（格式为$userId_67bdd8e83ee08669ced059c3c4306ef.jpg）
+     * @param userId
+     * @param fileName
+     * @return
+     */
+    public static String getFileName(String userId, String fileName) {
         return getFileNameWithPlaceHolder(userId, fileName, null, System.currentTimeMillis());
     }
     
@@ -68,7 +76,7 @@ public class UploadUtil {
    	
     public static String getBaseUrl() {
     	String domain = ConfigUtil.getString("img_domain");
-    	String contextPath = ConfigUtil.getString("contextPath"); 
+    	String contextPath = ConfigUtil.getString("contextPath");
     	String basePath = domain + contextPath + ConfigUtil.getString("upload_url_base");
         return basePath;
     }
@@ -80,9 +88,29 @@ public class UploadUtil {
    	private static String getDictionary(long time) {
         return simpleDateFormat.format(new Date(time));
     }
-
-   /**
-	 * 获取用户图片保存的相对路径
+   	
+   	
+   	/**
+	 * 获取文件保存的相对路径
+	 * @param userId
+	 * @return
+	 */
+	public static String getFilePath(long time) {
+		String filePath = ConfigUtil.getString("upload_path_file") + UploadUtil.FILE_SEPARTOR + getDictionary(time) ;
+		return filePath;
+	}
+	
+	/**
+     * 获取文件保存的相对路径
+     * @param userId
+     * @return
+     */
+    public static String getFilePath() {
+        return getFilePath(System.currentTimeMillis());
+    }
+	
+   	/**
+	 * 获取图片保存的相对路径
 	 * @param userId
 	 * @return
 	 */
@@ -92,7 +120,7 @@ public class UploadUtil {
 	}
 	
 	/**
-     * 获取用户图片保存的相对路径
+     * 获取图片保存的相对路径
      * @param userId
      * @return
      */
@@ -151,9 +179,7 @@ public class UploadUtil {
     }
     
     
-    
-    
-	public static byte[] file2bytes(File file) throws Exception {
+    public static byte[] file2bytes(File file) throws Exception {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream((int) file.length());
 		BufferedInputStream in = null;
 		try {
@@ -173,5 +199,8 @@ public class UploadUtil {
 			}
 			bos.close();
 		}
+	}
+	
+	public static void main(String[] args) {
 	}
 }

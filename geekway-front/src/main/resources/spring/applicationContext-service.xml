@@ -45,7 +45,7 @@
 	
 	
 	<!-- upload service -->
-	<bean id="uploadService" class="com.bruce.geekway.service.impl.UploadServiceImpl">
+	<bean id="uploadService" class="com.bruce.geekway.service.upload.impl.UploadServiceImpl">
 	</bean>
 	
 	
