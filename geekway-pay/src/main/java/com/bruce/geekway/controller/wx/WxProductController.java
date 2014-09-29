@@ -35,10 +35,10 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
-import com.bruce.geekway.service.upload.impl.QiniuUploadServiceImpl;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.UploadUtil;
 
 /**
  * 商品controller
@@ -61,7 +61,7 @@ public class WxProductController {
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
 	@Autowired
-	private QiniuUploadServiceImpl qiniuUploadService;
+	private IUploadService uploadService;
 	
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
@@ -77,11 +77,16 @@ public class WxProductController {
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) {
 		try {
-//			String result = qiniuUploadService.uploadFile("", new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"));
-//			System.out.println(result);
+			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
+			byte[] bytesData = UploadUtil.file2bytes(file);
+			String result = uploadService.uploadFile(bytesData, "", file.getName());
+			System.out.println(result);
 			
-			UploadImageResult uploadResult = qiniuUploadService.uploadImage(new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"), "", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
-			System.out.println(uploadResult);
+//			UploadImageResult uploadResult = qiniuUploadService.uploadImage(new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"), "", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
+//			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
+//			byte[] bytesData = UploadUtil.file2bytes(file);
+//			UploadImageResult imageUploadResult = uploadService.uploadImage(bytesData, "", "hands-plant-870x450.jpg", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
+//			System.out.println(imageUploadResult);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

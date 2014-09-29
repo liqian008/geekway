@@ -5,12 +5,14 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
+import com.bruce.geekway.service.upload.IUploadProcessor;
 import com.bruce.geekway.service.upload.IUploadService;
-import com.bruce.geekway.utils.ImageUtil;
 import com.bruce.geekway.utils.UploadUtil;
 
 
@@ -19,25 +21,32 @@ public class UploadServiceImpl implements IUploadService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UploadImageInfo.class);
 	
+	@Autowired
+	private IUploadProcessor uploadProcessor;
 	
-	/* 普通文件类型 */
-	public static final short UPLOAD_FILE_TYPE_NORMAL = 0;
-	/* 图片文件类型 */
-	public static final short UPLOAD_FILE_TYPE_IMAGE = 1;
+//	/* 普通文件类型 */
+//	public static final short UPLOAD_FILE_TYPE_NORMAL = 0;
+//	/* 图片文件类型 */
+//	public static final short UPLOAD_FILE_TYPE_IMAGE = 1;
 	
-	// 文件存储的绝对路径
-	public static final String BASE_PATH = UploadUtil.getBasePath();
-	// 文件的baseUrl
-	public static final String BASE_URL = UploadUtil.getBaseUrl();
+//	// 文件存储的绝对路径
+//	public static final String BASE_PATH = UploadUtil.getBasePath();
+//	// 文件的baseUrl
+//	public static final String BASE_URL = UploadUtil.getBaseUrl();
+	
 
 	/**
 	 * 保存文件
 	 */
 	@Override
-	public String uploadFile(byte[] data, String userId, String fileName) throws IOException {
+	public String uploadFile(byte[] data, String userId, String fileName) throws Exception {
+		//先保存本地文件
 		String newFileName = UploadUtil.getFileName(userId, fileName);
-		String fileUrl = UploadUtil.saveFile(data, BASE_PATH, UploadUtil.getImagePath(), newFileName);
-		return fileUrl;
+		String filePath = UploadUtil.getFilePath();//相对路径
+		String absoultDirPath = ConstConfig.UPLOAD_PATH_BASE + filePath;//完整路径
+		File destFile =  UploadUtil.saveFile(data, absoultDirPath, newFileName);
+		
+		return uploadProcessor.saveFile(destFile, filePath);
 	}
 
 	/**
@@ -46,45 +55,28 @@ public class UploadServiceImpl implements IUploadService {
 	 * @throws IOException
 	 */
 	@Override
-	public UploadImageResult uploadImage(byte[] data, String userId, String filename, UploadImageInfo... imageSpecs) throws IOException {
+	public UploadImageResult uploadImage(byte[] data, String userId, String filename, UploadImageInfo... imageSpecs) throws Exception {
 		long time = System.currentTimeMillis();
 		// 获取图片存储的绝对、相对路径及文件名
-		String imageDirPath = UploadUtil.getImagePath(time);
-		String absoultImagePath = BASE_PATH + imageDirPath;
-		
-		logger.debug("upload absoultImagePath: "+absoultImagePath);
-
-		String imageName = UploadUtil.getFileNameWithPlaceHolder(userId, filename, null, time);
-		
-		logger.debug("upload image rename to: "+imageName);
+		String newImageName = UploadUtil.getFileNameWithPlaceHolder(userId, filename, null, time);
+		String imageDirPath = UploadUtil.getImagePath(time);//相对路径
+		String absoultImageDirPath = ConstConfig.UPLOAD_PATH_BASE + imageDirPath;//完整路径
+		logger.debug("upload absoultImageDirPath: "+absoultImageDirPath);
+		logger.debug("upload image rename to: "+newImageName);
 
 		String originalImageSpec = "original";
+		File originalImageFile = UploadUtil.saveFile(data, absoultImageDirPath + UploadUtil.FILE_SEPARTOR + originalImageSpec,  newImageName);
 		
-		String originalUrl = UploadUtil.saveFile(data, BASE_PATH, imageDirPath+ UploadUtil.FILE_SEPARTOR + originalImageSpec,  imageName);
-
-		// 构造uploadResult
-		UploadImageResult uploadResult = new UploadImageResult();
-		UploadImageInfo originalImage = new UploadImageInfo(imageName, UPLOAD_FILE_TYPE_IMAGE, originalImageSpec, originalUrl, -1);
-		//增加origin图片result
-		uploadResult.getUploadImageList().add(originalImage);
+		return uploadProcessor.saveImage(originalImageFile, imageDirPath, imageSpecs);
 		
-		if(imageSpecs!=null&&imageSpecs.length>0){
-			for (UploadImageInfo imageSpec : imageSpecs) {
-				int width = imageSpec.getWidth();
-				String scaleImagePath = absoultImagePath + UploadUtil.FILE_SEPARTOR +imageSpec;
-				File scaleImageFile = new File(scaleImagePath);
-				scaleImageFile.mkdirs();
-				
-				//图片缩放
-				ImageUtil.scaleByWidth(absoultImagePath +"/"+originalImageSpec+"/"+ imageName, scaleImagePath+"/"+imageName, width);
-				//TODO水印处理
-				String imageUrl = BASE_URL + imageDirPath +"/"+imageSpec+"/"+ imageName;
-				UploadImageInfo imageInfo = new UploadImageInfo(imageName, UPLOAD_FILE_TYPE_IMAGE, imageSpec.getImageSpec(), imageUrl, -1);
-
-				//增加不同规格图片result
-				uploadResult.getUploadImageList().add(imageInfo);
-			}
-		}
-		return uploadResult;
 	}
+
+	public IUploadProcessor getUploadProcessor() {
+		return uploadProcessor;
+	}
+
+	public void setUploadProcessor(IUploadProcessor uploadProcessor) {
+		this.uploadProcessor = uploadProcessor;
+	}
+	
 }

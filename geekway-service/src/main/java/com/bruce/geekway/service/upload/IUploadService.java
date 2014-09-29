@@ -22,13 +22,13 @@ public interface IUploadService{
 	 * @return
 	 * @throws IOException 
 	 */
-	public String uploadFile(byte[] bytes, String userId, String filename) throws IOException;
+	public String uploadFile(byte[] bytes, String userId, String filename) throws Exception;
 	
 	/**
 	 * 保存图片文件，需切割图片
 	 * @param bytes
 	 * @return 
 	 */
-	public UploadImageResult uploadImage(byte[] bytes, String userId, String filename, UploadImageInfo... imageSpecs) throws IOException;
+	public UploadImageResult uploadImage(byte[] bytes, String userId, String filename, UploadImageInfo... imageSpecs) throws Exception;
 	
 }

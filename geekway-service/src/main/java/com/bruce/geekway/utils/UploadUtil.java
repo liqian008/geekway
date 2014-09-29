@@ -11,6 +11,8 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.FileCopyUtils;
 
+import com.bruce.geekway.constants.ConstConfig;
+
 /**
  * 
  * @author liqian
@@ -23,7 +25,7 @@ public class UploadUtil {
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
     
     /**
-     * 返回系统生成的文件名
+     * 返回系统随机构造的文件名
      * @param userId
      * @param fileName
      * @param placeHolder
@@ -59,30 +61,26 @@ public class UploadUtil {
         return getFileNameWithPlaceHolder(userId, fileName, null, System.currentTimeMillis());
     }
     
-    /**
-   	 * 获取文件保存的base路径
-   	 * @param userId
-   	 * @return
-   	 */
-   	public static String getBasePath() {
-   		String basePath = ConfigUtil.getString("upload_path_base");
-   		return basePath;
-   	}
-   	
-//   	public static String getDomain() {
-//        String basePath = ConfigUtil.getString("domain");
+//    /**
+//   	 * 获取文件保存的base路径，通常为$localDir/staticFile）
+//   	 * @param userId
+//   	 * @return
+//   	 */
+//   	public static String getBasePath() {
+//   		String basePath = ConfigUtil.getString("upload_path_base");
+//   		return basePath;
+//   	}
+//   	
+//   	
+//    public static String getBaseUrl() {
+//    	String domain = ConfigUtil.getString("img_domain");
+//    	String contextPath = ConfigUtil.getString("contextPath");
+//    	String basePath = domain + contextPath + ConfigUtil.getString("upload_url_base");
 //        return basePath;
 //    }
    	
-    public static String getBaseUrl() {
-    	String domain = ConfigUtil.getString("img_domain");
-    	String contextPath = ConfigUtil.getString("contextPath");
-    	String basePath = domain + contextPath + ConfigUtil.getString("upload_url_base");
-        return basePath;
-    }
-   	
    	private static String getDictionary() {
-        return simpleDateFormat.format(new Date());
+   		return getDictionary(System.currentTimeMillis());
     }
    	
    	private static String getDictionary(long time) {
@@ -91,7 +89,7 @@ public class UploadUtil {
    	
    	
    	/**
-	 * 获取文件保存的相对路径
+	 * 获取文件保存的相对路径(1、用于文件寻址，2、用于拼url)
 	 * @param userId
 	 * @return
 	 */
@@ -101,7 +99,7 @@ public class UploadUtil {
 	}
 	
 	/**
-     * 获取文件保存的相对路径
+     * 获取文件保存的相对路径(1、用于文件寻址，2、用于拼url)
      * @param userId
      * @return
      */
@@ -138,14 +136,34 @@ public class UploadUtil {
 	 * @return
 	 * @throws IOException
 	 */
-    public static String saveFile(byte[] data, String basePath, String dictionary, String filename) throws IOException{
-        File dir = new File(basePath + UploadUtil.FILE_SEPARTOR + dictionary);
+//    public static String saveFile(byte[] data, String basePath, String dictionary, String filename) throws IOException{
+//        File dir = new File(basePath + UploadUtil.FILE_SEPARTOR + dictionary);
+//        if(!dir.exists()){
+//            dir.mkdirs();
+//        }
+//        File file = new File(dir, filename);
+//    	FileCopyUtils.copy(data, file);
+//		return getBaseUrl()  + UploadUtil.FILE_SEPARTOR + dictionary + UploadUtil.FILE_SEPARTOR + filename;
+//    }
+    
+    
+    /**
+	 * 保存文件，返回文件
+	 * @param data
+	 * @param basePath
+	 * @param dictionary
+	 * @param filename
+	 * @return
+	 * @throws IOException
+	 */
+    public static File saveFile(byte[] data, String dirPath, String filename) throws IOException{
+        File dir = new File(dirPath);
         if(!dir.exists()){
             dir.mkdirs();
         }
         File file = new File(dir, filename);
     	FileCopyUtils.copy(data, file);
-		return getBaseUrl()  + UploadUtil.FILE_SEPARTOR + dictionary + UploadUtil.FILE_SEPARTOR + filename;
+		return file;
     }
     
     
@@ -169,7 +187,7 @@ public class UploadUtil {
      */
     public static File loadFileByUrl(String fileUrl){
     	if(fileUrl!=null){
-    		String abFilePath = fileUrl.replace(getBaseUrl(), getBasePath());
+    		String abFilePath = fileUrl.replace(ConstConfig.UPLOAD_URL_BASE, ConstConfig.UPLOAD_PATH_BASE);
     		File file = new File(abFilePath);
     		if(file.exists()){
     			return file;

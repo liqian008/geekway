@@ -12,10 +12,17 @@
 
 	default-lazy-init="false" default-autowire="byName">
 	
-	
-	<bean id="qiniuUploadServiceImpl" class="com.bruce.geekway.service.upload.impl.QiniuUploadServiceImpl">
+	<!-- 上传service -->	
+	<bean id="uploadServiceImpl" class="com.bruce.geekway.service.upload.impl.UploadServiceImpl">
 	</bean>
 	
+	<!-- 上传本地的processor -->	
+	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadLocalProcessor">
+	</bean>
+	<!-- 上传七牛的processor	
+	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadQiniuProcessor">
+	</bean>
+	 -->
 	
 	<!-- 本地MpUserService 
 	<bean id="wxUserService" class="com.bruce.geekway.service.impl.WxUserServiceImpl">

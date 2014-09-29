@@ -48,7 +48,7 @@ public class GeekwayUploadController extends BaseController{
 			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			model.addAttribute("imageUploadResult", imageUploadResult);
 			model.addAttribute("callback", callback);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "geekway/ckUploadResult";
@@ -70,7 +70,7 @@ public class GeekwayUploadController extends BaseController{
 			if(imageUploadResult!=null){
 				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
@@ -100,7 +100,7 @@ public class GeekwayUploadController extends BaseController{
 					return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -132,7 +132,7 @@ public class GeekwayUploadController extends BaseController{
 					return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);

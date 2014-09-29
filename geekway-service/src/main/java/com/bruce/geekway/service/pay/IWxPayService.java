@@ -58,6 +58,7 @@ public class IWxPayService{
 	 */
 	public int receiveWxOrder(WxPayNotifyOrderRequest wxOrderRequest){
 		if(wxOrderRequest==null){
+			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}
 		
 		int result = 0;
