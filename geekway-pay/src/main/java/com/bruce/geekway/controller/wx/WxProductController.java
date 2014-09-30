@@ -1,6 +1,5 @@
 package com.bruce.geekway.controller.wx;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
-import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -38,7 +36,6 @@ import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
-import com.bruce.geekway.utils.UploadUtil;
 
 /**
  * 商品controller
@@ -63,10 +60,8 @@ public class WxProductController {
 	@Autowired
 	private IUploadService uploadService;
 	
-	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
 
-	
 	/**
 	 * 首页
 	 * @param model
@@ -77,10 +72,10 @@ public class WxProductController {
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) {
 		try {
-			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
-			byte[] bytesData = UploadUtil.file2bytes(file);
-			String result = uploadService.uploadFile(bytesData, "", file.getName());
-			System.out.println(result);
+//			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
+//			byte[] bytesData = UploadUtil.file2bytes(file);
+//			String result = uploadService.uploadFile(bytesData, "", file.getName());
+//			System.out.println(result);
 			
 //			UploadImageResult uploadResult = qiniuUploadService.uploadImage(new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"), "", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
 //			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
@@ -130,11 +125,13 @@ public class WxProductController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "moreProducts.json")
-	public ModelAndView moreProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam("tailId") int tailId) {
+	public ModelAndView moreProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam("tailId") int tailId, @RequestParam(required=false, defaultValue="6")int limit) {
 	    if(logger.isDebugEnabled()){
-            logger.debug("ajax加载更多专辑，tailId: "+tailId);
+            logger.debug("ajax加载更多商品，tailId: "+tailId);
         }
-	    int limit = 2;
+	    if(limit>10||limit<1){
+	    	limit = 6;
+	    }
 		List<WxProductSku> productSkuList = null;
 	    if(logger.isDebugEnabled()){
             logger.debug("根据商品分类查询");
@@ -178,7 +175,7 @@ public class WxProductController {
 	}
 	
 	/**
-	 * 商品详细信息
+	 * sku商品详细信息
 	 * @param model
 	 * @param request
 	 * @return
@@ -233,6 +230,23 @@ public class WxProductController {
 			model.addAttribute("skuGroupMap", skuGroupMap);
 		}
 		return "product/productInfo";
+	}
+	
+	
+	
+	@RequestMapping(value = "recommendProducts.json")
+	public ModelAndView recommendProducts(HttpServletRequest request, @RequestParam(required=false, defaultValue="4")int limit) {
+	    if(logger.isDebugEnabled()){
+            logger.debug("ajax获取推荐商品");
+        }
+	    if(limit>10||limit<1){
+	    	limit = 4;
+	    }
+	    List<WxProduct> productList = wxProductService.queryAvailableList();
+	    String productListHtml = HtmlBuildUtils.buildRecommendProductsHtml(productList);
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("html", productListHtml);
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
 }

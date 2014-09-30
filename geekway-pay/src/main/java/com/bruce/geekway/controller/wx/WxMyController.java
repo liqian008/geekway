@@ -179,19 +179,25 @@ public class WxMyController{
 		}
 	}
 	
-	
-	@NeedAuthorize
-	@RequestMapping(value = "/applyVoucher.json")
-	public ModelAndView moreVouchers(Model model, HttpServletRequest request) {
-		String userOpenId = (String)request.getAttribute(ConstFront.CURRENT_USER);
-		if (logger.isDebugEnabled()) {
-			logger.debug("ajax获得优惠券，userOpenId: " + userOpenId);
-		}
-		WxProductVoucher voucher = wxProductVoucherService.applyVoucher(userOpenId);
-		if(voucher!=null){//成功
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(voucher));
-		}
-		return ResponseBuilderUtil.SUBMIT_FAILED_VIEW;
-	}
+	/**
+	 * 提取【优惠码】
+	 * 因微信分享策略限制（禁止以奖励的形式促使分享），该接口下线
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+//	@NeedAuthorize
+//	@RequestMapping(value = "/applyVoucher.json")
+//	public ModelAndView moreVouchers(Model model, HttpServletRequest request) {
+//		String userOpenId = (String)request.getAttribute(ConstFront.CURRENT_USER);
+//		if (logger.isDebugEnabled()) {
+//			logger.debug("ajax获得优惠券，userOpenId: " + userOpenId);
+//		}
+//		WxProductVoucher voucher = wxProductVoucherService.applyVoucher(userOpenId);
+//		if(voucher!=null){//成功
+//			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(voucher));
+//		}
+//		return ResponseBuilderUtil.SUBMIT_FAILED_VIEW;
+//	}
 	
 }

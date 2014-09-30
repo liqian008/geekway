@@ -43,6 +43,7 @@
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	
+	<!-- 微信支付回调相关mapper -->
 	<bean id="wxPayAlarmMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.WxPayAlarmMapper" />
@@ -62,7 +63,7 @@
 	</bean>
 	
 	
-	<!-- weixin product  -->
+	<!-- weixin product 相关mapper  -->
 	<bean id="wxProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.WxProductMapper" />
@@ -103,6 +104,11 @@
 	<bean id="wxProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.WxProductOrderMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	<bean id="wxProductOrderItemMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxProductOrderItemMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	<bean id="wxUserAddressMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">

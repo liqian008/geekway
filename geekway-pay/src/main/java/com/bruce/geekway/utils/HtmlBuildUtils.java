@@ -2,6 +2,7 @@ package com.bruce.geekway.utils;
 
 import java.util.List;
 
+import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductVoucher;
@@ -40,7 +41,7 @@ public class HtmlBuildUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
 			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(productSku.getProductId()) + "'>");
-			sb.append("<img class='responsive-image' src='" + "/geekway-pay/slideby/images/general-nature/2s.jpg" + "'");
+			sb.append("<img class='responsive-image' src='" + productSku.getSkuPicUrl() + "'");
 			sb.append("</a>");
 			sb.append("<h4>"+productSku.getName()+"</h4>");
 			sb.append("<ul id='choose'>");
@@ -116,6 +117,62 @@ public class HtmlBuildUtils {
 			sb.append("<em></em>");
 			sb.append("</p>");
 			sb.append("</div>");
+			return sb.toString();
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 构造推荐产品的html
+	 * @param productSkuList
+	 * @return
+	 */
+	public static String buildRecommendProductsHtml(List<WxProduct> productList) {
+		// TODO freemarker template
+		if (productList != null && productList.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			int i = 0;
+			for (WxProduct product : productList) {
+				i++;
+				sb.append(buildRecommendProductItemHtml(product));
+			}
+			return sb.toString();
+		}
+		return "";
+	}
+	
+	/**
+	 * 构造系统推荐商品
+	 * @param product
+	 * @return
+	 */
+	private static String buildRecommendProductItemHtml(WxProduct product) {
+		if (product != null) {
+			StringBuilder sb = new StringBuilder();
+			
+//			sb.append("<div class='portfolio-item-thumb one-third'>");
+//			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(product.getId()) + "'>");
+//			sb.append("<img class='responsive-image' src='"+product.getProductPic1Url()+"'>");
+//			sb.append("</a>");
+//			sb.append("<h4>"+product.getName()+"</h4>");
+//			sb.append("<ul>");
+//			sb.append("<li>原 价：&nbsp;<span id='originPrice' class='text-highlight highlight-red'><del>"+product.getOriginPrice()+"</del></span>元</li>");
+//			sb.append("<li>现 价：&nbsp;<span id='price' class='text-highlight highlight-green>"+product.getPrice()+"</span>元</li>");
+//			sb.append("</ul>");
+//			sb.append("</div>");
+			
+			sb.append("<p class='quote-item'>");
+			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(product.getId()) + "'>");
+			sb.append("<img src='"+product.getProductPic1Url()+"'>");
+			sb.append("</a>");
+			sb.append(product.getName());
+			sb.append("<em>");
+			sb.append("原 价：&nbsp;<span id='originPrice' class='text-highlight highlight-red'><del>3</del></span>元");
+			sb.append("，现 价：&nbsp;<span id='price' class='text-highlight highlight-green'>2</span>元");
+			sb.append("</em>");
+			sb.append("</p>");
+			
 			return sb.toString();
 		}
 		return null;

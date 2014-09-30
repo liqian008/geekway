@@ -1,7 +1,6 @@
 package com.bruce.geekway.admin.controller.geekway;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,66 +75,68 @@ public class GeekwayUploadController extends BaseController{
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 	
-	/**
-	 * 上传微信图片素材(需返回mediaId)
-	 * @param model
-	 * @param image
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/wxImageUpload", method = RequestMethod.POST)
-	public JsonResultBean wxImageUpload(Model model, @RequestParam("image") CommonsMultipartFile image) {
-		WebUserDetails userDetail = getUserInfo();
-		int userId = userDetail.getUserId();
-		UploadImageResult imageUploadResult;
-		try {
-			imageUploadResult = uploadService.uploadImage(image.getBytes(), String.valueOf(userId), image.getOriginalFilename(), IUploadService.IMAGE_SPEC_MEDIUM);
-			
-			if(imageUploadResult!=null && imageUploadResult.getUploadImageList().size()>0){
-				File imageFile = UploadUtil.loadFileByUrl(imageUploadResult.getUploadImageList().get(1).getUrl());//第0条为originalUrl的数据
-				if(imageFile!=null){//文件存在，可以上传至微信服务器
-					WxMediaUploadResult wxImageUploadResult = wxMediaUploadService.uploadImage(imageFile);
-					imageUploadResult.setWxMediaResult(wxImageUploadResult);
-					//返回正确响应
-					return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
-	}
+//	/**
+//	 * 上传微信图片素材(需返回mediaId)
+//	 * @param model
+//	 * @param image
+//	 * @return
+//	 */
+//	@ResponseBody
+//	@RequestMapping(value = "/wxImageUpload", method = RequestMethod.POST)
+//	public JsonResultBean wxImageUpload(Model model, @RequestParam("image") CommonsMultipartFile image) {
+//		WebUserDetails userDetail = getUserInfo();
+//		int userId = userDetail.getUserId();
+//		UploadImageResult imageUploadResult;
+//		try {
+//			imageUploadResult = uploadService.uploadImage(image.getBytes(), String.valueOf(userId), image.getOriginalFilename(), IUploadService.IMAGE_SPEC_MEDIUM);
+//			
+//			if(imageUploadResult!=null && imageUploadResult.getUploadImageMap().size()>0){
+//				File imageFile = UploadUtil.loadFileByUrl(imageUploadResult.getUploadImageMap().get("original").getUrl());//第0条为originalUrl的数据
+//				if(imageFile!=null){//文件存在，可以上传至微信服务器
+//					WxMediaUploadResult wxImageUploadResult = wxMediaUploadService.uploadImage(imageFile);
+//					imageUploadResult.setWxMediaResult(wxImageUploadResult);
+//					//返回正确响应
+//					return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
+//				}
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+//	}
 	
-	/**
-	 * 上传微信缩略图素材(需返回thumb_media_id)
-	 * @param model
-	 * @param thumbImage
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/wxThumbUpload", method = RequestMethod.POST)
-	public JsonResultBean wxThumbUpload(Model model, @RequestParam("thumbImage") CommonsMultipartFile thumbImage) {
-		WebUserDetails userDetail = getUserInfo();
-		int userId = userDetail.getUserId();
-		UploadImageResult imageUploadResult;
-		try {
-			//缩略图上传小尺寸
-			imageUploadResult = uploadService.uploadImage(thumbImage.getBytes(), String.valueOf(userId), thumbImage.getOriginalFilename(), IUploadService.IMAGE_SPEC_SMALL);
-		
-			if(imageUploadResult!=null && imageUploadResult.getUploadImageList().size()>0){
-				File thumbFile = UploadUtil.loadFileByUrl(imageUploadResult.getUploadImageList().get(1).getUrl());//第0条为originalUrl的数据
-				if(thumbFile!=null){//文件存在，可以上传至微信服务器
-					WxMediaUploadResult wxThumbUploadResult = wxMediaUploadService.uploadThumb(thumbFile);
-					imageUploadResult.setWxMediaResult(wxThumbUploadResult);
-					//返回正确响应
-					return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
-	}
+	
+	
+//	/**
+//	 * 上传微信缩略图素材(需返回thumb_media_id)
+//	 * @param model
+//	 * @param thumbImage
+//	 * @return
+//	 */
+//	@ResponseBody
+//	@RequestMapping(value = "/wxThumbUpload", method = RequestMethod.POST)
+//	public JsonResultBean wxThumbUpload(Model model, @RequestParam("thumbImage") CommonsMultipartFile thumbImage) {
+//		WebUserDetails userDetail = getUserInfo();
+//		int userId = userDetail.getUserId();
+//		UploadImageResult imageUploadResult;
+//		try {
+//			//缩略图上传小尺寸
+//			imageUploadResult = uploadService.uploadImage(thumbImage.getBytes(), String.valueOf(userId), thumbImage.getOriginalFilename(), IUploadService.IMAGE_SPEC_SMALL);
+//		
+//			if(imageUploadResult!=null && imageUploadResult.getUploadImageMap().size()>0){
+//				File thumbFile = UploadUtil.loadFileByUrl(imageUploadResult.getUploadImageMap().get("original").getUrl());
+//				if(thumbFile!=null){//文件存在，可以上传至微信服务器
+//					WxMediaUploadResult wxThumbUploadResult = wxMediaUploadService.uploadThumb(thumbFile);
+//					imageUploadResult.setWxMediaResult(wxThumbUploadResult);
+//					//返回正确响应
+//					return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
+//				}
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+//	}
 
 }

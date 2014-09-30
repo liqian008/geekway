@@ -2,10 +2,6 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 
-<%
-String contextPath = request.getContextPath();
-%>
-
 
 <!DOCTYPE HTML>
 <html>
@@ -102,7 +98,7 @@ String contextPath = request.getContextPath();
   		$('#moreAlbumsBtn').attr("disabled","disabled");
   		var tailId = $("#tailId").val();
   		var jsonData = {'categoryId' : '1', 'tailId' : tailId};
-  		$.post('<%=contextPath%>/moreProducts.json', jsonData, function(data) {
+  		$.post('${pageContext.request.contextPath}/moreProducts.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){
 				$("#productsContainer").append(data.data.html);

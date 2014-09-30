@@ -35,6 +35,13 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 
 </head>
+
+<%
+//选中的sku属性map
+WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
+Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
+%>
+	            	
 <body>
 
 <div class="all-elements">
@@ -65,13 +72,21 @@
 				</div>
 
 				<div class="container">
-                <div class="slider-controls" data-snap-ignore="true">                
+                <div class="slider-controls" data-snap-ignore="true">          
+                	<div>
+                        <img src="${currentProductSku.skuPicUrl}" class="responsive-image">
+                    </div>      
                     <div>
-                        <img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image" alt="img">
+                        <img src="${product.productPic1Url}" class="responsive-image">
                     </div>
-                
                     <div>
-                        <img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image" alt="img">
+                        <img src="${product.productPic2Url}" class="responsive-image">
+                    </div>
+                    <div>
+                        <img src="${product.productPic3Url}" class="responsive-image">
+                    </div>
+                    <div>
+                        <img src="${product.productPic4Url}" class="responsive-image">
                     </div>
 
                 </div>
@@ -89,11 +104,7 @@
             
             <div class="container" id="product-intro">
             	<ul id="choose">
-            		<%
-	            	//选中的sku属性map
-	            	WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
-	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
-	            	%>
+            		
             		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>${currentProductSku.originPrice}</del></span>元</li>
 	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">${currentProductSku.price}</span>元</li>
 	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">${currentProductSku.amount}</span>件</li>
@@ -251,38 +262,20 @@
 			                
             <div class="decoration"></div>
             
-            <div class="container">
+            <div id="recommendProductsContainer" class="container">
             	<div class="section-title">
-                	<h4>推荐商品</h4>
+                	<h4>猜您喜欢</h4>
                 </div>
-                <a href="index.html#" class="next-quote"></a>
-                <a href="index.html#" class="prev-quote"></a>
-                <div class="quote-slider" data-snap-ignore="true">
-                    <div>
-                        <div class="services-item">
-                            <img src="images/general-nature/3s.jpg" alt="img">
-                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
-                        </div>
-                    </div>
-                    <div>
-                        <div class="services-item">
-                            <img src="images/general-nature/4s.jpg" alt="img">
-                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
-                        </div>
-                    </div>
-                    <div>
-                        <div class="services-item">
-                            <img src="images/general-nature/5s.jpg" alt="img">
-                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
-                        </div>
-                    </div>
-                    <div>
-                        <div class="services-item">
-                            <img src="images/general-nature/6s.jpg" alt="img">
-                            原价:&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>298.00</del></span>元
-                        </div>
-                    </div>
-                </div>
+                <!-- 
+                <p class="quote-item">
+                	<img src="http://jinwanr.qiniudn.com/image/20140930/1_fb315d11ac58521c025082df3e0c4fff.jpg">
+                    ${product.name}
+                    <em>
+					原 价：&nbsp;<span id='originPrice' class='text-highlight highlight-red'><del>3</del></span>元
+					现 价：&nbsp;<span id='price' class='text-highlight highlight-green'>2</span>元
+					</em>
+                </p>
+                 -->
             </div>
              
             <div class="decoration"></div>
@@ -293,6 +286,22 @@
 </div>
 
 </body>
+
+
+<script>
+recommendProducts();
+
+function recommendProducts(){
+	//置为数据加载状态
+	var paramData = {};
+	$.post('${pageContext.request.contextPath}/recommendProducts.json', paramData, function(data) {
+		var result = data.result;
+		if(result==1){
+			$("#recommendProductsContainer").append(data.data.html);
+		}
+	})
+}
+</script>
 
 <!-- 微信分享 -->
 <jsp:include page="../inc/weixinShareJs.jsp"></jsp:include>

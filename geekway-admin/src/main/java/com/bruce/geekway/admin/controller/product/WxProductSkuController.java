@@ -147,13 +147,11 @@ public class WxProductSkuController {
 		Date currentTime = new Date();
 		wxProductSku.setUpdateTime(currentTime);
 		if(wxProductSku!=null&&wxProductSku.getId()!=null&&wxProductSku.getId()>0){
-			wxProductSku.setSkuThumbPicUrl(wxProductSku.getSkuPicUrl()); 			
 			result = wxProductSkuService.updateById(wxProductSku);
 		}
 		
 		model.addAttribute("redirectUrl", "./productSkus?productId="+wxProductSku.getProductId());
 		return "forward:/home/operationRedirect";
 	}
-	
 
 }

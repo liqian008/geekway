@@ -118,16 +118,53 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">商品大图1:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${product.productPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${product.productPicUrl}" width="200px" />
+								<a href="${product.productPic1Url}" id="productPic1Link"  class="lightbox">
+									<img id="productPic1Image" src="${product.productPic1Url}" width="200px" />
 								</a>
-								<input id="cover-image-url" type="hidden" name="productPicUrl" value="${product.productPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div> 
+								<input id="productPic1Url" type="hidden" name="productPic1Url" value="${product.productPic1Url}"/>
+								<input type="file" name="imageFile" id="imageFile1" class="imageFile styled" imageIndex="1">
+							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图2:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${product.productPic2Url}" id="productPic2Link"  class="lightbox">
+									<img id="productPic2Image" src="${product.productPic2Url}" width="200px" />
+								</a>
+								<input id="productPic2Url" type="hidden" name="productPic2Url" value="${product.productPic2Url}"/>
+								<input type="file" name="imageFile" id="imageFile2" class="imageFile styled" imageIndex="2">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图3:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${product.productPic3Url}" id="productPic3Link"  class="lightbox">
+									<img id="productPic3Image" src="${product.productPic3Url}" width="200px" />
+								</a>
+								<input id="productPic3Url" type="hidden" name="productPic3Url" value="${product.productPic3Url}"/>
+								<input type="file" name="imageFile" id="imageFile3" class="imageFile styled" imageIndex="3">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图4:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${product.productPic4Url}" id="productPic4Link"  class="lightbox">
+									<img id="productPic4Image" src="${product.productPic4Url}" width="200px" />
+								</a>
+								<input id="productPic4Url" type="hidden" name="productPic4Url" value="${product.productPic4Url}"/>
+								<input type="file" name="imageFile" id="imageFile4" class="imageFile styled" imageIndex="4">
+							</div>
+						</div>
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
@@ -143,7 +180,6 @@
 								<input type="text" class="form-control" name="outId" id="outId" value="${product.outId}"/>
 							</div>
 						</div>
-						
 						
 						
 						<div class="form-group">
@@ -227,13 +263,15 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function(){
-	    $("#cover-image-file").change(function(){
+	    $(".imageFile").change(function(){
+	    	var imageIndex =$(this).attr("imageIndex");
+	    	alert(imageIndex);
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        data.append('productImage', $('#imageFile'+imageIndex)[0].files[0]);
 	        $.ajax({
-	            url:'/geekway-admin/geekway/imageUpload',
+	            url:'/geekway-admin/product/imageUpload',
 	            type:'POST',
 	            data:data,
 	            cache: false,
@@ -241,10 +279,10 @@
 	            processData: false,    //不可缺
 	            success:function(responseData){
 	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
-		                $('#cover-image').attr("src", imageUrl);
-		                $('#cover-image-link').attr("href", imageUrl);
-		                $('#cover-image-url').val(imageUrl);
+	                	var imageUrl = responseData.data.uploadImageMap.original.url;
+		                $('#productPic'+imageIndex+'Image').attr("src", imageUrl);
+		                $('#productPic'+imageIndex+'Link').attr("href", imageUrl);
+		                $('#productPic'+imageIndex+'Url').val(imageUrl);
 	                }else{
 	                	alert(responseData.message);
 	                }

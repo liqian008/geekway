@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.utils.UrlUtil;
 
 @Controller
@@ -46,6 +47,33 @@ public class WxSystemController {
 			logger.debug("redirectFullUrl: "+ redirectFullUrl);
 		}
 		return "redirect:"+redirectFullUrl; 
+	}
+	
+	
+	/**
+	 * 首页
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value ="uploadTest")
+	public String index(Model model, HttpServletRequest request) {
+		try {
+//			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
+//			byte[] bytesData = UploadUtil.file2bytes(file);
+//			String result = uploadService.uploadFile(bytesData, "", file.getName());
+//			System.out.println(result);
+			
+//			UploadImageResult uploadResult = qiniuUploadService.uploadImage(new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"), "", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
+//			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
+//			byte[] bytesData = UploadUtil.file2bytes(file);
+//			UploadImageResult imageUploadResult = uploadService.uploadImage(bytesData, "", "hands-plant-870x450.jpg", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
+//			System.out.println(imageUploadResult);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "product/index";
 	}
 	
 }

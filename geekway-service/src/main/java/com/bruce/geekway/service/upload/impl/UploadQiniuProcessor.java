@@ -47,13 +47,13 @@ public class UploadQiniuProcessor implements IUploadProcessor{
 			UploadImageResult uploadImageResult = new UploadImageResult();
 			String originUrl = ConstConfig.UPLOAD_QINIU_BIND_DOMAIN + "/" + resultKey;
 			
-			uploadImageResult.add(buildImageResult(originUrl, "original", 0));//原始图片
+			uploadImageResult.put(buildImageResult(originUrl, "original", 0));//原始图片
 			
 			if(imageSpecs!=null&&imageSpecs.length>0){
 				for (UploadImageInfo imageSpec : imageSpecs) {
 					int width = imageSpec.getWidth();
 					String itemUrl = originUrl+"?imageView/2/w/"+width;
-					uploadImageResult.add(buildImageResult(itemUrl, imageSpec.getImageSpec(), width));
+					uploadImageResult.put(buildImageResult(itemUrl, imageSpec.getImageSpec(), width));
 				}
 			}
 			return uploadImageResult;

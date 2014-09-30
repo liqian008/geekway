@@ -45,7 +45,7 @@ public class UploadLocalProcessor implements IUploadProcessor {
 		UploadImageResult uploadResult = new UploadImageResult();
 		UploadImageInfo originalImage = new UploadImageInfo(newImageName, fileType, originalImageSpec, originalUrl, -1);
 		//增加origin图片result
-		uploadResult.getUploadImageList().add(originalImage);
+		uploadResult.put(originalImage);
 		
 		if(imageSpecs!=null&&imageSpecs.length>0){
 			
@@ -63,7 +63,7 @@ public class UploadLocalProcessor implements IUploadProcessor {
 				UploadImageInfo imageInfo = new UploadImageInfo(newImageName, fileType, imageSpecName, specedImageUrl, -1);
 
 				//增加不同规格图片result
-				uploadResult.getUploadImageList().add(imageInfo);
+				uploadResult.put(imageInfo);
 			}
 		}
 		return uploadResult;

@@ -132,8 +132,8 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td class="text-center">
-		                        	<a href="<%=product.getProductPicUrl()%>" class="lightbox">
-		                        	<img src='<%=product.getProductPicUrl()%>' class="img-media"/>
+		                        	<a href="<%=product.getProductPic1Url()%>" class="lightbox">
+		                        	<img src='<%=product.getProductPic1Url()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
 		                        <td title="SN：<%=product.getOutId()%>"><%=product.getName()%></td>
