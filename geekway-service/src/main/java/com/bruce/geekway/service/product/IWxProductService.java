@@ -14,4 +14,6 @@ public interface IWxProductService extends IFoundationService<WxProduct, Integer
 	 */
 	public List<WxProduct> queryAvailableList();
 
+//	public int txTest();
+
 }

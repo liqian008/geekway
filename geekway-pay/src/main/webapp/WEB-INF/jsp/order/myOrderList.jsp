@@ -47,8 +47,6 @@
         </div>
         <div class="content-header">
         	<a href="./" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
         <div class="content">
@@ -101,7 +99,7 @@
   	
   	function fallLoad(){
   		//置为数据加载状态
-  		$('#moreOrdersBtn').val("努力加载中...");
+  		$('#moreOrdersBtn').text("努力加载中...");
   		$('#moreOrdersBtn').attr("disabled","disabled");
   		var tailId = $("#tailId").val();
   		var jsonData = {'tailId' : tailId};
@@ -115,7 +113,7 @@
   					$('#moreOrdersContainer').attr("style","display:none");
   				}else{//还有更多数据，启用加载按钮
   					$('#moreOrdersBtn').removeAttr("disabled");
-  					$('#moreOrdersBtn').val("加载更多...");
+  					$('#moreOrdersBtn').text("加载更多...");
   				}
 			}
 		})

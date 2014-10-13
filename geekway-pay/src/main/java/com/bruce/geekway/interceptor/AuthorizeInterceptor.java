@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
@@ -26,7 +27,6 @@ import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ResponseUtil;
-import com.bruce.geekway.utils.UrlUtil;
 import com.bruce.geekway.utils.WxMpUtil;
 import com.google.gson.Gson;
 

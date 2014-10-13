@@ -43,13 +43,11 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">123</p>
-            <a href="contact.html" class="deploy-contact"></a>
+            <p class="bread-crumb">订单详情</p>
+            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
         <div class="content"> 

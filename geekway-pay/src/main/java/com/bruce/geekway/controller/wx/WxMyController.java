@@ -1,5 +1,6 @@
 package com.bruce.geekway.controller.wx;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.exception.ErrorCode;
@@ -88,22 +88,21 @@ public class WxMyController{
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多优惠券");
 			}
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
-		} else {
-			if (productOrderList.size() > limit) {// 查询数据超过limit，含分页内容
-				// 移除最后一个元素
-				productOrderList.remove(limit);
-				nextTailId = productOrderList.get(limit - 1).getId();//取id
-				if(logger.isDebugEnabled()){
-	                logger.debug("还有更多优惠券，tailId： "+nextTailId);
-	            }
-			}
-			String productListHtml = HtmlBuildUtils.buildFallLoadOrdersHtml(productOrderList);
-			Map<String, String> dataMap = new HashMap<String, String>();
-			dataMap.put("html", productListHtml);
-			dataMap.put("tailId", String.valueOf(nextTailId));
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+			productOrderList = new ArrayList<WxProductOrder>();
 		}
+		if (productOrderList.size() > limit) {// 查询数据超过limit，含分页内容
+			// 移除最后一个元素
+			productOrderList.remove(limit);
+			nextTailId = productOrderList.get(limit - 1).getId();//取id
+			if(logger.isDebugEnabled()){
+                logger.debug("还有更多优惠券，tailId： "+nextTailId);
+            }
+		}
+		String productListHtml = HtmlBuildUtils.buildFallLoadOrdersHtml(productOrderList);
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("html", productListHtml);
+		dataMap.put("tailId", String.valueOf(nextTailId));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
 	/**
@@ -118,25 +117,6 @@ public class WxMyController{
 		if(logger.isDebugEnabled()){
 			logger.debug("进入[我的优惠券], debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
 		}
-		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
-//		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
-//		if(!ConstWeixin.WX_OAUTH_DEBUG){
-//			if(!StringUtils.isBlank(code)){//oauth回调后
-//				if(logger.isDebugEnabled()){
-//					logger.debug("微信oauth回调后进入[我的优惠券], code: "+code);
-//				}
-//				//根据code换取openId
-//				WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
-//				if(oauthResult!=null){
-//					userOpenId = oauthResult.getOpenid();
-//					if(logger.isDebugEnabled()){
-//						logger.debug("微信oauth回调后进入[我的优惠券], 换取的userOpenId，并写入cookie: "+userOpenId);
-//					}
-//					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
-//				}
-//			}
-//		}
-		
 		return "order/myVoucherList";
 	}
 	
@@ -161,22 +141,21 @@ public class WxMyController{
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多优惠券");
 			}
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
-		} else {
-			if (productVoucherList.size() > limit) {// 查询数据超过limit，含分页内容
-				// 移除最后一个元素
-				productVoucherList.remove(limit);
-				nextTailId = productVoucherList.get(limit - 1).getId();//取id
-				if(logger.isDebugEnabled()){
-	                logger.debug("还有更多优惠券，tailId： "+nextTailId);
-	            }
-			}
-			String productListHtml = HtmlBuildUtils.buildFallLoadVouchersHtml(productVoucherList);
-			Map<String, String> dataMap = new HashMap<String, String>();
-			dataMap.put("html", productListHtml);
-			dataMap.put("tailId", String.valueOf(nextTailId));
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+			productVoucherList = new ArrayList<WxProductVoucher>();
 		}
+		if (productVoucherList.size() > limit) {// 查询数据超过limit，含分页内容
+			// 移除最后一个元素
+			productVoucherList.remove(limit);
+			nextTailId = productVoucherList.get(limit - 1).getId();//取id
+			if(logger.isDebugEnabled()){
+                logger.debug("还有更多优惠券，tailId： "+nextTailId);
+            }
+		}
+		String productListHtml = HtmlBuildUtils.buildFallLoadVouchersHtml(productVoucherList);
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("html", productListHtml);
+		dataMap.put("tailId", String.valueOf(nextTailId));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
 	/**

@@ -31,14 +31,6 @@
 		</dependency>
 		-->
 		
-		<!-- 七牛的配置 -->
-		<dependency>
-			<groupId>com.qiniu</groupId>
-			<artifactId>sdk</artifactId>
-			<version>[6.1.7, 6.999]</version>
-		</dependency>
-
-		
 		
 		<dependency>
 			<groupId>commons-httpclient</groupId>
@@ -54,7 +46,7 @@
 			<type>jar</type>
 		</dependency>
 		
-		 <dependency> 
+		<dependency> 
 			<groupId>com.bruce</groupId>
 			<artifactId>geekway-model</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
@@ -64,6 +56,18 @@
 			<groupId>com.bruce</groupId>
 			<artifactId>foundation-service</artifactId>
 			<version>1.0.0-BUILD-SNAPSHOT</version>
+		</dependency>
+		<dependency> 
+			<groupId>com.bruce</groupId>
+			<artifactId>foundation-util</artifactId>
+			<version>1.0.0-BUILD-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- 七牛的配置 -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>sdk</artifactId>
+			<version>6.1.7</version>
 		</dependency>
 
 		<!-- Mysql -->
@@ -92,12 +96,6 @@
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2.4</version>
 		</dependency>
 
 		<dependency>

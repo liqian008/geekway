@@ -4,10 +4,10 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
-import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.WxHttpUtil;
 
 /**

@@ -6,7 +6,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.bruce.foundation.util.DateUtil;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayComplaint;
@@ -25,7 +28,6 @@ import com.bruce.geekway.service.pay.mp.WxMpPayService;
 import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
-import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -52,10 +54,11 @@ public class IWxPayService{
 	
 	
 	/**
-	 * 支付成功，记录微信订单流水表，且更新系统订单状态+库存
+	 * 支付成功，记录微信订单流水表，且更新系统订单状态+库存（事务操作）
 	 * @param wxNotifyOrder 
 	 * @return
 	 */
+	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public int receiveWxOrder(WxPayNotifyOrderRequest wxOrderRequest){
 		if(wxOrderRequest==null){
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
@@ -69,7 +72,6 @@ public class IWxPayService{
 			
 			WxPayNotifyOrder wxNotifyOrder = WxPayNotifyOrderRequest.convert2WxPayNotifyOrder(wxOrderRequest);
 			if(wxNotifyOrder!=null){//处理微信支付成功的业务
-				//需要事务操作
 				
 				//保存微信订单流水表
 				result = wxPayNotifyOrderService.save(wxNotifyOrder);

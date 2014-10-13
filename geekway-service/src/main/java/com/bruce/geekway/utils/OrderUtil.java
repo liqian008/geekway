@@ -3,6 +3,7 @@ package com.bruce.geekway.utils;
 import java.util.Date;
 import java.util.UUID;
 
+import com.bruce.foundation.util.DateUtil;
 import com.bruce.geekway.constants.ConstConfig;
 
 public class OrderUtil {

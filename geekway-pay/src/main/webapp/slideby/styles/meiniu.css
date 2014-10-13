@@ -67,11 +67,14 @@ color:#666;
 	margin: 1px 3px 1px 1px;
 }
 
-#choose-color.choose-color-shouji i{
+#choose-color.choose-color-shouji i, #choose-version.choose-version-shouji i{
 	display:inline-block;
 	font-style:normal;
-	padding-top:4px;
-	margin-right:3px;
+	/* padding-top:4px;
+	margin-right:5px;
+	margin-left:5px; */
+	
+	margin: 4px 6px;
 	cursor:pointer;
 }
 
@@ -79,11 +82,11 @@ color:#666;
 
 #choose-version .item a:link, #choose-version .item a:visited{
 	float:left;
-	padding:4px 6px;
+	padding:1px;
 }
 
 #choose-version .item a:hover, #choose-version .item a:active, #choose-version .selected a:link, #choose-version .selected a:visited{
-	padding: 3px 5px;
+	padding: 1x;
 }
 
 
@@ -93,7 +96,7 @@ color:#666;
 
 #choose #choose-version .disabled a, #choose #choose-type .disabled a{
 	border: 1px dashed #ccc;
-	padding: 4px;
+	padding: 1px;
 }
 
 

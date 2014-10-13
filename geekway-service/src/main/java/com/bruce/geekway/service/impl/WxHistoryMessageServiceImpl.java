@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.dao.mapper.WxHistoryMessageMapper;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
@@ -16,9 +17,7 @@ import com.bruce.geekway.model.wx.message.CustomMessage;
 import com.bruce.geekway.model.wx.message.ImageMessage;
 import com.bruce.geekway.model.wx.message.NewsMessage;
 import com.bruce.geekway.model.wx.message.TextMessage;
-import com.bruce.geekway.model.wx.message.VoiceMessage;
 import com.bruce.geekway.model.wx.request.BaseRequest;
-import com.bruce.geekway.model.wx.request.ClickEventRequest;
 import com.bruce.geekway.model.wx.request.EventRequest;
 import com.bruce.geekway.model.wx.request.ImageRequest;
 import com.bruce.geekway.model.wx.request.LocationRequest;
@@ -30,7 +29,6 @@ import com.bruce.geekway.model.wx.response.ImageResponse;
 import com.bruce.geekway.model.wx.response.NewsResponse;
 import com.bruce.geekway.model.wx.response.TextResponse;
 import com.bruce.geekway.service.IWxHistoryMessageService;
-import com.bruce.geekway.utils.JsonUtil;
 
 /**
  * 微信历史消息（需要记录接入消息与回复消息）

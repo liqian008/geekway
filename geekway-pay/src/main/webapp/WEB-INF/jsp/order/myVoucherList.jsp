@@ -44,12 +44,10 @@
     	<div class="page-header">
         	<a href="./#" class="deploy-sidebar"></a>
             <p class="bread-crumb">我的优惠券</p> 
-            <a href="javascript:void(0)" class="deploy-refresh"></a> 
+            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="./" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
         <div class="content">
@@ -103,7 +101,7 @@
   	
   	function fallLoad(){
   		//置为数据加载状态
-  		$('#moreVouchersBtn').val("努力加载中...");
+  		$('#moreVouchersBtn').text("努力加载中...");
   		$('#moreVouchersBtn').attr("disabled","disabled");
   		var tailId = $("#tailId").val();
   		var jsonData = {'tailId' : tailId};
@@ -117,7 +115,7 @@
   					$('#moreVouchersContainer').attr("style","display:none");
   				}else{//还有更多数据，启用加载按钮
   					$('#moreVouchersBtn').removeAttr("disabled");
-  					$('#moreVouchersBtn').val("加载更多...");
+  					$('#moreVouchersBtn').text("加载更多...");
   				}
 			}
 		})

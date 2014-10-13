@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
-import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -34,8 +35,8 @@ import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
-import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.UploadUtil;
 
 /**
  * 商品controller
@@ -88,6 +89,14 @@ public class WxProductController {
 		return "product/index";
 	}
 	
+	
+//	@RequestMapping(value = "txTest")
+//	public String txTest(Model model, HttpServletRequest request) {
+//		int result = wxProductService.txTest();
+//		return "product/index";
+//	}
+	
+	
 	/**
 	 * 根据分类加载商品
 	 * @param model
@@ -99,6 +108,10 @@ public class WxProductController {
 	public String productListByCategory(Model model, @PathVariable int categoryId, HttpServletRequest request) {
 		WxProductCategory productCategory = wxProductCategoryService.loadById(categoryId);
 		model.addAttribute("productCategory", productCategory);
+		
+		List<String> categoryPicList = buildCategoryPicList(productCategory);
+		model.addAttribute("categoryPicList", categoryPicList);
+		
 		return "product/productListByCategory";
 	}
 	
@@ -132,33 +145,34 @@ public class WxProductController {
 	    if(limit>10||limit<1){
 	    	limit = 6;
 	    }
-		List<WxProductSku> productSkuList = null;
+	    
 	    if(logger.isDebugEnabled()){
             logger.debug("根据商品分类查询");
         }
-		productSkuList = wxProductSkuService.fallLoadCategoryProductSkuList(categoryId, tailId, limit + 1);
+	    List<WxProductSku> productSkuList = wxProductSkuService.fallLoadCategoryProductSkuList(categoryId, tailId, limit + 1);
 
 		int nextTailId = 0;
 		if (productSkuList == null || productSkuList.size() == 0) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多商品");
 			}
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
-		} else {
-			if (productSkuList.size() > limit) {// 查询数据超过limit，含分页内容
-				// 移除最后一个元素
-				productSkuList.remove(limit);
-				nextTailId = productSkuList.get(limit - 1).getProductId();//取productId
-				if(logger.isDebugEnabled()){
-	                logger.debug("还有更多商品，tailId： "+nextTailId);
-	            }
-			}
-			String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productSkuList);
-			Map<String, String> dataMap = new HashMap<String, String>();
-			dataMap.put("html", productListHtml);
-			dataMap.put("tailId", String.valueOf(nextTailId));
-			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+		
+			productSkuList = new ArrayList<WxProductSku>();
 		}
+		
+		if (productSkuList.size() > limit) {// 查询数据超过limit，含分页内容
+			// 移除最后一个元素
+			productSkuList.remove(limit);
+			nextTailId = productSkuList.get(limit - 1).getProductId();//取productId
+			if(logger.isDebugEnabled()){
+                logger.debug("还有更多商品，tailId： "+nextTailId);
+            }
+		}
+		String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productSkuList);
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("html", productListHtml);
+		dataMap.put("tailId", String.valueOf(nextTailId));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
 	
@@ -185,6 +199,9 @@ public class WxProductController {
 	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
 		WxProduct product = wxProductService.loadById(productId);
 		model.addAttribute("product", product);
+		
+		List<String> productPicList = buildProductPicList(product);
+		model.addAttribute("productPicList", productPicList);
 		
 		WxProductSku currentProductSku = null;
 		
@@ -234,6 +251,8 @@ public class WxProductController {
 	
 	
 	
+	
+
 	@RequestMapping(value = "recommendProducts.json")
 	public ModelAndView recommendProducts(HttpServletRequest request, @RequestParam(required=false, defaultValue="4")int limit) {
 	    if(logger.isDebugEnabled()){
@@ -248,5 +267,57 @@ public class WxProductController {
 		dataMap.put("html", productListHtml);
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
+	
+	
+	private List<String> buildProductPicList(WxProduct product) {
+		if(product!=null&&product.getId()!=null){
+			List<String> productPicList = new ArrayList<String>();
+			String pic1Url = product.getProductPic1Url();
+			if(StringUtils.isNotBlank(pic1Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
+			}
+			String pic2Url = product.getProductPic2Url();
+			if(StringUtils.isNotBlank(pic2Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
+			}
+			String pic3Url = product.getProductPic3Url();
+			if(StringUtils.isNotBlank(pic3Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
+			}
+			String pic4Url = product.getProductPic4Url();
+			if(StringUtils.isNotBlank(pic4Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
+			}
+			return productPicList;
+		}
+		return null;
+	}
+	
+	private List<String> buildCategoryPicList(WxProductCategory productCategory) {
+		if(productCategory!=null&&productCategory.getId()!=null){
+			List<String> productPicList = new ArrayList<String>();
+			String pic1Url = productCategory.getCategoryPic1Url();
+			if(StringUtils.isNotBlank(pic1Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
+			}
+			String pic2Url = productCategory.getCategoryPic2Url();
+			if(StringUtils.isNotBlank(pic2Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
+			}
+			String pic3Url = productCategory.getCategoryPic3Url();
+			if(StringUtils.isNotBlank(pic3Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
+			}
+			String pic4Url = productCategory.getCategoryPic4Url();
+			if(StringUtils.isNotBlank(pic4Url)){
+				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
+			}
+			return productPicList;
+		}
+		return null;
+	}
+	
+	
+	
 	
 }

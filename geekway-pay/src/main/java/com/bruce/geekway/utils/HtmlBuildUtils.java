@@ -2,6 +2,7 @@ package com.bruce.geekway.utils;
 
 import java.util.List;
 
+import com.bruce.foundation.util.DateUtil;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductSku;
@@ -41,7 +42,7 @@ public class HtmlBuildUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
 			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(productSku.getProductId()) + "'>");
-			sb.append("<img class='responsive-image' src='" + productSku.getSkuPicUrl() + "'");
+			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(productSku.getSkuPicUrl(), 300, 0) + "'");
 			sb.append("</a>");
 			sb.append("<h4>"+productSku.getName()+"</h4>");
 			sb.append("<ul id='choose'>");
@@ -51,7 +52,7 @@ public class HtmlBuildUtils {
 			sb.append("</div>");
 			return sb.toString();
 		}
-		return null;
+		return "";
 	}
 	
 	
@@ -85,7 +86,7 @@ public class HtmlBuildUtils {
 			sb.append("</div>");
 			return sb.toString();
 		}
-		return null;
+		return "";
 	}
 	
 	
@@ -119,7 +120,7 @@ public class HtmlBuildUtils {
 			sb.append("</div>");
 			return sb.toString();
 		}
-		return null;
+		return "";
 	}
 	
 	
@@ -164,7 +165,7 @@ public class HtmlBuildUtils {
 			
 			sb.append("<p class='quote-item'>");
 			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(product.getId()) + "'>");
-			sb.append("<img src='"+product.getProductPic1Url()+"'>");
+			sb.append("<img src='"+UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 100, 0) +"'>");
 			sb.append("</a>");
 			sb.append(product.getName());
 			sb.append("<em>");
@@ -175,7 +176,7 @@ public class HtmlBuildUtils {
 			
 			return sb.toString();
 		}
-		return null;
+		return "";
 	}
 
 }

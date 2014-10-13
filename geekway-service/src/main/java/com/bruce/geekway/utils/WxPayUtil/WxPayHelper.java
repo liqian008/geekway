@@ -1,9 +1,15 @@
 package com.bruce.geekway.utils.WxPayUtil;
 
-import java.util.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.bruce.geekway.utils.JsonUtil;
+import com.bruce.foundation.util.JsonUtil;
 
 public class WxPayHelper {
 	private HashMap<String, String> parameters = new HashMap<String, String>();

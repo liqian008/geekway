@@ -14,13 +14,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.foundation.util.DateUtil;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
 import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.service.IWxHistoryMessageService;
 import com.bruce.geekway.service.IWxUserService;
-import com.bruce.geekway.utils.DateUtil;
 
 /**
  * 消息群发controller

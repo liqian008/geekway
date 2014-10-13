@@ -4,8 +4,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.util.Md5Util;
+import com.bruce.foundation.util.Sha1Util;
 import com.bruce.geekway.constants.ConstWeixin;
 
 @Service

@@ -34,36 +34,64 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
 
 </head>
-<body>
 
+<%
+int categoryId = 0;
+WxProductCategory productCategory = (WxProductCategory)request.getAttribute("productCategory");
+%>
+
+<body>
 
 <div class="all-elements">
 	<jsp:include page="../inc/sidebar.jsp"></jsp:include>
 	
 	<%
-	int categoryId = 0;
-	WxProductCategory productCategory = (WxProductCategory)request.getAttribute("productCategory");
 	if(productCategory!=null){
 		categoryId = productCategory.getId();
 	}
 	%>
-	
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb"><%=productCategory.getName()%></p>
+            <p class="bread-crumb">${productCategory.name}</p>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
+        
         <div class="content">
+        	<div class="container no-bottom">
+				<div class="section-title">
+					<h4>
+						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">${productCategory.name}</a>
+					</h4>
+				</div>
+			</div>
+			<div class="container">
+				<div class="slider-controls" data-snap-ignore="true">
+					<%
+					List<String> categoryPicList = (List<String>) request.getAttribute("categoryPicList");
+					if(categoryPicList!=null&&categoryPicList.size()>0){
+						for(String categoryPicUrl: categoryPicList){
+					%>
+					<div>
+						<img src="<%=categoryPicUrl%>" class="responsive-image">
+					</div>
+					<%}
+					}%>
+				</div>
+				<a href="./#" class="next-slider"></a> <a href="./#"
+					class="prev-slider"></a>
+			</div>
+        
         	<div class="decoration"></div>
 
         	<div class="container no-bottom" id="productsContainer">
+        		<div class="section-title">
+					<h4>${productCategory.name}</h4>
+				</div>
         	</div>
         	
         	<div id="moreProductsContainer" class="container center-text">
@@ -94,10 +122,10 @@
   	
   	function fallLoad(){
   		//置为数据加载状态
-  		$('#moreProductsBtn').val("努力加载中...");
+  		$('#moreProductsBtn').text("努力加载中...");
   		$('#moreAlbumsBtn').attr("disabled","disabled");
   		var tailId = $("#tailId").val();
-  		var jsonData = {'categoryId' : '1', 'tailId' : tailId};
+  		var jsonData = {'categoryId' : $("#categoryId").val(), 'tailId' : tailId};
   		$.post('${pageContext.request.contextPath}/moreProducts.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){
@@ -108,7 +136,7 @@
   					$('#moreProductsContainer').attr("style","display:none");
   				}else{//还有更多数据，启用加载按钮
   					$('#moreProductsBtn').removeAttr("disabled");
-  					$('#moreProductsBtn').val("加载更多...");
+  					$('#moreProductsBtn').text("加载更多...");
   				}
 			}
 		})

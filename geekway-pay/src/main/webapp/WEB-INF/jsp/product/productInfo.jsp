@@ -63,38 +63,35 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 			<div class="decoration"></div> 
         	<jsp:include page="../inc/weixinShareNotification.jsp"></jsp:include>
 
-				<div class="container no-bottom">
-					<div class="section-title">
-						<h4>
-							<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">热销</a>
-						</h4>
-					</div>
+			<div class="container no-bottom">
+				<div class="section-title">
+					<h4>
+						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">热销</a>
+					</h4>
 				</div>
+			</div>
 
-				<div class="container">
-                <div class="slider-controls" data-snap-ignore="true">          
-                	<div>
-                        <img src="${currentProductSku.skuPicUrl}" class="responsive-image">
-                    </div>      
-                    <div>
-                        <img src="${product.productPic1Url}" class="responsive-image">
-                    </div>
-                    <div>
-                        <img src="${product.productPic2Url}" class="responsive-image">
-                    </div>
-                    <div>
-                        <img src="${product.productPic3Url}" class="responsive-image">
-                    </div>
-                    <div>
-                        <img src="${product.productPic4Url}" class="responsive-image">
-                    </div>
+			<div class="container">
+				<div class="slider-controls" data-snap-ignore="true">
+					<div>
+						<img src="${currentProductSku.skuPicUrl}" class="responsive-image">
+					</div>
+					<%
+					List<String> productPicList = (List<String>) request.getAttribute("productPicList");
+					if(productPicList!=null&&productPicList.size()>0){
+						for(String productPicUrl: productPicList){
+					%>
+					<div>
+						<img src="<%=productPicUrl%>" class="responsive-image">
+					</div>
+					<%}
+					}%>
+				</div>
+				<a href="./#" class="next-slider"></a> <a href="./#"
+					class="prev-slider"></a>
+			</div>
 
-                </div>
-                <a href="./#" class="next-slider"></a>
-                <a href="./#" class="prev-slider"></a>
-            </div>
-            
-            <div class="decoration"></div> 
+			<div class="decoration"></div> 
            
             <div class="container no-bottom">
             	<div class="section-title">
@@ -126,7 +123,9 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 	            			<div class="item <%=colorSelected?"selected":""%>" data="<%=propertyName%>">
 	            				<b></b>
 	            				<a href="#none" title="<%=displayName%>">
+			            			<%-- 
 			            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="<%=displayName%> ">
+		            				--%>
 		            				<i><%=displayName%></i>
 		            			</a>
 	            			</div>
@@ -149,7 +148,10 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 								
 								boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
 							%>
-	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
+	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b>
+	            			<a href="#none" title="<%=displayName%>" style="cursor: pointer;">
+	            			<i><%=displayName%></a></i>
+	            			</div>
 	            			<%}%>
 	            		</div>
 	            	</li>

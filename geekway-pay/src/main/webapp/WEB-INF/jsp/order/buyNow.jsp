@@ -44,12 +44,10 @@
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">123</p>
-            <a href="contact.html" class="deploy-contact"></a>
+            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="index.html" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
         <div class="content"> 
@@ -62,12 +60,12 @@
 				</div>
             </div> 
             
+			<%
+			List<WxProductVoucher> availableVoucherList = (List<WxProductVoucher>)request.getAttribute("availableVoucherList");
+			if(availableVoucherList!=null&&availableVoucherList.size()>0){
+			%>
             <div class="decoration"></div>
         	<div id="vouchersContainer" class="container no-bottom">
-				<%
-				List<WxProductVoucher> availableVoucherList = (List<WxProductVoucher>)request.getAttribute("availableVoucherList");
-				if(availableVoucherList!=null&&availableVoucherList.size()>0){
-				%>
 					<div class="section-title">
 	                	<h4>选择使用优惠券</h4>
 	                </div>
@@ -78,9 +76,9 @@
 			            	优惠券信息： 编号 <%=voucher.getVoucherCode()%> | 金额 <%=voucher.getPrice()%>元  | 状态 可用
 		            	</p> 
 		            </div>
-		            <%}%>
-				<%}%>
             </div>
+	            <%}%>
+			<%}%>
             
             <div class="decoration"></div>
             <div class="container">
@@ -137,6 +135,7 @@
 </div>
 
 </body>
+
 <%
 WxOrderAddressJsObj orderAddressJsObj = (WxOrderAddressJsObj)request.getAttribute("orderAddressJsObj");
 if(orderAddressJsObj!=null){

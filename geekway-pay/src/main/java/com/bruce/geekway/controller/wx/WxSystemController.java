@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
-import com.bruce.geekway.utils.UrlUtil;
 
 @Controller
 public class WxSystemController {

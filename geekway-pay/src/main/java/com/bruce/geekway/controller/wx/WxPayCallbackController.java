@@ -1,12 +1,9 @@
 package com.bruce.geekway.controller.wx;
 
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -19,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bruce.foundation.util.JsonUtil;
+import com.bruce.foundation.util.Sha1Util;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.pay.IWxPayService;
-import com.bruce.geekway.utils.JsonUtil;
-import com.bruce.geekway.utils.Sha1Util;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**

@@ -1,13 +1,17 @@
 package com.bruce.geekway.service.product.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bruce.geekway.dao.mapper.WxProductMapper;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCriteria;
+import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 
@@ -74,6 +78,27 @@ public class WxProductServiceImpl implements IWxProductService {
 		return wxProductMapper.selectByExample(criteria);
 	}
 
+	
+
+//	@Transactional(propagation=Propagation.REQUIRED)
+//	@Override
+//	public int txTest() {
+//		Date currentTime = new Date();
+//		WxProduct product = new WxProduct();
+//		product.setId(1);
+//		product.setCreateTime(currentTime);
+//		save(product);
+//		
+//		WxProductSku sku = new WxProductSku();
+//		sku.setId(1);
+//		sku.setProductId(1);
+//		sku.setCreateTime(currentTime);
+//		wxProductSkuService.save(sku);
+//		
+//		return 0;
+//	}
+
+	
 	public WxProductMapper getWxProductMapper() {
 		return wxProductMapper;
 	}
@@ -82,8 +107,12 @@ public class WxProductServiceImpl implements IWxProductService {
 		this.wxProductMapper = wxPayProductMapper;
 	}
 
-	
+	public IWxProductSkuService getWxProductSkuService() {
+		return wxProductSkuService;
+	}
 
-	
+	public void setWxProductSkuService(IWxProductSkuService wxProductSkuService) {
+		this.wxProductSkuService = wxProductSkuService;
+	}
 	
 }

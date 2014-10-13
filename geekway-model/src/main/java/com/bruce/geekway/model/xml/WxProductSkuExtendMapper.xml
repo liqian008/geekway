@@ -5,7 +5,7 @@
 	<!-- groupby方式查询 sku产品，在产品分类列表中使用 -->
 	<select id="fallLoadCategoryProductSkuList" resultMap="BaseResultMap">
 		select id, product_id, name, origin_price, price, amount, sku_pic_url,
-		sku_thumb_pic_url, create_time, update_time
+		create_time, update_time
 		from wx_product_sku
 		where
 		<if test="categoryId > 0">
@@ -28,7 +28,7 @@
 
 	<select id="fallLoadTagProductSkuList" resultMap="BaseResultMap">
 		select id, product_id, name, origin_price, price, amount, sku_pic_url,
-		sku_thumb_pic_url, create_time, update_time
+		create_time, update_time
 		from wx_product_sku
 		where price>0 and amount>0
 		group by product_id having sum(amount)>0
