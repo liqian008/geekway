@@ -34,6 +34,7 @@ import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.mp.WxMpOauthService;
+import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -62,6 +63,8 @@ public class WxProductOrderController {
 	private IWxProductOrderService wxProductOrderService;
 	@Autowired
 	private IWxUserAddressService wxUserAddressService;
+	@Autowired
+	private IWxDeliveryTemplateService wxDeliveryTemplateService;
 	@Autowired
 	private WxMpOauthService wxMpOauthService;
 	
@@ -124,6 +127,21 @@ public class WxProductOrderController {
 		return "order/address";
 	}
 	
+	
+	/**
+	 * 计算所需的运费
+	 * @param model
+	 * @param request
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/calcDeliverFee.json")
+	public ModelAndView calcDeliverFee(Model model, int deliveryTemplateId, String country, String province, String city, HttpServletRequest request) {
+		//计算运费(单位:分)
+		int deliveryFee = wxDeliveryTemplateService.calcDeliveryFee(deliveryTemplateId, 0 , country, province, city);
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("deliveryFee", String.valueOf(deliveryFee));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
+	}
 	
 	/**
 	 * 确认地址&金额后，提交订单(生成预支付的订单号)，此步之前应该已经获取了商户的地址
@@ -388,8 +406,8 @@ public class WxProductOrderController {
 			addressInfo.setPostCode(request.getParameter("postCode"));
 			addressInfo.setProvince(request.getParameter("province"));
 			addressInfo.setCity(request.getParameter("city"));
-			addressInfo.setCountry(request.getParameter("country"));
-			addressInfo.setNationalCode(request.getParameter("addressDetail"));
+			addressInfo.setCountry(request.getParameter("countries"));
+			addressInfo.setNationalCode(request.getParameter("addressDetailInfo"));
 			addressInfo.setAddressDetail(request.getParameter("nationalCode"));
 			return addressInfo;
 		}

@@ -138,10 +138,10 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 	}
 	
 	/**
-	 * 计算邮费
+	 * 计算相应的邮费
 	 */
 	@Override
-	public int calcDeliveryFee(int templateId, int deliveryType, String country, String privince, String city) {
+	public int calcDeliveryFee(int templateId, int deliveryType, String country, String province, String city) {
 		WxDeliveryTemplate deliverTemplate = loadDeliveryTemplate(templateId);
 		if(deliverTemplate!=null){//有对应的邮费模板
 			List<TopFee> topFeeList = deliverTemplate.getTopFeeList();
@@ -153,8 +153,10 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 						List<CustomFee> customFeeList = topFee.getCustomFeeList();
 						if(customFeeList!=null&&customFeeList.size()>0){
 							for(CustomFee customFee: customFeeList){
-								if(customFee.getDestCountry().equals(country)&&customFee.getDestProvince().equals(privince)&&customFee.getDestCity().equals(city)){
+								if(customFee.getDestProvince().equals(province)&&customFee.getDestCity().equals(city)){
+									//暂不检查国家 if(customFee.getDestCountry().equals(country))
 									deliverFee = customFee.getStartFees();
+									return deliverFee;
 								}
 							}
 						}
@@ -163,6 +165,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 							NormalFee normalFee = topFee.getNormalFee();
 							if(normalFee!=null){
 								deliverFee = normalFee.getStartFees();
+								return deliverFee;
 							}
 						}
 					}

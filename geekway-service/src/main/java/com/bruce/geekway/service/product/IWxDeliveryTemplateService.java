@@ -39,7 +39,7 @@ public interface IWxDeliveryTemplateService{
 	 * @param city
 	 * @return
 	 */
-	public int calcDeliveryFee(int templateId, int deliveryType, String country, String privince, String city);
+	public int calcDeliveryFee(int templateId, int deliveryType, String country, String province, String city);
 
 	
 	

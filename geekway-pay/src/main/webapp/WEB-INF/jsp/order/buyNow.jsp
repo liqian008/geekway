@@ -90,13 +90,15 @@
                     <em>${productSku.name}——${productSku.skuName}</em>
                     单价：&nbsp;<span class="text-highlight highlight-red">${productSku.price}</span>元&nbsp;|&nbsp;
                     数量：&nbsp;<span id="amount" class="text-highlight highlight-blue">${amount}</span>件
+                    合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${totalPrice}</span>元
                 </p>
                 <input type="hidden" id="productSkuId" name="productSkuId" value="${productSku.id}"/>
 	            
                 <div class="decoration"></div> 
                 <p class="quote-item">
                     <h5 class="center-text"> 
-                    优惠券折扣：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
+                    运费：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue">0.00</span>元&nbsp;|&nbsp;
+                    优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
                     合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${totalPrice}</span>元
                     </h5>
                 </p>
@@ -115,10 +117,10 @@
             		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">无</span></li>
 	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">无</span></li>
 	            	<li>邮寄地址：&nbsp;
-	            	<span id="provinceName" class="text-highlight highlight-dark">省</span>
-	            	<span id="cityName" class="text-highlight highlight-dark">市</span>
-	            	<span id="countryName" class="text-highlight highlight-dark">区/县</span>
-	            	<span id="addressDetail" class="text-highlight highlight-dark"></span>
+		            	<span id="provinceName" class="text-highlight highlight-dark">省</span>
+		            	<span id="cityName" class="text-highlight highlight-dark">市</span>
+		            	<span id="countriesName" class="text-highlight highlight-dark">区/县</span>
+		            	<span id="addressDetailInfo" class="text-highlight highlight-dark"></span>
 	            	</li>
 	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">无</span></li>
 	            </ul>
@@ -152,15 +154,15 @@ $("#submitOrder").click(function(){
 	
 	var provinceName = $("#provinceName").text();
 	var cityName = $("#cityName").text();
-	var countryName = $("#countryName").text();
-	var addressDetail = $("#addressDetail").text();
+	var countriesName = $("#countriesName").text();
+	var addressDetailInfo = $("#addressDetailInfo").text();
 	var postCode = $("#postCode").text();
 	var postNationalCode = $("#postNationalCode").val();
 	
 	var productSkuId = $("#productSkuId").val();
 	var amount = $("#amount").text();
 	
-	var paramData = {'productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'country':countryName, 'addressDetail':addressDetail, 'postCode':postCode, 'nationalCode':postNationalCode};
+	var paramData = {'productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'countries':countriesName, 'addressDetailInfo':addressDetailInfo, 'postCode':postCode, 'nationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
@@ -198,9 +200,11 @@ $("#chooseAddress").click(function(){
 				$("#provice").text(res.proviceFirstStageName);
 				$("#city").text(res.addressCitySecondStageName);
 				$("#country").text(res.addressCountiesThirdStageName);
-				$("#addressDetail").text(res.addressDetailInfo);
+				$("#addressDetailInfo").text(res.addressDetailInfo);
 				
 				$("#chooseAddress").text("重新选择收货地址");
+				
+				refreshDeliveryFee('', res.proviceFirstStageName, res.addressCitySecondStageName);
 			}else{
 				alert("获取用户收货地址失败");
 			}
@@ -214,12 +218,30 @@ $("#chooseAddress").click(function(){
 		
 		$("#provinceName").text("fail:province");
 		$("#cityName").text("fail:city");
-		$("#countryName").text("fail: country");
-		$("#addressDetail").text("fail:addressDetail");
+		$("#countriesName").text("fail: country");
+		$("#addressDetailInfo").text("fail:addressDetailInfo");
 		
 		$("#chooseAddress").text("重新选择收货地址");
+		
+		refreshDeliveryFee('','2','3');
 	}
 })
+
+
+function refreshDeliveryFee(templateId, province, city){
+	alert(123);
+	//ajax重新计算运费
+	var paramData = {'deliveryTemplateId': '1', 'country':'', 'province':province, 'city':city};
+	$.post('${pageContext.request.contextPath}/calcDeliverFee.json', paramData, function(responseData) {
+		var result = responseData.result;
+		if(result==1){
+			alert(responseData.data.deliveryFee);
+		}else{
+			alert(responseData.message);
+		}
+	} , "json");
+}
+
 </script>
 <%}%>
 </html>
