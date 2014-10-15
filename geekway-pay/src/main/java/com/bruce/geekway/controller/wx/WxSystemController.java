@@ -4,17 +4,30 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.model.wx.pay.WxDeliveryTemplate;
+import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
 
 @Controller
 public class WxSystemController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxSystemController.class);
+	
+	@Autowired
+	private IWxDeliveryTemplateService wxDeliverTemplateService;
+	
+	@RequestMapping(value = "/test")
+	public String test(HttpServletRequest request) {
+		WxDeliveryTemplate template = wxDeliverTemplateService.loadDeliveryTemplate(1);
+		System.out.println(template);
+		return "product/index";
+	}
 	
 	
 	/**
@@ -75,5 +88,18 @@ public class WxSystemController {
 		}
 		return "product/index";
 	}
+
+
+	public IWxDeliveryTemplateService getWxDeliverTemplateService() {
+		return wxDeliverTemplateService;
+	}
+
+
+	public void setWxDeliverTemplateService(
+			IWxDeliveryTemplateService wxDeliverTemplateService) {
+		this.wxDeliverTemplateService = wxDeliverTemplateService;
+	}
+	
+	
 	
 }

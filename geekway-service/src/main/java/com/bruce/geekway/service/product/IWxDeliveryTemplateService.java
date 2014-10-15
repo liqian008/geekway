@@ -2,6 +2,8 @@ package com.bruce.geekway.service.product;
 
 import java.util.List;
 
+import com.bruce.geekway.model.wx.pay.WxDeliveryTemplate;
+
 
 /**
  * 运费模板service
@@ -9,29 +11,37 @@ import java.util.List;
  *
  */
 public interface IWxDeliveryTemplateService{
-
+	
+	/**
+	 * init-method
+	 */
+	public void init();
+	
 	/**
 	 * 列出所有运费模板
 	 * @return
 	 */
-	public List queryAllDeliveryTemplates();
+	public List<WxDeliveryTemplate> queryAllDeliveryTemplates();
 	
 	/**
 	 * 加载指定的运费模板
 	 * @param templateId
 	 * @return
 	 */
-	public String loadDeliveryTemplate(int templateId);
+	public WxDeliveryTemplate loadDeliveryTemplate(int templateId);
 	
 	/**
 	 * 计算运费
 	 * @param templateId
+	 * @param deliveryType
 	 * @param country
 	 * @param privince
 	 * @param city
 	 * @return
 	 */
-	public double calcDeliveryFee(int templateId, String country, String privince, String city);
+	public int calcDeliveryFee(int templateId, int deliveryType, String country, String privince, String city);
+
+	
 	
 	
 }

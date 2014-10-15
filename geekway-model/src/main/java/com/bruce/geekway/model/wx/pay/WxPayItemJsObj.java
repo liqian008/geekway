@@ -39,8 +39,6 @@ public class WxPayItemJsObj {
 		this.nonceStr = nonceStr;
 	}
 
-
-
 	public String getPackageValue() {
 		return packageValue;
 	}

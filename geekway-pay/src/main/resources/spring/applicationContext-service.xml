@@ -75,5 +75,8 @@
 	</bean>
 	<bean id="wxUserAddressService" class="com.bruce.geekway.service.product.impl.WxUserAddressServiceImpl">
 	</bean>
+	<bean id="wxDeliverTemplateService" class="com.bruce.geekway.service.product.impl.WxDeliveryTemplateServiceImpl"
+	init-method="init">
+	</bean>
 	
 </beans>
