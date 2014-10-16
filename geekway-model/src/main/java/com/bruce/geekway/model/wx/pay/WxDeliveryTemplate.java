@@ -120,13 +120,13 @@ public class WxDeliveryTemplate {
 	}
 
 	public static class NormalFee {
-		private int startStandards;
-		private int StartFees;
-		private int addStandards;
-		private int addFees;
+		private double startStandards;
+		private double StartFees;
+		private double addStandards;
+		private double addFees;
 
-		public NormalFee(int startStandards, int startFees, int addStandards,
-				int addFees) {
+		public NormalFee(double startStandards, double startFees, double addStandards,
+				double addFees) {
 			super();
 			this.startStandards = startStandards;
 			StartFees = startFees;
@@ -134,35 +134,35 @@ public class WxDeliveryTemplate {
 			this.addFees = addFees;
 		}
 
-		public int getStartStandards() {
+		public double getStartStandards() {
 			return startStandards;
 		}
 
-		public void setStartStandards(int startStandards) {
+		public void setStartStandards(double startStandards) {
 			this.startStandards = startStandards;
 		}
 
-		public int getStartFees() {
+		public double getStartFees() {
 			return StartFees;
 		}
 
-		public void setStartFees(int startFees) {
+		public void setStartFees(double startFees) {
 			StartFees = startFees;
 		}
 
-		public int getAddStandards() {
+		public double getAddStandards() {
 			return addStandards;
 		}
 
-		public void setAddStandards(int addStandards) {
+		public void setAddStandards(double addStandards) {
 			this.addStandards = addStandards;
 		}
 
-		public int getAddFees() {
+		public double getAddFees() {
 			return addFees;
 		}
 
-		public void setAddFees(int addFees) {
+		public void setAddFees(double addFees) {
 			this.addFees = addFees;
 		}
 	}
@@ -172,8 +172,8 @@ public class WxDeliveryTemplate {
 		private String destProvince;
 		private String destCity;
 
-		public CustomFee(int startStandards, int startFees, int addStandards,
-				int addFees, String destCountry, String destProvince,
+		public CustomFee(double startStandards, double startFees, double addStandards,
+				double addFees, String destCountry, String destProvince,
 				String destCity) {
 			super(startStandards, startFees, addStandards, addFees);
 			this.destCountry = destCountry;

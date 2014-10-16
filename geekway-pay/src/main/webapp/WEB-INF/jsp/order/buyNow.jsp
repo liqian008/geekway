@@ -33,6 +33,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 
 </head>
 <body>
@@ -89,17 +90,19 @@
                 	<img src="${pageContext.request.contextPath}/slideby/images/general-nature/6s.jpg" alt="img">
                     <em>${productSku.name}——${productSku.skuName}</em>
                     单价：&nbsp;<span class="text-highlight highlight-red">${productSku.price}</span>元&nbsp;|&nbsp;
-                    数量：&nbsp;<span id="amount" class="text-highlight highlight-blue">${amount}</span>件
-                    合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${totalPrice}</span>元
+                    数量：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue">${buyAmount}</span>件
+                    共计：&nbsp;<span id="productTotalFee" class="text-highlight highlight-green">${totalFee}</span>元
                 </p>
                 <input type="hidden" id="productSkuId" name="productSkuId" value="${productSku.id}"/>
 	            
                 <div class="decoration"></div> 
                 <p class="quote-item">
                     <h5 class="center-text"> 
-                    运费：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue">0.00</span>元&nbsp;|&nbsp;
+                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-blue">0.00</span>元&nbsp;|&nbsp;
+                    <!-- 
                     优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
-                    合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${totalPrice}</span>元
+                     -->
+                    合计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
                     </h5>
                 </p>
                 <div class="center-text">
@@ -117,10 +120,10 @@
             		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">无</span></li>
 	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">无</span></li>
 	            	<li>邮寄地址：&nbsp;
-		            	<span id="provinceName" class="text-highlight highlight-dark">省</span>
-		            	<span id="cityName" class="text-highlight highlight-dark">市</span>
-		            	<span id="countriesName" class="text-highlight highlight-dark">区/县</span>
-		            	<span id="addressDetailInfo" class="text-highlight highlight-dark"></span>
+		            	<span id="postProvince" class="text-highlight highlight-dark">省</span>
+		            	<span id="postCity" class="text-highlight highlight-dark">市</span>
+		            	<span id="postCountries" class="text-highlight highlight-dark">区/县</span>
+		            	<span id="postAddressDetailInfo" class="text-highlight highlight-dark"></span>
 	            	</li>
 	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">无</span></li>
 	            </ul>
@@ -152,17 +155,17 @@ $("#submitOrder").click(function(){
 	var postName = $("#postName").text();
 	var postMobile = $("#postMobile").text();
 	
-	var provinceName = $("#provinceName").text();
-	var cityName = $("#cityName").text();
-	var countriesName = $("#countriesName").text();
-	var addressDetailInfo = $("#addressDetailInfo").text();
+	var postProvince = $("#postProvince").text();
+	var postCity = $("#postCity").text();
+	var postCountries = $("#postCountries").text();
+	var postAddressDetailInfo = $("#postAddressDetailInfo").text();
 	var postCode = $("#postCode").text();
 	var postNationalCode = $("#postNationalCode").val();
 	
 	var productSkuId = $("#productSkuId").val();
-	var amount = $("#amount").text();
+	var buyAmount = $("#buyAmount").text();
 	
-	var paramData = {'productSkuId':productSkuId, 'amount':amount, 'postName' : postName, 'postMobile':postMobile, 'province':provinceName, 'city':cityName, 'countries':countriesName, 'addressDetailInfo':addressDetailInfo, 'postCode':postCode, 'nationalCode':postNationalCode};
+	var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
@@ -200,7 +203,7 @@ $("#chooseAddress").click(function(){
 				$("#provice").text(res.proviceFirstStageName);
 				$("#city").text(res.addressCitySecondStageName);
 				$("#country").text(res.addressCountiesThirdStageName);
-				$("#addressDetailInfo").text(res.addressDetailInfo);
+				$("#postAddressDetailInfo").text(res.postAddressDetailInfo);
 				
 				$("#chooseAddress").text("重新选择收货地址");
 				
@@ -216,10 +219,10 @@ $("#chooseAddress").click(function(){
 		$("#postCode").text("fail: code");
 		$("#postNationalCode").val("fail: nationalCode");
 		
-		$("#provinceName").text("fail:province");
-		$("#cityName").text("fail:city");
-		$("#countriesName").text("fail: country");
-		$("#addressDetailInfo").text("fail:addressDetailInfo");
+		$("#postProvince").text("fail:province");
+		$("#postCity").text("fail:city");
+		$("#postCountries").text("fail: country");
+		$("#postAddressDetailInfo").text("fail:postAddressDetailInfo");
 		
 		$("#chooseAddress").text("重新选择收货地址");
 		
@@ -229,13 +232,19 @@ $("#chooseAddress").click(function(){
 
 
 function refreshDeliveryFee(templateId, province, city){
-	alert(123);
 	//ajax重新计算运费
 	var paramData = {'deliveryTemplateId': '1', 'country':'', 'province':province, 'city':city};
 	$.post('${pageContext.request.contextPath}/calcDeliverFee.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
-			alert(responseData.data.deliveryFee);
+			//展示运费价格
+			var deliveryFee=  fmoney(responseData.data.deliveryFee, 2);
+			$("#deliveryFee").text(deliveryFee);
+			//刷新总价格
+			var productTotalFee = $("#productTotalFee").text();
+			var totalFee = accAdd(deliveryFee, productTotalFee);
+			totalFee=  fmoney(totalFee, 2);
+			$("#totalFee").text(totalFee);
 		}else{
 			alert(responseData.message);
 		}

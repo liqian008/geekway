@@ -25,14 +25,14 @@
 			<!-- 例子解析：Type为10000027的默认邮费计算，第1件邮费2分，每增加3件邮费增加3分。Type为10000027的指定地区邮费计算，寄送到中国/广东省/广州市的商品，第一件邮费1元，每增加1件邮费增加3分。 -->
 
 			<!-- 默认的邮费计算方法 -->
-			<Normal StartStandards="1" StartFees="600" AddStandards="4" AddFees="200"/>
+			<Normal StartStandards="1" StartFees="6.00" AddStandards="4" AddFees="2.00"/>
 			<!-- 特殊的邮费计算方法(指定地区) -->
 			<!-- DestCountry, 感谢郭嘉（扣血拿牌 ^_^） -->
 			<!-- DestProvince，省 -->
 			<!-- DestCity，市 -->
 			
 			<!-- 北京市内
-			<Custom  StartStandards="1" StartFees="600" AddStandards="5" AddFees="200"
+			<Custom  StartStandards="1" StartFees="6.00" AddStandards="5" AddFees="2.00"
 					DestCountry="" DestProvince="北京" DestCity="北京"/>
 			 -->
 		</TopFee>
@@ -43,13 +43,13 @@
 			<Type>100001</Type>
 			<Name>申通</Name>
 			<!-- 默认的邮费计算方法 -->
-			<Normal StartStandards="1" StartFees="600" AddStandards="4" AddFees="200"/>
+			<Normal StartStandards="1" StartFees="6.00" AddStandards="4" AddFees="2.00"/>
 			<!-- 特殊的邮费计算方法(指定地区) -->
 			<!-- 北京市内 -->
-			<Custom  StartStandards="1" StartFees="600" AddStandards="5" AddFees="200"
+			<Custom  StartStandards="1" StartFees="6.00" AddStandards="5" AddFees="2.00"
 					DestCountry="" DestProvince="北京" DestCity="北京"/>
 			<!-- 江浙沪地区 -->
-			<Custom  StartStandards="1" StartFees="800" AddStandards="2" AddFees="200"
+			<Custom  StartStandards="1" StartFees="8.00" AddStandards="2" AddFees="2.00"
 					DestCountry="" DestProvince="上海" DestCity="上海"/>
 		</TopFee>
 		
@@ -59,14 +59,14 @@
 			<Type>100002</Type>
 			<Name>园通</Name>
 			<!-- 默认的邮费计算方法 -->
-			<Normal StartStandards="1" StartFees="600" AddStandards="4" AddFees="200"/>
+			<Normal StartStandards="1" StartFees="6.00" AddStandards="4" AddFees="2.00"/>
 			<!-- 特殊的邮费计算方法(指定地区) -->
 			
 			<!-- 北京市内 -->
-			<Custom  StartStandards="1" StartFees="600" AddStandards="5" AddFees="200"
+			<Custom  StartStandards="1" StartFees="6.00" AddStandards="5" AddFees="2.00"
 					DestCountry="" DestProvince="北京" DestCity="北京"/>
 			<!-- 江浙沪地区 -->
-			<Custom  StartStandards="1" StartFees="800" AddStandards="2" AddFees="200"
+			<Custom  StartStandards="1" StartFees="8.00" AddStandards="2" AddFees="2.00"
 					DestCountry="" DestProvince="上海" DestCity="上海"/>
 		</TopFee>
 		
@@ -77,10 +77,10 @@
 			<Name>顺丰</Name>
 			
 			<!-- 默认的邮费计算方法 -->
-			<Normal StartStandards="1" StartFees="2000" AddStandards="4" AddFees="300"/>
+			<Normal StartStandards="1" StartFees="20.00" AddStandards="4" AddFees="3.00"/>
 			<!-- 特殊的邮费计算方法(指定地区) -->
 			<!-- 北京市内 -->
-			<Custom  StartStandards="1" StartFees="1300" AddStandards="4" AddFees="300"
+			<Custom  StartStandards="1" StartFees="13.00" AddStandards="4" AddFees="3.00"
 					DestCountry="" DestProvince="北京" DestCity="北京"/>
 		</TopFee>
 		
