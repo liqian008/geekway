@@ -78,15 +78,18 @@
                 	<em>&nbsp;</em>
 				</div>
             	<ul id="choose">
-            		<li>姓 名：&nbsp;<span id="originPrice" class="text-highlight highlight-green">${orderInfo.postName}</span></li>
-	            	<li>手机号：&nbsp;<span id="price" class="text-highlight highlight-red">${orderInfo.postMobile}</span></li>
-	            	<li>邮寄地址：&nbsp;<span id="leftAmount" class="text-highlight highlight-dark">${orderInfo.postAddress}</span></li>
-	            	<li>邮 编：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">${orderInfo.postCode}</span></li>
+            		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">${orderInfo.postName}</span></li>
+	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">${orderInfo.postMobile}</span></li>
+	            	<li>邮寄地址：&nbsp;<span id="postAddress" class="text-highlight highlight-dark">${orderInfo.postProvince}${orderInfo.postCity}${orderInfo.postCountries}-${orderInfo.postAddressDetailInfo}</span></li>
+	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">${orderInfo.postCode}</span></li>
 	            </ul>
 	            <div class="decoration"></div>
                 <p class="quote-item">
-                    <h5 class="center-text">
-                    优惠券折扣：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
+                    <h5 class="center-text"> 
+                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-blue">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
+                    <!-- 
+                    优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
+                     -->
                     合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                     </h5>
                 </p>
@@ -131,4 +134,7 @@ WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
 		});
 	}, false);
 </script>
+
+<!-- 禁用微信分享 -->
+<jsp:include page="../inc/weixinHideOptionMenu.jsp"></jsp:include>
 </html>

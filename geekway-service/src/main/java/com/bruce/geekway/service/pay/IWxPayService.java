@@ -86,7 +86,7 @@ public class IWxPayService{
 							long productSkuId = orderItem.getProductSkuId();
 							int amount = orderItem.getAmount();
 							//执行扣减
-							result = wxProductSkuService.reduceAmount(productSkuId, amount);
+							result = wxProductSkuService.reduceStock(productSkuId, amount);
 						}
 					}
 					// 更新订单表中的订单状态为支付完毕

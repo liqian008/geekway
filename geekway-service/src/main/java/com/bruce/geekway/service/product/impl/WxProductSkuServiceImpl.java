@@ -81,8 +81,8 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	}
 	
 	@Override
-	public int reduceAmount(long productSkuId, int amount) {
-		return wxProductSkuMapper.reduceAmount(productSkuId, amount);
+	public int reduceStock(long productSkuId, int amount) {
+		return wxProductSkuMapper.reduceStock(productSkuId, amount);
 	}
 	
 	

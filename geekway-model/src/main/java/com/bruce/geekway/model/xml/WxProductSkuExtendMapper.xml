@@ -4,7 +4,7 @@
 	
 	<!-- groupby方式查询 sku产品，在产品分类列表中使用 -->
 	<select id="fallLoadCategoryProductSkuList" resultMap="BaseResultMap">
-		select id, product_id, name, origin_price, price, amount, sku_pic_url,
+		select id, product_id, name, origin_price, price, stock, sku_pic_url,
 		create_time, update_time
 		from wx_product_sku
 		where
@@ -16,22 +16,22 @@
 		</if>
 		price>0 
 		group by product_id
-		having sum(amount)>0 order by product_id desc limit #{limit};
+		having sum(stock)>0 order by product_id desc limit #{limit};
 	</select>
 	
 	
 	<!-- 更新库存数量 -->
-	<update id="reduceAmount">
-		update wx_product_sku set amount = amount-#{amount} where id= #{id};
+	<update id="reduceStock">
+		update wx_product_sku set stock = stock-#{stock} where id= #{id};
 	</update>
 	
 
 	<select id="fallLoadTagProductSkuList" resultMap="BaseResultMap">
-		select id, product_id, name, origin_price, price, amount, sku_pic_url,
+		select id, product_id, name, origin_price, price, stock, sku_pic_url,
 		create_time, update_time
 		from wx_product_sku
-		where price>0 and amount>0
-		group by product_id having sum(amount)>0
+		where price>0 and stock>0
+		group by product_id having sum(stock)>0
 		order by create_time desc;
 	</select>
 </mapper>

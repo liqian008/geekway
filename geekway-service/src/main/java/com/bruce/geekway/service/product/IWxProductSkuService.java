@@ -24,7 +24,7 @@ public interface IWxProductSkuService extends IFoundationService<WxProductSku, I
 	 * @param amount
 	 * @return
 	 */
-	public int reduceAmount(long productSkuId, int amount);
+	public int reduceStock(long productSkuId, int amount);
 	
 //	public int queryCountBySkuPropValueId(int skuPropValueId);
 	

@@ -104,7 +104,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
             		
             		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>${currentProductSku.originPrice}</del></span>元</li>
 	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">${currentProductSku.price}</span>元</li>
-	            	<li>库 存：&nbsp;<span id="leftAmount" class="text-highlight highlight-yellow">${currentProductSku.amount}</span>件</li>
+	            	<li>库 存：&nbsp;<span id="leftStock" class="text-highlight highlight-yellow">${currentProductSku.stock}</span>件</li>
 	            	
 	            	<%
 	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
@@ -162,7 +162,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
             	
             	<%
             	boolean buyNow = false;
-            	if(currentProductSku!=null && currentProductSku.getPrice()!=null&&currentProductSku.getPrice()>0&&currentProductSku.getAmount()!=null&&currentProductSku.getAmount()>0){
+            	if(currentProductSku!=null && currentProductSku.getPrice()!=null&&currentProductSku.getPrice()>0&&currentProductSku.getStock()!=null&&currentProductSku.getStock()>0){
             		buyNow = true;
             	}
             	%>
@@ -218,7 +218,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 					$("#buyNow").click(function(){
 						var buyAmount = $("#buyAmount").text();
 						var productSkuId = $("#productSkuId").val();
-						location.href= "${pageContext.request.contextPath}/buyNow?amount="+buyAmount+"&productSkuId="+productSkuId;						
+						location.href= "${pageContext.request.contextPath}/buyNow?buyAmount="+buyAmount+"&productSkuId="+productSkuId;						
 					});
 					
 					function reloadProductInfo(productSkuJson){
@@ -226,8 +226,8 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 							$("#productSkuId").val(productSkuJson.id);//刷新库存
 							$("#originPrice").html("<del>"+productSkuJson.originPrice+"</del>");//刷新价格
 							$("#price").text(productSkuJson.price);//刷新价格
-							$("#leftAmount").text(productSkuJson.amount);//刷新库存
-							if(productSkuJson.amount>0&&productSkuJson.price>0){//刷新购买&购物车按钮
+							$("#leftStock").text(productSkuJson.stock);//刷新库存
+							if(productSkuJson.stock>0&&productSkuJson.price>0){//刷新购买&购物车按钮
 								$("#buyNow").removeClass("gone");
 								$("#buyDisable").addClass("gone");
 							}else{

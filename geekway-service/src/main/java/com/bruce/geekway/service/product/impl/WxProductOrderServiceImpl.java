@@ -137,6 +137,9 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		productOrder.setOutTradeNo(tradeNo);
 		
 		int result = save(productOrder);
+		
+		//扣减库存
+		
 		//标记优惠码状态为正在使用
 		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
 			result = wxProductVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), IWxProductVoucherService.StatusEnum.USED.getStatus());
