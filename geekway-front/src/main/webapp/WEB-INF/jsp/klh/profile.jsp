@@ -8,10 +8,16 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
 
+<title>可乐惠</title>
+
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/klh//css/klh.css" />
 <script type="text/javascript" src="<%=request.getContextPath() %>/klh//js/jquery.js"></script>
 
 <style>
+#notification{
+margin:10px;
+text-align:center;
+}
 
 .score{
 margin:20px;
@@ -44,7 +50,13 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 	</div>
 	<div class="content">
 		<div class="main">
-			<form action="./updateProfile" method="post" name="profileForm"> 
+			
+			<div id="notification" style="display: none">
+				个人资料修改成功
+			</div>
+			
+			<form action="./updateProfile" method="post" name="profileForm">
+			
 			<div class="userProfile">
 				<label>昵称</label>
 				<input type="text" id="nickname" name="nickname" value="<%=userProfile.getNickname()==null?"":userProfile.getNickname()%>">
@@ -72,6 +84,14 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 $("#submitBtn").click(function (){
 	document.forms[0].submit();
 });
+
+<%
+String flag = (String)request.getAttribute("flag");
+if("updated".equals(flag)){
+%>
+$("#notification").show(1500);
+<%}%>
+
 </script>
 
 </html>

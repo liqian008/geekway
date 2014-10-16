@@ -34,11 +34,12 @@ public class KlhUserController {
 	
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public String profile(Model model, HttpServletRequest request) {
+	public String profile(Model model, String flag, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
 			//TODO 跳转auth界面
 			return KlhUtil.redirectToOauth(model);
 		}else{
+			model.addAttribute("flag",flag);
 			return "klh/profile";
 		}
 	}
@@ -70,7 +71,7 @@ public class KlhUserController {
 				request.getSession().setAttribute("sessionUserProfile", sessionUserProfile); 
 			}
 		}
-		return "redirect:./profile";
+		return "redirect:./profile?flag=updated";
 	}
 	
 //	@RequestMapping(value = "/login", method = RequestMethod.GET)
