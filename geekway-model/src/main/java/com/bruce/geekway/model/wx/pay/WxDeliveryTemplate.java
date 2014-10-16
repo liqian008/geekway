@@ -134,7 +134,7 @@ public class WxDeliveryTemplate {
 			this.addFees = addFees;
 		}
 
-		public int getStartStandards() {
+		public double getStartStandards() {
 			return startStandards;
 		}
 
@@ -146,7 +146,7 @@ public class WxDeliveryTemplate {
 			return startFees;
 		}
 
-		public void setStartFees(double startFees) {
+		public void setStartFees(int startFees) {
 			this.startFees = startFees;
 		}
 

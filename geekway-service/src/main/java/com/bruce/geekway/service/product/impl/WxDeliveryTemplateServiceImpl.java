@@ -169,6 +169,30 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 		}
 		return 0;
 	}
+
+	private double calcTopFeeDelivery(TopFee topFee, String province, String city) {
+		//计算费用金额
+		double deliveryFee =0;
+		List<CustomFee> customFeeList = topFee.getCustomFeeList();
+		if(customFeeList!=null&&customFeeList.size()>0){
+			for(CustomFee customFee: customFeeList){
+				if(customFee.getDestProvince().equals(province)&&customFee.getDestCity().equals(city)){
+					//暂不检查国家 if(customFee.getDestCountry().equals(country))
+					deliveryFee = customFee.getStartFees();
+					return deliveryFee;
+				}
+			}
+		}
+		//没有找到匹配的自定义邮费设置，则使用default的邮费
+		if(deliveryFee<=0){
+			NormalFee normalFee = topFee.getNormalFee();
+			if(normalFee!=null){
+				deliveryFee = normalFee.getStartFees();
+				return deliveryFee;
+			}
+		}
+		return 0;
+	}
 	
 	private double calcTopFeeDelivery(int amount, TopFee topFee, String province, String city) {
 		//计算费用金额
