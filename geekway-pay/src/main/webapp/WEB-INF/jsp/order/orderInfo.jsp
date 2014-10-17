@@ -67,7 +67,7 @@
                 	<em>&nbsp;</em>
 				</div>
             	<p class="quote-item">
-                    订单物品：&nbsp;<span class="text-highlight highlight-red">${orderInfo.title}</span>
+                    订单商品：&nbsp;<span class="text-highlight highlight-red">${orderInfo.title}</span>
                 </p> 
             </div>
              
@@ -86,6 +86,7 @@
 	            <div class="decoration"></div>
                 <p class="quote-item">
                     <h5 class="center-text"> 
+                    商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${orderInfo.productFee}</span>元&nbsp;|&nbsp; 
                     运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-blue">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
                     <!-- 
                     优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;

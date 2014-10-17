@@ -147,11 +147,6 @@ if(orderAddressJsObj!=null){
 %>
 <script>
 $("#submitOrder").click(function(){
-	//检查输入有效性
-	$('#chooseAddress').hide();//隐藏地址按钮
-	$('#submitOrder').text("订单提交中...");
-	$('#submitOrder').attr("disabled","disabled");
-	
 	var postName = $("#postName").text();
 	var postMobile = $("#postMobile").text();
 	
@@ -163,7 +158,29 @@ $("#submitOrder").click(function(){
 	var postNationalCode = $("#postNationalCode").val();
 	
 	var productSkuId = $("#productSkuId").val();
-	var buyAmount = "7";
+	var buyAmount = $("#buyAmount").text();
+	
+	//检查商品&数量有效性
+	var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
+	if(productInfoError){
+		alert("选购商品信息有误，请返回重新选购");
+		return;
+	}
+	
+	//检查地址输入有效性
+	var postInfoError = isEmpty(postName) || isEmpty(postMobile) || isEmpty(postProvince) || isEmpty(postCity)|| isEmpty(postCountries)|| isEmpty(postAddressDetailInfo);
+	if(postInfoError){
+		alert("收货地址填写有误，请重新选择");
+		return;
+	}
+	
+	
+	
+	$('#chooseAddress').hide();//隐藏地址按钮
+	$('#submitOrder').text("订单提交中...");
+	$('#submitOrder').attr("disabled","disabled");
+	
+	
 	
 	var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {

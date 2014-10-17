@@ -175,6 +175,8 @@ public class WxProductOrderController {
 		Date currentTime = new Date();
 		WxProductOrder productOrder = new WxProductOrder();
 		productOrder.setUserOpenId(userOpenId);//用户身份
+		productOrder.setTitle(productSku.getName());
+		
 		productOrder.setVoucherId(voucherId);//优惠券id
 		
 		double productTotalFee = productSku.getPrice() * buyAmount;//商品金额

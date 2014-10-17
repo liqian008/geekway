@@ -135,10 +135,9 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		String tradeNo = OrderUtil.generateOrderSn4Wx();
 		//保存订单
 		productOrder.setOutTradeNo(tradeNo);
-		
 		int result = save(productOrder);
+		//下单不扣减库存（支付成功后才扣减）
 		
-		//扣减库存
 		
 		//标记优惠码状态为正在使用
 		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){

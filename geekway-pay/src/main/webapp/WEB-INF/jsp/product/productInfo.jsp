@@ -33,6 +33,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 
 </head>
 
@@ -197,7 +198,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 						if(colorProperty!=null && sizeProperty!=null){
 							var propertiesName = colorProperty + sizeProperty;
 							var productSkuJson = skuMap.get(propertiesName);
-							reloadProductInfo(productSkuJson);
+							reloadProductSkuInfo(productSkuJson);
 						}
 					});
 					
@@ -210,18 +211,24 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 						if(colorProperty!=null && sizeProperty!=null){
 							var propertiesName = colorProperty + sizeProperty;
 							var productSkuJson = skuMap.get(propertiesName);
-							reloadProductInfo(productSkuJson);
+							reloadProductSkuInfo(productSkuJson);
 						}
 					});
 					
 					//点击购买操作
 					$("#buyNow").click(function(){
-						var buyAmount = $("#buyAmount").text();
+						var buyAmount = "7";//$("#buyAmount").text();
 						var productSkuId = $("#productSkuId").val();
+						//检查商品&数量有效性
+						var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
+						if(productInfoError){
+							alert("商品选择有误，请检查后重新提交");
+							return;
+						}
 						location.href= "${pageContext.request.contextPath}/buyNow?buyAmount="+buyAmount+"&productSkuId="+productSkuId;						
 					});
 					
-					function reloadProductInfo(productSkuJson){
+					function reloadProductSkuInfo(productSkuJson){
 						if(productSkuJson!=null){
 							$("#productSkuId").val(productSkuJson.id);//刷新库存
 							$("#originPrice").html("<del>"+productSkuJson.originPrice+"</del>");//刷新价格
