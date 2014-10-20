@@ -1,8 +1,10 @@
 package com.bruce.geekway.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class DateUtil {
 
@@ -10,11 +12,24 @@ public class DateUtil {
 	public static long TIME_UNIT_MINUTE = TIME_UNIT_SECOND*60;
 	public static long TIME_UNIT_HOUR = TIME_UNIT_MINUTE*60;
 	public static long TIME_UNIT_DAY = TIME_UNIT_HOUR*24;
+	public static long TIME_UNIT_WEEK = TIME_UNIT_DAY*7;
+	public static long TIME_UNIT_MONTH = TIME_UNIT_DAY*30;
+	public static long TIME_UNIT_YEAR = TIME_UNIT_DAY*365;
 	
 	public static final SimpleDateFormat DATE_FORMAT_YMDHMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public static final SimpleDateFormat DATE_FORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	
+	public static Date parse2Date(String dateStr){
+		if(StringUtils.isNotBlank(dateStr)){
+			try {
+				return DATE_FORMAT_YMD.parse(dateStr);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	public static String date2YMD(Date date){
 		if(date!=null){
