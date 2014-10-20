@@ -1,8 +1,11 @@
 package com.bruce.geekway.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class DateUtil {
 
@@ -15,6 +18,16 @@ public class DateUtil {
 	
 	public static final SimpleDateFormat DATE_FORMAT_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	
+	public static Date parse2Date(String dateStr){
+		if(StringUtils.isNotBlank(dateStr)){
+			try {
+				return DATE_FORMAT_YMD.parse(dateStr);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	public static String date2YMD(Date date){
 		if(date!=null){

@@ -1,6 +1,7 @@
 package com.bruce.geekway.controller.klh;
 
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -18,6 +19,7 @@ import com.bruce.geekway.controller.ito.ItoUserController;
 import com.bruce.geekway.model.KlhProduct;
 import com.bruce.geekway.model.klh.KlhEdbOrder;
 import com.bruce.geekway.service.klh.IKlhProductService;
+import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.KlhUtil;
 /**
  * 可乐惠中易店宝订单查询
@@ -60,16 +62,21 @@ public class KlhOrderController {
 	 * @return
 	 */
 	@RequestMapping(value = "/edbOrderList")
-	public String edbOrderList(Model model, @RequestParam(required=true)String userMobile, int periodType,  HttpServletRequest request,  HttpServletResponse response) {
+	public String edbOrderList(Model model, @RequestParam(required=true)String userMobile, String queryStartDateStr,  HttpServletRequest request,  HttpServletResponse response) {
 		//将userMobile写入cookie
 		Cookie cookie = new Cookie(KLH_USER_MOBILE, userMobile);
 		cookie.setMaxAge(999999999);
 		response.addCookie(cookie);
 		
-		model.addAttribute("periodType", periodType);
+		//查询起始时间
+		Date queryStartDate = new Date();
+		if(StringUtils.isNotBlank(queryStartDateStr)){
+			queryStartDate = DateUtil.parse2Date(queryStartDateStr);
+		}
 		
-//		long startTime = System.currentTimeMillis();
-		List<KlhEdbOrder> edbOrderList = EdbApiUtil.edbTradeGet(periodType);
+		model.addAttribute("queryStartDateStr", DateUtil.date2YMD(queryStartDate));
+		
+		List<KlhEdbOrder> edbOrderList = EdbApiUtil.edbTradeGet(queryStartDate);
 		if(edbOrderList!=null&&edbOrderList.size()>0){
 			//移除非制定手机号码的数据
 			for(int i=edbOrderList.size()-1;i>=0;i--){
@@ -88,6 +95,45 @@ public class KlhOrderController {
 		
 		return "klh/orderList";
 	}
+	
+	
+	
+//	/**
+//	 * 易店宝订单列表(按时间周期查询，因需求问题暂时屏蔽)
+//	 * @param model
+//	 * @param request
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/edbOrderList")
+//	public String edbOrderList(Model model, @RequestParam(required=true)String userMobile, int periodType,  HttpServletRequest request,  HttpServletResponse response) {
+//		//将userMobile写入cookie
+//		Cookie cookie = new Cookie(KLH_USER_MOBILE, userMobile);
+//		cookie.setMaxAge(999999999);
+//		response.addCookie(cookie);
+//		
+//		model.addAttribute("periodType", periodType);
+//		
+////		long startTime = System.currentTimeMillis();
+//		List<KlhEdbOrder> edbOrderList = null;// EdbApiUtil.edbTradeGet(periodType);
+//		if(edbOrderList!=null&&edbOrderList.size()>0){
+//			//移除非制定手机号码的数据
+//			for(int i=edbOrderList.size()-1;i>=0;i--){
+//				KlhEdbOrder order = edbOrderList.get(i);
+//				if(!userMobile.equals(order.getMobile())){//手机号不相同，需要移除
+//					edbOrderList.remove(order);
+//				}
+//			}
+//		}
+//		model.addAttribute("userMobile", userMobile);
+//		model.addAttribute("edbOrderList", edbOrderList);
+//		
+////		long endTime = System.currentTimeMillis();
+////		long costTime = endTime - startTime;
+////		System.out.println("==="+(costTime)+"=====edbOrderListStr: "+ edbOrderList);
+//		
+//		return "klh/orderList";
+//	}
+	
 	
 //	/**
 //	 * 易店宝订单详情

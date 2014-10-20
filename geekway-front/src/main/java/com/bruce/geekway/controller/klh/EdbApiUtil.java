@@ -73,18 +73,18 @@ public class EdbApiUtil {
 	 * 订单列表
 	 * @return
 	 */
-	public static List<KlhEdbOrder> edbTradeGet(int periodType) {
-		int daysPeriod = 7;//默认取7天的数据
-		if(periodType==1){
-			daysPeriod=14;
-		}
+	public static List<KlhEdbOrder> edbTradeGet(Date queryStartDate) {
+//		int daysPeriod = 7;//默认取7天的数据
+//		if(periodType==1){
+//			daysPeriod=14;
+//		}
 		
 		
 		List<KlhEdbOrder> edbOrderList = new ArrayList<KlhEdbOrder>();
 		TreeMap<String, String> dataMap = new TreeMap<String, String>();
 		dataMap.put("date_type", "建档日期");
 		Date currentTime = new Date();
-		dataMap.put("begin_time", DateUtil.date2YMD(DateUtil.calcDatetime(currentTime, -daysPeriod)));
+		dataMap.put("begin_time", DateUtil.date2YMD(queryStartDate));
 		dataMap.put("end_time", DateUtil.date2YMD(currentTime));
 		dataMap.put("page_size", "100");
 		
@@ -194,7 +194,7 @@ public class EdbApiUtil {
 	
 	
 	public static void main(String[] args) {
-		edbTradeGet(0);
+//		edbTradeGet(0);
 //		System.out.println(edbTradeGet());
 	}
 }
