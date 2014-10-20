@@ -124,14 +124,16 @@ public class WxDeliveryTemplate {
 		private double startFees;
 		private int addStandards;
 		private double addFees;
+		private double freeStartFees;
 
 		public NormalFee(int startStandards, double startFees, int addStandards,
-				double addFees) {
+				double addFees, double freeStartFees) {
 			super();
 			this.startStandards = startStandards;
 			this.startFees = startFees;
 			this.addStandards = addStandards;
 			this.addFees = addFees;
+			this.freeStartFees = freeStartFees;
 		}
 
 		public double getStartStandards() {
@@ -165,6 +167,18 @@ public class WxDeliveryTemplate {
 		public void setAddFees(double addFees) {
 			this.addFees = addFees;
 		}
+
+		public double getFreeStartFees() {
+			return freeStartFees;
+		}
+
+		public void setFreeStartFees(double freeStartFees) {
+			this.freeStartFees = freeStartFees;
+		}
+
+		public void setStartFees(double startFees) {
+			this.startFees = startFees;
+		}
 	}
 
 	public static class CustomFee extends NormalFee {
@@ -173,9 +187,9 @@ public class WxDeliveryTemplate {
 		private String destCity;
 
 		public CustomFee(int startStandards, double startFees, int addStandards,
-				double addFees, String destCountry, String destProvince,
+				double addFees, double freeStartFees, String destCountry, String destProvince,
 				String destCity) {
-			super(startStandards, startFees, addStandards, addFees);
+			super(startStandards, startFees, addStandards, addFees, freeStartFees);
 			this.destCountry = destCountry;
 			this.destProvince = destProvince;
 			this.destCity = destCity;

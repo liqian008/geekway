@@ -146,6 +146,9 @@ WxOrderAddressJsObj orderAddressJsObj = (WxOrderAddressJsObj)request.getAttribut
 if(orderAddressJsObj!=null){
 %>
 <script>
+var productSkuId = $("#productSkuId").val();
+var buyAmount = $("#buyAmount").text();
+
 $("#submitOrder").click(function(){
 	var postName = $("#postName").text();
 	var postMobile = $("#postMobile").text();
@@ -156,9 +159,6 @@ $("#submitOrder").click(function(){
 	var postAddressDetailInfo = $("#postAddressDetailInfo").text();
 	var postCode = $("#postCode").text();
 	var postNationalCode = $("#postNationalCode").val();
-	
-	var productSkuId = $("#productSkuId").val();
-	var buyAmount = $("#buyAmount").text();
 	
 	//检查商品&数量有效性
 	var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
@@ -174,13 +174,9 @@ $("#submitOrder").click(function(){
 		return;
 	}
 	
-	
-	
 	$('#chooseAddress').hide();//隐藏地址按钮
 	$('#submitOrder').text("订单提交中...");
 	$('#submitOrder').attr("disabled","disabled");
-	
-	
 	
 	var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
@@ -211,6 +207,7 @@ $("#chooseAddress").click(function(){
 		"nonceStr" : "<%=orderAddressJsObj.getNonceStr()%>" 
 		},function(res){
 			//若res 中所带的返回值不为空,则表示用户选择该返回值作为收货地址。否则若返回空,则表示用户取消了这一次编辑收货地址。
+			alert(res.err_msg);
 			if(res.err_msg=="edit_address:ok"){
 				$("#postName").text(res.userName);
 				$("#postMobile").text(res.telNumber);
@@ -224,7 +221,7 @@ $("#chooseAddress").click(function(){
 				
 				$("#chooseAddress").text("重新选择收货地址");
 				
-				refreshDeliveryFee('', '6', res.proviceFirstStageName, res.addressCitySecondStageName);
+				refreshDeliveryFee('', buyAmount, res.proviceFirstStageName, res.addressCitySecondStageName);
 			}else{
 				alert("获取用户收货地址失败");
 			}
@@ -243,14 +240,14 @@ $("#chooseAddress").click(function(){
 		
 		$("#chooseAddress").text("重新选择收货地址");
 		
-		refreshDeliveryFee('','2','3');
+		refreshDeliveryFee('', buyAmount,'3','4');
 	}
 })
 
 
-function refreshDeliveryFee(templateId, amount, province, city){
+function refreshDeliveryFee(templateId, buyAmount, province, city){
 	//ajax重新计算运费
-	var paramData = {'deliveryTemplateId': '1', 'amount': amount, 'country':'', 'province':province, 'city':city};
+	var paramData = {'deliveryTemplateId': '1', 'amount': buyAmount, 'country':'', 'province':province, 'city':city};
 	$.post('${pageContext.request.contextPath}/calcDeliverFee.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){ 

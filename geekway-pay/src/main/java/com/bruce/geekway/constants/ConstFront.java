@@ -14,6 +14,9 @@ public interface ConstFront {
     
     /* 微信openId在cookie的key*/
 	public static final String COOKIE_KEY_WX_OPENID = "wx_user_open_id";
+	
+	 /* 购物车在cookie的key*/
+	public static final String COOKIE_KEY_WX_PRODUCT_CART = "wx_product_cart";
     
     
     /* 用户对象的Attribute*/

@@ -162,13 +162,15 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
             	<input type="hidden" id="productSkuId" name="productSkuId" value="${currentProductSku.id}"/> 
             	
             	<%
-            	boolean buyNow = false;
+            	boolean canBuy = false;
             	if(currentProductSku!=null && currentProductSku.getPrice()!=null&&currentProductSku.getPrice()>0&&currentProductSku.getStock()!=null&&currentProductSku.getStock()>0){
-            		buyNow = true;
+            		canBuy = true;
             	}
             	%>
-                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=buyNow?"":"gone"%>">点击购买</a>
-                <div class="static-notification-red <%=buyNow?"gone":""%>" id="buyDisable">
+                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=canBuy?"":"gone"%>">点击购买</a>
+                <a href="javascript:void(0)" id="addToCart" class="button-big button-blue <%=canBuy?"":"gone"%>">添加到购物车</a>
+                
+                <div class="static-notification-red <%=canBuy?"gone":""%>" id="buyDisable">
                     <p class="center-text uppercase">本品暂时缺货</p>
                 </div>
                 
@@ -225,7 +227,20 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 							alert("商品选择有误，请检查后重新提交");
 							return;
 						}
-						location.href= "${pageContext.request.contextPath}/buyNow?buyAmount="+buyAmount+"&productSkuId="+productSkuId;						
+						location.href= "${pageContext.request.contextPath}/buyNow?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
+					});
+					
+					//点击购买操作
+					$("#addToCart").click(function(){
+						var buyAmount = "7";//$("#buyAmount").text();
+						var productSkuId = $("#productSkuId").val();
+						//检查商品&数量有效性
+						var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
+						if(productInfoError){
+							alert("商品选择有误，请检查后重新提交");
+							return;
+						}
+						location.href= "${pageContext.request.contextPath}/cart/addToCart?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
 					});
 					
 					function reloadProductSkuInfo(productSkuJson){
@@ -236,10 +251,12 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 							$("#leftStock").text(productSkuJson.stock);//刷新库存
 							if(productSkuJson.stock>0&&productSkuJson.price>0){//刷新购买&购物车按钮
 								$("#buyNow").removeClass("gone");
+								$("#addToCart").removeClass("gone");
 								$("#buyDisable").addClass("gone");
 							}else{
 								$("#buyDisable").removeClass("gone");
 								$("#buyNow").addClass("gone");
+								$("#addToCart").addClass("gone");
 							}
 						}
 					}

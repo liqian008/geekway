@@ -44,7 +44,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 	private List<WxDeliveryTemplate> initFromTemplateXml() {
 		SAXReader reader = new SAXReader();           
 	    try {
-	    	InputStream is = WxDeliveryTemplateServiceImpl.class.getResourceAsStream("/deliverTemplate.xml");
+	    	InputStream is = WxDeliveryTemplateServiceImpl.class.getResourceAsStream("/deliveryTemplate.xml");
 	    	Document document = reader.read(is);
 	    	is.close();  
 			Element root = document.getRootElement();
@@ -77,13 +77,17 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 								String normalStartFeesText = eleNormal.attributeValue("StartFees");
 								String normalAddStandardsText = eleNormal.attributeValue("AddStandards");
 								String normalAddFeesText = eleNormal.attributeValue("AddFees");
+								String normalFreeStartFeesText = eleNormal.attributeValue("FreeStartFees");
+								
 								//转double类型
 								int normalStartStandards = NumberUtils.toInt(normalStartStandardsText, 1);
 								double normalStartFees = NumberUtils.toDouble(normalStartFeesText, 0);
 								int normalAddStandards = NumberUtils.toInt(normalAddStandardsText, 1);
 								double normalAddFees = NumberUtils.toDouble(normalAddFeesText, 0);
+								double normalFreeStartFees = NumberUtils.toDouble(normalFreeStartFeesText, Double.MAX_VALUE);
+								
 								//构造NormalFee对象
-								NormalFee normalFee = new NormalFee(normalStartStandards, normalStartFees, normalAddStandards, normalAddFees);
+								NormalFee normalFee = new NormalFee(normalStartStandards, normalStartFees, normalAddStandards, normalAddFees, normalFreeStartFees);
 								
 								List<Element> elementCustomList = topFeeElement.elements("Custom");
 								List<CustomFee> customFeeList = new ArrayList<CustomFee>();
@@ -93,6 +97,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 										String startFeesText = customElement.attributeValue("StartFees");
 										String addStandardsText = customElement.attributeValue("AddStandards");
 										String addFeesText = customElement.attributeValue("AddFees");
+										String freeStartFeesText = customElement.attributeValue("FreeStartFees");
 										String destCountry = customElement.attributeValue("DestCountry");
 										String destProvince = customElement.attributeValue("DestProvince");
 										String destCity = customElement.attributeValue("DestCity");
@@ -102,8 +107,9 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 										double startFees = NumberUtils.toDouble(startFeesText, 0);
 										int addStandards = NumberUtils.toInt(addStandardsText, 1);
 										double addFees = NumberUtils.toDouble(addFeesText, 0);
+										double freeStartFees = NumberUtils.toDouble(freeStartFeesText, Double.MAX_VALUE);
 										//构造CustomFee对象
-										CustomFee customFee = new CustomFee(startStandards, startFees, addStandards, addFees, destCountry, destProvince, destCity);
+										CustomFee customFee = new CustomFee(startStandards, startFees, addStandards, addFees, freeStartFees, destCountry, destProvince, destCity);
 										customFeeList.add(customFee);
 									}
 								}
