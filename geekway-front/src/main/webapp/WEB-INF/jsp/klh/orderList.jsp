@@ -64,11 +64,32 @@
 
 .query{
 	margin: 10px 0px;
-}
 
 .order_item {
 	background-color: #c6c0b4;
 	font-size: 14px;
+
+.order_item div {
+	padding: 4px 10px;
+	color: #fff;
+	text-align: left
+}
+
+.order_item .product {
+	font-size: 10px;
+
+.order_item .trace {
+	float: right;
+
+.order_item div.sperator {
+	padding: 0px;
+	margin: 6px 10px;
+	height: 1px;
+	background-color: #fff;
+}
+
+.order_item .product td,.order_item .product th {
+	padding: 5px;
 }
 
 .order_item div {
