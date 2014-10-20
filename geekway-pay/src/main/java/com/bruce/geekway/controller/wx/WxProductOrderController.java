@@ -1,5 +1,8 @@
 package com.bruce.geekway.controller.wx;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +30,10 @@ import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductSku;
+import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.WxUserAddress;
+import com.bruce.geekway.model.WxProductCart.CartProductSku;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
@@ -70,17 +75,62 @@ public class WxProductOrderController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
 
+//	/**
+//	 * 不使用购物车，直接点击购买（呈现所购商品&列出优惠券&订单价格）
+//	 * 强制用户使用oauth，以刷最新的userToken，用于获取地址信息
+//	 * @param model
+//	 * @param productSkuId
+//	 * @param buyAmount
+//	 * @param request
+//	 * @return
+//	 */
+//	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
+//	@RequestMapping(value = "/buyNow")
+//	public String buyNow(Model model, @RequestParam(required=false)String code, int productSkuId, int buyAmount, HttpServletRequest request, HttpServletResponse response) {
+//		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
+//		//userAccessToken，用于获取微信的共享地址address
+//		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
+//		if(logger.isDebugEnabled()){
+//			logger.debug("进入[购买信息页面] code: "+code+", debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
+//			logger.debug("进入[购买信息页面] userOpenId: "+userOpenId+", userAccessToken: "+userAccessToken);
+//		}
+//		
+//		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
+//		//检查订单的有效性
+//		checkOrder(productSku, buyAmount);
+//		
+//		List<CartProductSku> cartItemList = new ArrayList<CartProductSku>();
+//		cartItemList.add(new CartProductSku(productSku, buyAmount));
+//		
+//		model.addAttribute("cartItemList", cartItemList);
+//		
+//		int limit = 3;
+//		//加载优惠券列表&供用户选择使用
+//		List<WxProductVoucher> availableVoucherList = wxProductVoucherService.queryUserAvailableVoucherList(userOpenId, limit);
+//		model.addAttribute("availableVoucherList", availableVoucherList);
+//		
+//		//获取当前页面url，用于构造地址签名
+//		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
+//		System.out.println("userAccessToken: "+userAccessToken);
+//		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
+//		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
+//		
+//		return "order/buy";
+//	}
+	
+	
 	/**
-	 * 不使用购物车，直接点击购买（呈现所购商品&列出优惠券&订单价格）
+	 * 结算清单（呈现所购商品&订单价格， 兼容购物车和直接购买）
 	 * 强制用户使用oauth，以刷最新的userToken，用于获取地址信息
 	 * @param model
 	 * @param productSkuId
+	 * @param fromCart 来自购物车中的结算请求（生成订单后需要清空购物车）
 	 * @param request
 	 * @return
 	 */
 	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
-	@RequestMapping(value = "/buyNow")
-	public String buyNow(Model model, @RequestParam(required=false)String code, int productSkuId, int buyAmount, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/buy")
+	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="false")boolean fromCart, HttpServletRequest request, HttpServletResponse response) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
 		//userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
@@ -89,44 +139,41 @@ public class WxProductOrderController {
 			logger.debug("进入[购买信息页面] userOpenId: "+userOpenId+", userAccessToken: "+userAccessToken);
 		}
 		
-		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
-		//检查订单的有效性
-		checkOrder(productSku, buyAmount);
-		
-		model.addAttribute("productSku", productSku);
-		model.addAttribute("buyAmount", buyAmount);
-		model.addAttribute("totalFee", buyAmount*productSku.getPrice());
-		
-		int limit = 3;
-		//加载优惠券列表&供用户选择使用
-		List<WxProductVoucher> availableVoucherList = wxProductVoucherService.queryUserAvailableVoucherList(userOpenId, limit);
-		model.addAttribute("availableVoucherList", availableVoucherList);
-		
-		//获取当前页面url，用于构造地址签名
-		String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
-		System.out.println("userAccessToken: "+userAccessToken);
-		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
-		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
-		
-		return "order/buyNow";
-	}
-
-	@Deprecated
-	@RequestMapping("address")
-	public String address(Model model, String token, HttpServletRequest request) {
-		//获取当前页面url，用于构造地址签名
-		String queryString = request.getQueryString();
-		String currentUrl = request.getRequestURL().toString();
-		if(StringUtils.isNotBlank(queryString)){
-			currentUrl = currentUrl + "&" + queryString;
+		WxProductSkuCriteria criteria = new WxProductSkuCriteria();
+		List<Integer> skuIdList = new ArrayList<Integer>();
+		if(productSkuId!=null&&productSkuId.length>0){//有效的购物数据
+			
+			Map<Integer, Integer> cartItemMap = new HashMap<Integer, Integer>();
+			for(int i=0; i<productSkuId.length; i++){
+				skuIdList.add(productSkuId[i]);
+				cartItemMap.put(productSkuId[i], buyAmount[i]);
+			}
+			//加载商品列表
+			criteria.createCriteria().andIdIn(skuIdList);
+			List<WxProductSku> productSkuList =  wxProductSkuService.queryByCriteria(criteria);
+			if(productSkuList!=null&&productSkuList.size()>0){
+				double totalFee = 0;
+				List<CartProductSku> cartItemList = new ArrayList<CartProductSku>();
+				for(WxProductSku productSku: productSkuList){
+					int itemBuyAmount = cartItemMap.get(productSku.getId()); 
+					//检查订单的有效性（库存等）
+					checkOrder(productSku, itemBuyAmount);
+					double itemTotalFees = itemBuyAmount*productSku.getPrice(); //金额
+					totalFee = totalFee+itemTotalFees;
+					cartItemList.add(new CartProductSku(productSku, itemBuyAmount));
+				}
+				model.addAttribute("cartItemList", cartItemList);
+				model.addAttribute("totalFee", totalFee);
+			}
+			
+			//获取当前页面url，用于构造地址签名
+			String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
+			System.out.println("userAccessToken: "+userAccessToken);
+			WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
+			model.addAttribute("orderAddressJsObj", orderAddressJsObj);
 		}
-		System.out.println("userAccessToken: "+token);
-		System.out.println("currentUrl: " + currentUrl);
-		WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(token, currentUrl);
-		model.addAttribute("orderAddressJsObj", orderAddressJsObj);
-		return "order/address";
+		return "order/buy";
 	}
-	
 	
 	/**
 	 * 计算所需的运费
@@ -150,7 +197,7 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(Model model, int productSkuId, int buyAmount, @RequestParam(required = false, defaultValue = "0") long voucherId, HttpServletRequest request) {
+	public ModelAndView submitOrder(Model model, int productSkuId, int buyAmount, @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean fromCart, HttpServletRequest request) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
@@ -165,7 +212,6 @@ public class WxProductOrderController {
 		
 		//检查地址的有效性&计算相应的邮费
 		WxUserAddress addressInfo = populateAddressInfoFromRequest(request);
-//		checkAddress(addressInfo);
 		double transportFee = checkAddressDeliveryFee(productSku, buyAmount, addressInfo);
 		
 		//检查订单的有效性
@@ -195,6 +241,11 @@ public class WxProductOrderController {
 		//保存订单
 		int result = wxProductOrderService.createOrder(productOrder, addressInfo);
 		if(result>0){
+			
+			if(fromCart){//来自购物车的结算，需要清空购物车
+				
+			}
+			
 			Map<String, String> dataMap = new HashMap<String, String>();
 			dataMap.put("tradeNo", productOrder.getOutTradeNo());
 			dataMap.put("orderId", String.valueOf(productOrder.getId()));

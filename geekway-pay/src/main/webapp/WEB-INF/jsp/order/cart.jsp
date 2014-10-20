@@ -70,7 +70,17 @@
 				<%
 				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
 				if(cartItemList!=null&&cartItemList.size()>0){
-				for(CartProductSku cartItem: cartItemList){%>
+				%>
+				<form action="${pageContext.request.contextPath}/buy" method="get" id="cartForm"> 	 
+				<input type="hidden" name="fromCart" value="true"/>					
+				<%
+				int i=0;
+				for(CartProductSku cartItem: cartItemList){
+					i++;
+				%>
+					<input type="hidden" name="productSkuId" value="<%=cartItem.getProductSku().getId()%>"/>
+					<input type="hidden" name="buyAmount" value="<%=cartItem.getAmount()+i%>"/>
+				
             	<p class="quote-item">
                 	<img src="${pageContext.request.contextPath}/slideby/images/general-nature/6s.jpg" alt="img">
                     <em><%=cartItem.getProductSku().getName() %></em>
@@ -78,11 +88,15 @@
                     数量：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件
                     合计：&nbsp;<span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
                     
-                    |
                     &nbsp;<span class="text-highlight highlight-dark"><a href="./cartItem?viewCartItem=<%=cartItem.getProductSku().getId()%>">修改</a></span>
                     &nbsp;<span class="text-highlight highlight-dark"><a href="./removeFromCart?productSkuId=<%=cartItem.getProductSku().getId()%>">移除 X</a></span>
                 </p>
-                <%} 
+                <%} %>
+                <div class="center-text">
+                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-red">结算商品</a>
+                </div>
+                </form>
+                <% 
                 }%>
             </div>
             
@@ -96,4 +110,11 @@
 
 <!-- 禁用微信分享 -->
 <jsp:include page="../inc/weixinHideOptionMenu.jsp"></jsp:include>
+
+<script>
+$("#submitOrder").click(function(){
+	$("#cartForm").submit();
+});
+</script>
+
 </html>

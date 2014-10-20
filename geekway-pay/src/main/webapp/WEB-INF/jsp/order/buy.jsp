@@ -3,6 +3,7 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
+<%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -86,14 +87,20 @@
             	<div class="section-title">
                 	<h4>订单信息</h4>
 				</div>
+				<%
+				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
+				if(cartItemList!=null&&cartItemList.size()>0){
+				for(CartProductSku cartItem: cartItemList){%>
             	<p class="quote-item">
                 	<img src="${pageContext.request.contextPath}/slideby/images/general-nature/6s.jpg" alt="img">
-                    <em>${productSku.name}——${productSku.skuName}</em>
-                    单价：&nbsp;<span class="text-highlight highlight-red">${productSku.price}</span>元&nbsp;|&nbsp;
-                    数量：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue">${buyAmount}</span>件
-                    共计：&nbsp;<span id="productTotalFee" class="text-highlight highlight-green">${totalFee}</span>元
+                    <em><%=cartItem.getProductSku().getName() %></em>
+                    单价：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元&nbsp;|&nbsp;
+                    数量：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件
+                    合计：&nbsp;<span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
                 </p>
-                <input type="hidden" id="productSkuId" name="productSkuId" value="${productSku.id}"/>
+                <input type="hidden" id="productSkuId" name="productSkuId" value="<%=cartItem.getProductSku().getId() %>"/>
+	            <%}
+	            }%>
 	            
                 <div class="decoration"></div> 
                 <p class="quote-item">
@@ -103,6 +110,7 @@
                     优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
                      -->
                     合计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
+                    <input type="hidden" id="hiddenTotalFee" value="${totalFee}"/>
                     </h5>
                 </p>
                 <div class="center-text">
@@ -255,7 +263,7 @@ function refreshDeliveryFee(templateId, buyAmount, province, city){
 			var deliveryFee=  fmoney(responseData.data.deliveryFee, 2);
 			$("#deliveryFee").text(deliveryFee);
 			//刷新总价格
-			var productTotalFee = $("#productTotalFee").text();
+			var productTotalFee = $("#hiddenTotalFee").val();
 			var totalFee = accAdd(deliveryFee, productTotalFee);
 			totalFee=  fmoney(totalFee, 2);
 			$("#totalFee").text(totalFee);
