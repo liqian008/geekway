@@ -46,6 +46,7 @@
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">购物车</p>
+            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
@@ -72,7 +73,7 @@
 				if(cartItemList!=null&&cartItemList.size()>0){
 				%>
 				<form action="${pageContext.request.contextPath}/buy" method="get" id="cartForm"> 	 
-				<input type="hidden" name="fromCart" value="true"/>					
+				<input type="hidden" name="cartBuy" value="true"/>					
 				<%
 				int i=0;
 				for(CartProductSku cartItem: cartItemList){
@@ -82,13 +83,11 @@
 					<input type="hidden" name="buyAmount" value="<%=cartItem.getAmount()+i%>"/>
 				
             	<p class="quote-item">
-                	<img src="${pageContext.request.contextPath}/slideby/images/general-nature/6s.jpg" alt="img">
+                	<img src="<%=cartItem.getProductSku().getSkuPicUrl()%>" alt="<%=cartItem.getProductSku().getName() %>">
                     <em><%=cartItem.getProductSku().getName() %></em>
-                    单价：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元&nbsp;|&nbsp;
-                    数量：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件
-                    合计：&nbsp;<span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
+                    合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
                     
-                    &nbsp;<span class="text-highlight highlight-dark"><a href="./cartItem?viewCartItem=<%=cartItem.getProductSku().getId()%>">修改</a></span>
+                    |&nbsp;<span class="text-highlight highlight-dark"><a href="./cartItem?viewCartItem=<%=cartItem.getProductSku().getId()%>">修改</a></span>
                     &nbsp;<span class="text-highlight highlight-dark"><a href="./removeFromCart?productSkuId=<%=cartItem.getProductSku().getId()%>">移除 X</a></span>
                 </p>
                 <%} %>

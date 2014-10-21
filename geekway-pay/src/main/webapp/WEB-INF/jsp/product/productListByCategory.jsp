@@ -54,6 +54,7 @@ WxProductCategory productCategory = (WxProductCategory)request.getAttribute("pro
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">${productCategory.name}</p>
+            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">

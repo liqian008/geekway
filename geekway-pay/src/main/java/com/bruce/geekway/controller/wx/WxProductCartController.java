@@ -5,11 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bruce.foundation.util.CookieUtils;
-import com.bruce.foundation.util.DateUtil;
-import com.bruce.foundation.util.JsonUtil;
-import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.model.WxProductCart;
 import com.bruce.geekway.model.WxProductCart.CartProductSku;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
+import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.ResponseUtil;
 
 /**
@@ -56,7 +51,7 @@ public class WxProductCartController {
 	@RequestMapping(value = "/")
 	public String cart(Model model, HttpServletRequest request, HttpServletResponse response) {
 		//加载购物车中的
-		WxProductCart cart = loadCartFromCookie(request, response);
+		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			Map<Integer, Integer> cartItemMap = cart.getItemMap();
 			if(cartItemMap!=null&&cartItemMap.size()>0){
@@ -91,11 +86,11 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/addToCart")
 	public String addToCart(Model model, int productSkuId, int buyAmount, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = loadCartFromCookie(request, response);
+		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			//购物车中添加商品
 			cart.addItem(productSkuId, buyAmount);
-			writeCartCookie(cart, response);
+			CartUtil.writeCartCookie(cart, response);
 		}
 		return ResponseUtil.getRedirectString("./");
 	}
@@ -111,11 +106,11 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/removeFromCart")
 	public String removeFromCart(Model model, int productSkuId, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = loadCartFromCookie(request, response);
+		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			//购物车中移除商品
 			cart.removeItem(productSkuId);
-			writeCartCookie(cart, response);
+			CartUtil.writeCartCookie(cart, response);
 		}
 		return ResponseUtil.getRedirectString("./");
 	}
@@ -131,12 +126,12 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/cartItem")
 	public String cartItem(Model model, int productSkuId, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = loadCartFromCookie(request, response);
+		WxProductCart cart =  CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			Map<Integer, Integer> cartItemMap = cart.getItemMap();
 			if(cartItemMap!=null&&cartItemMap.size()>0){
 				//加载购物车中的商品
-				Integer buyAmount = cartItemMap.get(productSkuId);
+				Integer buyAmount = cartItemMap.get(productSkuId); 
 				if(buyAmount!=null){
 					WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
 					if(productSku!=null){
@@ -159,44 +154,28 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/modifyCartItem")
 	public String modifyCartItem(Model model, int productSkuId, int buyAmount, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = loadCartFromCookie(request, response);
+		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			cart.addItem(productSkuId, buyAmount);
-			writeCartCookie(cart, response);
+			CartUtil.writeCartCookie(cart, response);
 		}
 		return ResponseUtil.getRedirectString("./");
 	}
 	
-	
 	/**
-	 * 从cookie中加载购物车
+	 * 修改购物车中的商品信息
+	 * @param model
+	 * @param productSkuId
+	 * @param buyAmount
 	 * @param request
+	 * @param response
 	 * @return
 	 */
-	private WxProductCart loadCartFromCookie(HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = null;
-		//检查cookie中的购物车信息
-		String cartJson = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_WX_PRODUCT_CART);
-		if(!StringUtils.isBlank(cartJson)){
-			try{
-				cart = JsonUtil.gson.fromJson(cartJson, WxProductCart.class);
-			}catch(Exception e){
-			}
-		}
-		if(cart==null){
-			cart = new WxProductCart();
-			writeCartCookie(cart, response);
-		}
-		return cart;
+	@RequestMapping(value = "/clearCart")
+	public String clearCart(Model model, HttpServletRequest request, HttpServletResponse response) {
+		CartUtil.clearCartCookie(response);
+		return ResponseUtil.getRedirectString("./");
 	}
-
-
-	private void writeCartCookie(WxProductCart productCart, HttpServletResponse response) {
-		if(productCart!=null){
-			//将购物车写入cookie
-			Cookie cookie = new Cookie(ConstFront.COOKIE_KEY_WX_PRODUCT_CART, JsonUtil.gson.toJson(productCart));
-			cookie.setMaxAge((int)DateUtil.TIME_UNIT_WEEK);//超时时间
-			response.addCookie(cookie);
-		}
-	}
+	
+	
 }

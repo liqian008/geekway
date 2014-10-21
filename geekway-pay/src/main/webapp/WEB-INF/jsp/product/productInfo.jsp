@@ -52,6 +52,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">${product.name}</p>
+            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
@@ -227,7 +228,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 							alert("商品选择有误，请检查后重新提交");
 							return;
 						}
-						location.href= "${pageContext.request.contextPath}/buyNow?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
+						location.href= "${pageContext.request.contextPath}/buy?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
 					});
 					
 					//点击购买操作
