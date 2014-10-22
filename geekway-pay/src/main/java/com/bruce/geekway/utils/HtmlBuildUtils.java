@@ -115,7 +115,9 @@ public class HtmlBuildUtils {
 			sb.append("<div>");
 			sb.append("<p class='quote-item'>");
 			sb.append("订单号： "+productOrder.getOutTradeNo()+"<br/>");
-			sb.append("订单信息： "+productOrder.getTitle()+" | 货款 <span class='text-highlight highlight-red'>"+productOrder.getProductFee()+"</span>元，运费 <span class='text-highlight highlight-blue'>"+productOrder.getTransportFee()+"</span>元，合计 <span class='text-highlight highlight-green'>"+productOrder.getTotalFee()+"</span>元");
+			sb.append("订单信息： "+productOrder.getTitle()+"<br/>");
+			sb.append("合计： 商品 <span class='text-highlight highlight-red'>"+productOrder.getProductFee()+"</span>元&nbsp;+&nbsp;运费 <span class='text-highlight highlight-blue'>"+productOrder.getTransportFee()+"</span>元&nbsp;=&nbsp;<span class='text-highlight highlight-green'>"+productOrder.getTotalFee()+"</span>元");
+			sb.append("&nbsp;|&nbsp;<span class='text-highlight highlight-dark'><a href='./orderInfo?orderId="+productOrder.getId()+"&tradeNo="+productOrder.getOutTradeNo()+"'>查看详情</a></span>");
 			sb.append("</p>");
 //			sb.append("<p class='quote-item'>");
 //			sb.append("订单信息： "+productOrder.getTitle()+" | 商品 "+productOrder.getProductFee()+"元，运费 "+productOrder.getTransportFee()+"元，合计 "+productOrder.getTotalFee()+"元");

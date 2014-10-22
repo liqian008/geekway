@@ -77,7 +77,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 								String normalStartFeesText = eleNormal.attributeValue("StartFees");
 								String normalAddStandardsText = eleNormal.attributeValue("AddStandards");
 								String normalAddFeesText = eleNormal.attributeValue("AddFees");
-								String normalFreeStartFeesText = eleNormal.attributeValue("FreeStartFees");
+								String normalFreeStartFeesText = eleNormal.attributeValue("FreeStartFees");//免邮费金额起
 								
 								//转double类型
 								int normalStartStandards = NumberUtils.toInt(normalStartStandardsText, 1);
@@ -147,7 +147,8 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 	 * 计算相应的邮费
 	 */
 	@Override
-	public double calcDeliveryFee(int templateId, int deliveryType, int amount, String country, String province, String city) {
+	public double calcDeliveryFee(int deliveryType, double totalProductFee, int totalAmount, String country, String province, String city) {
+		int templateId = 1;
 		WxDeliveryTemplate deliverTemplate = loadDeliveryTemplate(templateId);
 		if(deliverTemplate!=null){//有对应的邮费模板
 			List<TopFee> topFeeList = deliverTemplate.getTopFeeList();
@@ -156,7 +157,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 				for(TopFee topFee: topFeeList){
 					if(deliveryType!=0 && topFee.getDeliveryType()==deliveryType){//确定快递类型
 						//计算费用金额
-						deliveryFee = calcTopFeeDelivery(amount, topFee, province, city);
+						deliveryFee = calcTopFeeDelivery(totalProductFee, totalAmount, topFee, province, city);
 						return deliveryFee;
 					}
 				}
@@ -166,7 +167,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 					for(TopFee topFee: topFeeList){
 						if(topFee.getDeliveryType()==0){//定位默认的TopFee模板
 							//计算费用金额
-							deliveryFee = calcTopFeeDelivery(amount, topFee, province, city);
+							deliveryFee = calcTopFeeDelivery(totalProductFee, totalAmount, topFee, province, city);
 							return deliveryFee;
 						}
 					}
@@ -176,7 +177,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 		return 0;
 	}
 
-	private double calcTopFeeDelivery(int amount, TopFee topFee, String province, String city) {
+	private double calcTopFeeDelivery(double totalProductFee, int amount, TopFee topFee, String province, String city) {
 		//计算费用金额
 		double deliveryFee =0;
 		List<CustomFee> customFeeList = topFee.getCustomFeeList();
@@ -184,12 +185,16 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 			for(CustomFee customFee: customFeeList){
 				if(customFee.getDestProvince().equals(province)&&customFee.getDestCity().equals(city)){
 					//暂不检查国家 if(customFee.getDestCountry().equals(country))
-					deliveryFee = customFee.getStartFees();
-					if(amount>customFee.getStartStandards()){//大于起始数量
-						int times = (int)Math.ceil((double)(amount-customFee.getStartStandards())/customFee.getAddStandards());
-						deliveryFee = deliveryFee + (customFee.getAddFees()*times);
+					if(totalProductFee>=customFee.getFreeStartFees()){//免运费
+						return 0;
+					}else{//计算邮费
+						deliveryFee = customFee.getStartFees();
+						if(amount>customFee.getStartStandards()){//大于起始数量
+							int times = (int)Math.ceil((double)(amount-customFee.getStartStandards())/customFee.getAddStandards());
+							deliveryFee = deliveryFee + (customFee.getAddFees()*times);
+						}
+						return deliveryFee;
 					}
-					return deliveryFee;
 				}
 			}
 		}
@@ -198,11 +203,15 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 			NormalFee normalFee = topFee.getNormalFee();
 			if(normalFee!=null){
 				deliveryFee = normalFee.getStartFees();
-				if(amount>normalFee.getStartStandards()){//大于起始数量
-					int times = (int)Math.ceil((double)(amount-normalFee.getStartStandards())/normalFee.getAddStandards());
-					deliveryFee = deliveryFee + (normalFee.getAddFees()*times);
+				if(totalProductFee>=normalFee.getFreeStartFees()){//免运费
+					return 0;
+				}else{//计算邮费
+					if(amount>normalFee.getStartStandards()){//大于起始数量
+						int times = (int)Math.ceil((double)(amount-normalFee.getStartStandards())/normalFee.getAddStandards());
+						deliveryFee = deliveryFee + (normalFee.getAddFees()*times);
+					}
+					return deliveryFee;
 				}
-				return deliveryFee;
 			}
 		}
 		return 0;

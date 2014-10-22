@@ -108,7 +108,7 @@
                     <!-- 
                     优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
                      -->
-                    合计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
+                    总计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
                     <input type="hidden" id="hiddenTotalFee" value="${totalFee}"/>
                     <input type="hidden" id="cartBuy" name="cartBuy" value="false"/>
                     </h5>
@@ -233,7 +233,7 @@ $("#chooseAddress").click(function(){
 				
 				$("#chooseAddress").text("重新选择收货地址");
 				
-				refreshDeliveryFee('', buyAmount, res.proviceFirstStageName, res.addressCitySecondStageName);
+				refreshDeliveryFee(10, 3, res.proviceFirstStageName, res.addressCitySecondStageName);
 			}else{
 				alert("获取用户收货地址失败");
 			}
@@ -252,14 +252,13 @@ $("#chooseAddress").click(function(){
 		
 		$("#chooseAddress").text("重新选择收货地址");
 		
-		refreshDeliveryFee('', buyAmount,'3','4');
+		refreshDeliveryFee(10, 3, '3','4');
 	}
 })
 
-
-function refreshDeliveryFee(templateId, buyAmount, province, city){
+function refreshDeliveryFee(totalProductFee, totalAmount, province, city){
 	//ajax重新计算运费
-	var paramData = {'deliveryTemplateId': '1', 'amount': buyAmount, 'country':'', 'province':province, 'city':city};
+	var paramData = {'totalProductFee': totalProductFee, 'totalAmount': totalAmount, 'country':'', 'province':province, 'city':city};
 	$.post('${pageContext.request.contextPath}/calcDeliverFee.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){ 

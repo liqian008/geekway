@@ -138,7 +138,9 @@ public class WxProductOrderController {
 			logger.debug("进入[购买信息页面] userOpenId: "+userOpenId+", userAccessToken: "+userAccessToken);
 		}
 		
+		//TODO 检查请求参数的正确性
 		WxProductSkuCriteria criteria = new WxProductSkuCriteria();
+		
 		List<Integer> skuIdList = new ArrayList<Integer>();
 		if(productSkuId!=null&&productSkuId.length>0){//有效的购物数据
 			
@@ -183,9 +185,9 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/calcDeliverFee.json")
-	public ModelAndView calcDeliverFee(Model model, int deliveryTemplateId, int amount, String country, String province, String city, HttpServletRequest request) {
+	public ModelAndView calcDeliverFee(Model model, double totalProductFee, int totalAmount, String country, String province, String city, HttpServletRequest request) {
 		//计算运费(单位:分)
-		double deliveryFee = wxDeliveryTemplateService.calcDeliveryFee(deliveryTemplateId, 100004, amount, country, province, city);
+		double deliveryFee = wxDeliveryTemplateService.calcDeliveryFee(100004, totalProductFee, totalAmount, country, province, city);
 		Map<String, Double> dataMap = new HashMap<String, Double>();
 		dataMap.put("deliveryFee", deliveryFee);
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
@@ -198,7 +200,7 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(Model model, int productSkuId, int buyAmount, @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request,  HttpServletResponse response) {
+	public ModelAndView submitOrder(Model model, int productSkuId[], int buyAmount[], @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request,  HttpServletResponse response) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
@@ -208,27 +210,34 @@ public class WxProductOrderController {
 			voucher = wxProductVoucherService.loadUserVoucherById(userOpenId, voucherId);
 			checkUserVoucher(voucher);
 		}
-		//加载商品信息
-		WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
 		
+		double productTotalFee = 0;
+		int totalBuyAmount = 0;
+		//TODO 检查请求参数的正确性
+		if(productSkuId!=null&&productSkuId.length>0){
+			for(int i=0;i<productSkuId.length;i++){
+				//加载商品信息
+				WxProductSku productSku = wxProductSkuService.loadById(productSkuId[i]);
+				//检查订单的有效性
+				checkOrder(productSku, buyAmount[i]);
+				double itemTotalPrice = productSku.getPrice() * buyAmount[i];//单品总金额
+				productTotalFee = productTotalFee + itemTotalPrice;
+				totalBuyAmount = totalBuyAmount + buyAmount[i];
+			}
+		}
 		//检查地址的有效性&计算相应的邮费
 		WxUserAddress addressInfo = populateAddressInfoFromRequest(request);
-		double transportFee = checkAddressDeliveryFee(productSku, buyAmount, addressInfo);
-		
-		//检查订单的有效性
-		checkOrder(productSku, buyAmount);
+		double transportFee = checkAddressDeliveryFee(productTotalFee, totalBuyAmount, addressInfo);
 		
 		//构造预购买的订单数据
 		Date currentTime = new Date();
 		WxProductOrder productOrder = new WxProductOrder();
 		productOrder.setUserOpenId(userOpenId);//用户身份
-		productOrder.setTitle(productSku.getName());
+		productOrder.setTitle("");//TODO
 		
 		productOrder.setVoucherId(voucherId);//优惠券id
-		
-		double productTotalFee = productSku.getPrice() * buyAmount;//商品金额
+		//折扣费用
 		double discountFee = voucher==null?0:voucher.getPrice();
-		
 		
 		productOrder.setProductFee(productTotalFee);
 		productOrder.setDiscountFee(discountFee);//折扣费用
@@ -245,7 +254,6 @@ public class WxProductOrderController {
 			if(cartBuy){//来自购物车的结算，需要清空购物车
 				CartUtil.clearCartCookie(response);
 			}
-			
 			
 			Map<String, String> dataMap = new HashMap<String, String>();
 			dataMap.put("tradeNo", productOrder.getOutTradeNo());
@@ -430,7 +438,7 @@ public class WxProductOrderController {
 	 * @param userAddress
 	 * @return
 	 */
-	private double checkAddressDeliveryFee(WxProductSku productSku, int amount, WxUserAddress userAddress) {
+	private double checkAddressDeliveryFee(double productTotalPrice, int amount, WxUserAddress userAddress) {
 		if(userAddress==null){
 			//地址对象为空
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
@@ -449,12 +457,11 @@ public class WxProductOrderController {
 //		}
 		//postCode、nationalCode、省、市、县等信息不做检查
 		
-		if(productSku==null||productSku.getId()==null||productSku.getDeliveryTemplateId()==null){
-			//加载商品失败
+		if(productTotalPrice<0){
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
 		}
 		String country = "";
-		return wxDeliveryTemplateService.calcDeliveryFee(productSku.getDeliveryTemplateId(), 0, amount, country, userAddress.getPostProvince(), userAddress.getPostCity());
+		return wxDeliveryTemplateService.calcDeliveryFee(0, productTotalPrice, amount, country, userAddress.getPostProvince(), userAddress.getPostCity());
 	}
 	
 	

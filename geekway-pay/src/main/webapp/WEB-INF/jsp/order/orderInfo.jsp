@@ -65,9 +65,10 @@
             <div class="container no-bottom">
             	<div class="section-title"> 
                 	<h4>订单信息</h4>
-                	<em>&nbsp;</em>
+                	<em></em> 
 				</div>
             	<p class="quote-item">
+                    订单状态：&nbsp;<br/>
                     订单商品：&nbsp;<span class="text-highlight highlight-red">${orderInfo.title}</span>
                 </p> 
             </div>
@@ -95,10 +96,15 @@
                     合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                     </h5>
                 </p>
+                <%
+                WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
+                if(orderInfo.getStatus()==0){
+                %>
                 <div class="decoration"></div>
             	<div class="center-text">
 	               	<a href="javascript:void(0)" id="submitOrder" class="button-big button-green">使用微信支付</a>
             	</div> 
+            	<%}%>
             </div>
             
             <div class="decoration"></div>
