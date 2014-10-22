@@ -1,8 +1,6 @@
 package com.bruce.geekway.controller.wx;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +26,12 @@ import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.WxProductCart.CartProductSku;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.WxUserAddress;
-import com.bruce.geekway.model.WxProductCart.CartProductSku;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
@@ -45,6 +43,7 @@ import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxUserAddressService;
+import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
@@ -124,13 +123,13 @@ public class WxProductOrderController {
 	 * 强制用户使用oauth，以刷最新的userToken，用于获取地址信息
 	 * @param model
 	 * @param productSkuId
-	 * @param fromCart 来自购物车中的结算请求（生成订单后需要清空购物车）
+	 * @param cartBuy 来自购物车中的结算请求（生成订单后需要清空购物车）
 	 * @param request
 	 * @return
 	 */
 	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/buy")
-	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="false")boolean fromCart, HttpServletRequest request, HttpServletResponse response) {
+	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request, HttpServletResponse response) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
 		//userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
@@ -165,6 +164,8 @@ public class WxProductOrderController {
 				model.addAttribute("cartItemList", cartItemList);
 				model.addAttribute("totalFee", totalFee);
 			}
+			//标记为从购物车购买的
+			model.addAttribute("cartBuy", cartBuy);
 			
 			//获取当前页面url，用于构造地址签名
 			String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
@@ -197,7 +198,7 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(Model model, int productSkuId, int buyAmount, @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean fromCart, HttpServletRequest request) {
+	public ModelAndView submitOrder(Model model, int productSkuId, int buyAmount, @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request,  HttpServletResponse response) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
@@ -241,14 +242,15 @@ public class WxProductOrderController {
 		//保存订单
 		int result = wxProductOrderService.createOrder(productOrder, addressInfo);
 		if(result>0){
-			
-			if(fromCart){//来自购物车的结算，需要清空购物车
-				
+			if(cartBuy){//来自购物车的结算，需要清空购物车
+				CartUtil.clearCartCookie(response);
 			}
+			
 			
 			Map<String, String> dataMap = new HashMap<String, String>();
 			dataMap.put("tradeNo", productOrder.getOutTradeNo());
 			dataMap.put("orderId", String.valueOf(productOrder.getId()));
+//			dataMap.put("cartBuy", String.valueOf(cartBuy));//是否来自购物车的结算
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR));
@@ -265,7 +267,7 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/orderInfo")
-	public String orderInfo(Model model, long orderId, String tradeNo,  HttpServletRequest request) {
+	public String orderInfo(Model model, long orderId, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
 		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		

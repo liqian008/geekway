@@ -34,6 +34,7 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
+import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.UploadUtil;
@@ -88,13 +89,6 @@ public class WxProductController {
 		}
 		return "product/index";
 	}
-	
-	
-//	@RequestMapping(value = "txTest")
-//	public String txTest(Model model, HttpServletRequest request) {
-//		int result = wxProductService.txTest();
-//		return "product/index";
-//	}
 	
 	
 	/**
@@ -200,12 +194,12 @@ public class WxProductController {
 		WxProduct product = wxProductService.loadById(productId);
 		model.addAttribute("product", product);
 		
-		List<String> productPicList = buildProductPicList(product);
+		List<String> productPicList = CartUtil.buildProductPicList(product);
 		model.addAttribute("productPicList", productPicList);
 		
 		WxProductSku currentProductSku = null;
 		
-		//加载productSku，用于构造json的map，使得前端切换时取出相应的数据
+		//加载productSku，用于构造json的map，使得前端切换时能取到相应的数据
 		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
 		if(productSkuList!=null&&productSkuList.size()>0){
 			SortedMap<String, String> productSkuMap = new TreeMap<String, String>();
@@ -269,29 +263,7 @@ public class WxProductController {
 	}
 	
 	
-	private List<String> buildProductPicList(WxProduct product) {
-		if(product!=null&&product.getId()!=null){
-			List<String> productPicList = new ArrayList<String>();
-			String pic1Url = product.getProductPic1Url();
-			if(StringUtils.isNotBlank(pic1Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
-			}
-			String pic2Url = product.getProductPic2Url();
-			if(StringUtils.isNotBlank(pic2Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
-			}
-			String pic3Url = product.getProductPic3Url();
-			if(StringUtils.isNotBlank(pic3Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
-			}
-			String pic4Url = product.getProductPic4Url();
-			if(StringUtils.isNotBlank(pic4Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
-			}
-			return productPicList;
-		}
-		return null;
-	}
+	
 	
 	private List<String> buildCategoryPicList(WxProductCategory productCategory) {
 		if(productCategory!=null&&productCategory.getId()!=null){

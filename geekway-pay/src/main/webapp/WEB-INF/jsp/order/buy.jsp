@@ -46,6 +46,7 @@
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">123</p>
+            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
@@ -92,11 +93,9 @@
 				if(cartItemList!=null&&cartItemList.size()>0){
 				for(CartProductSku cartItem: cartItemList){%>
             	<p class="quote-item">
-                	<img src="${pageContext.request.contextPath}/slideby/images/general-nature/6s.jpg" alt="img">
+                	<img src="<%=cartItem.getProductSku().getSkuPicUrl()%>" alt="<%=cartItem.getProductSku().getName() %>">
                     <em><%=cartItem.getProductSku().getName() %></em>
-                    单价：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元&nbsp;|&nbsp;
-                    数量：&nbsp;<span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件
-                    合计：&nbsp;<span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
+                    合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
                 </p>
                 <input type="hidden" id="productSkuId" name="productSkuId" value="<%=cartItem.getProductSku().getId() %>"/>
 	            <%}
@@ -111,6 +110,7 @@
                      -->
                     合计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
                     <input type="hidden" id="hiddenTotalFee" value="${totalFee}"/>
+                    <input type="hidden" id="cartBuy" name="cartBuy" value="false"/>
                     </h5>
                 </p>
                 <div class="center-text">
@@ -168,6 +168,8 @@ $("#submitOrder").click(function(){
 	var postCode = $("#postCode").text();
 	var postNationalCode = $("#postNationalCode").val();
 	
+	
+	
 	//检查商品&数量有效性
 	var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
 	if(productInfoError){
@@ -186,7 +188,9 @@ $("#submitOrder").click(function(){
 	$('#submitOrder').text("订单提交中...");
 	$('#submitOrder').attr("disabled","disabled");
 	
-	var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
+	var cartBuy = $("#cartBuy").val();//是否来自购物车
+	
+	var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'cartBuy':cartBuy, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){

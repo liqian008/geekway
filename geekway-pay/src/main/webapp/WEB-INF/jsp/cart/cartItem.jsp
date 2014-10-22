@@ -2,6 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
+<%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
 
 
 <!DOCTYPE HTML>
@@ -12,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>商品详情</title>
+<title>购物车商品信息</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -38,11 +39,12 @@
 </head>
 
 <%
-//选中的sku属性map
-WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
-Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
+
+CartProductSku cartItem = (CartProductSku)request.getAttribute("cartItem");
+WxProductSku cartProductSku = cartItem.getProductSku();
+int buyAmount = cartItem.getAmount();
 %>
-	            	
+
 <body>
 
 <div class="all-elements">
@@ -68,7 +70,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 			<div class="container no-bottom">
 				<div class="section-title">
 					<h4>
-						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">热销</a>
+						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">购物车商品</a>
 					</h4>
 				</div>
 			</div>
@@ -97,127 +99,46 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
            
             <div class="container no-bottom">
             	<div class="section-title">
-                	<h4 class="center-text">${product.name}</h4> 
+                	<h4 class="center-text">${product.name}</h4>
                 </div>
             </div> 
             
             <div class="container" id="product-intro">
             	<ul id="choose">
             		
-            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del>${currentProductSku.originPrice}</del></span>元</li>
-	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red">${currentProductSku.price}</span>元</li>
-	            	<li>库 存：&nbsp;<span id="leftStock" class="text-highlight highlight-yellow">${currentProductSku.stock}</span>件</li>
+            		<li>原 价：&nbsp;<span id="originPrice" class="text-highlight highlight-dark"><del><%=cartProductSku.getOriginPrice()%></del></span>元</li>
+	            	<li>现 价：&nbsp;<span id="price" class="text-highlight highlight-red"><%=cartProductSku.getPrice()%></span>元</li>
+	            	<li>库 存：&nbsp;<span id="leftStock" class="text-highlight highlight-yellow"><%=cartProductSku.getStock()%></span>件</li>
 	            	
-	            	<%
-	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
-	            	%>
 	            	<li id="choose-color" class="choose-color-shouji">
-	            		<div class="dt">选择颜色：</div>
+	            		<div class="dt">规格：</div>
 	            		<div class="dd">
-							<%
-							List<WxSkuPropValue> colorSkuValueList = skuGroupMap.get(1);
-							for(WxSkuPropValue skuPropValue : colorSkuValueList){
-								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
-								
-								boolean colorSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuColorValueId());
-							%>	            		
-	            			<div class="item <%=colorSelected?"selected":""%>" data="<%=propertyName%>">
+	            			<div class="item  selected">
 	            				<b></b>
-	            				<a href="#none" title="<%=displayName%>">
-			            			<%-- 
-			            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="<%=displayName%> ">
-		            				--%>
-		            				<i><%=displayName%></i>
+	            				<a href="#none" title="<%=cartProductSku.getSkuName()%>">
+		            				<i><%=cartProductSku.getSkuName()%></i>
 		            			</a>
 	            			</div>
-	            			<%}%>
 	            		</div>
 	            	</li>
-	            	<%}%>
-	            	
-	            	<%
-	            	if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
-	            	%>
-	            	<li id="choose-version" class="choose-version-shouji">
-	            		<div class="dt">选择尺码：</div>
-	            		<div class="dd">
-	            			<%
-							List<WxSkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
-							for(WxSkuPropValue skuPropValue : sizeSkuValueList){
-								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
-								
-								boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
-							%>
-	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b>
-	            			<a href="#none" title="<%=displayName%>" style="cursor: pointer;">
-	            			<i><%=displayName%></a></i>
-	            			</div>
-	            			<%}%>
-	            		</div>
-	            	</li>
-	            	<%}%>
-	            	<li>购买数量: <span id="buyAmount" class="text-highlight highlight-blue">1</span>件</li> 
+	            	<li>购买数量: <span id="buyAmount" class="text-highlight highlight-blue"><%=buyAmount%></span>件</li> 
             	</ul>
             	<input type="hidden" id="productSkuId" name="productSkuId" value="${currentProductSku.id}"/> 
             	
             	<%
             	boolean canBuy = false;
-            	if(currentProductSku!=null && currentProductSku.getPrice()!=null&&currentProductSku.getPrice()>0&&currentProductSku.getStock()!=null&&currentProductSku.getStock()>0){
+            	if(cartProductSku!=null && cartProductSku.getPrice()!=null&&cartProductSku.getPrice()>0&&cartProductSku.getStock()!=null&&cartProductSku.getStock()>0){
             		canBuy = true;
             	}
             	%>
-                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=canBuy?"":"gone"%>">点击购买</a>
-                <a href="javascript:void(0)" id="addToCart" class="button-big button-blue <%=canBuy?"":"gone"%>">添加到购物车</a>
+                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=canBuy?"":"gone"%>">保存修改</a>
+                <a href="${pageContext.request.contextPath}/cart/removeFromCart?productSkuId=<%=cartProductSku.getId()%>" id="removeFromCart" class="button-big button-red <%=canBuy?"":"gone"%>">从购物车中移除</a>
                 
                 <div class="static-notification-red <%=canBuy?"gone":""%>" id="buyDisable">
                     <p class="center-text uppercase">本品暂时缺货</p>
                 </div>
                 
-                
                 <script>
-					var skuMap = new Map();
-					<%
-					Map<String, String> productSkuMap = (Map<String, String>)request.getAttribute("productSkuMap");
-					if(productSkuMap!=null&&productSkuMap.size()>0){
-						for(Entry<String, String> productSkuEntry: productSkuMap.entrySet()){
-							String key = productSkuEntry.getKey();
-							String value = productSkuEntry.getValue();
-					%>
-					var skuPropValueJson = <%=value%>;
-					skuMap.put('<%=key%>', skuPropValueJson);
-					<%}
-					}%>
-					//选定时检查二维数组的数据
-					//var skuObj = skuMap.get("selectedKey");//根据选定的key查询
-					
-					$("#choose-color .item").click(function(){
-						$("#choose-color .item").removeClass("selected");
-						$(this).addClass("selected");
-						
-						var colorProperty = $(this).attr("data");
-						var sizeProperty = $("#choose-version .selected").attr("data");
-						if(colorProperty!=null && sizeProperty!=null){
-							var propertiesName = colorProperty + sizeProperty;
-							var productSkuJson = skuMap.get(propertiesName);
-							reloadProductSkuInfo(productSkuJson);
-						}
-					});
-					
-					$("#choose-version .item").click(function(){
-						$("#choose-version .item").removeClass("selected");
-						$(this).addClass("selected");
-						
-						var colorProperty = $("#choose-color .selected").attr("data");
-						var sizeProperty = $(this).attr("data");
-						if(colorProperty!=null && sizeProperty!=null){
-							var propertiesName = colorProperty + sizeProperty;
-							var productSkuJson = skuMap.get(propertiesName);
-							reloadProductSkuInfo(productSkuJson);
-						}
-					});
-					
 					//点击购买操作
 					$("#buyNow").click(function(){
 						var buyAmount = "7";//$("#buyAmount").text();
@@ -231,36 +152,6 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 						location.href= "${pageContext.request.contextPath}/buy?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
 					});
 					
-					//点击购买操作
-					$("#addToCart").click(function(){
-						var buyAmount = "7";//$("#buyAmount").text();
-						var productSkuId = $("#productSkuId").val();
-						//检查商品&数量有效性
-						var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
-						if(productInfoError){
-							alert("商品选择有误，请检查后重新提交");
-							return;
-						}
-						location.href= "${pageContext.request.contextPath}/cart/addToCart?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
-					});
-					
-					function reloadProductSkuInfo(productSkuJson){
-						if(productSkuJson!=null){
-							$("#productSkuId").val(productSkuJson.id);//刷新库存
-							$("#originPrice").html("<del>"+productSkuJson.originPrice+"</del>");//刷新价格
-							$("#price").text(productSkuJson.price);//刷新价格
-							$("#leftStock").text(productSkuJson.stock);//刷新库存
-							if(productSkuJson.stock>0&&productSkuJson.price>0){//刷新购买&购物车按钮
-								$("#buyNow").removeClass("gone");
-								$("#addToCart").removeClass("gone");
-								$("#buyDisable").addClass("gone");
-							}else{
-								$("#buyDisable").removeClass("gone");
-								$("#buyNow").addClass("gone");
-								$("#addToCart").addClass("gone");
-							}
-						}
-					}
 				</script>
             </div>
             
@@ -281,7 +172,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
                 </div>
                 <div class="tab-content tab-content-2">
                     <p>
-                        ${product.param}                    
+                        ${product.param}
                     </p>
                 </div>
             </div>

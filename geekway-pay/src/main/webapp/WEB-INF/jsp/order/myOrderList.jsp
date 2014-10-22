@@ -42,7 +42,8 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="./#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">我的订单</p> 
+            <p class="bread-crumb">我的订单</p>
+            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a> 
         </div>
         <div class="content-header">
