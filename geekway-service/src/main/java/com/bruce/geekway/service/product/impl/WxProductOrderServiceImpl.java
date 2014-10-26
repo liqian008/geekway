@@ -136,6 +136,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		//保存订单
 		productOrder.setOutTradeNo(tradeNo);
 		int result = save(productOrder);
+		
 		//下单不扣减库存（支付成功后才扣减）
 		
 		

@@ -28,6 +28,7 @@ import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductCart.CartProductSku;
 import com.bruce.geekway.model.WxProductOrder;
+import com.bruce.geekway.model.WxProductOrderItem;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.model.WxProductVoucher;
@@ -38,6 +39,7 @@ import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
+import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -66,6 +68,8 @@ public class WxProductOrderController {
 	@Autowired
 	private IWxProductOrderService wxProductOrderService;
 	@Autowired
+	private IWxProductOrderItemService wxProductOrderItemService;
+	@Autowired
 	private IWxUserAddressService wxUserAddressService;
 	@Autowired
 	private IWxDeliveryTemplateService wxDeliveryTemplateService;
@@ -74,6 +78,24 @@ public class WxProductOrderController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
 
+	
+	@RequestMapping(value = "/tests")
+	public String tests(Model model, HttpServletRequest request) {
+		
+		return "cart/test";
+	}
+	
+	@RequestMapping(value = "/test1.json")
+	public ModelAndView test1(Model model, int[] totalAmount, int[] productSkuId, HttpServletRequest request) {
+		
+		System.out.println(totalAmount);
+		System.out.println(productSkuId);
+		
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson("123"));
+	}
+	
+	
+	
 //	/**
 //	 * 不使用购物车，直接点击购买（呈现所购商品&列出优惠券&订单价格）
 //	 * 强制用户使用oauth，以刷最新的userToken，用于获取地址信息
@@ -282,14 +304,20 @@ public class WxProductOrderController {
 		//加载商品信息
 		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
 		model.addAttribute("orderInfo", orderInfo);
+		
+		//加载订单中商品列表
+		List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+		model.addAttribute("orderItemList", orderItemList);
+		
 		//检查订单状态
 		
-		//如果是未付款状态，需要构造支付js对象
-		//再开始构造微信所需的订单对象
-		String remoteIp = RequestUtil.getRemoteIP(request);
-		WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
-		model.addAttribute("wxPayJsObj", wxPayJsObj);
-		
+		boolean notPayed = IWxProductOrderService.StatusEnum.SUBMITED.getStatus() == orderInfo.getStatus();
+		if(notPayed){//如果是未付款状态，需要构造支付js对象
+			//再开始构造微信所需的订单对象
+			String remoteIp = RequestUtil.getRemoteIP(request);
+			WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
+			model.addAttribute("wxPayJsObj", wxPayJsObj);
+		}
 		//需要在页面中增加地址的处理
 		return "order/orderInfo";
 	}

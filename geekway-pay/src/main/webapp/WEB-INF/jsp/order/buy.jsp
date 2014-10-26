@@ -97,7 +97,8 @@
                     <em><%=cartItem.getProductSku().getName() %></em>
                     合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
                 </p>
-                <input type="hidden" id="productSkuId" name="productSkuId" value="<%=cartItem.getProductSku().getId() %>"/>
+                <input type="hidden" id="productSkuId" class="paramField" name="productSkuId" value="<%=cartItem.getProductSku().getId() %>"/>
+                <input type="hidden" id="productSkuId" class="paramField" name="buyAmount" value="<%=cartItem.getAmount() %>"/>
 	            <%}
 	            }%>
 	            
@@ -109,8 +110,8 @@
                     优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
                      -->
                     总计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
-                    <input type="hidden" id="hiddenTotalFee" value="${totalFee}"/>
-                    <input type="hidden" id="cartBuy" name="cartBuy" value="false"/>
+                    <input type="hidden" id="hiddenTotalFee" class="paramField" name="hiddenTotalFee" value="${totalFee}"/>
+                    <input type="hidden" id="cartBuy" class="paramField" name="cartBuy" value="false"/>
                     </h5>
                 </p>
                 <div class="center-text">
@@ -125,17 +126,31 @@
                 	<em>&nbsp;</em>
 				</div>
             	<ul id="choose">
-            		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">无</span></li>
-	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">无</span></li>
+            		<li>
+            		姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">无</span>
+            		<input type="hidden" id="hiddenPostName" class="paramField" name="postName" value=""/>
+            		</li>
+	            	<li>
+	            	手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">无</span>
+	            	<input type="hidden" id="hiddenPostMobile" class="paramField" name="postMobile" value=""/>
+	            	</li>
 	            	<li>邮寄地址：&nbsp;
 		            	<span id="postProvince" class="text-highlight highlight-dark">省</span>
 		            	<span id="postCity" class="text-highlight highlight-dark">市</span>
 		            	<span id="postCountries" class="text-highlight highlight-dark">区/县</span>
 		            	<span id="postAddressDetailInfo" class="text-highlight highlight-dark"></span>
+		            	
+		            	<input type="hidden" id="hiddenPostProvince" class="paramField" name="postProvince" value=""/>
+            			<input type="hidden" id="hiddenPostCity" class="paramField" name="postCity" value=""/>
+            			<input type="hidden" id="hiddenPostCountries" class="paramField" name="postCountries" value=""/>
+            			<input type="hidden" id="hiddenAddressDetailInfo" class="paramField" name="postAddressDetailInfo" value=""/>
 	            	</li>
-	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">无</span></li>
+	            	<li>
+	            	邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">无</span>
+	            	<input type="hidden" id="hiddenPostCode" class="paramField" name="postCode" value=""/>
+	            	</li>
 	            </ul>
-	            <input type="hidden" id="postNationalCode" name="postNationalCode" value=""/>
+	            <input type="hidden" class="paramField" id="postNationalCode" name="postNationalCode" value=""/>
 	            <div class="center-text">
 					<a href="javascript:void(0)" id="chooseAddress" class="button-big button-dark">请选择收获地址</a>
 				</div>
@@ -154,43 +169,35 @@ WxOrderAddressJsObj orderAddressJsObj = (WxOrderAddressJsObj)request.getAttribut
 if(orderAddressJsObj!=null){
 %>
 <script>
-var productSkuId = $("#productSkuId").val();
-var buyAmount = $("#buyAmount").text();
 
 $("#submitOrder").click(function(){
-	var postName = $("#postName").text();
-	var postMobile = $("#postMobile").text();
+	var postName = $("#hiddenPostName").val();
+	var postMobile = $("#hiddenPostMobile").val();
 	
-	var postProvince = $("#postProvince").text();
-	var postCity = $("#postCity").text();
-	var postCountries = $("#postCountries").text();
-	var postAddressDetailInfo = $("#postAddressDetailInfo").text();
-	var postCode = $("#postCode").text();
-	var postNationalCode = $("#postNationalCode").val();
-	
-	
+	var postProvince = $("#hiddenPostProvince").val();
+	var postCity = $("#hiddenPostCity").val();
+	var postCountries = $("#hiddenPostCountries").val();
+	var postAddressDetailInfo = $("#postAddressDetailInfo").val();
 	
 	//检查商品&数量有效性
-	var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
-	if(productInfoError){
-		alert("选购商品信息有误，请返回重新选购");
-		return;
-	}
 	
 	//检查地址输入有效性
-	var postInfoError = isEmpty(postName) || isEmpty(postMobile) || isEmpty(postProvince) || isEmpty(postCity)|| isEmpty(postCountries)|| isEmpty(postAddressDetailInfo);
+	/* var postInfoError = isEmpty(postName) || isEmpty(postMobile) || isEmpty(postProvince) || isEmpty(postCity)|| isEmpty(postCountries)|| isEmpty(postAddressDetailInfo);
 	if(postInfoError){
 		alert("收货地址填写有误，请重新选择");
 		return;
-	}
+	} */
 	
 	$('#chooseAddress').hide();//隐藏地址按钮
 	$('#submitOrder').text("订单提交中...");
 	$('#submitOrder').attr("disabled","disabled");
 	
-	var cartBuy = $("#cartBuy").val();//是否来自购物车
+	//var cartBuy = $("#cartBuy").val();//是否来自购物车
 	
-	var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'cartBuy':cartBuy, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
+	var paramData = $(".paramField").serialize();
+	alert(paramData);
+	
+	//var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'cartBuy':cartBuy, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
@@ -241,14 +248,24 @@ $("#chooseAddress").click(function(){
 	);
 	}catch(e){
 		$("#postName").text("fail: name");
+		$("#hiddenPostName").val("fail: name");
 		$("#postMobile").text("fail: mobile");
+		$("#hiddenPostMobile").val("fail: mobile");
 		$("#postCode").text("fail: code");
-		$("#postNationalCode").val("fail: nationalCode");
+		$("#hiddenPostCode").val("fail: code");
+		$("#hiddenPostNationalCode").val("fail: nationalCode");
+		
 		
 		$("#postProvince").text("fail:province");
+		$("#hiddenPostProvince").val("fail:province");
 		$("#postCity").text("fail:city");
+		$("#hiddenPostCity").val("fail:city");
+		
 		$("#postCountries").text("fail: country");
+		$("#hiddenPostCountries").val("fail: country");
+		
 		$("#postAddressDetailInfo").text("fail:postAddressDetailInfo");
+		$("#hiddenAddressDetailInfo").val("fail:postAddressDetailInfo");
 		
 		$("#chooseAddress").text("重新选择收货地址");
 		
