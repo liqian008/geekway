@@ -1,10 +1,10 @@
 package com.bruce.geekway.service.pay;
 
-import com.bruce.foundation.service.IFoundationService;
+import com.bruce.foundation.service.IFoundationPagingService;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayComplaintCriteria;
 
-public interface IWxPayComplaintService extends IFoundationService<WxPayComplaint, Integer, WxPayComplaintCriteria> {
+public interface IWxPayComplaintService extends IFoundationPagingService<WxPayComplaint, Integer, WxPayComplaintCriteria> {
 	
 	/**
 	 * 标记为待用户确认

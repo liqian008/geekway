@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxPayComplaintMapper;
+import com.bruce.geekway.model.WxPayComplaint;
+import com.bruce.geekway.model.WxPayComplaintCriteria;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayComplaintCriteria;
 import com.bruce.geekway.service.pay.IWxPayComplaintService;
@@ -56,6 +59,34 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		criteria.setOrderByClause(orderByClause);
 		return queryByCriteria(criteria);
 	}
+	
+	@Override
+	public List<WxPayComplaint> fallloadByCriteria(int pageSize,
+			WxPayComplaintCriteria criteria) {
+		return null;
+	}
+
+	@Override
+	public PagingResult<WxPayComplaint> pagingByCriteria(int pageNo,
+			int pageSize, WxPayComplaintCriteria criteria) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxPayComplaintCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxPayComplaintMapper.countByExample(criteria);
+		List<WxPayComplaint> dataList = wxPayComplaintMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxPayComplaint>(pageNo, pageSize, count, dataList);
+	}
+
 
 	@Override
 	public List<WxPayComplaint> queryByCriteria(WxPayComplaintCriteria criteria) {
@@ -86,6 +117,8 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		t.setDealStatus(dealStatus);
 		return updateByCriteria(t, criteria);
 	}
+	
+	
 
 	public WxPayComplaintMapper getWxPayComplaintMapper() {
 		return wxPayComplaintMapper;
@@ -95,6 +128,7 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		this.wxPayComplaintMapper = wxPayComplaintMapper;
 	}
 
+	
 
 	
 }

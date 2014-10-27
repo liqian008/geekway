@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxPayAlarmMapper;
 import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayAlarmCriteria;
@@ -56,6 +57,35 @@ public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 		criteria.setOrderByClause(orderByClause);
 		return queryByCriteria(criteria);
 	}
+	
+	@Override
+	public List<WxPayAlarm> fallloadByCriteria(int pageSize,
+			WxPayAlarmCriteria criteria) {
+		return null;
+	}
+
+	@Override
+	public PagingResult<WxPayAlarm> pagingByCriteria(int pageNo, int pageSize,
+			WxPayAlarmCriteria criteria) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxPayAlarmCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxPayAlarmMapper.countByExample(criteria);
+		List<WxPayAlarm> dataList = wxPayAlarmMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxPayAlarm>(pageNo, pageSize, count, dataList);
+	}
+	
+	
 
 	@Override
 	public List<WxPayAlarm> queryByCriteria(WxPayAlarmCriteria criteria) {
@@ -69,7 +99,7 @@ public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 	public void setWxPayAlarmMapper(WxPayAlarmMapper wxPayAlarmMapper) {
 		this.wxPayAlarmMapper = wxPayAlarmMapper;
 	}
-	
+
 	
 	
 	
