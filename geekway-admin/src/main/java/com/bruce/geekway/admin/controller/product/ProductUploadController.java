@@ -27,7 +27,7 @@ import com.bruce.geekway.utils.UploadUtil;
  * @author liqian
  *
  */
-@Controller
+//@Controller
 @RequestMapping("/product")
 public class ProductUploadController extends BaseController{
 

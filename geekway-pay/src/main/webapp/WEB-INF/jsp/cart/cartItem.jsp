@@ -58,7 +58,7 @@ int buyAmount = cartItem.getAmount();
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="index.html" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
             <a href="javascript:void(0)" id="shareToFriend" class="facebook-content"></a>
         </div>
         

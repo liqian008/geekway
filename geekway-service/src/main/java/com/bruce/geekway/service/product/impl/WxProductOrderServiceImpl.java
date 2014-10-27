@@ -9,9 +9,12 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.dao.mapper.WxProductOrderMapper;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
+import com.bruce.geekway.model.WxProductOrderItem;
 import com.bruce.geekway.model.WxUserAddress;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
+import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
+import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxUserAddressService;
@@ -23,9 +26,13 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	@Autowired
 	private WxProductOrderMapper wxProductOrderMapper;
 	@Autowired
+	private IWxProductOrderItemService wxProductOrderItemService;
+	@Autowired
 	private IWxProductVoucherService wxProductVoucherService;
 	@Autowired
 	private IWxUserAddressService wxUserAddressService;
+	@Autowired
+	private IWxDeliveryTemplateService wxDeliveryTemplateService;
 	
 	
 	@Override
@@ -123,11 +130,12 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		return null;
 	}
 	
+	
 	/**
 	 * 生成订单，供用户进行支付
 	 */
 	@Override
-	public int createOrder(WxProductOrder productOrder, WxUserAddress addressInfo) {
+	public int createOrder(WxProductOrder productOrder, WxUserAddress addressInfo, List<WxProductOrderItem> orderItemList) {
 		if(productOrder==null){
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR);
 		}
@@ -135,10 +143,39 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		String tradeNo = OrderUtil.generateOrderSn4Wx();
 		//保存订单
 		productOrder.setOutTradeNo(tradeNo);
+		
+		double productTotalFee = 0;
+		int totalBuyAmount = 0;
+		if(orderItemList!=null&&orderItemList.size()>0){
+			for(WxProductOrderItem orderItem:orderItemList){
+				double itemTotalPrice = orderItem.getTotalFee();//单品总金额
+				productTotalFee = productTotalFee + itemTotalPrice;
+				totalBuyAmount = totalBuyAmount + orderItem.getAmount();
+				orderItem.setOutTradeNo(tradeNo);
+				wxProductOrderItemService.save(orderItem);
+			}
+		}
+		productOrder.setTotalFee(productTotalFee);
+		//总数量
+		
+		double transportFee = wxDeliveryTemplateService.calcDeliveryFee(0, productTotalFee, totalBuyAmount, "", addressInfo.getPostProvince(), addressInfo.getPostCity());
+		//折扣费用
+		double discountFee = 0;//voucher==null?0:voucher.getPrice();
+		
+		productOrder.setTitle("");//TODO
+		productOrder.setProductFee(productTotalFee);
+		productOrder.setDiscountFee(discountFee);//折扣费用
+		productOrder.setTransportFee(transportFee);//运费
+		double totalFee = productTotalFee - discountFee + transportFee;
+		productOrder.setTotalFee(totalFee);//总费用
+		productOrder.setStatus(IWxProductOrderService.StatusEnum.SUBMITED.getStatus());//预支付状态
+		productOrder.setCreateTime(currentTime);
+		//组装邮寄地址
+		populatePostInfo(productOrder, addressInfo);
+		
 		int result = save(productOrder);
 		
 		//下单不扣减库存（支付成功后才扣减）
-		
 		
 		//标记优惠码状态为正在使用
 		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
@@ -152,6 +189,29 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		}
 		return result;
 	}
+	
+	
+	
+	/**
+	 * 将用户地址信息填写到订单对象中
+	 * @param productOrder
+	 * @param addressInfo
+	 */
+	private void populatePostInfo(WxProductOrder productOrder, WxUserAddress addressInfo) {
+		if(productOrder!=null&&addressInfo!=null){
+			productOrder.setPostName(addressInfo.getPostName());
+			productOrder.setPostMobile(addressInfo.getPostMobile());
+			productOrder.setPostCode(addressInfo.getPostCode());
+			
+			productOrder.setPostProvince(addressInfo.getPostProvince());
+			productOrder.setPostCity(addressInfo.getPostCity());
+			productOrder.setPostCountries(addressInfo.getPostCountries());
+			
+			productOrder.setPostAddressDetailInfo(addressInfo.getPostAddressDetailInfo());
+			productOrder.setPostNationalCode(addressInfo.getPostNationalCode());
+		}
+	}
+	
 
 	public WxProductOrderMapper getWxProductOrderMapper() {
 		return wxProductOrderMapper;
@@ -177,4 +237,22 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		this.wxUserAddressService = wxUserAddressService;
 	}
 
+	public IWxProductOrderItemService getWxProductOrderItemService() {
+		return wxProductOrderItemService;
+	}
+
+	public void setWxProductOrderItemService(
+			IWxProductOrderItemService wxProductOrderItemService) {
+		this.wxProductOrderItemService = wxProductOrderItemService;
+	}
+
+	public IWxDeliveryTemplateService getWxDeliveryTemplateService() {
+		return wxDeliveryTemplateService;
+	}
+
+	public void setWxDeliveryTemplateService(
+			IWxDeliveryTemplateService wxDeliveryTemplateService) {
+		this.wxDeliveryTemplateService = wxDeliveryTemplateService;
+	}
+	
 }

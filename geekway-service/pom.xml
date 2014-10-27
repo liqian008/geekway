@@ -133,8 +133,8 @@
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>1.5</version>
-		</dependency>
+			<version>1.6.1</version>
+		</dependency>  
 		
 		
 

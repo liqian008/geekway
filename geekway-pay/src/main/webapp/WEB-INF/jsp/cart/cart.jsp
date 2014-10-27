@@ -50,7 +50,7 @@
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="index.html" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
         </div>
         
         <div class="content"> 
@@ -73,7 +73,7 @@
 				if(cartItemList!=null&&cartItemList.size()>0){
 				%>
 				<form action="${pageContext.request.contextPath}/buy" method="get" id="cartForm"> 	 
-				<input type="hidden" name="cartBuy" value="true"/>					
+				<input type="hidden" name="cartBuy" value="true"/>
 				<%
 				int i=0;
 				for(CartProductSku cartItem: cartItemList){

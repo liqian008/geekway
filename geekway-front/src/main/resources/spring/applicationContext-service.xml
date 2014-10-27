@@ -44,8 +44,11 @@
 	</bean>
 	
 	
-	<!-- upload service -->
-	<bean id="uploadService" class="com.bruce.geekway.service.upload.impl.UploadServiceImpl">
+	<!-- 本地上传service -->	
+	<bean id="uploadLocalService" class="com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl">
+	</bean>
+	<!-- 七牛上传service -->	
+	<bean id="uploadQiniuService" class="com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl">
 	</bean>
 	
 	

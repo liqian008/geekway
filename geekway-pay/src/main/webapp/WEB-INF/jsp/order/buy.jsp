@@ -50,7 +50,7 @@
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="index.html" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
         </div>
         
         <div class="content"> 
@@ -111,7 +111,7 @@
                      -->
                     总计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
                     <input type="hidden" id="hiddenTotalFee" class="paramField" name="hiddenTotalFee" value="${totalFee}"/>
-                    <input type="hidden" id="cartBuy" class="paramField" name="cartBuy" value="false"/>
+                    <input type="hidden" id="cartBuy" class="paramField" name="cartBuy" value="${cartBuy}"/>
                     </h5>
                 </p>
                 <div class="center-text">
@@ -192,10 +192,9 @@ $("#submitOrder").click(function(){
 	$('#submitOrder').text("订单提交中...");
 	$('#submitOrder').attr("disabled","disabled");
 	
-	//var cartBuy = $("#cartBuy").val();//是否来自购物车
-	
 	var paramData = $(".paramField").serialize();
-	alert(paramData);
+	//alert(paramData);
+	//var cartBuy = $("#cartBuy").val();//是否来自购物车
 	
 	//var paramData = {'productSkuId':productSkuId, 'buyAmount':buyAmount, 'cartBuy':cartBuy, 'postName' : postName, 'postMobile':postMobile, 'postProvince':postProvince, 'postCity':postCity, 'postCountries':postCountries, 'postAddressDetailInfo':postAddressDetailInfo, 'postCode':postCode, 'postNationalCode':postNationalCode};
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {

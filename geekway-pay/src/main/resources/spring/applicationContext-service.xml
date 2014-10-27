@@ -12,13 +12,17 @@
 
 	default-lazy-init="false" default-autowire="byName">
 	
-	<!-- 上传service -->	
-	<bean id="uploadServiceImpl" class="com.bruce.geekway.service.upload.impl.UploadServiceImpl">
+	<!-- 本地上传service -->	
+	<bean id="uploadLocalService" class="com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl">
+	</bean>
+	<!-- 七牛上传service -->	
+	<bean id="uploadQiniuService" class="com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl">
 	</bean>
 	
-	<!-- 上传本地的processor -->	
+	<!-- 上传本地的processor	
 	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadLocalProcessor">
 	</bean>
+	 -->
 	<!-- 上传七牛的processor	
 	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadQiniuProcessor">
 	</bean>
@@ -73,9 +77,11 @@
 	</bean>
 	<bean id="wxProductOrderService" class="com.bruce.geekway.service.product.impl.WxProductOrderServiceImpl">
 	</bean>
+	<bean id="wxProductOrderItemService" class="com.bruce.geekway.service.product.impl.WxProductOrderItemServiceImpl">
+	</bean>
 	<bean id="wxUserAddressService" class="com.bruce.geekway.service.product.impl.WxUserAddressServiceImpl">
 	</bean>
-	<bean id="wxDeliverTemplateService" class="com.bruce.geekway.service.product.impl.WxDeliveryTemplateServiceImpl"
+	<bean id="wxDeliveryTemplateService" class="com.bruce.geekway.service.product.impl.WxDeliveryTemplateServiceImpl"
 	init-method="init">
 	</bean>
 	

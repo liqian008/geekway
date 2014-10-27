@@ -3,6 +3,7 @@ package com.bruce.geekway.admin.controller.geekway;
 import java.io.File;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +27,8 @@ import com.bruce.geekway.utils.UploadUtil;
 @RequestMapping("/geekway")
 public class GeekwayUploadController extends BaseController{
 
-	@Autowired
-	private IUploadService uploadService;
+	@Qualifier
+	private IUploadService uploadQiniuService;
 	
 	@Autowired
 	private WxMpMediaUploadService wxMediaUploadService;
@@ -44,7 +45,7 @@ public class GeekwayUploadController extends BaseController{
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
-			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
+			UploadImageResult imageUploadResult = uploadQiniuService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			model.addAttribute("imageUploadResult", imageUploadResult);
 			model.addAttribute("callback", callback);
 		} catch (Exception e) {
@@ -65,7 +66,7 @@ public class GeekwayUploadController extends BaseController{
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
-			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
+			UploadImageResult imageUploadResult = uploadQiniuService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			if(imageUploadResult!=null){
 				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 			}

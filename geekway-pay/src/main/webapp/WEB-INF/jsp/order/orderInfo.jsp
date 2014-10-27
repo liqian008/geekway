@@ -48,7 +48,7 @@
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="index.html" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
         </div>
         
         <div class="content"> 
@@ -67,11 +67,25 @@
                 	<h4>订单信息</h4>
                 	<em></em> 
 				</div>
-            	<p class="quote-item">
-                    订单状态：&nbsp;<br/>
-                    订单商品：&nbsp;<span class="text-highlight highlight-red">${orderInfo.title}</span>
-                </p> 
-            </div>
+				<p class="quote-item">
+					订单号： ${orderInfo.outTradeNo}<br/>
+					订单时间：${orderInfo.createTime}
+				</p>
+					
+				<p class="quote-item">
+					<% 
+					List<WxProductOrderItem> orderItemList = (List<WxProductOrderItem>)request.getAttribute("orderItemList"); 
+					if(orderItemList!=null&&orderItemList.size()>0){
+						for(WxProductOrderItem orderItem: orderItemList){
+					%> 
+						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>&nbsp;X&nbsp;<%=orderItem.getAmount()%>件 = <%=orderItem.getTotalFee()%>元<br/> <br/>
+					<%} 
+					}%>
+					商品合计：
+					<span class="text-highlight highlight-red">${orderInfo.productFee}</span>元
+				</p>
+				
+				</div>
              
             <div class="decoration"></div>
             <div class="container" id="product-intro">
@@ -98,11 +112,11 @@
                 </p>
                 <%
                 WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
-                if(orderInfo.getStatus()==0){
+                if(orderInfo.getStatus()==1){
                 %>
                 <div class="decoration"></div>
             	<div class="center-text">
-	               	<a href="javascript:void(0)" id="submitOrder" class="button-big button-green">使用微信支付</a>
+	               	<a href="javascript:void(0)" id="wxPay" class="button-big button-green">使用微信支付</a>
             	</div> 
             	<%}%>
             </div>
@@ -123,12 +137,12 @@ WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
 	// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
 	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 		//公众号支付
-		jQuery('a#buy').click(function(e) {
+		jQuery('a#wxPay').click(function(e) {
 			WeixinJSBridge.invoke('getBrandWCPayRequest', {
 				"appId" : "<%=itemJsObj.getAppId()%>", //公众号名称，由商户传入
 				"timeStamp" : "<%=itemJsObj.getTimeStamp()%>", //时间戳
 				"nonceStr" : "<%=itemJsObj.getNonceStr()%>", //随机串
-				"package" : "<%=itemJsObj.getPackageValue()%>",//扩展包 
+				"package" : "<%=itemJsObj.getPackageValue()%>",//扩展包
 				"signType" : "<%=itemJsObj.getSignType()%>", //微信签名方式:1.sha1
 				"paySign" : "<%=itemJsObj.getPaySign()%>"
 			//微信签名

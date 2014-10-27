@@ -5,11 +5,11 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.service.upload.IUploadProcessor;
 import com.bruce.geekway.utils.ImageUtil;
 import com.bruce.geekway.utils.UploadUtil;
 
@@ -19,13 +19,12 @@ import com.bruce.geekway.utils.UploadUtil;
  * @author liqian
  * 
  */
-@Deprecated
-public class UploadLocalProcessor implements IUploadProcessor {
+@Service
+public class UploadLocalServiceImpl extends AbstractUploadService{
 
 
-	private static final Logger logger = LoggerFactory.getLogger(UploadLocalProcessor.class);
+	private static final Logger logger = LoggerFactory.getLogger(UploadLocalServiceImpl.class);
 	
-	@Override
 	public String saveFile(File destFile, String fileDir) {
 		return ConstConfig.UPLOAD_URL_FULL + fileDir+ UploadUtil.FILE_SEPARTOR + destFile.getName();
 	}
@@ -34,7 +33,6 @@ public class UploadLocalProcessor implements IUploadProcessor {
 	 * 图片保存到本地
 	 * @throws IOException 
 	 */
-	@Override
 	public UploadImageResult saveImage(File originalImageFile, String imageDir, UploadImageInfo[] imageSpecs) throws IOException {
 		short fileType= (short)1;//图片类型
 		String newImageName = originalImageFile.getName();

@@ -42,7 +42,7 @@ public class WxDeliveryTemplateServiceImpl implements IWxDeliveryTemplateService
 	 */
 	@SuppressWarnings("unchecked")
 	private List<WxDeliveryTemplate> initFromTemplateXml() {
-		SAXReader reader = new SAXReader();           
+		SAXReader reader = new SAXReader();
 	    try {
 	    	InputStream is = WxDeliveryTemplateServiceImpl.class.getResourceAsStream("/deliveryTemplate.xml");
 	    	Document document = reader.read(is);

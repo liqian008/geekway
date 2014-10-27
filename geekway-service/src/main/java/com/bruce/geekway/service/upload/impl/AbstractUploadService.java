@@ -5,24 +5,20 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.service.upload.IUploadProcessor;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.UploadUtil;
 
 
-@Service
-public class UploadServiceImpl implements IUploadService {
+public abstract class AbstractUploadService implements IUploadService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UploadImageInfo.class);
 	
-	@Autowired
-	private IUploadProcessor uploadProcessor;
+//	@Autowired
+//	private IUploadProcessor uploadProcessor;
 	
 //	/* 普通文件类型 */
 //	public static final short UPLOAD_FILE_TYPE_NORMAL = 0;
@@ -46,9 +42,10 @@ public class UploadServiceImpl implements IUploadService {
 		String absoultDirPath = ConstConfig.UPLOAD_PATH_BASE + filePath;//完整路径
 		File destFile =  UploadUtil.saveFile(data, absoultDirPath, newFileName);
 		
-		return uploadProcessor.saveFile(destFile, filePath);
+		return saveFile(destFile, filePath);
 	}
 
+	
 	/**
 	 * 上传图片，需按尺寸切割
 	 * 
@@ -67,16 +64,20 @@ public class UploadServiceImpl implements IUploadService {
 		String originalImageSpec = "original";
 		File originalImageFile = UploadUtil.saveFile(data, absoultImageDirPath + UploadUtil.FILE_SEPARTOR + originalImageSpec,  newImageName);
 		
-		return uploadProcessor.saveImage(originalImageFile, imageDirPath, imageSpecs);
-		
+		return saveImage(originalImageFile, imageDirPath, imageSpecs);
 	}
 
-	public IUploadProcessor getUploadProcessor() {
-		return uploadProcessor;
-	}
+	
+	protected abstract String saveFile(File destFile, String filePath) throws Exception;
 
-	public void setUploadProcessor(IUploadProcessor uploadProcessor) {
-		this.uploadProcessor = uploadProcessor;
-	}
+	protected abstract UploadImageResult saveImage(File originalImageFile, String imageDirPath, UploadImageInfo[] imageSpecs) throws Exception;
+
+//	public IUploadProcessor getUploadProcessor() {
+//		return uploadProcessor;
+//	}
+//
+//	public void setUploadProcessor(IUploadProcessor uploadProcessor) {
+//		this.uploadProcessor = uploadProcessor;
+//	}
 	
 }

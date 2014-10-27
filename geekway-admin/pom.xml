@@ -37,6 +37,14 @@
 			<groupId>com.bruce</groupId>
 			<artifactId>geekway-service</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
+			<!--  
+			<exclusions>
+				<exclusion>
+					<groupId>dom4j</groupId>
+					<artifactId>dom4j</artifactId>
+				</exclusion>
+			</exclusions>
+			 -->
 		</dependency>
 		
 		<dependency>

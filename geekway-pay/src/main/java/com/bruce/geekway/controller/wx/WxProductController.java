@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,8 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
+import com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl;
+import com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl;
 import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
@@ -60,7 +63,9 @@ public class WxProductController {
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
 	@Autowired
-	private IUploadService uploadService;
+	private IUploadService uploadQiniuService; 
+	@Autowired
+	private IUploadService uploadLocalService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
 
@@ -170,17 +175,7 @@ public class WxProductController {
 	}
 	
 	
-	/**
-	 * 商品详细信息
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	@NeedAuthorize
-	@RequestMapping(value = "/product/{productId}")
-	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
-		return productInfo(model, productId, 0, request);
-	}
+	
 	
 	/**
 	 * sku商品详细信息
@@ -189,8 +184,8 @@ public class WxProductController {
 	 * @return
 	 */
 	@NeedAuthorize
-	@RequestMapping(value = "/product/{productId}/${productSkuId}")
-	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
+	@RequestMapping(value = "/product/{productId}/{productSkuId}")
+	public String product(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
 		WxProduct product = wxProductService.loadById(productId);
 		model.addAttribute("product", product);
 		
@@ -201,7 +196,7 @@ public class WxProductController {
 		
 		//加载productSku，用于构造json的map，使得前端切换时能取到相应的数据
 		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
-		if(productSkuList!=null&&productSkuList.size()>0){
+		if(productSkuList!=null&&productSkuList.size()>0){ 
 			SortedMap<String, String> productSkuMap = new TreeMap<String, String>();
 			for(WxProductSku productSku: productSkuList){
 				//置空无用的字段（json序列化时不需要）
@@ -243,7 +238,17 @@ public class WxProductController {
 		return "product/productInfo";
 	}
 	
-	
+	/**
+	 * 商品详细信息
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/product/{productId}")
+	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
+		return product(model, productId, 0, request);
+	}
 	
 	
 
@@ -288,6 +293,8 @@ public class WxProductController {
 		}
 		return null;
 	}
+	
+	
 	
 	
 	

@@ -50,7 +50,7 @@ String contextPath = request.getContextPath();
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="./" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
             <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
             <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>

@@ -61,7 +61,7 @@ if(redirectUrl==null||"".equals(redirectUrl)){
             <a href="contact.html" class="deploy-contact"></a>
         </div>
         <div class="content-header">
-        	<a href="index.html" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
             <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
             <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>

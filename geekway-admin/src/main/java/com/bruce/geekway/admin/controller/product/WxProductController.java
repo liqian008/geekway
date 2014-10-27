@@ -233,7 +233,7 @@ public class WxProductController {
 								
 								wxProductSku.setOriginPrice((double) 0);
 								wxProductSku.setPrice((double) 0);
-								wxProductSku.setAmount(0);
+								wxProductSku.setStock(0);
 								wxProductSku.setPropertiesName(skuProperty);
 								
 								wxProductSku.setSkuColorId(colorSkuPropValue.getSkuPropId());
@@ -314,13 +314,13 @@ public class WxProductController {
 //				
 				double skuOriginPrice = NumberUtils.toDouble(request.getParameter("skuOriginPrice_"+skuIdStr), 0);
 				double skuPrice = NumberUtils.toDouble(request.getParameter("skuPrice_"+skuIdStr), 0);
-				int skuAmount = NumberUtils.toInt(request.getParameter("skuAmount_"+skuIdStr), 0);
+				int skuStock = NumberUtils.toInt(request.getParameter("skuAmount_"+skuIdStr), 0);
 				//保存
 				WxProductSku wxSku = new WxProductSku();
 				wxSku.setId(skuId);
 				wxSku.setOriginPrice(skuOriginPrice); 
 				wxSku.setPrice(skuPrice);
-				wxSku.setAmount(skuAmount);
+				wxSku.setStock(skuStock);
 				wxSku.setUpdateTime(currentTime);
 				wxProductSkuService.updateById(wxSku);
 			}

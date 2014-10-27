@@ -139,7 +139,7 @@
 		                        </td>
 		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>
 		                        <td title="原价: <%=sku.getOriginPrice()%>元"><%=sku.getPrice()%>元</td>
-		                        <td><%=sku.getAmount()%>个</td>
+		                        <td><%=sku.getStock()%>个</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./productSkuEdit?productId=<%=sku.getProductId()%>&skuId=<%=sku.getId()%>"

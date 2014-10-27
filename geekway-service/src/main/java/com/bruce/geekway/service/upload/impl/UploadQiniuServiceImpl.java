@@ -4,11 +4,11 @@ import java.io.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.service.upload.IUploadProcessor;
 import com.qiniu.api.auth.digest.Mac;
 import com.qiniu.api.io.IoApi;
 import com.qiniu.api.io.PutExtra;
@@ -19,15 +19,14 @@ import com.qiniu.api.rs.PutPolicy;
  * 七牛上传的处理实现
  * @author liqian
  */
-@Deprecated
-public class UploadQiniuProcessor implements IUploadProcessor{
+@Service
+public class UploadQiniuServiceImpl extends AbstractUploadService{
 	
 	private Mac mac = new Mac(ConstConfig.UPLOAD_QINIU_APP_KEY, ConstConfig.UPLOAD_QINIU_SECRET_KEY);
 		
-	private static final Logger logger = LoggerFactory.getLogger(UploadQiniuProcessor.class);
+	private static final Logger logger = LoggerFactory.getLogger(UploadQiniuServiceImpl.class);
 	
-	@Override
-	public String saveFile(File destFile, String fileDir) throws Exception {
+	protected String saveFile(File destFile, String fileDir) throws Exception { 
 		if(fileDir.startsWith("/")){
 			fileDir = fileDir.substring(1);//使用fileDir作为key，确保首字母不能为/，否则不兼容七牛
 		}
@@ -38,8 +37,7 @@ public class UploadQiniuProcessor implements IUploadProcessor{
 	/**
 	 * 七牛处理图片（根据所需的尺寸，返回相应的数据）
 	 */
-	@Override
-	public UploadImageResult saveImage(File originalImageFile, String imageDir, UploadImageInfo[] imageSpecs) throws Exception {
+	protected UploadImageResult saveImage(File originalImageFile, String imageDir, UploadImageInfo[] imageSpecs) throws Exception {
 		if(imageDir.startsWith("/")){
 			imageDir = imageDir.substring(1);
 		}

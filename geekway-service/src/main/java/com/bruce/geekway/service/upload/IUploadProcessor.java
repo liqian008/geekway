@@ -5,6 +5,7 @@ import java.io.File;
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
 
+@Deprecated
 public interface IUploadProcessor {
 	
 	/**

@@ -79,20 +79,20 @@ public class WxProductOrderController {
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
 
 	
-	@RequestMapping(value = "/tests")
-	public String tests(Model model, HttpServletRequest request) {
-		
-		return "cart/test";
-	}
-	
-	@RequestMapping(value = "/test1.json")
-	public ModelAndView test1(Model model, int[] totalAmount, int[] productSkuId, HttpServletRequest request) {
-		
-		System.out.println(totalAmount);
-		System.out.println(productSkuId);
-		
-		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson("123"));
-	}
+//	@RequestMapping(value = "/tests")
+//	public String tests(Model model, HttpServletRequest request) {
+//		
+//		return "cart/test";
+//	}
+//	
+//	@RequestMapping(value = "/test1.json")
+//	public ModelAndView test1(Model model, int[] totalAmount, int[] productSkuId, HttpServletRequest request) {
+//		
+//		System.out.println(totalAmount);
+//		System.out.println(productSkuId);
+//		
+//		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson("123"));
+//	}
 	
 	
 	
@@ -223,6 +223,7 @@ public class WxProductOrderController {
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
 	public ModelAndView submitOrder(Model model, int productSkuId[], int buyAmount[], @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request,  HttpServletResponse response) {
+		Date currentTime = new Date();
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
@@ -233,45 +234,41 @@ public class WxProductOrderController {
 			checkUserVoucher(voucher);
 		}
 		
-		double productTotalFee = 0;
-		int totalBuyAmount = 0;
+//		double productTotalFee = 0;
+//		int totalBuyAmount = 0;
 		//TODO 检查请求参数的正确性
+		List<WxProductOrderItem> orderItemList = new ArrayList<WxProductOrderItem>();
 		if(productSkuId!=null&&productSkuId.length>0){
 			for(int i=0;i<productSkuId.length;i++){
 				//加载商品信息
 				WxProductSku productSku = wxProductSkuService.loadById(productSkuId[i]);
 				//检查订单的有效性
 				checkOrder(productSku, buyAmount[i]);
-				double itemTotalPrice = productSku.getPrice() * buyAmount[i];//单品总金额
-				productTotalFee = productTotalFee + itemTotalPrice;
-				totalBuyAmount = totalBuyAmount + buyAmount[i];
+				
+				WxProductOrderItem orderItem = new WxProductOrderItem();
+				orderItem.setProductId(productSku.getProductId());
+				orderItem.setProductSkuId(productSku.getId());
+				orderItem.setItemFee(productSku.getPrice());
+				orderItem.setTotalFee(productSku.getPrice() * buyAmount[i]);
+				orderItem.setProductName(productSku.getName());
+				orderItem.setCreateTime(currentTime);
+				orderItem.setAmount(buyAmount[i]);
+				
+				orderItemList.add(orderItem);
 			}
 		}
 		//检查地址的有效性&计算相应的邮费
 		WxUserAddress addressInfo = populateAddressInfoFromRequest(request);
-		double transportFee = checkAddressDeliveryFee(productTotalFee, totalBuyAmount, addressInfo);
+		checkDeliveryAddress(addressInfo);
 		
 		//构造预购买的订单数据
-		Date currentTime = new Date();
 		WxProductOrder productOrder = new WxProductOrder();
 		productOrder.setUserOpenId(userOpenId);//用户身份
-		productOrder.setTitle("");//TODO
 		
 		productOrder.setVoucherId(voucherId);//优惠券id
-		//折扣费用
-		double discountFee = voucher==null?0:voucher.getPrice();
 		
-		productOrder.setProductFee(productTotalFee);
-		productOrder.setDiscountFee(discountFee);//折扣费用
-		productOrder.setTransportFee(transportFee);//运费
-		double totalFee = productTotalFee - discountFee + transportFee;
-		productOrder.setTotalFee(totalFee);//总费用
-		productOrder.setStatus((short) 0);//预支付状态
-		productOrder.setCreateTime(currentTime);
-		//组装邮寄地址
-		populatePostInfo(productOrder, addressInfo);
-		//保存订单
-		int result = wxProductOrderService.createOrder(productOrder, addressInfo);
+		//提交订单
+		int result = wxProductOrderService.createOrder(productOrder, addressInfo, orderItemList);
 		if(result>0){
 			if(cartBuy){//来自购物车的结算，需要清空购物车
 				CartUtil.clearCartCookie(response);
@@ -280,7 +277,6 @@ public class WxProductOrderController {
 			Map<String, String> dataMap = new HashMap<String, String>();
 			dataMap.put("tradeNo", productOrder.getOutTradeNo());
 			dataMap.put("orderId", String.valueOf(productOrder.getId()));
-//			dataMap.put("cartBuy", String.valueOf(cartBuy));//是否来自购物车的结算
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR));
@@ -466,7 +462,7 @@ public class WxProductOrderController {
 	 * @param userAddress
 	 * @return
 	 */
-	private double checkAddressDeliveryFee(double productTotalPrice, int amount, WxUserAddress userAddress) {
+	private void checkDeliveryAddress(WxUserAddress userAddress) {
 		if(userAddress==null){
 			//地址对象为空
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
@@ -484,12 +480,6 @@ public class WxProductOrderController {
 //			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_POST_ADDRESS_ERROR);
 //		}
 		//postCode、nationalCode、省、市、县等信息不做检查
-		
-		if(productTotalPrice<0){
-			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
-		}
-		String country = "";
-		return wxDeliveryTemplateService.calcDeliveryFee(0, productTotalPrice, amount, country, userAddress.getPostProvince(), userAddress.getPostCity());
 	}
 	
 	
@@ -533,23 +523,5 @@ public class WxProductOrderController {
 		return null;
 	}
 
-	/**
-	 * 将用户地址信息填写到订单对象中
-	 * @param productOrder
-	 * @param addressInfo
-	 */
-	private void populatePostInfo(WxProductOrder productOrder, WxUserAddress addressInfo) {
-		if(productOrder!=null&&addressInfo!=null){
-			productOrder.setPostName(addressInfo.getPostName());
-			productOrder.setPostMobile(addressInfo.getPostMobile());
-			productOrder.setPostCode(addressInfo.getPostCode());
-			
-			productOrder.setPostProvince(addressInfo.getPostProvince());
-			productOrder.setPostCity(addressInfo.getPostCity());
-			productOrder.setPostCountries(addressInfo.getPostCountries());
-			
-			productOrder.setPostAddressDetailInfo(addressInfo.getPostAddressDetailInfo());
-			productOrder.setPostNationalCode(addressInfo.getPostNationalCode());
-		}
-	}
+	
 }
