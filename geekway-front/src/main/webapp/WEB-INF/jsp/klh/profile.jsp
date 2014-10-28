@@ -51,13 +51,23 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 	<div class="content">
 		<div class="main">
 			
-			<div id="notification" style="display: none">
-				个人资料修改成功
+			<%
+			String flag = (String)request.getAttribute("flag");
+			boolean updated = "updated".equals(flag); 
+			%>
+			
+			<div id="notification" <%=updated?"":"style='display:none'"%>>
+				<div style="padding: 30px 0px">
+					个人资料修改成功 
+				</div>
+				<div style="margin-top:10px">
+					<a href="./profile" id="okBtn" class="klh-button radius">OK</a>	
+				</div> 
 			</div>
 			
 			<form action="./updateProfile" method="post" name="profileForm">
 			
-			<div class="userProfile">
+			<div class="userProfile" <%=updated?"style='display:none'":""%>>
 				<label>昵称</label>
 				<input type="text" id="nickname" name="nickname" value="<%=userProfile.getNickname()==null?"":userProfile.getNickname()%>">
 				<label>真实姓名</label>
@@ -68,11 +78,14 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 				<input type="text" id="email" name="email" value="<%=userProfile.getEmail()==null?"":userProfile.getEmail()%>">
 				<label>通讯地址</label>
 				<input type="text" id="address" name="address" value="<%=userProfile.getAddress()==null?"":userProfile.getAddress()%>">
+				
+				<div class="score">
+					<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">修改</a>
+				</div>
+				
 			</div>
 			<div class="seperator"> </div>
-			<div class="score">
-				<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">修改</a>
-			</div>
+			
 			</form>
 		</div>
 	</div>
@@ -85,12 +98,11 @@ $("#submitBtn").click(function (){
 	document.forms[0].submit();
 });
 
-<%
-String flag = (String)request.getAttribute("flag");
-if("updated".equals(flag)){
-%>
-$("#notification").show(1500);
-<%}%>
+
+//$("#okBtn").click(function (){
+//	$("#notification").hide();
+	//$(".userProfile").show();
+//});
 
 </script>
 

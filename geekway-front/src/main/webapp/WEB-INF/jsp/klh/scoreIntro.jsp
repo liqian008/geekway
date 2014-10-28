@@ -40,13 +40,17 @@ color: darkred;
 			KlhSetting klhSetting = (KlhSetting)request.getAttribute("klhSetting");
 			%>
 			<div class="score">
-				<a href="./scoreHome" class="klh-button radius">获取积分</a>	
-			<p>	1. “注册”可获得<%=klhSetting.getBindScore() %>积分</p>
+				
+			<p>	1. “绑定个人资料”可获得<%=klhSetting.getBindScore() %>积分</p>
 			<p>	2. “每日签到”可获得<%=klhSetting.getSignScore() %>积分</p>
 			<p>	3. “随手拍”发照片可获得<%=klhSetting.getPostScore() %>积分</p>
 			<p>	4. “随手拍”点赞可获得<%=klhSetting.getLikeScore() %>积分</p>
 			<p>	5. 可使用积分免费兑换产品</p>
+		
 			</div>
+		</div>
+		<div style="margin-top:10px">
+		<a href="./scoreHome" class="klh-button radius">获取积分</a>	
 		</div>
 	</div>
 		
