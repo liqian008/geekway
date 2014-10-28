@@ -28,7 +28,7 @@ import com.bruce.geekway.service.pay.IWxPayAlarmService;
 @RequestMapping("/wxpay")
 public class WxAlarmController {
 	
-	private static final int pageSize = 20;
+	private static final int pageSize = 1;
 	
 	@Autowired
 	private IWxPayAlarmService wxPayAlarmService;
@@ -61,23 +61,32 @@ public class WxAlarmController {
 		
 		model.addAttribute("pageNo", pageNo);
 		
-		WxPayAlarmCriteria criteria =  null;
+		WxPayAlarmCriteria criteria = new WxPayAlarmCriteria();
+		WxPayAlarmCriteria.Criteria subCriteria = criteria.createCriteria();
+		
 		//根据模块的需求构造查询条件
-		String resourceName = request.getParameter("resourceName");
-		if(StringUtils.isNotBlank(resourceName)){
-			criteria = new WxPayAlarmCriteria();
+		String errorType = request.getParameter("errorType");
+		if(StringUtils.isNotBlank(errorType)){
 			if("get".equalsIgnoreCase(request.getMethod())){
-				resourceName = URLDecoder.decode(resourceName);
+				errorType = URLDecoder.decode(errorType);
 			}
-			model.addAttribute("resourceName", resourceName);
-//			criteria.createCriteria().andResourceNameLike("%"+resourceName+"%");
+			subCriteria.andErrorTypeEqualTo(errorType);
+			model.addAttribute("errorType", errorType);
+		}
+		String description = request.getParameter("description");
+		if(StringUtils.isNotBlank(description)){
+			if("get".equalsIgnoreCase(request.getMethod())){
+				description = URLDecoder.decode(description);
+			}
+			subCriteria.andDescriptionLike(description);
+			model.addAttribute("description", description);
 		}
 		
 		PagingResult<WxPayAlarm> alarmPagingData = wxPayAlarmService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(alarmPagingData!=null){
 			alarmPagingData.setRequestUri(request.getRequestURI());
 			
-			HashMap<String, Object> queryMap = new HashMap();
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
 			queryMap.putAll(request.getParameterMap());
 			alarmPagingData.setQueryMap(queryMap);
 			model.addAttribute("alarmPagingData", alarmPagingData);
@@ -88,11 +97,11 @@ public class WxAlarmController {
 	
 	
 	@RequestMapping("/alarmInfo")
-	public String alarmInfo(Model model, HttpServletRequest request, int alarmId) {
+	public String alarmInfo(Model model, int id, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxPayAlarm alarm = wxPayAlarmService.loadById(alarmId);
+		WxPayAlarm alarm = wxPayAlarmService.loadById(id);
 		model.addAttribute("alarm", alarm);
 		return "wxpay/alarmInfo";
 	}

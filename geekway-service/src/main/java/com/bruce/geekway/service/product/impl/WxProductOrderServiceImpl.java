@@ -6,7 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxProductOrderMapper;
+import com.bruce.geekway.model.WxProductOrder;
+import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrderItem;
@@ -82,6 +85,35 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	public List<WxProductOrder> queryByCriteria(WxProductOrderCriteria criteria) {
 		return wxProductOrderMapper.selectByExample(criteria);
 	}
+	
+	
+	@Override
+	public List<WxProductOrder> fallloadByCriteria(int pageSize,
+			WxProductOrderCriteria criteria) {
+		return null;
+	}
+
+	@Override
+	public PagingResult<WxProductOrder> pagingByCriteria(int pageNo,
+			int pageSize, WxProductOrderCriteria criteria) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxProductOrderCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxProductOrderMapper.countByExample(criteria);
+		List<WxProductOrder> dataList = wxProductOrderMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxProductOrder>(pageNo, pageSize, count, dataList);
+	}
+	
 	
 	@Override
 	public List<WxProductOrder> fallLoadUserOrderList(String userOpenId, long orderTailId, int limit) {
@@ -212,6 +244,9 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		}
 	}
 	
+	
+	
+	
 
 	public WxProductOrderMapper getWxProductOrderMapper() {
 		return wxProductOrderMapper;
@@ -254,5 +289,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 			IWxDeliveryTemplateService wxDeliveryTemplateService) {
 		this.wxDeliveryTemplateService = wxDeliveryTemplateService;
 	}
+
+	
 	
 }

@@ -2,7 +2,7 @@ package com.bruce.geekway.service.product;
 
 import java.util.List;
 
-import com.bruce.foundation.service.IFoundationService;
+import com.bruce.foundation.service.IFoundationPagingService;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrderItem;
@@ -13,7 +13,7 @@ import com.bruce.geekway.model.WxUserAddress;
  * @author liqian
  *
  */
-public interface IWxProductOrderService extends IFoundationService<WxProductOrder, Long, WxProductOrderCriteria>{
+public interface IWxProductOrderService extends IFoundationPagingService<WxProductOrder, Long, WxProductOrderCriteria>{
 	
 	public static enum StatusEnum{
 		//可能还需要其他流程，如维权，退款等

@@ -188,7 +188,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 					</table>
 					
 					<div class="datatable-footer">
-					<%//=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
+					<%=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
 					</div>
 					 
 				</div>

@@ -79,7 +79,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						微信支付通知管理 
+						订单管理 
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -91,7 +91,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="index.html">首页</a></li>
-					<li class="active">微信支付通知管理</li>
+					<li class="active">订单管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -105,13 +105,13 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、可用权限微信支付通知列表<br/>
+					1、可用权限订单列表<br/>
 				</p>
 			</div>
 			 -->
 			
 			
-			<form id="validate" action="<s:url value='./notifyPaging'/>" method="post" >
+			<form id="validate" action="<s:url value='./orderPaging'/>" method="post" >
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -123,10 +123,10 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-md-4">
-									<label>用户openId:</label><input type="text" name="openId" placeholder="支持模糊匹配" class="form-control" value="${openId}"> 
+									<label>用户OpenId:</label><input type="text" name="openId" placeholder="支持模糊匹配" class="form-control" value="${openId}"> 
 								</div>
 								<div class="col-md-4">
-									<label>微信支付通知链接:</label> <input type="text" name="url" placeholder="支持模糊匹配" class="form-control">
+									<label>订单号:</label> <input type="text" name="outTradeNo" placeholder="支持模糊匹配" class="form-control">
 								</div>
 							</div>
 						</div>
@@ -145,7 +145,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>微信支付通知管理
+						<i class="icon-people"></i>订单管理
 					</h5>
 				</div>
 				<div class="table-responsive">
@@ -162,21 +162,21 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxPayNotifyOrder> pagingResult = (PagingResult<WxPayNotifyOrder>)request.getAttribute("notifyPagingData");
-							List<WxPayNotifyOrder> notifyOrderList = pagingResult.getPageData();
+							PagingResult<WxProductOrder> pagingResult = (PagingResult<WxProductOrder>)request.getAttribute("orderPagingData");
+							List<WxProductOrder> notifyOrderList = pagingResult.getPageData();
                            	if(notifyOrderList!=null&&notifyOrderList.size()>0){
-                           		for(WxPayNotifyOrder notifyOrder: notifyOrderList){
+                           		for(WxProductOrder notifyOrder: notifyOrderList){
                            	%>
 						
 							<tr>
 								<td><%=notifyOrder.getId()%></td>
 		                        <td><%=notifyOrder.getOutTradeNo()%></td>
 		                        <td><%=notifyOrder.getTotalFee()%></td>
-		                        <td><%=notifyOrder.getOpenId()%></td>
+		                        <td><%=notifyOrder.getUserOpenId()%></td>
 		                        <td><%=sdf.format(notifyOrder.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./notifyInfo?id=<%=notifyOrder.getId()%>"
+										<a href="./orderInfo?outTradeNo=<%=notifyOrder.getOutTradeNo()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="查 看"><i class="icon-pencil3"></i></a>
 									</div>

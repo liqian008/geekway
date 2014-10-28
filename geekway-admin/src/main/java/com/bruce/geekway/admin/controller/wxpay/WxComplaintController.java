@@ -29,7 +29,7 @@ import com.bruce.geekway.service.pay.IWxPayComplaintService;
 public class WxComplaintController {
 	
 
-	private static final int pageSize = 20;
+	private static final int pageSize = 1;
 	
 	@Autowired
 	private IWxPayComplaintService wxPayComplaintService;
@@ -87,11 +87,11 @@ public class WxComplaintController {
 	}
 	
 	@RequestMapping("/complaintInfo")
-	public String complaintInfo(Model model, HttpServletRequest request, int complaintId) {
+	public String complaintInfo(Model model, int id, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxPayComplaint complaint = wxPayComplaintService.loadById(complaintId);
+		WxPayComplaint complaint = wxPayComplaintService.loadById(id);
 		model.addAttribute("complaint", complaint);
 		return "wxpay/complaintInfo";
 	}

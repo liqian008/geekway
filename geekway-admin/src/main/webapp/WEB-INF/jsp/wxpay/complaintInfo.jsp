@@ -4,15 +4,9 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
-<%@page import="com.bruce.foundation.enumeration.*"%>
-<%@page import="com.bruce.foundation.model.paging.*"%>
-<%@page import="com.bruce.foundation.admin.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
-<%
-SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +14,12 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>后台管理系统</title>
+<title>后台管理平台</title>
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/londinium-theme.min.css" rel="stylesheet"
 	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
-
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
@@ -41,28 +34,22 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/validate.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/tags.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/moment.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/jgrowl.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/colorpicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/application.js"></script>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
 </head>
 <body class="sidebar-wide">
 
@@ -79,7 +66,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						微信支付通知管理 
+						用户投诉详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -90,8 +77,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
-					<li class="active">微信支付通知管理</li>
+					<li><a href="javascript:void(0)">首页</a></li>
+					<li class="active">用户投诉详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -100,106 +87,86 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			</div>
 			<!-- /breadcrumbs line -->
 			
-			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、可用权限微信支付通知列表<br/>
+					1、用户投诉详情<br/>
 				</p>
 			</div>
-			 -->
-			
-			
-			<form id="validate" action="<s:url value='./notifyPaging'/>" method="post" >
+
+
+			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bordered">
+
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>请输入查询条件
+							<i class="icon-bubble4"></i>查看用户投诉详情
 						</h6>
 					</div>
-					<div class="panel-body"> 
+					<div class="panel-body">
+						
 						<div class="form-group">
-							<div class="row">
-								<div class="col-md-4">
-									<label>用户openId:</label><input type="text" name="openId" placeholder="支持模糊匹配" class="form-control" value="${openId}"> 
-								</div>
-								<div class="col-md-4">
-									<label>微信支付通知链接:</label> <input type="text" name="url" placeholder="支持模糊匹配" class="form-control">
+							<label class="col-sm-2 control-label text-right">告警类型: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="name" id="name" value="${alarm.errorType}"/>
+								<form:hidden path="alarm.id"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">描述: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="description" id="description" value="${alarm.description}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">详情: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea class="ckeditor" name="alarmContent" id="alarmContent">
+									${alarm.alarmContent}
+									</textarea>
 								</div>
 							</div>
 						</div>
-					
-						<div class="form-actions text-center">
-							<input type="submit" value="查 询" class="btn btn-primary btn-sm"> 
-							<input type="reset" value="重 置" class="btn btn-default btn-sm">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<form:select path="alarm.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
+							</div>
 						</div>
+						
+						<!-- 
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="提 交" class="btn btn-primary">
+						</div>
+						 -->
 					</div>
 				</div>
 				
 			</form>
-			
-			 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>微信支付通知管理
-					</h5>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-bordered table-striped dataTable">
-						<thead>
-							<tr>
-								<th>ID</th>
-                                <th>订单号</th>
-                                <th>金额</th>
-                                <th>用户ID</th>
-                                <th>创建时间</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-							PagingResult<WxPayNotifyOrder> pagingResult = (PagingResult<WxPayNotifyOrder>)request.getAttribute("notifyPagingData");
-							List<WxPayNotifyOrder> notifyOrderList = pagingResult.getPageData();
-                           	if(notifyOrderList!=null&&notifyOrderList.size()>0){
-                           		for(WxPayNotifyOrder notifyOrder: notifyOrderList){
-                           	%>
-						
-							<tr>
-								<td><%=notifyOrder.getId()%></td>
-		                        <td><%=notifyOrder.getOutTradeNo()%></td>
-		                        <td><%=notifyOrder.getTotalFee()%></td>
-		                        <td><%=notifyOrder.getOpenId()%></td>
-		                        <td><%=sdf.format(notifyOrder.getCreateTime())%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="./notifyInfo?id=<%=notifyOrder.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查 看"><i class="icon-pencil3"></i></a>
-									</div>
-								</td>
-							</tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-					
-					<div class="datatable-footer">
-					<%=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
-					</div> 
-					 
-				</div>
-			</div>
-			<!-- /table view -->
-
+		
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+	   
+	});
+	</script>
+	
 </body>
 </html>
