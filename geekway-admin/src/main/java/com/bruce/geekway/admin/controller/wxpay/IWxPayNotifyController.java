@@ -1,4 +1,4 @@
-package com.bruce.geekway.admin.controller.wx;
+package com.bruce.geekway.admin.controller.wxpay;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import com.bruce.geekway.service.pay.IWxPayNotifyOrderService;
  *
  */
 @Controller
-@RequestMapping("/wxNotify")
+@RequestMapping("/wxpay")
 public class IWxPayNotifyController {
 	
 	@Autowired
@@ -32,7 +32,7 @@ public class IWxPayNotifyController {
 		
 		List<WxPayNotifyOrder> notifyList = wxPayNotifyOrderService.queryAll();
 		model.addAttribute("notifyList", notifyList);
-		return "notify/notifyList";
+		return "wxpay/notifyList";
 	}
 	
 	@RequestMapping("/notifyInfo")
@@ -42,7 +42,7 @@ public class IWxPayNotifyController {
 		
 		WxPayNotifyOrder notify = wxPayNotifyOrderService.loadById(notifyId);
 		model.addAttribute("notify", notify);
-		return "notify/notifyInfo";
+		return "wxpay/notifyInfo";
 	}
 	
 	

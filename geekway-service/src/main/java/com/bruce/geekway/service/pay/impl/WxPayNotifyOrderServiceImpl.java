@@ -3,6 +3,7 @@ package com.bruce.geekway.service.pay.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxPayNotifyOrderMapper;
@@ -10,6 +11,7 @@ import com.bruce.geekway.model.WxPayNotifyOrder;
 import com.bruce.geekway.model.WxPayNotifyOrderCriteria;
 import com.bruce.geekway.service.pay.IWxPayNotifyOrderService;
 
+@Service
 public class WxPayNotifyOrderServiceImpl implements IWxPayNotifyOrderService {
 
 	@Autowired

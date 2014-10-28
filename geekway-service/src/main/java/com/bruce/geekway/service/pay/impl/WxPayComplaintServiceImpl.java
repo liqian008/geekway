@@ -3,15 +3,16 @@ package com.bruce.geekway.service.pay.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxPayComplaintMapper;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayComplaintCriteria;
-import com.bruce.geekway.model.WxPayComplaint;
-import com.bruce.geekway.model.WxPayComplaintCriteria;
 import com.bruce.geekway.service.pay.IWxPayComplaintService;
 
+
+@Service
 public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 
 	@Autowired

@@ -3,6 +3,7 @@ package com.bruce.geekway.service.pay.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxPayAlarmMapper;
@@ -10,6 +11,8 @@ import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayAlarmCriteria;
 import com.bruce.geekway.service.pay.IWxPayAlarmService;
 
+
+@Service
 public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 
 	@Autowired

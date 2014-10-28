@@ -1,4 +1,4 @@
-package com.bruce.geekway.admin.controller.wx;
+package com.bruce.geekway.admin.controller.wxpay;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -14,35 +14,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
-import com.bruce.geekway.model.WxPayComplaint;
-import com.bruce.geekway.model.WxPayComplaintCriteria;
-import com.bruce.geekway.service.pay.IWxPayComplaintService;
+import com.bruce.geekway.model.WxPayAlarm;
+import com.bruce.geekway.model.WxPayAlarmCriteria;
+import com.bruce.geekway.service.pay.IWxPayAlarmService;
 
 
 /**
- * 微信维权通知
+ * 微信告警
  * @author liqian
  *
  */
 @Controller
-@RequestMapping("/wxComplaint")
-public class WxComplaintController {
+@RequestMapping("/wxpay")
+public class WxAlarmController {
 	
-
 	private static final int pageSize = 20;
 	
 	@Autowired
-	private IWxPayComplaintService wxPayComplaintService;
+	private IWxPayAlarmService wxPayAlarmService;
 
 	
-	@RequestMapping("/complaintList")
-	public String complaintList(Model model, HttpServletRequest request) {
+	@RequestMapping("/alarmList")
+	public String alarmList(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxPayComplaint> complaintList = wxPayComplaintService.queryAll();
-		model.addAttribute("complaintList", complaintList);
-		return "complaint/complaintList";
+		List<WxPayAlarm> alarmList = wxPayAlarmService.queryAll();
+		model.addAttribute("alarmList", alarmList);
+		return "wxpay/alarmList";
 	}
 	
 	
@@ -55,18 +54,18 @@ public class WxComplaintController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/complaintPaging")
-	public String complaintPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+	@RequestMapping("/alarmPaging")
+	public String alarmPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
 		model.addAttribute("pageNo", pageNo);
 		
-		WxPayComplaintCriteria criteria =  null;
+		WxPayAlarmCriteria criteria =  null;
 		//根据模块的需求构造查询条件
 		String resourceName = request.getParameter("resourceName");
 		if(StringUtils.isNotBlank(resourceName)){
-			criteria = new WxPayComplaintCriteria();
+			criteria = new WxPayAlarmCriteria();
 			if("get".equalsIgnoreCase(request.getMethod())){
 				resourceName = URLDecoder.decode(resourceName);
 			}
@@ -74,26 +73,28 @@ public class WxComplaintController {
 //			criteria.createCriteria().andResourceNameLike("%"+resourceName+"%");
 		}
 		
-		PagingResult<WxPayComplaint> complaintPagingData = wxPayComplaintService.pagingByCriteria(pageNo, pageSize , criteria);
-		if(complaintPagingData!=null){
-			complaintPagingData.setRequestUri(request.getRequestURI());
+		PagingResult<WxPayAlarm> alarmPagingData = wxPayAlarmService.pagingByCriteria(pageNo, pageSize , criteria);
+		if(alarmPagingData!=null){
+			alarmPagingData.setRequestUri(request.getRequestURI());
 			
 			HashMap<String, Object> queryMap = new HashMap();
 			queryMap.putAll(request.getParameterMap());
-			complaintPagingData.setQueryMap(queryMap);
-			model.addAttribute("complaintPagingData", complaintPagingData);
+			alarmPagingData.setQueryMap(queryMap);
+			model.addAttribute("alarmPagingData", alarmPagingData);
 		}
-		return "complaint/complaintListPaging";
+		return "wxpay/alarmListPaging";
 	}
 	
-	@RequestMapping("/complaintInfo")
-	public String complaintInfo(Model model, HttpServletRequest request, int complaintId) {
+	
+	
+	@RequestMapping("/alarmInfo")
+	public String alarmInfo(Model model, HttpServletRequest request, int alarmId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxPayComplaint complaint = wxPayComplaintService.loadById(complaintId);
-		model.addAttribute("complaint", complaint);
-		return "complaint/complaintInfo";
+		WxPayAlarm alarm = wxPayAlarmService.loadById(alarmId);
+		model.addAttribute("alarm", alarm);
+		return "wxpay/alarmInfo";
 	}
 	
 	

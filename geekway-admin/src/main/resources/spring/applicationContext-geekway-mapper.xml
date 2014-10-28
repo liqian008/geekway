@@ -168,5 +168,6 @@
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	
+	<!-- 微信支付相关 -->
 	
 </beans>
