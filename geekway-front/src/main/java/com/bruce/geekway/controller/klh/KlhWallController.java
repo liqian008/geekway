@@ -105,7 +105,7 @@ public class KlhWallController {
 	}
 	
 	@RequestMapping(value = "/imagePreview")
-	public String imagePreview(Model model, int wallImageId, String imgUrl, HttpServletRequest request) {
+	public String imagePreview(Model model, int wallImageId, HttpServletRequest request) {
 		if (!KlhUtil.sessionValid(request)) {// 页面流程
 			//跳转auth界面
 			return KlhUtil.redirectToOauth(model);
@@ -114,7 +114,14 @@ public class KlhWallController {
 		KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
 		//增加浏览记录
 		klhWallImageService.increaseBrowse(wallImageId, sessionUserProfile.getUserOpenId());
-		model.addAttribute("imgUrl", imgUrl);
+		KlhWallImage wallImage = klhWallImageService.loadById(wallImageId);
+		if(wallImage!=null){
+			model.addAttribute("wallImage", wallImage);
+			
+			Cookie[] cookies = request.getCookies();
+			boolean hasLiked = hasLike(wallImageId, cookies);
+			wallImage.setHasLike(hasLiked); 
+		}
 		return "klh/wallImagePreview";
 	}
 	

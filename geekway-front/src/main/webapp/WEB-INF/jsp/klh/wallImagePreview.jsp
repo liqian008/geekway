@@ -19,6 +19,17 @@
 body{
 height:100%;
 }
+
+.box a{
+	color:#93242a;
+}
+.box i {
+	background-image: url('images/like.png');
+	width: 12px;
+	height: 10px;
+	margin-right: 3px;
+	display: inline-block;
+}
 </style>
 
 <body>
@@ -33,15 +44,47 @@ height:100%;
 	</div>
 
 	<div class="content">
+		<%
+	  		KlhWallImage wallImage = (KlhWallImage)request.getAttribute("wallImage");
+			if(wallImage!=null){
+		%>
 		<div class="logo">
-			<img src="<%=request.getAttribute("imgUrl")%>">
+			<img src="<%=wallImage.getPicUrl()%>">
 		</div>
 		
+		<div class="box">
+	  		<%
+	  		if(wallImage.isHasLike()){%>
+	  		<a href="javascript:void(0)" class="hasliked"><i></i><%=wallImage.getLikeCount()%>个喜欢</a>
+	  		<%}else{%>
+	  		<a href="javascript:void(0)" id="like" class="like" dataItem="<%=wallImage.getId()%>"><i></i><span class="likeNum"><%=wallImage.getLikeCount()%></span>个喜欢</a>
+			<script>
+			$("a.like").click(function(){
+				var wallImageId = $(".like").attr('dataItem');
+				var jsonData = {"wallImageId": wallImageId};
+				$.post("<%=request.getContextPath()%>/klh/like.json", jsonData, function(data) {
+					if(data.result==1){
+						
+						$(".like").attr("class", "hasLiked");
+						//TODO like数+1
+						location.reload(true);
+					}else{
+						alert(data.message);
+					}
+				 }, "json");
+			});
+			</script>
+	  		
+	  		<%} %>
+	  	</div>
+		<%}%>		
 	</div>
+	
+	
 </body>
 
 <script>
-$("body").click(function(){
+$(".logo").click(function(){
 	history.back();
 });
 </script>

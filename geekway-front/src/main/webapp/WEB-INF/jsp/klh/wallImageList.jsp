@@ -114,7 +114,7 @@ border-right:1px solid #f7f3f0;
 			<div id="masonry" class="container-fluid">
 			<%for(KlhWallImage wallImage: wallImageList) {%>
 			  <div class="box">
-			  	<a href="./imagePreview?wallImageId=<%=wallImage.getId()%>&imgUrl=<%=wallImage.getThumbPicUrl()%>"><img src="<%=wallImage.getThumbPicUrl()%>"></a>
+			  	<a href="./imagePreview?wallImageId=<%=wallImage.getId()%>"><img src="<%=wallImage.getThumbPicUrl()%>"></a>
 			  	<div style="float:left">
 			  		<%if(wallImage.isHasLike()){%>
 			  		<a href="javascript:void(0)" class="hasliked"><i></i><%=wallImage.getLikeCount()%>个喜欢</a>
