@@ -193,12 +193,6 @@
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">投票积分: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="voteScore" id="voteScore" value="${setting.voteScore}"/>
-							</div>
-						</div>
 						
 						<div class="form-group"> 
 							<label class="col-sm-2 control-label text-right">绑定积分: <span class="mandatory">*</span></label>
@@ -207,6 +201,15 @@
 							</div>
 						</div>
 						
+						<!-- 
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">投票积分: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="voteScore" id="voteScore" value="${setting.voteScore}"/>
+							</div>
+						</div>
+						 -->
+						 
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="确 认" class="btn btn-primary">

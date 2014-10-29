@@ -120,13 +120,18 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 					</div>
 					<div class="panel-body">
 						
-						
-						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">变更用户ID: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="userOpenId" id="userOpenId" value="${userScoreLog.userOpenId}"/>
 								<form:hidden path="userScoreLog.id"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">用户昵称: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="userNickname" id="userNickname" value="${userProfile.nickname}"/>
 							</div>
 						</div>
 						

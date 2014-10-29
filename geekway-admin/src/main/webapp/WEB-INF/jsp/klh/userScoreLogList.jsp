@@ -115,7 +115,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						<thead>
 							<tr>
 								<th>序号</th>
-                                <th>用户</th>
+                                <th>昵称</th>
+                                <th>OpenID</th>
                                 <th>变更积分</th>
                                 <th>变更原因</th>
                                 <th>时间</th>
@@ -132,6 +133,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                            	%>
 							<tr>
 		                        <td><%=i%></td>
+		                        <td><%=userScoreLog.getUserNickname()%></td>
 		                        <td><%=userScoreLog.getUserOpenId()%></td>
 		                        <td><%=userScoreLog.getScoreChange()%></td>
 		                        <td><%=userScoreLog.getReason()%></td>

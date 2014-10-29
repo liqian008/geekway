@@ -1,11 +1,9 @@
 package com.bruce.geekway.admin.controller.geekway;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +15,6 @@ import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
-import com.bruce.geekway.model.wx.json.response.WxJsonResult;
-import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.service.IWxBroadcastService;
 import com.bruce.geekway.utils.ConfigUtil;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
