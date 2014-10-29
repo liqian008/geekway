@@ -112,17 +112,7 @@ public class SystemController {
 						userProfile.setCreateTime(currentTime);
 						userProfile.setStatus((short) 1);
 						klhUserProfileService.save(userProfile);
-						//新增用户变化积分记录
-						KlhSetting klhSetting = klhSettingService.loadKlhSetting();
-						if(klhSetting!=null&&klhSetting.getBindScore()!=null){
-							int bindScore = klhSetting.getBindScore();
-							KlhUserScoreLog scoreLog = new KlhUserScoreLog();
-							scoreLog.setUserOpenId(userOpenId);
-							scoreLog.setScoreChange(bindScore);
-							scoreLog.setCreateTime(currentTime);
-							scoreLog.setReason("新用户，增加【"+bindScore+"】积分, "+DateUtil.DATE_FORMAT_YMDHMS.format(currentTime));
-							result =  klhUserScoreLogService.save(scoreLog);
-						}
+						
 					}else{
 						result = 1;
 					}

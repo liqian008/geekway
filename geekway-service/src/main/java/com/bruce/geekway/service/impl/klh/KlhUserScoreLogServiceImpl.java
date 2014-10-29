@@ -95,5 +95,10 @@ public class KlhUserScoreLogServiceImpl implements IKlhUserScoreLogService{
 		return null;
 	}
 
+	@Override
+	public boolean hasBind(String userOpenId) {
+		return klhUserScoreLogDao.hasBind(userOpenId);
+	}
+
 	
 }

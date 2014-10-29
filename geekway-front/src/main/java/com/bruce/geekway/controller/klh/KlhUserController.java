@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserProfile;
+import com.bruce.geekway.model.KlhUserScoreLog;
 import com.bruce.geekway.service.klh.IKlhSettingService;
 import com.bruce.geekway.service.klh.IKlhUserProfileService;
 import com.bruce.geekway.service.klh.IKlhUserScoreLogService;
+import com.bruce.geekway.utils.DateUtil;
 import com.bruce.geekway.utils.KlhUtil;
 
 /**
@@ -34,13 +36,22 @@ public class KlhUserController {
 	
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public String profile(Model model, String flag, HttpServletRequest request) {
+	public String profile(Model model, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
 			//TODO 跳转auth界面
 			return KlhUtil.redirectToOauth(model);
 		}else{
-			model.addAttribute("flag",flag);
 			return "klh/profile";
+		}
+	}
+	
+	@RequestMapping(value = "/profilePreview", method = RequestMethod.GET)
+	public String profilePreview(Model model, HttpServletRequest request) {
+		if(!KlhUtil.sessionValid(request)){// 页面流程
+			//TODO 跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}else{
+			return "klh/profilePreview";
 		}
 	}
 	
@@ -67,11 +78,33 @@ public class KlhUserController {
 				userProfile.setId(dbProfile.getId());
 				klhUserProfileService.updateById(userProfile);
 				
-				sessionUserProfile = klhUserProfileService.loadByOpenid(sessionUserProfile.getUserOpenId());
+				String userOpenId = sessionUserProfile.getUserOpenId();
+				sessionUserProfile = klhUserProfileService.loadByOpenid(userOpenId);
 				request.getSession().setAttribute("sessionUserProfile", sessionUserProfile); 
+			
+				//检查是否是首次绑定
+				boolean firstBind = !klhUserScoreLogService.hasBind(userOpenId);
+				if(firstBind){
+					int bindScore = 0;
+					
+					//新增用户变化积分记录
+					KlhSetting klhSetting = klhSettingService.loadKlhSetting();
+					if(klhSetting!=null&&klhSetting.getBindScore()!=null){
+						bindScore = klhSetting.getBindScore();
+						KlhUserScoreLog scoreLog = new KlhUserScoreLog();
+						scoreLog.setUserOpenId(userOpenId);
+						scoreLog.setScoreType(1);//绑定的scoreType为1
+						scoreLog.setScoreChange(bindScore);
+						scoreLog.setCreateTime(currentTime);
+						scoreLog.setReason("用户绑定资料，增加【"+bindScore+"】积分, "+DateUtil.DATE_FORMAT_YMDHMS.format(currentTime));
+						int result =  klhUserScoreLogService.save(scoreLog);
+					}
+					model.addAttribute("firstBind", firstBind);
+					model.addAttribute("bindScore", bindScore);
+				}
 			}
 		}
-		return "redirect:./profile?flag=updated";
+		return "klh/profileResult";
 	}
 	
 //	@RequestMapping(value = "/login", method = RequestMethod.GET)

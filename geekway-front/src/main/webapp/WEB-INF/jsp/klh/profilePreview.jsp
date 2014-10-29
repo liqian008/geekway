@@ -23,11 +23,15 @@ text-align:center;
 margin:20px;
 text-align:center;
 }
- 
 
-label { text-align:left;font-size: 12px; color: #4d4d4d; display: block; font-weight: 500; margin-bottom: 3px; }
+
+label { text-align:left;font-size: 12px; color: #4d4d4d; display: block; margin-bottom: 3px; }
 label.center { text-align:center }
 label.inline { line-height: 30px; margin: 0 0 12px 0; }
+
+
+.preview { text-align:left; font-size: 15px; color: #2d2d2d; display: block; font-weight: 500; margin: 8px 0; }
+
 
 input[type="text"]{
 width:100%;
@@ -51,41 +55,40 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 	<div class="content">
 		<div class="main">
 			
-			
-			<form action="./updateProfile" method="post" name="profileForm">
-			
 			<div class="userProfile">
 				<label>昵称 *</label>
-				<input type="text" id="nickname" name="nickname" value="<%=userProfile.getNickname()==null?"":userProfile.getNickname()%>">
+				<div class="preview">
+				<%=userProfile.getNickname()==null||"".equals(userProfile.getNickname())?"无":userProfile.getNickname()%>
+				</div>
 				<label>真实姓名 *</label>
-				<input type="text" id="realname" name="realname" value="<%=userProfile.getRealname()==null?"":userProfile.getRealname()%>">
+				<div  class="preview">
+				<%=userProfile.getRealname()==null||"".equals(userProfile.getRealname())?"无":userProfile.getRealname()%>
+				</div>
 				<label>手机号码 *</label>
-				<input type="text" id="mobile" name="mobile" value="<%=userProfile.getMobile()==null?"":userProfile.getMobile()%>">
+				<div  class="preview">
+				<%=userProfile.getMobile()==null||"".equals(userProfile.getMobile())?"无":userProfile.getMobile()%>
+				</div>
 				<label>Email *</label>
-				<input type="text" id="email" name="email" value="<%=userProfile.getEmail()==null?"":userProfile.getEmail()%>">
+				<div  class="preview">
+				<%=userProfile.getEmail()==null||"".equals(userProfile.getEmail())?"无":userProfile.getEmail()%>
+				</div>
 				<label>通讯地址</label>
-				<input type="text" id="address" name="address" value="<%=userProfile.getAddress()==null?"":userProfile.getAddress()%>">
+				<div class="preview" >
+				<%=userProfile.getAddress()==null||"".equals(userProfile.getAddress())?"无":userProfile.getAddress()%>
+				</div>
 				
 				<div class="score">
-					<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">修改</a>
+					<a href="./profile" class="klh-button radius" id="previewBtn">修 改</a> 
 				</div>
 				
 			</div>
 			<div class="seperator"> </div>
 			
-			</form>
 		</div>
 	</div>
 		
 </body>
 
-<script>
-
-$("#submitBtn").click(function (){
-	document.forms[0].submit();
-});
-
-</script>
 
 </html>
 

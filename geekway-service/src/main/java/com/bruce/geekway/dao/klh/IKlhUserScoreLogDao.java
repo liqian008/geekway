@@ -9,5 +9,5 @@ public interface IKlhUserScoreLogDao extends IBaseDao<KlhUserScoreLog, Integer> 
 
 	public List<KlhUserScoreLog> queryByUserOpenId(String userOpenId);
 
-
+	public boolean hasBind(String userOpenId);
 }

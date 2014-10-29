@@ -23,9 +23,9 @@ text-align:center;
 margin:20px;
 text-align:center;
 }
- 
 
-label { text-align:left;font-size: 12px; color: #4d4d4d; display: block; font-weight: 500; margin-bottom: 3px; }
+
+label { text-align:left;font-size: 12px; color: #4d4d4d; cursor: pointer; display: block; font-weight: 500; margin-bottom: 3px; }
 label.center { text-align:center }
 label.inline { line-height: 30px; margin: 0 0 12px 0; }
 
@@ -51,29 +51,24 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 	<div class="content">
 		<div class="main">
 			
+			<%
+			Boolean firstBind = (Boolean)request.getAttribute("firstBind");
+			Integer bindScore = (Integer)request.getAttribute("bindScore");
 			
-			<form action="./updateProfile" method="post" name="profileForm">
+			%>
 			
-			<div class="userProfile">
-				<label>昵称 *</label>
-				<input type="text" id="nickname" name="nickname" value="<%=userProfile.getNickname()==null?"":userProfile.getNickname()%>">
-				<label>真实姓名 *</label>
-				<input type="text" id="realname" name="realname" value="<%=userProfile.getRealname()==null?"":userProfile.getRealname()%>">
-				<label>手机号码 *</label>
-				<input type="text" id="mobile" name="mobile" value="<%=userProfile.getMobile()==null?"":userProfile.getMobile()%>">
-				<label>Email *</label>
-				<input type="text" id="email" name="email" value="<%=userProfile.getEmail()==null?"":userProfile.getEmail()%>">
-				<label>通讯地址</label>
-				<input type="text" id="address" name="address" value="<%=userProfile.getAddress()==null?"":userProfile.getAddress()%>">
-				
-				<div class="score">
-					<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">修改</a>
+			<div id="notification">
+				<div style="padding: 30px 0px">
+					个人信息提交完成
+					<%if(firstBind!=null&&firstBind&&bindScore!=null&&bindScore>0){%>
+					<p/>恭喜获得<%=bindScore%>积分!
+					<%} %>
 				</div>
-				
+				<div style="margin-top:10px">
+					<a href="./profilePreview" id="okBtn" class="klh-button radius">OK</a>	
+				</div> 
 			</div>
-			<div class="seperator"> </div>
 			
-			</form>
 		</div>
 	</div>
 		
@@ -84,6 +79,12 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 $("#submitBtn").click(function (){
 	document.forms[0].submit();
 });
+
+
+//$("#okBtn").click(function (){
+//	$("#notification").hide();
+	//$(".userProfile").show();
+//});
 
 </script>
 

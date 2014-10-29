@@ -13,5 +13,13 @@ public interface IKlhUserScoreLogService extends IFoundationService<KlhUserScore
 //	public int queryTotalScoreByUserOpenId(String userOpenId);
 	
 	public int queryCurrentScoreByUserOpenId(String userOpenId);
+	/**
+	 * 是否有过绑定资料操作
+	 * @param userOpenId
+	 * @return
+	 */
+	public boolean hasBind(String userOpenId);
 
+	
+	
 }

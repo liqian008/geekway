@@ -69,6 +69,13 @@ public class KlhUserScoreLogDaoImpl implements IKlhUserScoreLogDao, Initializing
 		this.klhUserScoreLogMapper = klhUserScoreLogMapper;
 	}
 
+	@Override
+	public boolean hasBind(String userOpenId) {
+		KlhUserScoreLogCriteria criteria = new KlhUserScoreLogCriteria();
+    	criteria.createCriteria().andUserOpenIdEqualTo(userOpenId).andScoreTypeEqualTo(1);//1为绑定类型
+    	return klhUserScoreLogMapper.countByExample(criteria)>0;
+	}
+
 	
 	
 	
