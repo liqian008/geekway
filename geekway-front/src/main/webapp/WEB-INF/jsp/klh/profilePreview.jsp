@@ -78,7 +78,7 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 				</div>
 				
 				<div class="score">
-					<a href="./profile" class="klh-button radius" id="previewBtn">修 改</a> 
+					<a href="./profile" class="klh-button radius" id="previewBtn">OK</a> 
 				</div>
 				
 			</div>

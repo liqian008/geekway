@@ -67,7 +67,7 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 				<input type="text" id="address" name="address" value="<%=userProfile.getAddress()==null?"":userProfile.getAddress()%>">
 				
 				<div class="score">
-					<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">修改</a>
+					<a href="javascript:void(0)" class="klh-button radius" id="submitBtn">提 交</a>
 				</div>
 				
 			</div>
