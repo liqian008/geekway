@@ -30,7 +30,7 @@ label.center { text-align:center }
 label.inline { line-height: 30px; margin: 0 0 12px 0; }
 
 
-.preview { text-align:left; font-size: 15px; color: #2d2d2d; display: block; font-weight: 500; margin: 8px 0; }
+.preview { text-align:left; padding-left:10px; font-size: 15px; color: #2d2d2d; display: block; font-weight: 500; margin: 8px 0; }
 
 
 input[type="text"]{
@@ -78,7 +78,7 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 				</div>
 				
 				<div class="score">
-					<a href="./profile" class="klh-button radius" id="previewBtn">OK</a> 
+					<a href="./profile?forceEdit=true" class="klh-button radius" id="previewBtn">修 改</a> 
 				</div>
 				
 			</div>

@@ -4,12 +4,12 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.model.KlhSetting;
 import com.bruce.geekway.model.KlhUserProfile;
@@ -36,12 +36,25 @@ public class KlhUserController {
 	
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	public String profile(Model model, HttpServletRequest request) {
+	public String profile(Model model, @RequestParam(required=false, defaultValue="false") boolean forceEdit, HttpServletRequest request) {
 		if(!KlhUtil.sessionValid(request)){// 页面流程
 			//TODO 跳转auth界面
 			return KlhUtil.redirectToOauth(model);
 		}else{
-			return "klh/profile";
+			if(forceEdit){
+				return "klh/profile";
+			}else{
+				KlhUserProfile sessionUserProfile = (KlhUserProfile) request.getSession().getAttribute("sessionUserProfile");
+				String userOpenId = sessionUserProfile.getUserOpenId();
+				//检查是否是首次绑定
+				boolean firstBind = !klhUserScoreLogService.hasBind(userOpenId);
+				model.addAttribute("firstBind", firstBind);
+				if(firstBind){
+					return "klh/profile";
+				}else{
+					return "klh/profilePreview";
+				}
+			}
 		}
 	}
 	
