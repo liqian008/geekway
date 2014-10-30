@@ -82,6 +82,33 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 <script>
 
 $("#submitBtn").click(function (){
+	var realname = $('#realname').val();
+	var mobile = $('#mobile').val();
+	var email = $('#email').val();
+	
+	if(realname==''){
+		alert('姓名不能为空');
+		return;
+	}
+	var mobileReg = /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+	if(mobile==''){
+		alert('手机号不能为空');
+		return;
+	}
+	if(!mobileReg.test(mobile)){
+		alert('手机号不符合规范');
+		return;
+	}
+	
+	var emailReg =  /^([a-z0-9A-Z]+[-|_|\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$/;
+	if(email==''){
+		alert('Email不能为空');
+		return;
+	}
+	if(!emailReg.test(email)){
+		alert('Email不符合规范');
+		return;
+	}
 	document.forms[0].submit();
 });
 
