@@ -116,7 +116,16 @@ public class HtmlBuildUtils {
 			sb.append("<p class='quote-item'>");
 			sb.append("订单号： "+productOrder.getOutTradeNo()+"<br/>");
 			sb.append("订单信息： "+productOrder.getTitle()+"<br/>");
-			sb.append("合计： 商品 <span class='text-highlight highlight-red'>"+productOrder.getProductFee()+"</span>元&nbsp;+&nbsp;运费 <span class='text-highlight highlight-blue'>"+productOrder.getTransportFee()+"</span>元&nbsp;=&nbsp;<span class='text-highlight highlight-green'>"+productOrder.getTotalFee()+"</span>元");
+			sb.append("合计： " +
+					"商品 <span class='text-highlight highlight-blue'>"+productOrder.getProductFee()+"</span>&nbsp;" +
+						"+&nbsp;运费 <span class='text-highlight highlight-red'>"+productOrder.getTransportFee()+"</span>&nbsp;");
+			if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
+				sb.append("+&nbsp;折扣 <span class='text-highlight highlight-dark'>"+productOrder.getDiscountFee()+"</span>&nbsp;");
+			}
+			if(productOrder.getVoucherFee()!=null&&productOrder.getVoucherFee()>0){
+				sb.append("+&nbsp;折扣 <span class='text-highlight highlight-yellow'>"+productOrder.getVoucherFee()+"</span>&nbsp;");
+			}
+			sb.append("=&nbsp;<span class='text-highlight highlight-green'>"+productOrder.getTotalFee()+"</span>元");
 			sb.append("&nbsp;|&nbsp;<span class='text-highlight highlight-dark'><a href='./orderInfo?orderId="+productOrder.getId()+"&tradeNo="+productOrder.getOutTradeNo()+"'>查看详情</a></span>");
 			sb.append("</p>");
 //			sb.append("<p class='quote-item'>");

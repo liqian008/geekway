@@ -248,9 +248,10 @@ public class WxProductOrderController {
 				WxProductOrderItem orderItem = new WxProductOrderItem();
 				orderItem.setProductId(productSku.getProductId());
 				orderItem.setProductSkuId(productSku.getId());
+				orderItem.setProductName(productSku.getName());
+				orderItem.setProductPicUrl(productSku.getSkuPicUrl());
 				orderItem.setItemFee(productSku.getPrice());
 				orderItem.setTotalFee(productSku.getPrice() * buyAmount[i]);
-				orderItem.setProductName(productSku.getName());
 				orderItem.setCreateTime(currentTime);
 				orderItem.setAmount(buyAmount[i]);
 				

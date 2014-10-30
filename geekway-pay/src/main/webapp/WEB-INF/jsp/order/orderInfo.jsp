@@ -77,10 +77,16 @@
 					List<WxProductOrderItem> orderItemList = (List<WxProductOrderItem>)request.getAttribute("orderItemList"); 
 					if(orderItemList!=null&&orderItemList.size()>0){
 						for(WxProductOrderItem orderItem: orderItemList){
-					%> 
-						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>&nbsp;X&nbsp;<%=orderItem.getAmount()%>件 = <%=orderItem.getTotalFee()%>元<br/> <br/>
+					%>  
+						<img src="<%=orderItem.getProductPicUrl()%>" alt="<%=orderItem.getProductName() %>">
+						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>
+						X&nbsp;<span class="text-highlight highlight-blue"><%=orderItem.getAmount()%></span>件 
+						=&nbsp;<span class="text-highlight highlight-green"><%=orderItem.getTotalFee()%>元</span><br/> <br/>
 					<%} 
 					}%>
+				</p>
+				
+				<p class="quote-item">
 					商品合计：
 					<span class="text-highlight highlight-red">${orderInfo.productFee}</span>元
 				</p>
@@ -103,10 +109,20 @@
                 <p class="quote-item">
                     <h5 class="center-text"> 
                     商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${orderInfo.productFee}</span>元&nbsp;|&nbsp; 
-                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-blue">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
-                    <!-- 
-                    优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
-                     -->
+                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
+                    
+                    <%
+                    WxProductOrder productOrder = (WxProductOrder)request.getAttribute("orderInfo");
+                    if(productOrder.getVoucherFee()!=null&&productOrder.getVoucherFee()>0){
+                    %>
+                    优惠券：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.voucherFee}</span>元&nbsp;|&nbsp;
+                    <%}%>
+                    <%
+                    if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
+                    %>
+                    折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
+                    <%}%>
+                    
                     合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                     </h5>
                 </p>
