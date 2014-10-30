@@ -191,14 +191,17 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		//总数量
 		
 		double transportFee = wxDeliveryTemplateService.calcDeliveryFee(0, productTotalFee, totalBuyAmount, "", addressInfo.getPostProvince(), addressInfo.getPostCity());
-		//折扣费用
-		double discountFee = 0;//voucher==null?0:voucher.getPrice();
+		//优惠券抵扣费用
+		double voucherFee = 0;//voucher==null?0:voucher.getPrice();
+		//折扣（用于后台改价）
+		double discountFee = 0;
 		
 		productOrder.setTitle("");//TODO
 		productOrder.setProductFee(productTotalFee);
+		productOrder.setVoucherFee(voucherFee);//折扣费用
 		productOrder.setDiscountFee(discountFee);//折扣费用
 		productOrder.setTransportFee(transportFee);//运费
-		double totalFee = productTotalFee - discountFee + transportFee;
+		double totalFee = productTotalFee - voucherFee + transportFee;
 		productOrder.setTotalFee(totalFee);//总费用
 		productOrder.setStatus(IWxProductOrderService.StatusEnum.SUBMITED.getStatus());//预支付状态
 		productOrder.setCreateTime(currentTime);

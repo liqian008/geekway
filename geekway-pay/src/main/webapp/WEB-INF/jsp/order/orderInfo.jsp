@@ -103,10 +103,20 @@
                 <p class="quote-item">
                     <h5 class="center-text"> 
                     商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${orderInfo.productFee}</span>元&nbsp;|&nbsp; 
-                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-blue">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
-                    <!-- 
-                    优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
-                     -->
+                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
+                    
+                    <%
+                    WxProductOrder productOrder = (WxProductOrder)request.getAttribute("orderInfo");
+                    if(productOrder.getVoucherFee()!=null&&productOrder.getVoucherFee()>0){
+                    %>
+                    优惠券：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.voucherFee}</span>元&nbsp;|&nbsp;
+                    <%}%>
+                    <%
+                    if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
+                    %>
+                    折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
+                    <%}%>
+                    
                     合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                     </h5>
                 </p>
