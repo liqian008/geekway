@@ -111,6 +111,30 @@ width:100%;
 <script>
 
 $("#submitBtn").click(function (){
+	var realname = $('#postName').val();
+	var mobile = $('#postMobile').val();
+	var address = $('#postAddress').val();
+	
+	if(realname==''){
+		alert('收件人不能为空');
+		return;
+	}
+	
+	var mobileReg = /^[+]{0,1}(\d){1,3}[ ]?([-]?((\d)|[ ]){1,12})+$/;
+	if(mobile==''){
+		alert('手机号不能为空');
+		return;
+	}
+	if(!mobileReg.test(mobile)){
+		alert('手机号不符合规范');
+		return;
+	}
+	
+	if(address==''){
+		alert('收件人地址不能为空');
+		return;
+	}
+	
 	if(confirm("确定兑换该商品吗？")){
 		document.forms[0].submit();
 	}else{
