@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxProductMapper;
+import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductCriteria;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCriteria;
 import com.bruce.geekway.model.WxProductSku;
@@ -70,6 +73,36 @@ public class WxProductServiceImpl implements IWxProductService {
 	public List<WxProduct> queryByCriteria(WxProductCriteria criteria) {
 		return wxProductMapper.selectByExample(criteria);
 	}
+	
+
+	@Override
+	public List<WxProduct> fallloadByCriteria(int pageSize,
+			WxProductCriteria criteria) {
+		return null;
+	}
+
+	@Override
+	public PagingResult<WxProduct> pagingByCriteria(int pageNo, int pageSize,
+			WxProductCriteria criteria) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxProductCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxProductMapper.countByExample(criteria);
+		List<WxProduct> dataList = wxProductMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxProduct>(pageNo, pageSize, count, dataList);
+	}
+	
+	
 
 	@Override
 	public List<WxProduct> queryAvailableList() {
@@ -114,5 +147,6 @@ public class WxProductServiceImpl implements IWxProductService {
 	public void setWxProductSkuService(IWxProductSkuService wxProductSkuService) {
 		this.wxProductSkuService = wxProductSkuService;
 	}
+
 	
 }

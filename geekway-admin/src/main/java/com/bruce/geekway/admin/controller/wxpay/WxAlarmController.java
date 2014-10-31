@@ -34,16 +34,6 @@ public class WxAlarmController {
 	private IWxPayAlarmService wxPayAlarmService;
 
 	
-	@RequestMapping("/alarmList")
-	public String alarmList(Model model, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		List<WxPayAlarm> alarmList = wxPayAlarmService.queryAll();
-		model.addAttribute("alarmList", alarmList);
-		return "wxpay/alarmList";
-	}
-	
 	
 	/**
 	 * 分页方式查询
@@ -107,5 +97,15 @@ public class WxAlarmController {
 	}
 	
 	
+
+	@RequestMapping("/alarmList")
+	public String alarmList(Model model, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		List<WxPayAlarm> alarmList = wxPayAlarmService.queryAll();
+		model.addAttribute("alarmList", alarmList);
+		return "wxpay/alarmList";
+	}
 	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,13 @@ import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrderItem;
+import com.bruce.geekway.service.pay.mp.WxMpPayService;
 import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 
 
 /**
- * 微信支付通知
+ * 微信订单管理
  * @author liqian
  *
  */
@@ -36,6 +38,8 @@ public class WxOrderController {
 	private IWxProductOrderService wxProductOrderService;
 	@Autowired
 	private IWxProductOrderItemService wxProductOrderItemService;
+	@Autowired
+	private WxMpPayService wxMpPayService;
 	
 	
 	/**
@@ -67,6 +71,20 @@ public class WxOrderController {
 			model.addAttribute("outTradeNo", outTradeNo);
 		}
 		
+		
+		//订单状态
+		String statusStr = request.getParameter("status");
+		short status = NumberUtils.toShort(statusStr, (short) -1);
+		if(status>=0){
+			subCriteria.andStatusEqualTo(status);
+			model.addAttribute("status", status);
+		}
+		
+		//订单时间范围查询
+		String startTimeStr = request.getParameter("startTime");
+		String endTimeStr = request.getParameter("endTime");
+		
+		
 		PagingResult<WxProductOrder> orderPagingData = wxProductOrderService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(orderPagingData!=null){
 			orderPagingData.setRequestUri(request.getRequestURI());
@@ -93,6 +111,60 @@ public class WxOrderController {
 		
 		return "order/orderInfo";
 	}
+	
+	
+	/**
+	 * 发货页面
+	 * @param model
+	 * @param outTradeNo
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/deliveryInfo")
+	public String deliveryInfo(Model model, String outTradeNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		WxProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
+		model.addAttribute("order", order);
+		
+		List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
+		model.addAttribute("productOrderItemList", productOrderItemList);
+		
+		return "order/orderInfo";
+	}
+	
+	
+	/**
+	 * 发货操作
+	 * @param model
+	 * @param outTradeNo
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/deliver")
+	public String deliver(Model model, String outTradeNo, String postType, String postSn, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		WxProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
+		if(order!=null){
+			//更新订单发货状态
+			WxProductOrder updatedOrder = new WxProductOrder();
+			updatedOrder.setId(order.getId());
+			updatedOrder.setPostType(postType);
+			updatedOrder.setPostSn(postSn);
+			updatedOrder.setStatus(IWxProductOrderService.StatusEnum.DELIVERED.getStatus());//状态改已发货
+			int result = wxProductOrderService.updateById(updatedOrder);//更新操作
+			if(result>0){
+				//TODO 发货完毕后需要通知微信服务
+				//wxMpPayService.deliverNotify(deliverInfo);
+			}
+		}
+		model.addAttribute("redirectUrl", "./orderInfo?outTradeNo="+outTradeNo);
+		return "forward:/home/operationRedirect";
+	}
+	
 	
 	
 //	@Deprecated

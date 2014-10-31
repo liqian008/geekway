@@ -1,5 +1,6 @@
 package com.bruce.geekway.admin.controller.product;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -8,13 +9,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductCriteria;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxSkuProp;
@@ -32,6 +38,8 @@ import com.bruce.geekway.service.product.IWxSkuPropValueService;
 @RequestMapping("/product")
 public class WxProductController {
 	
+	private static final int pageSize = 1;
+	
 	@Autowired
 	private IWxProductService wxProductService;
 	@Autowired
@@ -43,6 +51,59 @@ public class WxProductController {
 	private IWxProductSkuService wxProductSkuService;
 	@Autowired
 	private IWxProductCategoryService wxProductCategoryService;
+	
+	
+
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/productPaging")
+	public String productPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("pageNo", pageNo);
+		
+		WxProductCriteria criteria = new WxProductCriteria();
+		WxProductCriteria.Criteria subCriteria = criteria.createCriteria();
+		
+		//根据模块的需求构造查询条件
+		String errorType = request.getParameter("errorType");
+		if(StringUtils.isNotBlank(errorType)){
+			if("get".equalsIgnoreCase(request.getMethod())){
+				errorType = URLDecoder.decode(errorType);
+			}
+//			subCriteria.andErrorTypeEqualTo(errorType);
+//			model.addAttribute("errorType", errorType);
+		}
+		String description = request.getParameter("description");
+		if(StringUtils.isNotBlank(description)){
+			if("get".equalsIgnoreCase(request.getMethod())){
+				description = URLDecoder.decode(description);
+			}
+			subCriteria.andDescriptionLike(description);
+			model.addAttribute("description", description);
+		}
+		
+		PagingResult<WxProduct> alarmPagingData = wxProductService.pagingByCriteria(pageNo, pageSize , criteria);
+		if(alarmPagingData!=null){
+			alarmPagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			alarmPagingData.setQueryMap(queryMap);
+			model.addAttribute("alarmPagingData", alarmPagingData);
+		}
+		return "wxpay/alarmListPaging";
+	}
+	
+	
 	
 	@RequestMapping("/productList")
 	public String productList(Model model, HttpServletRequest request) {

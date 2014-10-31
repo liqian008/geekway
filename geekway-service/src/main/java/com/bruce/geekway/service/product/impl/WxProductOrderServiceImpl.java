@@ -172,7 +172,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR);
 		}
 		Date currentTime = new Date();
-		String tradeNo = OrderUtil.generateOrderSn4Wx();
+		String tradeNo = OrderUtil.generateOrderSn(currentTime);
 		//保存订单
 		productOrder.setOutTradeNo(tradeNo);
 		
