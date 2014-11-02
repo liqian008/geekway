@@ -87,69 +87,15 @@
 			</div>
 			<!-- /breadcrumbs line -->
 			
-			<div class="callout callout-info fade in">
+			<!-- <div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
 					1、订单详情<br/>
 				</p>
-			</div>
+			</div> -->
 
 
-			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>查看订单
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">用户: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="userOpenId" id="userOpenId" value="${order.userOpenId}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">系统订单号: <span class="mandatory">*</span></label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="outTradeNo" id="outTradeNo" value="${order.outTradeNo}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">合计费用（元）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="totalFee" id="totalFee" value="${order.totalFee}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品费用（元）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="productFee" id="productFee" value="${order.productFee}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">运费（元）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="transportFee" id="transportFee" value="${order.transportFee}"/>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<a href="${pageContext.request.contextPath}/order/orderInfo?outTradeNo=${notify.outTradeNo}" class="btn btn-primary">发 货</a>
-						</div>
-					</div>
-				</div>
-			</form>
-			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -161,13 +107,12 @@
 					<table class="table table-bordered table-striped table-check">
 						<thead>
 							<tr>
-								<th>序号</th>
+								<th>ID</th>
                                 <th>商品</th>
                                 <th>名称</th>
                                 <th>单价(元)</th>
                                 <th>数量(个)</th>
-                                <th>总价(元)</th>
-                                <th class="team-links">操作</th>
+                                <th>合计(元)</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -185,13 +130,6 @@
 		                        <td><%=productOrderItem.getItemFee()%></td>
 		                        <td><%=productOrderItem.getAmount()%></td>
 		                        <td><%=productOrderItem.getTotalFee()%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        		<a href="javascript:void(0)"  
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查看商品"><i class="icon-remove3"></i></a>
-									</div>
-								</td>
                              </tr>
                              <%}
                              }%>
@@ -200,6 +138,123 @@
 				</div>
 			</div>
 			<!-- /table view -->
+
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>订单详情
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">买家: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">${order.userOpenId}</label>
+								&nbsp;<a href="${pageContext.request.contextPath}/" class="btn btn-primary">查看资料</a>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">系统订单号: <span class="mandatory">*</span></label>
+							<div class="col-sm-6">
+								<label class="control-label">${order.outTradeNo}</label>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">订单金额: <span class="mandatory">*</span>
+							</label>
+							
+							
+							<div class="col-sm-2">
+								<label class="control-label">${order.totalFee}</label>
+								<span class="label label-success label-block">总金额(元)</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">${order.productFee}</label>
+								<span class="label label-danger label-block">商品(元)</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">${order.transportFee}</label>
+								<span class="label label-info label-block">运费(元)</span>
+							</div>
+							
+							
+							<div class="col-sm-2">
+								<label class="control-label">${order.discountFee}</label>
+								<span class="label label-success label-block">折扣(元)</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">${order.voucherFee}</label>
+								<span class="label label-primary label-block">优惠券(元)</span>
+							</div>
+							
+							
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">发货信息: <span class="mandatory">*</span>
+							</label>
+							
+							<div class="col-sm-3">
+								<label class="control-label">${order.postName}</label>
+								<span class="label label-success label-block">收件人</span>
+							</div>
+							
+							<div class="col-sm-3">
+								<label class="control-label">${order.postMobile}</label>
+								<span class="label label-danger label-block">手机号</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">${order.postCode}</label>
+								<span class="label label-primary label-block">邮编</span>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">邮寄地址: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<label class="control-label">xxxxxxx</label>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">发货信息: <span class="mandatory">*</span>
+							</label>
+							
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="postType" id="postType" value="${order.postType}">
+								<span class="label label-success label-block">快递类型</span>
+							</div>
+							
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="postSn" id="postSn" value="${order.postSn}">
+								<span class="label label-danger label-block">快递单号</span>
+							</div>
+							
+						</div>
+						
+						
+						<div class="form-actions text-right">
+							<a href="${pageContext.request.contextPath}/order/deliveryInfo?outTradeNo=${notify.outTradeNo}" class="btn btn-info">确认发货</a>
+						</div>
+					</div>
+				</div>
+			</form>
+			
+			
 		
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

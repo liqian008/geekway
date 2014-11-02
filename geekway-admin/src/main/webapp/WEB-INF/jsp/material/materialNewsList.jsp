@@ -72,7 +72,7 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">多图文管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -129,7 +129,7 @@
 		                        	</a> 
 		                        </td>
 		                        <td>
-		                        	<a href="<%=ProductLinkUtil.getNewsLink(materialNews.getId())%>" target="_blank"> 
+		                        	<a href="<%=ArticleLinkUtil.getNewsLink(materialNews.getId())%>" target="_blank"> 
 									<span class="label label-success">预览</span> 
 									</a>	
 		                        </td>

@@ -1,9 +1,10 @@
-<%@page import="com.bruce.geekway.utils.DateUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.bruce.geekway.model.WxBroadcast"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.foundation.util.*"%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,7 +72,7 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">群发消息管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">

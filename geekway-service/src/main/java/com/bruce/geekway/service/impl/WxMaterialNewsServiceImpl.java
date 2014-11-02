@@ -11,6 +11,8 @@ import com.bruce.geekway.dao.mapper.WxMaterialNewsArticleMapper;
 import com.bruce.geekway.dao.mapper.WxMaterialNewsMapper;
 import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.model.WxMaterialNewsCriteria;
+import com.bruce.geekway.model.WxMaterialNews;
+import com.bruce.geekway.model.WxMaterialNewsCriteria;
 import com.bruce.geekway.service.IWxMaterialNewsService;
 
 @Service
@@ -80,8 +82,22 @@ public class WxMaterialNewsServiceImpl implements IWxMaterialNewsService, Initia
 	@Override
 	public PagingResult<WxMaterialNews> pagingByCriteria(int pageNo,
 			int pageSize, WxMaterialNewsCriteria criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxMaterialNewsCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxMaterialNewsMapper.countByExample(criteria);
+		List<WxMaterialNews> dataList = wxMaterialNewsMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxMaterialNews>(pageNo, pageSize, count, dataList);
 	}
 
 	@Override

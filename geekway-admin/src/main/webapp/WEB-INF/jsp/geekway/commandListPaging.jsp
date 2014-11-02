@@ -2,11 +2,44 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.WxCustomizeMenu"%>
+<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.foundation.enumeration.*"%>
+<%@page import="com.bruce.foundation.model.paging.*"%>
+<%@page import="com.bruce.foundation.admin.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
 
+<%!String displayCommandType(short commandType){
+	if(1==commandType){
+		return "菜单配置";
+	}else if(0==commandType){
+		return "文本输入";
+	}
+	return "类型错误";
+} %>
+
+<%!String displayMaterialType(Short materialType){
+	if(materialType!=null){
+		if(0==materialType){ 
+			return "文本";
+		}else if(1==materialType){
+			return "单图文";
+		}else if(2==materialType){
+			return "多图文";
+		}else if(3==materialType){
+			return "图片";
+		}else if(4==materialType){
+			return "语音";
+		}
+	}
+	return "未指定";
+} %>
+
+<%
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +53,7 @@
 	type="text/css">
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
+
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
@@ -72,7 +106,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						编辑自定义菜单
+						关键词管理 
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -84,7 +118,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">编辑自定义菜单</li>
+					<li class="active">关键词管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -93,99 +127,104 @@
 			</div>
 			<!-- /breadcrumbs line -->
 			
+			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>Wide left sidebar layout</h5>
-				<p>Page layout with left aligned wide sidebar, with right
-					aligned icons and 4 level navigation.</p>
+				<h5>功能介绍</h5>
+				<p>
+					1、可用权限关键词列表<br/>
+				</p>
 			</div>
+			 -->
 			
-			<%
-			WxCustomizeMenu customizeMenu = (WxCustomizeMenu)request.getAttribute("customizeMenu");
-			%>
-
-			<form id="validate" action="<s:url value='./saveCustomizeMenu'/>" method="post"  class="form-horizontal form-bordered">
-
+			
+			<form id="validate" action="<s:url value='./orderPaging'/>" method="post" >
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>编辑自定义菜单
+							<i class="icon-bubble4"></i>条件筛选
 						</h6>
 					</div>
-					<div class="panel-body">
+					<div class="panel-body"> 
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">父菜单: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<form:select path="customizeMenu.parentId"  items="${parentMenus}"  itemValue="id"  itemLabel="menuName" class="select-liquid"></form:select>
+							<div class="row">
+								<div class="col-md-4">
+									<label>关键词:</label>
+									<input type="text" name="command" placeholder="支持模糊匹配" class="form-control">
+								</div>
+								
 							</div>
 						</div>
 					
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">菜单名称:
-							</label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="menuName" id="menuName" value="${customizeMenu.menuName}"/>
-	                             <form:hidden path="customizeMenu.id"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">菜单key:
-							</label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="menuKey" id="menuKey" value="${customizeMenu.menuKey}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">菜单类型:
-							</label>
-							<div class="col-sm-3">
-								<form:select path="customizeMenu.menuType" class="form-control">
-									<form:option value="click"  label="按钮点击事件"/>
-									<form:option value="view"  label="按钮链接事件"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">菜单链接:
-							</label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="url" id="url" value="${customizeMenu.url}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">菜单排序:
-							</label>
-							<div class="col-sm-1">
-								<input type="text" class="form-control" name="sort" id="sort" value="${customizeMenu.sort}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态:
-							</label>
-							<div class="col-sm-4">
-								<form:select path="customizeMenu.status" class="select-liquid">
-									<form:option value="1"  label="启用"/>
-									<form:option value="0"  label="禁用"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
+						<div class="form-actions text-center">
+							<input type="submit" value="查 询" class="btn btn-primary btn-sm"> 
+							<input type="reset" value="重 置" class="btn btn-default btn-sm">
 						</div>
 					</div>
 				</div>
 				
 			</form>
+			
+			 
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>关键词管理
+					</h5>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped dataTable">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>类型</th>
+                                <th>关键词</th>
+                                <th>素材类型</th>
+                                <th>状态</th>
+                                <th class="team-links">操 作</th> 
+							</tr>
+						</thead>
+						<tbody>
+							<%
+							PagingResult<WxCommand> pagingResult = (PagingResult<WxCommand>)request.getAttribute("commandPagingData");
+							List<WxCommand> commandList = pagingResult.getPageData();
+                           	if(commandList!=null&&commandList.size()>0){
+                           		int i=0;
+                           		for(WxCommand command: commandList){
+                           			i++;
+                           	%>
+						
+							<tr>
+		                        <td><%=i%></td>
+		                        <td><%=displayCommandType(command.getCommandType())%></td>
+		                        <td><%=command.getCommand()%></td>
+		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
+		                        <td>状态</td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="./commandEdit?commandId=<%=command.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
+										<a href="./delCommand?commandId=<%=command.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="删除"><i class="icon-remove3"></i></a>
+									</div>
+								</td>
+                            </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
+					
+					<div class="datatable-footer">
+					<%=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
+					</div> 
+					 
+				</div>
+			</div>
+			<!-- /table view -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

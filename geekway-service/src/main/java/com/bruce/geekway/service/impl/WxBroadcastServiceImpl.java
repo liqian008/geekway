@@ -12,6 +12,8 @@ import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.dao.mapper.WxBroadcastMapper;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.WxBroadcastCriteria;
+import com.bruce.geekway.model.WxBroadcast;
+import com.bruce.geekway.model.WxBroadcastCriteria;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialMultimedia;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
@@ -219,7 +221,22 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 
 	@Override
 	public PagingResult<WxBroadcast> pagingByCriteria(int pageNo, int pageSize, WxBroadcastCriteria criteria) {
-		return null;
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxBroadcastCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxBroadcastMapper.countByExample(criteria);
+		List<WxBroadcast> dataList = wxBroadcastMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxBroadcast>(pageNo, pageSize, count, dataList);
 	}
 	
 

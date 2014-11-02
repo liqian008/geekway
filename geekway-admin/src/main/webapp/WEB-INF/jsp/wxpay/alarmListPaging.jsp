@@ -90,7 +90,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">微信告警管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -100,15 +100,13 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			</div>
 			<!-- /breadcrumbs line -->
 			
-			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、可用权限微信告警列表<br/>
+					1、接收到告警通知后请尽快修复其中提到的问题,以免影响线上经营。<br/>
 				</p>
 			</div>
-			 -->
 			
 			
 			<form id="validate" action="<s:url value='./alarmPaging'/>" method="post" >
@@ -116,7 +114,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>请输入查询条件
+							<i class="icon-bubble4"></i>条件筛选
 						</h6>
 					</div>
 					<div class="panel-body"> 
@@ -167,7 +165,6 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                            	if(alarmList!=null&&alarmList.size()>0){
                            		for(WxPayAlarm alarm: alarmList){
                            	%>
-						
 							<tr>
 								<td><%=alarm.getId()%></td>
 		                        <td title="<%=alarm.getAlarmContent()%>"><%=alarm.getDescription()%></td>

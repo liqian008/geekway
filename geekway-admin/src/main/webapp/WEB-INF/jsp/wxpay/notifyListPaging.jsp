@@ -90,7 +90,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">微信支付通知管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -100,16 +100,14 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			</div>
 			<!-- /breadcrumbs line -->
 			
-			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、可用权限微信支付通知列表<br/>
+					1、发货时间限制:虚拟、服务类24小时内,实物类72小时内。请在收到支付通知后按时发货。
+					2、若平台在规定时间内没有收到,将视作发货超时处理。<br/>
 				</p>
 			</div>
-			 -->
-			
 			
 			<form id="validate" action="<s:url value='./notifyPaging'/>" method="post" >
 				<!-- Basic inputs -->

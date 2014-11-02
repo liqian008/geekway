@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayAlarmCriteria;
 import com.bruce.geekway.service.pay.IWxPayAlarmService;
@@ -28,7 +29,7 @@ import com.bruce.geekway.service.pay.IWxPayAlarmService;
 @RequestMapping("/wxpay")
 public class WxAlarmController {
 	
-	private static final int pageSize = 1;
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxPayAlarmService wxPayAlarmService;
@@ -52,6 +53,7 @@ public class WxAlarmController {
 		model.addAttribute("pageNo", pageNo);
 		
 		WxPayAlarmCriteria criteria = new WxPayAlarmCriteria();
+		criteria.setOrderByClause(" id desc");
 		WxPayAlarmCriteria.Criteria subCriteria = criteria.createCriteria();
 		
 		//根据模块的需求构造查询条件

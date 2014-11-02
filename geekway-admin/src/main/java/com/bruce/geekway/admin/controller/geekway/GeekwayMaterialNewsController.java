@@ -1,6 +1,7 @@
 package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.model.WxMaterialArticle;
-import com.bruce.geekway.model.WxMaterialArticleCriteria;
 import com.bruce.geekway.model.WxMaterialNews;
 import com.bruce.geekway.model.WxMaterialNewsArticle;
 import com.bruce.geekway.model.WxMaterialNewsCriteria;
@@ -30,12 +33,46 @@ import com.bruce.geekway.service.IWxMaterialNewsService;
 @RequestMapping("/geekway")
 public class GeekwayMaterialNewsController {
 
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+
 	@Autowired
 	private IWxMaterialNewsService wxMaterialNewsService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 	@Autowired
 	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
+	
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/materialNewsPaging")
+	public String materialNewsPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("pageNo", pageNo);
+		
+		WxMaterialNewsCriteria criteria = new WxMaterialNewsCriteria();
+		criteria.setOrderByClause(" id desc");
+		
+		PagingResult<WxMaterialNews> materialNewsPagingData = wxMaterialNewsService.pagingByCriteria(pageNo, pageSize  , criteria);
+		if(materialNewsPagingData!=null){
+			materialNewsPagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			materialNewsPagingData.setQueryMap(queryMap);
+			model.addAttribute("materialNewsPagingData", materialNewsPagingData);
+		}
+		return "material/materialNewsListPaging";
+	}
+	
 	
 	@RequestMapping("/materialNewsList")
 	public String materialNewsList(Model model, HttpServletRequest request) {

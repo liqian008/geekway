@@ -93,7 +93,7 @@ public String displayMenuName(String name, int parentId){
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">自定义菜单管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -162,10 +162,12 @@ public String displayMenuName(String name, int parentId){
 			                        <td><%=customizeMenu.getMenuKey()%></td>
 			                        <td><%=customizeMenu.getMenuType()%></td> 
 			                        <td><%=customizeMenu.getSort()%></td>
-			                        <td> 
+			                        <td>
 			                        	<%
 			                        	if("view".equalsIgnoreCase(customizeMenu.getMenuType())){%>
-			                        		<a href="<%=customizeMenu.getUrl()%>" target="_blank">查看</a>
+				                        	<a href="<%=customizeMenu.getUrl()%>" target="_blank"> 
+												<span class="label label-success">查看</span> 
+											</a>
 			                        	<%}%>
 			                        </td>
 			                        <td class='text-center'>

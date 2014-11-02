@@ -27,6 +27,8 @@ public class GeekwayMaterialMultimediaController extends BaseController {
 	@Autowired
 	private IWxMaterialMultimediaService wxMaterialMultimediaService;
 	
+	
+	
 	/**
 	 * 图片素材列表
 	 * @param model

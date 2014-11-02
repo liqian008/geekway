@@ -10,8 +10,6 @@ import com.bruce.geekway.model.wx.response.BaseResponse;
 public interface IWxHistoryMessageService extends IFoundationPagingService<WxHistoryMessage, Integer, WxHistoryMessageCriteria> {
 	
 	
-	
-	
 	/**
 	 * 记录用户发送来的微信消息
 	 * @return

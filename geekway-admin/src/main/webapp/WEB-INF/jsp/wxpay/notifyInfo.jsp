@@ -91,7 +91,8 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、微信支付通知详情<br/>
+					1、发货时间限制:虚拟、服务类24小时内,实物类72小时内。请在收到支付通知后按时发货。
+					2、若平台在规定时间内没有收到,将视作发货超时处理。<br/>
 				</p>
 			</div>
 
@@ -110,109 +111,110 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">支付ID: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="notifyId" id="notifyId" value="${notify.notifyId}"/>
+								<label class="control-label">${notify.notifyId}</label>
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付用户: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="openId" id="openId" value="${notify.openId}"/>
-							</div>
-						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">用户状态: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">买家信息: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-3">
+								<label class="control-label">${notify.openId}</label>
+								<a href="${pageContext.request.contextPath}" target="_blank"> 
+									<span class="label label-success">查看资料</span> 
+								</a>
+								<span class="label label-success label-block">用户ID</span>
+							</div>
+							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="isSubsuribed" id="isSubsuribed" value="${notify.isSubsuribed}"/>
+								<label class="control-label">${notify.isSubsuribed}</label>
+								<span class="label label-primary label-block">关注状态</span>
 							</div>
 						</div>
 						
 						
+						
+						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">微信交易ID: <span class="mandatory">*</span></label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="transactionId" id="transactionId" value="${notify.transactionId}"/>
+							<label class="col-sm-2 control-label text-right">交易信息: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<label class="control-label">${notify.transactionId}</label>
+								<span class="label label-success label-block">微信交易ID</span>
 							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">系统订单号: <span class="mandatory">*</span></label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="outTradeNo" id="outTradeNo" value="${notify.outTradeNo}"/>
+							
+							<div class="col-sm-4">
+								<label class="control-label">${notify.outTradeNo}</label>
+								<span class="label label-primary label-block">订单号</span>
 							</div>
 						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">支付时间: <span class="mandatory">*</span></label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="timeEnd" id="timeEnd" value="${notify.timeEnd}"/>
+								<label class="control-label">${notify.timeEnd}</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">合计费用（分）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="totalFee" id="totalFee" value="${notify.totalFee}"/>
+							<label class="col-sm-2 control-label text-right">交易金额: <span class="mandatory">*</span>
+							</label>
+							
+							
+							<div class="col-sm-2">
+								<label class="control-label">${notify.totalFee}</label>
+								<span class="label label-success label-block">总金额(元)</span>
 							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">${notify.productFee}</label>
+								<span class="label label-danger label-block">商品(元)</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">${notify.transportFee}</label>
+								<span class="label label-info label-block">运费(元)</span>
+							</div>
+							
+							
+							<div class="col-sm-2">
+								<label class="control-label">${notify.discount}</label>
+								<span class="label label-success label-block">折扣(元)</span>
+							</div>
+							
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品费用（分）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="productFee" id="productFee" value="${notify.productFee}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">运费（分）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="transportFee" id="transportFee" value="${notify.transportFee}"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">折扣（分）: <span class="mandatory">*</span></label>
-							<div class="col-sm-3">
-								<input type="text" class="form-control" name="discount" id="discount" value="${notify.discount}"/>
-							</div>
-						</div>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">说明: <span class="mandatory">*</span></label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="attach" id="attach" value="${notify.attach}"/>
+								<label class="control-label">${notify.attach}</label>
 							</div>
 						</div>
 						
+						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付机构类型: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">支付机构信息: <span class="mandatory">*</span>
+							</label>
+							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="bankType" id="bankType" value="${notify.bankType}"/>
+								<label class="control-label">微信</label>
+								<span class="label label-success label-block">支付机构类型</span>
 							</div>
+							
+							<div class="col-sm-2">
+								<label class="control-label">人民币</label>
+								<span class="label label-danger label-block">feeType</span>
+							</div>
+							
+							<div class="col-sm-5">
+								<label class="control-label">${notify.bankBillno}</label>
+								<span class="label label-primary label-block">银行流水号</span>
+							</div>
+							
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">支付机构流水号: <span class="mandatory">*</span></label>
-							<div class="col-sm-6">
-								<input type="text" class="form-control" name="bankBillno" id="bankBillno" value="${notify.bankBillno}"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">币种: <span class="mandatory">*</span></label>
-							<div class="col-sm-1">
-								<input type="text" class="form-control" name="feeType" id="feeType" value="${notify.feeType}"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">原数据: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="rawData" id="rawData" value="${notify.rawData}"/>
-							</div>
-						</div>
-
 						<div class="form-actions text-right">
 							<a href="${pageContext.request.contextPath}/order/orderInfo?outTradeNo=${notify.outTradeNo}" class="btn btn-info">查看订单</a> 
 						<!-- 

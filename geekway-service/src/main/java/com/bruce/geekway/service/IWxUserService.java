@@ -2,11 +2,12 @@ package com.bruce.geekway.service;
 
 import java.util.List;
 
+import com.bruce.foundation.service.IFoundationPagingService;
 import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.WxUserCriteria;
 
-public interface IWxUserService extends IFoundationService<WxUser, Integer, WxUserCriteria> {
+public interface IWxUserService extends IFoundationPagingService<WxUser, Integer, WxUserCriteria> {
 	
 	/**
 	 * 根据用户的openId获取用户对象

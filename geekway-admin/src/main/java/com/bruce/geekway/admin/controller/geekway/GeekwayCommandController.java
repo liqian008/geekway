@@ -1,21 +1,26 @@
 package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxCommand;
+import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
-import com.bruce.geekway.utils.ConfigUtil;
 
 /**
  * 普通指令controller
@@ -26,12 +31,17 @@ import com.bruce.geekway.utils.ConfigUtil;
 @RequestMapping("/geekway") 
 public class GeekwayCommandController {
 
+
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+	
 	@Autowired
 	private IWxCommandService wxCommandService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 //	@Autowired
 //	private IWxMaterialNewsService wxMaterialNewsService;
+	
+	
 	
 	/**
 	 * 接入信息
@@ -51,6 +61,49 @@ public class GeekwayCommandController {
 		
 		return "geekway/wxConfig";
 	}
+	
+	
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/commandPaging")
+	public String commandPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("pageNo", pageNo);
+		
+		WxCommandCriteria criteria = new WxCommandCriteria();
+		criteria.setOrderByClause(" id desc");
+		WxCommandCriteria.Criteria subCriteria = criteria.createCriteria();
+		
+		//订单状态
+		String statusStr = request.getParameter("status");
+		short status = NumberUtils.toShort(statusStr, (short) -1);
+		if(status>=0){
+			subCriteria.andStatusEqualTo(status);
+			model.addAttribute("status", status);
+		}
+		
+		
+		PagingResult<WxCommand> commandPagingData = wxCommandService.pagingByCriteria(pageNo, pageSize , criteria);
+		if(commandPagingData!=null){
+			commandPagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			commandPagingData.setQueryMap(queryMap);
+			model.addAttribute("commandPagingData", commandPagingData);
+		}
+		return "geekway/commandListPaging";
+	}
+	
 	
 	@RequestMapping("/commandList")
 	public String commandList(Model model, HttpServletRequest request) {

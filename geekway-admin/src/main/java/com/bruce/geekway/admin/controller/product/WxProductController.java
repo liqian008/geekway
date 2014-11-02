@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCriteria;
-import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxSkuProp;
 import com.bruce.geekway.model.WxSkuPropCriteria;
@@ -38,7 +38,7 @@ import com.bruce.geekway.service.product.IWxSkuPropValueService;
 @RequestMapping("/product")
 public class WxProductController {
 	
-	private static final int pageSize = 1;
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxProductService wxProductService;
@@ -71,6 +71,7 @@ public class WxProductController {
 		model.addAttribute("pageNo", pageNo);
 		
 		WxProductCriteria criteria = new WxProductCriteria();
+		criteria.setOrderByClause(" id desc");
 		WxProductCriteria.Criteria subCriteria = criteria.createCriteria();
 		
 		//根据模块的需求构造查询条件
@@ -91,16 +92,16 @@ public class WxProductController {
 			model.addAttribute("description", description);
 		}
 		
-		PagingResult<WxProduct> alarmPagingData = wxProductService.pagingByCriteria(pageNo, pageSize , criteria);
-		if(alarmPagingData!=null){
-			alarmPagingData.setRequestUri(request.getRequestURI());
+		PagingResult<WxProduct> productPagingData = wxProductService.pagingByCriteria(pageNo, pageSize , criteria);
+		if(productPagingData!=null){
+			productPagingData.setRequestUri(request.getRequestURI());
 			
 			HashMap<String, Object> queryMap = new HashMap<String, Object>();
 			queryMap.putAll(request.getParameterMap());
-			alarmPagingData.setQueryMap(queryMap);
-			model.addAttribute("alarmPagingData", alarmPagingData);
+			productPagingData.setQueryMap(queryMap);
+			model.addAttribute("productPagingData", productPagingData);
 		}
-		return "wxpay/alarmListPaging";
+		return "product/productListPaging";
 	}
 	
 	

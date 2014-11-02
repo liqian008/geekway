@@ -108,24 +108,24 @@
 					<div class="panel-body">
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">告警类型: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">错误类型: <span class="mandatory">*</span></label>
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="name" id="name" value="${alarm.errorType}"/>
+								<label class="control-label">${alarm.errorType}</label>
 								<form:hidden path="alarm.id"/>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">描述: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">错误描述: <span class="mandatory">*</span></label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="description" id="description" value="${alarm.description}"/>
+								<label class="control-label">${alarm.description}</label>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">详情: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">错误详情: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-8"> 
-								<input type="text" class="form-control" name="alarmContent" id="alarmContent" value="${alarm.alarmContent}"/>
+								<label class="control-label">${alarm.alarmContent}</label>
 							</div>
 						</div>
 						
@@ -133,18 +133,12 @@
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<form:select path="alarm.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
+								<label class="control-label">${alarm.status}</label>
 							</div>
 						</div>
 						
 						<div class="form-actions text-right">
-							<input type="button" value="我知道了" class="btn btn-danger"> 
-						<!-- 
-							<input type="submit" value="提 交" class="btn btn-primary">
-						 -->
+							<input type="button" value="标记为已处理" class="btn btn-danger">
 						</div>
 					</div>
 				</div>

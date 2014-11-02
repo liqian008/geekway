@@ -78,7 +78,7 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">多图文内容</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
@@ -124,7 +124,7 @@
 							<div class="col-sm-6">
 								<label class="control-label">
 									<%
-										String meterialLink = ProductLinkUtil.getArticleLink(materialNews.getId());
+										String meterialLink = ArticleLinkUtil.getArticleLink(materialNews.getId());
 									%>
 									<%=meterialLink%>
 									<a href="<%=meterialLink%>" target="_blank" id="changeMaterial"><span class="label label-info">预 览</span></a>

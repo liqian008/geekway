@@ -273,9 +273,23 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 
 	@Override
 	public PagingResult<WxHistoryMessage> pagingByCriteria(int pageNo, int pageSize, WxHistoryMessageCriteria criteria) {
-		return null;
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxHistoryMessageCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxHistoryMessageMapper.countByExample(criteria);
+		List<WxHistoryMessage> dataList = wxHistoryMessageMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxHistoryMessage>(pageNo, pageSize, count, dataList);
 	}
-	
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {

@@ -1,6 +1,5 @@
 package com.bruce.geekway.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,8 +148,22 @@ public class WxCommandServiceImpl implements IWxCommandService {
 
 	@Override
 	public PagingResult<WxCommand> pagingByCriteria(int pageNo, int pageSize, WxCommandCriteria criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxCommandCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxCommandMapper.countByExample(criteria);
+		List<WxCommand> dataList = wxCommandMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxCommand>(pageNo, pageSize, count, dataList);
 	}
 
 	public WxCommandMapper getWxCommandMapper() {

@@ -1,5 +1,6 @@
 package com.bruce.geekway.admin.controller.geekway;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,10 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxBroadcast;
+import com.bruce.geekway.model.WxBroadcastCriteria;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
@@ -28,8 +33,53 @@ import com.bruce.geekway.utils.JsonResultBuilderUtil;
 @RequestMapping("/geekway") 
 public class GeekwayBroadcastController {
 
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+	
 	@Autowired
 	private IWxBroadcastService wxBroadcastService;
+	
+	
+	
+	
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/broadcastPaging")
+	public String broadcastPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		//判断是否是服务号（只有服务号才支持群发功能）
+		if("senior".equalsIgnoreCase(ConstWeixin.WX_ACCOUNT_TYPE)){
+			model.addAttribute("pageNo", pageNo);
+			
+			WxBroadcastCriteria criteria =  null;
+			
+			PagingResult<WxBroadcast> broadcastPagingData = wxBroadcastService.pagingByCriteria(pageNo, pageSize , criteria);
+			if(broadcastPagingData!=null){
+				broadcastPagingData.setRequestUri(request.getRequestURI());
+				
+				HashMap<String, Object> queryMap = new HashMap();
+				queryMap.putAll(request.getParameterMap());
+				broadcastPagingData.setQueryMap(queryMap);
+				model.addAttribute("broadcastPagingData", broadcastPagingData);
+			}
+			return "geekway/broadcastListPaging";
+		}else{
+			request.setAttribute("message", "只有服务号才支持群发功能");
+			return "forward:/home/operationResult";
+		}
+		
+	}
+	
+	
+	
 	
 	/**
 	 * 群发记录列表

@@ -1,6 +1,7 @@
 package com.bruce.geekway.admin.controller.geekway;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.admin.controller.BaseController;
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.model.WxMaterialArticle;
+import com.bruce.geekway.model.WxMaterialArticleCriteria;
 import com.bruce.geekway.service.IWxCommandService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialNewsArticleService;
@@ -26,6 +31,9 @@ import com.bruce.geekway.service.IWxMaterialNewsArticleService;
 @RequestMapping("/geekway")
 public class GeekwayMaterialArticleController extends BaseController {
 
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+
+	
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 	@Autowired
@@ -33,6 +41,39 @@ public class GeekwayMaterialArticleController extends BaseController {
 	@Autowired
 	private IWxMaterialNewsArticleService wxMaterialNewsArticleService;
 
+	
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/materialArticlePaging")
+	public String materialArticlePaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("pageNo", pageNo);
+		
+		WxMaterialArticleCriteria criteria = new WxMaterialArticleCriteria();
+		criteria.setOrderByClause(" id desc");
+		
+		PagingResult<WxMaterialArticle> materialArticlePagingData = wxMaterialArticleService.pagingByCriteria(pageNo, pageSize  , criteria);
+		if(materialArticlePagingData!=null){
+			materialArticlePagingData.setRequestUri(request.getRequestURI()); 
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			materialArticlePagingData.setQueryMap(queryMap);
+			model.addAttribute("materialArticlePagingData", materialArticlePagingData);
+		}
+		return "material/materialArticleListPaging";
+	}
+	
+	
 	
 	@RequestMapping("/materialArticleList")
 	public String materialArticleList(Model model, HttpServletRequest request) {

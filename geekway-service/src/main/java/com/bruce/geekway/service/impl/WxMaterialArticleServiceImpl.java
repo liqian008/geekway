@@ -119,8 +119,22 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService, 
 
 	@Override
 	public PagingResult<WxMaterialArticle> pagingByCriteria(int pageNo, int pageSize, WxMaterialArticleCriteria criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxMaterialArticleCriteria();
+		}
+		
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxMaterialArticleMapper.countByExample(criteria);
+		List<WxMaterialArticle> dataList = wxMaterialArticleMapper.selectByExample(criteria);
+		//返回分页数据
+		return new PagingResult<WxMaterialArticle>(pageNo, pageSize, count, dataList);
 	}
 	
 	

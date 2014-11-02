@@ -71,7 +71,7 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="index.html">首页</a></li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
 					<li class="active">添加单图文素材</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
