@@ -16,9 +16,9 @@ import com.bruce.geekway.service.mp.WxMpUserService;
 public class WxUserSyncTask implements Runnable{
 
 	@Autowired
-	private WxMpUserService wxMpUserService;
-	@Autowired
 	private IWxUserService wxUserService;
+	@Autowired
+	private WxMpUserService wxMpUserService;
 	
 	private boolean running;
 	

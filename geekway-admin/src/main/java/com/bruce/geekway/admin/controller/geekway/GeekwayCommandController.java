@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.admin.constants.ConstAdmin;
-import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCommandCriteria;
 import com.bruce.geekway.service.IWxCommandService;
@@ -31,36 +30,13 @@ import com.bruce.geekway.service.IWxMaterialArticleService;
 @RequestMapping("/geekway") 
 public class GeekwayCommandController {
 
-
 	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxCommandService wxCommandService;
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
-//	@Autowired
-//	private IWxMaterialNewsService wxMaterialNewsService;
 	
-	
-	
-	/**
-	 * 接入信息
-	 * @param model
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("/wxConfig")
-	public String config(Model model, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		
-		model.addAttribute("devmodeUrl", ConstWeixin.WX_DEV_MODE_URL);
-		model.addAttribute("devmodeToken", ConstWeixin.WX_DEV_MODE_TOKEN);
-		model.addAttribute("qrcodeUrl", ConstWeixin.WX_MP_ACCOUNT_QRCODE_URL);
-		
-		return "geekway/wxConfig";
-	}
 	
 	
 	/**

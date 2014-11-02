@@ -143,8 +143,15 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>群发管理
+						<i class="icon-people"></i>群发消息管理
 					</h5>
+					<!-- 
+					暂时不支持以下格式类型
+					<a id="imageMaterial" class="modal-trigger" href="javascript:void(0)"><span class="label label-primary pull-right">群发图片消息</span></a>
+					-->
+					<a id="newsMaterial"  class="modal-trigger" href="javascript:void(0)"><span class="label label-danger pull-right">群发多图文消息</span></a>
+					<a id="articleMaterial"  class="modal-trigger" href="javascript:void(0)"><span class="label label-info pull-right">群发单图文消息</span></a>
+					<a id="textMaterial"  class="modal-trigger" href="javascript:void(0)"><span class="label label-success pull-right">群发文本消息</span></a>
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped dataTable">

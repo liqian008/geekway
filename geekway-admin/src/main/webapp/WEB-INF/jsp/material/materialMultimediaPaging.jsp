@@ -153,6 +153,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 					<h5 class="panel-title">
 						<i class="icon-people"></i>多媒体素材管理
 					</h5>
+					<a href="./materialImageAdd"><span class="label label-danger pull-right">新增图片素材</span></a>
+					<a href="./materialVoiceAdd"><span class="label label-info pull-right">新增语音素材</span></a>
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped dataTable">

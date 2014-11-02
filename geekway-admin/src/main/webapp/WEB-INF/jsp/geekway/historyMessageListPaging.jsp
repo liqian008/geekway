@@ -7,14 +7,15 @@
 <%@page import="com.bruce.foundation.enumeration.*"%>
 <%@page import="com.bruce.foundation.model.paging.*"%>
 <%@page import="com.bruce.foundation.admin.utils.*"%>
+<%@page import="com.bruce.foundation.util.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
 
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
+<%!String displayHistoryMessageType(short historyMessageType){
+	if(1==historyMessageType){
 		return "菜单配置";
-	}else if(0==commandType){
+	}else if(0==historyMessageType){
 		return "文本输入";
 	}
 	return "类型错误";
@@ -106,7 +107,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词管理 
+						历史消息管理 
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -118,7 +119,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">关键词管理</li>
+					<li class="active">历史消息管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -132,13 +133,13 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、可用权限关键词列表<br/>
+					1、可用权限历史消息列表<br/>
 				</p>
 			</div>
 			 -->
 			
 			
-			<form id="validate" action="<s:url value='./commandPaging'/>" method="post" >
+			<form id="validate" action="<s:url value='./historyMessagePaging'/>" method="post" >
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -150,8 +151,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-md-4">
-									<label>关键词:</label>
-									<input type="text" name="command" placeholder="支持模糊匹配" class="form-control">
+									<label>历史消息:</label>
+									<input type="text" name="historyMessage" placeholder="支持模糊匹配" class="form-control">
 								</div>
 								
 							</div>
@@ -171,50 +172,59 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>关键词管理
+						<i class="icon-people"></i>历史消息管理
 					</h5>
-					<a href="./menuCommandAdd"><span class="label label-danger pull-right">增加菜单关键词</span></a>
-					<a href="./textCommandAdd"><span class="label label-info pull-right">增加文本关键词</span></a>
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped dataTable">
 						<thead>
 							<tr>
-								<th>序号</th>
-								<th>类型</th>
-                                <th>关键词</th>
-                                <th>素材类型</th>
-                                <th>状态</th>
-                                <th class="team-links">操 作</th> 
+								<th>ID</th>
+                                <th>用户</th>
+                                <th>姓名</th>
+                                <th>消息</th>
+                                <th>发送时间</th>
+                                <th class="team-links">操作</th> 
 							</tr>
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxCommand> pagingResult = (PagingResult<WxCommand>)request.getAttribute("commandPagingData");
-							List<WxCommand> commandList = pagingResult.getPageData();
-                           	if(commandList!=null&&commandList.size()>0){
+							PagingResult<WxHistoryMessage> pagingResult = (PagingResult<WxHistoryMessage>)request.getAttribute("historyMessagePagingData");
+							List<WxHistoryMessage> historyMessageList = pagingResult.getPageData();
+                           	if(historyMessageList!=null&&historyMessageList.size()>0){
                            		int i=0;
-                           		for(WxCommand command: commandList){
+                           		for(WxHistoryMessage historyMessage: historyMessageList){
                            			i++;
                            	%>
-						
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=displayCommandType(command.getCommandType())%></td>
-		                        <td><%=command.getCommand()%></td>
-		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
-		                        <td>状态</td>
+		                        <td>
+		                        	<a href="javascript:void(0)" class="lightbox">
+		                        	<%if(historyMessage.getUser()!=null){%>
+		                        	<img src="<%=historyMessage.getUser().getHeadImgUrl()%>" class="img-media"/>
+		                        	<%}%>
+		                        	</a>
+		                        </td>
+		                        <td><%=historyMessage.getUser().getNickname()%></td> 
+		                        <td>
+		                        	<%=historyMessage.getContent()%>
+		                        	<%if("image".equalsIgnoreCase(historyMessage.getMsgType())){%>
+		                        	<a href="javascript:void(0)" class="lightbox">
+		                        	<img src="<%=historyMessage.getPicUrl()%>" class="img-media"/>
+		                        	</a>
+		                        	<%}%>
+		                        </td>
+		                        <td><%=DateUtil.date2YMDHMS(historyMessage.getSentTime())%></td> 
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./commandEdit?commandId=<%=command.getId()%>"
+		                        		<%String link = "./historyMessageDialogPaging?openId="+historyMessage.getOpenId();%>
+										<a href="<%=link%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<a href="./delCommand?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
+											data-original-title="回 复"><i class="icon-bubble3"></i></a>
+										
 									</div>
 								</td>
-                            </tr>
+                           	</tr>
 							<%}
                            	} %>
 						</tbody>

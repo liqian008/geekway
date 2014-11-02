@@ -41,7 +41,7 @@ public class GeekwayUserController {
 	 */
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/wxUserPaging")
-	public String productPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+	public String wxUserPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

@@ -10,33 +10,6 @@
 
 <%@ include file="../inc/include_tag.jsp" %>
 
-
-<%!String displayCommandType(short commandType){
-	if(1==commandType){
-		return "菜单配置";
-	}else if(0==commandType){
-		return "文本输入";
-	}
-	return "类型错误";
-} %>
-
-<%!String displayMaterialType(Short materialType){
-	if(materialType!=null){
-		if(0==materialType){ 
-			return "文本";
-		}else if(1==materialType){
-			return "单图文";
-		}else if(2==materialType){
-			return "多图文";
-		}else if(3==materialType){
-			return "图片";
-		}else if(4==materialType){
-			return "语音";
-		}
-	}
-	return "未指定";
-} %>
-
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 %>
@@ -106,7 +79,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						关键词管理 
+						用户管理 
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -118,7 +91,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">关键词管理</li>
+					<li class="active">用户管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -127,18 +100,18 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			</div>
 			<!-- /breadcrumbs line -->
 			
-			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、可用权限关键词列表<br/>
+					1、用户资料的同步策略为每小时一次。即新关注的用户资料，一小时内可以同步回来。<br/>
+					2、点击【查看】按钮，可查看用户详情<br/>
 				</p>
 			</div>
-			 -->
+
 			
 			
-			<form id="validate" action="<s:url value='./commandPaging'/>" method="post" >
+			<form id="validate" action="<s:url value='./wxUserPaging'/>" method="post" >
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -150,8 +123,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-md-4">
-									<label>关键词:</label>
-									<input type="text" name="command" placeholder="支持模糊匹配" class="form-control">
+									<label>用户:</label>
+									<input type="text" name="user" placeholder="支持模糊匹配" class="form-control">
 								</div>
 								
 							</div>
@@ -171,50 +144,65 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>关键词管理
+						<i class="icon-people"></i>用户管理
 					</h5>
-					<a href="./menuCommandAdd"><span class="label label-danger pull-right">增加菜单关键词</span></a>
-					<a href="./textCommandAdd"><span class="label label-info pull-right">增加文本关键词</span></a>
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped dataTable">
 						<thead>
 							<tr>
 								<th>序号</th>
-								<th>类型</th>
-                                <th>关键词</th>
-                                <th>素材类型</th>
-                                <th>状态</th>
-                                <th class="team-links">操 作</th> 
+								<th>头像</th>
+								<th>状态</th>
+								<th>昵称</th>
+								<th>OPENID</th>
+								<th>区域</th>
+                               <!--  <th>关注时间</th> -->
+                                <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxCommand> pagingResult = (PagingResult<WxCommand>)request.getAttribute("commandPagingData");
-							List<WxCommand> commandList = pagingResult.getPageData();
-                           	if(commandList!=null&&commandList.size()>0){
+							PagingResult<WxUser> pagingResult = (PagingResult<WxUser>)request.getAttribute("wxUserPagingData");
+							List<WxUser> wxUserList = pagingResult.getPageData();
+							if(wxUserList!=null&&wxUserList.size()>0){
                            		int i=0;
-                           		for(WxCommand command: commandList){
+                           		for(WxUser wxUser: wxUserList){
+                           			boolean synced = wxUser.getSyncStatus()>0;
                            			i++;
                            	%>
 						
 							<tr>
 		                        <td><%=i%></td>
-		                        <td><%=displayCommandType(command.getCommandType())%></td>
-		                        <td><%=command.getCommand()%></td>
-		                        <td><%=displayMaterialType(command.getMaterialType())%></td>
-		                        <td>状态</td>
+		                        <td>
+		                        	<%if(synced){ %>
+	                        		<a href="javascript:void(0)" class="lightbox">
+		                        	<img src="<%=wxUser.getHeadImgUrl()%>" class="img-media"/>
+		                        	</a>
+		                        	<%}%>
+		                        </td>
+		                        <td><%=wxUser.getSubscribeStatus()==1?"已关注":"已取消"%></td>
+		                        <td><%=synced?wxUser.getNickname():"详细信息未同步"%></td>
+		                        <td><%=wxUser.getOpenId()%></td>
+		                        <td>
+		                        	<%if(synced){%>
+		                        	<%=wxUser.getCountry()+"-"+wxUser.getProvince()+"-"+wxUser.getProvince()%>
+		                        	<%}%>
+		                        </td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./commandEdit?commandId=<%=command.getId()%>"
+		                        		<%String link = "./historyMessageDialog?openId="+wxUser.getOpenId();%>
+											<a href="<%=link%>"
+												class="btn btn-link btn-icon btn-xs tip" title=""
+												data-original-title="回 复"><i class="icon-bubble3"></i></a>
+		                        		<%if(synced){%>
+										<a href="./wxUserInfo?wxUserId=<%=wxUser.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a>
-										<a href="./delCommand?commandId=<%=command.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
+											data-original-title="查看"><i class="icon-pencil3"></i></a> 
+										<%} %>
 									</div>
 								</td>
-                            </tr>
+                               </tr>
 							<%}
                            	} %>
 						</tbody>

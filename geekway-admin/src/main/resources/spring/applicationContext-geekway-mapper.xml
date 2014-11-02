@@ -65,7 +65,11 @@
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxUserMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-
+	<bean id="wxWebUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxWebUserMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
+	
 	<bean id="wxBroadcastMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface" value="com.bruce.geekway.dao.mapper.WxBroadcastMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />

@@ -14,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.foundation.util.DateUtil;
+import com.bruce.geekway.admin.constants.ConstAdmin;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
@@ -30,11 +32,113 @@ import com.bruce.geekway.service.IWxUserService;
 @Controller
 @RequestMapping("/geekway") 
 public class GeekwayHistoryMessageController {
+
+	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxHistoryMessageService wxHistoryMessageService;
 	@Autowired
-	private IWxUserService userrService;
+	private IWxUserService userService;
+	
+	
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/historyMessagePaging")
+	public String historyMessagePaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("pageNo", pageNo);
+		
+		WxHistoryMessageCriteria criteria = new WxHistoryMessageCriteria();
+		criteria.setOrderByClause(" id desc");
+		WxHistoryMessageCriteria.Criteria subCriteria = criteria.createCriteria();
+		
+		PagingResult<WxHistoryMessage> historyMessagePagingData = wxHistoryMessageService.pagingByCriteria(pageNo, pageSize , criteria);
+		if(historyMessagePagingData!=null){
+			historyMessagePagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			historyMessagePagingData.setQueryMap(queryMap);
+			model.addAttribute("historyMessagePagingData", historyMessagePagingData);
+			
+			List<WxHistoryMessage> historyMessageList = historyMessagePagingData.getPageData();
+			if(historyMessageList!=null&&historyMessageList.size()>0){
+				//获取个人资料
+				Map<String, WxUser> userMap = new HashMap<String, WxUser>();
+				for(WxHistoryMessage historyMessage: historyMessageList){
+					String userOpenId = historyMessage.getOpenId();
+					if(!StringUtils.isBlank(userOpenId)){
+						WxUser mpUser = userMap.get(userOpenId);//取缓存对象中的对象
+						if(mpUser==null){//用户对象未被缓存，需要从db中获取
+							mpUser = userService.loadByOpenId(userOpenId);
+						}
+						if(mpUser!=null){
+							historyMessage.setUser(mpUser);
+						}
+					}
+				}
+			}
+		}
+		return "geekway/historyMessageListPaging";
+	}
+	
+	
+	
+	/**
+	 * 用户的对话消息
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/historyMessageDialogPaging")
+	public String historyMessageDialogPaging(Model model, String openId, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		WxUser chatUser = userService.loadByOpenId(openId);
+		if(chatUser!=null){
+			model.addAttribute("chatUser", chatUser);
+			model.addAttribute("accountDefaultAvatar", ConstWeixin.DEFAULT_WEIXIN_ACCOUNT_AVATAR_URL);
+			
+			//检查是否可以给用户回复消息
+			boolean replyDenied = true;
+			WxHistoryMessage userLatestMessage = wxHistoryMessageService.queryUserLastestMessage(openId);
+			if(userLatestMessage!=null&& (System.currentTimeMillis() - userLatestMessage.getSentTime().getTime() < DateUtil.TIME_UNIT_DAY*2) ){
+				//距离用户上次回复48小时内，才能进行回复
+				replyDenied = false;
+			}
+			model.addAttribute("replyDenied", replyDenied);
+			
+			WxHistoryMessageCriteria criteria = new WxHistoryMessageCriteria();
+			WxHistoryMessageCriteria.Criteria subCriteria = criteria.createCriteria();
+			subCriteria.andIsSystemMsgEqualTo((short) 0).andOpenIdEqualTo(openId);
+			criteria.setOrderByClause(" id desc");
+			PagingResult<WxHistoryMessage> historyMessagePagingData = wxHistoryMessageService.pagingByCriteria(pageNo, pageSize , criteria);
+			if(historyMessagePagingData!=null){
+				historyMessagePagingData.setRequestUri(request.getRequestURI());
+				
+				HashMap<String, Object> queryMap = new HashMap<String, Object>();
+				queryMap.putAll(request.getParameterMap());
+				historyMessagePagingData.setQueryMap(queryMap);
+				model.addAttribute("historyMessagePagingData", historyMessagePagingData);
+			}
+			return "geekway/historyMessageDialogPaging";
+		}else{
+			request.setAttribute("message", "选定用户不存在");
+			return "forward:/home/operationResult";
+		}
+	}
+	
 	
 	/**
 	 * 历史消息列表
@@ -43,6 +147,7 @@ public class GeekwayHistoryMessageController {
 	 * @param request
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping("/historyMessageList")
 	public String historyMessageList(Model model, @RequestParam(defaultValue="1")int interval, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -65,7 +170,7 @@ public class GeekwayHistoryMessageController {
 				if(!StringUtils.isBlank(userOpenId)){
 					WxUser mpUser = userMap.get(userOpenId);//取缓存对象中的对象
 					if(mpUser==null){//用户对象未被缓存，需要从db中获取
-						mpUser = userrService.loadByOpenId(userOpenId);
+						mpUser = userService.loadByOpenId(userOpenId);
 					}
 					if(mpUser!=null){
 						historyMessage.setUser(mpUser);
@@ -83,6 +188,7 @@ public class GeekwayHistoryMessageController {
 	 * @param request
 	 * @return
 	 */
+	@Deprecated
 	@RequestMapping("/historyMessageDialog")
 	public String historyMessageDialog(Model model, @RequestParam(defaultValue="1")int interval, String openId,  HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -92,7 +198,7 @@ public class GeekwayHistoryMessageController {
 		model.addAttribute("interval", interval);
 		Date queryTimeFrom = DateUtil.calcDatetime(new Date(), 0-interval);
 		
-		WxUser chatUser = userrService.loadByOpenId(openId);
+		WxUser chatUser = userService.loadByOpenId(openId);
 		if(chatUser!=null){
 			
 			model.addAttribute("chatUser", chatUser);
@@ -106,8 +212,6 @@ public class GeekwayHistoryMessageController {
 				customReply = true;
 			}
 			model.addAttribute("customReply", customReply);
-			
-			
 			
 			WxHistoryMessageCriteria criteria = new WxHistoryMessageCriteria();
 			WxHistoryMessageCriteria.Criteria subCriteria = criteria.createCriteria();

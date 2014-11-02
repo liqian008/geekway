@@ -145,8 +145,9 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>多图文素材管理
+						<i class="icon-people"></i>多图文管理
 					</h5>
+					<a href="./materialNewsAdd"><span class="label label-danger pull-right">新增多图文素材</span></a>
 				</div>
 				<div class="table-responsive">
 					<table class="table table-bordered table-striped dataTable">
