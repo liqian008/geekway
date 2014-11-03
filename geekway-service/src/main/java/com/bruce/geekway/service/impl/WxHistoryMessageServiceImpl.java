@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.foundation.util.JsonUtil;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxHistoryMessageMapper;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
@@ -274,7 +275,7 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 	@Override
 	public PagingResult<WxHistoryMessage> pagingByCriteria(int pageNo, int pageSize, WxHistoryMessageCriteria criteria) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
-		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		//构造查询条件

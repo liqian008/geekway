@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
-import com.bruce.geekway.admin.constants.ConstAdmin;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayComplaintCriteria;
 import com.bruce.geekway.service.pay.IWxPayComplaintService;
@@ -30,7 +30,7 @@ import com.bruce.geekway.service.pay.IWxPayComplaintService;
 public class WxComplaintController {
 	
 
-	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxPayComplaintService wxPayComplaintService;

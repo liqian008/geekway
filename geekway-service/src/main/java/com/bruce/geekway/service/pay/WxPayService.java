@@ -37,7 +37,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
  *
  */
 @Service
-public class IWxPayService{
+public class WxPayService{
 	
 	@Autowired
 	private IWxPayNotifyOrderService wxPayNotifyOrderService;
@@ -135,8 +135,6 @@ public class IWxPayService{
 			//微信提交成功，解析返回结果
 		}
 		return 0;
-		
-		
 	}
 	
 	
@@ -151,8 +149,8 @@ public class IWxPayService{
 			String feedbackId = wxComplateRequest.getFeedbackId();
 			String openId = wxComplateRequest.getOpenId();
 			
-			boolean isFirst = true;//判断是否是新投诉，还是投诉后续的反馈，默认为新投诉
-			if(!"request".equalsIgnoreCase(msgType)){
+			boolean isFirst = true;//判断投诉类型（request用户提交投诉,confirm 用户确认消除,reject用户拒绝消除投诉），默认为新投诉
+			if(!"request".equalsIgnoreCase(msgType)){//通知类型 
 				isFirst = false;
 			}
 			//新增投诉

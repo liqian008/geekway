@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.foundation.util.DateUtil;
-import com.bruce.geekway.admin.constants.ConstAdmin;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrderItem;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
-import com.bruce.geekway.service.pay.IWxPayService;
+import com.bruce.geekway.service.pay.WxPayService;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
 import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
@@ -41,7 +41,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
 @RequestMapping("/order")
 public class WxOrderController {
 	
-	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxProductOrderService wxProductOrderService;
@@ -50,7 +50,7 @@ public class WxOrderController {
 	@Autowired
 	private WxMpPayService wxMpPayService;
 	@Autowired
-	private IWxPayService wxPayService;
+	private WxPayService wxPayService;
 	
 	
 	/**

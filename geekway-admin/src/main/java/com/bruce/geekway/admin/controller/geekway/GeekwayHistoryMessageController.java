@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.foundation.util.DateUtil;
-import com.bruce.geekway.admin.constants.ConstAdmin;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxHistoryMessage;
 import com.bruce.geekway.model.WxHistoryMessageCriteria;
@@ -33,7 +33,7 @@ import com.bruce.geekway.service.IWxUserService;
 @RequestMapping("/geekway") 
 public class GeekwayHistoryMessageController {
 
-	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
 	private IWxHistoryMessageService wxHistoryMessageService;

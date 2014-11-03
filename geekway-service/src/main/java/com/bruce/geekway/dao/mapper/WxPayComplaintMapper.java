@@ -74,4 +74,7 @@ public interface WxPayComplaintMapper {
 	 * @mbggenerated  Tue Sep 16 18:22:03 CST 2014
 	 */
 	int updateByPrimaryKey(WxPayComplaint record);
+	
+	
+	List<WxPayComplaint> groupSelectByExample(WxPayComplaintCriteria example);
 }

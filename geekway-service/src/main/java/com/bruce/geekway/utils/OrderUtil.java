@@ -4,11 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.bruce.foundation.util.DateUtil;
 import com.bruce.foundation.util.RandomNumberUtil;
-import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 
@@ -134,5 +131,4 @@ public class OrderUtil {
 		return String.valueOf(secondValue);
 	}
 	
-
 }

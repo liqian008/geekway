@@ -21,7 +21,7 @@ import com.bruce.foundation.util.Sha1Util;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
-import com.bruce.geekway.service.pay.IWxPayService;
+import com.bruce.geekway.service.pay.WxPayService;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -32,7 +32,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
 public class WxPayCallbackController {
 
 	@Autowired
-	private IWxPayService wxPayService;
+	private WxPayService wxPayService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxPayCallbackController.class);
 

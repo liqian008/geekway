@@ -33,7 +33,7 @@
 		<mapper resource="com/bruce/geekway/model/xml/WxPayNotifyOrderMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxPayAlarmMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxPayComplaintMapper.xml" />
-		
+		<mapper resource="com/bruce/geekway/model/xml/WxPayComplaintExtendMapper.xml" />
 		
 		<!-- weixin product -->
 		<mapper resource="com/bruce/geekway/model/xml/WxProductCategoryMapper.xml" />

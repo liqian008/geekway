@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
-import com.bruce.geekway.admin.constants.ConstAdmin;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.WxUserCriteria;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
@@ -24,7 +24,7 @@ import com.bruce.geekway.service.mp.WxMpUserService;
 @RequestMapping("/geekway")
 public class GeekwayUserController {
 	
-	private static final int pageSize = ConstAdmin.PAGE_SIZE_DEFAULT;
+	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 
 	@Autowired
 	private IWxUserService wxUserService;

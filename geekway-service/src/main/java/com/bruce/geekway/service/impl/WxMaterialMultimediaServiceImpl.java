@@ -7,9 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxMaterialMultimediaMapper;
-import com.bruce.geekway.model.WxMaterialMultimedia;
-import com.bruce.geekway.model.WxMaterialMultimediaCriteria;
 import com.bruce.geekway.model.WxMaterialMultimedia;
 import com.bruce.geekway.model.WxMaterialMultimediaCriteria;
 import com.bruce.geekway.service.IWxMaterialMultimediaService;
@@ -118,7 +117,7 @@ public class WxMaterialMultimediaServiceImpl implements IWxMaterialMultimediaSer
 	@Override
 	public PagingResult<WxMaterialMultimedia> pagingByCriteria(int pageNo, int pageSize, WxMaterialMultimediaCriteria criteria) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
-		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		//构造查询条件

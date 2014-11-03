@@ -1,20 +1,16 @@
+
 package com.bruce.geekway.service.product.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxProductMapper;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCriteria;
-import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductCriteria;
-import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 
@@ -85,7 +81,7 @@ public class WxProductServiceImpl implements IWxProductService {
 	public PagingResult<WxProduct> pagingByCriteria(int pageNo, int pageSize,
 			WxProductCriteria criteria) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
-		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		//构造查询条件

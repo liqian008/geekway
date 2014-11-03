@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxPayComplaintMapper;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayComplaintCriteria;
@@ -71,7 +72,7 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 	public PagingResult<WxPayComplaint> pagingByCriteria(int pageNo,
 			int pageSize, WxPayComplaintCriteria criteria) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
-		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		//构造查询条件
@@ -83,10 +84,11 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		criteria.setLimitRows(pageSize);
 		
 		int count = wxPayComplaintMapper.countByExample(criteria);
-		List<WxPayComplaint> dataList = wxPayComplaintMapper.selectByExample(criteria);
+		List<WxPayComplaint> dataList = wxPayComplaintMapper.groupSelectByExample(criteria);
 		//返回分页数据
 		return new PagingResult<WxPayComplaint>(pageNo, pageSize, count, dataList);
 	}
+	
 
 
 	@Override
@@ -101,7 +103,7 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 	
 	@Override
 	public int markWait4Confirm(String openId, String feedbackId) {
-		return markDealStatus(openId, feedbackId, (short)2);
+		return markDealStatus(openId, feedbackId, (short)1);
 	}
 	
 	/**

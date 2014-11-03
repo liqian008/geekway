@@ -1,5 +1,7 @@
 package com.bruce.geekway.constants;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.bruce.geekway.utils.ConfigUtil;
 
 public interface ConstConfig {
@@ -7,6 +9,9 @@ public interface ConstConfig {
 	//分布式的服务器编号index, 从1开始
 	public static final String SERVER_INDEX = ConfigUtil.getString("server_index");
 	
+	/*默认每页显示的条数*/
+	public static final int PAGE_SIZE_DEFAULT = NumberUtils.toInt(ConfigUtil.getString("page_size_default"), 20);
+
 	
 	/* contextPath */
 	public static final String CONTEXT_PATH = ConfigUtil.getString("contextPath");

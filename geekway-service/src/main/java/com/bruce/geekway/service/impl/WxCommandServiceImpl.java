@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxCommandMapper;
 import com.bruce.geekway.model.WxCommand;
 import com.bruce.geekway.model.WxCommandCriteria;
@@ -149,7 +150,7 @@ public class WxCommandServiceImpl implements IWxCommandService {
 	@Override
 	public PagingResult<WxCommand> pagingByCriteria(int pageNo, int pageSize, WxCommandCriteria criteria) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
-		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		//构造查询条件

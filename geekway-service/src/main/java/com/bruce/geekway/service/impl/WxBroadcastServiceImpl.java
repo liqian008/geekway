@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxBroadcastMapper;
-import com.bruce.geekway.model.WxBroadcast;
-import com.bruce.geekway.model.WxBroadcastCriteria;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.WxBroadcastCriteria;
 import com.bruce.geekway.model.WxMaterialArticle;
@@ -21,7 +20,6 @@ import com.bruce.geekway.service.IWxBroadcastService;
 import com.bruce.geekway.service.IWxMaterialArticleService;
 import com.bruce.geekway.service.IWxMaterialMultimediaService;
 import com.bruce.geekway.service.mp.WxMpBroadcastService;
-import com.bruce.geekway.utils.ConfigUtil;
 
 /**
  * 
@@ -222,7 +220,7 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 	@Override
 	public PagingResult<WxBroadcast> pagingByCriteria(int pageNo, int pageSize, WxBroadcastCriteria criteria) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
-		pageSize = pageNo<=0?20:pageSize;//确保pageSize合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		//构造查询条件
