@@ -154,6 +154,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 							<tr>
 								<th>ID</th>
                                 <th>用户ID</th>
+                                <th>类型</th> 
                                 <th>原因</th>
                                 <th>状态</th>
                                 <th>投诉时间</th>
@@ -167,16 +168,16 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                            	if(complaintList!=null&&complaintList.size()>0){
                            		for(WxPayComplaint complaint: complaintList){
                            	%>
-						
 							<tr>
 								<td><%=complaint.getId()%></td>
 		                        <td><%=complaint.getOpenId()%></td>
+		                        <td><%=complaint.getMsgType()%></td>
 		                        <td><%=complaint.getReason()%></td>
 		                        <td><%=complaint.getDealStatus()%></td>
 		                        <td><%=sdf.format(complaint.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./complaintInfo?id=<%=complaint.getId()%>"
+										<a href="./complaintHistory?transId=<%=complaint.getTransId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="查 看"><i class="icon-pencil3"></i></a>
 									</div>
@@ -188,7 +189,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 					</table>
 					
 					<div class="datatable-footer">
-					<%//=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
+					<%=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
 					</div>
 					 
 				</div>

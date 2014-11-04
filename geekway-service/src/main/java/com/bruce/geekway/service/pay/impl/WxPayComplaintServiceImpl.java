@@ -83,7 +83,7 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		criteria.setLimitOffset(offset);
 		criteria.setLimitRows(pageSize);
 		
-		int count = wxPayComplaintMapper.countByExample(criteria);
+		int count = wxPayComplaintMapper.groupCountByExample(criteria);
 		List<WxPayComplaint> dataList = wxPayComplaintMapper.groupSelectByExample(criteria);
 		//返回分页数据
 		return new PagingResult<WxPayComplaint>(pageNo, pageSize, count, dataList);

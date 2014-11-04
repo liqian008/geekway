@@ -1,9 +1,11 @@
+<%@page import="com.bruce.foundation.util.DateUtil"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.foundation.admin.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
 
@@ -66,7 +68,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						用户投诉详情
+						用户投诉
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -78,7 +80,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">用户投诉详情</li>
+					<li class="active">用户投诉</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -87,73 +89,58 @@
 			</div>
 			<!-- /breadcrumbs line -->
 			
-			<div class="callout callout-info fade in">
+			<!-- <div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、用户投诉详情<br/>
+					1、投诉详情<br/>
 				</p>
-			</div>
+			</div> -->
 
 
-			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>查看用户投诉详情
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">告警类型: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="name" id="name" value="${alarm.errorType}"/>
-								<form:hidden path="alarm.id"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">描述: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" name="description" id="description" value="${alarm.description}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">详情: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea class="ckeditor" name="alarmContent" id="alarmContent">
-									${alarm.alarmContent}
-									</textarea>
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<form:select path="alarm.status" class="select-liquid">
-									<form:option value="0"  label="禁用"/>
-									<form:option value="1"  label="启用"/>
-								</form:select>
-							</div>
-						</div>
-						
-						<!-- 
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="提 交" class="btn btn-primary">
-						</div>
-						 -->
-					</div>
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>用户投诉
+					</h5>
 				</div>
-				
-			</form>
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>OpenID</th>
+                                <th>类型</th> 
+                                <th>原因</th>
+                                <th>状态</th>
+                                <th>投诉时间</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+                           	List<WxPayComplaint> complaintList = (List<WxPayComplaint>)request.getAttribute("complaintList");
+                           	if(complaintList!=null&&complaintList.size()>0){
+                           		int i=0;
+                           		for(WxPayComplaint complaint: complaintList){
+                           			i++;
+                           	%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td><%=complaint.getOpenId()%></td>
+		                        <td><%=complaint.getMsgType()%></td>
+		                        <td><%=complaint.getReason()%></td>
+		                        <td><%=complaint.getDealStatus()%></td>
+		                        <td><%=DateUtil.date2YMDHMS(complaint.getCreateTime())%></td>
+                             </tr>
+                             <%}
+                             }%>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- /table view -->
+
 		
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

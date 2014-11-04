@@ -75,6 +75,7 @@ public interface WxPayComplaintMapper {
 	 */
 	int updateByPrimaryKey(WxPayComplaint record);
 	
+	int groupCountByExample(WxPayComplaintCriteria example);
 	
 	List<WxPayComplaint> groupSelectByExample(WxPayComplaintCriteria example);
 }

@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bruce.geekway.dao.mapper.WxPayComplaintMapper">
   
+  
+  
+  
 	<!-- 查询分页 -->
 	<select id="groupSelectByExample" parameterType="com.bruce.geekway.model.WxPayComplaintCriteria" resultMap="BaseResultMap">
     <!--
@@ -28,6 +31,17 @@
       </if>
       #{limitRows}
     </if>
+  </select>
+  
+  
+  <select id="groupCountByExample" parameterType="com.bruce.geekway.model.WxPayComplaintCriteria" resultType="java.lang.Integer">
+    select count(trans_id) from (
+     select trans_id from wx_pay_complaint
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+     group by trans_id
+     ) sub
   </select>
   
 </mapper>

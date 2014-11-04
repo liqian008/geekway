@@ -87,14 +87,17 @@ public class WxComplaintController {
 		return "wxpay/complaintListPaging";
 	}
 	
-	@RequestMapping("/complaintInfo")
-	public String complaintInfo(Model model, int id, HttpServletRequest request) {
+	@RequestMapping("/complaintHistory")
+	public String complaintHistory(Model model, String transId, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxPayComplaint complaint = wxPayComplaintService.loadById(id);
-		model.addAttribute("complaint", complaint);
-		return "wxpay/complaintInfo";
+		WxPayComplaintCriteria criteria = new WxPayComplaintCriteria();
+		criteria.createCriteria().andTransIdEqualTo(transId);
+		criteria.setOrderByClause(" id desc");
+		List<WxPayComplaint> complaintList = wxPayComplaintService.queryByCriteria(criteria);
+		model.addAttribute("complaintList", complaintList);
+		return "wxpay/complaintHistory";
 	}
 	
 }
