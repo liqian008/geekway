@@ -49,7 +49,7 @@
 
 	<!-- wxpay service -->
 	
-	<bean id="wxPayService" class="com.bruce.geekway.service.pay.IWxPayService">
+	<bean id="wxPayService" class="com.bruce.geekway.service.pay.WxPayService">
 	</bean>
 	<bean id="wxPayComplaintService" class="com.bruce.geekway.service.pay.impl.WxPayComplaintServiceImpl">
 	</bean>

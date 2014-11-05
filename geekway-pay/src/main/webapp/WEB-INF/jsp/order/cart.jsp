@@ -66,7 +66,7 @@
             <div class="decoration"></div>
             <div class="container">
             	<div class="section-title">
-                	<h4>购物车清单</h4>
+                	<h4>购物车清单1</h4>
 				</div>
 				<%
 				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
@@ -96,7 +96,13 @@
                 </div>
                 </form>
                 <% 
-                }%>
+                }else{%> 
+                 
+                <div id="buyContainer" class="container center-text">
+	        		<a href="${pageContext.request.contextPath}/index" class="button button-dark">无任何商品，快去选购吧</a>
+	        	</div>
+                
+                <%} %>
             </div>
             
             <div class="decoration"></div>

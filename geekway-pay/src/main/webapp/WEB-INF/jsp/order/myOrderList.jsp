@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 
-<title>支付</title>
+<title>我的订单</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -80,6 +80,10 @@
         		<a href="javascript:void(0)" id="moreOrdersBtn" class="button button-dark">加载更多</a>
         		<input type="hidden" id="tailId" name="tailId" value="0"/>
         	</div>
+        	
+        	<div id="buyContainer" class="container center-text gone" >
+        		<a href="${pageContext.request.contextPath}/index" class="button button-blue">订单记录为空，快去选购些商品吧</a>
+	        </div>
 
 			<div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
@@ -109,8 +113,9 @@
 				$("#ordersContainer").append(data.data.html);
  				var nextTailId = data.data.tailId;
    				$("#tailId").val(nextTailId);
-   				if(nextTailId<=0){//无更多数据，则隐藏按钮
+   				if(nextTailId<=0){//无更多数据，则隐藏更多按钮
   					$('#moreOrdersContainer').attr("style","display:none");
+  					//$("#buyContainer").show();
   				}else{//还有更多数据，启用加载按钮
   					$('#moreOrdersBtn').removeAttr("disabled");
   					$('#moreOrdersBtn').text("加载更多...");
