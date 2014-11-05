@@ -129,16 +129,63 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">Sku图片:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">商品大图1:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPicUrl}" id="skuPic1Link"  class="lightbox">
-									<img id="skuPic1Image" src="${productSku.skuPicUrl}" width="200px"/>
+								<a href="${productSku.skuPic1Url}" id="skuPic1Link"  class="lightbox">
+									<img id="skuPic1Image" src="${productSku.skuPic1Url}" width="200px" />
 								</a>
-								<input id="skuPic1Url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
+								<input id="skuPic1Url" type="hidden" name="skuPic1Url" value="${productSku.skuPic1Url}"/>
 								<input type="file" name="imageFile" id="imageFile1" class="imageFile styled" imageIndex="1">
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图2:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${productSku.skuPic2Url}" id="skuPic2Link"  class="lightbox">
+									<img id="skuPic2Image" src="${productSku.skuPic2Url}" width="200px" />
+								</a>
+								<input id="skuPic2Url" type="hidden" name="skuPic2Url" value="${productSku.skuPic2Url}"/>
+								<input type="file" name="imageFile" id="imageFile2" class="imageFile styled" imageIndex="2">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图3:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${productSku.skuPic3Url}" id="skuPic3Link"  class="lightbox">
+									<img id="skuPic3Image" src="${productSku.skuPic3Url}" width="200px" />
+								</a>
+								<input id="skuPic3Url" type="hidden" name="skuPic3Url" value="${productSku.skuPic3Url}"/>
+								<input type="file" name="imageFile" id="imageFile3" class="imageFile styled" imageIndex="3">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品大图4:<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${productSku.skuPic4Url}" id="skuPic4Link"  class="lightbox">
+									<img id="skuPic4Image" src="${productSku.skuPic4Url}" width="200px" />
+								</a>
+								<input id="skuPic4Url" type="hidden" name="skuPic4Url" value="${productSku.skuPic4Url}"/>
+								<input type="file" name="imageFile" id="imageFile4" class="imageFile styled" imageIndex="4">
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="name" id="name" value="${product.name}"/>
+								<form:hidden path="product.id"/>
+							</div>
+						</div>
+						
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
@@ -178,12 +225,12 @@
 							</div> --%>
 							
 							<div class="col-sm-2">
-								<input type="text" class="form-control" name="amount" id="amount" value="${productSku.amount}"/>
+								<input type="text" class="form-control" name="stock" id="stock" value="${productSku.stock}"/>
 								<span class="label label-primary label-block">库存(个)</span>
 							</div>
 						</div>
 						
-						
+						 
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="提 交" class="btn btn-primary">
@@ -205,6 +252,7 @@
 	$(document).ready(function(){
 	    $(".imageFile").change(function(){
 	    	var imageIndex =$(this).attr("imageIndex");
+	    	alert(imageIndex);
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 

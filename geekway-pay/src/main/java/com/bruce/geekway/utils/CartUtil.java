@@ -13,8 +13,8 @@ import com.bruce.foundation.util.CookieUtils;
 import com.bruce.foundation.util.DateUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstFront;
-import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCart;
+import com.bruce.geekway.model.WxProductSku;
 
 /**
  * 
@@ -23,26 +23,26 @@ import com.bruce.geekway.model.WxProductCart;
  */
 public class CartUtil {
 
-	public static List<String> buildProductPicList(WxProduct product) {
-		if(product!=null&&product.getId()!=null){
-			List<String> productPicList = new ArrayList<String>();
-			String pic1Url = product.getProductPic1Url();
+	public static List<String> buildProductSkuPicList(WxProductSku productSku) {
+		if(productSku!=null&&productSku.getId()!=null){
+			List<String> skuPicList = new ArrayList<String>();
+			String pic1Url = productSku.getSkuPic1Url();
 			if(StringUtils.isNotBlank(pic1Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
+				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
 			}
-			String pic2Url = product.getProductPic2Url();
+			String pic2Url = productSku.getSkuPic2Url();
 			if(StringUtils.isNotBlank(pic2Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
+				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
 			}
-			String pic3Url = product.getProductPic3Url();
+			String pic3Url = productSku.getSkuPic3Url();
 			if(StringUtils.isNotBlank(pic3Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
+				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
 			}
-			String pic4Url = product.getProductPic4Url();
+			String pic4Url = productSku.getSkuPic4Url();
 			if(StringUtils.isNotBlank(pic4Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
+				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
 			}
-			return productPicList;
+			return skuPicList;
 		}
 		return null;
 	}

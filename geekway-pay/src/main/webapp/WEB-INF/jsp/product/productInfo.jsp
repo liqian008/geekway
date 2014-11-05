@@ -75,16 +75,13 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 
 			<div class="container">
 				<div class="slider-controls" data-snap-ignore="true">
-					<div>
-						<img src="${currentProductSku.skuPicUrl}" class="responsive-image">
-					</div>
 					<%
-					List<String> productPicList = (List<String>) request.getAttribute("productPicList");
-					if(productPicList!=null&&productPicList.size()>0){
-						for(String productPicUrl: productPicList){
+					List<String> skuPicList = (List<String>) request.getAttribute("skuPicList");
+					if(skuPicList!=null&&skuPicList.size()>0){
+						for(String skuPicUrl: skuPicList){
 					%>
 					<div>
-						<img src="<%=productPicUrl%>" class="responsive-image">
+						<img src="<%=skuPicUrl%>" class="responsive-image">
 					</div>
 					<%}
 					}%>
@@ -124,7 +121,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 							%>	            		
 	            			<div class="item <%=colorSelected?"selected":""%>" data="<%=propertyName%>">
 	            				<b></b>
-	            				<a href="#none" title="<%=displayName%>">
+	            				<a href="javascript:void(0)" title="<%=displayName%>">
 			            			<%-- 
 			            			<img data-img="1" src="http://img14.360buyimg.com/n9/jfs/t154/186/206532666/68265/1ee30751/53842794N21159018.jpg" width="25" height="25" alt="<%=displayName%> ">
 		            				--%>
@@ -151,7 +148,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 								boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
 							%>
 	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b>
-	            			<a href="#none" title="<%=displayName%>" style="cursor: pointer;">
+	            			<a href="javascript:void(0)" title="<%=displayName%>" style="cursor: pointer;">
 	            			<i><%=displayName%></a></i>
 	            			</div>
 	            			<%}%>
@@ -201,6 +198,7 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 						if(colorProperty!=null && sizeProperty!=null){
 							var propertiesName = colorProperty + sizeProperty;
 							var productSkuJson = skuMap.get(propertiesName);
+							//重新加载界面
 							reloadProductSkuInfo(productSkuJson);
 						}
 					});
@@ -246,19 +244,9 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 					
 					function reloadProductSkuInfo(productSkuJson){
 						if(productSkuJson!=null){
-							$("#productSkuId").val(productSkuJson.id);//刷新库存
-							$("#originPrice").html("<del>"+productSkuJson.originPrice+"</del>");//刷新价格
-							$("#price").text(productSkuJson.price);//刷新价格
-							$("#leftStock").text(productSkuJson.stock);//刷新库存
-							if(productSkuJson.stock>0&&productSkuJson.price>0){//刷新购买&购物车按钮
-								$("#buyNow").removeClass("gone");
-								$("#addToCart").removeClass("gone");
-								$("#buyDisable").addClass("gone");
-							}else{
-								$("#buyDisable").removeClass("gone");
-								$("#buyNow").addClass("gone");
-								$("#addToCart").addClass("gone");
-							}
+							var productId = productSkuJson.productId;
+							var productSkuId = productSkuJson.id;
+							location.href="${pageContext.request.contextPath}/product/"+productId+"/"+productSkuId;
 						}
 					}
 				</script>

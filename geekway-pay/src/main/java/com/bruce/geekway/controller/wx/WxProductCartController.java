@@ -138,8 +138,8 @@ public class WxProductCartController {
 					if(productSku!=null){
 						WxProduct product = wxProductService.loadById(productSku.getProductId());
 						if(product!=null){
-							List<String> productPicList = CartUtil.buildProductPicList(product);
-							model.addAttribute("productPicList", productPicList);
+							List<String> skuPicList = CartUtil.buildProductSkuPicList(productSku);
+							model.addAttribute("skuPicList", skuPicList);
 						}
 						
 						model.addAttribute("product", product);

@@ -42,7 +42,7 @@ public class HtmlBuildUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
 			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(productSku.getProductId()) + "'>");
-			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(productSku.getSkuPicUrl(), 300, 0) + "'");
+			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(productSku.getSkuPic1Url(), 300, 0) + "'");
 			sb.append("</a>");
 			sb.append("<h4>"+productSku.getName()+"</h4>");
 			sb.append("<ul id='choose'>");
