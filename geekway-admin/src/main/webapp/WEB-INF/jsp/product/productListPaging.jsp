@@ -123,11 +123,17 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-md-4">
-									<label>商品名称:</label><input type="text" name="name" placeholder="支持模糊匹配" class="form-control" value="${name}"> 
+									<label>商品状态:</label>
+									<input type="text" name="outTradeNo" placeholder="支持模糊匹配" class="form-control">
 								</div>
 								<div class="col-md-4">
-									<label>价格:</label> <input type="text" name="price" placeholder="支持模糊匹配" class="form-control" value="${price}">
+									<label>用户OpenId:</label><input type="text" name="openId" placeholder="支持模糊匹配" class="form-control" value="${openId}"> 
 								</div>
+								<div class="col-md-4">
+									<label>商品号:</label> <input type="text" name="outTradeNo" placeholder="支持模糊匹配" class="form-control">
+								</div>
+								
+								
 							</div>
 						</div>
 					
@@ -152,11 +158,12 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 					<table class="table table-bproducted table-striped dataTable">
 						<thead>
 							<tr>
-								<th>ID</th>
+								<th>序号</th>
+								<th>图片</th>
                                 <th>名称</th>
-                                <th>金额</th>
+                                <!-- <th>价格</th>
+                                <th>库存</th> -->
                                 <th>状态</th>
-                                <th>创建时间</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
@@ -164,24 +171,41 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 							<%
 							PagingResult<WxProduct> pagingResult = (PagingResult<WxProduct>)request.getAttribute("productPagingData");
 							List<WxProduct> productList = pagingResult.getPageData();
-                           	if(productList!=null&&productList.size()>0){
+							if(productList!=null&&productList.size()>0){
+                           		int i=0;
                            		for(WxProduct product: productList){
+                           			i++;
                            	%>
 						
 							<tr>
-								<td><%=product.getId()%></td>
-		                        <td><%=product.getName()%></td>
-		                        <td><%=product.getPrice()%></td>
-		                        <td><%=product.getStatus()%></td>
-		                        <td><%=sdf.format(product.getCreateTime())%></td>
+		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=product.getProductPic1Url()%>" class="lightbox">
+		                        	<img src='<%=product.getProductPic1Url()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
+		                        <td title="SN：<%=product.getOutId()%>"><%=product.getName()%></td>
+		                        <td><%=product.getStatus()==1?"上架":"下架"%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
+		                        	
 										<a href="./productEdit?productId=<%=product.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查 看"><i class="icon-pencil3"></i></a>
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+										<!-- 
+										<a href="./productSkuValueDisplay?productId=<%=product.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="查看SKU"><i class="icon-eye7"></i></a>
+										-->
+										<a href="./productSkus?productId=<%=product.getId()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="SKU列表"><i class="icon-tree3"></i></a> 
+										<%-- <a href="./delProduct?productId=<%=product.getId()%>" 
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="删除"><i class="icon-remove3"></i></a> --%>
 									</div>
 								</td>
-							</tr>
+                               </tr>
 							<%}
                            	} %>
 						</tbody>

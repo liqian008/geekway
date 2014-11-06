@@ -74,8 +74,8 @@ String contextPath = request.getContextPath();
                     </div>
 
                 </div>
-                <a href="./#" class="next-slider"></a>
-                <a href="./#" class="prev-slider"></a>
+                <a href="javascript:void(0)" class="next-slider"></a>
+                <a href="javascript:void(0)" class="prev-slider"></a>
             </div>
             
             

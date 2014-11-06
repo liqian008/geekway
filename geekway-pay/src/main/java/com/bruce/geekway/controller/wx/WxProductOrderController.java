@@ -249,7 +249,7 @@ public class WxProductOrderController {
 				orderItem.setProductId(productSku.getProductId());
 				orderItem.setProductSkuId(productSku.getId());
 				orderItem.setProductName(productSku.getName());
-				orderItem.setProductPicUrl(productSku.getSkuPicUrl());
+				orderItem.setProductPicUrl(productSku.getSkuPic1Url());
 				orderItem.setItemFee(productSku.getPrice());
 				orderItem.setTotalFee(productSku.getPrice() * buyAmount[i]);
 				orderItem.setCreateTime(currentTime);

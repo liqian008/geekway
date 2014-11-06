@@ -189,9 +189,6 @@ public class WxProductController {
 		WxProduct product = wxProductService.loadById(productId);
 		model.addAttribute("product", product);
 		
-		List<String> productPicList = CartUtil.buildProductPicList(product);
-		model.addAttribute("productPicList", productPicList);
-		
 		WxProductSku currentProductSku = null;
 		
 		//加载productSku，用于构造json的map，使得前端切换时能取到相应的数据
@@ -216,6 +213,10 @@ public class WxProductController {
 			//解析当前sku商品对应的属性值，以便在前端高亮显示
 			if(currentProductSku!=null){
 				model.addAttribute("currentProductSku", currentProductSku);
+				
+				List<String> skuPicList = CartUtil.buildProductSkuPicList(currentProductSku);
+				model.addAttribute("skuPicList", skuPicList);
+				
 			}
 		}
 		

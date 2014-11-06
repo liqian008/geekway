@@ -4,10 +4,10 @@
 	<div class="page-sidebar-scroll">
 		<div class="sidebar-section">
 			<p>美妞儿</p>
-			<a href="./#" class="sidebar-close"></a>
+			<a href="javascript:void(0)" class="sidebar-close"></a>
 		</div>
 		<div class="sidebar-header">
-			<a href="./" class="sidebar-logo"></a>
+			<a href="${pageContext.request.contextPath}/index" class="sidebar-logo"></a>
 			<!-- 分享 
                 <a href="http://www.facebook.com/enabled.labs" class="facebook-sidebar"></a>
                 <a href="https://twitter.com/iEnabled" class="twitter-sidebar"></a>
@@ -16,12 +16,15 @@
 
 		<div class="navigation-items">
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/index" class="home-nav">分类1<em></em></a>
+				<a href="${pageContext.request.contextPath}/index" class="home-nav">双11促销<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="./#" class="features-nav submenu-deploy">分类2<em></em></a>
+				<a href="${pageContext.request.contextPath}/index" class="home-nav">热销爆款<em></em></a>
+			</div>
+			<div class="nav-item">
+				<a href="./#" class="features-nav submenu-deploy">韩版<em></em></a>
 				<div class="nav-item-submenu" style="overflow: hidden; display: block;">
-					<a href="intro.html">Introduction <em class="unselected-sub-nav"></em></a> 
+					<a href="intro.html">Introduction <em class="unselected-sub-nav"></em></a>
 					<a href="type.html">Typography<em class="unselected-sub-nav"></em></a>
 					<a href="jquery.html">jQuery <em class="unselected-sub-nav"></em></a>
 				</div>
@@ -36,10 +39,10 @@
 			</div>
 			 -->
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/orders?code=1" class="home-order">我的订单<em></em></a>
+				<a href="${pageContext.request.contextPath}/orders" class="home-order">我的订单<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/vouchers?code=1" class="home-voucher">我的优惠券<em></em></a>
+				<a href="${pageContext.request.contextPath}/vouchers" class="home-voucher">我的优惠券<em></em></a>
 			</div>
 			<!-- 
 			<div class="nav-item">
@@ -54,7 +57,7 @@
 
 
 		<div class="sidebar-section copyright-sidebar">
-			<p>Copyright 2013. All rights reserved.</p>
+			<p>Copyright 2014. All rights reserved.</p>
 		</div>
 	</div>
 </div>

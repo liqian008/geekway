@@ -133,8 +133,8 @@
 							<tr>
 		                        <td><%=i%></td>
 		                        <td class="text-center">
-		                        	<a href="<%=sku.getSkuPicUrl()%>" class="lightbox">
-		                        	<img src='<%=sku.getSkuPicUrl()%>' class="img-media"/>
+		                        	<a href="<%=sku.getSkuPic1Url()%>" class="lightbox">
+		                        	<img src='<%=sku.getSkuPic1Url()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
 		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>
