@@ -1,10 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxArticle"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.utils.*"%>
-
+<%@page import="com.bruce.geekway.model.*"%>
 
 
 <!DOCTYPE html>
@@ -33,26 +30,18 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/validate.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/tags.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/moment.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/jgrowl.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/datatables.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/colorpicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fullcalendar.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/timepicker.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/application.js"></script>
 </head>
@@ -71,7 +60,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						文章管理
+						Tag关联商品
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -83,7 +72,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">文章管理</li>
+					<li class="active">Tag关联商品</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -92,65 +81,74 @@
 			</div>
 			<!-- /breadcrumbs line -->
 
-			<div class="callout callout-info fade in">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
-				<p>
-					1、点击封面图，可预览大图<br/>
-					2、点击【编辑】按钮，可对文章进行编辑
-				</p>
-			</div>
+			
+			<form id="validate" action="<s:url value='#'/>" method="post"  class="form-horizontal form-bordered">
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>Tag关联商品
+						</h6>
+					</div>
+					<div class="panel-body">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Tag名称:
+							</label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="name" id="name" value="${productTag.name}" readonly="readonly"/>
+	                             <form:hidden path="productTag.id"/> 
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				
+			</form>
 
-			<!-- Table view -->
+			<!-- Table with checkboxes -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>文章管理
+						<i class="icon-checkbox-partial"></i>关联商品
 					</h5>
-					<a href="./articleAdd"><span class="label label-danger pull-right">新增文章</span></a>
+					<a href="./tagProductSet?tagId=${productTag.id}"><span class="label label-danger pull-right">返 回</span></a>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
 						<thead>
 							<tr>
-								<th>ID</th>
-                                <th>封面</th>
-                                <th>标题</th>
-                                <th>短标题</th>
-                                <th>链接</th>
+								<th><input type="checkbox" class="styled"></th>
+								<th>序号</th>
+                                <th>图片</th>
+                                <th>名称</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxArticle> articleList = (List<WxArticle>)request.getAttribute("articleList");
-                           	if(articleList!=null&&articleList.size()>0){
+                           	List<WxProduct> productList = (List<WxProduct>)request.getAttribute("unmappedProductList");
+                           	if(productList!=null&&productList.size()>0){
                            		int i=0;
-                           		for(WxArticle article: articleList){
+                           		for(WxProduct product: productList){
                            			i++;
                            	%>
 							<tr>
-		                        <td><%=i%></td>
-		                        <td class="text-center">
-		                        	<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
-		                        	</a> 
+		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
+		                        <td><%=product.getId()%></td> 
+		                        <td>
+		                        	<a href="<%=product.getProductPic1Url()%>" class="lightbox">
+		                        	<img src='<%=product.getProductPic1Url()%>' class="img-media"/>
+		                        	</a>
 		                        </td>
-		                        <td><%=article.getTitle()%></td>
-		                        <td><%=article.getShortTitle()%></td>
-		                        <td><a href='<%=ProductUtil.getArticleLink(article.getId())%>' target="_blank">预览</a></td>
+		                        <td><%=product.getName()%></td>
 		                        <td>正常</td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        	
-										<a href="./articleEdit?articleId=<%=article.getId()%>"
+										<a href="./addProductTag?tagId=${productTag.id}&productId=<%=product.getId()%>"  
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./delArticle?articleId=<%=article.getId()%>" 
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
-									</div>
+											data-original-title="添加关联"><i class="icon-link"></i></a> 
+									</div> 
 								</td>
                                </tr>
 							<%}
@@ -158,8 +156,25 @@
 						</tbody>
 					</table>
 				</div>
+
+				<!-- 
+				<div class="table-footer">
+					<div class="table-actions">
+						<label>操作:</label>
+						<input type="button" value="批量添加" class="btn btn-info btn-xs">
+					</div> 
+					<ul class="pagination">
+						<li><a href="#">Prev</a></li>
+						<li ><a href="#">1</a></li>
+						<li class="active"><a href="#">2</a></li>
+						<li><a href="#">3</a></li>
+						<li><a href="#">Next</a></li>
+					</ul>
+				</div>
+				 -->
+
 			</div>
-			<!-- /table view -->
+			<!-- /table with checkboxes -->
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

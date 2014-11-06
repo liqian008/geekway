@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
-<%@ page import="com.bruce.geekway.utils.*" %>
-<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
 
 <%
 String contextPath = request.getContextPath();
@@ -25,7 +23,6 @@ String contextPath = request.getContextPath();
 <link href="${pageContext.request.contextPath}/slideby/styles/owl.theme.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/swipebox.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/colorbox.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/slideby/styles/meiniu.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jqueryui.js"></script>
@@ -58,57 +55,25 @@ String contextPath = request.getContextPath();
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb"><%=productTag.getName()%></p>
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
-            <a href="javascript:void(0)" class="deploy-refresh"></a>
-        </div> 
+            <a href="contact.html" class="deploy-contact"></a>
+        </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
+            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
+            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
         </div>
         
         <div class="content">
-        	<div class="container">
-        		
-        		<div class="decoration"></div> 
-        		<jsp:include page="../inc/weixinShareNotification.jsp"></jsp:include>
-        		
-				<%
-				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
-				if(slideImageList!=null&&slideImageList.size()>0){
-            	%>
-                <div class="slider-controls" data-snap-ignore="true">
-					<%for(SlideImage slideImage: slideImageList){%>
-					<div>
-						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
-					</div>
-					<%}%>
-				</div>
-                <a href="javascript:void(0)" class="next-slider"></a>
-                <a href="javascript:void(0)" class="prev-slider"></a>
-                <%}%>
-			</div>
-
-			<div class="decoration"></div> 
+        	<div class="decoration"></div>
 
         	<div class="container no-bottom" id="productsContainer">
-        		<div class="section-title">
-					<h4>
-						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)"><%=productTag.getName()%></a>
-					</h4>
-				</div>
-	        	<%
-	        	List<WxProduct> productList = (List<WxProduct>)request.getAttribute("tagProductList");
-	        	for(WxProduct product: productList){%>
-	        	
-	        	<div class='portfolio-item-thumb one-half'>
-					<a href='<%=ProductUtil.getProductSkuLink(product.getId())%>'>
-						<img class='responsive-image' src='<%=UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 300, 0)%>'>
-					</a>
-					<h4><%=product.getName()%></h4>
-					<ul id='choose'>
-						<li>原 价：&nbsp;<span id='price' class='text-highlight highlight-dark'><del><%=product.getOriginPrice()%></del></span>元</li>
-						<li>现 价：&nbsp;<span id='price' class='text-highlight highlight-red'><%=product.getPrice()%></span>元</li>
-					</ul>
-				</div>
-				<%} %>
+        	</div>
+        	
+        	<div id="moreProductsContainer" class="container center-text">
+        		<a href="javascript:void(0)" id="moreProductsBtn" class="button button-turqoise">加载更多</a>
+        		
+        		<input type="hidden" id="tagId" name="tagId" value="<%=tagId%>"/>
+        		<input type="hidden" id="tailId" name="tailId" value="0"/>
         	</div>
         	
             <div class="decoration"></div>
@@ -120,4 +85,35 @@ String contextPath = request.getContextPath();
 </div>
 
 </body>
+
+<script>
+	fallLoad();
+
+  	$('#moreProductsBtn').click(function(){
+  		fallLoad();
+  	});
+  	
+  	function fallLoad(){
+  		//置为数据加载状态
+  		$('#moreProductsBtn').val("努力加载中...");
+  		$('#moreAlbumsBtn').attr("disabled","disabled");
+  		var tailId = $("#tailId").val();
+  		var jsonData = {'tagId' : '1', 'tailId' : tailId};
+  		$.post('<%=contextPath%>/moreTagProducts.json', jsonData, function(data) {
+  			var result = data.result;
+			if(result==1){
+				$("#productsContainer").append(data.data.html);
+ 				var nextTailId = data.data.tailId;
+   				$("#tailId").val(nextTailId);
+   				if(nextTailId<=0){//无更多数据，则隐藏按钮
+  					$('#moreProductsContainer').attr("style","display:none");
+  				}else{//还有更多数据，启用加载按钮
+  					$('#moreProductsBtn').removeAttr("disabled");
+  					$('#moreProductsBtn').val("加载更多...");
+  				}
+			}
+		})
+	}
+</script>
+
 </html>

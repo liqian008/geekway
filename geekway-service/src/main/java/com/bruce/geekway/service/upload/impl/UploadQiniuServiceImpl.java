@@ -19,7 +19,6 @@ import com.qiniu.api.rs.PutPolicy;
  * 七牛上传的处理实现
  * @author liqian
  */
-@Service
 public class UploadQiniuServiceImpl extends AbstractUploadService{
 	
 	private Mac mac = new Mac(ConstConfig.UPLOAD_QINIU_APP_KEY, ConstConfig.UPLOAD_QINIU_SECRET_KEY);

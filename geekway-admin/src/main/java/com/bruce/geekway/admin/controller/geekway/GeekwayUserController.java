@@ -102,7 +102,7 @@ public class GeekwayUserController {
 				}
 			}
 		}
-		model.addAttribute("redirectUrl", "./mpUserList");
+		model.addAttribute("redirectUrl", "./wxUserPaging");
 		return "forward:/home/operationRedirect";
 	}
 

@@ -170,7 +170,7 @@ public class GeekwayCommandController {
 			}
 			
 		}
-		model.addAttribute("redirectUrl", "./commandList");
+		model.addAttribute("redirectUrl", "./commandPaging");
 		return "forward:/home/operationRedirect";
 	}
 	

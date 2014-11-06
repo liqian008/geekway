@@ -74,4 +74,10 @@ public interface WxProductMapper {
 	 * @mbggenerated  Thu Oct 30 14:29:39 CST 2014
 	 */
 	int updateByPrimaryKey(WxProduct record);
+
+	
+	List<WxProduct> queryProductsByTagId(int tagId);
+
+	List<WxProduct> queryProductsOutTagId(int tagId); 
+	
 }

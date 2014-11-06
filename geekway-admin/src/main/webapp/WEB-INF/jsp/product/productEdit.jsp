@@ -269,9 +269,9 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('productImage', $('#imageFile'+imageIndex)[0].files[0]);
+	        data.append('image', $('#imageFile'+imageIndex)[0].files[0]);
 	        $.ajax({
-	            url:'/geekway-admin/product/imageUpload',
+	            url:'${pageContext.request.contextPath}/upload/uploadQiniu',
 	            type:'POST',
 	            data:data,
 	            cache: false,

@@ -3,6 +3,7 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
+<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
 
 
 <!DOCTYPE HTML>
@@ -76,20 +77,20 @@ int buyAmount = cartItem.getAmount();
 			</div>
 
 			<div class="container">
-				<div class="slider-controls" data-snap-ignore="true">
-					<%
-					List<String> skuPicList = (List<String>) request.getAttribute("skuPicList");
-					if(skuPicList!=null&&skuPicList.size()>0){
-						for(String skuPicUrl: skuPicList){
-					%>
+				<%
+				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
+				if(slideImageList!=null&&slideImageList.size()>0){
+            	%>
+                <div class="slider-controls" data-snap-ignore="true">
+					<%for(SlideImage slideImage: slideImageList){%>
 					<div>
-						<img src="<%=skuPicUrl%>" class="responsive-image">
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
 					</div>
-					<%}
-					}%>
+					<%}%>
 				</div>
-				<a href="./#" class="next-slider"></a> <a href="./#"
-					class="prev-slider"></a>
+                <a href="javascript:void(0)" class="next-slider"></a>
+                <a href="javascript:void(0)" class="prev-slider"></a>
+                <%}%>
 			</div>
 
 			<div class="decoration"></div> 

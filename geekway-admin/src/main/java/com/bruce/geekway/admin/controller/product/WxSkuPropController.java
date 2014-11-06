@@ -11,9 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductCategory;
-import com.bruce.geekway.model.WxSkuProp;
 import com.bruce.geekway.model.WxSkuProp;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxSkuPropService;

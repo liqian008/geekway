@@ -169,7 +169,7 @@ public class GeekwayMaterialArticleController extends BaseController {
 		//删除实体&关联
 		wxMaterialArticleService.deleteById(articleId);
 
-		model.addAttribute("redirectUrl", "./materialArticleList");
+		model.addAttribute("redirectUrl", "./materialArticlePaging");
 		return "forward:/home/operationRedirect";
 	}
 

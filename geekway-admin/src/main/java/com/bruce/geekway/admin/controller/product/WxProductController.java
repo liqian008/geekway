@@ -227,7 +227,7 @@ public class WxProductController {
 		product.setUpdateTime(currentTime);
 		if(product!=null&&product.getId()!=null&&product.getId()>0){
 			result = wxProductService.updateById(product);
-			model.addAttribute("redirectUrl", "./productList");
+			model.addAttribute("redirectUrl", "./productPaging");
 			return "forward:/home/operationRedirect";
 		}else{//新增
 			product.setCreateTime(currentTime);

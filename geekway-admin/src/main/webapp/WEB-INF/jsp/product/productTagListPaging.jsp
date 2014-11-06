@@ -1,11 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxArticle"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.foundation.enumeration.*"%>
+<%@page import="com.bruce.foundation.model.paging.*"%>
+<%@page import="com.bruce.foundation.admin.utils.*"%>
 
+<%@ include file="../inc/include_tag.jsp" %>
 
+<%
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +27,7 @@
 <link href="${pageContext.request.contextPath}/css/styles.min.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/css/icons.min.css" rel="stylesheet" type="text/css">
 
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.1/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/charts/sparkline.min.js"></script>
@@ -33,14 +41,10 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/validate.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/tags.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/switch.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.full.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/daterangepicker.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/fancybox.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/prettify.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/moment.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/plugins/interface/jgrowl.min.js"></script>
@@ -71,7 +75,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						文章管理
+						商品Tag管理 
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -83,7 +87,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">文章管理</li>
+					<li class="active">商品Tag管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -91,72 +95,97 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
+			<!-- 
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
+				<h5>功能介绍</h5>
 				<p>
-					1、点击封面图，可预览大图<br/>
-					2、点击【编辑】按钮，可对文章进行编辑
+					1、可用权限商品Tag列表<br/>
 				</p>
 			</div>
-
+			 -->
+			
+			
+			<form id="validate" action="<s:url value='./productTagPaging'/>" method="post" >
+				<!-- Basic inputs -->
+				<div class="panel panel-default"> 
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>条件筛选
+						</h6>
+					</div>
+					<div class="panel-body"> 
+						<div class="form-group">
+							<div class="row">
+								<div class="col-md-4">
+									<label>商品Tag状态:</label>
+									<input type="text" name="outTradeNo" placeholder="支持模糊匹配" class="form-control">
+								</div>
+							</div>
+						</div>
+					 
+						<div class="form-actions text-center">
+							<input type="submit" value="查 询" class="btn btn-primary btn-sm"> 
+							<input type="reset" value="重 置" class="btn btn-default btn-sm">
+						</div>
+					</div>
+				</div>
+				
+			</form>
+			
+			 
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>文章管理
+						<i class="icon-people"></i>商品Tag管理
 					</h5>
-					<a href="./articleAdd"><span class="label label-danger pull-right">新增文章</span></a>
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped dataTable">
 						<thead>
 							<tr>
 								<th>ID</th>
-                                <th>封面</th>
-                                <th>标题</th>
-                                <th>短标题</th>
-                                <th>链接</th>
-                                <th>状态</th>
+                                <th>Tag名称</th> 
+                                <th>描述</th>
+                                <th>创建时间</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxArticle> articleList = (List<WxArticle>)request.getAttribute("articleList");
-                           	if(articleList!=null&&articleList.size()>0){
-                           		int i=0;
-                           		for(WxArticle article: articleList){
-                           			i++;
+							PagingResult<WxProductTag> pagingResult = (PagingResult<WxProductTag>)request.getAttribute("productTagPagingData");
+							List<WxProductTag> productTagList = pagingResult.getPageData(); 
+                           	if(productTagList!=null&&productTagList.size()>0){
+                           		for(WxProductTag productTag: productTagList){
                            	%>
+						
 							<tr>
-		                        <td><%=i%></td>
-		                        <td class="text-center">
-		                        	<a href="<%=article.getCoverImageUrl()%>" class="lightbox">
-		                        	<img src='<%=article.getCoverImageUrl()%>' class="img-media"/>
-		                        	</a> 
-		                        </td>
-		                        <td><%=article.getTitle()%></td>
-		                        <td><%=article.getShortTitle()%></td>
-		                        <td><a href='<%=ProductUtil.getArticleLink(article.getId())%>' target="_blank">预览</a></td>
-		                        <td>正常</td>
+								<td><%=productTag.getId()%></td>
+		                        <td><%=productTag.getName()%></td>
+		                        <td><%=productTag.getDescription()%></td>
+		                        <td><%=sdf.format(productTag.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-		                        	
-										<a href="./articleEdit?articleId=<%=article.getId()%>"
+										<a href="./productTagEdit?productTagId=<%=productTag.getId()%>"
+										class="btn btn-link btn-icon btn-xs tip" title=""
+										data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+										<a href="./tagProductSet?tagId=<%=productTag.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./delArticle?articleId=<%=article.getId()%>" 
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
+											data-original-title="商品列表"><i class="icon-tree3"></i></a> 
 									</div>
 								</td>
-                               </tr>
+							</tr>
 							<%}
                            	} %>
 						</tbody>
 					</table>
+					
+					<div class="datatable-footer">
+					<%=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
+					</div> 
+					 
 				</div>
 			</div>
 			<!-- /table view -->
@@ -169,4 +198,3 @@
 	<!-- /page container -->
 </body>
 </html>
-

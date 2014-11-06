@@ -21,6 +21,7 @@ public class WxProductServiceImpl implements IWxProductService {
 	private WxProductMapper wxProductMapper;
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
+	
 
 	@Override
 	public int save(WxProduct t) {
@@ -106,6 +107,18 @@ public class WxProductServiceImpl implements IWxProductService {
 		criteria.createCriteria().andStatusEqualTo((short) 1);
 		return wxProductMapper.selectByExample(criteria);
 	}
+	
+	
+	
+	@Override
+	public List<WxProduct> queryProductsByTagId(int tagId) {
+		return wxProductMapper.queryProductsByTagId(tagId); 
+	}
+
+	@Override
+	public List<WxProduct> queryProductsOutTagId(int tagId) {
+		return wxProductMapper.queryProductsOutTagId(tagId); 
+	}
 
 	
 
@@ -144,5 +157,6 @@ public class WxProductServiceImpl implements IWxProductService {
 		this.wxProductSkuService = wxProductSkuService;
 	}
 
+	
 	
 }

@@ -2,10 +2,7 @@ package com.bruce.geekway.service.product;
 
 import java.util.List;
 
-import javax.jws.soap.InitParam;
-
 import com.bruce.foundation.service.IFoundationPagingService;
-import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCriteria;
 
@@ -16,7 +13,14 @@ public interface IWxProductService extends IFoundationPagingService<WxProduct, I
 	 * @return
 	 */
 	public List<WxProduct> queryAvailableList();
-
-//	public int txTest();
+	
+	
+	/**
+	 * 根据tagId查询匹配的商品列表
+	 * @return
+	 */
+	public List<WxProduct> queryProductsByTagId(int tagId);
+	
+	public List<WxProduct> queryProductsOutTagId(int tagId);
 
 }

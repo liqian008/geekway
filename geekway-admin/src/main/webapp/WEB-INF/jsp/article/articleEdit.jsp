@@ -203,8 +203,8 @@
 							<label class="col-sm-2 control-label text-right">文章链接: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" name="" value="<%=ProductLinkUtil.getArticleLink(article.getId())%>"/>
-								<a href='<%=ProductLinkUtil.getArticleLink(article.getId())%>' target="_blank">预览</a>
+								<input type="text" class="form-control" name="" value="<%=ProductUtil.getArticleLink(article.getId())%>"/>
+								<a href='<%=ProductUtil.getArticleLink(article.getId())%>' target="_blank">预览</a>
 							</div>
 						</div>
 						<%}%>

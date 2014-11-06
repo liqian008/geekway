@@ -2,6 +2,8 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import="com.bruce.geekway.constants.*" %>
+<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
+
 <%
 String contextPath = request.getContextPath();
 %>
@@ -64,18 +66,21 @@ String contextPath = request.getContextPath();
                 	<h4>时尚爆款</h4>
                     <em>最时尚的韩流服饰</em>
                 </div>
-            
+            	
+            	<%
+				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
+				if(slideImageList!=null&&slideImageList.size()>0){
+            	%>
                 <div class="slider-controls" data-snap-ignore="true">
-                    <div>
-                        <a href="http://www.jinwanr.com"><img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image"/></a>
-                    </div>
-                    <div>
-                        <a href="http://www.jinwanr.com"><img src="http://wximg.geekway.com.cn/staticFile/image/20140522/original/1_1f32d71a505e80bbfb612f97f062f1f3.jpg" class="responsive-image"/></a>
-                    </div>
-
-                </div>
+					<%for(SlideImage slideImage: slideImageList){%>
+					<div>
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
+					</div>
+					<%}%>
+				</div>
                 <a href="javascript:void(0)" class="next-slider"></a>
                 <a href="javascript:void(0)" class="prev-slider"></a>
+                <%}%>
             </div>
             
             

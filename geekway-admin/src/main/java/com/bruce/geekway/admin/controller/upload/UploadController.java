@@ -1,4 +1,4 @@
-package com.bruce.geekway.admin.controller.product;
+package com.bruce.geekway.admin.controller.upload;
 
 import java.io.File;
 
@@ -27,26 +27,28 @@ import com.bruce.geekway.utils.UploadUtil;
  * @author liqian
  *
  */
-//@Controller
-@RequestMapping("/product")
-public class ProductUploadController extends BaseController{
+@Controller
+@RequestMapping("/upload")
+public class UploadController extends BaseController{
 
 	@Autowired
-	private IUploadService uploadService;
+	private IUploadService uploadQiniuService;
+	@Autowired
+	private IUploadService uploadLocalService;
 	
 	/**
-	 * 处理产品图片的上传
+	 * 上传到七牛cdn
 	 * @param model
 	 * @param file
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
-	public JsonResultBean imageUpload(Model model, @RequestParam("productImage") CommonsMultipartFile file) {
+	@RequestMapping(value = "/uploadQiniu", method = RequestMethod.POST)
+	public JsonResultBean uploadQiniu(Model model, @RequestParam("image") CommonsMultipartFile file) {
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
-			UploadImageResult imageUploadResult = uploadService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
+			UploadImageResult imageUploadResult = uploadQiniuService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			if(imageUploadResult!=null){
 				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 			}
@@ -56,4 +58,26 @@ public class ProductUploadController extends BaseController{
 		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
 	}
 	
+	
+	/**
+	 * 上传到本地
+	 * @param model
+	 * @param file
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	public JsonResultBean upload(Model model, @RequestParam("image") CommonsMultipartFile file) {
+		try {
+			WebUserDetails userDetail = getUserInfo();
+			int userId = userDetail.getUserId();
+			UploadImageResult imageUploadResult = uploadLocalService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
+			if(imageUploadResult!=null){
+				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+	}
 }

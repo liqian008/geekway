@@ -41,7 +41,7 @@ public class HtmlBuildUtils {
 		if (productSku != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
-			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(productSku.getProductId()) + "'>");
+			sb.append("<a href='" + ProductUtil.getProductSkuLink(productSku.getProductId()) + "'>");
 			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(productSku.getSkuPic1Url(), 300, 0) + "'");
 			sb.append("</a>");
 			sb.append("<h4>"+productSku.getName()+"</h4>");
@@ -179,7 +179,7 @@ public class HtmlBuildUtils {
 //			sb.append("</div>");
 			
 			sb.append("<p class='quote-item'>");
-			sb.append("<a href='" + ProductLinkUtil.getProductSkuLink(product.getId()) + "'>");
+			sb.append("<a href='" + ProductUtil.getProductSkuLink(product.getId()) + "'>");
 			sb.append("<img src='"+UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 100, 0) +"'>");
 			sb.append("</a>");
 			sb.append(product.getName());

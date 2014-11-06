@@ -119,7 +119,7 @@ public class GeekwayMaterialNewsController {
 			result = wxMaterialNewsService.save(MaterialNews);
 		}
 		
-		model.addAttribute("redirectUrl", "./materialNewsList");
+		model.addAttribute("redirectUrl", "./materialNewsPaging");
 		return "forward:/home/operationRedirect";
 	}
 	
@@ -132,7 +132,7 @@ public class GeekwayMaterialNewsController {
 		//删除实体
 		wxMaterialNewsService.deleteById(newsId);
 
-		model.addAttribute("redirectUrl", "./materialNewsList");
+		model.addAttribute("redirectUrl", "./materialNewsPaging");
 		return "forward:/home/operationRedirect";
 	}
 	

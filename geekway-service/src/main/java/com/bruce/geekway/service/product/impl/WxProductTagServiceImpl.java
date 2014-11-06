@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxProductTagMapper;
+import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxProductTagCriteria;
 import com.bruce.geekway.service.product.IWxProductTagService;
@@ -63,7 +66,34 @@ public class WxProductTagServiceImpl implements IWxProductTagService {
 	public List<WxProductTag> queryByCriteria(WxProductTagCriteria criteria) {
 		return wxProductTagMapper.selectByExample(criteria);
 	}
-	
+
+	@Override
+	public List<WxProductTag> fallloadByCriteria(int pageSize,
+			WxProductTagCriteria criteria) {
+		return null;
+	}
+
+	@Override
+	public PagingResult<WxProductTag> pagingByCriteria(int pageNo,
+			int pageSize, WxProductTagCriteria criteria) {
+		pageNo = pageNo <= 0 ? 1 : pageNo;// 确保pageNo合法
+		pageSize = pageNo <= 0 ? ConstConfig.PAGE_SIZE_DEFAULT : pageSize;// 确保pageSize合法
+		int offset = (pageNo - 1) * pageSize;
+
+		// 构造查询条件
+		if (criteria == null) {
+			criteria = new WxProductTagCriteria();
+		}
+
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+
+		int count = wxProductTagMapper.countByExample(criteria);
+		List<WxProductTag> dataList = wxProductTagMapper.selectByExample(criteria);
+		// 返回分页数据
+		return new PagingResult<WxProductTag>(pageNo, pageSize, count, dataList);
+	}
+
 
 	public WxProductTagMapper getWxProductTagMapper() {
 		return wxProductTagMapper;

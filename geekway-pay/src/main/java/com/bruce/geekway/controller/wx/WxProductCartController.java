@@ -15,15 +15,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCart;
 import com.bruce.geekway.model.WxProductCart.CartProductSku;
-import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.utils.CartUtil;
+import com.bruce.geekway.utils.ProductUtil;
 import com.bruce.geekway.utils.ResponseUtil;
+import com.bruce.geekway.utils.ProductUtil.SlideImage;
 
 /**
  * 购物车controller
@@ -138,8 +140,11 @@ public class WxProductCartController {
 					if(productSku!=null){
 						WxProduct product = wxProductService.loadById(productSku.getProductId());
 						if(product!=null){
-							List<String> skuPicList = CartUtil.buildProductSkuPicList(productSku);
-							model.addAttribute("skuPicList", skuPicList);
+//							List<String> skuPicList = ProductUtil.buildProductSkuPicList(productSku);
+//							model.addAttribute("skuPicList", skuPicList);
+							
+							List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productSku);
+							model.addAttribute("slideImageList", slideImageList);
 						}
 						
 						model.addAttribute("product", product);

@@ -1,9 +1,8 @@
-<%@page import="java.util.Map.Entry"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%@page import="java.util.*"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.model.WxSkuProp"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
@@ -73,7 +72,10 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品SKU数据
+						商品Tag
+						<!-- 
+						<small>Headings, lists, code, pre etc. </small>
+						 -->
 					</h3>
 				</div>
 			</div>
@@ -82,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">修改商品SKU数据</li>
+					<li class="active">商品Tag</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -93,192 +95,165 @@
 			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、商品SKU详情<br/>
-					2、商品SKU图片尺寸应为1976 × 1536，透明背景，且大小应尽量控制在200K以内<br/>
+					<br/>
 				</p>
 			</div>
-
-			<%
-			WxProductSku productSku = (WxProductSku)request.getAttribute("productSku");
-			WxProduct product = (WxProduct)request.getAttribute("product");
-			%>
-
-			<form id="validate" action="<s:url value='./saveSku'/>" method="post"  class="form-horizontal form-bordered">
-
+			
+			<form id="validate" action="<s:url value='./saveProductTag'/>" method="post"  class="form-horizontal form-bordered">
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>修改商品SKU数据
+							<i class="icon-bubble4"></i>编辑商品Tag
 						</h6>
 					</div>
 					<div class="panel-body">
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
+							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
-								<label class="control-label">
-									${product.name}
-									<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-									<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
-								</label>
+								<input type="text" class="form-control" name="name" id="name" value="${productTag.name}"/>
+	                            <form:hidden path="productTag.id"/>
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图1:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">描述: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="description" id="description" value="${productTag.description}"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">宣传大图1:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPic1Url}" id="skuPic1Link"  class="lightbox">
-									<img id="skuPic1Image" src="${productSku.skuPic1Url}" width="200px" />
+								<a href="${productTag.tagPic1Url}" id="tagPic1Link"  class="lightbox">
+									<img id="tagPic1Image" src="${productTag.tagPic1Url}" width="200px" />
 								</a>
-								<input id="skuPic1Url" type="hidden" name="skuPic1Url" value="${productSku.skuPic1Url}"/>
+								<input id="tagPic1Url" type="hidden" name="tagPic1Url" value="${productTag.tagPic1Url}"/>
 								<input type="file" name="imageFile" id="imageFile1" class="imageFile styled" imageIndex="1">
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图2:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">大图链接1: <span class="mandatory">*</span></label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" name="tagLink1" id="tagLink1" value="${productTag.tagLink1}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">宣传大图2:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPic2Url}" id="skuPic2Link"  class="lightbox">
-									<img id="skuPic2Image" src="${productSku.skuPic2Url}" width="200px" />
+								<a href="${productTag.tagPic2Url}" id="tagPic2Link"  class="lightbox">
+									<img id="tagPic2Image" src="${productTag.tagPic2Url}" width="200px" />
 								</a>
-								<input id="skuPic2Url" type="hidden" name="skuPic2Url" value="${productSku.skuPic2Url}"/>
+								<input id="tagPic2Url" type="hidden" name="tagPic2Url" value="${productTag.tagPic2Url}"/>
 								<input type="file" name="imageFile" id="imageFile2" class="imageFile styled" imageIndex="2">
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图3:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">大图链接2: <span class="mandatory">*</span></label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" name="tagLink2" id="tagLink2" value="${productTag.tagLink2}"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">宣传大图3:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPic3Url}" id="skuPic3Link"  class="lightbox">
-									<img id="skuPic3Image" src="${productSku.skuPic3Url}" width="200px" />
+								<a href="${productTag.tagPic3Url}" id="tagPic3Link"  class="lightbox">
+									<img id="tagPic3Image" src="${productTag.tagPic3Url}" width="200px" />
 								</a>
-								<input id="skuPic3Url" type="hidden" name="skuPic3Url" value="${productSku.skuPic3Url}"/>
+								<input id="tagPic3Url" type="hidden" name="tagPic3Url" value="${productTag.tagPic3Url}"/>
 								<input type="file" name="imageFile" id="imageFile3" class="imageFile styled" imageIndex="3">
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图4:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">大图链接3: <span class="mandatory">*</span></label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" name="tagLink3" id="tagLink3" value="${productTag.tagLink3}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">宣传大图4:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPic4Url}" id="skuPic4Link"  class="lightbox">
-									<img id="skuPic4Image" src="${productSku.skuPic4Url}" width="200px" />
+								<a href="${productTag.tagPic4Url}" id="tagPic4Link"  class="lightbox">
+									<img id="tagPic4Image" src="${productTag.tagPic4Url}" width="200px" />
 								</a>
-								<input id="skuPic4Url" type="hidden" name="skuPic4Url" value="${productSku.skuPic4Url}"/>
+								<input id="tagPic4Url" type="hidden" name="tagPic4Url" value="${productTag.tagPic4Url}"/>
 								<input type="file" name="imageFile" id="imageFile4" class="imageFile styled" imageIndex="4">
 							</div>
 						</div>
 						
-						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="name" id="name" value="${product.name}"/>
-								<form:hidden path="product.id"/>
+							<label class="col-sm-2 control-label text-right">大图链接4: <span class="mandatory">*</span></label>
+							<div class="col-sm-5">
+								<input type="text" class="form-control" name="tagLink4" id="tagLink4" value="${productTag.tagLink4}"/>
 							</div>
 						</div>
 						
 						
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.name}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU KEY: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.propertiesName}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU基本信息: <span class="mandatory">*</span>
-							</label>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" id="price" value="${productSku.originPrice}"/>
-								<span class="label label-info label-block">原价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${productSku.price}"/>
-								<span class="label label-danger label-block">现价(元)</span>
-							</div>
-							
-							<%-- <div class="col-sm-2">
-								<input type="text" class="form-control" name="postFee" id="postFee" value="${productSku.postFee}"/>
-								<span class="label label-success label-block">运费(元)</span>
-							</div> --%>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="stock" id="stock" value="${productSku.stock}"/>
-								<span class="label label-primary label-block">库存(个)</span>
-							</div>
-						</div>
-						
-						 
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<input type="submit" value="提 交" class="btn btn-primary">
 						</div>
 					</div>
-					
 				</div>
 				
 			</form>
-			
+
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
-	<script type="text/javascript">
-	$(document).ready(function(){
-	    $(".imageFile").change(function(){
-	    	var imageIndex =$(this).attr("imageIndex");
-	    	alert(imageIndex);
-	        //创建FormData对象
-	        var data = new FormData();
-	        
-	        //为FormData对象添加数据 
-	        data.append('image', $('#imageFile'+imageIndex)[0].files[0]);
-	        $.ajax({
-	            url:'${pageContext.request.contextPath}/upload/uploadQiniu',
-	            type:'POST',
-	            data:data,
-	            cache: false,
-	            contentType: false,    //不可缺
-	            processData: false,    //不可缺
-	            success:function(responseData){
-	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.uploadImageMap.original.url;
-		                $('#skuPic'+imageIndex+'Image').attr("src", imageUrl);
-		                $('#skuPic'+imageIndex+'Link').attr("href", imageUrl);
-		                $('#skuPic'+imageIndex+'Url').val(imageUrl);
-	                }else{
-	                	alert(responseData.message);
-	                }
-	            }
-	        });
-	    });
-	});
-	</script>
-	
 </body>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".imageFile").change(function(){
+    	var imageIndex =$(this).attr("imageIndex");
+    	alert(imageIndex);
+        //创建FormData对象
+        var data = new FormData();
+        //为FormData对象添加数据 
+        data.append('image', $('#imageFile'+imageIndex)[0].files[0]);
+        $.ajax({
+            url:'${pageContext.request.contextPath}/upload/uploadQiniu',
+            type:'POST',
+            data:data,
+            cache: false,
+            contentType: false,    //不可缺
+            processData: false,    //不可缺
+            success:function(responseData){
+                if(responseData.result==1){
+                	var imageUrl = responseData.data.uploadImageMap.original.url;
+	                $('#tagPic'+imageIndex+'Image').attr("src", imageUrl);
+	                $('#tagPic'+imageIndex+'Link').attr("href", imageUrl);
+	                $('#tagPic'+imageIndex+'Url').val(imageUrl);
+                }else{
+                	alert(responseData.message);
+                }
+            }
+        });
+    });
+});
+</script>
+	
 </html>

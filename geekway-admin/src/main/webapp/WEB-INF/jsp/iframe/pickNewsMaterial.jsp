@@ -91,7 +91,7 @@
 		                        </td>
 		                        <td>
 									<%
-										String meterialLink = ProductLinkUtil.getArticleLink(materialNews.getId());
+										String meterialLink = ProductUtil.getArticleLink(materialNews.getId());
 									%>
 									<a href="<%=meterialLink%>" target="_blank">预览</a>
 								</td>

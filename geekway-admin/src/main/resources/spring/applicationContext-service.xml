@@ -11,14 +11,20 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 
 	default-lazy-init="false" default-autowire="byName">
+
+	<!-- 本地上传service -->
+	<bean id="uploadLocalService" class="com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl">
+	</bean>
 	
-	<!-- 上传本地的processor
-	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadLocalProcessor">
+	<!-- 七牛上传service -->
+	<bean id="uploadQiniuService" class="com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl">
 	</bean>
-	 -->
-	 	
-	<!-- 上传七牛的processor-->
-	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadQiniuProcessor">
-	</bean>
-	 
+	
+	
+	<!-- 上传本地的processor <bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadLocalProcessor"> 
+		</bean> -->
+	<!-- 上传七牛的processor -->
+	<!-- <bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadQiniuProcessor"> 
+		</bean> -->
+
 </beans>

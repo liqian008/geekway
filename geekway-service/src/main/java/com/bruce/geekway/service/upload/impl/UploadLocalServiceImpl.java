@@ -19,7 +19,6 @@ import com.bruce.geekway.utils.UploadUtil;
  * @author liqian
  * 
  */
-@Service
 public class UploadLocalServiceImpl extends AbstractUploadService{
 
 

@@ -13,7 +13,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +34,10 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
-import com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl;
-import com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl;
 import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.HtmlBuildUtils;
+import com.bruce.geekway.utils.ProductUtil;
+import com.bruce.geekway.utils.ProductUtil.SlideImage;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.UploadUtil;
 
@@ -125,6 +124,14 @@ public class WxProductController {
 	public String productListByTag(Model model, @PathVariable int tagId, HttpServletRequest request) {
 		WxProductTag productTag = wxProductTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
+		if(productTag!=null){
+
+			List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productTag);
+			model.addAttribute("slideImageList", slideImageList);
+			
+			List<WxProduct> tagProductList = wxProductService.queryProductsByTagId(tagId);
+			model.addAttribute("tagProductList", tagProductList);
+		}
 		return "product/productListByTag";
 	}
 	
@@ -175,8 +182,6 @@ public class WxProductController {
 	}
 	
 	
-	
-	
 	/**
 	 * sku商品详细信息
 	 * @param model
@@ -214,8 +219,11 @@ public class WxProductController {
 			if(currentProductSku!=null){
 				model.addAttribute("currentProductSku", currentProductSku);
 				
-				List<String> skuPicList = CartUtil.buildProductSkuPicList(currentProductSku);
-				model.addAttribute("skuPicList", skuPicList);
+//				List<String> skuPicList = CartUtil.buildProductSkuPicList(currentProductSku);
+//				model.addAttribute("skuPicList", skuPicList);
+				
+				List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(currentProductSku);
+				model.addAttribute("slideImageList", slideImageList);
 				
 			}
 		}

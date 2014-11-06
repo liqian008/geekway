@@ -134,6 +134,11 @@
 			value="com.bruce.geekway.dao.mapper.WxProductTagMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<bean id="wxProductTagRelationMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.WxProductTagRelationMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	<bean id="wxProductSkuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.WxProductSkuMapper" />

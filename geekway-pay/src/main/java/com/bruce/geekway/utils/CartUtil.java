@@ -1,8 +1,5 @@
 package com.bruce.geekway.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +11,6 @@ import com.bruce.foundation.util.DateUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.model.WxProductCart;
-import com.bruce.geekway.model.WxProductSku;
 
 /**
  * 
@@ -22,32 +18,6 @@ import com.bruce.geekway.model.WxProductSku;
  * 
  */
 public class CartUtil {
-
-	public static List<String> buildProductSkuPicList(WxProductSku productSku) {
-		if(productSku!=null&&productSku.getId()!=null){
-			List<String> skuPicList = new ArrayList<String>();
-			String pic1Url = productSku.getSkuPic1Url();
-			if(StringUtils.isNotBlank(pic1Url)){
-				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
-			}
-			String pic2Url = productSku.getSkuPic2Url();
-			if(StringUtils.isNotBlank(pic2Url)){
-				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
-			}
-			String pic3Url = productSku.getSkuPic3Url();
-			if(StringUtils.isNotBlank(pic3Url)){
-				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
-			}
-			String pic4Url = productSku.getSkuPic4Url();
-			if(StringUtils.isNotBlank(pic4Url)){
-				skuPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
-			}
-			return skuPicList;
-		}
-		return null;
-	}
-	
-	
 	
 	/**
 	 * 从cookie中加载购物车
