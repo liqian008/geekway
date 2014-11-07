@@ -75,7 +75,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品Tag管理 
+						商品分类管理 
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -87,7 +87,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">商品Tag管理</li>
+					<li class="active">商品分类管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -101,13 +101,13 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、可用权限商品Tag列表<br/>
+					1、可用权限商品分类列表<br/>
 				</p>
 			</div>
 			 -->
 			
 			
-			<form id="validate" action="<s:url value='./productTagPaging'/>" method="post" >
+			<form id="validate" action="<s:url value='./productCategoryPaging'/>" method="post" >
 				<!-- Basic inputs -->
 				<div class="panel panel-default"> 
 					<div class="panel-heading">
@@ -119,7 +119,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<div class="form-group">
 							<div class="row">
 								<div class="col-md-4">
-									<label>商品Tag状态:</label>
+									<label>商品分类状态:</label>
 									<input type="text" name="outTradeNo" placeholder="支持模糊匹配" class="form-control">
 								</div>
 							</div>
@@ -139,7 +139,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>商品Tag管理
+						<i class="icon-people"></i>商品分类管理
 					</h5>
 				</div>
 				<div class="table-responsive">
@@ -147,7 +147,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<thead>
 							<tr>
 								<th>ID</th>
-                                <th>Tag名称</th> 
+                                <th>图片</th>
+                                <th>名称</th> 
                                 <th>描述</th>
                                 <th>创建时间</th>
                                 <th class="team-links">操作</th>
@@ -155,23 +156,28 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxProductTag> pagingResult = (PagingResult<WxProductTag>)request.getAttribute("productTagPagingData");
-							List<WxProductTag> productTagList = pagingResult.getPageData(); 
-                           	if(productTagList!=null&&productTagList.size()>0){
-                           		for(WxProductTag productTag: productTagList){
+							PagingResult<WxProductCategory> pagingResult = (PagingResult<WxProductCategory>)request.getAttribute("productCategoryPagingData");
+							List<WxProductCategory> productCategoryList = pagingResult.getPageData(); 
+                           	if(productCategoryList!=null&&productCategoryList.size()>0){
+                           		for(WxProductCategory productCategory: productCategoryList){
                            	%>
 						
 							<tr>
-								<td><%=productTag.getId()%></td>
-		                        <td><%=productTag.getName()%></td>
-		                        <td><%=productTag.getDescription()%></td>
-		                        <td><%=sdf.format(productTag.getCreateTime())%></td>
+								<td><%=productCategory.getId()%></td>
+		                        <td>
+		                        	<a href="<%=productCategory.getCategoryPic1Url()%>" class="lightbox">
+		                        	<img src='<%=productCategory.getCategoryPic1Url()%>' class="img-media"/>
+		                        	</a>
+		                        </td>
+		                        <td><%=productCategory.getName()%></td>
+		                        <td><%=productCategory.getDescription()%></td>
+		                        <td><%=sdf.format(productCategory.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./productTagEdit?productTagId=<%=productTag.getId()%>"
+										<a href="./categoryEdit?categoryId=<%=productCategory.getId()%>"
 										class="btn btn-link btn-icon btn-xs tip" title=""
 										data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<a href="./tagProductSet?tagId=<%=productTag.getId()%>"
+										<a href="./categoryProductSet?tagId=<%=productCategory.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="商品列表"><i class="icon-tree3"></i></a> 
 									</div>

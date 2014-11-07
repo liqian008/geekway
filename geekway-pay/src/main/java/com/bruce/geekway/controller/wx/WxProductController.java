@@ -34,7 +34,6 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
-import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ProductUtil;
 import com.bruce.geekway.utils.ProductUtil.SlideImage;
@@ -107,8 +106,12 @@ public class WxProductController {
 		WxProductCategory productCategory = wxProductCategoryService.loadById(categoryId);
 		model.addAttribute("productCategory", productCategory);
 		
-		List<String> categoryPicList = buildCategoryPicList(productCategory);
-		model.addAttribute("categoryPicList", categoryPicList);
+		
+		if(productCategory!=null){
+
+			List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productCategory);
+			model.addAttribute("slideImageList", slideImageList);
+		}
 		
 		return "product/productListByCategory";
 	}

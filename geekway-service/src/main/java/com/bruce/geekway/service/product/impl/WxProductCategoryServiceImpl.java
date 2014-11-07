@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxProductCategoryMapper;
 import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductCategoryCriteria;
@@ -64,6 +66,31 @@ public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
 		return wxProductCategoryMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public List<WxProductCategory> fallloadByCriteria(int pageSize,
+			WxProductCategoryCriteria criteria) {
+		return null;
+	}
+
+	@Override
+	public PagingResult<WxProductCategory> pagingByCriteria(int pageNo, int pageSize, WxProductCategoryCriteria criteria) {
+		pageNo = pageNo <= 0 ? 1 : pageNo;// 确保pageNo合法
+		pageSize = pageNo <= 0 ? ConstConfig.PAGE_SIZE_DEFAULT : pageSize;// 确保pageSize合法
+		int offset = (pageNo - 1) * pageSize;
+
+		// 构造查询条件
+		if (criteria == null) {
+			criteria = new WxProductCategoryCriteria();
+		}
+
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+
+		int count = wxProductCategoryMapper.countByExample(criteria);
+		List<WxProductCategory> dataList = wxProductCategoryMapper.selectByExample(criteria);
+		// 返回分页数据
+		return new PagingResult<WxProductCategory>(pageNo, pageSize, count, dataList);
+	}
 
 	public WxProductCategoryMapper getWxProductCategoryMapper() {
 		return wxProductCategoryMapper;

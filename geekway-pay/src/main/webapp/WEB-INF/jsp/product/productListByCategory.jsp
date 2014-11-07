@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
+<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
 
 
 <!DOCTYPE HTML>
@@ -63,35 +64,34 @@ WxProductCategory productCategory = (WxProductCategory)request.getAttribute("pro
         
         
         <div class="content">
-        	<div class="container no-bottom">
-				<div class="section-title">
-					<h4>
-						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">${productCategory.name}</a>
-					</h4>
-				</div>
-			</div>
 			<div class="container">
-				<div class="slider-controls" data-snap-ignore="true">
-					<%
-					List<String> categoryPicList = (List<String>) request.getAttribute("categoryPicList");
-					if(categoryPicList!=null&&categoryPicList.size()>0){
-						for(String categoryPicUrl: categoryPicList){
-					%>
+				<div class="decoration"></div> 
+        		<jsp:include page="../inc/weixinShareNotification.jsp"></jsp:include>
+        		
+        		
+				<%
+				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
+				if(slideImageList!=null&&slideImageList.size()>0){
+            	%>
+                <div class="slider-controls" data-snap-ignore="true">
+					<%for(SlideImage slideImage: slideImageList){%>
 					<div>
-						<img src="<%=categoryPicUrl%>" class="responsive-image">
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
 					</div>
-					<%}
-					}%>
+					<%}%>
 				</div>
-				<a href="./#" class="next-slider"></a> <a href="./#"
-					class="prev-slider"></a>
+                <a href="javascript:void(0)" class="next-slider"></a>
+                <a href="javascript:void(0)" class="prev-slider"></a>
+                <%}%>
 			</div>
         
         	<div class="decoration"></div>
 
         	<div class="container no-bottom" id="productsContainer">
         		<div class="section-title">
-					<h4>${productCategory.name}</h4>
+					<h4>
+						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)"><%=productCategory.getName()%></a>
+					</h4>
 				</div>
         	</div>
         	

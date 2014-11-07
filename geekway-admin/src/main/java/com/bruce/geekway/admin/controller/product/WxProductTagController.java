@@ -67,24 +67,6 @@ public class WxProductTagController {
 		criteria.setOrderByClause(" id desc");
 		WxProductTagCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		//根据模块的需求构造查询条件
-		String errorType = request.getParameter("errorType");
-		if(StringUtils.isNotBlank(errorType)){
-			if("get".equalsIgnoreCase(request.getMethod())){
-				errorType = URLDecoder.decode(errorType);
-			}
-//			subCriteria.andErrorTypeEqualTo(errorType);
-//			model.addAttribute("errorType", errorType);
-		}
-		String description = request.getParameter("description");
-		if(StringUtils.isNotBlank(description)){
-			if("get".equalsIgnoreCase(request.getMethod())){
-				description = URLDecoder.decode(description);
-			}
-			subCriteria.andDescriptionLike(description);
-			model.addAttribute("description", description);
-		}
-		
 		PagingResult<WxProductTag> productTagPagingData = wxProductTagService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productTagPagingData!=null){
 			productTagPagingData.setRequestUri(request.getRequestURI());
@@ -94,7 +76,7 @@ public class WxProductTagController {
 			productTagPagingData.setQueryMap(queryMap);
 			model.addAttribute("productTagPagingData", productTagPagingData);
 		}
-		return "product/productTagListPaging";
+		return "product/tagListPaging";
 	}
 	
 	
@@ -111,7 +93,7 @@ public class WxProductTagController {
 		model.addAttribute("servletPath", servletPath);
 		
 		model.addAttribute("productTag", productTag);
-		return "product/productTagEdit";
+		return "product/tagEdit";
 	}
 	
 	@RequestMapping("/productTagEdit")
@@ -122,7 +104,7 @@ public class WxProductTagController {
 		WxProductTag productTag = wxProductTagService.loadById(productTagId);
 		model.addAttribute("productTag", productTag);
 		
-		return "product/productTagEdit";
+		return "product/tagEdit";
 	}
 	
 	/**
@@ -154,8 +136,6 @@ public class WxProductTagController {
 	}
 	
 	
-	
-	
 	/**
 	 * 列出当前tag对应的商品列表
 	 * @param model
@@ -176,6 +156,7 @@ public class WxProductTagController {
 		
 		return "product/tagProductSet";
 	}
+	
 	
 	/**
 	 * 

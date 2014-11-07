@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
+import com.bruce.geekway.utils.ProductUtil.SlideImage;
 
 
 public class ProductUtil {
@@ -128,6 +130,39 @@ public class ProductUtil {
 		return null;
 	}
 	
+	public static List<SlideImage> buildSlideImageList(WxProductCategory productCategory) {
+		if(productCategory!=null&&productCategory.getId()!=null){
+			List<SlideImage> slideImageList = new ArrayList<SlideImage>();
+			int specWidth = 600;
+			
+			String pic1Url = productCategory.getCategoryPic1Url();
+			if(StringUtils.isNotBlank(pic1Url)){
+				String image1Url = UploadUtil.getQiniuResizeImageUrl(pic1Url, specWidth, 0);
+				slideImageList.add(buildSlideImage(image1Url, productCategory.getCategoryLink1()));
+			}
+			
+			String pic2Url = productCategory.getCategoryPic2Url();
+			if(StringUtils.isNotBlank(pic2Url)){
+				String image2Url = UploadUtil.getQiniuResizeImageUrl(pic2Url, specWidth, 0);
+				slideImageList.add(buildSlideImage(image2Url, productCategory.getCategoryLink2()));
+			}
+			
+			String pic3Url = productCategory.getCategoryPic3Url();
+			if(StringUtils.isNotBlank(pic3Url)){
+				String image3Url = UploadUtil.getQiniuResizeImageUrl(pic3Url, specWidth, 0);
+				slideImageList.add(buildSlideImage(image3Url, productCategory.getCategoryLink3()));
+			}
+			
+			String pic4Url = productCategory.getCategoryPic4Url();
+			if(StringUtils.isNotBlank(pic4Url)){
+				String image4Url = UploadUtil.getQiniuResizeImageUrl(pic4Url, specWidth, 0);
+				slideImageList.add(buildSlideImage(image4Url, productCategory.getCategoryLink4()));
+			}
+			return slideImageList;
+		}
+		return null;
+	}
+	
 	
 	public static SlideImage buildSlideImage(String imageUrl, String link){
 		if(StringUtils.isBlank(link)){
@@ -159,5 +194,8 @@ public class ProductUtil {
 		}
 		
 	}
+
+
+	
 	
 }

@@ -229,7 +229,6 @@
 $(document).ready(function(){
     $(".imageFile").change(function(){
     	var imageIndex =$(this).attr("imageIndex");
-    	alert(imageIndex);
         //创建FormData对象
         var data = new FormData();
         //为FormData对象添加数据 

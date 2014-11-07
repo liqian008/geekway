@@ -1,6 +1,7 @@
 package com.bruce.geekway.admin.controller.product;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.WxProductCategory;
+import com.bruce.geekway.model.WxProductCategoryCriteria;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 
 
@@ -19,10 +24,47 @@ import com.bruce.geekway.service.product.IWxProductCategoryService;
 @Controller
 @RequestMapping("/product")
 public class WxProductCategoryController {
+	
+
+	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
+	
 
 	@Autowired
 	private IWxProductCategoryService wxProductCategoryService;
 	
+	/**
+	 * 分页方式查询
+	 * @param model
+	 * @param pageNo
+	 * @param pageSize
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/productCategoryPaging")
+	public String productCategoryPaging(Model model, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		model.addAttribute("pageNo", pageNo);
+		
+		WxProductCategoryCriteria criteria = new WxProductCategoryCriteria();
+		criteria.setOrderByClause(" id desc");
+		WxProductCategoryCriteria.Criteria subCriteria = criteria.createCriteria();
+		
+		PagingResult<WxProductCategory> productCategoryPagingData = wxProductCategoryService.pagingByCriteria(pageNo, pageSize , criteria);
+		if(productCategoryPagingData!=null){
+			productCategoryPagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			productCategoryPagingData.setQueryMap(queryMap);
+			model.addAttribute("productCategoryPagingData", productCategoryPagingData);
+		}
+		return "product/categoryListPaging";
+	}
+	
+	@Deprecated
 	@RequestMapping("/categoryList")
 	public String categoryList(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -85,18 +127,14 @@ public class WxProductCategoryController {
 		model.addAttribute("servletPath", servletPath);
 		
 		//先检查该category是否被使用
-		boolean propValueUsed = true;//默认为使用中，不能被删除
-//		int usedCount = wxProductSkuRelationService.queryCountByProductCategoryId(categoryId);
-//		if(usedCount<=0){
-//			propValueUsed = false;//未使用，则可以删除
-//		}
-		if(propValueUsed){//被使用的情况下，删除会导致数据异常
-			model.addAttribute("message", "该Sku属性已经被产品关联，无法删除");
+		boolean categoryUsed = true;//默认为使用中，不能被删除
+		if(categoryUsed){//被使用的情况下，删除会导致数据异常
+			model.addAttribute("message", "该分类已经被产品关联，无法删除");
 			return "forward:/home/operationResult"; 
 		}else{//未被使用，可以删除
 			int result = wxProductCategoryService.deleteById(categoryId);
 			
-			model.addAttribute("redirectUrl", "./categoryList");
+			model.addAttribute("redirectUrl", "./productCategoryPaging");
 			return "forward:/home/operationRedirect"; 
 		}
 	}

@@ -4,7 +4,7 @@
 	
 	<!-- groupby方式查询 sku产品，在产品分类列表中使用 -->
 	<select id="fallLoadCategoryProductSkuList" resultMap="BaseResultMap">
-		select id, product_id, name, origin_price, price, stock, sku_pic_url,
+		select id, product_id, name, origin_price, price, stock, sku_pic1_url,
 		create_time, update_time
 		from wx_product_sku
 		where

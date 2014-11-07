@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.dao.mapper.WxProductTagMapper;
-import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxProductTagCriteria;
 import com.bruce.geekway.service.product.IWxProductTagService;
