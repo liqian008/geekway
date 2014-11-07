@@ -88,7 +88,7 @@ public class WxMyController{
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多优惠券");
 			}
-			productOrderList = new ArrayList<WxProductOrder>();
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		if (productOrderList.size() > limit) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素
@@ -141,7 +141,7 @@ public class WxMyController{
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多优惠券");
 			}
-			productVoucherList = new ArrayList<WxProductVoucher>();
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		if (productVoucherList.size() > limit) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素

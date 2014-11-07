@@ -75,9 +75,18 @@ public interface WxProductMapper {
 	 */
 	int updateByPrimaryKey(WxProduct record);
 
+	//根据tagId计算对应的商品总数量
+	int countProductsByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
+	//根据tagId查询已关联的商品列表
+	List<WxProduct> queryProductsByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
 	
-	List<WxProduct> queryProductsByTagId(int tagId);
+	//根据tagId计算对应的商品总数量
+	int countProductsOutByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
+	//根据tagId查询未关联的商品列表
+	List<WxProduct> queryProductsOutByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
+	
+	//瀑布流方式加载tag的产品
+	List<WxProduct> fallLoadProductsByTag(@Param("tagId")int tagId, @Param("tailId")int tailId, @Param("limit")int limit);
 
-	List<WxProduct> queryProductsOutTagId(int tagId); 
 	
 }

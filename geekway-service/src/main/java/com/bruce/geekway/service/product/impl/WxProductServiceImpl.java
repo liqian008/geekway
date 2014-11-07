@@ -109,16 +109,63 @@ public class WxProductServiceImpl implements IWxProductService {
 	}
 	
 	
-	
 	@Override
-	public List<WxProduct> queryProductsByTagId(int tagId) {
-		return wxProductMapper.queryProductsByTagId(tagId); 
+	public PagingResult<WxProduct> pagingTagProductsByCriteria(int tagId, int pageNo, int pageSize,
+			WxProductCriteria criteria) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxProductCriteria();
+		}
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxProductMapper.countProductsByTagId(criteria, tagId);
+		List<WxProduct> dataList =  wxProductMapper.queryProductsByTagId(criteria, tagId);
+		//返回分页数据
+		return new PagingResult<WxProduct>(pageNo, pageSize, count, dataList);
 	}
+	
 
 	@Override
-	public List<WxProduct> queryProductsOutTagId(int tagId) {
-		return wxProductMapper.queryProductsOutTagId(tagId); 
+	public PagingResult<WxProduct> pagingTagOutProductsByCriteria(int tagId, int pageNo, int pageSize,
+			WxProductCriteria criteria) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		//构造查询条件
+		if(criteria==null){
+			criteria = new WxProductCriteria();
+		}
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		int count = wxProductMapper.countProductsOutByTagId(criteria, tagId);
+		List<WxProduct> dataList =  wxProductMapper.queryProductsOutByTagId(criteria, tagId);
+		//返回分页数据
+		return new PagingResult<WxProduct>(pageNo, pageSize, count, dataList);
 	}
+	
+	@Override
+	public List<WxProduct> fallLoadProductsByTag(int tagId, int tailId, int limit) {
+		return wxProductMapper.fallLoadProductsByTag(tagId, tailId, limit);
+	}
+
+	
+	
+//	@Override
+//	public List<WxProduct> queryProductsByTagId(int tagId, int limitOffset, int limitRows){
+//		return wxProductMapper.queryProductsByTagId(tagId, limitOffset, limitRows); 
+//	}
+//
+//	@Override
+//	public List<WxProduct> queryProductsOutTagId(int tagId, int limitOffset, int limitRows){ 
+//		return wxProductMapper.queryProductsOutTagId(tagId, limitOffset, limitRows); 
+//	}
 
 	
 

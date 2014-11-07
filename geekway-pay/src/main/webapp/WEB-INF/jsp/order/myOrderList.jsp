@@ -81,7 +81,7 @@
         		<input type="hidden" id="tailId" name="tailId" value="0"/>
         	</div>
         	
-        	<div id="buyContainer" class="container center-text gone" >
+        	<div id="emptyContainer" class="container center-text gone" >
         		<a href="${pageContext.request.contextPath}/index" class="button button-blue">订单记录为空，快去选购些商品吧</a>
 	        </div>
 
@@ -114,12 +114,16 @@
  				var nextTailId = data.data.tailId;
    				$("#tailId").val(nextTailId);
    				if(nextTailId<=0){//无更多数据，则隐藏更多按钮
-  					$('#moreOrdersContainer').attr("style","display:none");
+  					//$('#moreOrdersContainer').attr("style","display:none");
   					//$("#buyContainer").show();
+   					$('#moreOrdersContainer').hide();
   				}else{//还有更多数据，启用加载按钮
   					$('#moreOrdersBtn').removeAttr("disabled");
   					$('#moreOrdersBtn').text("加载更多...");
   				}
+			}else{
+				$('#moreOrdersContainer').hide();
+				$("#emptyContainer").show();
 			}
 		})
 	}

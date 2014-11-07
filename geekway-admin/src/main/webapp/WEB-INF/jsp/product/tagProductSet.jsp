@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
+<%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.foundation.enumeration.*"%>
+<%@page import="com.bruce.foundation.model.paging.*"%>
+<%@page import="com.bruce.foundation.admin.utils.*"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -100,45 +104,44 @@
 				</div>
 			</form>
 			
+			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>已关联的商品列表
-					</h5>
+						<i class="icon-people"></i>商品Tag管理
+					</h5> 
 					<a href="./tagProductSetAdd?tagId=${productTag.id}"><span class="label label-danger pull-right">关联商品</span></a>
 				</div>
 				<div class="table-responsive">
-					<table class="table table-bordered table-striped table-check">
+					<table class="table table-bordered table-striped dataTable">
 						<thead>
 							<tr>
-								<th><input type="checkbox" class="styled"></th>
-								<th>序号</th>
+								<th>ID</th>
                                 <th>图片</th>
-                                <th>标题</th>
-                                <th>状态</th>
+                                <th>名称</th>
+                                <th>置顶</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
 						<tbody>
 							<%
-                           	List<WxProduct> productList = (List<WxProduct>)request.getAttribute("mappedProductList");
+							PagingResult<WxProduct> pagingResult = (PagingResult<WxProduct>)request.getAttribute("productPagingData");
+							List<WxProduct> productList = pagingResult.getPageData(); 
                            	if(productList!=null&&productList.size()>0){
-                           		int i=0;
                            		for(WxProduct product: productList){
-                           			i++;
                            	%>
+						
 							<tr>
-		                        <td><input type="checkbox" name="checkRow" class="styled" /></td>
-		                        <td><%=product.getId()%></td>
+								<td><%=product.getId()%></td>
 		                        <td>
 		                        	<a href="<%=product.getProductPic1Url()%>" class="lightbox">
 		                        	<img src='<%=product.getProductPic1Url()%>' class="img-media"/>
 		                        	</a>
 		                        </td>
-		                        <td><%=product.getName()%></td>
+		                        <td title="SN：<%=product.getOutId()%>"><%=product.getName()%></td>
 		                        <td>
-									<a href="./topProduct?tagId=${productTag.id}&productId=<%=product.getId()%>" target="_blank"> 
+									<a href="./topProduct?tagId=${productTag.id}&productId=<%=product.getId()%>"> 
 									<span class="label label-success">置顶</span> 
 									</a>
 								</td>
@@ -149,30 +152,21 @@
 											data-original-title="移除关联"><i class="icon-link2"></i></a>
 									</div>
 								</td>
-                               </tr>
+							</tr>
 							<%}
                            	} %>
 						</tbody>
 					</table>
-				</div>
-				
-				<!-- 
-				<div class="table-footer">
-					<div class="table-actions">
-						<label>操作:</label>
-						<input type="button" value="批量移除" class="btn btn-danger btn-xs">
+					
+					<div class="datatable-footer">
+					<%=PaginatorUtil.buildPageingHtml(pagingResult, 5)%>
 					</div> 
-					<ul class="pagination">
-						<li><a href="#">Prev</a></li>
-						<li ><a href="#">1</a></li>
-						<li class="active"><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#">Next</a></li>
-					</ul>
+					 
 				</div>
-				 -->
 			</div>
 			<!-- /table view -->
+			
+			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 

@@ -2,21 +2,88 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bruce.geekway.dao.mapper.WxProductMapper">
 	
-	<!-- 查询指定tagId的product列表 -->
+	<!-- 瀑布流方式加载tag的product数据列表 -->
+	<select id="fallLoadProductsByTag" resultMap="BaseResultMap">
+		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp, wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER} and wp.id = wptr.product_id 
+		<if test="tailId>0">
+		and wp.id &lt;#{tailId,jdbcType=INTEGER}  
+		</if>
+		order by wptr.top_time desc
+		limit #{limit,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 查询指定tagId的product数量 -->
+	<select id="countProductsByTagId" resultType="java.lang.Integer">
+		select count(wp.id) from wx_product wp, wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER} and wp.id = wptr.product_id
+	</select>
+	
+	<!-- 查询指定tagId的product列表(分页方式) -->
 	<select id="queryProductsByTagId" resultMap="BaseResultMap">
-		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp, wx_product_tag_relation wptr where wp.id = wptr.product_id and wptr.product_tag_id=#{tagId,jdbcType=INTEGER} order by wptr.top_time desc;
+		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp, wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER} and wp.id = wptr.product_id order by wptr.top_time desc
+		<if test="criteria.limitRows != null">
+	      limit 
+	      <if test="criteria.limitOffset != null">
+	        #{criteria.limitOffset}, 
+	      </if>
+	      #{criteria.limitRows}
+	    </if>
 	</select>
 	
 	
-	<!-- limit查询指定tagId的product列表 -->
+	
+	<!-- 查询不在指定tagId的product数量 -->
+	<select id="countProductsOutByTagId" resultType="java.lang.Integer">
+		select count(wp.id) from wx_product wp where wp.id not in (select product_id from wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER})
+	</select>
+	<!-- 查询不在指定tagId的product列表(分页方式) -->
+	<select id="queryProductsOutByTagId" resultMap="BaseResultMap">
+		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp where wp.id not in (select product_id from wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER}) order by wp.create_time desc
+		<if test="criteria.limitRows != null">
+	      limit 
+	      <if test="criteria.limitOffset != null">
+	        #{criteria.limitOffset}, 
+	      </if>
+	      #{criteria.limitRows}
+	    </if>
+	</select>
+	
+	
+	<!-- 查询指定tagId的product列表 -->
+	<select id="queryProductsByTagId2" resultMap="BaseResultMap">
+		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp, wx_product_tag_relation wptr where wp.id = wptr.product_id and wptr.product_tag_id=#{tagId,jdbcType=INTEGER} order by wptr.top_time desc
+		<if test="limitRows != null">
+	      limit 
+	      <if test="limitOffset != null">
+	        #{limitOffset}, 
+	      </if>
+	      #{limitRows}
+	    </if>
+	</select>
+	
+	
+	<!-- limit查询指定不属于tagId的product列表 -->
 	<select id="queryProductsByTagIdLimit" resultMap="BaseResultMap">
-		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp, wx_product_tag_relation wptr where wp.id = wptr.product_id and wptr.product_tag_id=#{tagId,jdbcType=INTEGER} order by wptr.top_time desc limit #{limit};
+		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp, wx_product_tag_relation wptr where wp.id = wptr.product_id and wptr.product_tag_id=#{tagId,jdbcType=INTEGER} order by wptr.top_time desc 
+		<if test="limitRows != null">
+	      limit 
+	      <if test="limitOffset != null">
+	        #{limitOffset}, 
+	      </if>
+	      #{limitRows}
+	    </if>
 	</select> 
 	 
 	
 	<!-- 查询不在tagId中的product列表，供添加 -->
-	<select id="queryProductsOutTagId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp where wp.id not in (select product_id from wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER}) order by wp.create_time desc;
+	<select id="queryProductsOutTagId" resultMap="BaseResultMap">
+		select <include refid="Product_Tag_Base_Column_List" /> from wx_product wp where wp.id not in (select product_id from wx_product_tag_relation wptr where wptr.product_tag_id=#{tagId,jdbcType=INTEGER}) order by wp.create_time desc
+		<if test="limitRows != null">
+	      limit 
+	      <if test="limitOffset != null">
+	        #{limitOffset}, 
+	      </if>
+	      #{limitRows}
+	    </if>
 	</select> 
 	
   

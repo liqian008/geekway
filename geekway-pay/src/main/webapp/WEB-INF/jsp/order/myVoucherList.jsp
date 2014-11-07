@@ -83,6 +83,10 @@
         		<a href="javascript:void(0)" id="moreVouchersBtn" class="button button-dark">加载更多</a>
         		<input type="hidden" id="tailId" name="tailId" value="0"/>
         	</div>
+        	
+        	<div id="emptyContainer" class="container center-text gone" >
+        		<a href="javascript:void(0)" class="button button-blue">暂无优惠券</a>
+	        </div>
 
 			<div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
@@ -118,6 +122,9 @@
   					$('#moreVouchersBtn').removeAttr("disabled");
   					$('#moreVouchersBtn').text("加载更多...");
   				}
+			}else{
+				$('#moreVouchersContainer').hide();
+				$("#emptyContainer").show();
 			}
 		})
 	}

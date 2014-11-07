@@ -27,6 +27,7 @@ import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
+import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -132,10 +133,55 @@ public class WxProductController {
 			List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productTag);
 			model.addAttribute("slideImageList", slideImageList);
 			
-			List<WxProduct> tagProductList = wxProductService.queryProductsByTagId(tagId);
-			model.addAttribute("tagProductList", tagProductList);
+//			List<WxProduct> tagProductList = wxProductService.queryProductsByTagId(tagId);
+//			model.addAttribute("tagProductList", tagProductList);
 		}
 		return "product/productListByTag";
+	}
+	
+	
+	/**
+	 * 根据商品分类列出商品
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "moreTagProducts.json")
+	public ModelAndView moreTagProducts(HttpServletRequest request, @RequestParam("tagId") int tagId, @RequestParam("tailId") int tailId, @RequestParam(required=false, defaultValue="6")int limit) {
+	    if(logger.isDebugEnabled()){
+            logger.debug("ajax加载更多商品，tailId: "+tailId);
+        }
+	    if(limit>10||limit<1){
+	    	limit = 6;
+	    }
+	    
+	    if(logger.isDebugEnabled()){
+            logger.debug("根据商品Tag查询");
+        }
+	    List<WxProduct> productList = wxProductService.fallLoadProductsByTag(tagId, tailId, limit + 1);
+
+		int nextTailId = 0;
+		if (productList == null || productList.size() == 0) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("无更多商品");
+			}
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
+		}
+		
+		if (productList.size() > limit) {// 查询数据超过limit，含分页内容
+			// 移除最后一个元素
+			productList.remove(limit);
+			nextTailId = productList.get(limit - 1).getId();//取time
+			if(logger.isDebugEnabled()){
+                logger.debug("还有更多商品，tailId： "+nextTailId);
+            }
+		}
+		String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productList);
+		Map<String, String> dataMap = new HashMap<String, String>();
+		dataMap.put("html", productListHtml);
+		dataMap.put("tailId", String.valueOf(nextTailId));
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
 	
@@ -165,8 +211,7 @@ public class WxProductController {
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多商品");
 			}
-		
-			productSkuList = new ArrayList<WxProductSku>();
+			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		
 		if (productSkuList.size() > limit) {// 查询数据超过limit，含分页内容
@@ -177,7 +222,7 @@ public class WxProductController {
                 logger.debug("还有更多商品，tailId： "+nextTailId);
             }
 		}
-		String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productSkuList);
+		String productListHtml = HtmlBuildUtils.buildFallLoadProductSkuHtml(productSkuList);
 		Map<String, String> dataMap = new HashMap<String, String>();
 		dataMap.put("html", productListHtml);
 		dataMap.put("tailId", String.valueOf(nextTailId));
@@ -305,10 +350,6 @@ public class WxProductController {
 		}
 		return null;
 	}
-	
-	
-	
-	
 	
 	
 }

@@ -86,7 +86,7 @@ String contextPath = request.getContextPath();
                 <%}%>
 			</div>
 
-			<div class="decoration"></div> 
+        	<div class="decoration"></div>
 
         	<div class="container no-bottom" id="productsContainer">
         		<div class="section-title">
@@ -94,30 +94,52 @@ String contextPath = request.getContextPath();
 						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)"><%=productTag.getName()%></a>
 					</h4>
 				</div>
-	        	<%
-	        	List<WxProduct> productList = (List<WxProduct>)request.getAttribute("tagProductList");
-	        	for(WxProduct product: productList){%>
-	        	
-	        	<div class='portfolio-item-thumb one-half'>
-					<a href='<%=ProductUtil.getProductSkuLink(product.getId())%>'>
-						<img class='responsive-image' src='<%=UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 300, 0)%>'>
-					</a>
-					<h4><%=product.getName()%></h4>
-					<ul id='choose'>
-						<li>原 价：&nbsp;<span id='price' class='text-highlight highlight-dark'><del><%=product.getOriginPrice()%></del></span>元</li>
-						<li>现 价：&nbsp;<span id='price' class='text-highlight highlight-red'><%=product.getPrice()%></span>元</li>
-					</ul>
-				</div>
-				<%} %>
         	</div>
         	
-            <div class="decoration"></div>
+        	<div id="moreProductsContainer" class="container center-text">
+        		<a href="javascript:void(0)" id="moreProductsBtn" class="button button-turqoise">加载更多</a>
+        		
+        		<input type="hidden" id="tagId" name="tagId" value="<%=tagId%>"/>
+        		<input type="hidden" id="tailId" name="tailId" value="0"/>
+        	</div>
+        	
+        	<div class="decoration"></div>
 
-           	<jsp:include page="../inc/footer.jsp"></jsp:include>
-           	
+			<jsp:include page="../inc/footer.jsp"></jsp:include>
         </div>
     </div>  
 </div>
 
 </body>
+
+
+<script>
+fallLoad();
+
+ 	$('#moreProductsBtn').click(function(){
+ 		fallLoad();
+ 	});
+ 	
+ 	function fallLoad(){
+ 		//置为数据加载状态
+ 		$('#moreProductsBtn').val("努力加载中...");
+ 		$('#moreAlbumsBtn').attr("disabled","disabled");
+ 		var tailId = $("#tailId").val();
+ 		var jsonData = {'tagId' : '1', 'tailId' : tailId};
+ 		$.post('<%=contextPath%>/moreTagProducts.json', jsonData, function(data) {
+ 			var result = data.result;
+		if(result==1){
+			$("#productsContainer").append(data.data.html);
+				var nextTailId = data.data.tailId;
+  				$("#tailId").val(nextTailId);
+  				if(nextTailId<=0){//无更多数据，则隐藏按钮
+ 					$('#moreProductsContainer').attr("style","display:none");
+ 				}else{//还有更多数据，启用加载按钮
+ 					$('#moreProductsBtn').removeAttr("disabled");
+ 					$('#moreProductsBtn').val("加载更多...");
+ 				}
+		}
+	})
+}
+</script>
 </html>

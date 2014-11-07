@@ -1,13 +1,10 @@
 package com.bruce.geekway.admin.controller.product;
 
-import java.net.URLDecoder;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.WxProduct;
+import com.bruce.geekway.model.WxProductCriteria;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxProductTagCriteria;
 import com.bruce.geekway.model.WxProductTagRelation;
@@ -144,16 +142,31 @@ public class WxProductTagController {
 	 * @return
 	 */
 	@RequestMapping("/tagProductSet")
-	public String tagProductSet(Model model, int tagId, HttpServletRequest request) {
+	public String tagProductSet(Model model, int tagId, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
 		WxProductTag productTag = wxProductTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
 		
-		List<WxProduct> mappedProductList = wxProductService.queryProductsByTagId(tagId);
-		model.addAttribute("mappedProductList", mappedProductList);
+//		全量读取已关联的productList，将被下面分页替代
+//		List<WxProduct> mappedProductList = wxProductService.queryProductsByTagId(tagId);
+//		model.addAttribute("mappedProductList", mappedProductList);
 		
+		//分页方式查询已关联的产品列表
+		WxProductCriteria criteria = new WxProductCriteria();
+		criteria.setOrderByClause(" id desc");
+		WxProductCriteria.Criteria subCriteria = criteria.createCriteria();
+		
+		PagingResult<WxProduct> productPagingData = wxProductService.pagingTagProductsByCriteria(tagId, pageNo, pageSize, criteria);
+		if(productPagingData!=null){
+			productPagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			productPagingData.setQueryMap(queryMap);
+			model.addAttribute("productPagingData", productPagingData);
+		}
 		return "product/tagProductSet";
 	}
 	
@@ -166,15 +179,32 @@ public class WxProductTagController {
 	 * @return
 	 */
 	@RequestMapping("/tagProductSetAdd")
-	public String tagProductAdd(Model model,int tagId, HttpServletRequest request) {
+	public String tagProductAdd(Model model,int tagId, @RequestParam(defaultValue="1")int pageNo, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
 		WxProductTag productTag = wxProductTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
+
+//		全量读取未关联的productList，将被下面分页替代
+//		List<WxProduct> unmappedProductList = wxProductService.queryProductsOutTagId(tagId);
+//		model.addAttribute("unmappedProductList", unmappedProductList);
 		
-		List<WxProduct> unmappedProductList = wxProductService.queryProductsOutTagId(tagId);
-		model.addAttribute("unmappedProductList", unmappedProductList);
+		//分页方式查询已关联的产品列表
+		WxProductCriteria criteria = new WxProductCriteria();
+		criteria.setOrderByClause(" id desc");
+		WxProductCriteria.Criteria subCriteria = criteria.createCriteria();
+		
+		PagingResult<WxProduct> productPagingData = wxProductService.pagingTagOutProductsByCriteria(tagId, pageNo, pageSize, criteria);
+		if(productPagingData!=null){
+			productPagingData.setRequestUri(request.getRequestURI());
+			
+			HashMap<String, Object> queryMap = new HashMap<String, Object>();
+			queryMap.putAll(request.getParameterMap());
+			productPagingData.setQueryMap(queryMap);
+			model.addAttribute("productPagingData", productPagingData);
+		}
+		
 		
 //		return "material/tagProductSetAdd";
 		return "product/tagProductSetAdd";

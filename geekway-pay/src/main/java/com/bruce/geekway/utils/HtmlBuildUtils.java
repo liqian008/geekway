@@ -14,28 +14,69 @@ import com.bruce.geekway.model.WxProductVoucher;
  * @author liqian TODO 条件允许的话，最好改用freemarker，更灵活
  */
 public class HtmlBuildUtils {
-
+	
 	/**
 	 * 构造产品列表的html
 	 * 
 	 * @param productSkuList
 	 * @return
 	 */
-	public static String buildFallLoadProductHtml(List<WxProductSku> productSkuList) {
+	public static String buildFallLoadProductHtml(List<WxProduct> productList) {
 		// TODO freemarker template
-		if (productSkuList != null && productSkuList.size() > 0) {
+		if (productList != null && productList.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (WxProductSku productSku : productSkuList) {
+			for (WxProduct product : productList) {
 				i++;
-				sb.append(buildProductItemHtml(productSku, i % 2));
+				sb.append(buildProductItemHtml(product, i % 2));
 			}
 			return sb.toString();
 		}
 		return "";
 	}
 
-	private static String buildProductItemHtml(WxProductSku productSku, int mod) {
+	private static String buildProductItemHtml(WxProduct product, int mod) {
+		String lastColumnCss = mod == 0 ? " last-column" : ""; 
+		if (product != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
+			sb.append("<a href='" + ProductUtil.getProductSkuLink(product.getId()) + "'>");
+			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 300, 0) + "'");
+			sb.append("</a>");
+			sb.append("<h4>"+product.getName()+"</h4>");
+			sb.append("<ul id='choose'>");
+			sb.append("<li>原 价：&nbsp;<span id='price' class='text-highlight highlight-dark'><del>" + product.getOriginPrice() + "</del></span>元</li>");
+			sb.append("<li>现 价：&nbsp;<span id='price' class='text-highlight highlight-red'>" + product.getPrice() + "</span>元</li>");
+			sb.append("</ul>");
+			sb.append("</div>");
+			return sb.toString();
+		}
+		return "";
+	}
+	
+	
+	
+	/**
+	 * 构造产品列表的html
+	 * 
+	 * @param productSkuList
+	 * @return
+	 */
+	public static String buildFallLoadProductSkuHtml(List<WxProductSku> productSkuList) {
+		// TODO freemarker template
+		if (productSkuList != null && productSkuList.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			int i = 0;
+			for (WxProductSku productSku : productSkuList) {
+				i++;
+				sb.append(buildProductSkuItemHtml(productSku, i % 2));
+			}
+			return sb.toString();
+		}
+		return "";
+	}
+
+	private static String buildProductSkuItemHtml(WxProductSku productSku, int mod) {
 		String lastColumnCss = mod == 0 ? " last-column" : ""; 
 
 		if (productSku != null) {
