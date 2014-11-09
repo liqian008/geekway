@@ -162,6 +162,18 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	}
 	
 	
+	@Override
+	public WxProductOrder loadByWxTransId(String wxTransId) {
+		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
+		criteria.createCriteria().andWxTransIdEqualTo(wxTransId);
+		List<WxProductOrder> productOrderList = queryByCriteria(criteria);
+		if(productOrderList!=null&&productOrderList.size()>0){
+			return productOrderList.get(0);
+		}
+		return null;
+	}
+
+	
 	/**
 	 * 生成订单，供用户进行支付
 	 */
@@ -292,6 +304,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		this.wxDeliveryTemplateService = wxDeliveryTemplateService;
 	}
 
+	
 	
 	
 }

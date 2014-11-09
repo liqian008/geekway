@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>商品详情</title>
+<title>${currentProductSku.name}</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -42,7 +42,7 @@
 WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
 Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
 %>
-	            	
+
 <body>
 
 <div class="all-elements">
@@ -57,7 +57,6 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
         </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
-            <a href="javascript:void(0)" id="shareToFriend" class="facebook-content"></a>
         </div>
         
         <div class="content"> 

@@ -2,8 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
-<%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
-<%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
+<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -13,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>我的购物车</title>
+<title>资讯详情</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -37,6 +36,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 
 </head>
+
 <body>
 
 <div class="all-elements">
@@ -45,7 +45,7 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">购物车</p>
+            <p class="bread-crumb">${product.name}</p>
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
@@ -55,66 +55,33 @@
         
         <div class="content"> 
 	
-			<div class="decoration"></div> 
+			<div class="decoration"></div>
 
-        	<div class="container no-bottom">
-            	<div class="section-title">
-                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">我的购物车</a></h4>
+			<div class="container no-bottom">
+				<div class="section-title">
+					<h4>
+						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">资讯</a>
+					</h4>
 				</div>
+			</div>
+
+            <div class="container no-bottom">
+            	<div class="section-title">
+                	<h4 class="center-text">${product.name}</h4> 
+                </div>
             </div> 
             
-            <div class="decoration"></div>
-            <div class="container">
-            	<div class="section-title">
-                	<h4>购物车清单</h4>
-				</div>
-				<%
-				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
-				if(cartItemList!=null&&cartItemList.size()>0){
-				%>
-				<form action="${pageContext.request.contextPath}/buy" method="get" id="cartForm"> 	 
-				<input type="hidden" name="cartBuy" value="true"/>
-				<%
-				for(CartProductSku cartItem: cartItemList){
-				%>
-					<input type="hidden" name="productSkuId" value="<%=cartItem.getProductSku().getId()%>"/>
-					<input type="hidden" name="buyAmount" value="<%=cartItem.getAmount()%>"/>
-				
-            	<p class="quote-item">
-                	<img src="<%=cartItem.getProductSku().getSkuPic1Url()%>" alt="<%=cartItem.getProductSku().getName() %>">
-                    <em><%=cartItem.getProductSku().getName() %></em>
-                    合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
-                    
-                    |&nbsp;<span class="text-highlight highlight-dark"><a href="./cartItem?productSkuId=<%=cartItem.getProductSku().getId()%>">修改</a></span>
-                    &nbsp;<span class="text-highlight highlight-dark"><a href="./removeFromCart?productSkuId=<%=cartItem.getProductSku().getId()%>">移除 X</a></span>
-                </p>
-                <%} %>
-                <div class="center-text">
-                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-red">结算商品</a>
-                </div>
-                </form>
-                <%}else{%>
-                <div id="emptyContainer" class="container center-text" >
-	        		<a href="${pageContext.request.contextPath}/index" class="button button-blue">您的购物车为空，快去选购些商品吧</a>
-		        </div>
-                <%}%>
-            </div>
             
             <div class="decoration"></div>
+            
             <jsp:include page="../inc/footer.jsp"></jsp:include>
-		</div>
-	</div>  
+            
+        </div>                
+    </div>  
 </div>
 
 </body>
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp"></jsp:include>
-
-<script>
-$("#submitOrder").click(function(){
-	$("#cartForm").submit();
-});
 </script>
 
 </html>

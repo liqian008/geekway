@@ -116,11 +116,24 @@ public class WxOrderController {
 		model.addAttribute("servletPath", servletPath);
 		
 		WxProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
-		model.addAttribute("order", order);
+		if(order!=null){model.addAttribute("order", order);
+			List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
+			model.addAttribute("productOrderItemList", productOrderItemList);
+		}
+		return "order/orderInfo";
+	}
+	
+	@RequestMapping("/orderInfoByTrans")
+	public String orderInfoByTrans(Model model, String wxTransId, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
 		
-		List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
-		model.addAttribute("productOrderItemList", productOrderItemList);
-		
+		WxProductOrder order = wxProductOrderService.loadByWxTransId(wxTransId);
+		if(order!=null){
+			model.addAttribute("order", order);
+			List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(order.getOutTradeNo());
+			model.addAttribute("productOrderItemList", productOrderItemList);
+		}
 		return "order/orderInfo";
 	}
 	

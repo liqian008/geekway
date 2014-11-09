@@ -157,6 +157,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                 <th>类型</th> 
                                 <th>原因</th>
                                 <th>状态</th>
+                                <th>订单</th>
                                 <th>投诉时间</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -174,6 +175,11 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		                        <td><%=complaint.getMsgType()%></td>
 		                        <td><%=complaint.getReason()%></td>
 		                        <td><%=complaint.getDealStatus()%></td>
+		                        <td>
+		                        	<a href="${pageContext.request.contextPath}/order/orderInfoByTrans?wxTransId=<%=complaint.getTransId()%>" target="_blank"> 
+										<span class="label label-success">查看</span> 
+									</a>
+		                        </td>
 		                        <td><%=sdf.format(complaint.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

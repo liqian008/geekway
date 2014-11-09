@@ -12,6 +12,7 @@
 		
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandExtendMapper.xml" />
+		
 		<!-- 
 		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
 		 -->
@@ -46,6 +47,7 @@
 		<!-- 
 		<mapper resource="com/bruce/geekway/model/xml/WxProductSkuRelationMapper.xml" />
 		-->
+		<mapper resource="com/bruce/geekway/model/xml/WxProductNewsMapper.xml" /> 
 		<mapper resource="com/bruce/geekway/model/xml/WxProductTagMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxProductTagRelationMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/WxProductVoucherMapper.xml" />

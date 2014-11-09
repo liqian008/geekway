@@ -7,17 +7,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.model.WxProductNews;
 import com.bruce.geekway.model.wx.pay.WxDeliveryTemplate;
 import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
+import com.bruce.geekway.service.product.IWxProductNewsService;
 
 @Controller
 public class WxSystemController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxSystemController.class);
+	
+	@Autowired
+	private IWxProductNewsService wxProductNewsService;
 	
 	@Autowired
 	private IWxDeliveryTemplateService wxDeliverTemplateService;
@@ -27,6 +33,14 @@ public class WxSystemController {
 		WxDeliveryTemplate template = wxDeliverTemplateService.loadDeliveryTemplate(1);
 		System.out.println(template);
 		return "product/index";
+	}
+	
+	
+	@RequestMapping(value = "/news/{newsId}")
+	public String newsInfo(Model model, @PathVariable int newsId, HttpServletRequest request) {
+		WxProductNews news = wxProductNewsService.loadById(newsId);
+		model.addAttribute("news", news);
+		return "news/newsInfo";
 	}
 	
 	

@@ -121,9 +121,6 @@
 							</label>
 							<div class="col-sm-3">
 								<label class="control-label">${notify.openId}</label>
-								<a href="${pageContext.request.contextPath}" target="_blank"> 
-									<span class="label label-success">查看资料</span> 
-								</a>
 								<span class="label label-success label-block">用户ID</span>
 							</div>
 							
@@ -131,9 +128,13 @@
 								<label class="control-label">${notify.isSubsuribed}</label>
 								<span class="label label-primary label-block">关注状态</span>
 							</div>
+							
+							<div class="col-sm-2">
+								<a href="${pageContext.request.contextPath}" target="_blank"> 
+									<span class="label label-warning">查看买家资料</span>
+								</a>
+							</div>
 						</div>
-						
-						
 						
 						
 						<div class="form-group">
@@ -147,6 +148,12 @@
 							<div class="col-sm-4">
 								<label class="control-label">${notify.outTradeNo}</label>
 								<span class="label label-primary label-block">订单号</span>
+							</div>
+							
+							<div class="col-sm-2">
+								<a href="${pageContext.request.contextPath}/order/orderInfoByTrans?wxTransId=${notify.transactionId}" target="_blank"> 
+									<span class="label label-warning">查看订单</span> 
+								</a>
 							</div>
 						</div>
 						

@@ -156,7 +156,7 @@ public class GeekwayMaterialArticleController extends BaseController {
 			result = wxMaterialArticleService.save(materialArticle);
 		}
 		
-		model.addAttribute("redirectUrl", "./materialArticleList");
+		model.addAttribute("redirectUrl", "./materialArticlePaging");
 		return "forward:/home/operationRedirect";
 	}
 

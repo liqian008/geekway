@@ -16,17 +16,17 @@
 
 		<div class="navigation-items">
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/index" class="home-nav">双11促销<em></em></a>
+				<a href="${pageContext.request.contextPath}/products/c-1" class="home-nav">双11促销<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/index" class="home-nav">热销爆款<em></em></a>
+				<a href="${pageContext.request.contextPath}/products/t-1" class="home-nav">热销爆款<em></em></a>
 			</div>
 			<div class="nav-item">
 				<a href="./#" class="features-nav submenu-deploy">韩版<em></em></a>
 				<div class="nav-item-submenu" style="overflow: hidden; display: block;">
-					<a href="intro.html">Introduction <em class="unselected-sub-nav"></em></a>
-					<a href="type.html">Typography<em class="unselected-sub-nav"></em></a>
-					<a href="jquery.html">jQuery <em class="unselected-sub-nav"></em></a>
+					<a href="${pageContext.request.contextPath}/products/t-1">Introduction <em class="unselected-sub-nav"></em></a>
+					<a href="${pageContext.request.contextPath}/products/t-1">Typography<em class="unselected-sub-nav"></em></a>
+					<a href="${pageContext.request.contextPath}/products/t-1">jQuery <em class="unselected-sub-nav"></em></a>
 				</div>
 			</div>
 			<!-- 

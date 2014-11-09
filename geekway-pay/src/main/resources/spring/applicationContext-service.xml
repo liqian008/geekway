@@ -65,6 +65,8 @@
 	</bean>
 	<bean id="wxProductTagService" class="com.bruce.geekway.service.product.impl.WxProductTagServiceImpl">
 	</bean>
+	<bean id="wxProductNewsService" class="com.bruce.geekway.service.product.impl.WxProductNewsServiceImpl">
+	</bean>
 	<bean id="wxProductService" class="com.bruce.geekway.service.product.impl.WxProductServiceImpl">
 	</bean>
 	<bean id="wxProductSkuService" class="com.bruce.geekway.service.product.impl.WxProductSkuServiceImpl">

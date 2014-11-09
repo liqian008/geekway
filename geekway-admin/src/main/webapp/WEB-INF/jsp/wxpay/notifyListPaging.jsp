@@ -154,6 +154,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                 <th>订单号</th>
                                 <th>金额</th>
                                 <th>用户ID</th>
+                                <th>订单</th>
                                 <th>创建时间</th>
                                 <th class="team-links">操作</th>
 							</tr>
@@ -171,6 +172,11 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		                        <td><%=notifyOrder.getOutTradeNo()%></td>
 		                        <td><%=notifyOrder.getTotalFee()%></td>
 		                        <td><%=notifyOrder.getOpenId()%></td>
+		                        <td>
+		                        	<a href="${pageContext.request.contextPath}/order/orderInfoByTrans?wxTransId=<%=notifyOrder.getTransactionId()%>" target="_blank"> 
+										<span class="label label-success">查看</span> 
+									</a>
+		                        </td>
 		                        <td><%=sdf.format(notifyOrder.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">

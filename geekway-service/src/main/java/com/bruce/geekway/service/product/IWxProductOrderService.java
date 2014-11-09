@@ -84,11 +84,18 @@ public interface IWxProductOrderService extends IFoundationPagingService<WxProdu
 	public int changeOrderStatus(String outTradeNo, short status);
 	
 	/**
-	 * 根据订单号加载订单数据
+	 * 根据系统内订单号加载订单数据
 	 * @param outTradeNo
 	 * @return
 	 */
 	public WxProductOrder loadByTradeNo(String outTradeNo);
+	
+	/**
+	 * 根据微支付的交易id加载订单信息
+	 * @param wxTransId
+	 * @return
+	 */
+	public WxProductOrder loadByWxTransId(String wxTransId);
 	
 	
 }

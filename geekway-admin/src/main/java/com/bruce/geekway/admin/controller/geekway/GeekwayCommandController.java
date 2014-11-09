@@ -182,7 +182,7 @@ public class GeekwayCommandController {
 		//删除command实体
 		wxCommandService.deleteById(commandId);
 		
-		model.addAttribute("redirectUrl", "./commandList");
+		model.addAttribute("redirectUrl", "./commandPaging");
 		return "forward:/home/operationRedirect";
 	}
 }
