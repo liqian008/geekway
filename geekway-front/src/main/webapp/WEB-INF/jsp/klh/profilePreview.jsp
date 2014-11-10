@@ -30,7 +30,7 @@ label.center { text-align:center }
 label.inline { line-height: 30px; margin: 0 0 12px 0; }
 
 
-.preview { text-align:left; padding-left:10px; font-size: 15px; color: #2d2d2d; display: block; font-weight: 500; margin: 8px 0; }
+.preview {padding-left:10px; text-align:left; font-size: 15px; color: #2d2d2d; display: block; font-weight: 500; margin: 8px 0; }
 
 
 input[type="text"]{
@@ -66,7 +66,22 @@ KlhUserProfile userProfile = (KlhUserProfile)session.getAttribute("sessionUserPr
 				</div>
 				<label>手机号码 *</label>
 				<div  class="preview">
-				<%=userProfile.getMobile()==null||"".equals(userProfile.getMobile())?"无":userProfile.getMobile()%>
+
+				<%
+				String mobile = "无";
+				if(userProfile.getMobile()!=null&&!userProfile.getMobile().equals("")){
+					if(userProfile.getMobile().length()==11){
+						mobile =  userProfile.getMobile();	
+						mobile = mobile.substring(0, 4)+"***"+mobile.substring(7);
+						//mobile = mobile.substring(0,3)+"-"+mobile.substring(3,8)+"-"+mobile.substring(8);
+						//mobile = mobile+"*";
+					}
+				}
+				%>
+				<%=mobile%>
+				<!-- 
+				<input type="text" name="mobile" value="<%=mobile%>" readonly="readonly" style="border:none; background-color:#f7f3f0"/>
+				 -->
 				</div>
 				<label>Email *</label>
 				<div  class="preview">
