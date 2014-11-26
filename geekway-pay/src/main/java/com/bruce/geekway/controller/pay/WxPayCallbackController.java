@@ -1,4 +1,4 @@
-package com.bruce.geekway.controller.wx;
+package com.bruce.geekway.controller.pay;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
