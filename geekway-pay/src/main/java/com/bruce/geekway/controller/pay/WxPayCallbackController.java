@@ -35,6 +35,7 @@ public class WxPayCallbackController {
 	private WxPayService wxPayService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxPayCallbackController.class);
+	private static final Logger wxPayLogger = LoggerFactory.getLogger("wxPayLogger");
 
 	
 	////////////////////////////////////////////////////////

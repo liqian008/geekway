@@ -131,6 +131,6 @@
 </script>
 
 <!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp"></jsp:include>
+<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
 
 </html>

@@ -73,7 +73,7 @@
 				if(cartItemList!=null&&cartItemList.size()>0){
 				%>
 				<form action="${pageContext.request.contextPath}/buy" method="get" id="cartForm"> 	 
-				<input type="hidden" name="cartBuy" value="true"/>
+				<input type="hidden" name="cartBuy" value="1"/>
 				<%
 				for(CartProductSku cartItem: cartItemList){
 				%>
@@ -90,7 +90,9 @@
                 </p>
                 <%} %>
                 <div class="center-text">
-                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-red">结算商品</a>
+                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-blue">结算商品</a>
+                	<a href="javascript:void(0)" id="continueChoose" class="button-big button-orange">继续购物</a>
+                
                 </div>
                 </form>
                 <%}else{%>
@@ -109,7 +111,7 @@
 </body>
 
 <!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp"></jsp:include>
+<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include> 
 
 <script>
 $("#submitOrder").click(function(){

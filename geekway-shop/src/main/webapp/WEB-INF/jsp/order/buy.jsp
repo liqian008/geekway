@@ -112,10 +112,12 @@
                     总计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
                     <input type="hidden" id="hiddenTotalFee" class="paramField" name="hiddenTotalFee" value="${totalFee}"/>
                     <input type="hidden" id="cartBuy" class="paramField" name="cartBuy" value="${cartBuy}"/>
+                    <input type="hidden" id="selfPay" class="paramField" name="selfPay" value="1"/>
                     </h5>
                 </p>
                 <div class="center-text">
-                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-red">确认无误，提交订单</a>
+                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-green">微信支付</a>
+                	<a href="javascript:void(0)" id="shareOrder" class="button-big button-orange">我想找人，替我买单</a>
                 </div>
             </div>
             
@@ -170,7 +172,7 @@ if(orderAddressJsObj!=null){
 %>
 <script>
 
-$("#submitOrder").click(function(){
+$("#shareOrder").click(function(){
 	var postName = $("#hiddenPostName").val();
 	var postMobile = $("#hiddenPostMobile").val();
 	
@@ -189,8 +191,8 @@ $("#submitOrder").click(function(){
 	} */
 	
 	$('#chooseAddress').hide();//隐藏地址按钮
-	$('#submitOrder').text("订单提交中...");
-	$('#submitOrder').attr("disabled","disabled");
+	$('#shareOrder').text("代付订单提交中...");
+	$('#shareOrder').attr("disabled","disabled");
 	
 	var paramData = $(".paramField").serialize();
 	//alert(paramData);
@@ -200,12 +202,11 @@ $("#submitOrder").click(function(){
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
-			$('#submitOrder').text("订单提交成功");
-			$('#submitOrder').removeClass("");
+			$('#shareOrder').text("代付订单创建成功");
+			$('#shareOrder').removeClass("");
 			
 			var tradeNo = responseData.data.tradeNo;
-			var orderId = responseData.data.orderId;
-			location.href= "${pageContext.request.contextPath}/orderInfo?orderId="+orderId+"&tradeNo="+tradeNo;
+			location.href= "${pageContext.request.contextPath}/orderInfoAngle?tradeNo="+tradeNo;
 		}else{
 			alert(responseData.message);
 		} 
@@ -296,5 +297,5 @@ function refreshDeliveryFee(totalProductFee, totalAmount, province, city){
 <%}%>
 
 <!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp"></jsp:include>
+<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
 </html>

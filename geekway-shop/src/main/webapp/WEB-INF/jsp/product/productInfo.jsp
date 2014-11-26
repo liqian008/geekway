@@ -167,9 +167,9 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
             		canBuy = true;
             	}
             	%>
-                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=canBuy?"":"gone"%>">点击购买</a>
+                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=canBuy?"":"gone"%>">直接购买</a>
                 <a href="javascript:void(0)" id="addToCart" class="button-big button-blue <%=canBuy?"":"gone"%>">添加到购物车</a>
-                
+
                 <div class="static-notification-red <%=canBuy?"gone":""%>" id="buyDisable">
                     <p class="center-text uppercase">本品暂时缺货</p>
                 </div>

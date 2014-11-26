@@ -80,21 +80,6 @@ public class WxProductOrderController {
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
 
 	
-//	@RequestMapping(value = "/tests")
-//	public String tests(Model model, HttpServletRequest request) {
-//		
-//		return "cart/test";
-//	}
-//	
-//	@RequestMapping(value = "/test1.json")
-//	public ModelAndView test1(Model model, int[] totalAmount, int[] productSkuId, HttpServletRequest request) {
-//		
-//		System.out.println(totalAmount);
-//		System.out.println(productSkuId);
-//		
-//		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson("123"));
-//	}
-	
 	
 	
 //	/**
@@ -152,7 +137,7 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/buy")
-	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request, HttpServletResponse response) {
+	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="0")int cartBuy, HttpServletRequest request, HttpServletResponse response) {
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
 		//userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
@@ -223,20 +208,14 @@ public class WxProductOrderController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/submitOrder.json")
-	public ModelAndView submitOrder(Model model, int productSkuId[], int buyAmount[], @RequestParam(required = false, defaultValue = "0") long voucherId, @RequestParam(required=false, defaultValue="false")boolean cartBuy, HttpServletRequest request,  HttpServletResponse response) {
+	public ModelAndView submitOrder(Model model, int productSkuId[], int buyAmount[], 
+			@RequestParam(required=false, defaultValue="0")int cartBuy, 
+			@RequestParam(required=false, defaultValue="1")boolean selfPay, 
+			HttpServletRequest request,  HttpServletResponse response) {
 		Date currentTime = new Date();
 		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
-		WxProductVoucher voucher = null;
-		if(voucherId>0){
-			//验证优惠券有效性
-			voucher = wxProductVoucherService.loadUserVoucherById(userOpenId, voucherId);
-			checkUserVoucher(voucher);
-		}
-		
-//		double productTotalFee = 0;
-//		int totalBuyAmount = 0;
 		//TODO 检查请求参数的正确性
 		List<WxProductOrderItem> orderItemList = new ArrayList<WxProductOrderItem>();
 		if(productSkuId!=null&&productSkuId.length>0){
@@ -265,20 +244,29 @@ public class WxProductOrderController {
 		
 		//构造预购买的订单数据
 		WxProductOrder productOrder = new WxProductOrder();
-		productOrder.setUserOpenId(userOpenId);//用户身份
+		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
 		
-		productOrder.setVoucherId(voucherId);//优惠券id
+		productOrder.setVoucherId(null);//不使用优惠券
 		
 		//提交订单
 		int result = wxProductOrderService.createOrder(productOrder, addressInfo, orderItemList);
 		if(result>0){
-			if(cartBuy){//来自购物车的结算，需要清空购物车
+			if(cartBuy==1){//来自购物车的结算，需要清空购物车
 				CartUtil.clearCartCookie(response);
 			}
 			
-			Map<String, String> dataMap = new HashMap<String, String>();
-			dataMap.put("tradeNo", productOrder.getOutTradeNo());
-			dataMap.put("orderId", String.valueOf(productOrder.getId()));
+			Map<String, Object> dataMap = new HashMap<String, Object>();
+			if(selfPay){//如果是自己支付的
+				//立刻构造微信所需的支付JS对象，供用户支付
+				String remoteIp = RequestUtil.getRemoteIP(request);
+				WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(productOrder, remoteIp);
+				dataMap.put("wxPayJsObj", wxPayJsObj);
+				dataMap.put("tradeNo", productOrder.getOutTradeNo());
+				dataMap.put("payer", "self");//自己支付
+			}else{//找人代付
+				dataMap.put("tradeNo", productOrder.getOutTradeNo());
+				dataMap.put("payer", "diaosi");//找吊死备胎支付
+			}
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR));
@@ -288,14 +276,13 @@ public class WxProductOrderController {
 	/**
 	 * 订单详情
 	 * @param model
-	 * @param orderId
 	 * @param tradeNo
 	 * @param request
 	 * @return
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/orderInfo")
-	public String orderInfo(Model model, long orderId, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
+	public String orderInfo(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
 		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
 		checkUserOpenId(userOpenId);
 		
@@ -308,17 +295,84 @@ public class WxProductOrderController {
 		model.addAttribute("orderItemList", orderItemList);
 		
 		//检查订单状态
-		
 		boolean notPayed = GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus() == orderInfo.getStatus();
-		if(notPayed){//如果是未付款状态，需要构造支付js对象
-			//再开始构造微信所需的订单对象
+		if(notPayed){//如果是未付款状态，需要构造支付js对象(与在buy流程中不同，为保证速度，不在页面中使用ajax构造，而是直接在controller中就构造好)
 			String remoteIp = RequestUtil.getRemoteIP(request);
 			WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
 			model.addAttribute("wxPayJsObj", wxPayJsObj);
 		}
-		//需要在页面中增加地址的处理
 		return "order/orderInfo";
 	}
+	
+	
+	/**
+	 * 准备分享让吊死购买的请求
+	 * @param model
+	 * @param tradeNo
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/orderInfoShare")
+	public String orderInfoShare(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
+		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		checkUserOpenId(userOpenId);
+		
+		//加载订单信息
+		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		
+		//TODO 检查商品完整性
+		model.addAttribute("orderInfo", orderInfo);
+		
+		//加载订单中商品列表
+		List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+		model.addAttribute("orderItemList", orderItemList);
+		
+		return "order/orderInfoShare";
+	}
+	
+	
+	
+	
+	
+	/**
+	 * 代付订单页面，查看的是女神的订单信息
+	 * @param model
+	 * @param tradeNo
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/payForAngle")
+	public String payForAnother(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
+		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		checkUserOpenId(userOpenId);
+		
+		//加载订单信息
+		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		//检查订单状态（未支付时才可以支付）
+		short orderStatus = orderInfo.getStatus();
+		if(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()!=orderStatus){
+			//来晚了，订单已经被人抢着支付了
+			//TODO throw new GeekwayException(errorCode);
+		}
+		//TODO 增加超时限制（n天以上的不准代付？）
+		
+		//检查商品完整性
+		model.addAttribute("orderInfo", orderInfo);
+		
+		//加载订单中商品列表
+		List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+		model.addAttribute("orderItemList", orderItemList);
+		
+		//未付款状态，需要构造支付js对象
+		String remoteIp = RequestUtil.getRemoteIP(request);
+		WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
+		model.addAttribute("wxPayJsObj", wxPayJsObj);
+		
+		return "order/payForAngle";
+	}
+
 	
 	
 	/**

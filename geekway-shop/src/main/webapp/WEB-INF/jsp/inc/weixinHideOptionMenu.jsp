@@ -1,7 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
+
+<%
+String hideOpt = request.getParameter("hideOpt");
+String menuOption = "showOptionMenu";
+if("1".equals(hideOpt)){
+	menuOption = "hideOptionMenu"; 
+}
+%>
 <script>
 function onBridgeReady() {
-	WeixinJSBridge.call('hideOptionMenu');
+	WeixinJSBridge.call('<%=menuOption%>');
 }
 
 if (typeof WeixinJSBridge == "undefined") {

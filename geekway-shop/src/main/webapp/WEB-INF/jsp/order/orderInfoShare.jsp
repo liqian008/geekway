@@ -4,6 +4,8 @@
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
 
+<!-- 要分享出的页面 -->
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -12,7 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>订单详情</title>
+<title>让TA为我买单</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -43,8 +45,7 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">订单详情</p>
-            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
+            <p class="bread-crumb">让TA为我买单</p>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
@@ -53,11 +54,19 @@
         
         <div class="content"> 
 	
-			<div class="decoration"></div> 
+			<div class="decoration"></div>
+			<div class="container no-bottom">
+				<div class="big-notification green-notification"> 
+					<h4 class="uppercase">究竟有多少人愿意为我买单？</h4>
+					<p>
+						点击右上角的分享按钮，将此订单【分享给好友】或【分享至朋友圈】，看看有多少人愿意为我买单？
+					</p>
+				</div>
+			</div>
 
         	<div class="container no-bottom">
             	<div class="section-title">
-                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">订单信息</a></h4>
+                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">女神订单信息</a></h4>
 				</div>
             </div> 
             
@@ -71,9 +80,9 @@
 					订单号： ${orderInfo.outTradeNo}<br/>
 					下单时间：${orderInfo.createTime}
 				</p>
-					
+
 				<p class="quote-item">
-					<% 
+					<%
 					List<WxProductOrderItem> orderItemList = (List<WxProductOrderItem>)request.getAttribute("orderItemList"); 
 					if(orderItemList!=null&&orderItemList.size()>0){
 						for(WxProductOrderItem orderItem: orderItemList){
@@ -96,7 +105,7 @@
             <div class="decoration"></div>
             <div class="container" id="product-intro">
             	<div class="section-title">
-                	<h4>收件人信息</h4>
+                	<h4>发货信息</h4>
                 	<em>&nbsp;</em>
 				</div>
             	<ul id="choose">
@@ -106,17 +115,12 @@
 	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">${orderInfo.postCode}</span></li>
 	            </ul>
 	            <div class="decoration"></div>
-                <h5 class="center-text"> 
+                <h5 class="center-text">
                 商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${orderInfo.productFee}</span>元&nbsp;|&nbsp; 
                 运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
                 
                 <%
                 WxProductOrder productOrder = (WxProductOrder)request.getAttribute("orderInfo");
-                if(productOrder.getVoucherFee()!=null&&productOrder.getVoucherFee()>0){
-                %>
-                优惠券：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.voucherFee}</span>元&nbsp;|&nbsp;
-                <%}%>
-                <%
                 if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
                 %>
                 折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
@@ -125,18 +129,17 @@
                 合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
                 
+                <%
+                WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
+                if(orderInfo.getStatus()==1){
+                %>
+                <div class="decoration"></div>
+            	<div class="center-text">
+	               	<a href="javascript:void(0)" id="wxPay" class="button-big button-green">微信支付</a>
+            	</div> 
+            	<%}%>
             </div>
             
-            
-            <%
-            WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
-            if(orderInfo.getStatus()==1){
-            %>
-            <div class="decoration"></div>
-        	<div class="container center-text">
-            	<a href="javascript:void(0)" id="wxPay" class="button-big button-green">为女神付款【微信支付】</a>
-        	</div> 
-        	<%}%>
             <div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
             
@@ -145,36 +148,7 @@
 </div>
 </body>
 
-<%
-WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
-%>
-
-<script language="javascript">
-	// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
-	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-		//公众号支付
-		jQuery('a#wxPay').click(function(e) {
-			WeixinJSBridge.invoke('getBrandWCPayRequest', {
-				"appId" : "<%=itemJsObj.getAppId()%>", //公众号名称，由商户传入
-				"timeStamp" : "<%=itemJsObj.getTimeStamp()%>", //时间戳
-				"nonceStr" : "<%=itemJsObj.getNonceStr()%>", //随机串
-				"package" : "<%=itemJsObj.getPackageValue()%>",//扩展包
-				"signType" : "<%=itemJsObj.getSignType()%>", //微信签名方式:1.sha1
-				"paySign" : "<%=itemJsObj.getPaySign()%>"
-			//微信签名
-			}, function(res) {
-				if (res.err_msg == "get_brand_wcpay_request:ok") {
-					payComplete();
-				}
-				// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-				//因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
-			});
-		});
-	}, false);
-</script>
-
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
-
+<!-- 允许微信分享 -->
+<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=0"></jsp:include>
 
 </html>

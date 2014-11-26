@@ -204,6 +204,9 @@ int buyAmount = cartItem.getAmount();
 </body>
 
 
+<!-- 禁用微信分享 -->
+<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
+
 <script>
 recommendProducts();
 
@@ -219,65 +222,5 @@ function recommendProducts(){
 }
 </script>
 
-<!-- 微信分享 -->
-<jsp:include page="../inc/weixinShareJs.jsp"></jsp:include>
-
-<script>
-var imgUrl = "http://images.1758.com/article/image/2014/08/27/25831409142359848.jpg";
-var pageUrl = "网址";
-var descContent = '爱在五月，\n\n妈咪爱1+1亲子健康之旅开启全国行首站----重庆站妈咪爱活性益生菌';
-var shareTitle = '标题';
-var imageHeight = '120';//图片高度
-var imageWidth = '120';//图片宽度
-
-
-function shareTimeline() {
-    WeixinJSBridge.invoke('shareTimeline',{
-		"img_height": imageHeight,
-        "img_width": imageWidth,
-        "img_url": imgUrl,
-        "link": pageUrl,
-        "desc": descContent,
-        "title": shareTitle
-    }, function(res) {//朋友圈分享成功后的回调
-    	alert("系统测试阶段，分享到朋友圈暂时不予奖励优惠券");
-//    	if(res.err_msg=="share_timeline:ok"){
-//    		applyVoucher();
-//    	}
-    });
-}
-
-function shareFriend() {
-    WeixinJSBridge.invoke('sendAppMessage',{
-    	"img_height": imageHeight,
-        "img_width": imageWidth,
-    	"img_url": imgUrl,
-        "link": pageUrl,
-        "desc": descContent,
-        "title": shareTitle
-    }, function(res) {//分享给朋友成功后的回调
-    	if(res.err_msg=="send_app_msg:ok"){
-    		applyVoucher();
-    	}
-    });
-}
-
-//ajax方式增加礼券
-function applyVoucher(){
-	alert("调用申请优惠券接口");
-	var paramData = {};
-	$.post('${pageContext.request.contextPath}/applyVoucher.json', paramData, function(responseData) {
-		var result = responseData.result;
-		if(result==1){
-			var price = responseData.data.price;
-			alert("分享成功，获得【"+price+"元兑换券】");
-		}
-	}, "json");
-}
-
-$("#shareToFriend").click(function(){
-	shareTimeline();
-});
-</script>
 
 </html>
