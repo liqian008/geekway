@@ -90,6 +90,11 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 		return wxHistoryMessageMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxHistoryMessageCriteria criteria) {
+		return wxHistoryMessageMapper.countByExample(criteria);
+	}
+	
 	/**
 	 * 记录用户发送来的微信消息
 	 * @return

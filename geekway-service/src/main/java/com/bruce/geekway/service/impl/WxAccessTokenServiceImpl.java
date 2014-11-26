@@ -71,6 +71,11 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 		return wxAccessTokenMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxAccessTokenCriteria criteria) {
+		return wxAccessTokenMapper.countByExample(criteria);
+	}
+	
 	/**
 	 * 获取缓存中的accessToken
 	 */

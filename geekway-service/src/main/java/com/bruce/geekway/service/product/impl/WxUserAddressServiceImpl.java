@@ -64,6 +64,10 @@ public class WxUserAddressServiceImpl implements IWxUserAddressService {
 		return wxUserAddressMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxUserAddressCriteria criteria) {
+		return wxUserAddressMapper.countByExample(criteria);
+	}
 
 	public WxUserAddressMapper getWxUserAddressMapper() {
 		return wxUserAddressMapper;

@@ -63,10 +63,23 @@ public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 	}
 	
 	@Override
+	public List<WxPayAlarm> queryByCriteria(WxPayAlarmCriteria criteria) {
+		return wxPayAlarmMapper.selectByExample(criteria);
+	}
+
+	@Override
+	public int countByCriteria(WxPayAlarmCriteria criteria) {
+		return wxPayAlarmMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxPayAlarm> fallloadByCriteria(int pageSize,
 			WxPayAlarmCriteria criteria) {
 		return null;
 	}
+	
+	
+	
 
 	@Override
 	public PagingResult<WxPayAlarm> pagingByCriteria(int pageNo, int pageSize,
@@ -91,11 +104,7 @@ public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 	
 	
 
-	@Override
-	public List<WxPayAlarm> queryByCriteria(WxPayAlarmCriteria criteria) {
-		return wxPayAlarmMapper.selectByExample(criteria);
-	}
-
+	
 	public WxPayAlarmMapper getWxPayAlarmMapper() {
 		return wxPayAlarmMapper;
 	}

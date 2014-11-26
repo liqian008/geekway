@@ -1,6 +1,5 @@
 package com.bruce.geekway.service.pay;
 
-import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.foundation.service.IFoundationPagingService;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayComplaintCriteria;

@@ -67,6 +67,10 @@ public class WxPayNotifyOrderServiceImpl implements IWxPayNotifyOrderService {
 		return wxPayNotifyOrderMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxPayNotifyOrderCriteria criteria) {
+		return wxPayNotifyOrderMapper.countByExample(criteria);
+	}
 	
 	@Override
 	public List<WxPayNotifyOrder> fallloadByCriteria(int pageSize,

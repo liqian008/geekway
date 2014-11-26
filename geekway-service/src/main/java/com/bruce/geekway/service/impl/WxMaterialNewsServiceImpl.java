@@ -69,6 +69,12 @@ public class WxMaterialNewsServiceImpl implements IWxMaterialNewsService, Initia
 	}
 	
 	
+	@Override
+	public int countByCriteria(WxMaterialNewsCriteria criteria) {
+		return wxMaterialNewsMapper.countByExample(criteria);
+	}
+	
+	
 	
 	@Override
 	public List<WxMaterialNews> fallloadByCriteria(int pageSize,

@@ -64,6 +64,13 @@ public class WxProductOrderItemServiceImpl implements IWxProductOrderItemService
 		return wxProductOrderItemMapper.selectByExample(criteria);
 	}
 	
+
+	@Override
+	public int countByCriteria(WxProductOrderItemCriteria criteria) {
+		return wxProductOrderItemMapper.countByExample(criteria);
+	}
+	
+	
 	@Override
 	public List<WxProductOrderItem> queryByTradeNo(String outTradeNo) {
 		WxProductOrderItemCriteria criteria = new WxProductOrderItemCriteria();

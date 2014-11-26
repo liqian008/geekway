@@ -15,37 +15,6 @@ import com.bruce.geekway.model.WxUserAddress;
  */
 public interface IWxProductOrderService extends IFoundationPagingService<WxProductOrder, Long, WxProductOrderCriteria>{
 	
-	public static enum StatusEnum{
-		//可能还需要其他流程，如维权，退款等
-		SUBMITED((short)1, "待支付"), PAYED((short)2, "待发货"), DELIVERED((short)3, "待收货"), COMPLETED((short)100, "完成"), UNKNOWN((short)0, "关闭");
-		
-		private short status;
-		private String name;
-		StatusEnum(short status, String name){
-			this.status = status;
-			this.name = name;
-		}
-
-		public StatusEnum valueOf(short status){
-			StatusEnum[] statusArray  = StatusEnum.values();
-			for(StatusEnum orderStatus : statusArray){
-				if(status == orderStatus.status){
-					return orderStatus;
-				}
-			}
-			return null;
-		}
-		
-		public short getStatus() {
-			return status;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-	}
-	
 	
 	/**
 	 * 查询我的订单详情

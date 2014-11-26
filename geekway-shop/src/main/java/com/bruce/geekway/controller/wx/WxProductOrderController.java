@@ -33,6 +33,7 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.WxUserAddress;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
@@ -308,7 +309,7 @@ public class WxProductOrderController {
 		
 		//检查订单状态
 		
-		boolean notPayed = IWxProductOrderService.StatusEnum.SUBMITED.getStatus() == orderInfo.getStatus();
+		boolean notPayed = GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus() == orderInfo.getStatus();
 		if(notPayed){//如果是未付款状态，需要构造支付js对象
 			//再开始构造微信所需的订单对象
 			String remoteIp = RequestUtil.getRemoteIP(request);

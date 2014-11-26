@@ -65,6 +65,11 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	}
 
 	@Override
+	public int countByCriteria(WxProductSkuCriteria criteria) {
+		return wxProductSkuMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxProductSku> queryAllByProductId(int productId) {
 		WxProductSkuCriteria criteria = new WxProductSkuCriteria();
 		criteria.createCriteria().andProductIdEqualTo(productId);

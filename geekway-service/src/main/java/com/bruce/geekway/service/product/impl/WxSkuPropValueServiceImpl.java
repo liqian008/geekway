@@ -74,6 +74,11 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 	}
 	
 	@Override
+	public int countByCriteria(WxSkuPropValueCriteria criteria) {
+		return wxSkuPropValueMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxSkuPropValue> querySkuPropValueListByIdList(List<Integer> idList) {
 		WxSkuPropValueCriteria criteria = new WxSkuPropValueCriteria();
     	criteria.createCriteria().andIdIn(idList); 

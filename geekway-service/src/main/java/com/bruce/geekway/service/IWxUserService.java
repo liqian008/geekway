@@ -3,7 +3,6 @@ package com.bruce.geekway.service;
 import java.util.List;
 
 import com.bruce.foundation.service.IFoundationPagingService;
-import com.bruce.foundation.service.IFoundationService;
 import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.WxUserCriteria;
 

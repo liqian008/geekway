@@ -70,6 +70,11 @@ public class WxCustomizeMenuServiceImpl implements IWxCustomizeMenuService, Init
 	public List<WxCustomizeMenu> queryByCriteria(WxCustomizeMenuCriteria criteria) {
 		return wxCustomizeMenuMapper.selectByExample(criteria);
 	}
+	
+	@Override
+	public int countByCriteria(WxCustomizeMenuCriteria criteria) {
+		return wxCustomizeMenuMapper.countByExample(criteria);
+	}
 
 	@Override
 	public List<WxCustomizeMenu> queryChildrenMenus(int parentId) {

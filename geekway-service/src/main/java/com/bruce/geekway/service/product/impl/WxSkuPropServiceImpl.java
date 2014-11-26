@@ -64,6 +64,11 @@ public class WxSkuPropServiceImpl implements IWxSkuPropService{
 	public List<WxSkuProp> queryByCriteria(WxSkuPropCriteria criteria) {
 		return wxSkuPropMapper.selectByExample(criteria);
 	}
+	
+	@Override
+	public int countByCriteria(WxSkuPropCriteria criteria) {
+		return wxSkuPropMapper.countByExample(criteria);
+	}
 
 	@Override
 	public HashMap<Integer, WxSkuProp> queryMap() {

@@ -69,7 +69,10 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService, 
 		return wxMaterialArticleMapper.selectByExample(criteria);
 	}
 
-
+	@Override
+	public int countByCriteria(WxMaterialArticleCriteria criteria) {
+		return wxMaterialArticleMapper.countByExample(criteria);
+	}
 	
 	public List<WxMaterialArticle> queryMaterialArticlesByNewsId(int newsId) {
 		return wxMaterialArticleMapper.queryMaterialArticlesByNewsId(newsId);

@@ -73,6 +73,12 @@ public class WxMaterialMultimediaServiceImpl implements IWxMaterialMultimediaSer
 	}
 	
 	@Override
+	public int countByCriteria(WxMaterialMultimediaCriteria criteria) {
+		return wxMaterialMultimediaMapper.countByExample(criteria);
+	}
+	
+	
+	@Override
 	public WxMaterialMultimedia loadImageById(Integer id) {
 		WxMaterialMultimediaCriteria criteria = new WxMaterialMultimediaCriteria();
 		criteria.createCriteria().andIdEqualTo(id).andMaterialTypeEqualTo(MATERIAL_TYPE_IMAGE);

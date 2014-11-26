@@ -67,6 +67,11 @@ public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
 	}
 	
 	@Override
+	public int countByCriteria(WxProductCategoryCriteria criteria) {
+		return wxProductCategoryMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxProductCategory> fallloadByCriteria(int pageSize,
 			WxProductCategoryCriteria criteria) {
 		return null;

@@ -67,6 +67,11 @@ public class WxDefaultReplyServiceImpl implements IWxDefaultReplyService {
 	}
 	
 	@Override
+	public int countByCriteria(WxDefaultReplyCriteria criteria) {
+		return wxDefaultReplyMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxDefaultReply> fallloadByCriteria(int pageSize, WxDefaultReplyCriteria criteria) {
 		// TODO Auto-generated method stub
 		return null;

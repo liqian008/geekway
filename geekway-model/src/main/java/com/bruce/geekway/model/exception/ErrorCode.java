@@ -40,6 +40,8 @@ public class ErrorCode {
 	public static final int USER_FORBIDDEN = 201;
 	
 	
+	/* 支付相关分配300-400的错误码 */
+	
 	/*商品或SKU信息的基本参数错误*/
 	public static final int WX_PRODUCT_ORDER_ERROR = 300;
 	/*商品或SKU信息的基本参数错误*/

@@ -70,6 +70,11 @@ public class WxWebUserServiceImpl implements IWxWebUserService {
 	}
 	
 	@Override
+	public int countByCriteria(WxWebUserCriteria criteria) {
+		return wxWebUserMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxWebUser> fallloadByCriteria(int pageSize, WxWebUserCriteria criteria) {
 		return null;
 	}

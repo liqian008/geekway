@@ -67,6 +67,11 @@ public class WxCommandServiceImpl implements IWxCommandService {
 	public List<WxCommand> queryByCriteria(WxCommandCriteria criteria) {
 		return wxCommandMapper.selectByExample(criteria);
 	}
+	
+	@Override
+	public int countByCriteria(WxCommandCriteria criteria) {
+		return wxCommandMapper.countByExample(criteria);
+	}
 
 	public WxCommand loadByCommandType(short commandType, String command) {
 		WxCommandCriteria criteria = new WxCommandCriteria();

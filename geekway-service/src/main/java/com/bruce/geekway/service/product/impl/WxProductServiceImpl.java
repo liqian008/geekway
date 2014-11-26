@@ -71,6 +71,11 @@ public class WxProductServiceImpl implements IWxProductService {
 		return wxProductMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxProductCriteria criteria) {
+		return wxProductMapper.countByExample(criteria);
+	}
+	
 
 	@Override
 	public List<WxProduct> fallloadByCriteria(int pageSize,

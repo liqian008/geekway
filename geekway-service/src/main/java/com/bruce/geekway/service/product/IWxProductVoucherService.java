@@ -13,37 +13,6 @@ import com.bruce.geekway.model.WxProductVoucherCriteria;
  */
 public interface IWxProductVoucherService extends IFoundationService<WxProductVoucher, Long, WxProductVoucherCriteria>{
 	
-	public static enum StatusEnum{
-		//可能还需要其他流程，如维权，退款等
-		USED((short)2, "已使用"), AVAILABLE((short)1, "可用"), UNKNOWN((short)0, "冻结");
-		
-		private short status;
-		private String name;
-		StatusEnum(short status, String name){
-			this.status = status;
-			this.name = name;
-		}
-
-		public StatusEnum valueOf(short status){
-			StatusEnum[] statusArray  = StatusEnum.values();
-			for(StatusEnum statusEnum : statusArray){
-				if(status == statusEnum.status){
-					return statusEnum;
-				}
-			}
-			return null;
-		}
-		
-		public short getStatus() {
-			return status;
-		}
-		
-		public String getName() {
-			return name;
-		}
-	}
-	
-	
 	/**
 	 * 加载我的所有优惠券
 	 * @param userOpenId

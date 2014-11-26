@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 邮费模板的配置信息 -->
+
+<delivery_templates>
+	<delivery_template>
+		<!-- 模板id -->
+		<Id>1</Id>
+		<!-- 模板名称 -->
+		<Name>买家承担运费模板</Name>
+		<!-- 支付方式(0-买家承担运费, 1-卖家承担运费) -->
+		<Assumer>0</Assumer>
+		<!-- 计费单位(0-按件计费, 1-按重量计费, 2-按体积计费，目前只支持按件计费，默认为0) -->
+		<Valuation>0</Valuation>
+		<!-- 默认运费价格 -->
+		<TopFee>
+			<!-- 默认的快递ID，禁止修改-->
+			<Type>0</Type>
+			<Name>默认费用</Name>
+
+			<!-- StartStandards, 起始计费数量(比如计费单位是按件, 填2代表起始计费为2件) -->
+			<!-- StartFees，起始计费金额(单位: 元） -->
+			<!-- AddStandards，递增计费数量 -->
+			<!-- AddFees，递增计费金额(单位: 元) -->
+			<!-- FreeStartFees，免运费的起始标准(单位: 元) -->
+			<!-- 例子解析：Type为10000027的默认邮费计算，第1件邮费2分，每增加3件邮费增加3分。Type为10000027的指定地区邮费计算，寄送到中国/广东省/广州市的商品，第一件邮费1元，每增加1件邮费增加3分。 -->
+
+			<!-- 默认的邮费计算方法 -->
+			<Normal StartStandards="2" StartFees="6.00" AddStandards="2" AddFees="2.00" FreeStartFees="200.00"/>
+			<!-- 特殊的邮费计算方法(指定地区) -->
+			<!-- DestCountry, 感谢郭嘉（扣血拿牌 ^_^） -->
+			<!-- DestProvince，省 -->
+			<!-- DestCity，市 -->
+			
+			<!-- 北京市内
+			<Custom  StartStandards="2" StartFees="6.00" AddStandards="5" AddFees="2.00"
+					DestCountry="" DestProvince="北京" DestCity="北京"/>
+			 -->
+		</TopFee>
+		
+		<!-- 申通运费模板 -->
+		<TopFee>
+			<!-- 快递类型ID(字典表)-->
+			<Type>100001</Type>
+			<Name>申通</Name>
+			<!-- 默认的邮费计算方法 -->
+			<Normal StartStandards="2" StartFees="6.00" AddStandards="4" AddFees="2.00" FreeStartFees="200.00"/>
+			<!-- 特殊的邮费计算方法(指定地区) -->
+			<!-- 北京市内 -->
+			<Custom  StartStandards="2" StartFees="6.00" AddStandards="5" AddFees="2.00" FreeStartFees="200.00"
+					DestCountry="" DestProvince="北京" DestCity="北京"/>
+			<!-- 江浙沪地区 -->
+			<Custom  StartStandards="2" StartFees="8.00" AddStandards="2" AddFees="2.00" FreeStartFees="200.00"
+					DestCountry="" DestProvince="上海" DestCity="上海"/>
+		</TopFee>
+		
+		<!-- 园通运费模板 -->
+		<TopFee>
+			<!-- 快递类型ID(字典表)-->
+			<Type>100002</Type>
+			<Name>园通</Name>
+			<!-- 默认的邮费计算方法 -->
+			<Normal StartStandards="2" StartFees="6.00" AddStandards="4" AddFees="2.00" FreeStartFees="200.00"/>
+			<!-- 特殊的邮费计算方法(指定地区) -->
+			
+			<!-- 北京市内 -->
+			<Custom  StartStandards="2" StartFees="6.00" AddStandards="5" AddFees="2.00" FreeStartFees="200.00"
+					DestCountry="" DestProvince="北京" DestCity="北京"/>
+			<!-- 江浙沪地区 -->
+			<Custom  StartStandards="2" StartFees="8.00" AddStandards="2" AddFees="2.00" FreeStartFees="200.00"
+					DestCountry="" DestProvince="上海" DestCity="上海"/>
+		</TopFee>
+		
+		<!-- 顺丰运费模板 -->
+		<TopFee>
+			<!-- 快递类型ID(字典表)-->
+			<Type>100003</Type>
+			<Name>顺丰</Name>
+			
+			<!-- 默认的邮费计算方法 -->
+			<Normal StartStandards="2" StartFees="20.00" AddStandards="4" AddFees="3.00" FreeStartFees="200.00"/>
+			<!-- 特殊的邮费计算方法(指定地区) -->
+			<!-- 北京市内 -->
+			<Custom StartStandards="2" StartFees="13.00" AddStandards="4" AddFees="3.00" FreeStartFees="200.00"
+					DestCountry="" DestProvince="北京" DestCity="北京"/>
+		</TopFee>
+		
+	</delivery_template>
+</delivery_templates>

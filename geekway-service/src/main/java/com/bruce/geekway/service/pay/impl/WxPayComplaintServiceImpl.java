@@ -61,6 +61,16 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 		criteria.setOrderByClause(orderByClause);
 		return queryByCriteria(criteria);
 	}
+
+	@Override
+	public List<WxPayComplaint> queryByCriteria(WxPayComplaintCriteria criteria) {
+		return wxPayComplaintMapper.selectByExample(criteria);
+	}
+	
+	@Override
+	public int countByCriteria(WxPayComplaintCriteria criteria) {
+		return wxPayComplaintMapper.countByExample(criteria);
+	}
 	
 	@Override
 	public List<WxPayComplaint> fallloadByCriteria(int pageSize,
@@ -91,10 +101,6 @@ public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 	
 
 
-	@Override
-	public List<WxPayComplaint> queryByCriteria(WxPayComplaintCriteria criteria) {
-		return wxPayComplaintMapper.selectByExample(criteria);
-	}
 
 	@Override
 	public int markFinish(String openId, String feedbackId) {

@@ -65,6 +65,11 @@ public class WxProductTagServiceImpl implements IWxProductTagService {
 	public List<WxProductTag> queryByCriteria(WxProductTagCriteria criteria) {
 		return wxProductTagMapper.selectByExample(criteria);
 	}
+	
+	@Override
+	public int countByCriteria(WxProductTagCriteria criteria) {
+		return wxProductTagMapper.countByExample(criteria);
+	}
 
 	@Override
 	public List<WxProductTag> fallloadByCriteria(int pageSize,

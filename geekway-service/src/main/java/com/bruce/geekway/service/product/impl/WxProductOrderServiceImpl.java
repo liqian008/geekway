@@ -13,6 +13,7 @@ import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrderItem;
 import com.bruce.geekway.model.WxUserAddress;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
@@ -85,6 +86,10 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		return wxProductOrderMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxProductOrderCriteria criteria) {
+		return wxProductOrderMapper.countByExample(criteria);
+	}
 	
 	@Override
 	public List<WxProductOrder> fallloadByCriteria(int pageSize,
@@ -214,7 +219,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		productOrder.setTransportFee(transportFee);//运费
 		double totalFee = productTotalFee - voucherFee + transportFee;
 		productOrder.setTotalFee(totalFee);//总费用
-		productOrder.setStatus(IWxProductOrderService.StatusEnum.SUBMITED.getStatus());//预支付状态
+		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus());//预支付状态
 		productOrder.setCreateTime(currentTime);
 		//组装邮寄地址
 		populatePostInfo(productOrder, addressInfo);
@@ -225,7 +230,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		
 		//标记优惠码状态为正在使用
 		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
-			result = wxProductVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), IWxProductVoucherService.StatusEnum.USED.getStatus());
+			result = wxProductVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), GeekwayEnum.ProductVoucherStatusEnum.USED.getStatus());
 		}
 		if(addressInfo!=null&&result>0){
 			//保存用户邮寄地址信息

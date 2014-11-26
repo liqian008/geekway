@@ -68,6 +68,10 @@ public class WxProductTagRelationServiceImpl implements IWxProductTagRelationSer
 		return wxProductTagRelationMapper.selectByExample(criteria);
 	}
 	
+	@Override
+	public int countByCriteria(WxProductTagRelationCriteria criteria) {
+		return wxProductTagRelationMapper.countByExample(criteria);
+	}
 	
 	@Override
 	public int topProduct(int tagId, int productId) {

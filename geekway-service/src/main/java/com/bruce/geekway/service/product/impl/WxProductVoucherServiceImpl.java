@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.dao.mapper.WxProductVoucherMapper;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.WxProductVoucherCriteria;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 
 @Service
@@ -66,6 +67,11 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 	}
 	
 	@Override
+	public int countByCriteria(WxProductVoucherCriteria criteria) {
+		return wxProductVoucherMapper.countByExample(criteria);
+	}
+	
+	@Override
 	public List<WxProductVoucher> fallLoadUserVoucherList(String userOpenId, long voucherTailId, int limit) {
 		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
 		WxProductVoucherCriteria.Criteria subCriteria =  criteria.createCriteria();
@@ -81,7 +87,7 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 	public List<WxProductVoucher> queryUserAvailableVoucherList(String userOpenId, int limit){
 		WxProductVoucherCriteria criteria = new WxProductVoucherCriteria();
 		WxProductVoucherCriteria.Criteria subCriteria = criteria.createCriteria();
-		subCriteria.andUserOpenIdEqualTo(userOpenId).andStatusEqualTo(IWxProductVoucherService.StatusEnum.AVAILABLE.getStatus());
+		subCriteria.andUserOpenIdEqualTo(userOpenId).andStatusEqualTo(GeekwayEnum.ProductVoucherStatusEnum.AVAILABLE.getStatus());
 		criteria.setLimitRows(limit);
 		criteria.setOrderByClause(" id desc");
 		return queryByCriteria(criteria);
@@ -121,7 +127,7 @@ public class WxProductVoucherServiceImpl implements IWxProductVoucherService {
 		WxProductVoucher voucher = new WxProductVoucher();
 		voucher.setUserOpenId(userOpenId);
 		Date currentTime = new Date();
-		voucher.setStatus(IWxProductVoucherService.StatusEnum.AVAILABLE.getStatus());
+		voucher.setStatus(GeekwayEnum.ProductVoucherStatusEnum.AVAILABLE.getStatus());
 		//TODO 配置文件化
 		voucher.setPrice(5d);//5元优惠券
 		voucher.setVoucherCode("");//展示用，无具体意义

@@ -88,6 +88,12 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		return wxBroadcastMapper.selectByExample(criteria);
 	}
 	
+
+	@Override
+	public int countByCriteria(WxBroadcastCriteria criteria) {
+		return wxBroadcastMapper.countByExample(criteria);
+	}
+	
 	/**
 	 * 根据回调的群发结果，更新数据
 	 */

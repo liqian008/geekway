@@ -17,6 +17,7 @@ import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayNotifyOrder;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderItem;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
@@ -92,7 +93,7 @@ public class WxPayService{
 						}
 					}
 					// 更新订单表中的订单状态为支付完毕
-					result = wxProductOrderService.changeOrderStatus(outTradeNo, IWxProductOrderService.StatusEnum.PAYED.getStatus());
+					result = wxProductOrderService.changeOrderStatus(outTradeNo, GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
 				}
 			}
 		}
@@ -209,7 +210,7 @@ public class WxPayService{
 			WxJsonResult jsonResult = wxMpPayService.deliverNotify(deliverInfo);
 			if(jsonResult!=null){
 				//微信提交成功后，更改db中的状态
-				int result = wxProductOrderService.changeOrderStatus(deliverInfo.out_trade_no, IWxProductOrderService.StatusEnum.DELIVERED.getStatus());
+				int result = wxProductOrderService.changeOrderStatus(deliverInfo.out_trade_no, GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());
 				return result;
 			}
 		}

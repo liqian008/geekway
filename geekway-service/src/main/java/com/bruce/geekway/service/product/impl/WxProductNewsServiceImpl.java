@@ -66,6 +66,13 @@ public class WxProductNewsServiceImpl implements IWxProductNewsService, Initiali
 	public List<WxProductNews> queryByCriteria(WxProductNewsCriteria criteria) {
 		return wxProductNewsMapper.selectByExample(criteria);
 	}
+	
+
+	@Override
+	public int countByCriteria(WxProductNewsCriteria criteria) {
+		return wxProductNewsMapper.countByExample(criteria);
+	}
+	
 
 	@Override
 	public List<WxProductNews> fallloadByCriteria(int pageSize, WxProductNewsCriteria criteria) {

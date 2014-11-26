@@ -70,6 +70,13 @@ public class WxMaterialNewsArticleServiceImpl implements IWxMaterialNewsArticleS
 	
 	
 	@Override
+	public int countByCriteria(WxMaterialNewsArticleCriteria criteria) {
+		return wxMaterialNewsArticleMapper.countByExample(criteria);
+	}
+	
+	
+	
+	@Override
 	public int topArticle(int newsId, int articleId) {
 		WxMaterialNewsArticleCriteria criteria = new WxMaterialNewsArticleCriteria();
 		criteria.createCriteria().andNewsIdEqualTo(newsId).andArticleIdEqualTo(articleId);
