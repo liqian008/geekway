@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>让TA为我买单</title>
+<title>【美妞儿】找土豪朋友待付</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -45,7 +45,7 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">让TA为我买单</p>
+            <p class="bread-crumb">找土豪朋友待付</p>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
@@ -57,9 +57,10 @@
 			<div class="decoration"></div>
 			<div class="container no-bottom">
 				<div class="big-notification green-notification"> 
-					<h4 class="uppercase">究竟有多少人愿意为我买单？</h4>
+					<h4 class="uppercase">看看有多少土豪替为我买单？</h4>
 					<p>
-						点击右上角的分享按钮，将此订单【分享给好友】或【分享至朋友圈】，看看有多少人愿意为我买单？
+						点击右上角的分享按钮，将此订单【分享给好友】，让土豪朋友替我买单<br/>
+						隐私提醒：代付时，土豪可能会确认本订单的信息，如：收件人信息、地址、电话。【美妞儿】在此提醒您，务必注意避免将该订单发给陌生人
 					</p>
 				</div>
 			</div>
