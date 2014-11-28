@@ -1,6 +1,5 @@
 package com.bruce.geekway.controller.wx;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,7 @@ import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductVoucher;
+import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
@@ -70,7 +70,8 @@ public class WxMyController{
 	@NeedAuthorize
 	@RequestMapping(value = "/moreOrders.json")
 	public ModelAndView moreOrders(Model model, @RequestParam("tailId") long tailId, HttpServletRequest request) {
-		String userOpenId = (String)request.getAttribute(ConstFront.CURRENT_USER);
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String userOpenId = wxWebUser.getOpenId();
 		
 		if(logger.isDebugEnabled()){
             logger.debug("ajax加载更多【我的订单】，userOpenId: "+userOpenId+" , tailId: "+tailId);
@@ -123,7 +124,8 @@ public class WxMyController{
 	@NeedAuthorize
 	@RequestMapping(value = "/moreVouchers.json")
 	public ModelAndView moreVouchers(Model model, @RequestParam("tailId") long tailId, HttpServletRequest request) {
-		String userOpenId = (String)request.getAttribute(ConstFront.CURRENT_USER);
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String userOpenId = wxWebUser.getOpenId();
 		
 		if(logger.isDebugEnabled()){
             logger.debug("ajax加载更多【我的优惠券】，userOpenId: "+userOpenId+" , tailId: "+tailId);

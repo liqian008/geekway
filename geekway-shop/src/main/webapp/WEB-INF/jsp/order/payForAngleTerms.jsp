@@ -5,6 +5,8 @@
 <%@page import="com.bruce.geekway.model.enumeration.GeekwayEnum"%>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
 
+<!-- 待付条款 -->
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -55,15 +57,14 @@
 	
 			<div class="decoration"></div>
 			<div class="container no-bottom">
-				<div class="big-notification blue-notification"> 
-					<h4 class="uppercase">为女神买单，我骄傲啊！</h4>
+				<div class="big-notification yellow-notification"> 
+					<h4 class="uppercase">提醒：</h4>
 					<a href="#" class="close-big-notification">x</a>
 					<p>
-						女神虐我千百遍，我待女神如初恋；今日为她买一单，看她是否心意变。
+						您即将查看&付款的是女神的订单，请付款前务必确认好订单信息。
 					</p>
 				</div>
 			</div>
-			
 
         	<div class="container no-bottom">
             	<div class="section-title">
@@ -74,7 +75,7 @@
             <div class="decoration"></div>
             <div class="container no-bottom">
             	<div class="section-title"> 
-                	<h4>订单信息</h4>
+                	<h4>代付订单信息</h4>
                 	<em></em> 
 				</div>
 				<p class="quote-item">
@@ -83,39 +84,20 @@
 				</p>
 
 				<p class="quote-item">
-					<%
-					List<WxProductOrderItem> orderItemList = (List<WxProductOrderItem>)request.getAttribute("orderItemList"); 
-					if(orderItemList!=null&&orderItemList.size()>0){
-						for(WxProductOrderItem orderItem: orderItemList){
-					%>  
-						<img src="<%=orderItem.getProductPicUrl()%>" alt="<%=orderItem.getProductName() %>">
-						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>
-						X&nbsp;<span class="text-highlight highlight-blue"><%=orderItem.getAmount()%></span>件 
-						=&nbsp;<span class="text-highlight highlight-green"><%=orderItem.getTotalFee()%>元</span><br/> <br/>
-					<%} 
-					}%>
+					<img src="${orderWebUser.headImgUrl}">
+					<span class="text-highlight highlight-dark">
+						下单人昵称： ${orderWebUser.nickname}<br/>
+					</span>
 				</p>
-				
-				<p class="quote-item">
-					商品合计：
-					<span class="text-highlight highlight-red">${orderInfo.productFee}</span>元
-				</p>
-				
-				</div>
+			</div>
              
             <div class="decoration"></div>
             <div class="container" id="product-intro">
             	<div class="section-title">
-                	<h4>发货信息</h4>
+                	<h4>订单金额</h4>
                 	<em>&nbsp;</em>
 				</div>
-            	<ul id="choose">
-            		<li>女神姓名：&nbsp;<span id="postName" class="text-highlight highlight-green">${orderInfo.postName}</span></li>
-	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">${orderInfo.postMobile}</span></li>
-	            	<li>收货地址：&nbsp;<span id="postAddress" class="text-highlight highlight-dark">${orderInfo.postProvince}${orderInfo.postCity}${orderInfo.postCountries}-${orderInfo.postAddressDetailInfo}</span></li>
-	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">${orderInfo.postCode}</span></li>
-	            </ul>
-	            <div class="decoration"></div>
+            	
                 <h5 class="center-text"> 
                 商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${orderInfo.productFee}</span>元&nbsp;|&nbsp; 
                 运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
@@ -131,15 +113,15 @@
                 </h5>
             </div>
             
-            <%
-            WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
-            if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
-            %> 
+            <div class="decoration"></div>
            	<div class="container center-text">
-               	<a href="javascript:void(0)" id="wxpay" class="button-big button-green">为女神付款【微支付】</a>
-               	<a href="javascript:void(0)" id="alipay" class="button-big button-yellow">为女神付款【支付宝】</a>
+           		<div class="section-title">
+                	<h4>您即将查看的是女神的订单，请务必先确认好订单信息，再确认付款</h4>
+				</div>  
+           	 
+               	<a href="javascript:void(0)" id="tuhaoPay" class="button-big button-green">少废话，买完赶紧啪啪啪</a>
+               	<a href="javascript:void(0)" id="diaosiCancel" class="button-big button-blue">算了，我自己都还没买呢</a>
            	</div> 
-           	<%}%>
             
             <div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
@@ -149,36 +131,19 @@
 </div>
 </body>
 
-<%
-WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
-%>
+<script>
+$("#tuhaoPay").click(function(){
+	location.href="${pageContext.request.contextPath}/payForAngle?tradeNo=${orderInfo.outTradeNo}";
+});
 
-<script language="javascript">
-	// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
-	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-		//公众号支付
-		jQuery('a#wxpay').click(function(e) {
-			WeixinJSBridge.invoke('getBrandWCPayRequest', {
-				"appId" : "<%=itemJsObj.getAppId()%>", //公众号名称，由商户传入
-				"timeStamp" : "<%=itemJsObj.getTimeStamp()%>", //时间戳
-				"nonceStr" : "<%=itemJsObj.getNonceStr()%>", //随机串
-				"package" : "<%=itemJsObj.getPackageValue()%>",//扩展包
-				"signType" : "<%=itemJsObj.getSignType()%>", //微信签名方式:1.sha1
-				"paySign" : "<%=itemJsObj.getPaySign()%>"
-			//微信签名
-			}, function(res) {
-				if (res.err_msg == "get_brand_wcpay_request:ok") {
-					payComplete();
-				}
-				// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-				//因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
-			});
-		});
-	}, false);
+$("#diaosiCancel").click(function(){
+	location.href="${pageContext.request.contextPath}/index";
+});
+
 </script>
+
 
 <!-- 禁用微信分享 -->
 <jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
-
 
 </html>

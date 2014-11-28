@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.foundation.util.DateUtil;
+import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
@@ -33,11 +35,13 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.model.WxProductVoucher;
 import com.bruce.geekway.model.WxUserAddress;
+import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
+import com.bruce.geekway.service.IWxWebUserService;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
 import com.bruce.geekway.service.product.IWxProductOrderItemService;
@@ -50,6 +54,7 @@ import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -57,6 +62,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
  * @author liqian
  *
  */
+
 @Controller
 public class WxProductOrderController {
 	
@@ -71,6 +77,8 @@ public class WxProductOrderController {
 	@Autowired
 	private IWxProductOrderItemService wxProductOrderItemService;
 	@Autowired
+	private IWxWebUserService wxWebUserService;
+	@Autowired
 	private IWxUserAddressService wxUserAddressService;
 	@Autowired
 	private IWxDeliveryTemplateService wxDeliveryTemplateService;
@@ -79,8 +87,6 @@ public class WxProductOrderController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderController.class);
 
-	
-	
 	
 //	/**
 //	 * 不使用购物车，直接点击购买（呈现所购商品&列出优惠券&订单价格）
@@ -138,12 +144,15 @@ public class WxProductOrderController {
 	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/buy")
 	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="0")int cartBuy, HttpServletRequest request, HttpServletResponse response) {
-		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
+//		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
+		
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		
 		//userAccessToken，用于获取微信的共享地址address
 		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
 		if(logger.isDebugEnabled()){
 			logger.debug("进入[购买信息页面] code: "+code+", debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
-			logger.debug("进入[购买信息页面] userOpenId: "+userOpenId+", userAccessToken: "+userAccessToken);
+			logger.debug("进入[购买信息页面] userOpenId: "+wxWebUser.getOpenId()+", userAccessToken: "+userAccessToken);
 		}
 		
 		//TODO 检查请求参数的正确性
@@ -213,8 +222,11 @@ public class WxProductOrderController {
 			@RequestParam(required=false, defaultValue="1")boolean selfPay, 
 			HttpServletRequest request,  HttpServletResponse response) {
 		Date currentTime = new Date();
-		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String userOpenId = wxWebUser.getOpenId();
+		String userUnionId = wxWebUser.getUnionId();
 		checkUserOpenId(userOpenId);
+		checkUserOpenId(userUnionId);
 		
 		//TODO 检查请求参数的正确性
 		List<WxProductOrderItem> orderItemList = new ArrayList<WxProductOrderItem>();
@@ -245,6 +257,7 @@ public class WxProductOrderController {
 		//构造预购买的订单数据
 		WxProductOrder productOrder = new WxProductOrder();
 		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
+		productOrder.setUserUnionId(userUnionId);//下单人的unionId
 		
 		productOrder.setVoucherId(null);//不使用优惠券
 		
@@ -275,7 +288,7 @@ public class WxProductOrderController {
 	
 	/**
 	 * 订单详情
-	 * @param model
+	 * @param model 
 	 * @param tradeNo
 	 * @param request
 	 * @return
@@ -283,11 +296,12 @@ public class WxProductOrderController {
 	@NeedAuthorize
 	@RequestMapping(value = "/orderInfo")
 	public String orderInfo(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
-		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String userOpenId = wxWebUser.getOpenId();
 		checkUserOpenId(userOpenId);
 		
 		//加载商品信息
-		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		WxProductOrder orderInfo = wxProductOrderService.loadByUserTradeNo(userOpenId, tradeNo);
 		model.addAttribute("orderInfo", orderInfo);
 		
 		//加载订单中商品列表
@@ -306,20 +320,33 @@ public class WxProductOrderController {
 	
 	
 	/**
-	 * 准备分享让吊死购买的请求
+	 * 准备分享让土豪购买的请求（需使用scope为SNSAPI_USERINFO，带出下单人的昵称&头像）
 	 * @param model
 	 * @param tradeNo
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/orderInfoShare")
 	public String orderInfoShare(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
-		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String userOpenId = wxWebUser.getOpenId();
 		checkUserOpenId(userOpenId);
 		
+		//userAccessToken，用于获取个人资料（昵称&头像）
+		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
+		//获取个人资料
+		boolean success = false;
+		if(success){
+			wxWebUser = null;
+			//重写cookie
+			ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, JsonUtil.gson.toJson(wxWebUser));
+			request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
+		}
+		
+		
 		//加载订单信息
-		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		WxProductOrder orderInfo = wxProductOrderService.loadByUserTradeNo(userOpenId, tradeNo);
 		
 		//TODO 检查商品完整性
 		model.addAttribute("orderInfo", orderInfo);
@@ -332,20 +359,46 @@ public class WxProductOrderController {
 	}
 	
 	
-	
-	
-	
 	/**
-	 * 代付订单页面，查看的是女神的订单信息
+	 * 代付条款页面，分享后回流的url，在此知会当前登录用户是给别人付款（点击确定后，才会进入真正的支付页）
 	 * @param model
 	 * @param tradeNo
 	 * @param request
 	 * @return
 	 */
 	@NeedAuthorize
+	@RequestMapping(value = "/payForAngleTerms")
+	public String payForAngleTerms(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
+		WxWebUser hostWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String hostOpenId = hostWebUser.getOpenId();
+		checkUserOpenId(hostOpenId);
+		
+		//TODO 参数签名，用于保护订单不被泄漏
+		
+		//加载订单信息
+		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		request.setAttribute("orderInfo", orderInfo);
+		
+		//查询下单用户信息
+		WxWebUser orderWebUser = wxWebUserService.loadByUnionId(orderInfo.getUserUnionId());
+		request.setAttribute("orderWebUser", orderWebUser);//展示在页面上，以提醒用户付款对象
+		
+		return "order/payForAngleTerms";
+	}
+	
+	
+	/**
+	 * 进入代付订单页面，查看的是女神的订单信息
+	 * @param model
+	 * @param tradeNo
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/payForAngle")
-	public String payForAnother(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
-		String userOpenId =  (String) request.getAttribute(ConstFront.CURRENT_USER);//获取用户信息
+	public String payForAngle(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
+		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+		String userOpenId = wxWebUser.getOpenId();
 		checkUserOpenId(userOpenId);
 		
 		//加载订单信息
@@ -372,8 +425,9 @@ public class WxProductOrderController {
 		
 		return "order/payForAngle";
 	}
-
 	
+	
+
 	
 	/**
 	 * 构造用于支付的js对象

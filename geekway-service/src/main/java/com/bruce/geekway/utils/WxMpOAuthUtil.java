@@ -10,9 +10,9 @@ import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.constants.ConstWeixin;
 
 
-public class WxMpUtil {
+public class WxMpOAuthUtil {
 
-	private static final Logger logger = LoggerFactory.getLogger(WxMpUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(WxMpOAuthUtil.class);
 	
 	public static final String REDIRECT_URI = ConfigUtil.getString("weixinmp_oauth_redirect_url");
 
@@ -23,22 +23,22 @@ public class WxMpUtil {
 			+ "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
 
 	
-	/**
-	 * redirectUrl需要urlEncode
-	 * @param scopeType
-	 * @param redirectUrl
-	 * @param state
-	 * @return
-	 */
-	public static String buildWeixinOauthUrl(int scopeType, String redirectUrl, String state){
-		//获取scope
-		String scope = getScopeType(scopeType);
-		
-		String encodedUrl = URLEncoder.encode(redirectUrl);
-		
-		String oauthUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + ConstWeixin.WX_APP_ID + "&redirect_uri=" + encodedUrl+ "&response_type=code&scope="+scope+"&state="+state+"#wechat_redirect";
-		return oauthUrl;
-	}
+//	/**
+//	 * redirectUrl需要urlEncode
+//	 * @param scopeType
+//	 * @param redirectUrl
+//	 * @param state
+//	 * @return
+//	 */
+//	public static String buildWeixinOauthUrl(int scopeType, String redirectUrl, String state){
+//		//获取scope
+//		String scope = getScopeType(scopeType);
+//		
+//		String encodedUrl = URLEncoder.encode(redirectUrl);
+//		
+//		String oauthUrl =  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + ConstWeixin.WX_APP_ID + "&redirect_uri=" + encodedUrl+ "&response_type=code&scope="+scope+"&state="+state+"#wechat_redirect";
+//		return oauthUrl;
+//	}
 	
 
 	/**
@@ -48,9 +48,10 @@ public class WxMpUtil {
 	 * @param state
 	 * @return
 	 */
-	public static String buildWeixinOauthProxyUrl(int scopeType, String proxyUrl, String state){
-		//获取scope
-		String scope = getScopeType(scopeType);
+	public static String buildWeixinOauthProxyUrl(String scope, String proxyUrl, String state){
+		if(!"snsapi_userinfo".equals(scope)){
+			scope = "snsapi_base";
+		}
 		
 		String redirectUrl = ConstWeixin.WX_OAUTH_REDIRECT_PROXY_URL;
 		if(StringUtils.isNotBlank(proxyUrl)){
@@ -67,22 +68,22 @@ public class WxMpUtil {
 		return oauthUrl;
 	}
 
-
-	/**
-	 * 
-	 * @param scopeType
-	 * @return
-	 */
-	private static String getScopeType(int scopeType) {
-		String scope = "snsapi_base";
-		if(scopeType==1){
-			scope = "snsapi_userinfo";
-		}
-		return scope;
-	}
+//
+//	/**
+//	 * 
+//	 * @param scopeType
+//	 * @return
+//	 */
+//	private static String getScopeType(int scopeType) {
+//		String scope = "snsapi_base";
+//		if(scopeType==1){
+//			scope = "snsapi_userinfo";
+//		}
+//		return scope;
+//	}
 	
 	
 	public static void main(String[] args) {
-		System.out.println(buildWeixinOauthProxyUrl(1, "http://www.baidu.com", null));
+		System.out.println(buildWeixinOauthProxyUrl("", "http://www.baidu.com", null));
 	}
 }

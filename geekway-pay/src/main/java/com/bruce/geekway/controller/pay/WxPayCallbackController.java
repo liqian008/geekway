@@ -21,7 +21,7 @@ import com.bruce.foundation.util.Sha1Util;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
-import com.bruce.geekway.service.pay.WxPayService;
+import com.bruce.geekway.service.pay.WxpayService;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -32,10 +32,11 @@ import com.bruce.geekway.utils.WxAuthUtil;
 public class WxPayCallbackController {
 
 	@Autowired
-	private WxPayService wxPayService;
+	private WxpayService wxpayService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxPayCallbackController.class);
-	private static final Logger wxPayLogger = LoggerFactory.getLogger("wxPayLogger");
+	
+	private static final Logger wxpayLogger = LoggerFactory.getLogger("wxpayLogger");
 
 	
 	////////////////////////////////////////////////////////
@@ -59,7 +60,7 @@ public class WxPayCallbackController {
 				wxOrderRequest.setOpenId(tempXmlOrder.getOpenId());
 			}
 			// 调用支付service，保存订单信息
-			int result = wxPayService.receiveWxOrder(wxOrderRequest);
+			int result = wxpayService.receiveWxOrder(wxOrderRequest);
 		}
 		return "wxpay/jspayNotify";
 	}
@@ -94,7 +95,7 @@ public class WxPayCallbackController {
 		System.out.println("=====alarm xml===="+xml);
 		//解析告警的数据
 		WxPayAlarmNotify alarmRequest = parseWxAlarmXml(xml);
-		int result = wxPayService.receiverWxAlarm(alarmRequest);
+		int result = wxpayService.receiverWxAlarm(alarmRequest);
 		if(result>0){
 			return "success";
 		}
@@ -114,7 +115,7 @@ public class WxPayCallbackController {
 		System.out.println("=====rights====");
 		//解析投诉的数据
 		WxComplaintNotify complaintRequest = parseWxComplaintXml(xml);
-		int result = wxPayService.receiverWxComplaint(complaintRequest);
+		int result = wxpayService.receiverWxComplaint(complaintRequest);
 		if(result>0){
 			return "success";
 		}

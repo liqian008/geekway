@@ -44,16 +44,16 @@ public interface IWxProductOrderService extends IFoundationPagingService<WxProdu
 	 */
 	public int createOrder(WxProductOrder productOrder, WxUserAddress userAddressInfo, List<WxProductOrderItem> orderItemList);
 	
-	
 	/**
-	 * 更新订单状态
-	 * @param status
+	 * 根据系统内用户openId和订单号加载订单数据(用于前台查询)
+	 * @param userOpenId
+	 * @param tradeNo
 	 * @return
 	 */
-	public int changeOrderStatus(String outTradeNo, short status);
+	public WxProductOrder loadByUserTradeNo(String userOpenId, String tradeNo);
 	
 	/**
-	 * 根据系统内订单号加载订单数据
+	 * 根据系统内订单号加载订单数据(用于后台管理)
 	 * @param outTradeNo
 	 * @return
 	 */
@@ -61,10 +61,35 @@ public interface IWxProductOrderService extends IFoundationPagingService<WxProdu
 	
 	/**
 	 * 根据微支付的交易id加载订单信息
-	 * @param wxTransId
+	 * @param transactionId
 	 * @return
 	 */
-	public WxProductOrder loadByWxTransId(String wxTransId);
+	public WxProductOrder loadByTransactionId(String transactionId);
 	
+	
+	/**
+	 * 已收到支付通知（更新订单状态&其中的微信id）
+	 * @param status
+	 * @return
+	 */
+	public int markNotifyReceived(short payType, String outTradeNo, String wxTransId);
+	
+	/**
+	 * 标记为等待发货
+	 * @param outTradeNo
+	 * @param status
+	 * @return
+	 */
+	public int markWaitingDelivery(String outTradeNo);
+	
+	
+	
+	/**
+	 * 第三方发货成功，更新订单状态为已发货
+	 * @param status
+	 * @return
+	 */
+	public int markDelivered(String outTradeNo);
+
 	
 }

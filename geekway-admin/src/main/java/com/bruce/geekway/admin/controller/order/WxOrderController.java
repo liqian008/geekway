@@ -24,8 +24,9 @@ import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderCriteria;
 import com.bruce.geekway.model.WxProductOrderItem;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
-import com.bruce.geekway.service.pay.WxPayService;
+import com.bruce.geekway.service.pay.WxpayService;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
 import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
@@ -50,7 +51,7 @@ public class WxOrderController {
 	@Autowired
 	private WxMpPayService wxMpPayService;
 	@Autowired
-	private WxPayService wxPayService;
+	private WxpayService wxpayService;
 	
 	
 	/**
@@ -123,12 +124,12 @@ public class WxOrderController {
 		return "order/orderInfo";
 	}
 	
-	@RequestMapping("/orderInfoByTrans")
-	public String orderInfoByTrans(Model model, String wxTransId, HttpServletRequest request) {
+	@RequestMapping("/orderInfoByTransactionId")
+	public String orderInfoByTrans(Model model, String transactionId, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductOrder order = wxProductOrderService.loadByWxTransId(wxTransId);
+		WxProductOrder order = wxProductOrderService.loadByTransactionId(transactionId);
 		if(order!=null){
 			model.addAttribute("order", order);
 			List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(order.getOutTradeNo());
@@ -161,14 +162,14 @@ public class WxOrderController {
 			//构造微信发货对象
 			WxDeliverInfo deliveryInfo = buildDeliveryInfo(openId, transId, outTradeNo, deliverStatus, deliverMsg);
 			//调用微信发货通知接口
-			int result = wxPayService.dealWxDeliver(deliveryInfo);
+			int result = wxpayService.dealWxDeliver(deliveryInfo);
 			if(result>0){
 				//更新订单发货状态
 				WxProductOrder updatedOrder = new WxProductOrder();
 				updatedOrder.setId(order.getId());
 				updatedOrder.setPostType(postType);
 				updatedOrder.setPostSn(postSn);
-				updatedOrder.setStatus(IWxProductOrderService.StatusEnum.DELIVERED.getStatus());//状态改已发货
+				updatedOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());//状态改已发货
 				result = wxProductOrderService.updateById(updatedOrder);//更新操作
 			}
 		}

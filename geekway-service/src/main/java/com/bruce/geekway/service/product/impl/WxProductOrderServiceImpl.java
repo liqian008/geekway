@@ -132,17 +132,49 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		return queryByCriteria(criteria);
 	}
 	
-	
 	@Override
-	public int changeOrderStatus(String outTradeNo, short status) {
+	public int markNotifyReceived(short payType, String outTradeNo, String transactionId) {
 		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
 		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo);
 		
 		WxProductOrder wxProductOrder = new WxProductOrder();
-		wxProductOrder.setStatus(status);
+		wxProductOrder.setPayType(payType);
+		wxProductOrder.setTransactionId(transactionId);
+		wxProductOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
+		return updateByCriteria(wxProductOrder, criteria);
+	}
+
+	@Override
+	public int markWaitingDelivery(String outTradeNo) {
+		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
+		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo);
+		
+		WxProductOrder wxProductOrder = new WxProductOrder();
+		wxProductOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus());
+		return updateByCriteria(wxProductOrder, criteria);
+	}
+
+	@Override
+	public int markDelivered(String outTradeNo) {
+		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
+		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo);
+		
+		WxProductOrder wxProductOrder = new WxProductOrder();
+		wxProductOrder.setDeliverTime(new Date());
+		wxProductOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());
 		return updateByCriteria(wxProductOrder, criteria);
 	}
 	
+	@Override
+	public WxProductOrder loadByUserTradeNo(String userOpenId, String outTradeNo) {
+		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
+		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo).andUserOpenIdEqualTo(userOpenId);
+		List<WxProductOrder> productOrderList = queryByCriteria(criteria);
+		if(productOrderList!=null&&productOrderList.size()>0){
+			return productOrderList.get(0);
+		}
+		return null;
+	}
 	
 	@Override
 	public WxProductOrder loadByTradeNo(String outTradeNo) {
@@ -168,9 +200,9 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	
 	
 	@Override
-	public WxProductOrder loadByWxTransId(String wxTransId) {
+	public WxProductOrder loadByTransactionId(String transactionId) {
 		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
-		criteria.createCriteria().andWxTransIdEqualTo(wxTransId);
+		criteria.createCriteria().andTransactionIdEqualTo(transactionId);
 		List<WxProductOrder> productOrderList = queryByCriteria(criteria);
 		if(productOrderList!=null&&productOrderList.size()>0){
 			return productOrderList.get(0);
@@ -308,6 +340,8 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 			IWxDeliveryTemplateService wxDeliveryTemplateService) {
 		this.wxDeliveryTemplateService = wxDeliveryTemplateService;
 	}
+
+	
 
 	
 	

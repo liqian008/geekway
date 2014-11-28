@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.model.WxProduct;
 import com.bruce.geekway.model.WxProductCategory;
 import com.bruce.geekway.model.WxProductSku;
@@ -301,7 +302,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/product/{productId}")
 	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
 		return product(model, productId, 0, request);

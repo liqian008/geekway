@@ -1,7 +1,6 @@
 package com.bruce.geekway.service.pay;
 
 import java.util.Date;
-import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -15,9 +14,6 @@ import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxPayAlarm;
 import com.bruce.geekway.model.WxPayComplaint;
 import com.bruce.geekway.model.WxPayNotifyOrder;
-import com.bruce.geekway.model.WxProductOrder;
-import com.bruce.geekway.model.WxProductOrderItem;
-import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
@@ -27,7 +23,6 @@ import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
-import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.utils.WxAuthUtil;
@@ -38,7 +33,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
  *
  */
 @Service
-public class WxPayService{
+public class WxpayService{
 	
 	@Autowired
 	private IWxPayNotifyOrderService wxPayNotifyOrderService;
@@ -49,11 +44,11 @@ public class WxPayService{
 	@Autowired
 	private WxMpPayService wxMpPayService;
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
-	@Autowired
-	private IWxProductOrderItemService wxProductOrderItemService;
-	@Autowired
 	private IWxProductSkuService wxProductSkuService;
+	@Autowired
+	private IGenericPayService genericPayService;
+	@Autowired
+	private IWxProductOrderService wxProductOrderService;
 	
 	
 	/**
@@ -71,30 +66,14 @@ public class WxPayService{
 		//检查签名是否合法
 		boolean signValid = true;
 		if(signValid){
-			//重复订单的检查
-			
+			//入微信流水库表
 			WxPayNotifyOrder wxNotifyOrder = WxPayNotifyOrderRequest.convert2WxPayNotifyOrder(wxOrderRequest);
 			if(wxNotifyOrder!=null){//处理微信支付成功的业务
-				
 				//保存微信订单流水表
 				result = wxPayNotifyOrderService.save(wxNotifyOrder);
-				//加载订单数据
-				String outTradeNo = wxNotifyOrder.getOutTradeNo();
-				WxProductOrder productOrder = wxProductOrderService.loadByTradeNo(outTradeNo);
-				if(productOrder!=null&&productOrder.getId()!=null){//有效的订单信息
-					List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
-					//遍历单条订单，扣减sku商品的库存数
-					if(orderItemList!=null&&orderItemList.size()>0){
-						for(WxProductOrderItem orderItem: orderItemList){
-							long productSkuId = orderItem.getProductSkuId();
-							int amount = orderItem.getAmount();
-							//执行扣减
-							result = wxProductSkuService.reduceStock(productSkuId, amount);
-						}
-					}
-					// 更新订单表中的订单状态为支付完毕
-					result = wxProductOrderService.changeOrderStatus(outTradeNo, GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
-				}
+				
+				result = genericPayService.processPayNotify((short)0, wxNotifyOrder.getOutTradeNo(), wxNotifyOrder.getTransactionId());
+				
 			}
 		}
 		return result;
@@ -210,7 +189,7 @@ public class WxPayService{
 			WxJsonResult jsonResult = wxMpPayService.deliverNotify(deliverInfo);
 			if(jsonResult!=null){
 				//微信提交成功后，更改db中的状态
-				int result = wxProductOrderService.changeOrderStatus(deliverInfo.out_trade_no, GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());
+				int result = wxProductOrderService.markDelivered(deliverInfo.out_trade_no);
 				return result;
 			}
 		}
@@ -280,9 +259,6 @@ public class WxPayService{
 	public void setWxMpPayService(WxMpPayService wxMpPayService) {
 		this.wxMpPayService = wxMpPayService;
 	}
-	
-	
-	
 	
 	
 }

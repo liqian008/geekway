@@ -48,8 +48,11 @@
 
 
 	<!-- wxpay service -->
+	<bean id="wxWebUserService" class="com.bruce.geekway.service.impl.WxWebUserServiceImpl">
+		<property name="wxWebUserMapper" ref="wxWebUserMapper"></property>
+	</bean>
 	
-	<bean id="wxPayService" class="com.bruce.geekway.service.pay.WxPayService">
+	<bean id="wxpayService" class="com.bruce.geekway.service.pay.WxpayService">
 	</bean>
 	<bean id="wxPayComplaintService" class="com.bruce.geekway.service.pay.impl.WxPayComplaintServiceImpl">
 	</bean>

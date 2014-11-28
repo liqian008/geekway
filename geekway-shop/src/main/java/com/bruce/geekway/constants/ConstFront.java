@@ -4,17 +4,18 @@ public interface ConstFront {
 	/*jsonView*/
 	public static final String JSON_VIEW = "jsonView";
 	
-	/* 登录用户的sessionAttribute*/
-	public static final String CURRENT_USER = "_currentUser";
+	/* 微信用户在cookie的key*/
+	public static final String COOKIE_KEY_WX_USER = "cookie_ke_wx_user";
+	/* 登录用户的sessionAttribute名称*/
+	public static final String CURRENT_USER = "_currentWxUser";
+	
 	/* 登录用户的userAccessToken Attribute*/
 	public static final String CURRENT_USER_ACCESS_TOKEN = "_currentUserAccessToken";
 	
 	/* 用户对象的Attribute*/
     public static final String REQUEST_USER_ATTRIBUTE = "_user";
     
-    /* 微信openId在cookie的key*/
-	public static final String COOKIE_KEY_WX_OPENID = "wx_user_open_id";
-	
+    
 	 /* 购物车在cookie的key*/
 	public static final String COOKIE_KEY_WX_PRODUCT_CART = "wx_product_cart";
     

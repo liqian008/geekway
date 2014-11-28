@@ -15,11 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.bruce.foundation.util.JsonUtil;
 import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
+import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
@@ -27,7 +30,7 @@ import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ResponseUtil;
-import com.bruce.geekway.utils.WxMpUtil;
+import com.bruce.geekway.utils.WxMpOAuthUtil;
 import com.google.gson.Gson;
 
 /**
@@ -54,8 +57,13 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		String userOpenId = null;
 		logger.debug("weixin oauth debug: " +ConstWeixin.WX_OAUTH_DEBUG);
 		if((ConstWeixin.WX_OAUTH_DEBUG)){//微信调试模式
-			userOpenId = "1234";
-			request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
+			WxWebUser wxWebUser = new WxWebUser();
+			wxWebUser.setOpenId("debug_openid");
+			wxWebUser.setNickname("Debug模式");
+			wxWebUser.setUnionId("debug_unionid");
+			
+			//attribute中存放json对象
+			request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
 			return true;
 		}
 		String code = request.getParameter("code");//对微信oauth回调的redirect不加限制
@@ -81,8 +89,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 					logger.debug("微信oauth回调后进入[拦截器], 换取的userOpenId，并写入cookie: "+userOpenId);
 				}
 				if(StringUtils.isNotBlank(userOpenId)){
-					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_OPENID, userOpenId);
-					request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
+					WxWebUser webUser = newUser(userOpenId);//拦截器只置入openid，如业务如需更多个人资料，需要在controller中根据下面的accessToken自行处理
+					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, JsonUtil.gson.toJson(webUser));
+					request.setAttribute(ConstFront.CURRENT_USER, webUser);
 					if(logger.isDebugEnabled()){
 						logger.debug("微信oauth回调后进入[拦截器], 换取的userAccessToken，并置入Attribute: "+userAccessToken);
 					}
@@ -93,26 +102,39 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 			}
 		}else{//自己业务系统内的处理
-			AuthorizeStrategy authorizeStrategy = getNeedAuthorize(request, handlerMethod);
+			AuthorizeStrategy authorizeStrategy = getAuthorizeStratege(request, handlerMethod);
 			boolean needAuthorize = authorizeStrategy!=null;//调用的接口需要进行登录
 			if (needAuthorize) {//需要用户身份才能访问
+				String webUserJson = null;
 				if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//允许从cookie中读取用户信息
 					//检查cookie中是否存在用户信息
 					Cookie[] cookieArray = request.getCookies();
 					if(cookieArray!=null&&cookieArray.length>0){
 						for(Cookie cookie: cookieArray){
-							if(ConstFront.COOKIE_KEY_WX_OPENID.equals(cookie.getName())){
-								userOpenId = cookie.getValue();
-								logger.debug("userOpenId from cookie:: " +userOpenId);
+							if(ConstFront.COOKIE_KEY_WX_USER.equals(cookie.getName())){
+								webUserJson = cookie.getValue();
+								logger.debug("webUserJson from cookie:: " +webUserJson);
 								break;
 							}
 						}
 					}
 				}
 				
-				if (StringUtils.isNotBlank(userOpenId)) {//用户信息存在，写入request，供controller获取使用
-					request.setAttribute(ConstFront.CURRENT_USER, userOpenId);
+				//从cookie中读出的webUser对象
+				WxWebUser webUser = null;
+				if(webUserJson!=null){
+					try{
+						webUser = JsonUtil.gson.fromJson(webUserJson, WxWebUser.class);
+					}catch(Exception e){
+					}
+				}
+				
+				if (webUser!=null&&StringUtils.isNotBlank(webUser.getOpenId())) {//用户信息存在，写入request，供controller获取使用
+					request.setAttribute(ConstFront.CURRENT_USER, webUser);
 				}else{//用户身份信息不存在，无法访问
+					//获取需要使用的scope
+					String scope = getAuthorizeScope(request, handlerMethod).getScope();
+					
 					if (RequestUtil.isJsonRequest(request)) {//来路为json请求
 						writeJson(response, ErrorCode.AUTHORIZE_NEED_LOGIN);
 						return false;
@@ -122,12 +144,12 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 						if (RequestUtil.isGet(request)) {
 							// Get跳回请求地址，增加redirectUrl
 							String redirectUrl = UrlUtil.getRequestUrl(request);
-							wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
+							wxOauthUrl = WxMpOAuthUtil.buildWeixinOauthProxyUrl(scope, redirectUrl, "");
 						} else {
 							// 其他方法取referer，增加redirectUrl
 							String redirectUrl = UrlUtil.getRefererUrl(request);
 							System.out.println("redirectUrl: "+redirectUrl);
-							wxOauthUrl = WxMpUtil.buildWeixinOauthProxyUrl(0, redirectUrl, "");
+							wxOauthUrl = WxMpOAuthUtil.buildWeixinOauthProxyUrl(scope, redirectUrl, "");
 						}
 						response.sendRedirect(wxOauthUrl);
 						return false;
@@ -145,7 +167,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 	 * @param handlerMethod
 	 * @return
 	 */
-	private AuthorizeStrategy getNeedAuthorize(HttpServletRequest request, HandlerMethod handlerMethod) {
+	private AuthorizeStrategy getAuthorizeStratege(HttpServletRequest request, HandlerMethod handlerMethod) {
 		NeedAuthorize authorizeOnMethod = handlerMethod.getMethodAnnotation(NeedAuthorize.class);
 		NeedAuthorize annotationOnClass = handlerMethod.getBean().getClass().getAnnotation(NeedAuthorize.class);
 		boolean needAuthorize = annotationOnClass != null || authorizeOnMethod != null;
@@ -159,6 +181,30 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		}
 		return null;
 	}
+	
+	/**
+	 * 判断需要使用的scope
+	 * @param request
+	 * @param handlerMethod
+	 * @return
+	 */
+	private AuthorizeScope getAuthorizeScope(HttpServletRequest request, HandlerMethod handlerMethod) {
+		NeedAuthorize authorizeOnMethod = handlerMethod.getMethodAnnotation(NeedAuthorize.class);
+		NeedAuthorize annotationOnClass = handlerMethod.getBean().getClass().getAnnotation(NeedAuthorize.class);
+		boolean needAuthorize = annotationOnClass != null || authorizeOnMethod != null;
+		if (needAuthorize) {
+			// 检查策略，如果有snsapi_userinfo，则使用
+			if ((authorizeOnMethod != null && authorizeOnMethod.AuthorizeScope() == AuthorizeScope.WX_SNSAPI_USERINFO)
+					|| (annotationOnClass != null && annotationOnClass.AuthorizeScope() == AuthorizeScope.WX_SNSAPI_USERINFO)) {
+				return AuthorizeScope.WX_SNSAPI_USERINFO;
+			}
+			//默认为隐式的snsapi_base
+			return AuthorizeScope.WX_SNSAPI_BASE;
+		}
+		return null;
+	}
+	
+	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -183,6 +229,13 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 
 	public void setWxMpOauthService(WxMpOauthService wxMpOauthService) {
 		this.wxMpOauthService = wxMpOauthService;
+	}
+	
+	
+	public WxWebUser newUser(String userOpenId){
+		WxWebUser wxWebUser = new WxWebUser();
+		wxWebUser.setOpenId(userOpenId);
+		return wxWebUser;
 	}
 	
 }
