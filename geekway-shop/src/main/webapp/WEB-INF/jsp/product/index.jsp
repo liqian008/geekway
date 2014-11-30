@@ -2,7 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import="com.bruce.geekway.constants.*" %>
-<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
+<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 <%
 String contextPath = request.getContextPath();
@@ -149,7 +149,5 @@ String contextPath = request.getContextPath();
 </div>
 </body>
 
-<!-- 微信分享 -->
-<jsp:include page="../inc/weixinShareJs.jsp"></jsp:include>
 
 </html>

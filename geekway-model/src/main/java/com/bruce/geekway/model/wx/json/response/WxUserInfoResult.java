@@ -2,7 +2,7 @@ package com.bruce.geekway.model.wx.json.response;
 
 
 /**
- * 关注着列表
+ * 关注者列表
  * @author jianqing.cai@qq.com, https://github.com/caijianqing/weixinmp4java/
  */
 public class WxUserInfoResult extends WxJsonResult {
@@ -36,6 +36,8 @@ public class WxUserInfoResult extends WxJsonResult {
 
 	/** 用户关注时间，为时间戳。如果用户曾多次关注，则取最后关注时间 */
 	public String subscribe_time;
+	
+	private String unionid;
 
 	public short getSubscribe() {
 		return subscribe;
@@ -115,6 +117,14 @@ public class WxUserInfoResult extends WxJsonResult {
 
 	public void setSubscribe_time(String subscribe_time) {
 		this.subscribe_time = subscribe_time;
+	}
+
+	public String getUnionid() {
+		return unionid;
+	}
+
+	public void setUnionid(String unionid) {
+		this.unionid = unionid;
 	}
 	
 }

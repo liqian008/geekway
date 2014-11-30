@@ -129,7 +129,8 @@
 	}
 </script>
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
+
+<!-- 微信默认分享 -->
+<jsp:include page="../inc/weixinShareJsDefault.jsp"></jsp:include>
 
 </html>

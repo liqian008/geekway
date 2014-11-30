@@ -57,11 +57,11 @@
 	
 			<div class="decoration"></div>
 			<div class="container no-bottom">
-				<div class="big-notification yellow-notification"> 
-					<h4 class="uppercase">提醒：</h4>
+				<div class="big-notification red-notification"> 
+					<h4 class="uppercase">您即将要为女神的订单结账</h4>
 					<a href="#" class="close-big-notification">x</a>
 					<p>
-						您即将查看&付款的是女神的订单，请付款前务必确认好订单信息。
+						请务必先确认好订单信息（收件人，电话、地址），避免误付
 					</p>
 				</div>
 			</div>
@@ -79,49 +79,33 @@
                 	<em></em> 
 				</div>
 				<p class="quote-item">
-					订单号： ${orderInfo.outTradeNo}<br/>
-					下单时间：${orderInfo.createTime}
-				</p>
-
+					代付单号： ${orderInfo.outTradeNo}<br/>
+					下单时间：${orderInfo.createTime}<br/>
+					下单人身份：<span class="text-highlight highlight-red">${orderOwnerWebUser.nickname}</span>
+				</p> 
 				<p class="quote-item">
-					<img src="${orderWebUser.headImgUrl}">
-					<span class="text-highlight highlight-dark">
-						下单人昵称： ${orderWebUser.nickname}<br/>
-					</span>
+					<img src="${orderOwnerWebUser.headImgUrl}">
 				</p>
 			</div>
-             
+
+
             <div class="decoration"></div>
             <div class="container" id="product-intro">
-            	<div class="section-title">
-                	<h4>订单金额</h4>
-                	<em>&nbsp;</em>
-				</div>
-            	
+                <div class="section-title">
+                    <h4>代付订单金额</h4>
+                </div>
+                
                 <h5 class="center-text"> 
-                商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${orderInfo.productFee}</span>元&nbsp;|&nbsp; 
-                运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
-                
-                <%
-                WxProductOrder productOrder = (WxProductOrder)request.getAttribute("orderInfo");
-                if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
-                %>
-                折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
-                <%}%>
-                
-                合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
+                代付金额：&nbsp;<span id="totalPrice" class="text-highlight highlight-red">${orderInfo.totalFee}</span>元
                 </h5>
             </div>
-            
+
+             
             <div class="decoration"></div>
            	<div class="container center-text">
-           		<div class="section-title">
-                	<h4>您即将查看的是女神的订单，请务必先确认好订单信息，再确认付款</h4>
-				</div>  
-           	 
-               	<a href="javascript:void(0)" id="tuhaoPay" class="button-big button-green">少废话，买完赶紧啪啪啪</a>
-               	<a href="javascript:void(0)" id="diaosiCancel" class="button-big button-blue">算了，我自己都还没买呢</a>
-           	</div> 
+               	<a href="javascript:void(0)" id="tuhaoPay" class="button-big button-green button-fullscreen">知道了，土豪揍是这么任性</a>
+               	<a href="javascript:void(0)" id="diaosiLuSelf" class="button-big button-blue button-fullscreen">凭啥，我不认识TA</a>
+           	</div>
             
             <div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
@@ -133,17 +117,19 @@
 
 <script>
 $("#tuhaoPay").click(function(){
-	location.href="${pageContext.request.contextPath}/payForAngle?tradeNo=${orderInfo.outTradeNo}";
+	location.href="${pageContext.request.contextPath}/payForAngle?showwxpaytitle=1&tradeNo=${orderInfo.outTradeNo}";
 });
 
-$("#diaosiCancel").click(function(){
+$("#diaosiLuSelf").click(function(){
 	location.href="${pageContext.request.contextPath}/index";
 });
 
 </script>
 
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
+
+<!-- 微信默认分享 -->
+<jsp:include page="../inc/weixinShareJsDefault.jsp"></jsp:include>
+
 
 </html>

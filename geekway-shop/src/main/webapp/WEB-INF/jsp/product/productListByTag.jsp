@@ -2,7 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import="com.bruce.geekway.utils.*" %>
-<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
+<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 <%
 String contextPath = request.getContextPath();
@@ -142,4 +142,6 @@ fallLoad();
 	})
 }
 </script>
+
+
 </html>

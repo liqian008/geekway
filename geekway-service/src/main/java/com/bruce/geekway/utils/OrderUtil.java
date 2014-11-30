@@ -57,12 +57,12 @@ public class OrderUtil {
 		int milliSecond = calc.get(Calendar.MILLISECOND);
 		
 		StringBuilder sb= new StringBuilder();
-		sb.append(buildServerFlag());//分布式服务器标志
-		sb.append(buildYearStr(year));//年
-		sb.append(buildMonthStr(month));//月
-		sb.append(buildDayStr(day));//日
-		sb.append(buildSecondStr(hour, minute, second));//秒数
-		sb.append(milliSecond);//豪秒数
+		sb.append(buildServerFlag());//分布式服务器标志， 0位
+		sb.append(buildYearStr(year));//年，1位
+		sb.append(buildMonthStr(month));//月，1位
+		sb.append(buildDayStr(day));//日， 1位
+		sb.append(buildSecondStr(hour, minute, second));//秒数，5位
+		sb.append(leftFill(5, milliSecond));//豪秒数， 3位
 		sb.append(RandomNumberUtil.getRandomString(3));//3位随机数
 //		System.out.println(sb.length());
 		return sb.toString().toUpperCase();
@@ -128,7 +128,24 @@ public class OrderUtil {
 	 */
 	private static String buildSecondStr(int hour, int minute, int second){
 		int secondValue = (hour * 60 * 60) +  (minute * 60) +second;
-		return String.valueOf(secondValue);
+		return leftFill(5, secondValue);
+	}
+	
+	
+	/**
+	 * 左侧补齐长度，确保订单长度统一
+	 * @param length
+	 * @param number
+	 * @return
+	 */
+    private static String leftFill(int length, int number) {
+        String f = "%0" + length + "d";
+        return String.format(f, number);
+    }
+	
+	public static void main(String[] args) {
+		System.out.println(generateOrderSn(new Date()));
+		
 	}
 	
 }

@@ -37,10 +37,11 @@ import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
-import com.bruce.geekway.utils.ProductUtil;
-import com.bruce.geekway.utils.ProductUtil.SlideImage;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
+import com.bruce.geekway.utils.ShopLinkUtil;
+import com.bruce.geekway.utils.ShopLinkUtil.SlideImage;
 import com.bruce.geekway.utils.UploadUtil;
+import com.bruce.geekway.utils.WxShareUtil;
 
 /**
  * 商品controller
@@ -111,8 +112,14 @@ public class WxProductController {
 		
 		if(productCategory!=null){
 
-			List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productCategory);
+			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productCategory);
 			model.addAttribute("slideImageList", slideImageList);
+			
+			//分享对象
+			model.addAttribute("wxSharedInfo", WxShareUtil.wxShare(productCategory.getWxShareTitle(), 
+											productCategory.getWxShareContent(), 
+											productCategory.getWxShareIconUrl(), 
+											ShopLinkUtil.getCategoryLink4Mobile(categoryId)));
 		}
 		
 		return "product/productListByCategory";
@@ -131,11 +138,17 @@ public class WxProductController {
 		model.addAttribute("productTag", productTag);
 		if(productTag!=null){
 
-			List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productTag);
+			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productTag);
 			model.addAttribute("slideImageList", slideImageList);
 			
 //			List<WxProduct> tagProductList = wxProductService.queryProductsByTagId(tagId);
 //			model.addAttribute("tagProductList", tagProductList);
+			
+			//分享对象
+			model.addAttribute("wxSharedInfo", WxShareUtil.wxShare(productTag.getWxShareTitle(), 
+											productTag.getWxShareContent(), 
+											productTag.getWxShareIconUrl(), 
+											ShopLinkUtil.getTagLink4Mobile(tagId)));
 		}
 		return "product/productListByTag";
 	}
@@ -266,12 +279,16 @@ public class WxProductController {
 
 			//解析当前sku商品对应的属性值，以便在前端高亮显示
 			if(currentProductSku!=null){
+				
+				//分享对象
+				model.addAttribute("wxSharedInfo", WxShareUtil.wxShare(product.getWxShareTitle(), 
+												product.getWxShareContent(), 
+												product.getWxShareIconUrl(), 
+												ShopLinkUtil.getProductLink4Mobile(productId)));
+				
 				model.addAttribute("currentProductSku", currentProductSku);
 				
-//				List<String> skuPicList = CartUtil.buildProductSkuPicList(currentProductSku);
-//				model.addAttribute("skuPicList", skuPicList);
-				
-				List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(currentProductSku);
+				List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(currentProductSku);
 				model.addAttribute("slideImageList", slideImageList);
 				
 			}
@@ -327,30 +344,30 @@ public class WxProductController {
 	
 	
 	
-	
-	private List<String> buildCategoryPicList(WxProductCategory productCategory) {
-		if(productCategory!=null&&productCategory.getId()!=null){
-			List<String> productPicList = new ArrayList<String>();
-			String pic1Url = productCategory.getCategoryPic1Url();
-			if(StringUtils.isNotBlank(pic1Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
-			}
-			String pic2Url = productCategory.getCategoryPic2Url();
-			if(StringUtils.isNotBlank(pic2Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
-			}
-			String pic3Url = productCategory.getCategoryPic3Url();
-			if(StringUtils.isNotBlank(pic3Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
-			}
-			String pic4Url = productCategory.getCategoryPic4Url();
-			if(StringUtils.isNotBlank(pic4Url)){
-				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
-			}
-			return productPicList;
-		}
-		return null;
-	}
+//	
+//	private List<String> buildCategoryPicList(WxProductCategory productCategory) {
+//		if(productCategory!=null&&productCategory.getId()!=null){
+//			List<String> productPicList = new ArrayList<String>();
+//			String pic1Url = productCategory.getCategoryPic1Url();
+//			if(StringUtils.isNotBlank(pic1Url)){
+//				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic1Url, 600, 0));
+//			}
+//			String pic2Url = productCategory.getCategoryPic2Url();
+//			if(StringUtils.isNotBlank(pic2Url)){
+//				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic2Url, 600, 0));
+//			}
+//			String pic3Url = productCategory.getCategoryPic3Url();
+//			if(StringUtils.isNotBlank(pic3Url)){
+//				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic3Url, 600, 0));
+//			}
+//			String pic4Url = productCategory.getCategoryPic4Url();
+//			if(StringUtils.isNotBlank(pic4Url)){
+//				productPicList.add(UploadUtil.getQiniuResizeImageUrl(pic4Url, 600, 0));
+//			}
+//			return productPicList;
+//		}
+//		return null;
+//	}
 	
 	
 }

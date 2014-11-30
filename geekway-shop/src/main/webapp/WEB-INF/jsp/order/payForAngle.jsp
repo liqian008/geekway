@@ -78,8 +78,13 @@
                 	<em></em> 
 				</div>
 				<p class="quote-item">
-					订单号： ${orderInfo.outTradeNo}<br/>
-					下单时间：${orderInfo.createTime}
+					代付单号： ${orderInfo.outTradeNo}<br/>
+					下单时间：${orderInfo.createTime}<br/>
+					下单人身份：<span class="text-highlight highlight-red">${orderOwnerWebUser.nickname}</span>
+				</p> 
+				
+				<p class="quote-item">
+					<img src="${orderOwnerWebUser.headImgUrl}">
 				</p>
 
 				<p class="quote-item">
@@ -106,7 +111,7 @@
             <div class="decoration"></div>
             <div class="container" id="product-intro">
             	<div class="section-title">
-                	<h4>发货信息</h4>
+                	<h4>收货信息</h4>
                 	<em>&nbsp;</em>
 				</div>
             	<ul id="choose">
@@ -127,7 +132,7 @@
                 折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
                 <%}%>
                 
-                合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
+                总计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
             </div>
             
@@ -136,8 +141,8 @@
             if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
             %> 
            	<div class="container center-text">
-               	<a href="javascript:void(0)" id="wxpay" class="button-big button-green">为女神付款【微支付】</a>
-               	<a href="javascript:void(0)" id="alipay" class="button-big button-yellow">为女神付款【支付宝】</a>
+               	<a href="javascript:void(0)" id="wxpay" class="button-big button-green button-fullscreen">为女神付款【微支付】</a>
+               	<a href="javascript:void(0)" id="alipay" class="button-big button-orange button-fullscreen">为女神付款【支付宝】</a>
            	</div> 
            	<%}%>
             
@@ -177,8 +182,8 @@ WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
 	}, false);
 </script>
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
 
+<!-- 微信默认分享 -->
+<jsp:include page="../inc/weixinShareJsDefault.jsp"></jsp:include>
 
 </html>

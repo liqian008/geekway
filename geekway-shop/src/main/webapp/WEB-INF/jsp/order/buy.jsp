@@ -45,9 +45,9 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">123</p>
+            <p class="bread-crumb">订单确认</p>
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
-            <a href="javascript:void(0)" class="deploy-refresh"></a>
+            <!-- <a href="javascript:void(0)" class="deploy-refresh"></a> --> 
         </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
@@ -63,26 +63,6 @@
 				</div>
             </div> 
             
-			<%
-			List<WxProductVoucher> availableVoucherList = (List<WxProductVoucher>)request.getAttribute("availableVoucherList");
-			if(availableVoucherList!=null&&availableVoucherList.size()>0){
-			%>
-            <div class="decoration"></div>
-        	<div id="vouchersContainer" class="container no-bottom">
-					<div class="section-title">
-	                	<h4>选择使用优惠券</h4>
-	                </div>
-	                <%for(WxProductVoucher voucher: availableVoucherList){%>
-	            	<div>
-		            	<p class="quote-item">
-			            	<input type="radio"/>
-			            	优惠券信息： 编号 <%=voucher.getVoucherCode()%> | 金额 <%=voucher.getPrice()%>元  | 状态 可用
-		            	</p> 
-		            </div>
-            </div>
-	            <%}%>
-			<%}%>
-            
             <div class="decoration"></div>
             <div class="container">
             	<div class="section-title">
@@ -91,40 +71,38 @@
 				<%
 				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
 				if(cartItemList!=null&&cartItemList.size()>0){
-				for(CartProductSku cartItem: cartItemList){%>
-            	<p class="quote-item">
-                	<img src="<%=cartItem.getProductSku().getSkuPic1Url()%>" alt="<%=cartItem.getProductSku().getName() %>">
-                    <em><%=cartItem.getProductSku().getName() %></em>
-                    合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
-                </p>
-                <input type="hidden" id="productSkuId" class="paramField" name="productSkuId" value="<%=cartItem.getProductSku().getId() %>"/>
-                <input type="hidden" id="productSkuId" class="paramField" name="buyAmount" value="<%=cartItem.getAmount() %>"/>
+					for(CartProductSku cartItem: cartItemList){
+					%>
+	            	<p class="quote-item">
+	                	<img src="<%=cartItem.getProductSku().getSkuPic1Url()%>" alt="<%=cartItem.getProductSku().getName() %>">
+	                    <em><%=cartItem.getProductSku().getName() %></em>
+	                    商品合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
+	                </p>
+	                <input type="hidden" id="productSkuId" class="paramField" name="productSkuId" value="<%=cartItem.getProductSku().getId() %>"/>
+	                <input type="hidden" id="productSkuId" class="paramField" name="buyAmount" value="<%=cartItem.getAmount() %>"/>
 	            <%}
 	            }%>
 	            
                 <div class="decoration"></div> 
-                <p class="quote-item">
-                    <h5 class="center-text"> 
-                    运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-blue">0.00</span>元&nbsp;|&nbsp;
-                    <!-- 
-                    优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
-                     -->
-                    总计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
-                    <input type="hidden" id="hiddenTotalFee" class="paramField" name="hiddenTotalFee" value="${totalFee}"/>
-                    <input type="hidden" id="cartBuy" class="paramField" name="cartBuy" value="${cartBuy}"/>
-                    <input type="hidden" id="selfPay" class="paramField" name="selfPay" value="1"/>
-                    </h5>
-                </p>
-                <div class="center-text">
-                	<a href="javascript:void(0)" id="submitOrder" class="button-big button-green">微信支付</a>
-                	<a href="javascript:void(0)" id="shareOrder" class="button-big button-orange">我想找人，替我买单</a>
-                </div>
+                <h5 class="center-text"> 
+                商品：&nbsp;<span id="productFee" class="text-highlight highlight-blue">${totalFee}</span>元&nbsp;|&nbsp; 
+            
+                运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">0.00</span>元&nbsp;|&nbsp;
+                <!-- 
+                优惠：&nbsp;<span id="buyAmount" class="text-highlight highlight-yellow">-0.00</span>元&nbsp;|&nbsp;
+                 -->
+                总计：&nbsp;<span id="totalFee" class="text-highlight highlight-green">${totalFee}</span>元
+                <input type="hidden" id="hiddenTotalFee" class="paramField" name="hiddenTotalFee" value="${totalFee}"/>
+                <input type="hidden" id="cartBuy" class="paramField" name="cartBuy" value="${cartBuy}"/>
+                <input type="hidden" id="selfPay" class="paramField" name="selfPay" value="1"/>
+                </h5>
             </div>
+            
             
             <div class="decoration"></div>
             <div class="container" id="product-intro">
             	<div class="section-title">
-                	<h4>发货信息</h4>
+                	<h4>收货信息</h4>
                 	<em>&nbsp;</em>
 				</div>
             	<ul id="choose">
@@ -154,8 +132,17 @@
 	            </ul>
 	            <input type="hidden" class="paramField" id="postNationalCode" name="postNationalCode" value=""/>
 	            <div class="center-text">
-					<a href="javascript:void(0)" id="chooseAddress" class="button-big button-dark">请选择收获地址</a>
+					<a href="javascript:void(0)" id="chooseAddress" class="button-big button-dark">请选择收货地址</a>
 				</div>
+            </div>
+            
+            <div class="decoration"></div>
+            <div class="container">
+                <div class="center-text">
+                	<a href="javascript:void(0)" id="wxpayBtn" class="button-big button-green button-fullscreen">自付【微支付】</a>
+                	<a href="javascript:void(0)" id="alipayBtn" class="button-big button-orange button-fullscreen">自付【支付宝】</a>
+                	<a href="javascript:void(0)" id="shareOrderBtn" class="button-big button-blue button-fullscreen">让土豪朋友【代付】</a>
+                </div>
             </div>
             
             <div class="decoration"></div>
@@ -172,7 +159,7 @@ if(orderAddressJsObj!=null){
 %>
 <script>
 
-$("#shareOrder").click(function(){
+$("#shareOrderBtn").click(function(){
 	var postName = $("#hiddenPostName").val();
 	var postMobile = $("#hiddenPostMobile").val();
 	
@@ -191,8 +178,8 @@ $("#shareOrder").click(function(){
 	} */
 	
 	$('#chooseAddress').hide();//隐藏地址按钮
-	$('#shareOrder').text("代付订单提交中...");
-	$('#shareOrder').attr("disabled","disabled");
+	$('#shareOrderBtn').text("代付订单提交中...");
+	$('#shareOrderBtn').attr("disabled","disabled");
 	
 	var paramData = $(".paramField").serialize();
 	//alert(paramData);
@@ -202,11 +189,11 @@ $("#shareOrder").click(function(){
 	$.post('${pageContext.request.contextPath}/submitOrder.json', paramData, function(responseData) {
 		var result = responseData.result;
 		if(result==1){
-			$('#shareOrder').text("代付订单创建成功");
-			$('#shareOrder').removeClass("");
+			$('#shareOrderBtn').text("代付订单创建成功");
+			$('#shareOrderBtn').removeClass("");
 			
 			var tradeNo = responseData.data.tradeNo;
-			location.href= "${pageContext.request.contextPath}/orderInfoAngle?tradeNo="+tradeNo;
+			location.href= "${pageContext.request.contextPath}/orderInfoShare?tradeNo="+tradeNo;
 		}else{
 			alert(responseData.message);
 		} 
@@ -243,6 +230,32 @@ $("#chooseAddress").click(function(){
 				refreshDeliveryFee(10, 3, res.proviceFirstStageName, res.addressCitySecondStageName);
 			}else{
 				alert("获取用户收货地址失败");
+				
+				//TODO 以下是为了在测试账户下能有地址显示
+				$("#postName").text("fail: name");
+				$("#hiddenPostName").val("fail: name");
+				$("#postMobile").text("fail: mobile");
+				$("#hiddenPostMobile").val("fail: mobile");
+				$("#postCode").text("fail: code");
+				$("#hiddenPostCode").val("fail: code");
+				$("#hiddenPostNationalCode").val("fail: nationalCode");
+				
+				
+				$("#postProvince").text("fail:province");
+				$("#hiddenPostProvince").val("fail:province");
+				$("#postCity").text("fail:city");
+				$("#hiddenPostCity").val("fail:city");
+				
+				$("#postCountries").text("fail: country");
+				$("#hiddenPostCountries").val("fail: country");
+				
+				$("#postAddressDetailInfo").text("fail:postAddressDetailInfo");
+				$("#hiddenAddressDetailInfo").val("fail:postAddressDetailInfo");
+				
+				$("#chooseAddress").text("重新选择收货地址");
+				
+				
+				
 			}
 		}
 	);
@@ -296,6 +309,8 @@ function refreshDeliveryFee(totalProductFee, totalAmount, province, city){
 </script>
 <%}%>
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
+
+<!-- 微信默认分享 -->
+<jsp:include page="../inc/weixinShareJsDefault.jsp"></jsp:include>
+
 </html>

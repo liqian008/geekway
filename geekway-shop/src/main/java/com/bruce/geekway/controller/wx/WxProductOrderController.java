@@ -1,5 +1,7 @@
 package com.bruce.geekway.controller.wx;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
+import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.IWxWebUserService;
@@ -55,7 +58,9 @@ import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ResponseUtil;
+import com.bruce.geekway.utils.ShopLinkUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
+import com.bruce.geekway.utils.WxShareUtil;
 
 /**
  * 订单controller
@@ -224,9 +229,9 @@ public class WxProductOrderController {
 		Date currentTime = new Date();
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
 		String userOpenId = wxWebUser.getOpenId();
-		String userUnionId = wxWebUser.getUnionId();
+//		String userUnionId = wxWebUser.getUnionId();
 		checkUserOpenId(userOpenId);
-		checkUserOpenId(userUnionId);
+//		checkUserOpenId(userUnionId);
 		
 		//TODO 检查请求参数的正确性
 		List<WxProductOrderItem> orderItemList = new ArrayList<WxProductOrderItem>();
@@ -257,7 +262,7 @@ public class WxProductOrderController {
 		//构造预购买的订单数据
 		WxProductOrder productOrder = new WxProductOrder();
 		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
-		productOrder.setUserUnionId(userUnionId);//下单人的unionId
+//		productOrder.setUserUnionId(userUnionId);//下单人的unionId
 		
 		productOrder.setVoucherId(null);//不使用优惠券
 		
@@ -320,13 +325,13 @@ public class WxProductOrderController {
 	
 	
 	/**
-	 * 准备分享让土豪购买的请求（需使用scope为SNSAPI_USERINFO，带出下单人的昵称&头像）
+	 * 准备分享让土豪购买的请求（需使用scope为SNSAPI_USERINFO，以加载下单人的昵称&头像）
 	 * @param model
 	 * @param tradeNo
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO, authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/orderInfoShare")
 	public String orderInfoShare(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
@@ -335,30 +340,65 @@ public class WxProductOrderController {
 		
 		//userAccessToken，用于获取个人资料（昵称&头像）
 		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
-		//获取个人资料
-		boolean success = false;
-		if(success){
-			wxWebUser = null;
-			//重写cookie
-			ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, JsonUtil.gson.toJson(wxWebUser));
-			request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
+		logger.debug("orderInfoShare中的accessToken: "+ userAccessToken);
+		//oauth获取个人资料
+		WxUserInfoResult wxUserInfoResult = wxMpOauthService.getOAuthUserinfo(userAccessToken, userOpenId);
+		logger.debug("oauth wxUserInfoResult: "+ wxUserInfoResult);
+		
+		if(wxUserInfoResult!=null&&wxUserInfoResult.getErrcode()==0){//正确的响应 
+			wxWebUser = buildOAuthWebUser(wxUserInfoResult);
+
+			if(wxWebUser!=null){
+				//重写cookie
+				String webUserCookie = JsonUtil.gson.toJson(wxWebUser);
+				try {
+					webUserCookie = URLEncoder.encode(webUserCookie, "utf-8");
+				} catch (UnsupportedEncodingException e) {
+					throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+				}
+				logger.debug("userCookie json: "+ webUserCookie);
+				
+				//用户表saveOrUpdate
+				wxWebUserService.save(wxWebUser);
+				
+				ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, webUserCookie);
+				request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
+				
+				//加载订单信息
+				WxProductOrder orderInfo = wxProductOrderService.loadByUserTradeNo(userOpenId, tradeNo);
+				
+				//TODO 检查商品完整性
+				model.addAttribute("orderInfo", orderInfo);
+				
+				//加载订单中商品列表
+				List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+				model.addAttribute("orderItemList", orderItemList);
+				
+				return "order/orderInfoShare";
+			}
 		}
-		
-		
-		//加载订单信息
-		WxProductOrder orderInfo = wxProductOrderService.loadByUserTradeNo(userOpenId, tradeNo);
-		
-		//TODO 检查商品完整性
-		model.addAttribute("orderInfo", orderInfo);
-		
-		//加载订单中商品列表
-		List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
-		model.addAttribute("orderItemList", orderItemList);
-		
-		return "order/orderInfoShare";
+		throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 	}
 	
-	
+	/**
+	 * oauth返回webUser对象
+	 * @param wxUserInfoResult
+	 * @return
+	 */
+	private WxWebUser buildOAuthWebUser(WxUserInfoResult wxUserInfoResult) {
+		WxWebUser webUser = new WxWebUser();
+		webUser.setOpenId(wxUserInfoResult.getOpenid());
+		webUser.setUnionId(wxUserInfoResult.getUnionid());
+		webUser.setNickname(wxUserInfoResult.getNickname());
+		webUser.setCountry(wxUserInfoResult.getCountry());
+		webUser.setProvince(wxUserInfoResult.getProvince());
+		webUser.setCity(wxUserInfoResult.getCity());
+		webUser.setHeadImgUrl(wxUserInfoResult.getHeadimgurl());
+		webUser.setSex(wxUserInfoResult.getSex());
+		
+		return webUser;
+	}
+
 	/**
 	 * 代付条款页面，分享后回流的url，在此知会当前登录用户是给别人付款（点击确定后，才会进入真正的支付页）
 	 * @param model
@@ -379,11 +419,18 @@ public class WxProductOrderController {
 		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
 		request.setAttribute("orderInfo", orderInfo);
 		
-		//查询下单用户信息
-		WxWebUser orderWebUser = wxWebUserService.loadByUnionId(orderInfo.getUserUnionId());
-		request.setAttribute("orderWebUser", orderWebUser);//展示在页面上，以提醒用户付款对象
+		boolean isHost = hostOpenId.equals(orderInfo.getUserOpenId());
+		if(isHost){//如果是自己打开的
+			//则直接转到订单详情页
+			return ResponseUtil.getRedirectString("orderInfo?tradeNo="+orderInfo.getOutTradeNo());
+		}else{//非自己的订单（代付订单，需要替别人结账）
+			//查询下单用户信息（页面进行提示，避免购买错误）
+			WxWebUser orderOwnerWebUser = wxWebUserService.loadByOpenId(orderInfo.getUserOpenId()); 
+			request.setAttribute("orderOwnerWebUser", orderOwnerWebUser);//展示在页面上，以提醒用户付款对象
+			
+			return "order/payForAngleTerms";
+		}
 		
-		return "order/payForAngleTerms";
 	}
 	
 	
@@ -398,32 +445,46 @@ public class WxProductOrderController {
 	@RequestMapping(value = "/payForAngle")
 	public String payForAngle(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
-		String userOpenId = wxWebUser.getOpenId();
-		checkUserOpenId(userOpenId);
+		String hostOpenId = wxWebUser.getOpenId();
+		checkUserOpenId(hostOpenId);
 		
 		//加载订单信息
 		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
-		//检查订单状态（未支付时才可以支付）
-		short orderStatus = orderInfo.getStatus();
-		if(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()!=orderStatus){
-			//来晚了，订单已经被人抢着支付了
-			//TODO throw new GeekwayException(errorCode);
+		
+		boolean isHost = hostOpenId.equals(orderInfo.getUserOpenId());
+		if(isHost){//如果是自己打开的
+			//则直接转到订单详情页
+			return ResponseUtil.getRedirectString("orderInfo?tradeNo="+orderInfo.getOutTradeNo());
+		}else{//非自己的订单（代付订单，需要替别人结账）
+			//查询下单用户信息（页面进行提示，避免购买错误）
+
+			//检查订单状态（未支付时才可以支付）
+			short orderStatus = orderInfo.getStatus();
+			if(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()!=orderStatus){
+				//来晚了，订单已经被人抢着支付了
+				//TODO throw new GeekwayException(errorCode);
+			}
+			//TODO 增加超时限制（n天以上的不准代付？）
+			
+			//检查商品完整性
+			model.addAttribute("orderInfo", orderInfo);
+			
+			//查询下单用户信息
+			WxWebUser orderOwnerWebUser = wxWebUserService.loadByOpenId(orderInfo.getUserOpenId()); 
+			request.setAttribute("orderOwnerWebUser", orderOwnerWebUser);//展示在页面上，以提醒用户付款对象
+			
+			
+			//加载订单中商品列表
+			List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+			model.addAttribute("orderItemList", orderItemList);
+			
+			//未付款状态，需要构造支付js对象
+			String remoteIp = RequestUtil.getRemoteIP(request);
+			WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
+			model.addAttribute("wxPayJsObj", wxPayJsObj);
+			
+			return "order/payForAngle";
 		}
-		//TODO 增加超时限制（n天以上的不准代付？）
-		
-		//检查商品完整性
-		model.addAttribute("orderInfo", orderInfo);
-		
-		//加载订单中商品列表
-		List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
-		model.addAttribute("orderItemList", orderItemList);
-		
-		//未付款状态，需要构造支付js对象
-		String remoteIp = RequestUtil.getRemoteIP(request);
-		WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
-		model.addAttribute("wxPayJsObj", wxPayJsObj);
-		
-		return "order/payForAngle";
 	}
 	
 	

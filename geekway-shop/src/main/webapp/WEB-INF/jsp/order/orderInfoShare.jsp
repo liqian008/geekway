@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>找土豪朋友待付【美妞儿】</title>
+<title>找土豪朋友代付【美妞儿】</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -45,7 +45,7 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">找土豪朋友待付</p>
+            <p class="bread-crumb">找土豪朋友代付</p>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
@@ -56,11 +56,10 @@
 	
 			<div class="decoration"></div>
 			<div class="container no-bottom">
-				<div class="big-notification green-notification"> 
-					<h4 class="uppercase">看看有多少土豪替为我买单？</h4>
+				<div class="big-notification green-notification">
+					<h4 class="uppercase">如何让土豪朋友代付？</h4>
 					<p>
-						点击右上角的分享按钮，将此订单【分享给好友】，让土豪朋友替我买单<br/>
-						隐私提醒：代付时，土豪可能会确认本订单的信息，如：收件人信息、地址、电话。【美妞儿】在此提醒您，务必注意避免将该订单发给陌生人
+						点击微信右上角【分享】按钮，将此订单【分享给好友】，即可通知土豪朋友替我买单<br/>
 					</p>
 				</div>
 			</div>
@@ -100,7 +99,7 @@
 					商品合计：
 					<span class="text-highlight highlight-red">${orderInfo.productFee}</span>元
 				</p>
-				
+
 				</div>
              
             <div class="decoration"></div>
@@ -130,18 +129,21 @@
                 合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
                 
-                <%
-                WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
-                if(orderInfo.getStatus()==1){
-                %>
-                <div class="decoration"></div>
-            	<div class="center-text">
-	               	<a href="javascript:void(0)" id="wxPay" class="button-big button-green">微信支付</a>
-            	</div> 
-            	<%}%>
             </div>
             
+            
+            <div class="container no-bottom">
+				<div class="big-notification red-notification">
+					<h4 class="uppercase">【美妞儿】隐私提醒：</h4>
+					<p>
+						土豪代付时，会强制对方确认本订单信息，如：姓名、电话、地址等。<br/>
+						为避免您的隐私泄露，请不要将该订单发送给陌生人
+					</p> 
+				</div>
+			</div>
             <div class="decoration"></div>
+            
+            
             <jsp:include page="../inc/footer.jsp"></jsp:include>
             
         </div>
@@ -149,7 +151,9 @@
 </div>
 </body>
 
-<!-- 允许微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=0"></jsp:include>
+
+
+<!-- 微信默认分享 -->
+<jsp:include page="../inc/weixinShareJsDefault.jsp"></jsp:include>
 
 </html>

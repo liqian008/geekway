@@ -16,12 +16,12 @@ public interface IWxWebUserService extends IFoundationPagingService<WxWebUser, I
 	public WxWebUser loadByUnionId(String unionId);
 	
 	
-//	/**
-//	 * 根据用户的openId获取用户对象（可能会有碰撞出现）
-//	 * @param userOpenId
-//	 * @return
-//	 */
-//	public WxWebUser loadByOpenId(String userOpenId);
+	/**
+	 * 根据用户的openId获取用户对象（可能会有碰撞出现）
+	 * @param userOpenId
+	 * @return
+	 */
+	public WxWebUser loadByOpenId(String userOpenId);
 	
 	
 }
