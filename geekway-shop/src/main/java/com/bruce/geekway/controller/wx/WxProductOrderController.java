@@ -27,6 +27,7 @@ import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
+import com.bruce.geekway.constants.ConstPay;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxProductCart.CartProductSku;
 import com.bruce.geekway.model.WxProductOrder;
@@ -51,7 +52,6 @@ import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxUserAddressService;
 import com.bruce.geekway.utils.CartUtil;
-import com.bruce.geekway.utils.OrderUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ResponseUtil;
@@ -259,7 +259,7 @@ public class WxProductOrderController {
 		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
 		productOrder.setUserUnionId(userUnionId);//下单人的unionId
 		
-		productOrder.setVoucherId(null);//不使用优惠券
+//		productOrder.setVoucherId(null);//不使用优惠券
 		
 		//提交订单
 		int result = wxProductOrderService.createOrder(productOrder, addressInfo, orderItemList);
@@ -427,8 +427,6 @@ public class WxProductOrderController {
 	}
 	
 	
-
-	
 	/**
 	 * 构造用于支付的js对象
 	 * @param clientIp
@@ -439,8 +437,8 @@ public class WxProductOrderController {
 		String productName = orderInfo.getTitle();// 商品名称信息，这里由测试网页填入。
 		String fee_type = "1";// 费用类型，这里1为默认的人民币
 		String input_charset = "UTF-8";// 字符集，可以使用GBK或者UTF-8
-		String notify_url = "http://wxmp.1758.com/wxpay/jspayNotify";// 支付成功后将通知该地址
-		String out_trade_no = OrderUtil.generateOrderSn4Wx();// 订单号，商户需要保证该字段对于本商户的唯一性, 长度<32
+		String notify_url = ConstPay.NOTIFY_URL_JS_WXPAY;;// 支付成功后将通知该地址
+		String out_trade_no = orderInfo.getOutTradeNo();// 订单号，商户需要保证该字段对于本商户的唯一性, 长度<32
 		String spbill_create_ip = clientIp;// 用户浏览器的ip，这个需要在前端获取
 		String product_fee = String.valueOf(orderInfo.getProductFee());// 商品金额
 		String transport_fee = String.valueOf(orderInfo.getTransportFee());// 运费

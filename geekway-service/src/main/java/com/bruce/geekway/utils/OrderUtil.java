@@ -15,28 +15,7 @@ public class OrderUtil {
 	private static final String MONTH_STR = "1234567890AB";
 	private static final String DAY_STR = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345";
 	
-	/**
-	 * 生成系统订单号(50位)
-	 * @return
-	 */
-	@Deprecated
-	public static String generateOrderSn() {
-		String uuid = UUID.randomUUID().toString().replace("-", "");
-		String orderTimeStr = DateUtil.date2YMDHMS(new Date());
-//		return orderTimeStr +"_"+ ConstConfig.SERVER_INDEX +"_"+ uuid;
-		return orderTimeStr +"_"+ uuid;
-	}
 	
-	/**
-	 * 生成系统订单号（长度32位以下，保证不超过微信的限制）
-	 * @return
-	 */
-	@Deprecated
-	public static String generateOrderSn4Wx() {
-		//使用uuid
-		String uuid = UUID.randomUUID().toString().replace("-", "");
-		return uuid;
-	}
 	
 	/**
 	 * 生成系统订单号（长度16位）
@@ -129,6 +108,31 @@ public class OrderUtil {
 	private static String buildSecondStr(int hour, int minute, int second){
 		int secondValue = (hour * 60 * 60) +  (minute * 60) +second;
 		return String.valueOf(secondValue);
+	}
+	
+	
+	
+	/**
+	 * 生成系统订单号(50位)
+	 * @return
+	 */
+	@Deprecated
+	public static String generateOrderSn() {
+		String uuid = UUID.randomUUID().toString().replace("-", "");
+		String orderTimeStr = DateUtil.date2YMDHMS(new Date());
+//		return orderTimeStr +"_"+ ConstConfig.SERVER_INDEX +"_"+ uuid;
+		return orderTimeStr +"_"+ uuid;
+	}
+	
+	/**
+	 * 生成系统订单号（长度32位以下，保证不超过微信的限制）
+	 * @return
+	 */
+	@Deprecated
+	public static String generateOrderSn4Wx() {
+		//使用uuid
+		String uuid = UUID.randomUUID().toString().replace("-", "");
+		return uuid;
 	}
 	
 }

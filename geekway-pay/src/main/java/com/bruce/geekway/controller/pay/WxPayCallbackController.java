@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bruce.foundation.util.JsonUtil;
-import com.bruce.foundation.util.Sha1Util;
+import com.bruce.foundation.util.Md5Util;
+import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxComplaintNotify;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
@@ -55,6 +58,13 @@ public class WxPayCallbackController {
 	public String jspayNotify(Model model, WxPayNotifyOrderRequest wxOrderRequest, @RequestBody String xml, HttpServletRequest request) {
 		logger.info("微信回调的通知数据: "+JsonUtil.gson.toJson(wxOrderRequest) + ", xml: "+xml);
 		if(wxOrderRequest!=null && xml!=null){
+			try{
+				//检查支付签名是否正确
+				checkWxpaySig(wxOrderRequest);
+			}catch(Exception e){
+				
+			}
+			
 			WxPayNotifyOrderRequest tempXmlOrder = parseWxOrderXml(xml);
 			if(tempXmlOrder!=null){
 				wxOrderRequest.setOpenId(tempXmlOrder.getOpenId());
@@ -63,6 +73,67 @@ public class WxPayCallbackController {
 			int result = wxpayService.receiveWxOrder(wxOrderRequest);
 		}
 		return "wxpay/jspayNotify";
+	}
+
+	
+	/**
+	 * 检查微信支付签名
+	 * @param wxOrderRequest
+	 */
+	private static boolean checkWxpaySig(WxPayNotifyOrderRequest wxOrderRequest) {
+		if(wxOrderRequest!=null){
+			SortedMap<String, String> packageMap = new TreeMap<String, String>();
+//			wxOrderRequest = new WxPayNotifyOrderRequest();
+//			wxOrderRequest.setSign_type("MD5");
+//			wxOrderRequest.setInput_charset("UTF-8");
+//			wxOrderRequest.setTrade_mode("1");
+//			wxOrderRequest.setTrade_state("0");
+//			wxOrderRequest.setPartner("1220724401");
+//			wxOrderRequest.setBank_type("4186");
+//			wxOrderRequest.setBank_billno("201412056193435269");
+//			wxOrderRequest.setTotal_fee(2000);
+//			wxOrderRequest.setFee_type(1);
+//			wxOrderRequest.setNotify_id("BoHVE6eXMi8M-1cvtjC_uWZiSbU3NLpS4SMi2GCIrRes4nViB_xtPSY_KMTMG-ym3NYqBB4pE6qG3hix8W6KgOsHge5npu1w");
+//			wxOrderRequest.setTransaction_id("1220724401201412056360171322");
+//			wxOrderRequest.setOut_trade_no("ABE61754653IMZ");
+//			wxOrderRequest.setTime_end("20141205170925");
+//			wxOrderRequest.setProduct_fee(2000);
+//			wxOrderRequest.setTransport_fee(0);
+//			wxOrderRequest.setDiscount(0);
+//			wxOrderRequest.setSign("6E4F4E4EB7D3B5B6AF79BE634BD5690C");
+			
+			packageMap.put("sign_type", wxOrderRequest.getSign_type());
+			packageMap.put("input_charset", wxOrderRequest.getInput_charset());
+			packageMap.put("trade_mode", wxOrderRequest.getTrade_mode());
+			packageMap.put("trade_state", wxOrderRequest.getTrade_state());
+			packageMap.put("partner", wxOrderRequest.getPartner());
+			packageMap.put("bank_type", wxOrderRequest.getBank_type());
+			packageMap.put("bank_billno", wxOrderRequest.getBank_billno());
+			
+			packageMap.put("notify_id", wxOrderRequest.getNotify_id());
+			packageMap.put("transaction_id", wxOrderRequest.getTransaction_id());
+			packageMap.put("out_trade_no", wxOrderRequest.getOut_trade_no());
+			packageMap.put("time_end", wxOrderRequest.getTime_end());
+			
+			packageMap.put("total_fee", String.valueOf(wxOrderRequest.getTotal_fee()));
+			packageMap.put("fee_type", String.valueOf(wxOrderRequest.getFee_type()));
+			packageMap.put("product_fee", String.valueOf(wxOrderRequest.getProduct_fee()));
+			packageMap.put("transport_fee", String.valueOf(wxOrderRequest.getTransport_fee()));
+			packageMap.put("discount", String.valueOf(wxOrderRequest.getDiscount()));
+			
+			//根据参数map生成sign
+			String unsignPackageText = WxAuthUtil.formatWxPayPackageText(packageMap) + "&key="+ConstWeixin.WX_PAY_PARTERN_KEY;//最后拼接key
+			String sign = Md5Util.md5Encode(unsignPackageText).toUpperCase();
+			//判断sign是否匹配
+			if(sign.equals(wxOrderRequest.getSign())){
+				return true;
+			}
+		}
+		throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(checkWxpaySig(new WxPayNotifyOrderRequest()));;
 	}
 
 
@@ -229,21 +300,21 @@ public class WxPayCallbackController {
 	}
 
 	
-	public static void main(String[] args) {
-		SortedMap<String, String> addressMap = new TreeMap<String, String>();
-		
-//		addressMap.put("appid", "wx17ef1eaef46752cb");
-		addressMap.put("accessToken", "OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA");
-		addressMap.put("timestamp", "1384841012");
-		addressMap.put("noncestr", "123456");
-		addressMap.put("url", "http://open.weixin.qq.com/");
-		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
-		
-		
-		String example = "accesstoken=OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA&appid=wx17ef1eaef46752cb&noncestr=123456&timestamp=1384841012&url=http://open.weixin.qq.com/";
-		System.out.println("example: "+example);
-		System.out.println(example.equals(addressSign));
-		System.out.println("addressSign: "+addressSign);
-		System.out.println("addressSign: "+ Sha1Util.getSha1(example));
-	}
+//	public static void main(String[] args) {
+//		SortedMap<String, String> addressMap = new TreeMap<String, String>();
+//		
+////		addressMap.put("appid", "wx17ef1eaef46752cb");
+//		addressMap.put("accessToken", "OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA");
+//		addressMap.put("timestamp", "1384841012");
+//		addressMap.put("noncestr", "123456");
+//		addressMap.put("url", "http://open.weixin.qq.com/");
+//		String addressSign = WxAuthUtil.formatWxPaySignText(addressMap);
+//		
+//		
+//		String example = "accesstoken=OezXcEiiBSKSxW0eoylIeBFk1b8VbNtfWALJ5g6aMgZHaqZwK4euEskSn78Qd5pLsfQtuMdgmhajVM5QDm24W8X3tJ18kz5mhmkUcI3RoLm7qGgh1cEnCHejWQo8s5L3VvsFAdawhFxUuLmgh5FRA&appid=wx17ef1eaef46752cb&noncestr=123456&timestamp=1384841012&url=http://open.weixin.qq.com/";
+//		System.out.println("example: "+example);
+//		System.out.println(example.equals(addressSign));
+//		System.out.println("addressSign: "+addressSign);
+//		System.out.println("addressSign: "+ Sha1Util.getSha1(example));
+//	}
 }

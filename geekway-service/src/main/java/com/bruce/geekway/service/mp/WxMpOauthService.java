@@ -16,15 +16,7 @@ import com.bruce.geekway.utils.WxHttpUtil;
  *
  */
 @Service
-public class WxMpOauthService extends WxBaseService {
-	
-//	@Autowired
-//	private WxMpTokenService mpTokenService;
-	
-//	public String getAuthorizeUrl(){
-//		return AUTHORIZE_URL;
-//	}
-	
+public class WxMpOauthService {
 	
 	/**
 	 * 根据code换取oauthAccessToken
