@@ -7,6 +7,7 @@ import com.bruce.geekway.utils.ConfigUtil;
  * @author liqian
  *
  */
+@Deprecated
 public interface ConstWeixinMerchant {
 	
 	/*以下是微信小店api的商品管理接口*/

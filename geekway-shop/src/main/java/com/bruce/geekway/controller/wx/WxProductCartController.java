@@ -23,9 +23,9 @@ import com.bruce.geekway.model.WxProductSkuCriteria;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.utils.CartUtil;
-import com.bruce.geekway.utils.ProductUtil;
 import com.bruce.geekway.utils.ResponseUtil;
-import com.bruce.geekway.utils.ProductUtil.SlideImage;
+import com.bruce.geekway.utils.ShopLinkUtil;
+import com.bruce.geekway.utils.ShopLinkUtil.SlideImage;
 
 /**
  * 购物车controller
@@ -140,10 +140,10 @@ public class WxProductCartController {
 					if(productSku!=null){
 						WxProduct product = wxProductService.loadById(productSku.getProductId());
 						if(product!=null){
-//							List<String> skuPicList = ProductUtil.buildProductSkuPicList(productSku);
+//							List<String> skuPicList = ShopLinkUtil.buildProductSkuPicList(productSku);
 //							model.addAttribute("skuPicList", skuPicList);
 							
-							List<SlideImage> slideImageList = ProductUtil.buildSlideImageList(productSku);
+							List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productSku);
 							model.addAttribute("slideImageList", slideImageList);
 						}
 						

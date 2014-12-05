@@ -72,7 +72,7 @@
 				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
 				if(cartItemList!=null&&cartItemList.size()>0){
 				%>
-				<form action="${pageContext.request.contextPath}/buy" method="get" id="cartForm"> 	 
+				<form action="${pageContext.request.contextPath}/buy?showwxpaytitle=1" method="get" id="cartForm"> 	 
 				<input type="hidden" name="cartBuy" value="1"/>
 				<%
 				for(CartProductSku cartItem: cartItemList){
@@ -110,8 +110,6 @@
 
 </body>
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include> 
 
 <script>
 $("#submitOrder").click(function(){

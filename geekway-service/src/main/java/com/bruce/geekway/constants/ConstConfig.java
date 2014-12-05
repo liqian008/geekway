@@ -35,4 +35,14 @@ public interface ConstConfig {
 	public static final String UPLOAD_QINIU_BUCKET = ConfigUtil.getString("upload_qiniu_bucket");
 	/*七牛的bucket*/
 	public static final String UPLOAD_QINIU_BIND_DOMAIN = ConfigUtil.getString("upload_qiniu_bind_domain");
+	
+	
+	/*默认微信分享的标题*/
+	public static final String WX_SHARE_TITLE_DEFAULT =  ConfigUtil.getString("wx_share_title_default");
+	/*默认微信分享的内容*/
+	public static final String WX_SHARE_CONTENT_DEFAULT =  ConfigUtil.getString("wx_share_content_default");
+	/*默认微信分享的iconUrl*/
+	public static final String WX_SHARE_ICON_URL_DEFAULT =  ConfigUtil.getString("wx_share_icon_url_default");
+	/*默认微信分享的链接*/
+	public static final String WX_SHARE_LINK_DEFAULT =  ConfigUtil.getString("wx_share_link_default");
 }

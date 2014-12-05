@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.util.EmojiUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
@@ -46,15 +47,17 @@ public class WxMpOauthService {
 	 * @param openid
 	 * @return
 	 */
-	public WxUserInfoResult getOauthUserinfo(String oauthAccessToken, String openid) {
+	public WxUserInfoResult getOAuthUserinfo(String oauthAccessToken, String openid) {
 		Map<String, String> params = WxHttpUtil.buildParams();
 		params.put("access_token", oauthAccessToken);
 		params.put("openid", openid);
 		params.put("lang", "zh_CN");
 		
 		String userinfoResultStr = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_USER_INFO_API, params); 
+		//过滤emoji字符
+		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResultStr);
 		
-		WxUserInfoResult userinfoResult = JsonUtil.gson.fromJson(userinfoResultStr, WxUserInfoResult.class);
+		WxUserInfoResult userinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
 		if(userinfoResult!=null && userinfoResult.getErrcode()==0){//成功
 			return userinfoResult;
 		}

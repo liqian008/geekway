@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
-<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
+<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 
 <!DOCTYPE HTML>
@@ -111,8 +111,6 @@ WxProductCategory productCategory = (WxProductCategory)request.getAttribute("pro
 </div>
 
 </body>
-<!-- 微信分享 -->
-<jsp:include page="../inc/weixinShareJs.jsp"></jsp:include>
 
 <script>
 	fallLoad();
@@ -143,5 +141,8 @@ WxProductCategory productCategory = (WxProductCategory)request.getAttribute("pro
 		})
 	}
 </script>
+
+
+
 
 </html>

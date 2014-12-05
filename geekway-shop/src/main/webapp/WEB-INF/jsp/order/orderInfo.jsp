@@ -1,3 +1,4 @@
+<%@page import="com.bruce.geekway.model.enumeration.GeekwayEnum"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"%>
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.Map.*" %>
@@ -12,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>订单详情【美妞儿】</title>
+<title>我的订单详情【美妞儿】</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -43,7 +44,7 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">订单详情</p>
+            <p class="bread-crumb">我的订单详情</p>
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
@@ -57,7 +58,7 @@
 
         	<div class="container no-bottom">
             	<div class="section-title">
-                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">订单信息</a></h4>
+                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">订单详情</a></h4>
 				</div>
             </div> 
             
@@ -112,17 +113,12 @@
                 
                 <%
                 WxProductOrder productOrder = (WxProductOrder)request.getAttribute("orderInfo");
-                if(productOrder.getVoucherFee()!=null&&productOrder.getVoucherFee()>0){
-                %>
-                优惠券：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.voucherFee}</span>元&nbsp;|&nbsp;
-                <%}%>
-                <%
                 if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
                 %>
                 折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
                 <%}%>
                 
-                合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
+                总计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
                 
             </div>
@@ -130,11 +126,13 @@
             
             <%
             WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
-            if(orderInfo.getStatus()==1){
+            if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
             %>
             <div class="decoration"></div>
         	<div class="container center-text">
-            	<a href="javascript:void(0)" id="wxPay" class="button-big button-green">为女神付款【微信支付】</a>
+            	<a href="javascript:void(0)" id="wxpayBtn" class="button-big button-green button-fullscreen">自付【微支付】</a>
+               	<a href="javascript:void(0)" id="alipayBtn" class="button-big button-orange button-fullscreen">自付【支付宝】</a>
+               	<a href="javascript:void(0)" id="shareOrderBtn" class="button-big button-blue button-fullscreen">让土豪朋友【代付】</a>
         	</div> 
         	<%}%>
             <div class="decoration"></div>
@@ -172,9 +170,6 @@ WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
 		});
 	}, false);
 </script>
-
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
 
 
 </html>

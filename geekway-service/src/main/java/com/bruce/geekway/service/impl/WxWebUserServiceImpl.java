@@ -114,18 +114,18 @@ public class WxWebUserServiceImpl implements IWxWebUserService {
 		return null;
 	}
 	
-//	/**
-//	 * 
-//	 */
-//	public WxWebUser loadByOpenId(String userOpenId) {
-//		WxWebUserCriteria criteria = new WxWebUserCriteria();
-//		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
-//		List<WxWebUser> mpUserList = wxWebUserMapper.selectByExample(criteria);
-//		if (mpUserList != null && mpUserList.size() > 0) {
-//			return mpUserList.get(0);
-//		}
-//		return null;
-//	}
+	/**
+	 * 
+	 */
+	public WxWebUser loadByOpenId(String userOpenId) {
+		WxWebUserCriteria criteria = new WxWebUserCriteria();
+		criteria.createCriteria().andOpenIdEqualTo(userOpenId);
+		List<WxWebUser> mpUserList = wxWebUserMapper.selectByExample(criteria);
+		if (mpUserList != null && mpUserList.size() > 0) {
+			return mpUserList.get(0);
+		}
+		return null;
+	}
 
 	
 	public WxWebUserMapper getWxWebUserMapper() {

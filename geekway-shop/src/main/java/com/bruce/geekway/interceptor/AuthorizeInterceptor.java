@@ -2,6 +2,7 @@ package com.bruce.geekway.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -124,6 +125,8 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				WxWebUser webUser = null;
 				if(webUserJson!=null){
 					try{
+						webUserJson= URLDecoder.decode(webUserJson, "utf-8");
+						
 						webUser = JsonUtil.gson.fromJson(webUserJson, WxWebUser.class);
 					}catch(Exception e){
 					}
@@ -144,11 +147,15 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 						if (RequestUtil.isGet(request)) {
 							// Get跳回请求地址，增加redirectUrl
 							String redirectUrl = UrlUtil.getRequestUrl(request);
+							logger.debug("微信get redirectUrl, redirectUrl: "+redirectUrl);
+							
 							wxOauthUrl = WxMpOAuthUtil.buildWeixinOauthProxyUrl(scope, redirectUrl, "");
 						} else {
 							// 其他方法取referer，增加redirectUrl
 							String redirectUrl = UrlUtil.getRefererUrl(request);
 							System.out.println("redirectUrl: "+redirectUrl);
+							logger.debug("微信post redirectUrl, redirectUrl: "+redirectUrl);
+							
 							wxOauthUrl = WxMpOAuthUtil.buildWeixinOauthProxyUrl(scope, redirectUrl, "");
 						}
 						response.sendRedirect(wxOauthUrl);

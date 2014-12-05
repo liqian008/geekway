@@ -3,7 +3,7 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
-<%@ page import="com.bruce.geekway.utils.ProductUtil.SlideImage" %>
+<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 
 <!DOCTYPE HTML>
@@ -204,8 +204,6 @@ int buyAmount = cartItem.getAmount();
 </body>
 
 
-<!-- 禁用微信分享 -->
-<jsp:include page="../inc/weixinHideOptionMenu.jsp?hideOpt=1"></jsp:include>
 
 <script>
 recommendProducts();
