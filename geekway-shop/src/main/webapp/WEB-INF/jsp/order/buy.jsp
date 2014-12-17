@@ -158,6 +158,12 @@ WxOrderAddressJsObj orderAddressJsObj = (WxOrderAddressJsObj)request.getAttribut
 if(orderAddressJsObj!=null){
 %>
 <script>
+$("#wxpayBtn").click(function(){
+	alert("支付能力申请中...暂不可用");
+});
+$("#alipayBtn").click(function(){
+	alert("支付宝支付能力申请中...暂不可用");
+});
 
 $("#shareOrderBtn").click(function(){
 	var postName = $("#hiddenPostName").val();
@@ -171,11 +177,19 @@ $("#shareOrderBtn").click(function(){
 	//检查商品&数量有效性
 	
 	//检查地址输入有效性
-	/* var postInfoError = isEmpty(postName) || isEmpty(postMobile) || isEmpty(postProvince) || isEmpty(postCity)|| isEmpty(postCountries)|| isEmpty(postAddressDetailInfo);
+	//alert(postName);
+	//alert(postMobile);
+	//alert(postProvince);
+	//alert(postCity);
+	//alert(postCountries);
+	//alert(postAddressDetailInfo);
+	
+	
+	var postInfoError = isEmpty(postName) || isEmpty(postMobile) || isEmpty(postProvince) || isEmpty(postCity)|| isEmpty(postCountries)|| isEmpty(postAddressDetailInfo);
 	if(postInfoError){
 		alert("收货地址填写有误，请重新选择");
 		return;
-	} */
+	}
 	
 	$('#chooseAddress').hide();//隐藏地址按钮
 	$('#shareOrderBtn').text("代付订单提交中...");
@@ -213,7 +227,7 @@ $("#chooseAddress").click(function(){
 		"nonceStr" : "<%=orderAddressJsObj.getNonceStr()%>" 
 		},function(res){
 			//若res 中所带的返回值不为空,则表示用户选择该返回值作为收货地址。否则若返回空,则表示用户取消了这一次编辑收货地址。
-			alert(res.err_msg);
+			alert("[获取用户地址]权限申请中，暂时使用错误地址替代");
 			if(res.err_msg=="edit_address:ok"){
 				$("#postName").text(res.userName);
 				$("#postMobile").text(res.telNumber);
