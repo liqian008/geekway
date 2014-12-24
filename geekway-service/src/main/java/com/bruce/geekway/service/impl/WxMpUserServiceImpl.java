@@ -200,5 +200,11 @@ public class WxMpUserServiceImpl implements IWxMpUserService {
 		this.wxUserService = wxUserService;
 	}
 
+	@Override
+	public int countByCriteria(WxMpUserCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 }

@@ -149,6 +149,12 @@ public class KlhDailySignServiceImpl implements IKlhDailySignService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(KlhDailySignCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 	

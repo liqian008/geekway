@@ -1,3 +1,4 @@
+<%@page import="com.bruce.geekway.constants.ConstIto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -156,7 +157,11 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			                        <td><%=order.getPostName()%></td>
 			                        <td><%=order.getPostAddress()%></td>
 			                        <td>APP支付</td>
-			                        <td><%=order.getPayStatus()==20?"已发货":"待发货"%></td>
+			                        <td>
+			                        	<a href="./orderDisplay?orderSn=<%=order.getOrderSn()%>">
+			                        <%=Short.valueOf(ConstIto.POSTSTATUS_POSTED).equals(order.getPostStatus())?"<span class='label label-success'>已发货</span>":"<span class='label label-warning'>未发货</span>"%>
+			                        	</a>
+			                        </td>
 			                        <td><%=sdf.format(order.getCreateTime())%></td>
 			                        <td class='text-center'>
 			                        	<div class="table-controls"> 

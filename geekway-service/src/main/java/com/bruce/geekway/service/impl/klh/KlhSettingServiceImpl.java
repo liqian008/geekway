@@ -89,5 +89,11 @@ public class KlhSettingServiceImpl implements IKlhSettingService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(KlhSettingCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

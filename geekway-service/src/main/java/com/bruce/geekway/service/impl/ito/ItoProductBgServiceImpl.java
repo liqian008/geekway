@@ -72,5 +72,11 @@ public class ItoProductBgServiceImpl implements IItoProductBgService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(ItoProductBgCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

@@ -148,6 +148,34 @@ public class KlhWallController {
 		return "klh/wallNewImage";
 	}
 	
+	@RequestMapping(value = "/wallPubImage")
+	public String wallPubImage(Model model, String thumbPicUrl, String picUrl, HttpServletRequest request) {
+		if (!KlhUtil.sessionValid(request)) {// 页面流程
+			//跳转auth界面
+			return KlhUtil.redirectToOauth(model);
+		}
+		
+		//检查cookie中的
+		Cookie[] cookies = request.getCookies();
+		if(cookies!=null&&cookies.length>0){
+			for(Cookie cookie: cookies){
+				//检查是否填写过手机号码
+				if(KLH_WALIMAGE_MY_NICKNAME.equals(cookie.getName())){
+					String nickname = cookie.getValue();
+					model.addAttribute("nickname", URLDecoder.decode(nickname));
+					break;
+				}
+			}
+		}
+//		System.out.println("thumbPicUrl: "+thumbPicUrl);
+//		System.out.println("picUrl: "+picUrl);
+		model.addAttribute("thumbPicUrl", thumbPicUrl);
+		model.addAttribute("picUrl", picUrl);
+		return "klh/wallPubImage";
+	}
+	
+	
+	
 	@RequestMapping(value = "/saveWallImage", method=RequestMethod.POST)
 	public String saveWallImage(Model model, KlhWallImage wallImage, HttpServletRequest request, HttpServletResponse response) {
 		if (!KlhUtil.sessionValid(request)) {// 页面流程

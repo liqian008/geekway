@@ -132,6 +132,12 @@ public class WxMaterialMultimediaServiceImpl implements IWxMaterialMultimediaSer
 		this.wxMaterialMultimediaMapper = wxMaterialMultimediaMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxMaterialMultimediaCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 
 

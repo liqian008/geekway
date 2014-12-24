@@ -119,6 +119,11 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 		this.wxAccessTokenMapper = wxAccessTokenMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxAccessTokenCriteria criteria) {
+		return 0;
+	}
+
 	
 
 	

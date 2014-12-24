@@ -127,6 +127,12 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(ItoProductOrderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 //	public static void main(String[] args) {
 //		ItoProductOrderServiceImpl x = new ItoProductOrderServiceImpl();

@@ -87,5 +87,11 @@ public class ItoSkuImageServiceImpl implements IItoSkuImageService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(ItoSkuImageCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 }

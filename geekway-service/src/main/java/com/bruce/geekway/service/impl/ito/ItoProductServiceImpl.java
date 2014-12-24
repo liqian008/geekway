@@ -79,6 +79,12 @@ public class ItoProductServiceImpl implements IItoProductService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(ItoProductCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 	
 }

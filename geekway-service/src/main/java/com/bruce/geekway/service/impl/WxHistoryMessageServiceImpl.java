@@ -293,5 +293,11 @@ public class WxHistoryMessageServiceImpl implements IWxHistoryMessageService, In
 		this.wxHistoryMessageMapper = wxHistoryMessageMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxHistoryMessageCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 }

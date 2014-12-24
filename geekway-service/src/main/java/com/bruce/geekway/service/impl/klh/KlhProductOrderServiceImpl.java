@@ -74,6 +74,12 @@ public class KlhProductOrderServiceImpl implements IKlhProductOrderService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(KlhProductOrderCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 
 }

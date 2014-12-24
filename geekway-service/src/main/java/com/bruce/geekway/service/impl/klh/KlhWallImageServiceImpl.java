@@ -177,6 +177,12 @@ public class KlhWallImageServiceImpl implements IKlhWallImageService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(KlhWallImageCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 //	@Override
 //	public List<KlhWallImage> queryLatestImages(int pageSize) {
 //		return klhWallImageDao.queryLatestImages(pageSize);

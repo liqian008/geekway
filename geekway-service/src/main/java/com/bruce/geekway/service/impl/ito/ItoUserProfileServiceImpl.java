@@ -86,5 +86,11 @@ public class ItoUserProfileServiceImpl implements IItoUserProfileService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(ItoUserProfileCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 }

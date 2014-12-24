@@ -138,4 +138,10 @@ public class WxMaterialArticleServiceImpl implements IWxMaterialArticleService, 
 		this.wxMaterialArticleMapper = wxMaterialArticleMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxMaterialArticleCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

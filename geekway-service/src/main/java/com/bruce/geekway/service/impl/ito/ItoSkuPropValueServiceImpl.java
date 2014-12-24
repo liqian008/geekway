@@ -131,4 +131,10 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(ItoSkuPropValueCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

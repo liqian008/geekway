@@ -131,6 +131,12 @@ public class WxMaterialNewsArticleServiceImpl implements IWxMaterialNewsArticleS
 		this.wxMaterialNewsArticleMapper = wxMaterialNewsArticleMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxMaterialNewsArticleCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 	
 

@@ -103,4 +103,10 @@ public class WxCustomizeMenuServiceImpl implements IWxCustomizeMenuService, Init
 		this.wxCustomizeMenuMapper = wxCustomizeMenuMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxCustomizeMenuCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -61,48 +61,23 @@ border-right:1px solid #f7f3f0;
 		</div>	
 
 		<div class="main">
-			
- 			<div id="uploadContainer">
-				<p>请选择要上传的图片</p>	
- 				<input type="file" id="wallImagePic" name="wallImagePic">
- 				<style>
- 				input[type="file"]::-webkit-file-upload-button {position: absolute; left:80px;width: 90px;height: 31px;overflow: hidden;line-height: 99em;background:url(./images/upload.png) no-repeat 0 0;border: 0 none;z-index: 2;}
- 				</style>
- 			</div>
+			<form action="./saveWallImage" id="wallImageForm" method="post" name="wallImageForm">
+			<div id="publishContainer">
+				<div>
+					<img id="imgView" src="${thumbPicUrl}" width="100%">
+					<input type="hidden" id="picUrl" name="picUrl" value="${picUrl}">
+					<input type="hidden" id="thumbPicUrl" name="thumbPicUrl" value="${thumbPicUrl}">
+				</div>
+				<%String nickname = (String)request.getAttribute("nickname"); %>
+ 				<input type="text" name="nickname" value="<%=nickname==null?"":nickname%>" placeholder="请输入昵称">
+				<a href="javascript:void(0)" id="submitBtn" class="klh-button radius">发 布</a>	
+			</div>
+			</form>
 		</div>
 	</div>
 </body>
 
 <script>
-
-$("#wallImagePic").change(function(){
-
-    //创建FormData对象
-    var data = new FormData();
-    //为FormData对象添加数据 
-    data.append('imageFile', $('input[type=file]')[0].files[0]);  
-    $.ajax({
-        url:'<%=request.getContextPath()%>/klh/imageUpload',
-        type:'POST',
-        data:data,
-        cache: false,
-        contentType: false,    //不可缺
-        processData: false,    //不可缺
-        success:function(responseData){
-            if(responseData.result==1){
-            	var imageUrl = responseData.data.mediumImage.url;
-				//$("#uploadContainer").hide();
-            	//$('#imgView').attr("src", imageUrl);
-            	//$('#picUrl').val(imageUrl);
-            	//$('#thumbPicUrl').val(imageUrl);
-				//$("#publishContainer").show();
-				location.href="./wallPubImage?picUrl="+imageUrl+"&thumbPicUrl="+imageUrl;
-            }else{
-            	alert(responseData.message);
-            }
-        }
-    });
-});
 
 $("#submitBtn").click(function(){
 	$("#wallImageForm").submit();

@@ -94,5 +94,11 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(ItoSkuCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

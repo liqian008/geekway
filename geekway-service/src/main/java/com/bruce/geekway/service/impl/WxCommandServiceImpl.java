@@ -161,6 +161,12 @@ public class WxCommandServiceImpl implements IWxCommandService {
 		this.wxCommandMapper = wxCommandMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxCommandCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 
 }

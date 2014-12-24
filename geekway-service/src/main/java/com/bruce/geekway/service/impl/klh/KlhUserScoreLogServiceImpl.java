@@ -100,5 +100,11 @@ public class KlhUserScoreLogServiceImpl implements IKlhUserScoreLogService{
 		return klhUserScoreLogDao.hasBind(userOpenId);
 	}
 
+	@Override
+	public int countByCriteria(KlhUserScoreLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 }

@@ -98,4 +98,10 @@ public class WxMaterialNewsServiceImpl implements IWxMaterialNewsService, Initia
 		this.wxMaterialNewsMapper = wxMaterialNewsMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxMaterialNewsCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

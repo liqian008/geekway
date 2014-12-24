@@ -1,3 +1,4 @@
+<%@page import="com.bruce.geekway.constants.ConstIto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -296,6 +297,27 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 								</label>
 							</div>
 						</div>
+						
+						
+							
+						<%if(Short.valueOf(ConstIto.PAYTYPE_SELF).equals(productOrder.getPayType())){ %>
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">邮寄状态: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<label class="control-label">
+									<%if(!Short.valueOf(ConstIto.POSTSTATUS_POSTED).equals(productOrder.getPostStatus())){ %>
+									未发货 
+									<a href="./deliver?orderSn=<%=productOrder.getOrderSn()%>" id="deliver">
+									<span class="label label-warning">填写物流信息</span></a>
+									<%}else{%>
+										<span class="label label-success">已发货</span>
+										物流：${productOrder.deliverCompany}; 运单号：${productOrder.deliverNo}
+									<%} %>
+								</label>
+							</div>
+						</div>
+						<%}%>
+						
 						
 						<%-- <div class="form-group">
 							<label class="col-sm-2 control-label text-right">运单号: <span class="mandatory">*</span></label>

@@ -236,6 +236,12 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		this.wxBroadcastMapper = wxBroadcastMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxBroadcastCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 
 }

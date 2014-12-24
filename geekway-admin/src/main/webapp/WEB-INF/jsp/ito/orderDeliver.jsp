@@ -1,11 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.ItoProductOrder"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
+<%@page import="com.bruce.geekway.constants.ConstIto"%>
+
+<%@ include file="../inc/include_tag.jsp" %>
 
 
+<%
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+%>
+
+
+<%!String displayPayType(Short payType){
+	if(payType!=null&&1==payType){
+		return "支付宝支付";
+	}
+	return "APP支付";
+} %>
+
+
+<%!String displayPayStatus(Short payStatus){
+	if(payStatus!=null&&10==payStatus){
+		return "支付宝已下单";
+	}else if(payStatus!=null&&11==payStatus){
+		return "支付宝已支付";
+	}else if(payStatus!=null&&0==payStatus){
+		return "APP已下单";
+	}
+	return "支付状态错误";
+} %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,7 +97,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						订单管理
+						订单详情
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -83,7 +109,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">订单管理</li>
+					<li class="active">订单详情</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -91,88 +117,148 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
+				<h5>功能介绍</h5>
 				<p>
-					1、此页数据为支付宝订单列表<br/>
-					1、支付宝的发货管理务必要在<a href="http://www.alipay.com">支付宝网站</a>进行操作，否则无法完成支付宝的流程<br/>
+					1、订单详情页<br/>
 				</p>
 			</div>
 
+			<%
+			ItoProductOrder productOrder = (ItoProductOrder)request.getAttribute("productOrder");
+			%>
 
-			<div class="tabbable page-tabs">
-				<ul class="nav nav-tabs">
-					<li>
-						<a href="./orderListSelf">
-							<i class="icon-hammer"></i>APP支付订单管理
-						</a>
-					</li>
-					<li class="active">
-						<a href="javascript:void(0)">
-							<i class="icon-table2"></i>支付宝订单管理
-						</a>
-					</li>
-				</ul>
+			<form id="validate" action="<s:url value='./postDeliver'/>" method="post"  class="form-horizontal form-bordered">
 
-
-				<!-- Table view -->
+				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h5 class="panel-title">
-							<i class="icon-people"></i>订单管理
-						</h5>
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>查看订单信息
+						</h6>
 					</div>
-					<div class="datatable-media">
-						<table class="table table-bordered table-striped">
-							<thead>
-								<tr>
-									<th class="text-center">序号</th>
-									<th>商品</th>
-	                                <th>SKU</th>
-	                                <th>价格</th>
-	                                <th>姓名</th>
-	                                <th>地址</th>
-	                                <th>类型</th>
-	                                <th>状态</th>
-	                                <th class="team-links">操作</th>
-								</tr>
-							</thead>
-							<tbody>
-								<%
-	                           	List<ItoProductOrder> orderList = (List<ItoProductOrder>)request.getAttribute("orderList");
-	                           	if(orderList!=null&&orderList.size()>0){
-	                           		int i=0;
-	                           		for(ItoProductOrder order: orderList){
-	                           			i++;
-	                           	%>
-								<tr>
-			                        <td><%=i%></td>
-			                        <td title="SN：<%=order.getOrderSn()%>"><%=order.getTitle()%></td>
-			                        <td><%=order.getSkuName()%></td>
-			                        <td><%=order.getTotalPrice()%>元</td>
-			                        <td><%=order.getPostName()%></td>
-			                        <td><%=order.getPostAddress()%></td>
-			                        <td>支付宝</td>
-			                        <td>已下单</td>
-			                        <td class='text-center'>
-			                        	<div class="table-controls">
-			                        	
-											<a href="./orderDisplay?orderSn=<%=order.getOrderSn()%>"
-												class="btn btn-link btn-icon btn-xs tip" title=""
-												data-original-title="查 看"><i class="icon-envelop"></i></a> 
-										</div>
-									</td>
-	                               </tr>
-								<%}
-	                           	} %>
-							</tbody>
-						</table>
+					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">订单号: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.orderSn}
+									<input type="hidden" name="orderSn" id="orderSn" value="${productOrder.orderSn}"/>
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品ID: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.productId}
+								</label>
+								<input type="hidden" name="productId" id="productId" value="${productOrder.productId}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									${productOrder.title}
+								</label>
+							</div>
+						</div>
+						
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">支付类型: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<label class="control-label">
+									<%=displayPayType(productOrder.getPayType()) %>
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">收件人: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.postName}
+								</label>
+							</div>
+							<label class="col-sm-2 control-label text-right">收件人电话: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<label class="control-label">
+									${productOrder.postMobile}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">收件人邮编: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<label class="control-label">
+									${productOrder.postCode}
+								</label>
+							</div>
+							<label class="col-sm-2 control-label text-right">收件人Email: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									${productOrder.postEmail}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">收件人地址: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<label class="control-label">
+									${productOrder.postAddress}
+								</label>
+							</div>
+						</div>
+						<%//}%>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">下单时间: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label">
+									<%=sdf.format(productOrder.getCreateTime())%>
+								</label>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">物流公司: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="deliverCompany" id="deliverCompany" value="${productOrder.deliverCompany}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">物流单号: <span class="mandatory">*</span></label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="deliverNo" id="deliverNo" value="${productOrder.deliverNo}"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-actions text-left">
+							<%if(!Short.valueOf(ConstIto.POSTSTATUS_POSTED).equals(productOrder.getPostStatus())){ %>
+							
+							<input type="submit" value="确认无误，提交物流信息" class="btn btn-danger">
+							<%} %>
+						</div> 
 					</div>
+					
+					
+					
 				</div>
-				<!-- /table view -->
-			</div>
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -180,6 +266,6 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
 </body>
 </html>
-

@@ -77,5 +77,11 @@ public class KlhVoteOptionServiceImpl implements IKlhVoteOptionService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(KlhVoteOptionCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

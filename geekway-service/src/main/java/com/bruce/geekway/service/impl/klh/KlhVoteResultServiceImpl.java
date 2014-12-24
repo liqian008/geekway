@@ -156,6 +156,12 @@ public class KlhVoteResultServiceImpl implements IKlhVoteResultService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(KlhVoteResultCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 	

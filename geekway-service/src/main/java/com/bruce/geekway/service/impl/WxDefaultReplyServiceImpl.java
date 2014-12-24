@@ -74,4 +74,10 @@ public class WxDefaultReplyServiceImpl implements IWxDefaultReplyService {
 		this.wxDefaultReplyMapper = wxDefaultReplyMapper;
 	}
 
+	@Override
+	public int countByCriteria(WxDefaultReplyCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

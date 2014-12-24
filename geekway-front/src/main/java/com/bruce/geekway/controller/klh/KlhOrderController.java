@@ -70,19 +70,21 @@ public class KlhOrderController {
 		
 		//查询起始时间，结束时间
 		Date currentTime = new Date();
-		Date queryStartDate = currentTime;
+		Date inputDate = currentTime;
 		if(StringUtils.isBlank(queryStartDateStr)){
-			queryStartDate = new Date(currentTime.getTime()-DateUtil.TIME_UNIT_WEEK);
+			inputDate = new Date(currentTime.getTime());
 		}else{
-			queryStartDate = DateUtil.parse2Date(queryStartDateStr);
+			inputDate = DateUtil.parse2Date(queryStartDateStr);
 		}
+		Date queryStartDate = new Date(inputDate.getTime() - (DateUtil.TIME_UNIT_DAY*90));//起始时间为选定日期前的90天
 		
-		Date queryEndDate = null;
-		if(currentTime.getTime() - queryStartDate.getTime()<DateUtil.TIME_UNIT_MONTH){
-			queryEndDate = currentTime; 
-		}else{
-			queryEndDate = new Date(queryStartDate.getTime()+DateUtil.TIME_UNIT_MONTH);
-		}
+		
+		Date queryEndDate = inputDate;
+//		if(currentTime.getTime() - queryStartDate.getTime()<DateUtil.TIME_UNIT_MONTH){
+//			queryEndDate = currentTime; 
+//		}else{
+//			queryEndDate = new Date(queryStartDate.getTime()+DateUtil.TIME_UNIT_MONTH);
+//		}
 		
 		model.addAttribute("queryStartDateStr", DateUtil.date2YMD(queryStartDate));
 		model.addAttribute("queryEndDateStr", DateUtil.date2YMD(queryEndDate));

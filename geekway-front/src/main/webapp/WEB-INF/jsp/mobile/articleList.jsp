@@ -41,11 +41,13 @@
 					<p>
 						<%=article.getShortContent() %>
 					</p>
+					<!-- 
 					<div class="a-meta">
 						<a href="./blog"><i class="i-comments i-small"></i>6 评论</a> 
 						<a href="about.html"><i class="i-author i-small"></i>John Doe</a> 
 						<a href="./blog"><i class="i-calendar i-small"></i>31 Nov 2013</a>
 					</div>
+					 -->
 				</article> 
 				<%}
 				}%>

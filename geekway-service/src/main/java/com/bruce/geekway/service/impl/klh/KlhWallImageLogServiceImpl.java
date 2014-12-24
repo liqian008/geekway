@@ -90,6 +90,12 @@ public class KlhWallImageLogServiceImpl implements IKlhWallImageLogService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(KlhWallImageLogCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	
 

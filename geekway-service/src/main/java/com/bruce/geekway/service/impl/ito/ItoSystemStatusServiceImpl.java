@@ -74,5 +74,11 @@ public class ItoSystemStatusServiceImpl implements IItoSystemStatusService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public int countByCriteria(ItoSystemStatusCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

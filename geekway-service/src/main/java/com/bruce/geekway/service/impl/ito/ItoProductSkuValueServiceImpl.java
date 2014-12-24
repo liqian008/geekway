@@ -85,6 +85,12 @@ public class ItoProductSkuValueServiceImpl implements IItoProductSkuValueService
 		return null;
 	}
 
+	@Override
+	public int countByCriteria(ItoProductSkuValueCriteria criteria) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	
 	
 }
