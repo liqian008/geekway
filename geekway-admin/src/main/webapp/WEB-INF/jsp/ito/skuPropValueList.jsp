@@ -125,7 +125,7 @@
 						<thead>
 							<tr>
 								<th>序号</th>
-								<th>图片</th>
+								<!-- <th>图片</th> -->
                                 <th>属性</th>
                                 <th>名称</th>
                                 <th>描述</th>
@@ -143,11 +143,11 @@
                            	%>
 							<tr>
 		                        <td><%=i%></td>
-		                        <td class="text-center">
+		                       <%--  <td class="text-center">
 		                        	<a href="<%=itoSkuPropValue.getSkuPicUrl()%>" class="lightbox">
 		                        	<img src='<%=itoSkuPropValue.getSkuPicUrl()%>' class="img-media"/>
 		                        	</a> 
-		                        </td>
+		                        </td> --%>
 		                        <td><%=displaySkuType(itoSkuPropValue.getSkuPropId())%></td>
 		                        <td><%=itoSkuPropValue.getName()%></td>
 		                        <td><%=itoSkuPropValue.getDescription()%></td>
@@ -157,9 +157,9 @@
 										<a href="./skuPropValueEdit?skuPropValueId=<%=itoSkuPropValue.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编辑"><i class="icon-pencil3"></i></a>
-										<a href="./delSkuPropValue?skuPropValueId=<%=itoSkuPropValue.getId()%>"
+										<%-- <a href="./delSkuPropValue?skuPropValueId=<%=itoSkuPropValue.getId()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
+											data-original-title="删除"><i class="icon-remove3"></i></a> --%>
 									</div>
 								</td>
                                </tr>

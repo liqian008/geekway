@@ -126,6 +126,7 @@
 							</div>
 						</div>
 						
+						<%-- 
 						<%if(skuPropValue!=null&&skuPropValue.getSkuPropId()!=null&&skuPropValue.getSkuPropId()==2){%>
 						
 						<!-- 颜色选项时，需要区分材质，做两套图片 start-->
@@ -166,7 +167,7 @@
 							</div> 
 						</div>
 							
-						<%}%>
+						<%}%> --%>
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">名称: <span class="mandatory">*</span></label>

@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -198,32 +197,34 @@ public class ItoProductController {
 									String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId());
 									
 									//最后生成的SKUCode，格式为 —— 3:6;2:3;1:1;
-									skuPropertiesNameList.add(materialSkuCode + colorSkuCode + sizeSkuCode);
+									String skuPropertiesName = materialSkuCode + colorSkuCode + sizeSkuCode;
+									skuPropertiesNameList.add(skuPropertiesName);
+									
+									//根据商品的sku配置，生成sku数据，填写价格
+									ItoSku itoSku = new ItoSku();
+									itoSku.setProductId(productId);
+									//设置各sku的缩略图
+									itoSku.setSkuPicUrl(product.getProductPicUrl());
+									itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
+									
+									itoSku.setOriginPrice((double) 0);
+									itoSku.setPrice((double) 0);
+									itoSku.setNum(0);
+									
+									//为单品设置相应的id（材质，颜色，尺码）
+									itoSku.setMaterialId(materialSkuPropValue.getId());
+									itoSku.setColorId(colorSkuPropValue.getId());
+									itoSku.setSizeId(sizeSkuPropValue.getId());
+									
+									itoSku.setPropertiesName(skuPropertiesName);
+									
+									itoSku.setCreateTime(currentTime);
+									itoSku.setUpdateTime(currentTime);
+									//保存sku
+									itoSkuService.save(itoSku);
+									
 								}
 							}
-						}
-						
-						//根据商品的sku配置，生成sku数据，填写价格
-						//创建新sku数据
-						int i=0;
-						for(String skuPropertiesName: skuPropertiesNameList){
-							ItoSku itoSku = new ItoSku();
-							itoSku.setProductId(productId);
-							//设置各sku的缩略图
-							itoSku.setSkuPicUrl(product.getProductPicUrl());
-							itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
-							
-							itoSku.setOriginPrice((double) 0);
-							itoSku.setPrice((double) 0);
-							itoSku.setNum(0);
-							
-							itoSku.setPropertiesName(skuPropertiesName);
-							
-							itoSku.setCreateTime(currentTime);
-							itoSku.setUpdateTime(currentTime);
-							i++;
-							//保存sku
-							itoSkuService.save(itoSku);
 						}
 					}
 				}

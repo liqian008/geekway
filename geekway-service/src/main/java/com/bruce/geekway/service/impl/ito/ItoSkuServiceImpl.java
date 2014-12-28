@@ -74,7 +74,7 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 	@Override
 	public int updateByCriteria(ItoSku t, ItoSkuCriteria criteria) {
 		// TODO Auto-generated method stub
-		return 0;
+		return itoSkuDao.updateByCriteria(t, criteria);
 	}
 
 	@Override

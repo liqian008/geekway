@@ -31,7 +31,9 @@ import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
 
 /**
- * Handles requests for the application home page.
+ * ipad请求接口controller
+ * @author bruce
+ *
  */
 @Controller
 @RequestMapping(value={"api"})
@@ -140,18 +142,104 @@ public class ProductController {
 				}
 			}
 			
+			//为了级连显示，构造级连数据，数据结构为详见wiki描述https://github.com/yuanjiang1107/bruce/wiki
+			List<ItoSkuPropValue> materialList = new ArrayList<ItoSkuPropValue>();
+			if(skuList!=null&&skuList.size()>0){
+				//构造材质列表
+				for(ItoSku materialSku: skuList){
+					if(!containes(materialSku.getMaterialId(), materialList)){
+						ItoSkuPropValue materialPropValue = clonePropValueFromList(materialSku.getMaterialId(), skuPropValueList);
+						materialPropValue.setSkuPicUrl(materialSku.getMaterialPicUrl());//构造展示的图片
+						materialList.add(materialPropValue);
+						
+						//构造该材质下对应的颜色列表
+						List<ItoSkuPropValue> colorList = new ArrayList<ItoSkuPropValue>();
+						for(ItoSku colorSku: skuList){
+							if(!containes(colorSku.getColorId(), colorList)){
+								if(colorSku.getMaterialId()!=null&&colorSku.getMaterialId().equals(materialPropValue.getId())){
+									ItoSkuPropValue colorPropValue = clonePropValueFromList(colorSku.getColorId(), skuPropValueList);
+									colorPropValue.setSkuPicUrl(materialSku.getColorPicUrl());//构造展示的颜色图片
+									colorList.add(colorPropValue);
+									materialPropValue.setColorList(colorList);//将colorList加入材质对象
+									
+									//构造该颜色下对应的尺码列表
+									List<ItoSkuPropValue> sizeList = new ArrayList<ItoSkuPropValue>();
+									for(ItoSku sizeSku: skuList){
+										if(!containes(sizeSku.getSizeId(), sizeList)){
+											if(sizeSku.getMaterialId()!=null&&sizeSku.getMaterialId().equals(materialPropValue.getId())&&sizeSku.getColorId().equals(colorPropValue.getId())){
+												ItoSkuPropValue sizePropValue = clonePropValueFromList(sizeSku.getSizeId(), skuPropValueList);
+												sizePropValue.setSkuPicUrl(materialSku.getSizePicUrl());//构造展示的图片
+												sizeList.add(sizePropValue);
+												colorPropValue.setSizeList(sizeList);//将colorList加入材质对象
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 			
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("product", product);
 			dataMap.put("skuPropList", skuPropList);
+			dataMap.put("materialList", materialList);
+			
 //			dataMap.put("skuPropValues", skuPropValueList);
+			
+			
+			
 			
 			return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
 		}
 		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 	}
 	
-	
+	/**
+	 * 
+	 * @param skuPropValueId
+	 * @param skuPropValueList
+	 * @return
+	 */
+	private boolean containes(Integer skuPropValueId, List<ItoSkuPropValue> skuPropValueList) {
+		if(skuPropValueId!=null&&skuPropValueList!=null&&skuPropValueList.size()>0){
+			for(ItoSkuPropValue loop: skuPropValueList){
+				if(skuPropValueId.equals(loop.getId())){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 根据传入的skuPropValueId在list中定位&clone（不影响原ItoSkuPropValue的数据）
+	 * @param skuPropValueId
+	 * @param skuPropValueList
+	 * @return
+	 */
+	private ItoSkuPropValue clonePropValueFromList(Integer skuPropValueId,
+			List<ItoSkuPropValue> skuPropValueList) {
+		if(skuPropValueId!=null&&skuPropValueList!=null&&skuPropValueList.size()>0){
+			for(ItoSkuPropValue skuPropValue: skuPropValueList){
+				if(skuPropValueId.equals(skuPropValue.getId())){
+					
+					ItoSkuPropValue clonedSkuPropValue = new ItoSkuPropValue();
+					clonedSkuPropValue.setId(skuPropValue.getId());
+					clonedSkuPropValue.setName(skuPropValue.getName());
+					clonedSkuPropValue.setDescription(skuPropValue.getDescription());
+					clonedSkuPropValue.setSkuPropId(skuPropValue.getSkuPropId());
+					clonedSkuPropValue.setSkuPicUrl(skuPropValue.getSkuPicUrl());
+//					clonedSkuPropValue.setSkuThumbPicUrl(skuPropValue.getSkuThumbPicUrl());
+					
+					return clonedSkuPropValue;
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 获取sku属性列表
 	 * @param skuPropValueList

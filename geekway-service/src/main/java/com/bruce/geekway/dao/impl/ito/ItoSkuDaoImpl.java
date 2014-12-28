@@ -56,6 +56,13 @@ public class ItoSkuDaoImpl implements IItoSkuDao, InitializingBean {
 	}
     
 
+	@Override
+	public int updateByCriteria(ItoSku t, ItoSkuCriteria criteria) {
+		return itoSkuMapper.updateByExampleSelective(t, criteria);
+	}
+
+    
+
     
 //    @Override
 //	public ItoSku loadProductSku(int productId, int skuId) { 

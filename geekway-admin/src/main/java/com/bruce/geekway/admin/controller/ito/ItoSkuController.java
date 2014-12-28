@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bruce.geekway.model.ItoProduct;
 import com.bruce.geekway.model.ItoSku;
-import com.bruce.geekway.model.ItoSkuImage;
+import com.bruce.geekway.model.ItoSkuCriteria;
 import com.bruce.geekway.model.ItoSkuImage;
 import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.service.ito.IItoProductService;
@@ -149,13 +150,51 @@ public class ItoSkuController {
 		
 		int result = 0;
 		
-		Date currentTime = new Date();
-		itoSku.setUpdateTime(currentTime);
-		if(itoSku!=null&&itoSku.getId()!=null&&itoSku.getId()>0){
-			itoSku.setSkuThumbPicUrl(itoSku.getSkuPicUrl()); 			
-			result = itoSkuService.updateById(itoSku);
+		ItoSku dbSku = itoSkuService.loadById(itoSku.getId());
+			if(dbSku!=null){
+			
+			//step1: 获取materialUrl&更新
+			if(StringUtils.isNotBlank(itoSku.getMaterialPicUrl())){
+				//只将相同materialId的数据更新为materialUrl
+				ItoSkuCriteria criteria = new ItoSkuCriteria();
+				criteria.createCriteria().andProductIdEqualTo(dbSku.getProductId()).andMaterialIdEqualTo(dbSku.getMaterialId());
+				ItoSku updatedSkuInfo = new ItoSku();
+				updatedSkuInfo.setMaterialPicUrl(itoSku.getMaterialPicUrl());
+				itoSkuService.updateByCriteria(updatedSkuInfo, criteria);
+			}
+			
+			//step:2 获取colorUrl&更新
+			if(StringUtils.isNotBlank(itoSku.getColorPicUrl())){
+				//只将相同colorId的数据更新为colorUrl
+				ItoSkuCriteria criteria = new ItoSkuCriteria();
+				criteria.createCriteria().andProductIdEqualTo(dbSku.getProductId()).andMaterialIdEqualTo(dbSku.getMaterialId()).andColorIdEqualTo(dbSku.getColorId());
+				ItoSku updatedSkuInfo = new ItoSku();
+				updatedSkuInfo.setColorPicUrl(itoSku.getColorPicUrl());
+				itoSkuService.updateByCriteria(updatedSkuInfo, criteria);
+			}
+			
+			//step:3 获取sizeUrl&更新
+			if(StringUtils.isNotBlank(itoSku.getSizePicUrl())){
+				//理应当只将相同sizeId的数据更新为materialUrl，但实际上三个size的图片使用的是同一个，所以没必要单独更新（跟step2同样的策略即可）
+				ItoSkuCriteria criteria = new ItoSkuCriteria();
+				criteria.createCriteria().andProductIdEqualTo(dbSku.getProductId()).andMaterialIdEqualTo(dbSku.getMaterialId()).andColorIdEqualTo(dbSku.getColorId());
+				ItoSku updatedSkuInfo = new ItoSku();
+				updatedSkuInfo.setSizePicUrl(itoSku.getSizePicUrl());
+				itoSkuService.updateByCriteria(updatedSkuInfo, criteria);
+			}
+			
+			Date currentTime = new Date();
+			itoSku.setUpdateTime(currentTime);
+			if(itoSku!=null&&itoSku.getId()!=null&&itoSku.getId()>0){
+				itoSku.setSkuThumbPicUrl(itoSku.getSkuPicUrl());
+				//以下三项无需重新更新（上面step1~3流程中已经全面更新过了）
+				itoSku.setMaterialPicUrl(null);
+				itoSku.setColorPicUrl(null);
+				itoSku.setSizePicUrl(null);
+				
+				result = itoSkuService.updateById(itoSku);
+			}
 		}
-		
 		model.addAttribute("redirectUrl", "./productSkus?productId="+itoSku.getProductId());
 		return "forward:/home/operationRedirect";
 	}
