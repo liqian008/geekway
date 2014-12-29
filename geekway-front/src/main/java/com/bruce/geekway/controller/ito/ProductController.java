@@ -158,7 +158,7 @@ public class ProductController {
 							if(!containes(colorSku.getColorId(), colorList)){
 								if(colorSku.getMaterialId()!=null&&colorSku.getMaterialId().equals(materialPropValue.getId())){
 									ItoSkuPropValue colorPropValue = clonePropValueFromList(colorSku.getColorId(), skuPropValueList);
-									colorPropValue.setSkuPicUrl(materialSku.getColorPicUrl());//构造展示的颜色图片
+									colorPropValue.setSkuPicUrl(colorSku.getColorPicUrl());//构造展示的颜色图片
 									colorList.add(colorPropValue);
 									materialPropValue.setColorList(colorList);//将colorList加入材质对象
 									
@@ -168,7 +168,7 @@ public class ProductController {
 										if(!containes(sizeSku.getSizeId(), sizeList)){
 											if(sizeSku.getMaterialId()!=null&&sizeSku.getMaterialId().equals(materialPropValue.getId())&&sizeSku.getColorId().equals(colorPropValue.getId())){
 												ItoSkuPropValue sizePropValue = clonePropValueFromList(sizeSku.getSizeId(), skuPropValueList);
-												sizePropValue.setSkuPicUrl(materialSku.getSizePicUrl());//构造展示的图片
+												sizePropValue.setSkuPicUrl(sizeSku.getSizePicUrl());//构造展示的图片
 												sizeList.add(sizePropValue);
 												colorPropValue.setSizeList(sizeList);//将colorList加入材质对象
 											}
@@ -183,7 +183,7 @@ public class ProductController {
 			
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 			dataMap.put("product", product);
-			dataMap.put("skuPropList", skuPropList);
+//			dataMap.put("skuPropList", skuPropList);
 			dataMap.put("materialList", materialList);
 			
 //			dataMap.put("skuPropValues", skuPropValueList);
@@ -231,6 +231,7 @@ public class ProductController {
 					clonedSkuPropValue.setDescription(skuPropValue.getDescription());
 					clonedSkuPropValue.setSkuPropId(skuPropValue.getSkuPropId());
 					clonedSkuPropValue.setSkuPicUrl(skuPropValue.getSkuPicUrl());
+					clonedSkuPropValue.setSort(skuPropValue.getSort());
 //					clonedSkuPropValue.setSkuThumbPicUrl(skuPropValue.getSkuThumbPicUrl());
 					
 					return clonedSkuPropValue;
