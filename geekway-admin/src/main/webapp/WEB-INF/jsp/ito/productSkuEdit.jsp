@@ -130,27 +130,6 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU图片(订单页显示):<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
-									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
-								</a>
-								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
-								<input type="file" name="imageFile" id="cover-image-file" class="styled">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.name}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">材质显示图片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
@@ -187,6 +166,15 @@
 						</div>
 						
 						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-8">
+								<label class="control-label">
+									${productSku.name}
+								</label>
+							</div>
+						</div>
+						
+						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU KEY: <span class="mandatory">*</span></label>
 							<div class="col-sm-8">
 								<label class="control-label">
@@ -194,6 +182,43 @@
 								</label>
 							</div>
 						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU图片1(订单页显示):<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${productSku.skuPicUrl}" id="cover-image-link"  class="lightbox">
+									<img id="cover-image" src="${productSku.skuPicUrl}" width="200px" />
+								</a>
+								<input id="cover-image-url" type="hidden" name="skuPicUrl" value="${productSku.skuPicUrl}"/>
+								<input type="file" name="imageFile" id="cover-image-file" class="styled">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU图片2(订单页显示):<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${productSku.skuPic2Url}" id="sku-pic2-link"  class="lightbox">
+									<img id="sku-pic2" src="${productSku.skuPic2Url}" width="200px" />
+								</a>
+								<input id="sku-pic2-url" type="hidden" name="skuPic2Url" value="${productSku.skuPic2Url}"/>
+								<input type="file" name="imageFile" id="sku-pic2-file" class="styled">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">SKU图片3(订单页显示):<span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-4">
+								<a href="${productSku.skuPic3Url}" id="sku-pic3-link"  class="lightbox">
+									<img id="sku-pic3" src="${productSku.skuPic3Url}" width="200px" />
+								</a>
+								<input id="sku-pic3-url" type="hidden" name="skuPic3Url" value="${productSku.skuPic3Url}"/>
+								<input type="file" name="imageFile" id="sku-pic3-file" class="styled">
+							</div>
+						</div>
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">SKU基本信息: <span class="mandatory">*</span>
@@ -317,36 +342,11 @@
 	
 	<script type="text/javascript">
 	$(document).ready(function(){
-	    $("#cover-image-file").change(function(){
-	        //创建FormData对象
-	        var data = new FormData();
-	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
-	        $.ajax({
-	            url:'/geekway-admin/geekway/imageUpload',
-	            type:'POST',
-	            data:data,
-	            cache: false,
-	            contentType: false,    //不可缺
-	            processData: false,    //不可缺
-	            success:function(responseData){
-	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
-		                $('#cover-image').attr("src", imageUrl);
-		                $('#cover-image-link').attr("href", imageUrl);
-		                $('#cover-image-url').val(imageUrl);
-	                }else{
-	                	alert(responseData.message);
-	                }
-	            }
-	        });
-	    });
-	    
 	    $("#material-image-file").change(function(){
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[1].files[0]);  
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
 	        $.ajax({
 	            url:'/geekway-admin/geekway/imageUpload',
 	            type:'POST',
@@ -371,7 +371,7 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[2].files[0]);  
+	        data.append('imageFile', $('input[type=file]')[1].files[0]);  
 	        $.ajax({
 	            url:'/geekway-admin/geekway/imageUpload',
 	            type:'POST',
@@ -396,7 +396,7 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[3].files[0]);  
+	        data.append('imageFile', $('input[type=file]')[2].files[0]);  
 	        $.ajax({
 	            url:'/geekway-admin/geekway/imageUpload',
 	            type:'POST',
@@ -410,6 +410,84 @@
 		                $('#size-pic').attr("src", imageUrl);
 		                $('#size-pic-link').attr("href", imageUrl);
 		                $('#size-pic-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	    
+	    
+	  //第一张图片sku图片
+		$("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[3].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	    
+	    
+		$("#sku-pic2-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[4].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#sku-pic2').attr("src", imageUrl);
+		                $('#sku-pic2-link').attr("href", imageUrl);
+		                $('#sku-pic2-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+		
+		$("#sku-pic3-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[5].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#sku-pic3').attr("src", imageUrl);
+		                $('#sku-pic3-link').attr("href", imageUrl);
+		                $('#sku-pic3-url').val(imageUrl);
 	                }else{
 	                	alert(responseData.message);
 	                }

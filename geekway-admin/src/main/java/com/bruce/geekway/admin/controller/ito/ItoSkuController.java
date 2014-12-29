@@ -173,24 +173,23 @@ public class ItoSkuController {
 				itoSkuService.updateByCriteria(updatedSkuInfo, criteria);
 			}
 			
-			//step:3 获取sizeUrl&更新
-			if(StringUtils.isNotBlank(itoSku.getSizePicUrl())){
-				//理应当只将相同sizeId的数据更新为materialUrl，但实际上三个size的图片使用的是同一个，所以没必要单独更新（跟step2同样的策略即可）
-				ItoSkuCriteria criteria = new ItoSkuCriteria();
-				criteria.createCriteria().andProductIdEqualTo(dbSku.getProductId()).andMaterialIdEqualTo(dbSku.getMaterialId()).andColorIdEqualTo(dbSku.getColorId());
-				ItoSku updatedSkuInfo = new ItoSku();
-				updatedSkuInfo.setSizePicUrl(itoSku.getSizePicUrl());
-				itoSkuService.updateByCriteria(updatedSkuInfo, criteria);
-			}
+//			//step:3 获取sizeUrl&更新
+//			if(StringUtils.isNotBlank(itoSku.getSizePicUrl())){
+//				//理应当只将相同sizeId的数据更新为materialUrl，但实际上三个size的图片使用的是同一个，所以没必要单独更新（跟step2同样的策略即可）
+//				ItoSkuCriteria criteria = new ItoSkuCriteria();
+//				criteria.createCriteria().andProductIdEqualTo(dbSku.getProductId()).andMaterialIdEqualTo(dbSku.getMaterialId()).andColorIdEqualTo(dbSku.getColorId()).andSizeIdEqualTo(dbSku.getSizeId());
+//				ItoSku updatedSkuInfo = new ItoSku();
+//				updatedSkuInfo.setSizePicUrl(itoSku.getSizePicUrl());
+//				itoSkuService.updateByCriteria(updatedSkuInfo, criteria);
+//			}
 			
 			Date currentTime = new Date();
 			itoSku.setUpdateTime(currentTime);
 			if(itoSku!=null&&itoSku.getId()!=null&&itoSku.getId()>0){
 				itoSku.setSkuThumbPicUrl(itoSku.getSkuPicUrl());
-				//以下三项无需重新更新（上面step1~3流程中已经全面更新过了）
+				//材质和颜色两项无需重新更新（上面step1~2流程中已经全面更新过了）
 				itoSku.setMaterialPicUrl(null);
 				itoSku.setColorPicUrl(null);
-				itoSku.setSizePicUrl(null);
 				
 				result = itoSkuService.updateById(itoSku);
 			}

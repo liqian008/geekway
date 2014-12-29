@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.model.ItoProduct;
-import com.bruce.geekway.model.ItoProductBg;
 import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuImage;
 import com.bruce.geekway.model.ItoSkuProp;
@@ -72,15 +71,15 @@ public class ProductController {
 		if(productList==null){
 			productList = new ArrayList<ItoProduct>();
 		}
-		//额外构造一个ito封面的商品，主要为了给客户端使用
-		ItoProductBg productBg = itoProductBgService.loadById(1);
-		if(productBg!=null){
-			ItoProduct coverProduct = new ItoProduct();
-			coverProduct.setProductPicUrl(productBg.getCoverPicUrl());
-			coverProduct.setProductThumbPicUrl(productBg.getCoverThumbPicUrl());
-			coverProduct.setIsCover((short) 1);
-			productList.add(0, coverProduct);
-		}
+//		//额外构造一个ito封面的商品，主要为了给客户端使用
+//		ItoProductBg productBg = itoProductBgService.loadById(1);
+//		if(productBg!=null){
+//			ItoProduct coverProduct = new ItoProduct();
+//			coverProduct.setProductPicUrl(productBg.getCoverPicUrl());
+//			coverProduct.setProductThumbPicUrl(productBg.getCoverThumbPicUrl());
+//			coverProduct.setIsCover((short) 1);
+//			productList.add(0, coverProduct);
+//		}
 		//返回数据
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("productList", productList);
@@ -178,6 +177,13 @@ public class ProductController {
 							}
 						}
 					}
+				}
+				
+				//
+				for(ItoSku sku: skuList){
+					sku.setMaterialPicUrl(null);
+					sku.setColorPicUrl(null);
+					sku.setSizePicUrl(null);
 				}
 			}
 			
