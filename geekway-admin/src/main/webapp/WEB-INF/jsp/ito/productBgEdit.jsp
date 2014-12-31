@@ -96,7 +96,8 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、此处的图片，将在APP的页面中加以展示<br/>
+					1、此处的图片，将在APP中作为背景中加以展示<br/>
+					2、图片尺寸： 2048x1536比例<br/>
 				</p>
 			</div>
 			

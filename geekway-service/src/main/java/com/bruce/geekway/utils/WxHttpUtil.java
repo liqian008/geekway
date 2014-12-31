@@ -100,9 +100,12 @@ public class WxHttpUtil {
 		        pairs[i] = new NameValuePair(entry.getKey(), entry.getValue());
 		        i++;
 			}
-			postMethod.setQueryString(pairs);
+//			postMethod.setQueryString(pairs);
 		}
 		postMethod.getParams().setContentCharset("utf-8");
+		if(pairs!=null&&pairs.length>0){
+			postMethod.setRequestBody(pairs);
+		}
 		if(data!=null){
 			postMethod.setRequestEntity(new StringRequestEntity(data));
 		}

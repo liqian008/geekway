@@ -97,7 +97,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍</h5>
 				<p>
-					1、xxxxxxxxxx<br/>
+					1、商品SKU图片尺寸应为： 2048x1536比例。且无【确认按钮】，无【左右箭头】，左右下角无【导航】按钮<br/>
 				</p>
 			</div>
 

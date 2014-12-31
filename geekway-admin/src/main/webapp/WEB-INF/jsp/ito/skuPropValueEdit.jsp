@@ -97,7 +97,8 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、SKU属性图片尺寸应为1500 × 1536，透明背景，且大小应尽量控制在100K以内<br/>
+					暂无
+					<!-- 1、SKU属性图片尺寸应为1500 × 1536，透明背景，且大小应尽量控制在100K以内<br/> -->
 				</p>
 			</div>
 			
