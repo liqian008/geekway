@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
+import net.rubyeye.xmemcached.MemcachedClient;
+import net.rubyeye.xmemcached.exception.MemcachedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +38,10 @@ import com.bruce.geekway.service.product.IWxProductSkuService;
 import com.bruce.geekway.service.product.IWxProductTagService;
 import com.bruce.geekway.service.product.IWxProductVoucherService;
 import com.bruce.geekway.service.product.IWxSkuPropValueService;
-import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ShopLinkUtil;
 import com.bruce.geekway.utils.ShopLinkUtil.SlideImage;
-import com.bruce.geekway.utils.UploadUtil;
 import com.bruce.geekway.utils.WxShareUtil;
 
 /**
@@ -64,9 +65,7 @@ public class WxProductController {
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
 	@Autowired
-	private IUploadService uploadQiniuService; 
-	@Autowired
-	private IUploadService uploadLocalService;
+	private MemcachedClient memcachedClient;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
 
@@ -75,10 +74,18 @@ public class WxProductController {
 	 * @param model
 	 * @param request
 	 * @return
+	 * @throws MemcachedException 
+	 * @throws InterruptedException 
+	 * @throws TimeoutException 
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = {"/","/index"})
-	public String index(Model model, HttpServletRequest request) {
+	public String index(Model model, HttpServletRequest request) throws TimeoutException, InterruptedException, MemcachedException {
+		boolean memSet = memcachedClient.set("memkey", 60, "test");
+		System.out.println("mem set result: "+memSet);
+		String xxx = memcachedClient.get("memkey");
+		System.out.println("cache get result: "+xxx);
+		
 		try {
 //			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
 //			byte[] bytesData = UploadUtil.file2bytes(file);
@@ -368,6 +375,8 @@ public class WxProductController {
 //		}
 //		return null;
 //	}
+	
+	
 	
 	
 }
