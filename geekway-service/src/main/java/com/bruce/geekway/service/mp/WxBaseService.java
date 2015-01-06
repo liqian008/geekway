@@ -1,7 +1,22 @@
 package com.bruce.geekway.service.mp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class WxBaseService {
+	
+	
+	public static Map<String, String> buildAccessTokenParams(String accessToken) {
+		Map<String, String> result = buildParams();
+		result.put("access_token", accessToken);
+		return result;
+	}
+	
+	public static Map<String, String> buildParams() {
+		Map<String, String> result = new HashMap<String, String>();
+		return result;
+	}
 	
 //	public static final String APPID =  ConfigUtil.getString("weixinmp_appid");
 //	

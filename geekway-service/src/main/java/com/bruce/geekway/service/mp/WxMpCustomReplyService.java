@@ -15,7 +15,7 @@ import com.bruce.geekway.model.wx.message.TextMessage;
 import com.bruce.geekway.model.wx.message.VoiceMessage;
 import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.IWxHistoryMessageService;
-import com.bruce.geekway.utils.WxHttpUtil;
+import com.bruce.geekway.utils.HttpUtil;
 
 /**
  * 客服消息service，主要用于回复客服消息(mp包下的service均为对weixin api的封装)
@@ -82,7 +82,7 @@ public class WxMpCustomReplyService extends WxBaseService {
 			//TODO 48小时间隔检查
 			
 			String accessToken = wxAccessTokenService.getCachedAccessToken();
-			Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+			Map<String, String> params = buildAccessTokenParams(accessToken);
 			String customMessageStr = JsonUtil.gson.toJson(customMessage);
 			
 //			if(customMessage instanceof TextMessage){//文本消息
@@ -92,7 +92,7 @@ public class WxMpCustomReplyService extends WxBaseService {
 //			}
 			
 			// 回复客服消息
-			String sendResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_REPLY_MESSAGE_API, params, customMessageStr);
+			String sendResultStr = HttpUtil.postRequest(ConstWeixin.WX_REPLY_MESSAGE_API, params, customMessageStr);
 			
 			WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
 			if (wxSendResult != null &&wxSendResult.getErrcode() == 0) {//消息回复成功

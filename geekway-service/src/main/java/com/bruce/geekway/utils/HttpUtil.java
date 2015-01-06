@@ -1,14 +1,10 @@
 package com.bruce.geekway.utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -20,8 +16,6 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.lang3.CharSet;
-import org.omg.CORBA.FREE_MEM;
 
 //import org.apache.http.Consts;
 //import org.apache.http.HttpEntity;
@@ -35,7 +29,7 @@ import org.omg.CORBA.FREE_MEM;
 //import org.apache.http.util.EntityUtils;
 
 
-public class WxHttpUtil {
+public class HttpUtil {
 	
 	private static final int REQUEST_TIMEOUT = 6*1000;//设置请求超时时间  
 	private static final int SO_TIMEOUT = 6*1000;  //设置等待数据超时时间 
@@ -298,21 +292,11 @@ public class WxHttpUtil {
 //	}
 
 	
-	public static final long currentTimeInSec() {
-		return System.currentTimeMillis() / 1000;
-	}
+//	public static final long currentTimeInSec() {
+//		return System.currentTimeMillis() / 1000;
+//	}
 
 	
-	public static Map<String, String> buildAccessTokenParams(String accessToken) {
-		Map<String, String> result = buildParams();
-		result.put("access_token", accessToken);
-		return result;
-	}
-
-	public static Map<String, String> buildParams() {
-		Map<String, String> result = new HashMap<String, String>();
-		return result;
-	}
 	
 	private static void setConnectionParam(HttpClient httpClient) {
 		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(REQUEST_TIMEOUT);

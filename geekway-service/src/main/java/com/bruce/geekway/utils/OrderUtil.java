@@ -82,7 +82,7 @@ public class OrderUtil {
 	 * @return
 	 */
 	private static String buildMonthStr(int month){
-		if(month<1||month>12){
+		if(month<0||month>11){
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}
 		return String.valueOf(MONTH_STR.charAt(month));

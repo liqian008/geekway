@@ -12,7 +12,7 @@ import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
 import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.mp.WxBaseService;
-import com.bruce.geekway.utils.WxHttpUtil;
+import com.bruce.geekway.utils.HttpUtil;
 
 /**
  * 微信群发service(mp包下的service均为对weixin api的封装)
@@ -34,12 +34,12 @@ public class WxMpPayService extends WxBaseService {
 	 */
 	public WxJsonResult queryOrder(WxOrderQueryRequest orderRequest) {
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		Map<String, String> params = buildAccessTokenParams(accessToken);
 		
 		String queryJson = JsonUtil.gson.toJson(orderRequest);
 		
 		//提交查询请求至微信
-		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_QUERY_ORDER_API, params, queryJson);
+		String deliverResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_QUERY_ORDER_API, params, queryJson);
 		
 		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
 		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//订单查询成功
@@ -55,12 +55,12 @@ public class WxMpPayService extends WxBaseService {
 	 */
 	public WxJsonResult deliverNotify(WxDeliverInfo deliverInfo) {
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		Map<String, String> params = buildAccessTokenParams(accessToken);
 		
 		String postInfoStr = JsonUtil.gson.toJson(deliverInfo);
 		
 		//提交发货请求至微信
-		String deliverResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
+		String deliverResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
 		
 		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
 		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//发货操作成功
@@ -76,12 +76,12 @@ public class WxMpPayService extends WxBaseService {
 	public WxJsonResult dealComplaint(String openId, String feedbackId) {
 		
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		Map<String, String> params = buildAccessTokenParams(accessToken);
 		params.put("openid", openId);
 		params.put("feedbackid", feedbackId);
 		
 		//发送至微信
-		String complaintResultStr = WxHttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
+		String complaintResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
 		WxJsonResult wxpayComplaintResult = JsonUtil.gson.fromJson(complaintResultStr, WxJsonResult.class);
 		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()==0){//维权处理成功
 			return wxpayComplaintResult;

@@ -9,7 +9,7 @@ import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
-import com.bruce.geekway.utils.WxHttpUtil;
+import com.bruce.geekway.utils.HttpUtil;
 
 /**
  * OauthService (mp包下的service均为对weixin api的封装)
@@ -17,7 +17,7 @@ import com.bruce.geekway.utils.WxHttpUtil;
  *
  */
 @Service
-public class WxMpOauthService {
+public class WxMpOauthService extends WxBaseService {
 	
 	/**
 	 * 根据code换取oauthAccessToken
@@ -26,13 +26,13 @@ public class WxMpOauthService {
 	 */
 	public WxOauthTokenResult getOauthAccessToken(String code) {
 		
-		Map<String, String> params = WxHttpUtil.buildParams();
+		Map<String, String> params = buildParams();
 		params.put("appid", ConstWeixin.WX_APP_ID);
 		params.put("secret",  ConstWeixin.WX_APP_SECRET_KEY);
 		params.put("code", code);
 		params.put("grant_type", "authorization_code");
 		
-		String oauthResult = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_ACCESS_TOKEN_API, params);
+		String oauthResult = HttpUtil.getRequest(ConstWeixin.WX_OAUTH_ACCESS_TOKEN_API, params);
 		
 		WxOauthTokenResult wxOauthTokenResult = JsonUtil.gson.fromJson(oauthResult, WxOauthTokenResult.class);
 		if(wxOauthTokenResult!=null && wxOauthTokenResult.getErrcode()==0){//成功
@@ -48,12 +48,11 @@ public class WxMpOauthService {
 	 * @return
 	 */
 	public WxUserInfoResult getOAuthUserinfo(String oauthAccessToken, String openid) {
-		Map<String, String> params = WxHttpUtil.buildParams();
-		params.put("access_token", oauthAccessToken);
+		Map<String, String> params =buildAccessTokenParams(oauthAccessToken);
 		params.put("openid", openid);
 		params.put("lang", "zh_CN");
 		
-		String userinfoResultStr = WxHttpUtil.getRequest(ConstWeixin.WX_OAUTH_USER_INFO_API, params); 
+		String userinfoResultStr = HttpUtil.getRequest(ConstWeixin.WX_OAUTH_USER_INFO_API, params); 
 		//过滤emoji字符
 		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResultStr);
 		

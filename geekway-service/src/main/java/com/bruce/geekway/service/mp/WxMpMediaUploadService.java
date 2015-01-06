@@ -11,7 +11,7 @@ import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.wx.WxMediaTypeEnum;
 import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
-import com.bruce.geekway.utils.WxHttpUtil;
+import com.bruce.geekway.utils.HttpUtil;
 
 /**
  * 微信多媒体上传service(mp包下的service均为对weixin api的封装)
@@ -77,10 +77,10 @@ public class WxMpMediaUploadService extends WxBaseService {
 	private WxMediaUploadResult uploadMedia(WxMediaTypeEnum typeEnum, String contentType, File file) {
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
 		
-		Map<String, String> params = WxHttpUtil.buildAccessTokenParams(accessToken);
+		Map<String, String> params = buildAccessTokenParams(accessToken);
 		params.put("type", typeEnum.toString());
 		
-		String uploadResultStr = WxHttpUtil.postMultipartRequest(ConstWeixin.WX_MEDIA_UPLOAD_API, params, file, contentType);
+		String uploadResultStr = HttpUtil.postMultipartRequest(ConstWeixin.WX_MEDIA_UPLOAD_API, params, file, contentType);
 		if(uploadResultStr!=null){
 			return JsonUtil.gson.fromJson(uploadResultStr, WxMediaUploadResult.class);
 		}else{
