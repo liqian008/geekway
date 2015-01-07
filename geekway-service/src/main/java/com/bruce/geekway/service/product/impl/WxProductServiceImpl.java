@@ -3,7 +3,10 @@ package com.bruce.geekway.service.product.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -21,6 +24,8 @@ public class WxProductServiceImpl implements IWxProductService {
 	private WxProductMapper wxProductMapper;
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
+	
+	private static final Logger logger = LoggerFactory.getLogger(WxProductSkuServiceImpl.class);
 	
 
 	@Override
@@ -159,8 +164,21 @@ public class WxProductServiceImpl implements IWxProductService {
 	public List<WxProduct> fallLoadProductsByTag(int tagId, int tailId, int limit) {
 		return wxProductMapper.fallLoadProductsByTag(tagId, tailId, limit);
 	}
-
 	
+	@Override
+	@Cacheable(value="storageCache", key="'tagId-'+#tagId+'-tailId-'+#tailId+'-limit-'+#limit")
+	public List<WxProduct> fallLoadCachedProductsByTag(int tagId, int tailId, int limit) {
+		return fallLoadProductsByTag(tagId, tailId, limit);
+	}
+	
+	
+	@Override
+	@Cacheable(value="storageCache", key="'product-'+#productId")
+	public WxProduct loadCachedById(Integer id) {
+		logger.debug("load cache loadCachedById");
+		return loadById(id);
+	}
+
 	
 //	@Override
 //	public List<WxProduct> queryProductsByTagId(int tagId, int limitOffset, int limitRows){

@@ -81,7 +81,7 @@ public class WxMyController{
 		
 		//用户有效
 		if(!StringUtils.isBlank(userOpenId)){
-			productOrderList = wxProductOrderService.fallLoadUserOrderList(userOpenId, tailId, limit+1);
+			productOrderList = wxProductOrderService.fallLoadCachedUserOrderList(userOpenId, tailId, limit+1);
 		}
 		
 		long nextTailId = 0;

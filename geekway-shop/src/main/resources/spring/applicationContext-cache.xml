@@ -15,24 +15,68 @@
 	<context:property-placeholder location="classpath:conf/memcache.properties"
 		ignore-unresolvable="true" />
 
-	<bean id="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder">
-		<constructor-arg>
-			<list>
-				<bean class="java.net.InetSocketAddress">
-					<constructor-arg value="${memcache.ip}" />
-					<constructor-arg value="${memcache.port}" />
+
+	<!-- simple cache config <bean id="memcachedClientBuilder" class="net.rubyeye.xmemcached.XMemcachedClientBuilder"> 
+		<constructor-arg> <list> <bean class="java.net.InetSocketAddress"> <constructor-arg 
+		value="${memcache.ip}" /> <constructor-arg value="${memcache.port}" /> </bean> 
+		</list> </constructor-arg> <property name="connectionPoolSize" value="${memcache.pool.size}" 
+		/> <property name="commandFactory"> <bean class="net.rubyeye.xmemcached.command.BinaryCommandFactory" 
+		/> </property> <property name="transcoder"> <bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" 
+		/> </property> </bean> <bean id="memcachedClient" factory-bean="memcachedClientBuilder" 
+		factory-method="build" destroy-method="shutdown" /> -->
+
+	<cache:annotation-driven />
+	<bean name="cacheManager" class="com.google.code.ssm.spring.ExtendedSSMCacheManager">
+		<property name="caches">
+			<set>
+				<bean class="com.google.code.ssm.spring.SSMCache">
+					<constructor-arg name="cache" index="0" ref="storageCache" />
+					<constructor-arg name="expiration" index="1"
+						value="${memcached.cacheTimeout}" />
+					<!-- @CacheEvict(..., "allEntries" = true) won't work because allowClear 
+						is false, so we won't flush accidentally all entries from memcached instance -->
+					<constructor-arg name="allowClear" index="2" value="false" />
 				</bean>
-			</list>
-		</constructor-arg>
-		<property name="connectionPoolSize" value="${memcache.pool.size}" />
-		<property name="commandFactory">
-			<bean class="net.rubyeye.xmemcached.command.BinaryCommandFactory" />
-		</property>
-		<property name="transcoder">
-			<bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder" />
+			</set>
 		</property>
 	</bean>
 
-	<bean id="memcachedClient" factory-bean="memcachedClientBuilder"
-		factory-method="build" destroy-method="shutdown" />
+	<bean name="cacheAddress" class="java.net.InetSocketAddress">
+	  <constructor-arg index="0" value="${memcached.server}" />
+	  <constructor-arg index="1" value="${memcached.port}" />
+	</bean>
+
+	<bean name="authInfo" class="net.rubyeye.xmemcached.auth.AuthInfo"
+		factory-method="plain">
+		<constructor-arg index="0" value="${memcached.username}" />
+		<constructor-arg index="1" value="${memcached.password}" />
+	</bean>
+
+	<bean name="storageCache" class="com.google.code.ssm.CacheFactory">
+		<property name="cacheName" value="storageCache" />
+		<property name="cacheClientFactory">
+			<bean
+				class="com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl" />
+		</property>
+		<property name="addressProvider">
+			<bean class="com.google.code.ssm.config.DefaultAddressProvider">
+				<property name="address" value="${memcached.servers}"/>
+			</bean>
+		</property>
+		<property name="configuration">
+			<bean
+				class="com.google.code.ssm.providers.xmemcached.XMemcachedConfiguration">
+				<property name="consistentHashing" value="true" />
+				<property name="useBinaryProtocol" value="true" />
+				<property name="connectionPoolSize" value="${memcached.pool}" />
+				<!-- 
+				<property name="authInfoMap">
+					<map>
+						<entry key-ref="cacheAddress" value-ref="authInfo" />
+					</map>
+				</property>
+				 -->
+			</bean>
+		</property>
+	</bean>
 </beans>

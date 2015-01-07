@@ -2,7 +2,10 @@ package com.bruce.geekway.service.product.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bruce.geekway.dao.mapper.WxProductSkuMapper;
@@ -15,6 +18,9 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	
 	@Autowired
 	private WxProductSkuMapper wxProductSkuMapper;
+	
+	private static final Logger logger = LoggerFactory.getLogger(WxProductSkuServiceImpl.class);
+	
 	
 	@Override
 	public int save(WxProductSku t) {
@@ -70,11 +76,19 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	}
 	
 	@Override
-	public List<WxProductSku> queryAllByProductId(int productId) {
+	public List<WxProductSku> querySkuListByProductId(int productId) {
 		WxProductSkuCriteria criteria = new WxProductSkuCriteria();
 		criteria.createCriteria().andProductIdEqualTo(productId);
 		return wxProductSkuMapper.selectByExample(criteria);
 	}
+	
+	@Override
+	@Cacheable(value="storageCache", key="'product-'+#productId+'-skus'")
+	public List<WxProductSku> queryCachedSkuListByProductId(int productId) {
+		logger.debug("load cache queryCachedSkuListByProductId");
+		return querySkuListByProductId(productId);
+	}
+	
 	
 	@Override
 	public WxProductSku loadProductSku(int productId, int skuId) {
@@ -86,6 +100,14 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	}
 	
 	@Override
+	@Cacheable(value="storageCache", key="'product-sku-'+#skuId")
+	public WxProductSku loadCachedProductSku(int productId, int skuId) {
+		logger.debug("load cache loadCachedProductSku");
+		return loadProductSku(productId, skuId);
+	}
+
+	
+	@Override
 	public int reduceStock(long productSkuId, int amount) {
 		return wxProductSkuMapper.reduceStock(productSkuId, amount);
 	}
@@ -95,6 +117,18 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	public List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit) {
 		return wxProductSkuMapper.fallLoadCategoryProductSkuList(categoryId, productTailId, limit);
 	}
+	
+	/**
+	 * 使用缓存的组查询productSku
+	 * @return
+	 */
+	@Override
+	@Cacheable(value="storageCache", key="'category-'+#categoryId+'-tailId-'+#productTailId+'-limit-'+#limit+")
+	public List<WxProductSku> fallLoadCachedCategoryProductSkuList(int categoryId, int productTailId, int limit) {
+		logger.debug("缓存方式查询分类productSku列表");
+		return fallLoadCategoryProductSkuList(categoryId, productTailId, limit);
+	}
+	
 
 	public WxProductSkuMapper getWxProductSkuMapper() {
 		return wxProductSkuMapper;
@@ -104,6 +138,7 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 		this.wxProductSkuMapper = wxProductSkuMapper;
 	}
 
+	
 	
 	
 }

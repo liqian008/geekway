@@ -9,6 +9,10 @@ import com.bruce.geekway.model.WxProductCriteria;
 
 public interface IWxProductService extends IFoundationPagingService<WxProduct, Integer, WxProductCriteria>{
 
+	
+	public WxProduct loadCachedById(Integer id);
+	
+	
 	/**
 	 * 获取正在销售的产品系列
 	 * @return
@@ -31,4 +35,7 @@ public interface IWxProductService extends IFoundationPagingService<WxProduct, I
 
 	//瀑布流方式加载tag产品
 	public List<WxProduct> fallLoadProductsByTag(int tagId, int tailId, int limit);
+	
+	//瀑布流方式加载缓存中的tag产品
+	public List<WxProduct> fallLoadCachedProductsByTag(int tagId, int tailId, int limit); 
 }

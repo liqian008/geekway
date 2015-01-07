@@ -324,7 +324,7 @@ public class WxProductController {
 		model.addAttribute("product", wxProduct);
 		
 		//获取产品对应的sku列表
-		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
+		List<WxProductSku> productSkuList = wxProductSkuService.querySkuListByProductId(productId);
 		if(productSkuList!=null&&productSkuList.size()>0){
 			//获取propValue的map，供构造skuName
 			HashMap<Integer, WxSkuPropValue> propValueMap = wxSkuPropValueService.queryMap();

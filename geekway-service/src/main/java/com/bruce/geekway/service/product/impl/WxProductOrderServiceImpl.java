@@ -3,7 +3,10 @@ package com.bruce.geekway.service.product.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -37,6 +40,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	@Autowired
 	private IWxDeliveryTemplateService wxDeliveryTemplateService;
 	
+	private static final Logger logger = LoggerFactory.getLogger(WxProductOrderServiceImpl.class);
 	
 	@Override
 	public int save(WxProductOrder t) {
@@ -130,6 +134,14 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		criteria.setLimitRows(limit);
 		criteria.setOrderByClause(" id desc");
 		return queryByCriteria(criteria);
+	}
+	
+	
+	@Override
+	@Cacheable(value="storageCache", key="'userOpenId-'+#userOpenId+'-tailId-'+#orderTailId+'-limit-'+#limit")
+	public List<WxProductOrder> fallLoadCachedUserOrderList(String userOpenId, long orderTailId, int limit) {
+		logger.debug("缓存方式查询我的订单列表");
+		return fallLoadUserOrderList(userOpenId, orderTailId, limit);
 	}
 	
 	@Override

@@ -120,7 +120,7 @@ public class WxSkuPropValueServiceImpl implements IWxSkuPropValueService{
 
 	@Override
 	public List<Integer> querySkuPropValueIdListByProductId(int productId) {
-		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
+		List<WxProductSku> productSkuList = wxProductSkuService.querySkuListByProductId(productId);
 		if(productSkuList!=null&&productSkuList.size()>0){
 			Set<Integer> valueIdSet = new TreeSet<Integer>();
 			for(WxProductSku productSku: productSkuList){

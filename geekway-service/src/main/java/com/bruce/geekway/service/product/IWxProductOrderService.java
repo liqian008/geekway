@@ -34,6 +34,12 @@ public interface IWxProductOrderService extends IFoundationPagingService<WxProdu
 	 */
 	public List<WxProductOrder> fallLoadUserOrderList(String userOpenId, long orderTailId, int limit);
 	
+	/**
+	 * 使用缓存查询我的订单列表
+	 * @return
+	 */
+	public List<WxProductOrder> fallLoadCachedUserOrderList(String userOpenId, long orderTailId, int limit);
+	
 	
 	/**
 	 * 创建订单，等待用户支付

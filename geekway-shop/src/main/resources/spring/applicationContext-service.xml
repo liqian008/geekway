@@ -90,4 +90,7 @@
 	init-method="init">
 	</bean>
 	
+	<bean id="cacheTestService" class="com.bruce.geekway.service.product.CacheTestService">
+	</bean>
+	
 </beans>

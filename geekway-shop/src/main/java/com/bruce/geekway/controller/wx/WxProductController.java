@@ -10,7 +10,6 @@ import java.util.concurrent.TimeoutException;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.rubyeye.xmemcached.MemcachedClient;
 import net.rubyeye.xmemcached.exception.MemcachedException;
 
 import org.slf4j.Logger;
@@ -32,6 +31,7 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.service.product.CacheTestService;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -64,11 +64,25 @@ public class WxProductController {
 	private IWxProductVoucherService wxProductVoucherService;
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
+//	@Autowired
+//	private MemcachedClient memcachedClient;
 	@Autowired
-	private MemcachedClient memcachedClient;
+	private CacheTestService cacheTestService;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
-
+	
+	
+//	@RequestMapping(value = {"cacheTest.json"})
+//	public ModelAndView cacheTest(Model model, HttpServletRequest request){
+//		System.out.println(cacheTestService.cacheTest());
+////		System.out.println(cacheTestService.secondCache());
+//		
+//		return ResponseBuilderUtil.SUBMIT_SUCCESS_VIEW;
+//	}
+	
+	
+	
 	/**
 	 * 首页
 	 * @param model
@@ -81,10 +95,10 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) throws TimeoutException, InterruptedException, MemcachedException {
-		boolean memSet = memcachedClient.set("memkey", 60, "test");
-		System.out.println("mem set result: "+memSet);
-		String xxx = memcachedClient.get("memkey");
-		System.out.println("cache get result: "+xxx);
+//		boolean memSet = memcachedClient.set("memkey", 60, "test");
+//		System.out.println("mem set result: "+memSet);
+//		String xxx = memcachedClient.get("memkey");
+//		System.out.println("cache get result: "+xxx);
 		
 		try {
 //			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
@@ -260,13 +274,13 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = "/product/{productId}/{productSkuId}")
 	public String product(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
-		WxProduct product = wxProductService.loadById(productId);
+		WxProduct product = wxProductService.loadCachedById(productId);
 		model.addAttribute("product", product);
 		
 		WxProductSku currentProductSku = null;
 		
 		//加载productSku，用于构造json的map，使得前端切换时能取到相应的数据
-		List<WxProductSku> productSkuList = wxProductSkuService.queryAllByProductId(productId);
+		List<WxProductSku> productSkuList = wxProductSkuService.queryCachedSkuListByProductId(productId);
 		if(productSkuList!=null&&productSkuList.size()>0){ 
 			SortedMap<String, String> productSkuMap = new TreeMap<String, String>();
 			for(WxProductSku productSku: productSkuList){
@@ -286,14 +300,13 @@ public class WxProductController {
 
 			//解析当前sku商品对应的属性值，以便在前端高亮显示
 			if(currentProductSku!=null){
+				model.addAttribute("currentProductSku", currentProductSku);
 				
 				//分享对象
 				model.addAttribute("wxSharedInfo", WxShareUtil.wxShare(product.getWxShareTitle(), 
 												product.getWxShareContent(), 
 												product.getWxShareIconUrl(), 
 												ShopLinkUtil.getProductLink4Mobile(productId)));
-				
-				model.addAttribute("currentProductSku", currentProductSku);
 				
 				List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(currentProductSku);
 				model.addAttribute("slideImageList", slideImageList);
