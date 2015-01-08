@@ -11,4 +11,7 @@ import com.bruce.geekway.model.WxProductTagCriteria;
  */
 public interface IWxProductTagService extends IFoundationPagingService<WxProductTag, Integer, WxProductTagCriteria>{
 	
+	/*加载缓存中的tag*/
+	public WxProductTag loadCachedById(Integer id);
+	
 }

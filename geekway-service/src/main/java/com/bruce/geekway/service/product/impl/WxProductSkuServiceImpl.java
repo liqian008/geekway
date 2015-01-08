@@ -85,7 +85,7 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	@Override
 	@Cacheable(value="storageCache", key="'product-'+#productId+'-skus'")
 	public List<WxProductSku> queryCachedSkuListByProductId(int productId) {
-		logger.debug("load cache queryCachedSkuListByProductId");
+		logger.debug("load product "+productId+" skus from db");
 		return querySkuListByProductId(productId);
 	}
 	
@@ -102,7 +102,7 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	@Override
 	@Cacheable(value="storageCache", key="'product-sku-'+#skuId")
 	public WxProductSku loadCachedProductSku(int productId, int skuId) {
-		logger.debug("load cache loadCachedProductSku");
+		logger.debug("load productSku from db. [skuId:"+skuId+"]");
 		return loadProductSku(productId, skuId);
 	}
 
@@ -113,21 +113,21 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	}
 	
 	
-	@Override
-	public List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit) {
-		return wxProductSkuMapper.fallLoadCategoryProductSkuList(categoryId, productTailId, limit);
-	}
+//	@Override
+//	public List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit) {
+//		return wxProductSkuMapper.fallLoadCategoryProductSkuList(categoryId, productTailId, limit);
+//	}
 	
-	/**
-	 * 使用缓存的组查询productSku
-	 * @return
-	 */
-	@Override
-	@Cacheable(value="storageCache", key="'category-'+#categoryId+'-tailId-'+#productTailId+'-limit-'+#limit+")
-	public List<WxProductSku> fallLoadCachedCategoryProductSkuList(int categoryId, int productTailId, int limit) {
-		logger.debug("缓存方式查询分类productSku列表");
-		return fallLoadCategoryProductSkuList(categoryId, productTailId, limit);
-	}
+//	/**
+//	 * 使用缓存的组查询productSku
+//	 * @return
+//	 */
+//	@Override
+//	@Cacheable(value="storageCache", key="'category-'+#categoryId+'-tailId-'+#productTailId+'-limit-'+#limit+")
+//	public List<WxProductSku> fallLoadCachedCategoryProductSkuList(int categoryId, int productTailId, int limit) {
+//		logger.debug("fallload CategoryProductSkuList from db. [categoryId:"+categoryId+", productTailId:"+productTailId+", limit:"+limit+"]");
+//		return fallLoadCategoryProductSkuList(categoryId, productTailId, limit);
+//	}
 	
 
 	public WxProductSkuMapper getWxProductSkuMapper() {
@@ -137,8 +137,6 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	public void setWxProductSkuMapper(WxProductSkuMapper wxProductSkuMapper) {
 		this.wxProductSkuMapper = wxProductSkuMapper;
 	}
-
-	
 	
 	
 }

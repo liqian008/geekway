@@ -140,7 +140,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 	@Override
 	@Cacheable(value="storageCache", key="'userOpenId-'+#userOpenId+'-tailId-'+#orderTailId+'-limit-'+#limit")
 	public List<WxProductOrder> fallLoadCachedUserOrderList(String userOpenId, long orderTailId, int limit) {
-		logger.debug("缓存方式查询我的订单列表");
+		logger.debug("fallload userOrderList from db. [userOpenId:"+userOpenId+", orderTailId:"+orderTailId+", limit:"+limit+"]");
 		return fallLoadUserOrderList(userOpenId, orderTailId, limit);
 	}
 	
@@ -164,7 +164,7 @@ public class WxProductOrderServiceImpl implements IWxProductOrderService {
 		WxProductOrder wxProductOrder = new WxProductOrder();
 		wxProductOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus());
 		return updateByCriteria(wxProductOrder, criteria);
-	}
+	} 
 
 	@Override
 	public int markDelivered(String outTradeNo) {

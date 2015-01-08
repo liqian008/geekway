@@ -2,7 +2,10 @@ package com.bruce.geekway.service.product.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -14,7 +17,9 @@ import com.bruce.geekway.service.product.IWxProductTagService;
 
 @Service
 public class WxProductTagServiceImpl implements IWxProductTagService {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(WxProductSkuServiceImpl.class);
+	
 	@Autowired
 	private WxProductTagMapper wxProductTagMapper;
 
@@ -96,6 +101,13 @@ public class WxProductTagServiceImpl implements IWxProductTagService {
 		List<WxProductTag> dataList = wxProductTagMapper.selectByExample(criteria);
 		// 返回分页数据
 		return new PagingResult<WxProductTag>(pageNo, pageSize, count, dataList);
+	}
+	
+	@Override
+	@Cacheable(value="storageCache", key="'tag-'+#id")
+	public WxProductTag loadCachedById(Integer id) {
+		logger.debug("load tag from db. [tagId:"+id+"]");
+		return loadById(id);
 	}
 
 

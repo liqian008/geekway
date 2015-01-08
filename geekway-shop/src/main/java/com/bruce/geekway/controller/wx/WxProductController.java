@@ -31,7 +31,6 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
-import com.bruce.geekway.service.product.CacheTestService;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -61,13 +60,13 @@ public class WxProductController {
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
 	@Autowired
-	private IWxProductVoucherService wxProductVoucherService;
-	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
+//	@Autowired
+//	private IWxProductVoucherService wxProductVoucherService;
 //	@Autowired
 //	private MemcachedClient memcachedClient;
 	@Autowired
-	private CacheTestService cacheTestService;
+//	private CacheTestService cacheTestService;
 	
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
@@ -127,7 +126,7 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = "products/c-{categoryId}")
 	public String productListByCategory(Model model, @PathVariable int categoryId, HttpServletRequest request) {
-		WxProductCategory productCategory = wxProductCategoryService.loadById(categoryId);
+		WxProductCategory productCategory = wxProductCategoryService.loadCachedById(categoryId);
 		model.addAttribute("productCategory", productCategory);
 		
 		
@@ -155,7 +154,7 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = "products/t-{tagId}")
 	public String productListByTag(Model model, @PathVariable int tagId, HttpServletRequest request) {
-		WxProductTag productTag = wxProductTagService.loadById(tagId);
+		WxProductTag productTag = wxProductTagService.loadCachedById(tagId);
 		model.addAttribute("productTag", productTag);
 		if(productTag!=null){
 
@@ -183,20 +182,17 @@ public class WxProductController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "moreTagProducts.json")
-	public ModelAndView moreTagProducts(HttpServletRequest request, @RequestParam("tagId") int tagId, @RequestParam("tailId") int tailId, @RequestParam(required=false, defaultValue="6")int limit) {
+	public ModelAndView moreTagProducts(HttpServletRequest request, @RequestParam("tagId") int tagId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int limit) {
 	    if(logger.isDebugEnabled()){
-            logger.debug("ajax加载更多商品，tailId: "+tailId);
+            logger.debug("ajax加载更多Tag商品，tagId: "+tagId+", pageNo: "+pageNo);
         }
 	    if(limit>10||limit<1){
 	    	limit = 6;
 	    }
 	    
-	    if(logger.isDebugEnabled()){
-            logger.debug("根据商品Tag查询");
-        }
-	    List<WxProduct> productList = wxProductService.fallLoadProductsByTag(tagId, tailId, limit + 1);
+	    List<WxProduct> productList = wxProductService.queryCachedProductsByTagId(tagId, pageNo, limit + 1);
 
-		int nextTailId = 0;
+		int nextPageNo = 1;
 		if (productList == null || productList.size() == 0) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多商品");
@@ -207,15 +203,15 @@ public class WxProductController {
 		if (productList.size() > limit) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素
 			productList.remove(limit);
-			nextTailId = productList.get(limit - 1).getId();//取time
+			nextPageNo = pageNo+1;
 			if(logger.isDebugEnabled()){
-                logger.debug("还有更多商品，tailId： "+nextTailId);
+                logger.debug("还有更多商品，nextPageNo： "+nextPageNo);
             }
 		}
 		String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productList);
 		Map<String, String> dataMap = new HashMap<String, String>();
 		dataMap.put("html", productListHtml);
-		dataMap.put("tailId", String.valueOf(nextTailId));
+		dataMap.put("nextPageNo", String.valueOf(nextPageNo));
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
@@ -227,40 +223,39 @@ public class WxProductController {
 	 * @return
 	 */
 	@NeedAuthorize
-	@RequestMapping(value = "moreProducts.json")
-	public ModelAndView moreProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam("tailId") int tailId, @RequestParam(required=false, defaultValue="6")int limit) {
-	    if(logger.isDebugEnabled()){
-            logger.debug("ajax加载更多商品，tailId: "+tailId);
+	@RequestMapping(value = "moreCategoryProducts.json")
+	public ModelAndView moreCategoryProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int limit) {
+		if(logger.isDebugEnabled()){
+            logger.debug("ajax加载更多Category商品，categoryId: "+categoryId+", pageNo: "+pageNo);
         }
 	    if(limit>10||limit<1){
 	    	limit = 6;
 	    }
 	    
-	    if(logger.isDebugEnabled()){
-            logger.debug("根据商品分类查询");
-        }
-	    List<WxProductSku> productSkuList = wxProductSkuService.fallLoadCategoryProductSkuList(categoryId, tailId, limit + 1);
+//	    List<WxProductSku> productSkuList = wxProductSkuService.fallLoadCategoryProductSkuList(categoryId, pageNo, limit + 1);
+	    List<WxProduct> productList = wxProductService.queryCachedProductsByCategoryId(categoryId, pageNo, limit + 1);
+	    
 
-		int nextTailId = 0;
-		if (productSkuList == null || productSkuList.size() == 0) {
+		int nextPageNo = 0;
+		if (productList == null || productList.size() == 0) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多商品");
 			}
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		
-		if (productSkuList.size() > limit) {// 查询数据超过limit，含分页内容
+		if (productList.size() > limit) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素
-			productSkuList.remove(limit);
-			nextTailId = productSkuList.get(limit - 1).getProductId();//取productId
+			productList.remove(limit);
+			nextPageNo = pageNo+1;//取productId
 			if(logger.isDebugEnabled()){
-                logger.debug("还有更多商品，tailId： "+nextTailId);
+                logger.debug("还有更多商品，nextPageNo： "+nextPageNo);
             }
 		}
-		String productListHtml = HtmlBuildUtils.buildFallLoadProductSkuHtml(productSkuList);
+		String productListHtml = HtmlBuildUtils.buildFallLoadProductHtml(productList);
 		Map<String, String> dataMap = new HashMap<String, String>();
 		dataMap.put("html", productListHtml);
-		dataMap.put("tailId", String.valueOf(nextTailId));
+		dataMap.put("nextPageNo", String.valueOf(nextPageNo));
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	
@@ -273,7 +268,7 @@ public class WxProductController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "/product/{productId}/{productSkuId}")
-	public String product(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
+	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
 		WxProduct product = wxProductService.loadCachedById(productId);
 		model.addAttribute("product", product);
 		
@@ -342,7 +337,7 @@ public class WxProductController {
 	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/product/{productId}")
 	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
-		return product(model, productId, 0, request);
+		return productInfo(model, productId, 0, request);
 	}
 	
 	

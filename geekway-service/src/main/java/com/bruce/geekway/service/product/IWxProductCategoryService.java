@@ -10,5 +10,8 @@ import com.bruce.geekway.model.WxProductCategoryCriteria;
  *
  */
 public interface IWxProductCategoryService extends IFoundationPagingService<WxProductCategory, Integer, WxProductCategoryCriteria>{
+	
+	/*加载缓存中的category*/
+	public WxProductCategory loadCachedById(Integer id); 
 
 }

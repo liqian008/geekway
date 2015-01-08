@@ -100,7 +100,7 @@ String contextPath = request.getContextPath();
         		<a href="javascript:void(0)" id="moreProductsBtn" class="button button-turqoise">加载更多</a>
         		
         		<input type="hidden" id="tagId" name="tagId" value="<%=tagId%>"/>
-        		<input type="hidden" id="tailId" name="tailId" value="0"/>
+        		<input type="hidden" id="pageNo" name="pageNo" value="1"/>
         	</div>
         	
         	<div class="decoration"></div>
@@ -124,15 +124,15 @@ fallLoad();
  		//置为数据加载状态
  		$('#moreProductsBtn').val("努力加载中...");
  		$('#moreAlbumsBtn').attr("disabled","disabled");
- 		var tailId = $("#tailId").val();
- 		var jsonData = {'tagId' : '1', 'tailId' : tailId};
+ 		var pageNo = $("#pageNo").val();
+ 		var jsonData = {'tagId' : '1', 'pageNo' : pageNo};
  		$.post('<%=contextPath%>/moreTagProducts.json', jsonData, function(data) {
  			var result = data.result;
 		if(result==1){
 			$("#productsContainer").append(data.data.html);
-				var nextTailId = data.data.tailId;
-  				$("#tailId").val(nextTailId);
-  				if(nextTailId<=0){//无更多数据，则隐藏按钮
+				var nextPageNo = data.data.nextPageNo;
+  				$("#pageNo").val(nextPageNo);
+  				if(nextPageNo<=1){//无更多数据，则隐藏按钮
  					$('#moreProductsContainer').attr("style","display:none");
  				}else{//还有更多数据，启用加载按钮
  					$('#moreProductsBtn').removeAttr("disabled");

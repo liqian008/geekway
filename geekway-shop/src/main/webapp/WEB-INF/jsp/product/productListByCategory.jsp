@@ -99,7 +99,7 @@ WxProductCategory productCategory = (WxProductCategory)request.getAttribute("pro
         		<a href="javascript:void(0)" id="moreProductsBtn" class="button button-dark">加载更多</a>
         		
         		<input type="hidden" id="categoryId" name="categoryId" value="<%=categoryId%>"/>
-        		<input type="hidden" id="tailId" name="tailId" value="0"/>
+        		<input type="hidden" id="pageNo" name="pageNo" value="1"/>
         	</div>
         	
             <div class="decoration"></div>
@@ -123,15 +123,15 @@ WxProductCategory productCategory = (WxProductCategory)request.getAttribute("pro
   		//置为数据加载状态
   		$('#moreProductsBtn').text("努力加载中...");
   		$('#moreAlbumsBtn').attr("disabled","disabled");
-  		var tailId = $("#tailId").val();
-  		var jsonData = {'categoryId' : $("#categoryId").val(), 'tailId' : tailId};
-  		$.post('${pageContext.request.contextPath}/moreProducts.json', jsonData, function(data) {
+  		var pageNo = $("#pageNo").val();
+  		var jsonData = {'categoryId' : $("#categoryId").val(), 'pageNo' : pageNo};
+  		$.post('${pageContext.request.contextPath}/moreCategoryProducts.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){
 				$("#productsContainer").append(data.data.html);
- 				var nextTailId = data.data.tailId;
-   				$("#tailId").val(nextTailId);
-   				if(nextTailId<=0){//无更多数据，则隐藏按钮
+ 				var nextPageNo = data.data.nextPageNo;
+   				$("#pageNo").val(nextPageNo);
+   				if(nextPageNo<=1){//无更多数据，则隐藏按钮
   					$('#moreProductsContainer').attr("style","display:none");
   				}else{//还有更多数据，启用加载按钮
   					$('#moreProductsBtn').removeAttr("disabled");

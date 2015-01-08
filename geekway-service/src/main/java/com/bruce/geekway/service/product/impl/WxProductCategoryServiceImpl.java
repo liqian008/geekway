@@ -2,7 +2,10 @@ package com.bruce.geekway.service.product.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -14,10 +17,14 @@ import com.bruce.geekway.service.product.IWxProductCategoryService;
 
 @Service
 public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(WxProductSkuServiceImpl.class);
 
 	@Autowired
 	private WxProductCategoryMapper wxProductCategoryMapper;
 
+	
+	
 	@Override
 	public int save(WxProductCategory t) {
 		return wxProductCategoryMapper.insertSelective(t);
@@ -96,6 +103,14 @@ public class WxProductCategoryServiceImpl implements IWxProductCategoryService {
 		// 返回分页数据
 		return new PagingResult<WxProductCategory>(pageNo, pageSize, count, dataList);
 	}
+	
+	@Override
+	@Cacheable(value="storageCache", key="'category-'+#id")
+	public WxProductCategory loadCachedById(Integer id) {
+		logger.debug("load category from db. [categoryId:"+id+"]");
+		return loadById(id);
+	}
+	
 
 	public WxProductCategoryMapper getWxProductCategoryMapper() {
 		return wxProductCategoryMapper;

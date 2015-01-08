@@ -20,12 +20,12 @@ import com.bruce.geekway.service.product.IWxProductSkuService;
 @Service
 public class WxProductServiceImpl implements IWxProductService {
 
+	private static final Logger logger = LoggerFactory.getLogger(WxProductSkuServiceImpl.class);
+	
 	@Autowired
 	private WxProductMapper wxProductMapper;
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
-	
-	private static final Logger logger = LoggerFactory.getLogger(WxProductSkuServiceImpl.class);
 	
 
 	@Override
@@ -161,21 +161,64 @@ public class WxProductServiceImpl implements IWxProductService {
 	}
 	
 	@Override
-	public List<WxProduct> fallLoadProductsByTag(int tagId, int tailId, int limit) {
-		return wxProductMapper.fallLoadProductsByTag(tagId, tailId, limit);
+	public List<WxProduct> queryProductsByCategoryId(int categoryId, int pageNo, int pageSize) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		WxProductCriteria criteria = new WxProductCriteria();
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		return wxProductMapper.queryProductsByCategoryId(criteria, categoryId);
 	}
 	
 	@Override
-	@Cacheable(value="storageCache", key="'tagId-'+#tagId+'-tailId-'+#tailId+'-limit-'+#limit")
-	public List<WxProduct> fallLoadCachedProductsByTag(int tagId, int tailId, int limit) {
-		return fallLoadProductsByTag(tagId, tailId, limit);
+	@Cacheable(value="storageCache", key="'categoryId-'+#categoryId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
+	public List<WxProduct> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize) {
+		logger.debug("fallload productsByTag from db. [tagId:"+categoryId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
+		return queryProductsByTagId(categoryId, pageNo, pageSize);
+	}
+	
+	@Override
+	public List<WxProduct> queryProductsByTagId(int tagId, int pageNo, int pageSize) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
+		WxProductCriteria criteria = new WxProductCriteria();
+		criteria.setLimitOffset(offset);
+		criteria.setLimitRows(pageSize);
+		
+		return wxProductMapper.queryProductsByTagId(criteria, tagId);
+	}
+	
+	@Override
+	@Cacheable(value="storageCache", key="'tagId-'+#tagId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
+	public List<WxProduct> queryCachedProductsByTagId(int tagId, int pageNo, int pageSize) {
+		logger.debug("fallload productsByTag from db. [tagId:"+tagId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
+		//TODO converPageNo
+		return queryProductsByTagId(tagId, pageNo, pageSize);
 	}
 	
 	
+//	@Override
+//	public List<WxProduct> fallLoadProductsByTag(int tagId, int tailId, int limit) {
+//		return wxProductMapper.fallLoadProductsByTag(tagId, tailId, limit);
+//	}
+//	
+//	@Override
+//	@Cacheable(value="storageCache", key="'tagId-'+#tagId+'-tailId-'+#tailId+'-limit-'+#limit")
+//	public List<WxProduct> fallLoadCachedProductsByTag(int tagId, int tailId, int limit) {
+//		logger.debug("fallload productsByTag from db. [tagId:"+tagId+", tailId:"+tailId+", limit:"+limit+"]");
+//		return fallLoadProductsByTag(tagId, tailId, limit);
+//	}
+	
+	
 	@Override
-	@Cacheable(value="storageCache", key="'product-'+#productId")
+	@Cacheable(value="storageCache", key="'product-'+#id")
 	public WxProduct loadCachedById(Integer id) {
-		logger.debug("load cache loadCachedById");
+		logger.debug("load product from db. [productId:"+id+"]");
 		return loadById(id);
 	}
 

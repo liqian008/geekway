@@ -15,7 +15,7 @@ import com.bruce.geekway.service.mp.WxBaseService;
 import com.bruce.geekway.utils.HttpUtil;
 
 /**
- * 微信群发service(mp包下的service均为对weixin api的封装)
+ * 微信支付service(mp包下的service均为对weixin api的封装)
  * 
  * @author liqian
  * 

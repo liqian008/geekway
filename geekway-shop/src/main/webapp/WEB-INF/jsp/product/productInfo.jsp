@@ -89,14 +89,13 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
                 <a href="javascript:void(0)" class="prev-slider"></a>
                 <%}%>
 				
-				
 			</div>
 
 			<div class="decoration"></div> 
            
             <div class="container no-bottom">
             	<div class="section-title">
-                	<h4 class="center-text">${product.name}</h4> 
+                	<h4 class="center-text">${currentProductSku.name}</h4> 
                 </div>
             </div> 
             

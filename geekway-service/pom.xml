@@ -21,7 +21,14 @@
 			<artifactId>httpclient</artifactId> <version>4.3.1</version> </dependency> 
 			<dependency> <groupId>org.apache.httpcomponents</groupId> <artifactId>httpmime</artifactId> 
 			<version>4.3.1</version> </dependency> -->
-
+		
+		<!-- Redis -->
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.5.1</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.google.code.simple-spring-memcached</groupId>
 			<artifactId>spring-cache</artifactId>

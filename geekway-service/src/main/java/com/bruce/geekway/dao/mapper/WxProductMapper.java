@@ -62,18 +62,21 @@ public interface WxProductMapper {
 	 * @mbggenerated  Sun Nov 30 13:48:53 CST 2014
 	 */
 	int updateByPrimaryKey(WxProduct record);
-	//??¹æ??tagIdè®¡ç??å¯¹å?????????????»æ?°é??
+	
+	List<WxProduct> queryProductsByCategoryId(@Param("criteria")WxProductCriteria criteria, @Param("categoryId")int categoryId);
+	
+	//count product by tagId
 	int countProductsByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
-	//??¹æ??tagId??¥è?¢å·²??³è??????????????è¡?
+	
 	List<WxProduct> queryProductsByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
 	
-	//??¹æ??tagIdè®¡ç??å¯¹å?????????????»æ?°é??
 	int countProductsOutByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
-	//??¹æ??tagId??¥è?¢æ????³è??????????????è¡?
+	
 	List<WxProduct> queryProductsOutByTagId(@Param("criteria")WxProductCriteria criteria, @Param("tagId")int tagId);
 	
-	//???å¸?æµ???¹å?????è½?tag???äº§å??
-	List<WxProduct> fallLoadProductsByTag(@Param("tagId")int tagId, @Param("tailId")int tailId, @Param("limit")int limit);
+	//ç€‘å¸ƒæµæ–¹å¼åŠ è½½æ›´å¤štagçš„äº§å“åˆ—è¡¨
+//	@Deprecated
+//	List<WxProduct> fallLoadProductsByTag(@Param("tagId")int tagId, @Param("tailId")int tailId, @Param("limit")int limit);
 
 	
 }
