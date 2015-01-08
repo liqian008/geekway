@@ -30,5 +30,5 @@ public interface IItoProductSkuValueDao extends IBaseDao<ItoProductSkuValue, Int
 	 * @return
 	 */
 	public int queryCountBySkuPropValueId(int skuPropValueId);
-
+	
 }

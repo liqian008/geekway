@@ -62,6 +62,12 @@ public class ItoSkuDaoImpl implements IItoSkuDao, InitializingBean {
 	}
 
     
+	@Override
+	public int deleteByProductId(int productId) {
+		ItoSkuCriteria criteria = new ItoSkuCriteria();
+		criteria.createCriteria().andProductIdEqualTo(productId);
+		return itoSkuMapper.deleteByExample(criteria);
+	}
 
     
 //    @Override
@@ -101,6 +107,7 @@ public class ItoSkuDaoImpl implements IItoSkuDao, InitializingBean {
 		this.itoSkuMapper = itoSkuMapper;
 	}
 
+	
 	
 
 }

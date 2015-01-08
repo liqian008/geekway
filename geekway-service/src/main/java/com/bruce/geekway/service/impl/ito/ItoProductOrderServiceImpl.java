@@ -84,6 +84,11 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 		return itoProductOrderDao.updateById(order);
 	}
 	
+	@Override
+	public int countByProductId(int productId) {
+		return itoProductOrderDao.countByProductId(productId);
+	}
+
 	
 	@Override
 	public String generateOrderSn() {
@@ -132,6 +137,7 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 
 	
 //	public static void main(String[] args) {

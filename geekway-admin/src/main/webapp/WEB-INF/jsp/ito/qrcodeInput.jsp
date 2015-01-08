@@ -80,62 +80,11 @@
 				</div>
 			</div>
 			<!-- /page header -->
-			<!-- Breadcrumbs line -->
-			<div class="breadcrumb-line">
-				<ul class="breadcrumb">
-					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">补救生成二维码</li>
-				</ul>
-				<div class="visible-xs breadcrumb-toggle">
-					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
-						data-target=".breadcrumb-buttons"><i class="icon-menu2"></i></a>
-				</div>
-			</div>
-			<!-- /breadcrumbs line -->
 			
-			<div class="callout callout-info fade in">
-				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
-				<p>
-					1、发码中心可能存在服务不稳定的情况，因此在用户无法获取到二维码&投诉时，可使用改功能给用户补发二维码<br/>
-					2、考虑到效率问题，补发数量建议填写不超过10个，如数量较多，建议分次进行补发<br/>
-				</p>
+			<div>
+				<iframe src="http://www.itocases.com:89/" width="100%" height="700"/>
 			</div>
-
-			<%
-			ItoSlider slider = (ItoSlider)request.getAttribute("slider");
-			%>
-
-			<form id="validate" action="<s:url value='./displayQrcodes'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>补救生成二维码
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">补发数量: <span class="mandatory">*</span></label>
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="number" id="number" value="10"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<input type="submit" value="确 认" class="btn btn-primary">
-						</div>
-					</div>
-					
-					
-					
-				</div>
-				
-			</form>
+			
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -143,35 +92,6 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
-	<script type="text/javascript">
-	$(document).ready(function(){
-	    $("#cover-image-file").change(function(){
-	        //创建FormData对象
-	        var data = new FormData();
-	        //为FormData对象添加数据 
-	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
-	        $.ajax({
-	            url:'/geekway-admin/geekway/imageUpload',
-	            type:'POST',
-	            data:data,
-	            cache: false,
-	            contentType: false,    //不可缺
-	            processData: false,    //不可缺
-	            success:function(responseData){
-	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.originalImage.url;
-		                $('#cover-image').attr("src", imageUrl);
-		                $('#cover-image-link').attr("href", imageUrl);
-		                $('#cover-image-url').val(imageUrl);
-	                }else{
-	                	alert(responseData.message);
-	                }
-	            }
-	        });
-	    });
-	});
-	</script>
 	
 </body>
 </html>

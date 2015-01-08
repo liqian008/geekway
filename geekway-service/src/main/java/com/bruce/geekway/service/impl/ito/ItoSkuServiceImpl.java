@@ -100,5 +100,10 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public int deleteByProductId(int productId) {
+		return itoSkuDao.deleteByProductId(productId);
+	}
 	
 }

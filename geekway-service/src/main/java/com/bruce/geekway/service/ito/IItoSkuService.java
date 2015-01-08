@@ -8,6 +8,8 @@ import com.bruce.geekway.model.ItoSkuCriteria;
 
 public interface IItoSkuService extends IFoundationService<ItoSku, Integer, ItoSkuCriteria>{
 	
+	public int deleteByProductId(int productId);
+	
 	public List<ItoSku> queryAllByProductId(int productId);
 	
 	public ItoSku loadProductSku(int productId, int skuId);

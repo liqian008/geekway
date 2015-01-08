@@ -8,6 +8,11 @@ import com.bruce.geekway.model.ItoProductOrderCriteria;
 
 public interface IItoProductOrderService extends IFoundationService<ItoProductOrder, Integer,ItoProductOrderCriteria>{
 
+	/**
+	 * 查询某productId的订单列表
+	 * @return
+	 */
+	public int countByProductId(int productId);
 	
 	/**
 	 * 查询来自支付宝的订单列表

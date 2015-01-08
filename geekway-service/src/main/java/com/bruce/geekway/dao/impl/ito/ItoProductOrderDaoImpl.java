@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.bruce.geekway.dao.ito.IItoProductOrderDao;
 import com.bruce.geekway.dao.mapper.ItoProductOrderMapper;
 import com.bruce.geekway.model.ItoProductOrder;
-import com.bruce.geekway.model.ItoProductOrder;
 import com.bruce.geekway.model.ItoProductOrderCriteria;
 
 
@@ -49,6 +48,14 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
     public List<ItoProductOrder> fallLoadList(Integer tailId, int limit) {
         return null;
     }
+    
+	@Override
+	public int countByProductId(int productId) {
+		ItoProductOrderCriteria criteria = new ItoProductOrderCriteria();
+   		criteria.createCriteria().andProductIdEqualTo(productId);
+   		return itoProductOrderMapper.countByExample(criteria);
+	}
+
     
     /**
      * 查询指定类型的订单
@@ -102,6 +109,7 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
 	public void setItoProductOrderMapper(ItoProductOrderMapper itoProductOrderMapper) {
 		this.itoProductOrderMapper = itoProductOrderMapper;
 	}
+
 
 
 	

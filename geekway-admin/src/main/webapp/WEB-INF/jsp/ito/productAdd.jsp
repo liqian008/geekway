@@ -121,6 +121,7 @@
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="title" id="title" value="${product.title}"/>
 								<form:hidden path="product.id"/>
+								<input type="hidden" name="modifySkuSettings" value="true"/>
 							</div>
 						</div>
 						
@@ -197,7 +198,7 @@
 								int skuPropId = skuProp.getId();
 						%>
 						<div class="form-group" id="sku-config">
-							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">必选*</span>
 							</label>
 							<div class="col-sm-6">
 								<%

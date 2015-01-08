@@ -12,6 +12,9 @@ public interface IItoSkuDao extends IBaseDao<ItoSku, Integer> {
 
 	public int updateByCriteria(ItoSku t, ItoSkuCriteria criteria);
 
+	public int deleteByProductId(int productId);
+	
+
     
 //	public ItoSku loadProductSku(int productId, int skuId); 
 

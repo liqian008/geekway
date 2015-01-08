@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.ItoProduct"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@page import="com.bruce.geekway.model.*"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
+<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -71,7 +72,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品管理
+						补救生成二维码
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -83,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">商品管理</li>
+					<li class="active">补救生成二维码</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -91,84 +92,50 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-
+			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍：</h5>
+				<h5>功能介绍</h5>
 				<p>
-					1、商品系列列表<br/>
+					1、发码中心可能存在服务不稳定的情况，因此在用户无法获取到二维码&投诉时，可使用改功能给用户补发二维码<br/>
+					2、考虑到效率问题，补发数量建议填写不超过10个，如数量较多，建议分次进行补发<br/>
 				</p>
 			</div>
 
-			<!-- Table view -->
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h5 class="panel-title">
-						<i class="icon-people"></i>商品管理
-					</h5>
-					<a href="./productAdd"><span class="label label-danger pull-right">新增商品</span></a>
+			<%
+			ItoSlider slider = (ItoSlider)request.getAttribute("slider");
+			%>
+
+			<form id="validate" action="<s:url value='./displayQrcodes'/>" method="post"  class="form-horizontal form-bordered">
+
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>补救生成二维码
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">补发数量: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="number" id="number" value="10"/>
+							</div>
+						</div>
+						
+						
+						<div class="form-actions text-right">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<input type="submit" value="确 认" class="btn btn-primary">
+						</div>
+					</div>
+					
+					
+					
 				</div>
-				<div class="datatable-media">
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th>序号</th>
-								<th>图片</th>
-                                <th>名称</th>
-                                <!-- <th>价格</th>
-                                <th>库存</th> -->
-                                <th>状态</th>
-                                <th class="team-links">操作</th>
-							</tr>
-						</thead>
-						<tbody>
-							<%
-                           	List<ItoProduct> productList = (List<ItoProduct>)request.getAttribute("productList");
-                           	if(productList!=null&&productList.size()>0){
-                           		int i=0;
-                           		for(ItoProduct product: productList){
-                           			i++;
-                           	%>
-							<tr>
-		                        <td><%=i%></td>
-		                        <td class="text-center">
-		                        	<a href="<%=product.getProductPicUrl()%>" class="lightbox">
-		                        	<img src='<%=product.getProductPicUrl()%>' class="img-media"/>
-		                        	</a> 
-		                        </td>
-		                        <td title="SN：<%=product.getOutId()%>"><%=product.getTitle()%></td>
-		                        <%-- <td title="原价：<%=product.getOriginPrice()%>元"><%=product.getPrice()%>元</td>
-		                        <td><%=product.getNum()%>个</td> --%>
-		                        <td><%=product.getStatus()==1?"上架":"下架"%></td>
-		                        <td class='text-center'>
-		                        	<div class="table-controls">
-		                        	
-										<a href="./productEdit?productId=<%=product.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
-										<!-- 
-										<a href="./productSkuValueDisplay?productId=<%=product.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="查看SKU"><i class="icon-eye7"></i></a>
-										-->
-										<a href="./productSkus?productId=<%=product.getId()%>"
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="SKU列表"><i class="icon-tree3"></i></a> 
-										<%if(product.getStatus()<=0){ %>
-										<a href="./delProduct?productId=<%=product.getId()%>" 
-											class="btn btn-link btn-icon btn-xs tip" title=""
-											data-original-title="删除"><i class="icon-remove3"></i></a>
-										<%}%>
-									</div>
-								</td>
-                               </tr>
-							<%}
-                           	} %>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<!-- /table view -->
+				
+			</form>
 
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
@@ -176,6 +143,35 @@
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
+	
+	<script type="text/javascript">
+	$(document).ready(function(){
+	    $("#cover-image-file").change(function(){
+	        //创建FormData对象
+	        var data = new FormData();
+	        //为FormData对象添加数据 
+	        data.append('imageFile', $('input[type=file]')[0].files[0]);  
+	        $.ajax({
+	            url:'/geekway-admin/geekway/imageUpload',
+	            type:'POST',
+	            data:data,
+	            cache: false,
+	            contentType: false,    //不可缺
+	            processData: false,    //不可缺
+	            success:function(responseData){
+	                if(responseData.result==1){
+	                	var imageUrl = responseData.data.originalImage.url;
+		                $('#cover-image').attr("src", imageUrl);
+		                $('#cover-image-link').attr("href", imageUrl);
+		                $('#cover-image-url').val(imageUrl);
+	                }else{
+	                	alert(responseData.message);
+	                }
+	            }
+	        });
+	    });
+	});
+	</script>
+	
 </body>
 </html>
-

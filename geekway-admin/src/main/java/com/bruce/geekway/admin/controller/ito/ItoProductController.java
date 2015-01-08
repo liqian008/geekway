@@ -19,6 +19,7 @@ import com.bruce.geekway.model.ItoProduct;
 import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuProp;
 import com.bruce.geekway.model.ItoSkuPropValue;
+import com.bruce.geekway.service.ito.IItoProductOrderService;
 import com.bruce.geekway.service.ito.IItoProductService;
 import com.bruce.geekway.service.ito.IItoSkuPropService;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;
@@ -32,6 +33,8 @@ public class ItoProductController {
 
 	@Autowired
 	private IItoProductService itoProductService;
+	@Autowired
+	private IItoProductOrderService itoProductOrderService;
 	@Autowired
 	private IItoSkuPropService itoSkuPropService;
 	@Autowired
@@ -72,8 +75,8 @@ public class ItoProductController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ItoProduct Product = itoProductService.loadById(productId);
-		model.addAttribute("product", Product);
+		ItoProduct product = itoProductService.loadById(productId);
+		model.addAttribute("product", product);
 		
 		//获取所有的sku数据列表
 		List<ItoSkuPropValue> skuPropValueList =  itoSkuPropValueService.queryAll();
@@ -81,6 +84,12 @@ public class ItoProductController {
 		//根据数据计算出sku属性列表
 		List<ItoSkuProp> skuPropList = getPropListByValueList(skuPropValueList);
 		model.addAttribute("skuPropList", skuPropList);
+		
+		
+		int orderCount = itoProductOrderService.countByProductId(productId);
+		if(product.getStatus()!=null&&product.getStatus()<1&&orderCount<=0){
+			model.addAttribute("canModifySkuSettings", "true");
+		}
 		
 		//获取产品关联的skuValue的idList数据
 		List<Integer> productSkuValueIdList =  itoSkuPropValueService.querySkuValueIdListByProductId(productId);
@@ -106,131 +115,154 @@ public class ItoProductController {
 		
 		Date currentTime = new Date();
 		product.setUpdateTime(currentTime);
+		boolean isEdit = false;
+		int productId = 0;
 		if(product!=null&&product.getId()!=null&&product.getId()>0){
+			isEdit = true;
+			productId = product.getId();
 			result = itoProductService.updateById(product);
-			model.addAttribute("redirectUrl", "./productList");
-			return "forward:/home/operationRedirect";
+			product = itoProductService.loadById(productId);//重新加载产品数据
+			
 		}else{//新增
 			product.setCreateTime(currentTime);
 			product.setStatus((short) 0);
 			result = itoProductService.save(product);
 			
 			//保存SKU数据
-			int productId = product.getId();
+			productId = product.getId();
 			if(productId>0){
 				model.addAttribute("product", product);
-				
-			    //创建新SKU配置
-				if(productSkuValueIds!=null && productSkuValueIds.length>0){
+			}
+//			return "ito/productAddSkus";
+		}
+		
+		String modifySkuSettings = request.getParameter("modifySkuSettings");
+		if("true".equals(modifySkuSettings)){//需要修改sku配置(新创建时也认为是修改)
+			//删除
+			if(product.getStatus()!=null&&product.getStatus()<1&&productSkuValueIds!=null&&productSkuValueIds.length>0){
+				//检查是否有订单
+				int orderCount = itoProductOrderService.countByProductId(productId);//已经产生订单了，不能删除
+				if(orderCount<=0){
+					//先删除sku配置，再继续创建sku
+					result = itoSkuService.deleteByProductId(productId);//删除商品sku
 					
-					//清除原productSku数据
-					itoSkuPropValueService.deleteSkuValuesByProductId(productId);
-					
-					List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
-					result = itoSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
-
-					// Step2，填写sku属性数据
-
-					// 获取产品关联的skuValue的List数据
-					List<ItoSkuPropValue> productSkuValueList =  itoSkuPropValueService.querySkuValueListByProductId(productId);
-					model.addAttribute("productSkuValueList", productSkuValueList);
-					//sku属性列表
-					List<ItoSkuProp> skuPropList = new ArrayList<ItoSkuProp>();
-					HashMap<Integer, ItoSkuProp> skuPropHm = new HashMap<Integer, ItoSkuProp>();
-					if(productSkuValueList!=null&&productSkuValueList.size()>0){
-						skuPropHm = itoSkuPropService.queryMap();
-						for(ItoSkuPropValue skuPropValue :productSkuValueList){
-							ItoSkuProp skuProp = skuPropHm.get(skuPropValue.getSkuPropId());
-							if(skuProp!=null&&!skuPropList.contains(skuProp)){
-								skuPropList.add(skuProp);
+					//创建新SKU配置
+					if(productSkuValueIds!=null && productSkuValueIds.length>0){
+						
+						//清除原productSku数据
+						itoSkuPropValueService.deleteSkuValuesByProductId(productId);
+						
+						List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
+						result = itoSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
+			
+						// Step2，填写sku属性数据
+			
+						// 获取产品关联的skuValue的List数据
+						List<ItoSkuPropValue> productSkuValueList =  itoSkuPropValueService.querySkuValueListByProductId(productId);
+						model.addAttribute("productSkuValueList", productSkuValueList);
+						//sku属性列表
+						List<ItoSkuProp> skuPropList = new ArrayList<ItoSkuProp>();
+						HashMap<Integer, ItoSkuProp> skuPropHm = new HashMap<Integer, ItoSkuProp>();
+						if(productSkuValueList!=null&&productSkuValueList.size()>0){
+							skuPropHm = itoSkuPropService.queryMap();
+							for(ItoSkuPropValue skuPropValue :productSkuValueList){
+								ItoSkuProp skuProp = skuPropHm.get(skuPropValue.getSkuPropId());
+								if(skuProp!=null&&!skuPropList.contains(skuProp)){
+									skuPropList.add(skuProp);
+								}
 							}
 						}
-					}
-					
-//					model.addAttribute("skuPropList", skuPropList);
-					
-					//计算对应的sku矩阵
-					if(productSkuValueList!=null&&productSkuValueList.size()>0){
-						HashMap<Integer, List<ItoSkuPropValue>> skuGroupMap = new HashMap<Integer, List<ItoSkuPropValue>>();
-						for(ItoSkuPropValue skuPropValue: productSkuValueList){
-							int skuPropId = skuPropValue.getSkuPropId();
-							
-							List<ItoSkuPropValue> skuGroupList = skuGroupMap.get(skuPropId);
-							if(skuGroupList==null || skuGroupList.size()<=0){//不存在则初始化（默认值1）
-								skuGroupList = new ArrayList<ItoSkuPropValue>();
-								skuGroupMap.put(skuPropId, skuGroupList);
-							} 
-							skuGroupList.add(skuPropValue);
-						}
 						
-						List<ItoSkuPropValue> sizeSkuList = new ArrayList<ItoSkuPropValue>();
-						List<ItoSkuPropValue> colorSkuList = new ArrayList<ItoSkuPropValue>();
-						List<ItoSkuPropValue> materialSkuList = new ArrayList<ItoSkuPropValue>();
+			//			model.addAttribute("skuPropList", skuPropList);
 						
-						
-						if(skuGroupMap!=null&&skuGroupMap.size()==3){
-							sizeSkuList = skuGroupMap.get(1);
-							colorSkuList = skuGroupMap.get(2);
-							materialSkuList = skuGroupMap.get(3);
-						}
-
-						List<String> skuPropertiesNameList = new ArrayList<String>();
-						
-						for(ItoSkuPropValue materialSkuPropValue: materialSkuList){//材质SKU
-//							skuNameList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName()+"+"+materialSkuPropValue.getName());
-//							skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId()+"+"+materialSkuPropValue.getId());
-							//构造skuCode
-							int materialSkuPropId = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getId();
-//							String materialSkuPropName = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getName();
-							String materialSkuCode = getSkuCode(materialSkuPropId, materialSkuPropValue.getId());
-							
-							
-							for(ItoSkuPropValue colorSkuPropValue: colorSkuList){//颜色SKU
-								//构造skuCode
-								int colorSkuPropId = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getId();
-//								String colorSkuPropName = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getName();
-								String colorSkuCode = getSkuCode(colorSkuPropId, colorSkuPropValue.getId());
+						//计算对应的sku矩阵
+						if(productSkuValueList!=null&&productSkuValueList.size()>0){
+							HashMap<Integer, List<ItoSkuPropValue>> skuGroupMap = new HashMap<Integer, List<ItoSkuPropValue>>();
+							for(ItoSkuPropValue skuPropValue: productSkuValueList){
+								int skuPropId = skuPropValue.getSkuPropId();
 								
-								for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){//尺码SKU
-									int sizeSkuPropId = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getId();
-//									String sizeSkuPropName = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getName();
-									String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId());
+								List<ItoSkuPropValue> skuGroupList = skuGroupMap.get(skuPropId);
+								if(skuGroupList==null || skuGroupList.size()<=0){//不存在则初始化（默认值1）
+									skuGroupList = new ArrayList<ItoSkuPropValue>();
+									skuGroupMap.put(skuPropId, skuGroupList);
+								} 
+								skuGroupList.add(skuPropValue);
+							}
+							
+							List<ItoSkuPropValue> sizeSkuList = new ArrayList<ItoSkuPropValue>();
+							List<ItoSkuPropValue> colorSkuList = new ArrayList<ItoSkuPropValue>();
+							List<ItoSkuPropValue> materialSkuList = new ArrayList<ItoSkuPropValue>();
+							
+							
+							if(skuGroupMap!=null&&skuGroupMap.size()==3){
+								sizeSkuList = skuGroupMap.get(1);
+								colorSkuList = skuGroupMap.get(2);
+								materialSkuList = skuGroupMap.get(3);
+							}
+			
+							List<String> skuPropertiesNameList = new ArrayList<String>();
+							
+							for(ItoSkuPropValue materialSkuPropValue: materialSkuList){//材质SKU
+			//					skuNameList.add(sizeSkuPropValue.getName()+"+"+colorSkuPropValue.getName()+"+"+materialSkuPropValue.getName());
+			//					skuCombineValueList.add(sizeSkuPropValue.getId()+"_"+colorSkuPropValue.getId()+"+"+materialSkuPropValue.getId());
+								//构造skuCode
+								int materialSkuPropId = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getId();
+			//					String materialSkuPropName = skuPropHm.get(materialSkuPropValue.getSkuPropId()).getName();
+								String materialSkuCode = getSkuCode(materialSkuPropId, materialSkuPropValue.getId());
+								
+								
+								for(ItoSkuPropValue colorSkuPropValue: colorSkuList){//颜色SKU
+									//构造skuCode
+									int colorSkuPropId = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getId();
+			//						String colorSkuPropName = skuPropHm.get(colorSkuPropValue.getSkuPropId()).getName();
+									String colorSkuCode = getSkuCode(colorSkuPropId, colorSkuPropValue.getId());
 									
-									//最后生成的SKUCode，格式为 —— 3:6;2:3;1:1;
-									String skuPropertiesName = materialSkuCode + colorSkuCode + sizeSkuCode;
-									skuPropertiesNameList.add(skuPropertiesName);
-									
-									//根据商品的sku配置，生成sku数据，填写价格
-									ItoSku itoSku = new ItoSku();
-									itoSku.setProductId(productId);
-									//设置各sku的缩略图
-									itoSku.setSkuPicUrl(product.getProductPicUrl());
-									itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
-									
-									itoSku.setOriginPrice((double) 0);
-									itoSku.setPrice((double) 0);
-									itoSku.setNum(0);
-									
-									//为单品设置相应的id（材质，颜色，尺码）
-									itoSku.setMaterialId(materialSkuPropValue.getId());
-									itoSku.setColorId(colorSkuPropValue.getId());
-									itoSku.setSizeId(sizeSkuPropValue.getId());
-									
-									itoSku.setPropertiesName(skuPropertiesName);
-									
-									itoSku.setCreateTime(currentTime);
-									itoSku.setUpdateTime(currentTime);
-									//保存sku
-									itoSkuService.save(itoSku);
-									
+									for(ItoSkuPropValue sizeSkuPropValue: sizeSkuList){//尺码SKU
+										int sizeSkuPropId = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getId();
+			//							String sizeSkuPropName = skuPropHm.get(sizeSkuPropValue.getSkuPropId()).getName();
+										String sizeSkuCode = getSkuCode(sizeSkuPropId, sizeSkuPropValue.getId());
+										
+										//最后生成的SKUCode，格式为 —— 3:6;2:3;1:1;
+										String skuPropertiesName = materialSkuCode + colorSkuCode + sizeSkuCode;
+										skuPropertiesNameList.add(skuPropertiesName);
+										
+										//根据商品的sku配置，生成sku数据，填写价格
+										ItoSku itoSku = new ItoSku();
+										itoSku.setProductId(productId);
+										//设置各sku的缩略图
+										itoSku.setSkuPicUrl(product.getProductPicUrl());
+										itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
+										
+										itoSku.setOriginPrice((double) 0);
+										itoSku.setPrice((double) 0);
+										itoSku.setNum(0);
+										
+										//为单品设置相应的id（材质，颜色，尺码）
+										itoSku.setMaterialId(materialSkuPropValue.getId());
+										itoSku.setColorId(colorSkuPropValue.getId());
+										itoSku.setSizeId(sizeSkuPropValue.getId());
+										
+										itoSku.setPropertiesName(skuPropertiesName);
+										
+										itoSku.setCreateTime(currentTime);
+										itoSku.setUpdateTime(currentTime);
+										//保存sku
+										itoSkuService.save(itoSku);
+										
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-//			return "ito/productAddSkus";
-			
+			}	
+		}
+		
+		
+		if(isEdit){
+			model.addAttribute("redirectUrl", "./productList");
+			return "forward:/home/operationRedirect";
+		}else{
 			model.addAttribute("redirectUrl", "./batchEditProductSkus?productId="+productId);
 			return "forward:/home/operationRedirect";
 		}
@@ -367,6 +399,42 @@ public class ItoProductController {
 		return sb.toString();
 	}
 	
+	
+	/**
+	 * 删除slider
+	 * @param model
+	 * @param sliderId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/delProduct")
+	public String delProduct(Model model, int productId, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		ItoProduct itoProduct = itoProductService.loadById(productId);
+		if(itoProduct!=null){
+			if(itoProduct.getStatus()!=null&&itoProduct.getStatus()>0){//启用中的不支持删除
+				model.addAttribute("message", "该系列目前处于启用状态，无法删除");
+				return "forward:/home/operationResult";
+			}
+			if(itoProduct.getStatus()!=null&&itoProduct.getStatus()==0){//可以删除
+				//检查是否有订单
+				int orderCount = itoProductOrderService.countByProductId(productId);//已经产生订单了，不能删除
+				if(orderCount>0){
+					model.addAttribute("message", "该系列已经产生了订单数据，无法删除");
+					return "forward:/home/operationResult";
+				}else{
+					int result = itoProductService.deleteById(productId);//删除商品
+					result = itoSkuService.deleteByProductId(productId);//删除商品sku
+					
+					result = itoSkuPropValueService.deleteSkuValuesByProductId(productId);//清除product与skuPropValue的关系数据
+				}
+			}
+		}
+		model.addAttribute("redirectUrl", "./productList");
+		return "forward:/home/operationRedirect"; 
+	}
 	
 	public static void main(String[] args) {
 		ItoProductController x=  new ItoProductController();

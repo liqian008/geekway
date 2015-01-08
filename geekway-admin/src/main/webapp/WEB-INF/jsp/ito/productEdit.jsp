@@ -168,6 +168,31 @@
 							</div> 
 						</div>
 						-->
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">修改Sku属性配置: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-8"> 
+								<%
+								String canModifySkuSettings = (String) request.getAttribute("canModifySkuSettings");
+								if("true".equals(canModifySkuSettings)){
+								%>
+								<div class="checkbox-inline checkbox-info">
+									<label>
+										<input class="styled" type="radio" name="modifySkuSettings" value="false"/>
+										否
+									</label>
+								</div>
+								<div class="checkbox-inline checkbox-info">
+									<label>
+										<input class="styled" type="radio" name="modifySkuSettings" value="true"/>
+										是
+									</label>
+								</div>
+								<%}else{ %>
+									<label class="control-label">商品目前处于上架状态或已经产生了订单，无法修改Sku属性配置</label>
+								<%} %>
+							</div> 
+						</div>
 						
 						<%
 						List<ItoSkuProp> skuPropList = (List<ItoSkuProp>)request.getAttribute("skuPropList");
@@ -176,7 +201,7 @@
 								int skuPropId = skuProp.getId();
 						%>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">必选*</span>
 							</label>
 							<div class="col-sm-6">
 								<%
@@ -189,7 +214,7 @@
 								%>
 									<div class="checkbox-inline checkbox-info">
 										<label>
-											<input class="styled" type="checkbox" name="productSkuValueIds" value="<%=skuPropValue.getId()%>" <%=getCheckedString(skuPropValue.getId(), productSkuValueIdList)%> disabled="disabled"/>
+											<input class="styled" type="checkbox" name="productSkuValueIds" value="<%=skuPropValue.getId()%>" <%=getCheckedString(skuPropValue.getId(), productSkuValueIdList)%> <%="true".equals(canModifySkuSettings)?"":" disabled='disabled'"%>/>
 											<%=skuPropValue.getName()%>
 										</label>
 									</div>
