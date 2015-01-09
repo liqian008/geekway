@@ -93,4 +93,12 @@
 	<bean id="cacheTestService" class="com.bruce.geekway.service.product.CacheTestService">
 	</bean>
 	
+	<!-- 计数service -->
+	<bean id="counterService" class="com.bruce.geekway.service.product.impl.CounterServiceImpl">
+	</bean>
+	
+	<!-- 计数cache -->
+	<bean id="productStockCache" class="com.bruce.geekway.cache.product.ProductStockCache">
+	</bean>
+	
 </beans>

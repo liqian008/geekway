@@ -19,8 +19,12 @@
 		having sum(stock)>0 order by product_id desc limit #{limit};
 	</select>
 	
+	<!-- 增加库存数量 -->
+	<update id="incrStock">
+		update wx_product_sku set stock = stock+#{stock} where id= #{id};
+	</update>
 	
-	<!-- 更新库存数量 -->
+	<!-- 扣减库存数量 -->
 	<update id="reduceStock">
 		update wx_product_sku set stock = stock-#{stock} where id= #{id};
 	</update>

@@ -107,11 +107,6 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	}
 
 	
-	@Override
-	public int reduceStock(long productSkuId, int amount) {
-		return wxProductSkuMapper.reduceStock(productSkuId, amount);
-	}
-	
 	
 //	@Override
 //	public List<WxProductSku> fallLoadCategoryProductSkuList(int categoryId, int productTailId, int limit) {
@@ -137,6 +132,6 @@ public class WxProductSkuServiceImpl implements IWxProductSkuService{
 	public void setWxProductSkuMapper(WxProductSkuMapper wxProductSkuMapper) {
 		this.wxProductSkuMapper = wxProductSkuMapper;
 	}
-	
+
 	
 }

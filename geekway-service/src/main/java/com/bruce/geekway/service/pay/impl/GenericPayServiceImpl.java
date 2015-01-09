@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bruce.geekway.model.WxProductOrder;
 import com.bruce.geekway.model.WxProductOrderItem;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
+import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IWxProductOrderItemService;
 import com.bruce.geekway.service.product.IWxProductOrderService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -26,6 +27,8 @@ public class GenericPayServiceImpl {
 	private IWxProductOrderItemService wxProductOrderItemService;
 	@Autowired
 	private IWxProductSkuService wxProductSkuService;
+	@Autowired
+	private ICounterService counterService;
 
 	/**
 	 * 支付成功，记录微信订单流水表，且更新系统订单状态+库存（事务操作）
@@ -51,10 +54,11 @@ public class GenericPayServiceImpl {
 					// 遍历单条订单，扣减sku商品的库存数
 					if (orderItemList != null && orderItemList.size() > 0) {
 						for (WxProductOrderItem orderItem : orderItemList) {
-							long productSkuId = orderItem.getProductSkuId();
+							int productSkuId = orderItem.getProductSkuId();
 							int amount = orderItem.getAmount();
 							// 执行扣减
-							result = wxProductSkuService.reduceStock(productSkuId, amount);
+//							result = wxProductSkuService.reduceStock(productSkuId, amount);
+							result = counterService.reduceProductSkuStock(productSkuId, amount); 
 							//如果虚拟商品，可能无需扣减库存数
 						}
 					}

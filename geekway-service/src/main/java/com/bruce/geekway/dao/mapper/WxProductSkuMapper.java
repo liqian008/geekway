@@ -82,6 +82,15 @@ public interface WxProductSkuMapper {
 	 */
 	public List<WxProductSku> fallLoadCategoryProductSkuList(@Param("categoryId") int categoryId, @Param("productTailId") int productTailId, @Param("limit") int limit);
 	
+	
+	/**
+	 * 增加库存
+	 * @param id
+	 * @param stock
+	 * @return
+	 */
+	public int incrStock(@Param("id") long id, @Param("stock") int stock);
+	
 	/**
 	 * 扣减库存
 	 * @param id

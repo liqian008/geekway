@@ -31,6 +31,7 @@ import com.bruce.geekway.model.WxProductSku;
 import com.bruce.geekway.model.WxProductTag;
 import com.bruce.geekway.model.WxSkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
+import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IWxProductCategoryService;
 import com.bruce.geekway.service.product.IWxProductService;
 import com.bruce.geekway.service.product.IWxProductSkuService;
@@ -61,6 +62,9 @@ public class WxProductController {
 	private IWxProductSkuService wxProductSkuService;
 	@Autowired
 	private IWxSkuPropValueService wxSkuPropValueService;
+	@Autowired
+	private ICounterService counterService;
+	
 //	@Autowired
 //	private IWxProductVoucherService wxProductVoucherService;
 //	@Autowired
@@ -340,6 +344,21 @@ public class WxProductController {
 		return productInfo(model, productId, 0, request);
 	}
 	
+	
+	/**
+	 * 商品详细信息
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "productStock.json")
+	public ModelAndView productStock(HttpServletRequest request, int productSkuId) {
+		if(logger.isDebugEnabled()){
+            logger.debug("ajax获取商品库存");
+        }
+		int stock = counterService.queryProductSkuStock(productSkuId);
+		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(stock));
+	}
 	
 
 	@RequestMapping(value = "recommendProducts.json")

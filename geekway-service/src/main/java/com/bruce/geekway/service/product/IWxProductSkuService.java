@@ -30,12 +30,7 @@ public interface IWxProductSkuService extends IFoundationService<WxProductSku, I
 	 */
 //	public List<WxProductSku> fallLoadCachedCategoryProductSkuList(int categoryId, int productTailId, int limit);
 
-	/**
-	 * 扣减库存
-	 * @param amount
-	 * @return
-	 */
-	public int reduceStock(long productSkuId, int amount);
+	
 	
 //	public int queryCountBySkuPropValueId(int skuPropValueId);
 	

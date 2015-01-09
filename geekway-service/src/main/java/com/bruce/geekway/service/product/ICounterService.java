@@ -7,14 +7,15 @@ package com.bruce.geekway.service.product;
  */
 public interface ICounterService {
 	
-	public int getStock(int productSkuId);
+	//查询库存
+	public int queryProductSkuStock(int productSkuId);
 	
 	//增加库存
-	public int incrStock(int productSkuId, int stockNum);
+	public int incrProductSkuStock(int productSkuId, int incrNum);
 	
 	//扣减库存
-    public int reduceStock(int productSkuId, int stockNum);
+    public int reduceProductSkuStock(int productSkuId, int reduceNum);
     
 	//清空库存
-  	public void clearStock(int productSkuId);
+//  	public void clearProductSkuStock(int productSkuId);
 }
