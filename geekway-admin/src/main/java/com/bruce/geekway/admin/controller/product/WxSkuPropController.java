@@ -11,9 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.geekway.model.WxSkuProp;
-import com.bruce.geekway.service.product.IWxProductCategoryService;
-import com.bruce.geekway.service.product.IWxSkuPropService;
+import com.bruce.geekway.model.SkuProp;
+import com.bruce.geekway.service.product.IProductCategoryService;
+import com.bruce.geekway.service.product.ISkuPropService;
 
 
 @Controller
@@ -21,9 +21,9 @@ import com.bruce.geekway.service.product.IWxSkuPropService;
 public class WxSkuPropController {
 
 	@Autowired
-	private IWxSkuPropService wxSkuPropService;
+	private ISkuPropService wxSkuPropService;
 	@Autowired
-	private IWxProductCategoryService wxProductCategoryService;
+	private IProductCategoryService wxProductCategoryService;
 
 	
 	@RequestMapping("/skuPropList")
@@ -31,7 +31,7 @@ public class WxSkuPropController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxSkuProp> skuPropList = wxSkuPropService.queryAll();
+		List<SkuProp> skuPropList = wxSkuPropService.queryAll();
 		model.addAttribute("skuPropList", skuPropList);
 		return "product/skuPropList";
 	}
@@ -56,7 +56,7 @@ public class WxSkuPropController {
 //	}
 	
 	@RequestMapping("/skuPropAdd")
-	public String skuPropAdd(Model model,  WxSkuProp skuProp, HttpServletRequest request) {
+	public String skuPropAdd(Model model,  SkuProp skuProp, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -74,13 +74,13 @@ public class WxSkuPropController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxSkuProp SkuProp = wxSkuPropService.loadById(skuPropId);
+		SkuProp SkuProp = wxSkuPropService.loadById(skuPropId);
 		model.addAttribute("skuProp", SkuProp);
 		return "product/skuPropEdit";
 	}
 	
 	@RequestMapping(value = "/saveSkuProp", method = RequestMethod.POST)
-	public String saveSkuProp(Model model, WxSkuProp skuProp, HttpServletRequest request) {
+	public String saveSkuProp(Model model, SkuProp skuProp, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

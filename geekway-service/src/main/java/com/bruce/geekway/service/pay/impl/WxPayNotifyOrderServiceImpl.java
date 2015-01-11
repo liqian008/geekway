@@ -12,7 +12,6 @@ import com.bruce.geekway.model.WxPayNotifyOrder;
 import com.bruce.geekway.model.WxPayNotifyOrderCriteria;
 import com.bruce.geekway.service.pay.IWxPayNotifyOrderService;
 
-@Service
 public class WxPayNotifyOrderServiceImpl implements IWxPayNotifyOrderService {
 
 	@Autowired

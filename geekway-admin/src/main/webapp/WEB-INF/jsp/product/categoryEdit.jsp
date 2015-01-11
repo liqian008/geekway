@@ -102,8 +102,8 @@
 			</div>
 			
 			<%
-			WxProductCategory category = (WxProductCategory)request.getAttribute("category");
-			%>
+							ProductCategory category = (ProductCategory)request.getAttribute("category");
+						%>
 
 			<form id="validate" action="<s:url value='./saveProductCategory'/>" method="post"  class="form-horizontal form-bordered">
 				<!-- Basic inputs -->

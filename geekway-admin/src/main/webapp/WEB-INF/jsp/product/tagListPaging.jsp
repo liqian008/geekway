@@ -156,11 +156,11 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxProductTag> pagingResult = (PagingResult<WxProductTag>)request.getAttribute("productTagPagingData");
-							List<WxProductTag> productTagList = pagingResult.getPageData(); 
-                           	if(productTagList!=null&&productTagList.size()>0){
-                           		for(WxProductTag productTag: productTagList){
-                           	%>
+								PagingResult<ProductTag> pagingResult = (PagingResult<ProductTag>)request.getAttribute("productTagPagingData");
+												List<ProductTag> productTagList = pagingResult.getPageData(); 
+							                           	if(productTagList!=null&&productTagList.size()>0){
+							                           		for(ProductTag productTag: productTagList){
+							%>
 						
 							<tr>
 								<td><%=productTag.getId()%></td>

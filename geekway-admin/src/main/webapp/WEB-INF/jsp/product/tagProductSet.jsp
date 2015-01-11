@@ -126,11 +126,11 @@
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxProduct> pagingResult = (PagingResult<WxProduct>)request.getAttribute("productPagingData");
-							List<WxProduct> productList = pagingResult.getPageData(); 
-                           	if(productList!=null&&productList.size()>0){
-                           		for(WxProduct product: productList){
-                           	%>
+								PagingResult<Product> pagingResult = (PagingResult<Product>)request.getAttribute("productPagingData");
+												List<Product> productList = pagingResult.getPageData(); 
+							                           	if(productList!=null&&productList.size()>0){
+							                           		for(Product product: productList){
+							%>
 						
 							<tr>
 								<td><%=product.getId()%></td>

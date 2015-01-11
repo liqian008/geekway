@@ -18,7 +18,6 @@ import com.bruce.geekway.utils.HttpUtil;
  * @author liqian
  *
  */
-@Service
 public class WxMpMediaUploadService extends WxBaseService {
 
 	

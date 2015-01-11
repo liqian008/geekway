@@ -2,7 +2,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
-<%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
+<%@ page import ="com.bruce.geekway.model.ProductCart.CartProductSku" %>
 <%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 
@@ -40,9 +40,8 @@
 </head>
 
 <%
-
-CartProductSku cartItem = (CartProductSku)request.getAttribute("cartItem");
-WxProductSku cartProductSku = cartItem.getProductSku();
+	CartProductSku cartItem = (CartProductSku)request.getAttribute("cartItem");
+ProductSku cartProductSku = cartItem.getProductSku();
 int buyAmount = cartItem.getAmount();
 %>
 

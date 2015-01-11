@@ -6,12 +6,12 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.geekway.cache.product.ProductStockCache;
-import com.bruce.geekway.dao.mapper.WxProductSkuMapper;
-import com.bruce.geekway.model.WxProductSku;
+import com.bruce.geekway.constants.ConstConfig;
+import com.bruce.geekway.dao.mapper.ProductSkuMapper;
+import com.bruce.geekway.model.ProductSku;
 import com.bruce.geekway.model.exception.RedisKeyNotExistException;
-import com.bruce.geekway.model.exception.RedisScoreNotExistException;
 import com.bruce.geekway.service.product.ICounterService;
-import com.bruce.geekway.service.product.IWxProductSkuService;
+import com.bruce.geekway.service.product.IProductSkuService;
 
 /**
  * Comments for CounterServiceImpl.java
@@ -23,9 +23,9 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 	@Autowired 
 	private ProductStockCache productStockCache;
 	@Autowired 
-	private IWxProductSkuService wxProductSkuService;
+	private IProductSkuService wxProductSkuService;
 	@Autowired
-	private WxProductSkuMapper wxProductSkuMapper;
+	private ProductSkuMapper wxProductSkuMapper;
 	
     /**
      * Logger for this class
@@ -34,35 +34,39 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
     
     @Override
     public int queryProductSkuStock(int productSkuId){
-    	try {
-    		return productStockCache.getProductSkuStock(productSkuId);
-    	} catch (RedisKeyNotExistException e) {//key不存在
-    		if(logger.isErrorEnabled()){
-    			logger.error("get product sku stock: "+productSkuId, e);
-    		}
-            //重建库存的缓存
-    		int currentStock = queryProductSkuStockFromDB(productSkuId);
-			productStockCache.rebuildProductSkuStock(productSkuId, currentStock);
-			return currentStock;
-		}
-    }
-    
-    @Override
-    public int incrProductSkuStock(int productSkuId, int incrNum){
-    	int result = wxProductSkuMapper.incrStock(productSkuId, incrNum);
-    	if(result>0){
+    	if(ConstConfig.REDIS_ENABLE){//当启用redis时，先读redis
 	    	try {
-	    		return productStockCache.incrProductSkuStock(productSkuId, incrNum);
-	    	} catch (RedisKeyNotExistException e) {
+	    		return productStockCache.getProductSkuStock(productSkuId);
+	    	} catch (RedisKeyNotExistException e) {//key不存在
 	    		if(logger.isErrorEnabled()){
-	    			logger.error("incr sku stock: "+productSkuId, e);
+	    			logger.error("get product sku stock: "+productSkuId, e);
 	    		}
-	    		 //重建库存的缓存
+	            //重建库存的缓存
 	    		int currentStock = queryProductSkuStockFromDB(productSkuId);
 				productStockCache.rebuildProductSkuStock(productSkuId, currentStock);
+				return currentStock;
 			}
+    	}else{//不启用redis，则直接读db
+    		return queryProductSkuStockFromDB(productSkuId);
     	}
-    	return 0;
+    }
+    
+    
+    /**
+     * 增加库存
+     */
+    @Override
+    public int incrProductSkuStock(int productSkuId, int incrNum){
+    	//TODO synchronized
+    	int result = wxProductSkuMapper.incrStock(productSkuId, incrNum);
+    	if(ConstConfig.REDIS_ENABLE){//启用redis时，同步redis数据
+	    	if(result>0){
+		    	return productStockCache.incrProductSkuStock(productSkuId, incrNum);
+	    	}
+	    	return 0;
+    	}else{//不启用redis，直接返回
+    		return result;
+    	}
     }
 
     /**
@@ -70,20 +74,16 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
      */
 	@Override
 	public int reduceProductSkuStock(int productSkuId, int reduceStock) { 
-		int result = wxProductSkuMapper.reduceStock(productSkuId, reduceStock);
-    	if(result>0){
-	    	try {
-	    		return productStockCache.reduceProductSkuStock(productSkuId, reduceStock);
-	    	} catch (RedisKeyNotExistException e) {
-	    		if(logger.isErrorEnabled()){
-	    			logger.error("reduce product sku stock: "+productSkuId, e);
-	    		}
-	    		 //重建库存的缓存
-	    		int currentStock = queryProductSkuStockFromDB(productSkuId);
-				productStockCache.rebuildProductSkuStock(productSkuId, currentStock);
-			}
-    	}
-    	return 0;
+		//TODO synchronized
+    	int result = wxProductSkuMapper.reduceStock(productSkuId, reduceStock);
+		if(ConstConfig.REDIS_ENABLE){//启用redis时，同步redis数据
+			if(result>0){
+		    	return productStockCache.reduceProductSkuStock(productSkuId, reduceStock);
+	    	}
+	    	return 0;
+		}else{//不启用redis，直接返回
+			return result;
+		}
 	}
 	
 	
@@ -93,7 +93,7 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 	 * @return
 	 */
 	private int queryProductSkuStockFromDB(int productSkuId) {
-		WxProductSku productSku = wxProductSkuMapper.selectByPrimaryKey(productSkuId);
+		ProductSku productSku = wxProductSkuMapper.selectByPrimaryKey(productSkuId);
 		if(productSku!=null&&productSku.getStock()!=null&&productSku.getStock()>0){
 			return productSku.getStock().intValue();
 		}
@@ -112,19 +112,19 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 		this.productStockCache = productStockCache;
 	}
 
-	public IWxProductSkuService getWxProductSkuService() {
+	public IProductSkuService getWxProductSkuService() {
 		return wxProductSkuService;
 	}
 
-	public void setWxProductSkuService(IWxProductSkuService wxProductSkuService) {
+	public void setWxProductSkuService(IProductSkuService wxProductSkuService) {
 		this.wxProductSkuService = wxProductSkuService;
 	}
 
-	public WxProductSkuMapper getWxProductSkuMapper() {
+	public ProductSkuMapper getWxProductSkuMapper() {
 		return wxProductSkuMapper;
 	}
 
-	public void setWxProductSkuMapper(WxProductSkuMapper wxProductSkuMapper) {
+	public void setWxProductSkuMapper(ProductSkuMapper wxProductSkuMapper) {
 		this.wxProductSkuMapper = wxProductSkuMapper;
 	}
 	

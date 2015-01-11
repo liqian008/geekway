@@ -22,7 +22,6 @@ import com.bruce.geekway.utils.HttpUtil;
  * @author liqian
  *
  */
-@Service
 public class WxMpCustomReplyService extends WxBaseService {
 
 	

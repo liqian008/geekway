@@ -168,11 +168,11 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxProductOrder> pagingResult = (PagingResult<WxProductOrder>)request.getAttribute("orderPagingData");
-							List<WxProductOrder> notifyOrderList = pagingResult.getPageData();
-                           	if(notifyOrderList!=null&&notifyOrderList.size()>0){
-                           		for(WxProductOrder notifyOrder: notifyOrderList){
-                           	%>
+								PagingResult<ProductOrder> pagingResult = (PagingResult<ProductOrder>)request.getAttribute("orderPagingData");
+												List<ProductOrder> notifyOrderList = pagingResult.getPageData();
+							                           	if(notifyOrderList!=null&&notifyOrderList.size()>0){
+							                           		for(ProductOrder notifyOrder: notifyOrderList){
+							%>
 						
 							<tr>
 								<td><%=notifyOrder.getId()%></td>

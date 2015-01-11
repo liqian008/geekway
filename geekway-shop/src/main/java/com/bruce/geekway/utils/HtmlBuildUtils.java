@@ -3,10 +3,10 @@ package com.bruce.geekway.utils;
 import java.util.List;
 
 import com.bruce.foundation.util.DateUtil;
-import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductOrder;
-import com.bruce.geekway.model.WxProductSku;
-import com.bruce.geekway.model.WxProductVoucher;
+import com.bruce.geekway.model.Product;
+import com.bruce.geekway.model.ProductOrder;
+import com.bruce.geekway.model.ProductSku;
+import com.bruce.geekway.model.ProductVoucher;
 
 /**
  * html工具，用于ajax
@@ -21,12 +21,12 @@ public class HtmlBuildUtils {
 	 * @param productSkuList
 	 * @return
 	 */
-	public static String buildFallLoadProductHtml(List<WxProduct> productList) {
+	public static String buildFallLoadProductHtml(List<Product> productList) {
 		// TODO freemarker template
 		if (productList != null && productList.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (WxProduct product : productList) {
+			for (Product product : productList) {
 				i++;
 				sb.append(buildProductItemHtml(product, i % 2));
 			}
@@ -35,7 +35,7 @@ public class HtmlBuildUtils {
 		return "";
 	}
 
-	private static String buildProductItemHtml(WxProduct product, int mod) {
+	private static String buildProductItemHtml(Product product, int mod) {
 		String lastColumnCss = mod == 0 ? " last-column" : ""; 
 		if (product != null) {
 			StringBuilder sb = new StringBuilder();
@@ -62,12 +62,12 @@ public class HtmlBuildUtils {
 	 * @param productSkuList
 	 * @return
 	 */
-	public static String buildFallLoadProductSkuHtml(List<WxProductSku> productSkuList) {
+	public static String buildFallLoadProductSkuHtml(List<ProductSku> productSkuList) {
 		// TODO freemarker template
 		if (productSkuList != null && productSkuList.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (WxProductSku productSku : productSkuList) {
+			for (ProductSku productSku : productSkuList) {
 				i++;
 				sb.append(buildProductSkuItemHtml(productSku, i % 2));
 			}
@@ -76,7 +76,7 @@ public class HtmlBuildUtils {
 		return "";
 	}
 
-	private static String buildProductSkuItemHtml(WxProductSku productSku, int mod) {
+	private static String buildProductSkuItemHtml(ProductSku productSku, int mod) {
 		String lastColumnCss = mod == 0 ? " last-column" : ""; 
 
 		if (productSku != null) {
@@ -102,12 +102,12 @@ public class HtmlBuildUtils {
 	 * @param productSkuList
 	 * @return
 	 */
-	public static String buildFallLoadVouchersHtml(List<WxProductVoucher> productVoucherList) {
+	public static String buildFallLoadVouchersHtml(List<ProductVoucher> productVoucherList) {
 		// TODO freemarker template
 		if (productVoucherList != null && productVoucherList.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (WxProductVoucher productVoucher : productVoucherList) {
+			for (ProductVoucher productVoucher : productVoucherList) {
 				i++;
 				sb.append(buildVoucherItemHtml(productVoucher));
 			}
@@ -116,7 +116,7 @@ public class HtmlBuildUtils {
 		return "";
 	}
 	
-	private static String buildVoucherItemHtml(WxProductVoucher productVoucher) {
+	private static String buildVoucherItemHtml(ProductVoucher productVoucher) {
 		if (productVoucher != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div>");
@@ -136,12 +136,12 @@ public class HtmlBuildUtils {
 	 * @param productSkuList
 	 * @return
 	 */
-	public static String buildFallLoadOrdersHtml(List<WxProductOrder> productOrderList) {
+	public static String buildFallLoadOrdersHtml(List<ProductOrder> productOrderList) {
 		// TODO freemarker template
 		if (productOrderList != null && productOrderList.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (WxProductOrder productOrder : productOrderList) {
+			for (ProductOrder productOrder : productOrderList) {
 				i++;
 				sb.append(buildOrderItemHtml(productOrder));
 			}
@@ -150,7 +150,7 @@ public class HtmlBuildUtils {
 		return "";
 	}
 	
-	private static String buildOrderItemHtml(WxProductOrder productOrder) {
+	private static String buildOrderItemHtml(ProductOrder productOrder) {
 		if (productOrder != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div>");
@@ -185,12 +185,12 @@ public class HtmlBuildUtils {
 	 * @param productSkuList
 	 * @return
 	 */
-	public static String buildRecommendProductsHtml(List<WxProduct> productList) {
+	public static String buildRecommendProductsHtml(List<Product> productList) {
 		// TODO freemarker template
 		if (productList != null && productList.size() > 0) {
 			StringBuilder sb = new StringBuilder();
 			int i = 0;
-			for (WxProduct product : productList) {
+			for (Product product : productList) {
 				i++;
 				sb.append(buildRecommendProductItemHtml(product));
 			}
@@ -204,7 +204,7 @@ public class HtmlBuildUtils {
 	 * @param product
 	 * @return
 	 */
-	private static String buildRecommendProductItemHtml(WxProduct product) {
+	private static String buildRecommendProductItemHtml(Product product) {
 		if (product != null) {
 			StringBuilder sb = new StringBuilder();
 			

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
-import com.bruce.geekway.model.WxProductCategory;
-import com.bruce.geekway.model.WxProductCategoryCriteria;
-import com.bruce.geekway.service.product.IWxProductCategoryService;
+import com.bruce.geekway.model.ProductCategory;
+import com.bruce.geekway.model.ProductCategoryCriteria;
+import com.bruce.geekway.service.product.IProductCategoryService;
 
 
 
@@ -30,7 +30,7 @@ public class WxProductCategoryController {
 	
 
 	@Autowired
-	private IWxProductCategoryService wxProductCategoryService;
+	private IProductCategoryService wxProductCategoryService;
 	
 	/**
 	 * 分页方式查询
@@ -48,11 +48,11 @@ public class WxProductCategoryController {
 		
 		model.addAttribute("pageNo", pageNo);
 		
-		WxProductCategoryCriteria criteria = new WxProductCategoryCriteria();
+		ProductCategoryCriteria criteria = new ProductCategoryCriteria();
 		criteria.setOrderByClause(" id desc");
-		WxProductCategoryCriteria.Criteria subCriteria = criteria.createCriteria();
+		ProductCategoryCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<WxProductCategory> productCategoryPagingData = wxProductCategoryService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductCategory> productCategoryPagingData = wxProductCategoryService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productCategoryPagingData!=null){
 			productCategoryPagingData.setRequestUri(request.getRequestURI());
 			
@@ -70,13 +70,13 @@ public class WxProductCategoryController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxProductCategory> categoryList = wxProductCategoryService.queryAll();
+		List<ProductCategory> categoryList = wxProductCategoryService.queryAll();
 		model.addAttribute("categoryList", categoryList);
 		return "product/categoryList";
 	}
 	
 	@RequestMapping("/categoryAdd")
-	public String categoryAdd(Model model, WxProductCategory category, HttpServletRequest request) {
+	public String categoryAdd(Model model, ProductCategory category, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -89,13 +89,13 @@ public class WxProductCategoryController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductCategory ProductCategory = wxProductCategoryService.loadById(categoryId);
+		ProductCategory ProductCategory = wxProductCategoryService.loadById(categoryId);
 		model.addAttribute("category", ProductCategory);
 		return "product/categoryEdit";
 	}
 	
 	@RequestMapping(value = "/saveProductCategory", method = RequestMethod.POST)
-	public String saveProductCategory(Model model, WxProductCategory category, HttpServletRequest request) {
+	public String saveProductCategory(Model model, ProductCategory category, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

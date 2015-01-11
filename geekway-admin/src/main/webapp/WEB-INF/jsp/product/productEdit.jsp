@@ -104,7 +104,7 @@
 			</div>
 
 			<%
-			WxProduct product = (WxProduct)request.getAttribute("product"); 
+				Product product = (Product)request.getAttribute("product");
 			%>
 
 			<form id="validate" action="<s:url value='./saveProduct'/>" method="post"  class="form-horizontal form-bordered">
@@ -203,22 +203,22 @@
 						</div>
 						
 						<%
-						List<WxSkuProp> skuPropList = (List<WxSkuProp>)request.getAttribute("skuPropList");
-						if(skuPropList!=null){
-							for(WxSkuProp skuProp: skuPropList){
-								int skuPropId = skuProp.getId();
-						%>
+													List<SkuProp> skuPropList = (List<SkuProp>)request.getAttribute("skuPropList");
+																if(skuPropList!=null){
+																	for(SkuProp skuProp: skuPropList){
+																		int skuPropId = skuProp.getId();
+												%>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-6">
 								<%
-								List<Integer> productSkuValueIdList = (List<Integer>)request.getAttribute("productSkuValueIdList");
-								
-								List<WxSkuPropValue> skuPropValueList = (List<WxSkuPropValue>)request.getAttribute("skuPropValueList");
-								if(skuPropValueList!=null&&skuPropValueList.size()>0){
-									for(WxSkuPropValue skuPropValue : skuPropValueList){
-										if(skuPropId==skuPropValue.getSkuPropId()){
+									List<Integer> productSkuValueIdList = (List<Integer>)request.getAttribute("productSkuValueIdList");
+														
+														List<SkuPropValue> skuPropValueList = (List<SkuPropValue>)request.getAttribute("skuPropValueList");
+														if(skuPropValueList!=null&&skuPropValueList.size()>0){
+															for(SkuPropValue skuPropValue : skuPropValueList){
+																if(skuPropId==skuPropValue.getSkuPropId()){
 								%>
 									<div class="checkbox-inline checkbox-info">
 										<label>

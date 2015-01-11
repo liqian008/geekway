@@ -164,13 +164,13 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxProductNews> pagingResult = (PagingResult<WxProductNews>)request.getAttribute("productNewsPagingData");
-							List<WxProductNews> newsList = pagingResult.getPageData();
-                           	if(newsList!=null&&newsList.size()>0){
-                           		int i=0;
-                           		for(WxProductNews news: newsList){
-                           			i++;
-                           	%>
+								PagingResult<ProductNews> pagingResult = (PagingResult<ProductNews>)request.getAttribute("productNewsPagingData");
+												List<ProductNews> newsList = pagingResult.getPageData();
+							                           	if(newsList!=null&&newsList.size()>0){
+							                           		int i=0;
+							                           		for(ProductNews news: newsList){
+							                           			i++;
+							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td>单图文</td> 

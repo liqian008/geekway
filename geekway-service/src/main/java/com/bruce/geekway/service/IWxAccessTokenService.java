@@ -8,6 +8,6 @@ public interface IWxAccessTokenService extends IFoundationService<WxAccessToken,
 	
 	public String getCachedAccessToken();
 	
-	public int cachedAccessToken(WxAccessToken accessToken);
+//	public int cachedAccessToken(WxAccessToken accessToken);
 	
 }

@@ -20,14 +20,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.model.WxProductOrder;
-import com.bruce.geekway.model.WxProductVoucher;
+import com.bruce.geekway.model.ProductOrder;
+import com.bruce.geekway.model.ProductVoucher;
 import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.mp.WxMpOauthService;
-import com.bruce.geekway.service.product.IWxProductOrderService;
-import com.bruce.geekway.service.product.IWxProductService;
-import com.bruce.geekway.service.product.IWxProductVoucherService;
+import com.bruce.geekway.service.product.IProductOrderService;
+import com.bruce.geekway.service.product.IProductService;
+import com.bruce.geekway.service.product.IProductVoucherService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 
@@ -40,13 +40,13 @@ import com.bruce.geekway.utils.ResponseBuilderUtil;
 public class WxMyController{
 	
 	@Autowired
-	private IWxProductService wxProductService;
+	private IProductService productService;
 	@Autowired
 	private WxMpOauthService wxMpOauthService;
 	@Autowired
-	private IWxProductVoucherService wxProductVoucherService;
+	private IProductVoucherService productVoucherService;
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
+	private IProductOrderService productOrderService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
 	
@@ -59,7 +59,7 @@ public class WxMyController{
 	@NeedAuthorize
 	@RequestMapping(value = "/orders")
 	public String orders(Model model, HttpServletRequest request) {
-//		List<WxProduct> productList = wxProductService.queryAvailableList();
+//		List<WxProduct> productList = productService.queryAvailableList();
 //		model.addAttribute("productList", productList);
 		if(logger.isDebugEnabled()){
 			logger.debug("进入[我的订单], debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
@@ -77,11 +77,11 @@ public class WxMyController{
             logger.debug("ajax加载更多【我的订单】，userOpenId: "+userOpenId+" , tailId: "+tailId);
         }
 	    int limit = 2;
-		List<WxProductOrder> productOrderList = null;
+		List<ProductOrder> productOrderList = null;
 		
 		//用户有效
 		if(!StringUtils.isBlank(userOpenId)){
-			productOrderList = wxProductOrderService.fallLoadCachedUserOrderList(userOpenId, tailId, limit+1);
+			productOrderList = productOrderService.fallLoadCachedUserOrderList(userOpenId, tailId, limit+1);
 		}
 		
 		long nextTailId = 0;
@@ -131,11 +131,11 @@ public class WxMyController{
             logger.debug("ajax加载更多【我的优惠券】，userOpenId: "+userOpenId+" , tailId: "+tailId);
         }
 	    int limit = 2;
-		List<WxProductVoucher> productVoucherList = null;
+		List<ProductVoucher> productVoucherList = null;
 		
 		//用户有效
 		if(!StringUtils.isBlank(userOpenId)){
-			productVoucherList = wxProductVoucherService.fallLoadUserVoucherList(userOpenId, tailId, limit+1);
+			productVoucherList = productVoucherService.fallLoadUserVoucherList(userOpenId, tailId, limit+1);
 		}
 		
 		long nextTailId = 0;
@@ -174,7 +174,7 @@ public class WxMyController{
 //		if (logger.isDebugEnabled()) {
 //			logger.debug("ajax获得优惠券，userOpenId: " + userOpenId);
 //		}
-//		WxProductVoucher voucher = wxProductVoucherService.applyVoucher(userOpenId);
+//		WxProductVoucher voucher = productVoucherService.applyVoucher(userOpenId);
 //		if(voucher!=null){//成功
 //			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(voucher));
 //		}

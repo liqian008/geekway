@@ -107,7 +107,7 @@
 			</div>
 
 			<%
-			WxProductNews news = (WxProductNews)request.getAttribute("productNews");
+				ProductNews news = (ProductNews)request.getAttribute("productNews");
 			%>
 
 			<form id="validate" action="<s:url value='./saveProductNews'/>" method="post"  class="form-horizontal form-bordered">

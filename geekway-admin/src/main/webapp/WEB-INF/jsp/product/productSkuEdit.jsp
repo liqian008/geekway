@@ -101,8 +101,8 @@
 			</div>
 
 			<%
-			WxProductSku productSku = (WxProductSku)request.getAttribute("productSku");
-			WxProduct product = (WxProduct)request.getAttribute("product");
+				ProductSku productSku = (ProductSku)request.getAttribute("productSku");
+					Product product = (Product)request.getAttribute("product");
 			%>
 
 			<form id="validate" action="<s:url value='./saveSku'/>" method="post"  class="form-horizontal form-bordered">

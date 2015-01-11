@@ -3,7 +3,6 @@ package com.bruce.geekway.service.mp;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
@@ -18,7 +17,6 @@ import com.bruce.geekway.utils.HttpUtil;
  * @author liqian
  *
  */
-@Service
 public class WxMpUserGroupService extends WxBaseService {
 	
 	

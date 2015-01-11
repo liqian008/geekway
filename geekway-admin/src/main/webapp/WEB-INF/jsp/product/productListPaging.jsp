@@ -169,13 +169,13 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						</thead>
 						<tbody>
 							<%
-							PagingResult<WxProduct> pagingResult = (PagingResult<WxProduct>)request.getAttribute("productPagingData");
-							List<WxProduct> productList = pagingResult.getPageData();
-							if(productList!=null&&productList.size()>0){
-                           		int i=0;
-                           		for(WxProduct product: productList){
-                           			i++;
-                           	%>
+								PagingResult<Product> pagingResult = (PagingResult<Product>)request.getAttribute("productPagingData");
+												List<Product> productList = pagingResult.getPageData();
+												if(productList!=null&&productList.size()>0){
+							                           		int i=0;
+							                           		for(Product product: productList){
+							                           			i++;
+							%>
 						
 							<tr>
 		                        <td><%=i%></td>

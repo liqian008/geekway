@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxSkuProp"%>
+<%@page import="com.bruce.geekway.model.SkuProp"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
@@ -121,12 +121,12 @@
 						</thead>
 						<tbody>
 							<%
-                           	List<WxSkuProp> skuPropList = (List<WxSkuProp>)request.getAttribute("skuPropList");
-                           	if(skuPropList!=null&&skuPropList.size()>0){
-                           		int i=0;
-                           		for(WxSkuProp skuProp: skuPropList){
-                           			i++;
-                           	%>
+								List<SkuProp> skuPropList = (List<SkuProp>)request.getAttribute("skuPropList");
+							                           	if(skuPropList!=null&&skuPropList.size()>0){
+							                           		int i=0;
+							                           		for(SkuProp skuProp: skuPropList){
+							                           			i++;
+							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=skuProp.getName()%></td>

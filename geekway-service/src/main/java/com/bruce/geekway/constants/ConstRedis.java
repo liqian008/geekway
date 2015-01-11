@@ -6,6 +6,7 @@ package com.bruce.geekway.constants;
  *
  */
 public interface ConstRedis{
+	
     /*Redis全局命名空间*/
     public static final String REDIS_NAMESPACE = "meiniur";
     

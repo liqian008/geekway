@@ -37,8 +37,8 @@
 </head>
 
 <%
-int categoryId = 0;
-WxProductCategory productCategory = (WxProductCategory)request.getAttribute("productCategory");
+	int categoryId = 0;
+ProductCategory productCategory = (ProductCategory)request.getAttribute("productCategory");
 %>
 
 <body>

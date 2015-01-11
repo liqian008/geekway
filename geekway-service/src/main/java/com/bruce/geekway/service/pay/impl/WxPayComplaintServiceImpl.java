@@ -13,7 +13,6 @@ import com.bruce.geekway.model.WxPayComplaintCriteria;
 import com.bruce.geekway.service.pay.IWxPayComplaintService;
 
 
-@Service
 public class WxPayComplaintServiceImpl implements IWxPayComplaintService {
 
 	@Autowired

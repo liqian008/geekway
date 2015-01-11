@@ -86,16 +86,16 @@ String contextPath = request.getContextPath();
 	            	<li><span class="text-highlight highlight-red">现 价</span>10.00元</li>
 	            	
 	            	<%
-	            	Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
-	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
-	            	%>
+	            		            		Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>)request.getAttribute("skuGroupMap");
+	            		            		            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
+	            		            	%>
 	            	<li id="choose-color" class="choose-color-shouji">
 	            		<div class="dt">选择颜色：</div>
 	            		<div class="dd">
 							<%
-							List<WxSkuPropValue> colorSkuValueList = skuGroupMap.get(1);
-							for(WxSkuPropValue skuPropValue : colorSkuValueList){
-								String displayName = skuPropValue.getName();
+								List<SkuPropValue> colorSkuValueList = skuGroupMap.get(1);
+												for(SkuPropValue skuPropValue : colorSkuValueList){
+													String displayName = skuPropValue.getName();
 							%>	            		
 	            			<div class="item">
 	            				<b></b>
@@ -104,22 +104,26 @@ String contextPath = request.getContextPath();
 		            				<i><%=displayName%></i>
 		            			</a>
 	            			</div>
-	            			<%}%>
+	            			<%
+	            				}
+	            			%>
 	            		</div>
 	            	</li>
-	            	<%}%>
+	            	<%
+	            		}
+	            	%>
 	            	
 	            	<%
-	            	if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
-	            	%>
+	            		            		if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
+	            		            	%>
 	            	<li id="choose-version" class="choose-version-shouji">
 	            		<div class="dt">选择尺码：</div>
 	            		<div class="dd">
 	            			<%
-							List<WxSkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
-							for(WxSkuPropValue skuPropValue : sizeSkuValueList){
-								String displayName = skuPropValue.getName();
-							%>	  
+	            				List<SkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
+	            								for(SkuPropValue skuPropValue : sizeSkuValueList){
+	            									String displayName = skuPropValue.getName();
+	            			%>	  
 	            			<div class="item"><b></b><a href="#none" title="<%=displayName%>" style="cursor: pointer;"><%=displayName%></a></div>
 	            			<%}%>
 	            			<!-- 

@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.bruce.geekway.model.WxProductCategory;
-import com.bruce.geekway.model.WxProductSku;
-import com.bruce.geekway.model.WxProductTag;
+import com.bruce.geekway.model.ProductCategory;
+import com.bruce.geekway.model.ProductSku;
+import com.bruce.geekway.model.ProductTag;
 
 /**
  * 产品链接util类
@@ -104,7 +104,7 @@ public class ShopLinkUtil {
 	
 	
 	@Deprecated
-	public static List<String> buildProductSkuPicList(WxProductSku productSku) {
+	public static List<String> buildProductSkuPicList(ProductSku productSku) {
 		if(productSku!=null&&productSku.getId()!=null){
 			List<String> skuPicList = new ArrayList<String>();
 			String pic1Url = productSku.getSkuPic1Url();
@@ -134,7 +134,7 @@ public class ShopLinkUtil {
 	 * @param productTag
 	 * @return
 	 */
-	public static List<SlideImage> buildSlideImageList(WxProductSku productSku) {
+	public static List<SlideImage> buildSlideImageList(ProductSku productSku) {
 		if(productSku!=null&&productSku.getId()!=null){
 			List<SlideImage> slideImageList = new ArrayList<SlideImage>();
 			int specWidth = 600;
@@ -174,7 +174,7 @@ public class ShopLinkUtil {
 	 * @param productTag
 	 * @return
 	 */
-	public static List<SlideImage> buildSlideImageList(WxProductTag productTag) {
+	public static List<SlideImage> buildSlideImageList(ProductTag productTag) {
 		if(productTag!=null&&productTag.getId()!=null){
 			List<SlideImage> slideImageList = new ArrayList<SlideImage>();
 			int specWidth = 600;
@@ -207,7 +207,7 @@ public class ShopLinkUtil {
 		return null;
 	}
 	
-	public static List<SlideImage> buildSlideImageList(WxProductCategory productCategory) {
+	public static List<SlideImage> buildSlideImageList(ProductCategory productCategory) {
 		if(productCategory!=null&&productCategory.getId()!=null){
 			List<SlideImage> slideImageList = new ArrayList<SlideImage>();
 			int specWidth = 600;

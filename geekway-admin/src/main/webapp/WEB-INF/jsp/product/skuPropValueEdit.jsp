@@ -2,7 +2,7 @@
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.bruce.geekway.model.WxSkuPropValue"%>
+<%@page import="com.bruce.geekway.model.SkuPropValue"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
@@ -102,8 +102,8 @@
 			</div>
 			
 			<%
-			WxSkuPropValue skuPropValue = (WxSkuPropValue)request.getAttribute("skuPropValue");
-			%>
+							SkuPropValue skuPropValue = (SkuPropValue)request.getAttribute("skuPropValue");
+						%>
 
 			<form id="validate" action="<s:url value='./saveSkuPropValue'/>" method="post"  class="form-horizontal form-bordered">
 				<!-- Basic inputs -->

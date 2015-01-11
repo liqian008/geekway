@@ -23,8 +23,8 @@ import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
 import com.bruce.geekway.model.wx.pay.WxPayAlarmNotify;
 import com.bruce.geekway.model.wx.pay.WxPayNotifyOrderRequest;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
-import com.bruce.geekway.service.product.IWxProductOrderService;
-import com.bruce.geekway.service.product.IWxProductSkuService;
+import com.bruce.geekway.service.product.IProductOrderService;
+import com.bruce.geekway.service.product.IProductSkuService;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -44,11 +44,11 @@ public class WxpayService{
 	@Autowired
 	private WxMpPayService wxMpPayService;
 	@Autowired
-	private IWxProductSkuService wxProductSkuService;
+	private IProductSkuService wxProductSkuService;
 	@Autowired
 	private IGenericPayService genericPayService;
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
+	private IProductOrderService wxProductOrderService;
 	
 	
 	/**

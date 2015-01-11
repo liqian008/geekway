@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
-import com.bruce.geekway.service.product.IWxProductOrderService;
+import com.bruce.geekway.service.product.IProductOrderService;
 
 /**
  * 支付宝支付service
@@ -21,7 +21,7 @@ public class AlipayService {
 	private static final Logger alipayNotifyLogger = LoggerFactory.getLogger("alipayNotifyLogger");
 
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
+	private IProductOrderService wxProductOrderService;
 	@Autowired
 	private IGenericPayService genericPayService;
 
@@ -42,12 +42,12 @@ public class AlipayService {
 		return result;
 	}
 
-	public IWxProductOrderService getWxProductOrderService() {
+	public IProductOrderService getWxProductOrderService() {
 		return wxProductOrderService;
 	}
 
 	public void setWxProductOrderService(
-			IWxProductOrderService wxProductOrderService) {
+			IProductOrderService wxProductOrderService) {
 		this.wxProductOrderService = wxProductOrderService;
 	}
 
@@ -58,7 +58,5 @@ public class AlipayService {
 	public void setGenericPayService(IGenericPayService genericPayService) {
 		this.genericPayService = genericPayService;
 	}
-
-
 	
 }

@@ -11,8 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.geekway.model.WxSkuPropValue;
-import com.bruce.geekway.service.product.IWxSkuPropValueService;
+import com.bruce.geekway.model.SkuPropValue;
+import com.bruce.geekway.service.product.ISkuPropValueService;
 
 
 
@@ -21,7 +21,7 @@ import com.bruce.geekway.service.product.IWxSkuPropValueService;
 public class WxSkuPropValueController {
 
 	@Autowired
-	private IWxSkuPropValueService wxSkuPropValueService;
+	private ISkuPropValueService wxSkuPropValueService;
 //	@Autowired
 //	private IWxProductSkuRelationService wxProductSkuRelationService;
 	
@@ -31,13 +31,13 @@ public class WxSkuPropValueController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<WxSkuPropValue> skuPropValueList = wxSkuPropValueService.querySortedSkuPropValues();
+		List<SkuPropValue> skuPropValueList = wxSkuPropValueService.querySortedSkuPropValues();
 		model.addAttribute("skuPropValueList", skuPropValueList);
 		return "product/skuPropValueList";
 	}
 	
 	@RequestMapping("/skuPropValueAdd")
-	public String skuPropValueAdd(Model model, WxSkuPropValue skuPropValue, HttpServletRequest request) {
+	public String skuPropValueAdd(Model model, SkuPropValue skuPropValue, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -50,13 +50,13 @@ public class WxSkuPropValueController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxSkuPropValue SkuPropValue = wxSkuPropValueService.loadById(skuPropValueId);
+		SkuPropValue SkuPropValue = wxSkuPropValueService.loadById(skuPropValueId);
 		model.addAttribute("skuPropValue", SkuPropValue);
 		return "product/skuPropValueEdit";
 	}
 	
 	@RequestMapping(value = "/saveSkuPropValue", method = RequestMethod.POST)
-	public String saveSkuPropValue(Model model, WxSkuPropValue skuPropValue, HttpServletRequest request) {
+	public String saveSkuPropValue(Model model, SkuPropValue skuPropValue, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

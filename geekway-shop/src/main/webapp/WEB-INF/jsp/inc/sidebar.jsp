@@ -42,7 +42,7 @@
 				<a href="${pageContext.request.contextPath}/orders" class="home-order">我的订单<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/vouchers" class="home-voucher">我的优惠券<em></em></a>
+				<a href="${pageContext.request.contextPath}/cart/" class="home-voucher">我的购物车<em></em></a>
 			</div>
 			<!-- 
 			<div class="nav-item">

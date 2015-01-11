@@ -100,7 +100,7 @@
 			</div>
 
 			<%
-			WxProduct product = (WxProduct)request.getAttribute("product");
+				Product product = (Product)request.getAttribute("product");
 			%>
 
 			<form id="validate" action="<s:url value='./batchSaveProductSkus'/>" method="post"  class="form-horizontal form-bordered">
@@ -135,10 +135,10 @@
 						</div>
 						
 						<%
-						List<WxProductSku> productSkuList = (List<WxProductSku>)request.getAttribute("productSkuList");
-						
-						for(WxProductSku productSku: productSkuList){
-						%>
+													List<ProductSku> productSkuList = (List<ProductSku>)request.getAttribute("productSkuList");
+																
+																for(ProductSku productSku: productSkuList){
+												%>
 						<div class="form-group has-error sku-info">
 							<label class="col-sm-2 control-label text-right"><%=productSku.getName()%>: <span class="mandatory">*</span>
 							</label>

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.util.EmojiUtil;
 import com.bruce.foundation.util.JsonUtil;
@@ -19,7 +18,6 @@ import com.bruce.geekway.utils.HttpUtil;
  * @author liqian
  *
  */
-@Service
 public class WxMpUserService extends WxBaseService {
 
 	@Autowired

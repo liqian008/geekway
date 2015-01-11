@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxProductCategory"%>
+<%@page import="com.bruce.geekway.model.ProductCategory"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
@@ -121,12 +121,12 @@
 						</thead>
 						<tbody>
 							<%
-                           	List<WxProductCategory> categoryList = (List<WxProductCategory>)request.getAttribute("categoryList");
-                           	if(categoryList!=null&&categoryList.size()>0){
-                           		int i=0;
-                           		for(WxProductCategory category: categoryList){
-                           			i++;
-                           	%>
+								List<ProductCategory> categoryList = (List<ProductCategory>)request.getAttribute("categoryList");
+							                           	if(categoryList!=null&&categoryList.size()>0){
+							                           		int i=0;
+							                           		for(ProductCategory category: categoryList){
+							                           			i++;
+							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=category.getName()%></td> 

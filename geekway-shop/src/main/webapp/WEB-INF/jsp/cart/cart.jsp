@@ -3,7 +3,7 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
-<%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
+<%@ page import ="com.bruce.geekway.model.ProductCart.CartProductSku" %>
 
 <!DOCTYPE HTML>
 <html>

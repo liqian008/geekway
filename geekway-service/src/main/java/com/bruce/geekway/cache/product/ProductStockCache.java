@@ -1,5 +1,6 @@
 package com.bruce.geekway.cache.product;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,10 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import com.bruce.geekway.constants.ConstRedis;
 import com.bruce.geekway.model.exception.RedisKeyNotExistException;
-import com.bruce.geekway.model.exception.RedisScoreNotExistException;
 
 /**
  * 库存cache
- * 数据结构
+ * 数据结构string
  * @createTime 2013-9-11 下午06:46:02
  */
 public class ProductStockCache{
@@ -26,37 +26,35 @@ public class ProductStockCache{
 	
 	/* 产品sku库存数的key */
 	public static final String COUNTER_KEY_PRODUCT_SKU_STOCK = "productSkuStock";
-//	/* 产品销量的key */
-//	public static final String COUNTER_KEY_PRODUCT_SALES = "productSales";
 	
 	
 	public int getProductSkuStock(int productSkuId) throws RedisKeyNotExistException {
-	    return getCountByKey(getProductSkuStockKey(), productSkuId); 
+	    return getCountByKey(getProductSkuStockKey(productSkuId)); 
     }
 	
-	public int incrProductSkuStock(int productSkuId, int stockNum) throws RedisKeyNotExistException {
-	    return incrByKey(getProductSkuStockKey(), stockNum, productSkuId);
-    }
-	
-	public int reduceProductSkuStock(int productSkuId, int stockNum) throws RedisKeyNotExistException {
-	    return incrByKey(getProductSkuStockKey(), (0-stockNum), productSkuId);
-    }
-	
-	public void clearProductSkuStock(int productSkuId) throws RedisKeyNotExistException {
-		clearByKey(getProductSkuStockKey(), productSkuId);
+	public int incrProductSkuStock(int productSkuId, int incrNum) {
+		delByKey(getProductSkuStockKey(productSkuId));//删除redis缓存
+		return 1;
 	}
 	
+	public int reduceProductSkuStock(int productSkuId, int reduceStock) {
+		delByKey(getProductSkuStockKey(productSkuId));//删除redis缓存
+		return 1;
+	}
+
+	
+	
 	/**
-	 * 重新加载库存数据
+	 * 重建库存数据
 	 * @return
 	 */
 	public boolean rebuildProductSkuStock(int productSkuId, int currentStock) {
-		String key = getProductSkuStockKey();
-		return addByKey(key, productSkuId, currentStock);
+		String key = getProductSkuStockKey(productSkuId);
+		return setByKey(key, currentStock);
     }
 	
 	
-	private int getCountByKey(String key, int member) throws RedisKeyNotExistException{
+	private int getCountByKey(String key) throws RedisKeyNotExistException{
 		int result = 0;
 	    Jedis jedis = null;
         try {
@@ -66,16 +64,18 @@ public class ProductStockCache{
                 jedisPool.returnResource(jedis);
                 throw new RedisKeyNotExistException();
             } else {
-                Double countNum = jedis.zscore(key, String.valueOf(member));
-                jedisPool.returnResource(jedis);
-                if(countNum!=null){
-	            	result = countNum.intValue();
-	            	return result;
-	            }
-                throw new RedisKeyNotExistException();//没有member的情况下，共用RedisKeyNotExistException
+                String value = jedis.get(key);
+                if(NumberUtils.isNumber(value)){
+                	jedisPool.returnResource(jedis);
+                	return NumberUtils.toInt(value);
+                }else{
+                	jedis.del(key);
+                	jedisPool.returnResource(jedis);
+                	throw new RedisKeyNotExistException();
+                }
             }
         } catch (JedisException t) {
-            logger.error("incrByKey", t);
+            logger.error("get count by key", t);
             if (jedis != null) {
                 jedisPool.returnBrokenResource(jedis);
             }
@@ -83,67 +83,17 @@ public class ProductStockCache{
         return result;
 	}
 	
-	
-	private int incrByKey(String key, int score, int member) throws RedisKeyNotExistException {
-        int result = 0;
-	    Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            boolean exists = jedis.exists(key);
-            if (exists == false) {
-                jedisPool.returnResource(jedis);
-                throw new RedisKeyNotExistException();
-            } else {
-            	Double countNum = jedis.zscore(key, String.valueOf(member));
-            	if(countNum!=null){//有值，可以执行incr操作
-            		result = new Double(jedis.zincrby(key, score, String.valueOf(member))).intValue();
-            		jedisPool.returnResource(jedis);
-	            }else{
-	            	jedisPool.returnResource(jedis);
-	            	throw new RedisKeyNotExistException();//没有member的情况下，也返回RedisKeyNotExistException
-	            }
-            }
-            return result;
-        } catch (JedisException t) {
-            logger.error("incrByKey", t);
-            if (jedis != null) {
-                jedisPool.returnBrokenResource(jedis);
-            }
-        }
-        return 0;
-    }
-
-	private void clearByKey(String key, int member) throws RedisKeyNotExistException {
-	    Jedis jedis = null;
-        try {
-            jedis = jedisPool.getResource();
-            boolean exists = jedis.exists(key);
-            if (exists == false) {
-                jedisPool.returnResource(jedis);
-                throw new RedisKeyNotExistException();
-            } else {
-                jedis.zrem(key, String.valueOf(member));
-                jedisPool.returnResource(jedis);
-            }
-        } catch (JedisException t) {
-            logger.error("claerByKey", t);
-            if (jedis != null) {
-                jedisPool.returnBrokenResource(jedis);
-            }
-        }
-    }
-	
 	/**
 	 * 重新加载数据
 	 * @return
 	 */
-	public boolean addByKey(String key, int member, int initScore) {
+	public boolean setByKey(String key, int stock) {
         boolean result = false;
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
             jedis.del(key);
-            jedis.zadd(key, initScore, String.valueOf(member));
+            jedis.set(key, String.valueOf(stock));
             result =  true;
             jedisPool.returnResource(jedis);
             return result;
@@ -155,10 +105,25 @@ public class ProductStockCache{
         }
         return result;
     }
+	
+	private void delByKey(String key) {
+	    Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            jedis.del(key);
+            jedisPool.returnResource(jedis);
+        } catch (JedisException t) {
+            logger.error("delete by key", t);
+            if (jedis != null) {
+                jedisPool.returnBrokenResource(jedis);
+            }
+        }
+	}
+	
+	
 
-
-	private String getProductSkuStockKey() {
-        return ConstRedis.REDIS_NAMESPACE + "_" + ConstRedis.REDIS_KEY_TYPE_COUNT + "_" + COUNTER_KEY_PRODUCT_SKU_STOCK;
+	private String getProductSkuStockKey(int productSkuId) {
+        return ConstRedis.REDIS_NAMESPACE + "_" + ConstRedis.REDIS_KEY_TYPE_COUNT + "_" + COUNTER_KEY_PRODUCT_SKU_STOCK +"_"+ productSkuId;
     }
 
 	public JedisPool getJedisPool() {
@@ -168,6 +133,6 @@ public class ProductStockCache{
 	public void setJedisPool(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
 	}
-	
+
 	
 }

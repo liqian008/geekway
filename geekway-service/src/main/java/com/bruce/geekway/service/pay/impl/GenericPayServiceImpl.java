@@ -3,30 +3,28 @@ package com.bruce.geekway.service.pay.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import com.bruce.geekway.model.WxProductOrder;
-import com.bruce.geekway.model.WxProductOrderItem;
+import com.bruce.geekway.model.ProductOrder;
+import com.bruce.geekway.model.ProductOrderItem;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.service.product.ICounterService;
-import com.bruce.geekway.service.product.IWxProductOrderItemService;
-import com.bruce.geekway.service.product.IWxProductOrderService;
-import com.bruce.geekway.service.product.IWxProductSkuService;
+import com.bruce.geekway.service.product.IProductOrderItemService;
+import com.bruce.geekway.service.product.IProductOrderService;
+import com.bruce.geekway.service.product.IProductSkuService;
 
 /**
  * 支付通用处理service（负责维护、更新订单状态&扣减商品库存）
  * 
  * @author liqian
  */
-@Service
 public class GenericPayServiceImpl {
 
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
+	private IProductOrderService wxProductOrderService;
 	@Autowired
-	private IWxProductOrderItemService wxProductOrderItemService;
+	private IProductOrderItemService wxProductOrderItemService;
 	@Autowired
-	private IWxProductSkuService wxProductSkuService;
+	private IProductSkuService wxProductSkuService;
 	@Autowired
 	private ICounterService counterService;
 
@@ -40,7 +38,7 @@ public class GenericPayServiceImpl {
 	public int processPayNotify(short payType, String outTradeNo, String transactionId) {
 
 		int result = 0;
-		WxProductOrder productOrder = wxProductOrderService.loadByTradeNo(outTradeNo);
+		ProductOrder productOrder = wxProductOrderService.loadByTradeNo(outTradeNo);
 		if (productOrder != null && productOrder.getId() != null) {// 有效的订单信息
 			//检查订单是否已经是成功状态（已发货或已完成）,防止微信的重复补单
 			boolean alreadySuccess = GeekwayEnum.ProductOrderStatusEnum.COMPLETED.getStatus()==productOrder.getStatus()||GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus()==productOrder.getStatus();
@@ -50,10 +48,10 @@ public class GenericPayServiceImpl {
 				//更新本系统内的订单状态为已支付
 				result = wxProductOrderService.markNotifyReceived(payType, outTradeNo, transactionId);
 				if(result>0){
-					List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
+					List<ProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
 					// 遍历单条订单，扣减sku商品的库存数
 					if (orderItemList != null && orderItemList.size() > 0) {
-						for (WxProductOrderItem orderItem : orderItemList) {
+						for (ProductOrderItem orderItem : orderItemList) {
 							int productSkuId = orderItem.getProductSkuId();
 							int amount = orderItem.getAmount();
 							// 执行扣减

@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.WxAccessTokenMapper;
 import com.bruce.geekway.model.WxAccessToken;
 import com.bruce.geekway.model.WxAccessTokenCriteria;
@@ -80,6 +82,7 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 	 * 获取缓存中的accessToken
 	 */
 	@Override
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="accessToken#7000")
 	public synchronized String getCachedAccessToken() {
 		//从db中获取缓存的accessToken
 		WxAccessToken dbAccessToken = loadById(1);
@@ -95,26 +98,16 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 				newAccessToken.setAccessToken(accessToken);
 				newAccessToken.setExpireTime(new Date(wxResult.getExpiresTime()));
 				
-				int result = cachedAccessToken(newAccessToken);
-				
+				//更新db中的accessToken
+				WxAccessTokenCriteria criteria = new WxAccessTokenCriteria();
+				criteria.createCriteria().andIdEqualTo(1);
+				updateByCriteria(newAccessToken, criteria); 
 				return accessToken;
 			}
 		}
 		return null;
 	}
 
-	
-	@Override
-	public int cachedAccessToken(WxAccessToken newAccessToken) {
-		//构造更新条件
-		WxAccessTokenCriteria criteria = new WxAccessTokenCriteria();
-		criteria.createCriteria().andIdEqualTo(1);
-		//更新db中的accessToken
-		int result = updateByCriteria(newAccessToken, criteria); 
-		return result;
-	}
-	
-	
 	
 	public WxAccessTokenMapper getWxAccessTokenMapper() {
 		return wxAccessTokenMapper;

@@ -21,15 +21,15 @@ import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.foundation.util.DateUtil;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.model.WxProductOrder;
-import com.bruce.geekway.model.WxProductOrderCriteria;
-import com.bruce.geekway.model.WxProductOrderItem;
+import com.bruce.geekway.model.ProductOrder;
+import com.bruce.geekway.model.ProductOrderCriteria;
+import com.bruce.geekway.model.ProductOrderItem;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
 import com.bruce.geekway.service.pay.WxpayService;
 import com.bruce.geekway.service.pay.mp.WxMpPayService;
-import com.bruce.geekway.service.product.IWxProductOrderItemService;
-import com.bruce.geekway.service.product.IWxProductOrderService;
+import com.bruce.geekway.service.product.IProductOrderItemService;
+import com.bruce.geekway.service.product.IProductOrderService;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 
@@ -45,9 +45,9 @@ public class WxOrderController {
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
+	private IProductOrderService wxProductOrderService;
 	@Autowired
-	private IWxProductOrderItemService wxProductOrderItemService;
+	private IProductOrderItemService wxProductOrderItemService;
 	@Autowired
 	private WxMpPayService wxMpPayService;
 	@Autowired
@@ -70,9 +70,9 @@ public class WxOrderController {
 		
 		model.addAttribute("pageNo", pageNo);
 		
-		WxProductOrderCriteria criteria = new WxProductOrderCriteria();
+		ProductOrderCriteria criteria = new ProductOrderCriteria();
 		criteria.setOrderByClause(" id desc");
-		WxProductOrderCriteria.Criteria subCriteria = criteria.createCriteria();
+		ProductOrderCriteria.Criteria subCriteria = criteria.createCriteria();
 		
 		//根据模块的需求构造查询条件
 		String outTradeNo = request.getParameter("outTradeNo");
@@ -98,7 +98,7 @@ public class WxOrderController {
 		String endTimeStr = request.getParameter("endTime");
 		
 		
-		PagingResult<WxProductOrder> orderPagingData = wxProductOrderService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductOrder> orderPagingData = wxProductOrderService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(orderPagingData!=null){
 			orderPagingData.setRequestUri(request.getRequestURI());
 			
@@ -116,9 +116,9 @@ public class WxOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
+		ProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
 		if(order!=null){model.addAttribute("order", order);
-			List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
+			List<ProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
 			model.addAttribute("productOrderItemList", productOrderItemList);
 		}
 		return "order/orderInfo";
@@ -129,10 +129,10 @@ public class WxOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductOrder order = wxProductOrderService.loadByTransactionId(transactionId);
+		ProductOrder order = wxProductOrderService.loadByTransactionId(transactionId);
 		if(order!=null){
 			model.addAttribute("order", order);
-			List<WxProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(order.getOutTradeNo());
+			List<ProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(order.getOutTradeNo());
 			model.addAttribute("productOrderItemList", productOrderItemList);
 		}
 		return "order/orderInfo";
@@ -157,7 +157,7 @@ public class WxOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
+		ProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
 		if(order!=null){
 			//构造微信发货对象
 			WxDeliverInfo deliveryInfo = buildDeliveryInfo(openId, transId, outTradeNo, deliverStatus, deliverMsg);
@@ -165,7 +165,7 @@ public class WxOrderController {
 			int result = wxpayService.dealWxDeliver(deliveryInfo);
 			if(result>0){
 				//更新订单发货状态
-				WxProductOrder updatedOrder = new WxProductOrder();
+				ProductOrder updatedOrder = new ProductOrder();
 				updatedOrder.setId(order.getId());
 				updatedOrder.setPostType(postType);
 				updatedOrder.setPostSn(postSn);

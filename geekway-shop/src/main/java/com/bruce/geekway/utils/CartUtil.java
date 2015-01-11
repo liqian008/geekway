@@ -10,7 +10,7 @@ import com.bruce.foundation.util.CookieUtils;
 import com.bruce.foundation.util.DateUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstFront;
-import com.bruce.geekway.model.WxProductCart;
+import com.bruce.geekway.model.ProductCart;
 
 /**
  * 
@@ -25,18 +25,18 @@ public class CartUtil {
 	 * @param request
 	 * @return
 	 */
-	public static WxProductCart loadCartFromCookie(HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = null;
+	public static ProductCart loadCartFromCookie(HttpServletRequest request, HttpServletResponse response) {
+		ProductCart cart = null;
 		// 检查cookie中的购物车信息
 		String cartJson = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_WX_PRODUCT_CART);
 		if (!StringUtils.isBlank(cartJson)) {
 			try {
-				cart = JsonUtil.gson.fromJson(cartJson, WxProductCart.class);
+				cart = JsonUtil.gson.fromJson(cartJson, ProductCart.class);
 			} catch (Exception e) {
 			}
 		}
 		if (cart == null) {
-			cart = new WxProductCart();
+			cart = new ProductCart();
 			writeCartCookie(cart, response);
 		}
 		return cart;
@@ -48,7 +48,7 @@ public class CartUtil {
 	 * @param productCart
 	 * @param response
 	 */
-	public static  void writeCartCookie(WxProductCart productCart, HttpServletResponse response) {
+	public static  void writeCartCookie(ProductCart productCart, HttpServletResponse response) {
 		if (productCart != null) {
 			// 将购物车写入cookie
 			Cookie cookie = new Cookie(ConstFront.COOKIE_KEY_WX_PRODUCT_CART, JsonUtil.gson.toJson(productCart));

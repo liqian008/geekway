@@ -31,13 +31,13 @@ import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstPay;
 import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.model.WxProductCart.CartProductSku;
-import com.bruce.geekway.model.WxProductOrder;
-import com.bruce.geekway.model.WxProductOrderItem;
-import com.bruce.geekway.model.WxProductSku;
-import com.bruce.geekway.model.WxProductSkuCriteria;
-import com.bruce.geekway.model.WxProductVoucher;
-import com.bruce.geekway.model.WxUserAddress;
+import com.bruce.geekway.model.ProductCart.CartProductSku;
+import com.bruce.geekway.model.ProductOrder;
+import com.bruce.geekway.model.ProductOrderItem;
+import com.bruce.geekway.model.ProductSku;
+import com.bruce.geekway.model.ProductSkuCriteria;
+import com.bruce.geekway.model.ProductVoucher;
+import com.bruce.geekway.model.UserAddress;
 import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
@@ -47,20 +47,18 @@ import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.IWxWebUserService;
 import com.bruce.geekway.service.mp.WxMpOauthService;
-import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
-import com.bruce.geekway.service.product.IWxProductOrderItemService;
-import com.bruce.geekway.service.product.IWxProductOrderService;
-import com.bruce.geekway.service.product.IWxProductService;
-import com.bruce.geekway.service.product.IWxProductSkuService;
-import com.bruce.geekway.service.product.IWxProductVoucherService;
-import com.bruce.geekway.service.product.IWxUserAddressService;
+import com.bruce.geekway.service.product.IDeliveryTemplateService;
+import com.bruce.geekway.service.product.IProductOrderItemService;
+import com.bruce.geekway.service.product.IProductOrderService;
+import com.bruce.geekway.service.product.IProductService;
+import com.bruce.geekway.service.product.IProductSkuService;
+import com.bruce.geekway.service.product.IProductVoucherService;
+import com.bruce.geekway.service.product.IUserAddressService;
 import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ResponseUtil;
-import com.bruce.geekway.utils.ShopLinkUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
-import com.bruce.geekway.utils.WxShareUtil;
 
 /**
  * 订单controller
@@ -72,21 +70,21 @@ import com.bruce.geekway.utils.WxShareUtil;
 public class WxProductOrderController {
 	
 	@Autowired
-	private IWxProductService wxProductService;
+	private IProductService productService;
 	@Autowired
-	private IWxProductSkuService wxProductSkuService;
+	private IProductSkuService productSkuService;
 	@Autowired
-	private IWxProductVoucherService wxProductVoucherService;
+	private IProductVoucherService productVoucherService;
 	@Autowired
-	private IWxProductOrderService wxProductOrderService;
+	private IProductOrderService productOrderService;
 	@Autowired
-	private IWxProductOrderItemService wxProductOrderItemService;
+	private IProductOrderItemService productOrderItemService;
 	@Autowired
 	private IWxWebUserService wxWebUserService;
 	@Autowired
-	private IWxUserAddressService wxUserAddressService;
+	private IUserAddressService userAddressService;
 	@Autowired
-	private IWxDeliveryTemplateService wxDeliveryTemplateService;
+	private IDeliveryTemplateService deliveryTemplateService;
 	@Autowired
 	private WxMpOauthService wxMpOauthService;
 	
@@ -161,7 +159,7 @@ public class WxProductOrderController {
 		}
 		
 		//TODO 检查请求参数的正确性
-		WxProductSkuCriteria criteria = new WxProductSkuCriteria();
+		ProductSkuCriteria criteria = new ProductSkuCriteria();
 		
 		List<Integer> skuIdList = new ArrayList<Integer>();
 		if(productSkuId!=null&&productSkuId.length>0){//有效的购物数据
@@ -173,11 +171,11 @@ public class WxProductOrderController {
 			}
 			//加载商品列表
 			criteria.createCriteria().andIdIn(skuIdList);
-			List<WxProductSku> productSkuList =  wxProductSkuService.queryByCriteria(criteria);
+			List<ProductSku> productSkuList =  productSkuService.queryByCriteria(criteria);
 			if(productSkuList!=null&&productSkuList.size()>0){
 				double totalFee = 0;
 				List<CartProductSku> cartItemList = new ArrayList<CartProductSku>();
-				for(WxProductSku productSku: productSkuList){
+				for(ProductSku productSku: productSkuList){
 					int itemBuyAmount = cartItemMap.get(productSku.getId()); 
 					//检查订单的有效性（库存等）
 					checkOrder(productSku, itemBuyAmount);
@@ -209,7 +207,7 @@ public class WxProductOrderController {
 	@RequestMapping(value = "/calcDeliverFee.json")
 	public ModelAndView calcDeliverFee(Model model, double totalProductFee, int totalAmount, String country, String province, String city, HttpServletRequest request) {
 		//计算运费(单位:分)
-		double deliveryFee = wxDeliveryTemplateService.calcDeliveryFee(100004, totalProductFee, totalAmount, country, province, city);
+		double deliveryFee = deliveryTemplateService.calcDeliveryFee(100004, totalProductFee, totalAmount, country, province, city);
 		Map<String, Double> dataMap = new HashMap<String, Double>();
 		dataMap.put("deliveryFee", deliveryFee);
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
@@ -234,15 +232,15 @@ public class WxProductOrderController {
 //		checkUserOpenId(userUnionId);
 		
 		//TODO 检查请求参数的正确性
-		List<WxProductOrderItem> orderItemList = new ArrayList<WxProductOrderItem>();
+		List<ProductOrderItem> orderItemList = new ArrayList<ProductOrderItem>();
 		if(productSkuId!=null&&productSkuId.length>0){
 			for(int i=0;i<productSkuId.length;i++){
 				//加载商品信息
-				WxProductSku productSku = wxProductSkuService.loadById(productSkuId[i]);
+				ProductSku productSku = productSkuService.loadById(productSkuId[i]);
 				//检查订单的有效性
 				checkOrder(productSku, buyAmount[i]);
 				
-				WxProductOrderItem orderItem = new WxProductOrderItem();
+				ProductOrderItem orderItem = new ProductOrderItem();
 				orderItem.setProductId(productSku.getProductId());
 				orderItem.setProductSkuId(productSku.getId());
 				orderItem.setProductName(productSku.getName());
@@ -256,18 +254,18 @@ public class WxProductOrderController {
 			}
 		}
 		//检查地址的有效性&计算相应的邮费
-		WxUserAddress addressInfo = populateAddressInfoFromRequest(request);
+		UserAddress addressInfo = populateAddressInfoFromRequest(request);
 		checkDeliveryAddress(addressInfo);
 		
 		//构造预购买的订单数据
-		WxProductOrder productOrder = new WxProductOrder();
+		ProductOrder productOrder = new ProductOrder();
 		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
 //		productOrder.setUserUnionId(userUnionId);//下单人的unionId
 		
 //		productOrder.setVoucherId(null);//不使用优惠券
 		
 		//提交订单
-		int result = wxProductOrderService.createOrder(productOrder, addressInfo, orderItemList);
+		int result = productOrderService.createOrder(productOrder, addressInfo, orderItemList);
 		if(result>0){
 			if(cartBuy==1){//来自购物车的结算，需要清空购物车
 				CartUtil.clearCartCookie(response);
@@ -306,11 +304,11 @@ public class WxProductOrderController {
 		checkUserOpenId(userOpenId);
 		
 		//加载商品信息
-		WxProductOrder orderInfo = wxProductOrderService.loadByUserTradeNo(userOpenId, tradeNo);
+		ProductOrder orderInfo = productOrderService.loadByUserTradeNo(userOpenId, tradeNo);
 		model.addAttribute("orderInfo", orderInfo);
 		
 		//加载订单中商品列表
-		List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+		List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(tradeNo);
 		model.addAttribute("orderItemList", orderItemList);
 		
 		//检查订单状态
@@ -331,6 +329,7 @@ public class WxProductOrderController {
 	 * @param request
 	 * @return
 	 */
+//	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO, authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/orderInfoShare")
 	public String orderInfoShare(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
@@ -365,13 +364,13 @@ public class WxProductOrderController {
 				request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
 				
 				//加载订单信息
-				WxProductOrder orderInfo = wxProductOrderService.loadByUserTradeNo(userOpenId, tradeNo);
+				ProductOrder orderInfo = productOrderService.loadByUserTradeNo(userOpenId, tradeNo);
 				
 				//TODO 检查商品完整性
 				model.addAttribute("orderInfo", orderInfo);
 				
 				//加载订单中商品列表
-				List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+				List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(tradeNo);
 				model.addAttribute("orderItemList", orderItemList);
 				
 				return "order/orderInfoShare";
@@ -416,7 +415,7 @@ public class WxProductOrderController {
 		//TODO 参数签名，用于保护订单不被泄漏
 		
 		//加载订单信息
-		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		ProductOrder orderInfo = productOrderService.loadByTradeNo(tradeNo);
 		request.setAttribute("orderInfo", orderInfo);
 		
 		boolean isHost = hostOpenId.equals(orderInfo.getUserOpenId());
@@ -449,7 +448,7 @@ public class WxProductOrderController {
 		checkUserOpenId(hostOpenId);
 		
 		//加载订单信息
-		WxProductOrder orderInfo = wxProductOrderService.loadByTradeNo(tradeNo);
+		ProductOrder orderInfo = productOrderService.loadByTradeNo(tradeNo);
 		
 		boolean isHost = hostOpenId.equals(orderInfo.getUserOpenId());
 		if(isHost){//如果是自己打开的
@@ -475,7 +474,7 @@ public class WxProductOrderController {
 			
 			
 			//加载订单中商品列表
-			List<WxProductOrderItem> orderItemList = wxProductOrderItemService.queryByTradeNo(tradeNo);
+			List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(tradeNo);
 			model.addAttribute("orderItemList", orderItemList);
 			
 			//未付款状态，需要构造支付js对象
@@ -493,7 +492,7 @@ public class WxProductOrderController {
 	 * @param clientIp
 	 * @return
 	 */
-	private WxPayItemJsObj buildWxPayJsObj(WxProductOrder orderInfo, String clientIp) {
+	private WxPayItemJsObj buildWxPayJsObj(ProductOrder orderInfo, String clientIp) {
 		String banktype = "WX";
 		String productName = orderInfo.getTitle();// 商品名称信息，这里由测试网页填入。
 		String fee_type = "1";// 费用类型，这里1为默认的人民币
@@ -590,7 +589,7 @@ public class WxProductOrderController {
 	 * @param stock
 	 * @param productSku
 	 */
-	private void checkOrder(WxProductSku productSku, int buyAmount) {
+	private void checkOrder(ProductSku productSku, int buyAmount) {
 		if(productSku==null||productSku.getId()==null){
 			//加载商品失败
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
@@ -631,7 +630,7 @@ public class WxProductOrderController {
 	 * @param userAddress
 	 * @return
 	 */
-	private void checkDeliveryAddress(WxUserAddress userAddress) {
+	private void checkDeliveryAddress(UserAddress userAddress) {
 		if(userAddress==null){
 			//地址对象为空
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_BASIC_PARAM_ERROR);
@@ -656,7 +655,7 @@ public class WxProductOrderController {
 	 * 验证优惠券的有效性
 	 * @param userAddress
 	 */
-	private void checkUserVoucher(WxProductVoucher voucher) {
+	private void checkUserVoucher(ProductVoucher voucher) {
 		if(voucher==null){
 			//地址对象为空
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_VOUCHER_ERROR);
@@ -676,9 +675,9 @@ public class WxProductOrderController {
 	 * @param request
 	 * @return
 	 */
-	private WxUserAddress populateAddressInfoFromRequest(HttpServletRequest request) {
+	private UserAddress populateAddressInfoFromRequest(HttpServletRequest request) {
 		if(request!=null){
-			WxUserAddress addressInfo = new WxUserAddress();
+			UserAddress addressInfo = new UserAddress();
 			addressInfo.setPostName(request.getParameter("postName"));
 			addressInfo.setPostMobile(request.getParameter("postMobile"));
 			addressInfo.setPostCode(request.getParameter("postCode"));

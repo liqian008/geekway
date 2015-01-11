@@ -1,10 +1,16 @@
 package com.bruce.geekway.constants;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.bruce.geekway.utils.ConfigUtil;
 
 public interface ConstConfig {
+	
+	/*是否启用redis*/
+	public static final boolean REDIS_ENABLE = BooleanUtils.toBoolean(ConfigUtil.getString("redis_enable"));
+	/*是否启用memcache*/
+	public static final boolean MEMC_ENABLE = BooleanUtils.toBoolean(ConfigUtil.getString("memc_enable"));
 
 	//分布式的服务器编号index, 从1开始
 	public static final String SERVER_INDEX = ConfigUtil.getString("server_index");

@@ -3,7 +3,7 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.wx.pay.*" %>
-<%@ page import ="com.bruce.geekway.model.WxProductCart.CartProductSku" %>
+<%@ page import ="com.bruce.geekway.model.ProductCart.CartProductSku" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -172,18 +172,17 @@ $("#shareOrderBtn").click(function(){
 	var postProvince = $("#hiddenPostProvince").val();
 	var postCity = $("#hiddenPostCity").val();
 	var postCountries = $("#hiddenPostCountries").val();
-	var postAddressDetailInfo = $("#postAddressDetailInfo").val();
+	var postAddressDetailInfo = $("#hiddenAddressDetailInfo").val();
 	
 	//检查商品&数量有效性
 	
 	//检查地址输入有效性
-	//alert(postName);
-	//alert(postMobile);
-	//alert(postProvince);
-	//alert(postCity);
-	//alert(postCountries);
-	//alert(postAddressDetailInfo);
-	
+	/* alert(postName);
+	alert(postMobile);
+	alert(postProvince);
+	alert(postCity);
+	alert(postCountries);
+	alert(postAddressDetailInfo); */
 	
 	var postInfoError = isEmpty(postName) || isEmpty(postMobile) || isEmpty(postProvince) || isEmpty(postCity)|| isEmpty(postCountries)|| isEmpty(postAddressDetailInfo);
 	if(postInfoError){
@@ -267,8 +266,6 @@ $("#chooseAddress").click(function(){
 				$("#hiddenAddressDetailInfo").val("fail:postAddressDetailInfo");
 				
 				$("#chooseAddress").text("重新选择收货地址");
-				
-				
 				
 			}
 		}

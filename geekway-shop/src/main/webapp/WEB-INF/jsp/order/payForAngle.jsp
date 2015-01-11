@@ -89,9 +89,9 @@
 
 				<p class="quote-item">
 					<%
-					List<WxProductOrderItem> orderItemList = (List<WxProductOrderItem>)request.getAttribute("orderItemList"); 
-					if(orderItemList!=null&&orderItemList.size()>0){
-						for(WxProductOrderItem orderItem: orderItemList){
+						List<ProductOrderItem> orderItemList = (List<ProductOrderItem>)request.getAttribute("orderItemList"); 
+								if(orderItemList!=null&&orderItemList.size()>0){
+									for(ProductOrderItem orderItem: orderItemList){
 					%>  
 						<img src="<%=orderItem.getProductPicUrl()%>" alt="<%=orderItem.getProductName() %>">
 						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>
@@ -126,20 +126,22 @@
                 运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
                 
                 <%
-                WxProductOrder productOrder = (WxProductOrder)request.getAttribute("orderInfo");
-                if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
-                %>
+                                 	ProductOrder productOrder = (ProductOrder)request.getAttribute("orderInfo");
+                                                 if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
+                                 %>
                 折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
-                <%}%>
+                <%
+                	}
+                %>
                 
                 总计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
             </div>
             
             <%
-            WxProductOrder orderInfo = (WxProductOrder)request.getAttribute("orderInfo");
-            if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
-            %> 
+                        	ProductOrder orderInfo = (ProductOrder)request.getAttribute("orderInfo");
+                                    if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
+                        %> 
            	<div class="container center-text">
                	<a href="javascript:void(0)" id="wxpay" class="button-big button-green button-fullscreen">为女神付款【微支付】</a>
                	<a href="javascript:void(0)" id="alipay" class="button-big button-orange button-fullscreen">为女神付款【支付宝】</a>

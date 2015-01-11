@@ -38,9 +38,9 @@
 </head>
 
 <%
-//选中的sku属性map
-WxProductSku currentProductSku = (WxProductSku)request.getAttribute("currentProductSku");
-Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropValue>>)request.getAttribute("skuGroupMap");
+	//选中的sku属性map
+ProductSku currentProductSku = (ProductSku)request.getAttribute("currentProductSku");
+Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>)request.getAttribute("skuGroupMap");
 %>
 
 <body>
@@ -75,19 +75,25 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 			<div class="container">
 				
 				<%
-				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
-				if(slideImageList!=null&&slideImageList.size()>0){
-            	%>
+									List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
+										if(slideImageList!=null&&slideImageList.size()>0){
+								%>
                 <div class="slider-controls" data-snap-ignore="true">
-					<%for(SlideImage slideImage: slideImageList){%>
+					<%
+						for(SlideImage slideImage: slideImageList){
+					%>
 					<div>
 						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
 					</div>
-					<%}%>
+					<%
+						}
+					%>
 				</div>
                 <a href="javascript:void(0)" class="next-slider"></a>
                 <a href="javascript:void(0)" class="prev-slider"></a>
-                <%}%>
+                <%
+                	}
+                %>
 				
 			</div>
 
@@ -107,18 +113,18 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 	            	<li>库 存：&nbsp;<span id="leftStock" class="text-highlight highlight-yellow">${currentProductSku.stock}</span>件</li>
 	            	
 	            	<%
-	            	if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
-	            	%>
+	            		            		if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
+	            		            	%>
 	            	<li id="choose-color" class="choose-color-shouji">
 	            		<div class="dt">选择颜色：</div>
 	            		<div class="dd">
 							<%
-							List<WxSkuPropValue> colorSkuValueList = skuGroupMap.get(1);
-							for(WxSkuPropValue skuPropValue : colorSkuValueList){
-								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
-								
-								boolean colorSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuColorValueId());
+								List<SkuPropValue> colorSkuValueList = skuGroupMap.get(1);
+												for(SkuPropValue skuPropValue : colorSkuValueList){
+													String displayName = skuPropValue.getName();
+													String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
+													
+													boolean colorSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuColorValueId());
 							%>	            		
 	            			<div class="item <%=colorSelected?"selected":""%>" data="<%=propertyName%>">
 	            				<b></b>
@@ -129,25 +135,29 @@ Map<Integer, List<WxSkuPropValue>> skuGroupMap = (Map<Integer, List<WxSkuPropVal
 		            				<i><%=displayName%></i>
 		            			</a>
 	            			</div>
-	            			<%}%>
+	            			<%
+	            				}
+	            			%>
 	            		</div>
 	            	</li>
-	            	<%}%>
+	            	<%
+	            		}
+	            	%>
 	            	
 	            	<%
-	            	if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
-	            	%>
+	            		            		if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
+	            		            	%>
 	            	<li id="choose-version" class="choose-version-shouji">
 	            		<div class="dt">选择尺码：</div>
 	            		<div class="dd">
 	            			<%
-							List<WxSkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
-							for(WxSkuPropValue skuPropValue : sizeSkuValueList){
-								String displayName = skuPropValue.getName();
-								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
-								
-								boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
-							%>
+	            				List<SkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
+	            								for(SkuPropValue skuPropValue : sizeSkuValueList){
+	            									String displayName = skuPropValue.getName();
+	            									String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
+	            									
+	            									boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
+	            			%>
 	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b>
 	            			<a href="javascript:void(0)" title="<%=displayName%>" style="cursor: pointer;">
 	            			<i><%=displayName%></a></i>

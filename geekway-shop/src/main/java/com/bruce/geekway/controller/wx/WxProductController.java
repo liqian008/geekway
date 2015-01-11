@@ -25,19 +25,18 @@ import org.springframework.web.servlet.ModelAndView;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
-import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductCategory;
-import com.bruce.geekway.model.WxProductSku;
-import com.bruce.geekway.model.WxProductTag;
-import com.bruce.geekway.model.WxSkuPropValue;
+import com.bruce.geekway.model.Product;
+import com.bruce.geekway.model.ProductCategory;
+import com.bruce.geekway.model.ProductSku;
+import com.bruce.geekway.model.ProductTag;
+import com.bruce.geekway.model.SkuPropValue;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.product.ICounterService;
-import com.bruce.geekway.service.product.IWxProductCategoryService;
-import com.bruce.geekway.service.product.IWxProductService;
-import com.bruce.geekway.service.product.IWxProductSkuService;
-import com.bruce.geekway.service.product.IWxProductTagService;
-import com.bruce.geekway.service.product.IWxProductVoucherService;
-import com.bruce.geekway.service.product.IWxSkuPropValueService;
+import com.bruce.geekway.service.product.IProductCategoryService;
+import com.bruce.geekway.service.product.IProductService;
+import com.bruce.geekway.service.product.IProductSkuService;
+import com.bruce.geekway.service.product.IProductTagService;
+import com.bruce.geekway.service.product.ISkuPropValueService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ShopLinkUtil;
@@ -53,20 +52,20 @@ import com.bruce.geekway.utils.WxShareUtil;
 public class WxProductController {
 	
 	@Autowired
-	private IWxProductCategoryService wxProductCategoryService;
+	private IProductCategoryService productCategoryService;
 	@Autowired
-	private IWxProductTagService wxProductTagService;
+	private IProductTagService productTagService;
 	@Autowired
-	private IWxProductService wxProductService;
+	private IProductService productService;
 	@Autowired
-	private IWxProductSkuService wxProductSkuService;
+	private IProductSkuService productSkuService;
 	@Autowired
-	private IWxSkuPropValueService wxSkuPropValueService;
+	private ISkuPropValueService wxSkuPropValueService;
 	@Autowired
 	private ICounterService counterService;
 	
 //	@Autowired
-//	private IWxProductVoucherService wxProductVoucherService;
+//	private IWxProductVoucherService productVoucherService;
 //	@Autowired
 //	private MemcachedClient memcachedClient;
 	@Autowired
@@ -130,7 +129,7 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = "products/c-{categoryId}")
 	public String productListByCategory(Model model, @PathVariable int categoryId, HttpServletRequest request) {
-		WxProductCategory productCategory = wxProductCategoryService.loadCachedById(categoryId);
+		ProductCategory productCategory = productCategoryService.loadCachedById(categoryId);
 		model.addAttribute("productCategory", productCategory);
 		
 		
@@ -145,7 +144,6 @@ public class WxProductController {
 											productCategory.getWxShareIconUrl(), 
 											ShopLinkUtil.getCategoryLink4Mobile(categoryId)));
 		}
-		
 		return "product/productListByCategory";
 	}
 	
@@ -158,14 +156,14 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = "products/t-{tagId}")
 	public String productListByTag(Model model, @PathVariable int tagId, HttpServletRequest request) {
-		WxProductTag productTag = wxProductTagService.loadCachedById(tagId);
+		ProductTag productTag = productTagService.loadCachedById(tagId);
 		model.addAttribute("productTag", productTag);
 		if(productTag!=null){
 
 			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productTag);
 			model.addAttribute("slideImageList", slideImageList);
 			
-//			List<WxProduct> tagProductList = wxProductService.queryProductsByTagId(tagId);
+//			List<WxProduct> tagProductList = productService.queryProductsByTagId(tagId);
 //			model.addAttribute("tagProductList", tagProductList);
 			
 			//分享对象
@@ -194,7 +192,7 @@ public class WxProductController {
 	    	limit = 6;
 	    }
 	    
-	    List<WxProduct> productList = wxProductService.queryCachedProductsByTagId(tagId, pageNo, limit + 1);
+	    List<Product> productList = productService.queryCachedProductsByTagId(tagId, pageNo, limit + 1);
 
 		int nextPageNo = 1;
 		if (productList == null || productList.size() == 0) {
@@ -236,8 +234,8 @@ public class WxProductController {
 	    	limit = 6;
 	    }
 	    
-//	    List<WxProductSku> productSkuList = wxProductSkuService.fallLoadCategoryProductSkuList(categoryId, pageNo, limit + 1);
-	    List<WxProduct> productList = wxProductService.queryCachedProductsByCategoryId(categoryId, pageNo, limit + 1);
+//	    List<WxProductSku> productSkuList = productSkuService.fallLoadCategoryProductSkuList(categoryId, pageNo, limit + 1);
+	    List<Product> productList = productService.queryCachedProductsByCategoryId(categoryId, pageNo, limit + 1);
 	    
 
 		int nextPageNo = 0;
@@ -273,16 +271,16 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = "/product/{productId}/{productSkuId}")
 	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
-		WxProduct product = wxProductService.loadCachedById(productId);
+		Product product = productService.loadCachedById(productId);
 		model.addAttribute("product", product);
 		
-		WxProductSku currentProductSku = null;
+		ProductSku currentProductSku = null;
 		
 		//加载productSku，用于构造json的map，使得前端切换时能取到相应的数据
-		List<WxProductSku> productSkuList = wxProductSkuService.queryCachedSkuListByProductId(productId);
+		List<ProductSku> productSkuList = productSkuService.queryCachedSkuListByProductId(productId);
 		if(productSkuList!=null&&productSkuList.size()>0){ 
 			SortedMap<String, String> productSkuMap = new TreeMap<String, String>();
-			for(WxProductSku productSku: productSkuList){
+			for(ProductSku productSku: productSkuList){
 				//置空无用的字段（json序列化时不需要）
 				productSku.setCreateTime(null);
 				productSku.setUpdateTime(null);
@@ -314,15 +312,15 @@ public class WxProductController {
 		}
 		
 		//获取该商品sku属性值列表，展示以便用户选择
-		List<WxSkuPropValue> skuPropValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
+		List<SkuPropValue> skuPropValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
 		//计算该商品的sku矩阵
 		if(skuPropValueList!=null&&skuPropValueList.size()>0){
-			Map<Integer, List<WxSkuPropValue>> skuGroupMap = new TreeMap<Integer, List<WxSkuPropValue>>();
-			for(WxSkuPropValue skuPropValue: skuPropValueList){
+			Map<Integer, List<SkuPropValue>> skuGroupMap = new TreeMap<Integer, List<SkuPropValue>>();
+			for(SkuPropValue skuPropValue: skuPropValueList){
 				int skuPropId = skuPropValue.getSkuPropId();
-				List<WxSkuPropValue> skuPropValueGroupList = skuGroupMap.get(skuPropId);
+				List<SkuPropValue> skuPropValueGroupList = skuGroupMap.get(skuPropId);
 				if(skuPropValueGroupList==null || skuPropValueGroupList.size()<=0){//不存在则初始化（默认值1）
-					skuPropValueGroupList = new ArrayList<WxSkuPropValue>();
+					skuPropValueGroupList = new ArrayList<SkuPropValue>();
 					skuGroupMap.put(skuPropId, skuPropValueGroupList);
 				} 
 				skuPropValueGroupList.add(skuPropValue);
@@ -369,7 +367,7 @@ public class WxProductController {
 	    if(limit>10||limit<1){
 	    	limit = 4;
 	    }
-	    List<WxProduct> productList = wxProductService.queryAvailableList();
+	    List<Product> productList = productService.queryAvailableList();
 	    String productListHtml = HtmlBuildUtils.buildRecommendProductsHtml(productList);
 		Map<String, String> dataMap = new HashMap<String, String>();
 		dataMap.put("html", productListHtml);

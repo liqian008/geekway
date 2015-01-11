@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
-import com.bruce.geekway.model.WxProductNews;
+import com.bruce.geekway.model.ProductNews;
 import com.bruce.geekway.model.wx.pay.WxDeliveryTemplate;
-import com.bruce.geekway.service.product.IWxDeliveryTemplateService;
-import com.bruce.geekway.service.product.IWxProductNewsService;
+import com.bruce.geekway.service.product.IDeliveryTemplateService;
+import com.bruce.geekway.service.product.IProductNewsService;
 
 @Controller
 public class WxSystemController {
@@ -23,14 +23,14 @@ public class WxSystemController {
 	private static final Logger logger = LoggerFactory.getLogger(WxSystemController.class);
 	
 	@Autowired
-	private IWxProductNewsService wxProductNewsService;
+	private IProductNewsService productNewsService;
 	
 	@Autowired
-	private IWxDeliveryTemplateService wxDeliverTemplateService;
+	private IDeliveryTemplateService deliverTemplateService;
 	
 	@RequestMapping(value = "/test")
 	public String test(HttpServletRequest request) {
-		WxDeliveryTemplate template = wxDeliverTemplateService.loadDeliveryTemplate(1);
+		WxDeliveryTemplate template = deliverTemplateService.loadDeliveryTemplate(1);
 		System.out.println(template);
 		return "product/index";
 	}
@@ -38,7 +38,7 @@ public class WxSystemController {
 	
 	@RequestMapping(value = "/news/{newsId}")
 	public String newsInfo(Model model, @PathVariable int newsId, HttpServletRequest request) {
-		WxProductNews news = wxProductNewsService.loadById(newsId);
+		ProductNews news = productNewsService.loadById(newsId);
 		model.addAttribute("news", news);
 		return "news/newsInfo";
 	}
@@ -104,14 +104,14 @@ public class WxSystemController {
 	}
 
 
-	public IWxDeliveryTemplateService getWxDeliverTemplateService() {
-		return wxDeliverTemplateService;
+	public IDeliveryTemplateService getWxDeliverTemplateService() {
+		return deliverTemplateService;
 	}
 
 
 	public void setWxDeliverTemplateService(
-			IWxDeliveryTemplateService wxDeliverTemplateService) {
-		this.wxDeliverTemplateService = wxDeliverTemplateService;
+			IDeliveryTemplateService wxDeliverTemplateService) {
+		this.deliverTemplateService = wxDeliverTemplateService;
 	}
 	
 	

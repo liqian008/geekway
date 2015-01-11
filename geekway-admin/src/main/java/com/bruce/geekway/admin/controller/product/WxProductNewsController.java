@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
-import com.bruce.geekway.model.WxProductNews;
-import com.bruce.geekway.model.WxProductNewsCriteria;
-import com.bruce.geekway.service.product.IWxProductNewsService;
+import com.bruce.geekway.model.ProductNews;
+import com.bruce.geekway.model.ProductNewsCriteria;
+import com.bruce.geekway.service.product.IProductNewsService;
 
 
 
@@ -29,7 +29,7 @@ public class WxProductNewsController {
 	
 
 	@Autowired
-	private IWxProductNewsService wxProductNewsService;
+	private IProductNewsService wxProductNewsService;
 	
 	/**
 	 * 分页方式查询
@@ -47,11 +47,11 @@ public class WxProductNewsController {
 		
 		model.addAttribute("pageNo", pageNo);
 		
-		WxProductNewsCriteria criteria = new WxProductNewsCriteria();
+		ProductNewsCriteria criteria = new ProductNewsCriteria();
 		criteria.setOrderByClause(" id desc");
-		WxProductNewsCriteria.Criteria subCriteria = criteria.createCriteria();
+		ProductNewsCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<WxProductNews> productNewsPagingData = wxProductNewsService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductNews> productNewsPagingData = wxProductNewsService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productNewsPagingData!=null){
 			productNewsPagingData.setRequestUri(request.getRequestURI());
 			
@@ -65,7 +65,7 @@ public class WxProductNewsController {
 	
 	
 	@RequestMapping("/newsAdd")
-	public String newsAdd(Model model, WxProductNews news, HttpServletRequest request) {
+	public String newsAdd(Model model, ProductNews news, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -78,13 +78,13 @@ public class WxProductNewsController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductNews ProductNews = wxProductNewsService.loadById(newsId);
+		ProductNews ProductNews = wxProductNewsService.loadById(newsId);
 		model.addAttribute("news", ProductNews);
 		return "product/newsEdit";
 	}
 	
 	@RequestMapping(value = "/saveProductNews", method = RequestMethod.POST)
-	public String saveProductNews(Model model, WxProductNews news, HttpServletRequest request) {
+	public String saveProductNews(Model model, ProductNews news, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

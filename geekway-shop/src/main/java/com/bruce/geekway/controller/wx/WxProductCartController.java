@@ -15,13 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductCart;
-import com.bruce.geekway.model.WxProductCart.CartProductSku;
-import com.bruce.geekway.model.WxProductSku;
-import com.bruce.geekway.model.WxProductSkuCriteria;
-import com.bruce.geekway.service.product.IWxProductService;
-import com.bruce.geekway.service.product.IWxProductSkuService;
+import com.bruce.geekway.model.Product;
+import com.bruce.geekway.model.ProductCart;
+import com.bruce.geekway.model.ProductCart.CartProductSku;
+import com.bruce.geekway.model.ProductSku;
+import com.bruce.geekway.model.ProductSkuCriteria;
+import com.bruce.geekway.service.product.IProductService;
+import com.bruce.geekway.service.product.IProductSkuService;
 import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.ShopLinkUtil;
@@ -37,9 +37,9 @@ import com.bruce.geekway.utils.ShopLinkUtil.SlideImage;
 public class WxProductCartController {
 	
 	@Autowired
-	private IWxProductService wxProductService;
+	private IProductService productService;
 	@Autowired
-	private IWxProductSkuService wxProductSkuService;
+	private IProductSkuService productSkuService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductCartController.class);
 
@@ -54,19 +54,19 @@ public class WxProductCartController {
 	@RequestMapping(value = "/")
 	public String cart(Model model, HttpServletRequest request, HttpServletResponse response) {
 		//加载购物车中的
-		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
+		ProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			Map<Integer, Integer> cartItemMap = cart.getItemMap();
 			if(cartItemMap!=null&&cartItemMap.size()>0){
 				//加载购物车中的商品
 				Set<Integer> productSkuIdSet = cartItemMap.keySet();
 				if(productSkuIdSet!=null&&productSkuIdSet.size()>0){
-					WxProductSkuCriteria criteria = new WxProductSkuCriteria();
+					ProductSkuCriteria criteria = new ProductSkuCriteria();
 					criteria.createCriteria().andIdIn(new ArrayList<Integer>(productSkuIdSet));
-					List<WxProductSku> productSkuList =  wxProductSkuService.queryByCriteria(criteria);
+					List<ProductSku> productSkuList =  productSkuService.queryByCriteria(criteria);
 					if(productSkuList!=null&&productSkuList.size()>0){
 						List<CartProductSku> cartItemList =  new ArrayList<CartProductSku>();
-						for(WxProductSku productSku: productSkuList){
+						for(ProductSku productSku: productSkuList){
 							cartItemList.add(new CartProductSku(productSku, cartItemMap.get(productSku.getId())));
 						}
 						model.addAttribute("cartItemList", cartItemList);
@@ -89,7 +89,7 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/addToCart")
 	public String addToCart(Model model, int productSkuId, int buyAmount, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
+		ProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			//购物车中添加商品
 			cart.addItem(productSkuId, buyAmount);
@@ -109,7 +109,7 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/removeFromCart")
 	public String removeFromCart(Model model, int productSkuId, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
+		ProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			//购物车中移除商品
 			cart.removeItem(productSkuId);
@@ -129,16 +129,16 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/cartItem")
 	public String cartItem(Model model, int productSkuId, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart =  CartUtil.loadCartFromCookie(request, response);
+		ProductCart cart =  CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			Map<Integer, Integer> cartItemMap = cart.getItemMap();
 			if(cartItemMap!=null&&cartItemMap.size()>0){
 				//加载购物车中的商品
 				Integer buyAmount = cartItemMap.get(productSkuId); 
 				if(buyAmount!=null){
-					WxProductSku productSku = wxProductSkuService.loadById(productSkuId);
+					ProductSku productSku = productSkuService.loadById(productSkuId);
 					if(productSku!=null){
-						WxProduct product = wxProductService.loadById(productSku.getProductId());
+						Product product = productService.loadById(productSku.getProductId());
 						if(product!=null){
 //							List<String> skuPicList = ShopLinkUtil.buildProductSkuPicList(productSku);
 //							model.addAttribute("skuPicList", skuPicList);
@@ -167,7 +167,7 @@ public class WxProductCartController {
 	 */
 	@RequestMapping(value = "/modifyCartItem")
 	public String modifyCartItem(Model model, int productSkuId, int buyAmount, HttpServletRequest request, HttpServletResponse response) {
-		WxProductCart cart = CartUtil.loadCartFromCookie(request, response);
+		ProductCart cart = CartUtil.loadCartFromCookie(request, response);
 		if(cart!=null){
 			cart.addItem(productSkuId, buyAmount);
 			CartUtil.writeCartCookie(cart, response);

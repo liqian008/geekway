@@ -117,12 +117,12 @@
 						</thead>
 						<tbody>
 							<%
-                           	List<WxProductOrderItem> productOrderItemList = (List<WxProductOrderItem>)request.getAttribute("productOrderItemList");
-                           	if(productOrderItemList!=null&&productOrderItemList.size()>0){
-                           		int i=0;
-                           		for(WxProductOrderItem productOrderItem: productOrderItemList){
-                           			i++;
-                           	%>
+								List<ProductOrderItem> productOrderItemList = (List<ProductOrderItem>)request.getAttribute("productOrderItemList");
+							                           	if(productOrderItemList!=null&&productOrderItemList.size()>0){
+							                           		int i=0;
+							                           		for(ProductOrderItem productOrderItem: productOrderItemList){
+							                           			i++;
+							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=productOrderItem.getProductName()%></td>

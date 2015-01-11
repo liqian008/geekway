@@ -13,7 +13,6 @@ import com.bruce.geekway.model.WxPayAlarmCriteria;
 import com.bruce.geekway.service.pay.IWxPayAlarmService;
 
 
-@Service
 public class WxPayAlarmServiceImpl implements IWxPayAlarmService {
 
 	@Autowired

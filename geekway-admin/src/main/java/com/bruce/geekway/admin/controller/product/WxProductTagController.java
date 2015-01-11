@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
-import com.bruce.geekway.model.WxProduct;
-import com.bruce.geekway.model.WxProductCriteria;
-import com.bruce.geekway.model.WxProductTag;
-import com.bruce.geekway.model.WxProductTagCriteria;
-import com.bruce.geekway.model.WxProductTagRelation;
-import com.bruce.geekway.service.product.IWxProductService;
-import com.bruce.geekway.service.product.IWxProductTagRelationService;
-import com.bruce.geekway.service.product.IWxProductTagService;
-import com.bruce.geekway.service.product.IWxSkuPropService;
-import com.bruce.geekway.service.product.IWxSkuPropValueService;
+import com.bruce.geekway.model.Product;
+import com.bruce.geekway.model.ProductCriteria;
+import com.bruce.geekway.model.ProductTag;
+import com.bruce.geekway.model.ProductTagCriteria;
+import com.bruce.geekway.model.ProductTagRelation;
+import com.bruce.geekway.service.product.IProductService;
+import com.bruce.geekway.service.product.IProductTagRelationService;
+import com.bruce.geekway.service.product.IProductTagService;
+import com.bruce.geekway.service.product.ISkuPropService;
+import com.bruce.geekway.service.product.ISkuPropValueService;
 
 
 
@@ -34,15 +34,15 @@ public class WxProductTagController {
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
-	private IWxProductService wxProductService;
+	private IProductService wxProductService;
 	@Autowired
-	private IWxProductTagService wxProductTagService;
+	private IProductTagService wxProductTagService;
 	@Autowired
-	private IWxProductTagRelationService wxProductTagRelationService;
+	private IProductTagRelationService wxProductTagRelationService;
 	@Autowired
-	private IWxSkuPropService wxSkuPropService;
+	private ISkuPropService wxSkuPropService;
 	@Autowired
-	private IWxSkuPropValueService wxSkuPropValueService;
+	private ISkuPropValueService wxSkuPropValueService;
 	
 
 	/**
@@ -61,11 +61,11 @@ public class WxProductTagController {
 		
 		model.addAttribute("pageNo", pageNo);
 		
-		WxProductTagCriteria criteria = new WxProductTagCriteria();
+		ProductTagCriteria criteria = new ProductTagCriteria();
 		criteria.setOrderByClause(" id desc");
-		WxProductTagCriteria.Criteria subCriteria = criteria.createCriteria();
+		ProductTagCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<WxProductTag> productTagPagingData = wxProductTagService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductTag> productTagPagingData = wxProductTagService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productTagPagingData!=null){
 			productTagPagingData.setRequestUri(request.getRequestURI());
 			
@@ -86,7 +86,7 @@ public class WxProductTagController {
 	 * @return
 	 */
 	@RequestMapping("/productTagAdd")
-	public String productTagAdd(Model model, WxProductTag productTag, HttpServletRequest request) {
+	public String productTagAdd(Model model, ProductTag productTag, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -99,7 +99,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductTag productTag = wxProductTagService.loadById(productTagId);
+		ProductTag productTag = wxProductTagService.loadById(productTagId);
 		model.addAttribute("productTag", productTag);
 		
 		return "product/tagEdit";
@@ -114,7 +114,7 @@ public class WxProductTagController {
 	 * @return
 	 */
 	@RequestMapping(value = "/saveProductTag", method = RequestMethod.POST)
-	public String saveProductTag(Model model, WxProductTag productTag, Integer[] skuPropValueIds, HttpServletRequest request) {
+	public String saveProductTag(Model model, ProductTag productTag, Integer[] skuPropValueIds, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -146,7 +146,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		WxProductTag productTag = wxProductTagService.loadById(tagId);
+		ProductTag productTag = wxProductTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
 		
 //		全量读取已关联的productList，将被下面分页替代
@@ -154,11 +154,11 @@ public class WxProductTagController {
 //		model.addAttribute("mappedProductList", mappedProductList);
 		
 		//分页方式查询已关联的产品列表
-		WxProductCriteria criteria = new WxProductCriteria();
+		ProductCriteria criteria = new ProductCriteria();
 		criteria.setOrderByClause(" id desc");
-		WxProductCriteria.Criteria subCriteria = criteria.createCriteria();
+		ProductCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<WxProduct> productPagingData = wxProductService.pagingTagProductsByCriteria(tagId, pageNo, pageSize, criteria);
+		PagingResult<Product> productPagingData = wxProductService.pagingTagProductsByCriteria(tagId, pageNo, pageSize, criteria);
 		if(productPagingData!=null){
 			productPagingData.setRequestUri(request.getRequestURI());
 			
@@ -183,7 +183,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		WxProductTag productTag = wxProductTagService.loadById(tagId);
+		ProductTag productTag = wxProductTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
 
 //		全量读取未关联的productList，将被下面分页替代
@@ -191,11 +191,11 @@ public class WxProductTagController {
 //		model.addAttribute("unmappedProductList", unmappedProductList);
 		
 		//分页方式查询已关联的产品列表
-		WxProductCriteria criteria = new WxProductCriteria();
+		ProductCriteria criteria = new ProductCriteria();
 		criteria.setOrderByClause(" id desc");
-		WxProductCriteria.Criteria subCriteria = criteria.createCriteria();
+		ProductCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<WxProduct> productPagingData = wxProductService.pagingTagOutProductsByCriteria(tagId, pageNo, pageSize, criteria);
+		PagingResult<Product> productPagingData = wxProductService.pagingTagOutProductsByCriteria(tagId, pageNo, pageSize, criteria);
 		if(productPagingData!=null){
 			productPagingData.setRequestUri(request.getRequestURI());
 			
@@ -231,7 +231,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		WxProductTagRelation obj = new WxProductTagRelation();
+		ProductTagRelation obj = new ProductTagRelation();
 		obj.setProductTagId(tagId);
 		obj.setProductId(productId);
 		obj.setTopTime(new Date());

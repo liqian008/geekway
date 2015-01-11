@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="com.bruce.geekway.model.WxSkuPropValue"%>
+<%@page import="com.bruce.geekway.model.SkuPropValue"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
 
@@ -16,8 +16,7 @@
 		return "材质";
 	}
 	return "类型错误";
-}
-%>
+}%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -134,12 +133,12 @@
 						</thead>
 						<tbody>
 							<%
-                           	List<WxSkuPropValue> skuPropValueList = (List<WxSkuPropValue>)request.getAttribute("skuPropValueList");
-                           	if(skuPropValueList!=null&&skuPropValueList.size()>0){
-                           		int i=0;
-                           		for(WxSkuPropValue itoSkuPropValue: skuPropValueList){
-                           			i++;
-                           	%>
+								List<SkuPropValue> skuPropValueList = (List<SkuPropValue>)request.getAttribute("skuPropValueList");
+							                           	if(skuPropValueList!=null&&skuPropValueList.size()>0){
+							                           		int i=0;
+							                           		for(SkuPropValue itoSkuPropValue: skuPropValueList){
+							                           			i++;
+							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td><%=itoSkuPropValue.getSkuPropId()%></td>

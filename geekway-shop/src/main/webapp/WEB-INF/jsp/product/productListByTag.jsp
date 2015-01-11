@@ -46,12 +46,12 @@ String contextPath = request.getContextPath();
 	<jsp:include page="../inc/sidebar.jsp"></jsp:include>
 	
 	<%
-	int tagId = 0;
-	WxProductTag productTag = (WxProductTag)request.getAttribute("productTag");
-	if(productTag!=null){
-		tagId = productTag.getId();
-	}
-	%>
+			int tagId = 0;
+			ProductTag productTag = (ProductTag)request.getAttribute("productTag");
+			if(productTag!=null){
+				tagId = productTag.getId();
+			}
+		%>
 	
     <div id="content" class="page-content">
     	<div class="page-header">

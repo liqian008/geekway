@@ -121,15 +121,14 @@
 						</thead>
 						<tbody>
 							<%
-							
-							WxProduct product = (WxProduct) request.getAttribute("product"); 
-							
-                           	List<WxProductSku> productSkuList = (List<WxProductSku>)request.getAttribute("productSkuList");
-                           	if(productSkuList!=null&&productSkuList.size()>0){
-                           		int i=0;
-                           		for(WxProductSku sku: productSkuList){
-                           			i++;
-                           	%>
+								Product product = (Product) request.getAttribute("product"); 
+																	
+												                           	List<ProductSku> productSkuList = (List<ProductSku>)request.getAttribute("productSkuList");
+												                           	if(productSkuList!=null&&productSkuList.size()>0){
+												                           		int i=0;
+												                           		for(ProductSku sku: productSkuList){
+												                           			i++;
+							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td class="text-center">

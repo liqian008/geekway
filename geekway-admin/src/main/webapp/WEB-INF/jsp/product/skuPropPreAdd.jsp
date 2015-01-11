@@ -113,14 +113,16 @@
 					<div class="panel-body">
 						
 						<%
-						List<WxProductCategory> categoryList = (List<WxProductCategory>)request.getAttribute("categoryList");
-						if(categoryList!=null&&categoryList.size()>0){
-						%>
+													List<ProductCategory> categoryList = (List<ProductCategory>)request.getAttribute("categoryList");
+																if(categoryList!=null&&categoryList.size()>0){
+												%>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">所属分类: <span class="mandatory">*</span></label>
 							<div class="col-sm-4">
 								<label>
-									<%for(WxProductCategory category: categoryList){ %>
+									<%
+										for(ProductCategory category: categoryList){
+									%>
 									<div class="checkbox-inline checkbox-info">
 										<input class="styled" type="radio" name="categoryId" value="<%=category.getId()%>"/><%=category.getName()%>
 									</div>
