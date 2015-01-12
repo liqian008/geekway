@@ -82,7 +82,7 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 	 * 获取缓存中的accessToken
 	 */
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="accessToken#7000")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE+"#7000", key="'"+ConstMemc.MEMCACHE_CACHE_VALUE+"'")
 	public synchronized String getCachedAccessToken() {
 		//从db中获取缓存的accessToken
 		WxAccessToken dbAccessToken = loadById(1);

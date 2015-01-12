@@ -34,14 +34,15 @@ public interface IProductService extends IFoundationPagingService<Product, Integ
 	public PagingResult<Product> pagingTagOutProductsByCriteria(int tagId, int pageNo, int pageSize, ProductCriteria criteria);
 
 	//前台分页查询tag商品
-	public List<Product> queryProductsByTagId(int tagId, int tailId, int limit);
+	public List<Product> queryProductsByTagId(int tagId, int pageNo, int pageSize, boolean isFallload);
 	
 	//前台分页查询缓存tag商品
-	public List<Product> queryCachedProductsByTagId(int tagId, int tailId, int limit);
+	public List<Product> queryCachedProductsByTagId(int tagId, int pageNo, int pageSize, boolean isFallload);
 	
-	public List<Product> queryProductsByCategoryId(int categoryId, int pageNo, int pageSize);
-	
-	public List<Product> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize);
+	//前台分页查询category商品
+	public List<Product> queryProductsByCategoryId(int categoryId, int pageNo, int pageSize, boolean isFallload);
+	//前台分页查询缓存category商品
+	public List<Product> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize, boolean isFallload);
 
 	
 	//瀑布流方式加载tag产品

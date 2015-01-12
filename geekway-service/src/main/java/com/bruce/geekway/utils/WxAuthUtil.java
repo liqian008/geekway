@@ -132,7 +132,6 @@ public class WxAuthUtil {
 	/**
 	 * 将所有参数字典表排序，做urlencode后组成一个串（参数名改为小写）
 	 * @param packageMap
-	 * @param ignoreBlankValue  是否忽略空数据的字段
 	 * @param urlEncode  value是否需要做urlencode
 	 * @return
 	 */

@@ -160,44 +160,51 @@ public class ProductServiceImpl implements IProductService {
 	}
 	
 	@Override
-	public List<Product> queryProductsByCategoryId(int categoryId, int pageNo, int pageSize) {
+	public List<Product> queryProductsByCategoryId(int categoryId, int pageNo, int pageSize, boolean isFallload) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
 		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		ProductCriteria criteria = new ProductCriteria();
 		criteria.setLimitOffset(offset);
-		criteria.setLimitRows(pageSize);
+		if(isFallload){//如果是瀑布流方式加载，需要多加一行，以便于判断是否有下一页
+			criteria.setLimitRows(pageSize+1);
+		}else{
+			criteria.setLimitRows(pageSize);
+		}
 		
 		return productMapper.queryProductsByCategoryId(criteria, categoryId);
 	}
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="'categoryId-'+#categoryId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
-	public List<Product> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize) {
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'categoryId-'+#categoryId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
+	public List<Product> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize, boolean isFallload) {
 		logger.debug("fallload productsByTag from db. [tagId:"+categoryId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
-		return queryProductsByTagId(categoryId, pageNo, pageSize);
+		return queryProductsByCategoryId(categoryId, pageNo, pageSize, isFallload);
 	}
 	
 	@Override
-	public List<Product> queryProductsByTagId(int tagId, int pageNo, int pageSize) {
+	public List<Product> queryProductsByTagId(int tagId, int pageNo, int pageSize, boolean isFallload) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
 		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		ProductCriteria criteria = new ProductCriteria();
 		criteria.setLimitOffset(offset);
-		criteria.setLimitRows(pageSize);
+		if(isFallload){//如果是瀑布流方式加载，需要多加一行，以便于判断是否有下一页
+			criteria.setLimitRows(pageSize+1);
+		}else{
+			criteria.setLimitRows(pageSize);
+		}
 		
 		return productMapper.queryProductsByTagId(criteria, tagId);
 	}
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="'tagId-'+#tagId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
-	public List<Product> queryCachedProductsByTagId(int tagId, int pageNo, int pageSize) {
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'tagId-'+#tagId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
+	public List<Product> queryCachedProductsByTagId(int tagId, int pageNo, int pageSize, boolean isFallload) {
 		logger.debug("fallload productsByTag from db. [tagId:"+tagId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
-		//TODO converPageNo
-		return queryProductsByTagId(tagId, pageNo, pageSize);
+		return queryProductsByTagId(tagId, pageNo, pageSize, isFallload);
 	}
 	
 	
@@ -215,7 +222,7 @@ public class ProductServiceImpl implements IProductService {
 	
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="'product-'+#id")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'product-'+#id")
 	public Product loadCachedById(Integer id) {
 		logger.debug("load product from db. [productId:"+id+"]");
 		return loadById(id);

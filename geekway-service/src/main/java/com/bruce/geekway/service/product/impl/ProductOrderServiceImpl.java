@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
+import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.ProductOrderMapper;
 import com.bruce.geekway.model.ProductOrder;
 import com.bruce.geekway.model.ProductOrderCriteria;
@@ -122,24 +123,29 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	
 	
 	@Override
-	public List<ProductOrder> fallLoadUserOrderList(String userOpenId, long orderTailId, int limit) {
+	public List<ProductOrder> queryUserOrders(String userOpenId, int pageNo, int pageSize, boolean fallload) {
+		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
+		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
+		int offset = (pageNo-1)*pageSize;
+		
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
-		ProductOrderCriteria.Criteria subCriteria =  criteria.createCriteria();
-		subCriteria.andUserOpenIdEqualTo(userOpenId); 
-		if(orderTailId>0){
-			subCriteria.andIdLessThan(orderTailId);
+		criteria.createCriteria().andUserOpenIdEqualTo(userOpenId);
+		criteria.setLimitOffset(offset);
+		if(fallload){//如果是瀑布流方式加载，需要多加一行，以便于判断是否有下一页
+			criteria.setLimitRows(pageSize+1);
+		}else{
+			criteria.setLimitRows(pageSize);
 		}
-		criteria.setLimitRows(limit);
 		criteria.setOrderByClause(" id desc");
 		return queryByCriteria(criteria);
 	}
 	
 	
 	@Override
-	@Cacheable(value="storageCache", key="'userOpenId-'+#userOpenId+'-tailId-'+#orderTailId+'-limit-'+#limit")
-	public List<ProductOrder> fallLoadCachedUserOrderList(String userOpenId, long orderTailId, int limit) {
-		logger.debug("fallload userOrderList from db. [userOpenId:"+userOpenId+", orderTailId:"+orderTailId+", limit:"+limit+"]");
-		return fallLoadUserOrderList(userOpenId, orderTailId, limit);
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'userOpenId-'+#userOpenId", condition="#pageNo<=1")
+	public List<ProductOrder> queryCachedUserOrders(String userOpenId, int pageNo, int pageSize, boolean fallload) {
+		logger.debug("fallload userOrderList from db. [userOpenId:"+userOpenId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
+		return queryUserOrders(userOpenId, pageNo, pageSize, fallload);
 	}
 	
 	@Override

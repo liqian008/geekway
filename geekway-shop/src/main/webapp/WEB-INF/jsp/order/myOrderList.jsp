@@ -78,7 +78,7 @@
 			
             <div id="moreOrdersContainer" class="container center-text">
         		<a href="javascript:void(0)" id="moreOrdersBtn" class="button button-dark">加载更多</a>
-        		<input type="hidden" id="tailId" name="tailId" value="0"/>
+        		<input type="hidden" id="pageNo" name="pageNo" value="1"/>
         	</div>
         	
         	<div id="emptyContainer" class="container center-text gone" >
@@ -105,15 +105,15 @@
   		//置为数据加载状态
   		$('#moreOrdersBtn').text("努力加载中...");
   		$('#moreOrdersBtn').attr("disabled","disabled");
-  		var tailId = $("#tailId").val();
-  		var jsonData = {'tailId' : tailId};
+  		var pageNo = $("#pageNo").val();
+  		var jsonData = {'pageNo' : pageNo};
   		$.post('${pageContext.request.contextPath}/moreOrders.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){
 				$("#ordersContainer").append(data.data.html);
- 				var nextTailId = data.data.tailId;
-   				$("#tailId").val(nextTailId);
-   				if(nextTailId<=0){//无更多数据，则隐藏更多按钮
+ 				var nextPageNo = data.data.nextPageNo;
+   				$("#pageNo").val(nextPageNo); 
+   				if(nextPageNo<=1){//无更多数据，则隐藏更多按钮
   					//$('#moreOrdersContainer').attr("style","display:none");
   					//$("#buyContainer").show();
    					$('#moreOrdersContainer').hide();

@@ -23,9 +23,9 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 	@Autowired 
 	private ProductStockCache productStockCache;
 	@Autowired 
-	private IProductSkuService wxProductSkuService;
+	private IProductSkuService productSkuService;
 	@Autowired
-	private ProductSkuMapper wxProductSkuMapper;
+	private ProductSkuMapper productSkuMapper;
 	
     /**
      * Logger for this class
@@ -58,7 +58,7 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
     @Override
     public int incrProductSkuStock(int productSkuId, int incrNum){
     	//TODO synchronized
-    	int result = wxProductSkuMapper.incrStock(productSkuId, incrNum);
+    	int result = productSkuMapper.incrStock(productSkuId, incrNum);
     	if(ConstConfig.REDIS_ENABLE){//启用redis时，同步redis数据
 	    	if(result>0){
 		    	return productStockCache.incrProductSkuStock(productSkuId, incrNum);
@@ -75,7 +75,7 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 	@Override
 	public int reduceProductSkuStock(int productSkuId, int reduceStock) { 
 		//TODO synchronized
-    	int result = wxProductSkuMapper.reduceStock(productSkuId, reduceStock);
+    	int result = productSkuMapper.reduceStock(productSkuId, reduceStock);
 		if(ConstConfig.REDIS_ENABLE){//启用redis时，同步redis数据
 			if(result>0){
 		    	return productStockCache.reduceProductSkuStock(productSkuId, reduceStock);
@@ -93,7 +93,7 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 	 * @return
 	 */
 	private int queryProductSkuStockFromDB(int productSkuId) {
-		ProductSku productSku = wxProductSkuMapper.selectByPrimaryKey(productSkuId);
+		ProductSku productSku = productSkuMapper.selectByPrimaryKey(productSkuId);
 		if(productSku!=null&&productSku.getStock()!=null&&productSku.getStock()>0){
 			return productSku.getStock().intValue();
 		}
@@ -112,20 +112,20 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
 		this.productStockCache = productStockCache;
 	}
 
-	public IProductSkuService getWxProductSkuService() {
-		return wxProductSkuService;
+	public IProductSkuService getProductSkuService() {
+		return productSkuService;
 	}
 
-	public void setWxProductSkuService(IProductSkuService wxProductSkuService) {
-		this.wxProductSkuService = wxProductSkuService;
+	public void setProductSkuService(IProductSkuService productSkuService) {
+		this.productSkuService = productSkuService;
 	}
 
-	public ProductSkuMapper getWxProductSkuMapper() {
-		return wxProductSkuMapper;
+	public ProductSkuMapper getProductSkuMapper() {
+		return productSkuMapper;
 	}
 
-	public void setWxProductSkuMapper(ProductSkuMapper wxProductSkuMapper) {
-		this.wxProductSkuMapper = wxProductSkuMapper;
+	public void setProductSkuMapper(ProductSkuMapper productSkuMapper) {
+		this.productSkuMapper = productSkuMapper;
 	}
 	
 }

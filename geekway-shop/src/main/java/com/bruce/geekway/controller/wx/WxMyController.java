@@ -69,40 +69,40 @@ public class WxMyController{
 	
 	@NeedAuthorize
 	@RequestMapping(value = "/moreOrders.json")
-	public ModelAndView moreOrders(Model model, @RequestParam("tailId") long tailId, HttpServletRequest request) {
+	public ModelAndView moreOrders(Model model, @RequestParam(value="pageNo", defaultValue="1") int pageNo, HttpServletRequest request) {
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
 		String userOpenId = wxWebUser.getOpenId();
 		
 		if(logger.isDebugEnabled()){
-            logger.debug("ajax加载更多【我的订单】，userOpenId: "+userOpenId+" , tailId: "+tailId);
+            logger.debug("ajax加载更多【我的订单】，userOpenId: "+userOpenId+" , pageNo: "+pageNo);
         }
 	    int limit = 2;
 		List<ProductOrder> productOrderList = null;
 		
 		//用户有效
 		if(!StringUtils.isBlank(userOpenId)){
-			productOrderList = productOrderService.fallLoadCachedUserOrderList(userOpenId, tailId, limit+1);
+			productOrderList = productOrderService.queryCachedUserOrders(userOpenId, pageNo, limit, true);
 		}
 		
-		long nextTailId = 0;
+		long nextPageNo = 0;
 		if (productOrderList == null || productOrderList.size() == 0) {
 			if (logger.isDebugEnabled()) {
-				logger.debug("无更多优惠券");
+				logger.debug("无更多订单");
 			}
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		if (productOrderList.size() > limit) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素
 			productOrderList.remove(limit);
-			nextTailId = productOrderList.get(limit - 1).getId();//取id
+			nextPageNo = pageNo+1;//取id
 			if(logger.isDebugEnabled()){
-                logger.debug("还有更多优惠券，tailId： "+nextTailId);
+                logger.debug("还有更多订单，nextPageNo： "+nextPageNo);
             }
 		}
 		String productListHtml = HtmlBuildUtils.buildFallLoadOrdersHtml(productOrderList);
 		Map<String, String> dataMap = new HashMap<String, String>();
 		dataMap.put("html", productListHtml);
-		dataMap.put("tailId", String.valueOf(nextTailId));
+		dataMap.put("nextPageNo", String.valueOf(nextPageNo));
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 	}
 	

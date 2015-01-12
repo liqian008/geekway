@@ -113,8 +113,8 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 	            	<li>库 存：&nbsp;<span id="leftStock" class="text-highlight highlight-yellow">${currentProductSku.stock}</span>件</li>
 	            	
 	            	<%
-	            		            		if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
-	            		            	%>
+					if(skuGroupMap!=null&&skuGroupMap.get(1)!=null){
+	            	%>
 	            	<li id="choose-color" class="choose-color-shouji">
 	            		<div class="dt">选择颜色：</div>
 	            		<div class="dd">
@@ -297,6 +297,5 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 </div>
 
 </body>
-
 
 </html>

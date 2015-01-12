@@ -7,7 +7,10 @@ package com.bruce.geekway.constants;
  */
 public interface ConstMemc{
 	
-    /*memc全局命名空间*/
-    public static final String MEMCACHE_CACHE_STORAGE = "storageCache";
+    /*memc全局cache名*/
+    public static final String MEMCACHE_CACHE_VALUE = "storageCache";
+    
+    /*mpAccessToken的key*/
+    public static final String MEMCACHE_KEY_MP_ACCESSTOKEN = "mpAccessToken";
 	
 }

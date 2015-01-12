@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bruce.foundation.util.JsonUtil;
+import com.bruce.foundation.util.Sha1Util;
 
 public class WxPayHelper {
 	private HashMap<String, String> parameters = new HashMap<String, String>();
@@ -97,7 +98,7 @@ public class WxPayHelper {
 				false);
 		//System.out.println(bizString);
 
-		return SHA1Util.Sha1(bizString);
+		return Sha1Util.getSha1(bizString);
 
 	}
 

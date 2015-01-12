@@ -82,7 +82,7 @@ public class ProductSkuServiceImpl implements IProductSkuService{
 	}
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="'product-'+#productId+'-skus'")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'product-'+#productId+'-skus'")
 	public List<ProductSku> queryCachedSkuListByProductId(int productId) {
 		logger.debug("load product "+productId+" skus from db");
 		return querySkuListByProductId(productId);
@@ -99,7 +99,7 @@ public class ProductSkuServiceImpl implements IProductSkuService{
 	}
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_STORAGE, key="'product-sku-'+#skuId")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'product-sku-'+#skuId")
 	public ProductSku loadCachedProductSku(int productId, int skuId) {
 		logger.debug("load productSku from db. [skuId:"+skuId+"]");
 		return loadProductSku(productId, skuId);

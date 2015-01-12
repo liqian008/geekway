@@ -32,13 +32,13 @@ public interface IProductOrderService extends IFoundationPagingService<ProductOr
 	 * @param limit
 	 * @return
 	 */
-	public List<ProductOrder> fallLoadUserOrderList(String userOpenId, long orderTailId, int limit);
+	public List<ProductOrder> queryUserOrders(String userOpenId, int pageNo, int pageSize, boolean isFallload);
 	
 	/**
 	 * 使用缓存查询我的订单列表
 	 * @return
 	 */
-	public List<ProductOrder> fallLoadCachedUserOrderList(String userOpenId, long orderTailId, int limit);
+	public List<ProductOrder> queryCachedUserOrders(String userOpenId, int pageNo, int pageSize, boolean isFallload);
 	
 	
 	/**

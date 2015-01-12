@@ -184,17 +184,17 @@ public class WxProductController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "moreTagProducts.json")
-	public ModelAndView moreTagProducts(HttpServletRequest request, @RequestParam("tagId") int tagId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int limit) {
+	public ModelAndView moreTagProducts(HttpServletRequest request, @RequestParam("tagId") int tagId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int pageSize) {
 	    if(logger.isDebugEnabled()){
             logger.debug("ajax加载更多Tag商品，tagId: "+tagId+", pageNo: "+pageNo);
         }
-	    if(limit>10||limit<1){
-	    	limit = 6;
+	    if(pageSize>10||pageSize<1){
+	    	pageSize = 6;
 	    }
 	    
-	    List<Product> productList = productService.queryCachedProductsByTagId(tagId, pageNo, limit + 1);
+	    List<Product> productList = productService.queryCachedProductsByTagId(tagId, pageNo, pageSize, true);
 
-		int nextPageNo = 1;
+		int nextPageNo = 0;
 		if (productList == null || productList.size() == 0) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("无更多商品");
@@ -202,9 +202,9 @@ public class WxProductController {
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		
-		if (productList.size() > limit) {// 查询数据超过limit，含分页内容
+		if (productList.size() > pageSize) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素
-			productList.remove(limit);
+			productList.remove(pageSize);
 			nextPageNo = pageNo+1;
 			if(logger.isDebugEnabled()){
                 logger.debug("还有更多商品，nextPageNo： "+nextPageNo);
@@ -226,16 +226,16 @@ public class WxProductController {
 	 */
 	@NeedAuthorize
 	@RequestMapping(value = "moreCategoryProducts.json")
-	public ModelAndView moreCategoryProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int limit) {
+	public ModelAndView moreCategoryProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int pageSize) {
 		if(logger.isDebugEnabled()){
             logger.debug("ajax加载更多Category商品，categoryId: "+categoryId+", pageNo: "+pageNo);
         }
-	    if(limit>10||limit<1){
-	    	limit = 6;
+	    if(pageSize>10||pageSize<1){
+	    	pageSize = 6;
 	    }
 	    
 //	    List<WxProductSku> productSkuList = productSkuService.fallLoadCategoryProductSkuList(categoryId, pageNo, limit + 1);
-	    List<Product> productList = productService.queryCachedProductsByCategoryId(categoryId, pageNo, limit + 1);
+	    List<Product> productList = productService.queryCachedProductsByCategoryId(categoryId, pageNo, pageSize, true);
 	    
 
 		int nextPageNo = 0;
@@ -246,9 +246,9 @@ public class WxProductController {
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.SYSTEM_NO_MORE_DATA));
 		}
 		
-		if (productList.size() > limit) {// 查询数据超过limit，含分页内容
+		if (productList.size() > pageSize) {// 查询数据超过limit，含分页内容
 			// 移除最后一个元素
-			productList.remove(limit);
+			productList.remove(pageSize);
 			nextPageNo = pageNo+1;//取productId
 			if(logger.isDebugEnabled()){
                 logger.debug("还有更多商品，nextPageNo： "+nextPageNo);
@@ -288,6 +288,9 @@ public class WxProductController {
 				//设定第一条或选定的那条数据为current
 				if((productSkuId==0 && currentProductSku==null)||(productSkuId>0 && productSkuId == productSku.getId())){
 					currentProductSku = productSku;//当前指定的sku商品
+					//获取最新的库存数量
+					int productSkuStock = counterService.queryProductSkuStock(currentProductSku.getId());
+					currentProductSku.setStock(productSkuStock);
 				}
 				String key = productSku.getPropertiesName();
 				String value = JsonUtil.gson.toJson(productSku);
