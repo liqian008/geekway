@@ -80,6 +80,8 @@
 	</bean>
 	<bean id="productSkuService" class="com.bruce.geekway.service.product.impl.ProductSkuServiceImpl">
 	</bean>
+	<bean id="slideImageService" class="com.bruce.geekway.service.product.impl.SlideImageServiceImpl">
+	</bean>
 	<bean id="skuPropService" class="com.bruce.geekway.service.product.impl.SkuPropServiceImpl">
 	</bean>
 	<bean id="skuPropValueService" class="com.bruce.geekway.service.product.impl.SkuPropValueServiceImpl">

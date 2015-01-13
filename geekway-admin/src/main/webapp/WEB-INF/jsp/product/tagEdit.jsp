@@ -129,87 +129,19 @@
 						
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">宣传大图1:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">轮播图片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
 								<a href="${productTag.tagPic1Url}" id="tagPic1Link"  class="lightbox">
 									<img id="tagPic1Image" src="${productTag.tagPic1Url}" width="200px" />
 								</a>
-								<input id="tagPic1Url" type="hidden" name="tagPic1Url" value="${productTag.tagPic1Url}"/>
-								<input type="file" name="imageFile" id="imageFile1" class="imageFile styled" imageIndex="1">
 							</div>
 						</div>
 						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">大图链接1: <span class="mandatory">*</span></label>
-							<div class="col-sm-5">
-								<input type="text" class="form-control" name="tagLink1" id="tagLink1" value="${productTag.tagLink1}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">宣传大图2:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${productTag.tagPic2Url}" id="tagPic2Link"  class="lightbox">
-									<img id="tagPic2Image" src="${productTag.tagPic2Url}" width="200px" />
-								</a>
-								<input id="tagPic2Url" type="hidden" name="tagPic2Url" value="${productTag.tagPic2Url}"/>
-								<input type="file" name="imageFile" id="imageFile2" class="imageFile styled" imageIndex="2">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">大图链接2: <span class="mandatory">*</span></label>
-							<div class="col-sm-5">
-								<input type="text" class="form-control" name="tagLink2" id="tagLink2" value="${productTag.tagLink2}"/>
-							</div>
-						</div>
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">宣传大图3:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${productTag.tagPic3Url}" id="tagPic3Link"  class="lightbox">
-									<img id="tagPic3Image" src="${productTag.tagPic3Url}" width="200px" />
-								</a>
-								<input id="tagPic3Url" type="hidden" name="tagPic3Url" value="${productTag.tagPic3Url}"/>
-								<input type="file" name="imageFile" id="imageFile3" class="imageFile styled" imageIndex="3">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">大图链接3: <span class="mandatory">*</span></label>
-							<div class="col-sm-5">
-								<input type="text" class="form-control" name="tagLink3" id="tagLink3" value="${productTag.tagLink3}"/>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">宣传大图4:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${productTag.tagPic4Url}" id="tagPic4Link"  class="lightbox">
-									<img id="tagPic4Image" src="${productTag.tagPic4Url}" width="200px" />
-								</a>
-								<input id="tagPic4Url" type="hidden" name="tagPic4Url" value="${productTag.tagPic4Url}"/>
-								<input type="file" name="imageFile" id="imageFile4" class="imageFile styled" imageIndex="4">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">大图链接4: <span class="mandatory">*</span></label>
-							<div class="col-sm-5">
-								<input type="text" class="form-control" name="tagLink4" id="tagLink4" value="${productTag.tagLink4}"/>
-							</div>
-						</div>
-						
-						
-						
-						<div class="form-actions text-right">
-							<input type="reset" value="重 置" class="btn btn-danger">
+						<div class="form-actions text-left">
 							<input type="submit" value="提 交" class="btn btn-primary">
+							<input type="reset" value="重 置" class="btn btn-danger">
+							<a href="javascript:void(0)" class="btn btn-info">编辑轮播图片</a>
 						</div>
 					</div>
 				</div>
@@ -224,35 +156,5 @@
 	<!-- /page container -->
 </body>
 
-
-<script type="text/javascript">
-$(document).ready(function(){
-    $(".imageFile").change(function(){
-    	var imageIndex =$(this).attr("imageIndex");
-        //创建FormData对象
-        var data = new FormData();
-        //为FormData对象添加数据 
-        data.append('image', $('#imageFile'+imageIndex)[0].files[0]);
-        $.ajax({
-            url:'${pageContext.request.contextPath}/upload/uploadQiniu',
-            type:'POST',
-            data:data,
-            cache: false,
-            contentType: false,    //不可缺
-            processData: false,    //不可缺
-            success:function(responseData){
-                if(responseData.result==1){
-                	var imageUrl = responseData.data.uploadImageMap.original.url;
-	                $('#tagPic'+imageIndex+'Image').attr("src", imageUrl);
-	                $('#tagPic'+imageIndex+'Link').attr("href", imageUrl);
-	                $('#tagPic'+imageIndex+'Url').val(imageUrl);
-                }else{
-                	alert(responseData.message);
-                }
-            }
-        });
-    });
-});
-</script>
 	
 </html>

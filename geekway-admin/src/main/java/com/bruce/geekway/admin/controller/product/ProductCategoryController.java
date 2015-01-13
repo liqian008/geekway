@@ -17,7 +17,9 @@ import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.ProductCategory;
 import com.bruce.geekway.model.ProductCategoryCriteria;
+import com.bruce.geekway.model.SlideImage;
 import com.bruce.geekway.service.product.IProductCategoryService;
+import com.bruce.geekway.service.product.ISlideImageService;
 
 
 
@@ -31,6 +33,8 @@ public class ProductCategoryController {
 
 	@Autowired
 	private IProductCategoryService productCategoryService;
+	@Autowired
+	private ISlideImageService slideImageService;
 	
 	/**
 	 * 分页方式查询
@@ -64,17 +68,6 @@ public class ProductCategoryController {
 		return "product/categoryListPaging";
 	}
 	
-	@Deprecated
-	@RequestMapping("/categoryList")
-	public String categoryList(Model model, HttpServletRequest request) {
-		String servletPath = request.getRequestURI();
-		model.addAttribute("servletPath", servletPath);
-		
-		List<ProductCategory> categoryList = productCategoryService.queryAll();
-		model.addAttribute("categoryList", categoryList);
-		return "product/categoryList";
-	}
-	
 	@RequestMapping("/categoryAdd")
 	public String categoryAdd(Model model, ProductCategory category, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
@@ -91,6 +84,10 @@ public class ProductCategoryController {
 		
 		ProductCategory ProductCategory = productCategoryService.loadById(categoryId);
 		model.addAttribute("category", ProductCategory);
+		
+		List<SlideImage> slideImageList = slideImageService.queryByCategoryId(categoryId);
+		model.addAttribute("slideImageList", slideImageList);
+		
 		return "product/categoryEdit";
 	}
 	
@@ -137,5 +134,53 @@ public class ProductCategoryController {
 			model.addAttribute("redirectUrl", "./productCategoryPaging");
 			return "forward:/home/operationRedirect"; 
 		}
+	}
+	
+	
+	/**
+	 * 分类轮播列表
+	 */
+	@RequestMapping("/categorySlideImageList")
+	public String categorySlideImageList(Model model, int categoryId, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		List<SlideImage> slideImageList = slideImageService.queryByCategoryId(categoryId);
+		model.addAttribute("slideImageList", slideImageList);
+		return "product/categorySlideImageList";
+	}
+	
+	/**
+	 * 编辑分类轮播
+	 */
+	@RequestMapping("/categorySlideImageEdit")
+	public String categorySlideImageEdit(Model model, int categoryId, int id, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		SlideImage slideImage = slideImageService.loadById(id);
+		model.addAttribute("slideImage", slideImage);
+		return "product/categorySlideImageEdit";
+	}
+	
+	/**
+	 * 保存分类轮播
+	 */
+	@RequestMapping("/saveCategorySlideImage")
+	public String categorySlideImageEdit(Model model, SlideImage slideImage, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		int result = 0;
+		Date currentTime = new Date();
+		if(slideImage!=null&&slideImage.getId()!=null&&slideImage.getId()>0){
+			slideImage.setUpdateTime(currentTime);
+			result = slideImageService.updateById(slideImage);
+		}else{
+			slideImage.setCreateTime(currentTime);
+			result = slideImageService.save(slideImage);
+		}
+		model.addAttribute("redirectUrl", "./categorySlideImageList?categoryId="+slideImage.getRootId());
+		return "forward:/home/operationRedirect";
 	}
 }

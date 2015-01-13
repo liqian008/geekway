@@ -9,7 +9,7 @@ public class GeekwayEnum {
 	 *
 	 */
 	public static enum CommonStatusEnum{
-		UNAVAILABLE((short)0, "禁用"), AVAILABLE((short)1, "启用");
+		CLOSED((short)0, "禁用"), OPENED((short)1, "启用");
 		
 		private short status;
 		private String name;
@@ -19,10 +19,10 @@ public class GeekwayEnum {
 		}
 
 		public CommonStatusEnum valueOf(short status){
-			CommonStatusEnum[] statusArray  = CommonStatusEnum.values();
-			for(CommonStatusEnum statusEnum : statusArray){
-				if(status == statusEnum.status){
-					return statusEnum;
+			CommonStatusEnum[] arrays  = CommonStatusEnum.values();
+			for(CommonStatusEnum enumObj : arrays){
+				if(status == enumObj.status){
+					return enumObj;
 				}
 			}
 			return null;
@@ -50,8 +50,8 @@ public class GeekwayEnum {
 		}
 
 		public ProductOrderStatusEnum valueOf(short status){
-			ProductOrderStatusEnum[] statusArray  = ProductOrderStatusEnum.values();
-			for(ProductOrderStatusEnum orderStatus : statusArray){
+			ProductOrderStatusEnum[] arrays  = ProductOrderStatusEnum.values();
+			for(ProductOrderStatusEnum orderStatus : arrays){
 				if(status == orderStatus.status){
 					return orderStatus;
 				}
@@ -81,10 +81,10 @@ public class GeekwayEnum {
 		}
 
 		public ProductVoucherStatusEnum valueOf(short status){
-			ProductVoucherStatusEnum[] statusArray  = ProductVoucherStatusEnum.values();
-			for(ProductVoucherStatusEnum statusEnum : statusArray){
-				if(status == statusEnum.status){
-					return statusEnum;
+			ProductVoucherStatusEnum[] arrays  = ProductVoucherStatusEnum.values();
+			for(ProductVoucherStatusEnum enumObj : arrays){
+				if(status == enumObj.status){
+					return enumObj;
 				}
 			}
 			return null;
@@ -111,10 +111,10 @@ public class GeekwayEnum {
 		}
 
 		public PayTypeEnum valueOf(short status){
-			PayTypeEnum[] statusArray  = PayTypeEnum.values();
-			for(PayTypeEnum statusEnum : statusArray){
-				if(status == statusEnum.value){
-					return statusEnum;
+			PayTypeEnum[] arrays  = PayTypeEnum.values();
+			for(PayTypeEnum enumObj : arrays){
+				if(status == enumObj.value){
+					return enumObj;
 				}
 			}
 			return null;
@@ -128,5 +128,38 @@ public class GeekwayEnum {
 			return name;
 		}
 	}
-	
+
+	/**
+	 * slideImage类型
+	 * @author liqian
+	 *
+	 */
+	public static enum SlideImageTypeEnum{
+		PRODUCT((short)0, "商品图片"), CATEGORY((short)1, "分类图片"), TAG((short)2, "TAG图片");
+		
+		private short value;
+		private String name;
+		SlideImageTypeEnum(short value, String name){
+			this.value = value;
+			this.name = name;
+		}
+
+		public SlideImageTypeEnum valueOf(short status){
+			SlideImageTypeEnum[] arrays  = SlideImageTypeEnum.values();
+			for(SlideImageTypeEnum enumObj : arrays){
+				if(status == enumObj.value){
+					return enumObj;
+				}
+			}
+			return null;
+		}
+		
+		public short getValue() {
+			return value;
+		}
+		
+		public String getName() {
+			return name;
+		}
+	}
 }

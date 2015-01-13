@@ -2,6 +2,7 @@ package com.bruce.geekway.admin.controller.product;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,11 +20,13 @@ import com.bruce.geekway.model.ProductCriteria;
 import com.bruce.geekway.model.ProductTag;
 import com.bruce.geekway.model.ProductTagCriteria;
 import com.bruce.geekway.model.ProductTagRelation;
+import com.bruce.geekway.model.SlideImage;
 import com.bruce.geekway.service.product.IProductService;
 import com.bruce.geekway.service.product.IProductTagRelationService;
 import com.bruce.geekway.service.product.IProductTagService;
 import com.bruce.geekway.service.product.ISkuPropService;
 import com.bruce.geekway.service.product.ISkuPropValueService;
+import com.bruce.geekway.service.product.ISlideImageService;
 
 
 
@@ -37,6 +40,8 @@ public class ProductTagController {
 	private IProductService productService;
 	@Autowired
 	private IProductTagService productTagService;
+	@Autowired
+	private ISlideImageService slideImageService;
 	@Autowired
 	private IProductTagRelationService productTagRelationService;
 	@Autowired
@@ -102,11 +107,14 @@ public class ProductTagController {
 		ProductTag productTag = productTagService.loadById(productTagId);
 		model.addAttribute("productTag", productTag);
 		
+		List<SlideImage> slideImageList = slideImageService.queryByTagId(productTagId);
+		model.addAttribute("slideImageList", slideImageList);
+		
 		return "product/tagEdit";
 	}
 	
 	/**
-	 * 保存商品，并跳转至【填写sku信息】界面
+	 * 保存
 	 * @param model
 	 * @param productTag
 	 * @param productTagSkuValueIds
@@ -169,7 +177,6 @@ public class ProductTagController {
 		}
 		return "product/tagProductSet";
 	}
-	
 	
 	/**
 	 * 
@@ -256,6 +263,53 @@ public class ProductTagController {
 		int result = productTagRelationService.delete(tagId, productId); 
 		
 		model.addAttribute("redirectUrl", "./tagProductSet?tagId="+tagId);
+		return "forward:/home/operationRedirect";
+	}
+	
+	/**
+	 * tag轮播列表
+	 */
+	@RequestMapping("/tagSlideImageList")
+	public String tagSlideImageList(Model model, int tagId, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		List<SlideImage> slideImageList = slideImageService.queryByTagId(tagId);
+		model.addAttribute("slideImageList", slideImageList);
+		return "product/tagSlideImageList";
+	}
+	
+	/**
+	 * 编辑tag轮播
+	 */
+	@RequestMapping("/tagSlideImageEdit")
+	public String tagSlideImageEdit(Model model, int tagId, int id, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		SlideImage slideImage = slideImageService.loadById(id);
+		model.addAttribute("slideImage", slideImage);
+		return "product/tagSlideImageEdit";
+	}
+	
+	/**
+	 * 保存tag轮播
+	 */
+	@RequestMapping("/saveCategorySlideImage")
+	public String tagSlideImageEdit(Model model, SlideImage slideImage, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		int result = 0;
+		Date currentTime = new Date();
+		if(slideImage!=null&&slideImage.getId()!=null&&slideImage.getId()>0){
+			slideImage.setUpdateTime(currentTime);
+			result = slideImageService.updateById(slideImage);
+		}else{
+			slideImage.setCreateTime(currentTime);
+			result = slideImageService.save(slideImage);
+		}
+		model.addAttribute("redirectUrl", "./tagSlideImageList?tagId="+slideImage.getRootId());
 		return "forward:/home/operationRedirect";
 	}
 }

@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.bruce.geekway.model.Product;
 import com.bruce.geekway.model.ProductSku;
 import com.bruce.geekway.model.SkuPropValue;
+import com.bruce.geekway.model.SlideImage;
 import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IProductService;
 import com.bruce.geekway.service.product.IProductSkuService;
 import com.bruce.geekway.service.product.ISkuPropValueService;
+import com.bruce.geekway.service.product.ISlideImageService;
 
 /**
  * 某个product下的sku操作
@@ -33,6 +35,8 @@ public class ProductSkuController {
 	private IProductSkuService productSkuService;
 	@Autowired
 	private IProductService productService;
+	@Autowired
+	private ISlideImageService slideImageService;
 	@Autowired
 	private ISkuPropValueService skuPropValueService;
 	@Autowired
@@ -126,9 +130,9 @@ public class ProductSkuController {
 			Product product = productService.loadById(productId);
 			model.addAttribute("product", product);
 			
-//			//加载该sku商品对应的图片
-//			List<WxSkuImage> skuImageList = wxSkuImageService.queryAllBySkuId(skuId);
-//			model.addAttribute("skuImageList", skuImageList);
+			//加载该sku商品对应的图片
+			List<SlideImage> slideImageList = slideImageService.queryByProductSkuId(skuId);
+			model.addAttribute("slideImageList", slideImageList);
 		}
 		
 		return "product/productSkuEdit";
@@ -178,6 +182,53 @@ public class ProductSkuController {
 		model.addAttribute("redirectUrl", "./productSkuEdit?productId="+productId+"&skuId="+skuId);
 		return "forward:/home/operationRedirect";
 	}
-
+	
+	
+	/**
+	 * productSku轮播列表
+	 */
+	@RequestMapping("/productSkuSlideImageList")
+	public String productSkuSlideImageList(Model model, int productSkuId, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		List<SlideImage> slideImageList = slideImageService.queryByTagId(productSkuId);
+		model.addAttribute("slideImageList", slideImageList);
+		return "product/productSkuSlideImageList";
+	}
+	
+	/**
+	 * 编辑productSku轮播
+	 */
+	@RequestMapping("/productSkuSlideImageEdit")
+	public String productSkuSlideImageEdit(Model model, int productSkuId, int id, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		SlideImage slideImage = slideImageService.loadById(id);
+		model.addAttribute("slideImage", slideImage);
+		return "product/productSkuSlideImageEdit";
+	}
+	
+	/**
+	 * 保存productSku轮播
+	 */
+	@RequestMapping("/saveCategorySlideImage")
+	public String productSkuSlideImageEdit(Model model, SlideImage slideImage, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		int result = 0;
+		Date currentTime = new Date();
+		if(slideImage!=null&&slideImage.getId()!=null&&slideImage.getId()>0){
+			slideImage.setUpdateTime(currentTime);
+			result = slideImageService.updateById(slideImage);
+		}else{
+			slideImage.setCreateTime(currentTime);
+			result = slideImageService.save(slideImage);
+		}
+		model.addAttribute("redirectUrl", "./productSkuSlideImageList?productSkuId="+slideImage.getRootId());
+		return "forward:/home/operationRedirect";
+	}
 
 }

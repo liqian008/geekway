@@ -1,12 +1,9 @@
-<%@page import="java.util.Map.Entry"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%@page import="java.util.*"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.utils.*"%>
-
-<%@ include file="../inc/include_tag.jsp" %>
 
 
 <!DOCTYPE html>
@@ -73,7 +70,10 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品SKU数据
+						Tag轮播图片管理
+						<!-- 
+						<small>Headings, lists, code, pre etc. </small>
+						 -->
 					</h3>
 				</div>
 			</div>
@@ -81,8 +81,8 @@
 			<!-- Breadcrumbs line -->
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
-					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">修改商品SKU数据</li>
+					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
+					<li class="active">Tag轮播图片管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -90,145 +90,76 @@
 				</div>
 			</div>
 			<!-- /breadcrumbs line -->
-			
+
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、商品SKU详情<br/>
-					2、商品SKU图片尺寸应为1976 × 1536，透明背景，且大小应尽量控制在200K以内<br/>
+					1、xxx<br/>
 				</p>
 			</div>
 
-			<%
-				ProductSku productSku = (ProductSku)request.getAttribute("productSku");
-					Product product = (Product)request.getAttribute("product");
-			%>
-
-			<form id="validate" action="<s:url value='./saveSku'/>" method="post"  class="form-horizontal form-bordered">
-
-				<!-- Basic inputs -->
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>修改商品SKU数据
-						</h6>
-					</div>
-					<div class="panel-body">
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<label class="control-label">
-									${product.name}
-									<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-									<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品图片:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${productSku.skuPic1Url}" id="skuPic1Link"  class="lightbox">
-									<img id="skuPic1Image" src="${productSku.skuPic1Url}" width="200px" />
-								</a>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="name" id="name" value="${product.name}"/>
-								<form:hidden path="product.id"/>
-							</div>
-						</div>
-						
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.name}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU KEY: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.propertiesName}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU基本信息: <span class="mandatory">*</span>
-							</label>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" id="price" value="${productSku.originPrice}"/>
-								<span class="label label-info label-block">原价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${productSku.price}"/>
-								<span class="label label-danger label-block">现价(元)</span>
-							</div>
-							
-							<%-- <div class="col-sm-2">
-								<input type="text" class="form-control" name="postFee" id="postFee" value="${productSku.postFee}"/>
-								<span class="label label-success label-block">运费(元)</span>
-							</div> --%>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="stock" id="stock" value="${productSku.stock}"/>
-								<span class="label label-primary label-block">库存(个)</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea class="ckeditor" name="description" id="description">
-										${productSku.description}
-									</textarea>
-								</div>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">参数规格: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-6">
-								<textarea name="param" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${productSku.param}</textarea>
-							</div>
-						</div>
-						
-						 
-						<div class="form-actions text-left">
-							<input type="submit" value="提 交" class="btn btn-primary">
-							<input type="reset" value="重 置" class="btn btn-danger">
-							<a href="javascript:void(0)" class="btn btn-info">编辑产品图片</a>
-						</div>
-					</div>
-					
+			<!-- Table view -->
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h5 class="panel-title">
+						<i class="icon-people"></i>Tag轮播图片管理
+					</h5>
+				</div> 
+				<div class="table-responsive">
+					<table class="table table-bordered table-striped table-check">
+						<thead>
+							<tr>
+								<th>ID</th>
+                                <th>类型</th>
+								<th>图片</th>
+                                <th>链接</th>
+                                <th>排序</th> 
+                                <th class="team-links">操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<%
+	                           	List<SlideImage> slideImageList = (List<SlideImage>)request.getAttribute("slideImageList");
+	                           	if(slideImageList!=null&&slideImageList.size()>0){
+	                           		int i=0;
+	                           		for(SlideImage slideImage: slideImageList){
+	                           			i++;
+							%>
+							<tr>
+		                        <td><%=i%></td>
+		                        <td class="text-center">
+		                        	<a href="<%=slideImage.getPicUrl()%>" class="lightbox">
+		                        	<img src='<%=slideImage.getPicUrl()%>' class="img-media"/>
+		                        	</a> 
+		                        </td>
+		                        <td>Tag</td>
+		                        <td><%=slideImage.getLink()%></td>
+		                        <td><%=slideImage.getSort()%></td>
+		                        <td class='text-center'>
+		                        	<div class="table-controls">
+										<a href="./slideImageListEdit?slideImageId=<%=slideImage.getId()%>" 
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
+									</div>
+								</td> 
+                               </tr>
+							<%}
+                           	} %>
+						</tbody>
+					</table>
 				</div>
 				
-			</form>
-			
+				
+			</div>
+			<!-- /table view -->
+
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
 </body>
 </html>
+

@@ -30,6 +30,7 @@ import com.bruce.geekway.model.ProductCategory;
 import com.bruce.geekway.model.ProductSku;
 import com.bruce.geekway.model.ProductTag;
 import com.bruce.geekway.model.SkuPropValue;
+import com.bruce.geekway.model.SlideImage;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IProductCategoryService;
@@ -37,10 +38,10 @@ import com.bruce.geekway.service.product.IProductService;
 import com.bruce.geekway.service.product.IProductSkuService;
 import com.bruce.geekway.service.product.IProductTagService;
 import com.bruce.geekway.service.product.ISkuPropValueService;
+import com.bruce.geekway.service.product.ISlideImageService;
 import com.bruce.geekway.utils.HtmlBuildUtils;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ShopLinkUtil;
-import com.bruce.geekway.utils.ShopLinkUtil.SlideImage;
 import com.bruce.geekway.utils.WxShareUtil;
 
 /**
@@ -60,9 +61,11 @@ public class WxProductController {
 	@Autowired
 	private IProductSkuService productSkuService;
 	@Autowired
-	private ISkuPropValueService wxSkuPropValueService;
+	private ISkuPropValueService skuPropValueService;
 	@Autowired
 	private ICounterService counterService;
+	@Autowired
+	private ISlideImageService slideImageService;
 	
 //	@Autowired
 //	private IWxProductVoucherService productVoucherService;
@@ -134,15 +137,18 @@ public class WxProductController {
 		
 		
 		if(productCategory!=null){
-
-			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productCategory);
-			model.addAttribute("slideImageList", slideImageList);
+//			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productCategory);
+//			model.addAttribute("slideImageList", slideImageList);
 			
 			//分享对象
-			model.addAttribute("wxSharedInfo", WxShareUtil.wxShare(productCategory.getWxShareTitle(), 
+			model.addAttribute("wxSharedInfo", WxShareUtil.wxShare(productCategory.getWxShareTitle(),
 											productCategory.getWxShareContent(), 
 											productCategory.getWxShareIconUrl(), 
 											ShopLinkUtil.getCategoryLink4Mobile(categoryId)));
+			
+			List<SlideImage> slideImageList = slideImageService.queryCachedByCategoryId(categoryId);
+			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
+			model.addAttribute("slideImageList", slideImageList);
 		}
 		return "product/productListByCategory";
 	}
@@ -160,8 +166,8 @@ public class WxProductController {
 		model.addAttribute("productTag", productTag);
 		if(productTag!=null){
 
-			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productTag);
-			model.addAttribute("slideImageList", slideImageList);
+//			List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(productTag);
+//			model.addAttribute("slideImageList", slideImageList);
 			
 //			List<WxProduct> tagProductList = productService.queryProductsByTagId(tagId);
 //			model.addAttribute("tagProductList", tagProductList);
@@ -171,6 +177,10 @@ public class WxProductController {
 											productTag.getWxShareContent(), 
 											productTag.getWxShareIconUrl(), 
 											ShopLinkUtil.getTagLink4Mobile(tagId)));
+			
+			List<SlideImage> slideImageList = slideImageService.queryCachedByTagId(tagId);
+			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
+			model.addAttribute("slideImageList", slideImageList);
 		}
 		return "product/productListByTag";
 	}
@@ -308,14 +318,14 @@ public class WxProductController {
 												product.getWxShareIconUrl(), 
 												ShopLinkUtil.getProductLink4Mobile(productId)));
 				
-				List<SlideImage> slideImageList = ShopLinkUtil.buildSlideImageList(currentProductSku);
+				List<SlideImage> slideImageList = slideImageService.queryCachedByProductSkuId(currentProductSku.getId());
+				ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 				model.addAttribute("slideImageList", slideImageList);
-				
 			}
 		}
 		
 		//获取该商品sku属性值列表，展示以便用户选择
-		List<SkuPropValue> skuPropValueList =  wxSkuPropValueService.querySkuPropValueListByProductId(productId);
+		List<SkuPropValue> skuPropValueList =  skuPropValueService.querySkuPropValueListByProductId(productId);
 		//计算该商品的sku矩阵
 		if(skuPropValueList!=null&&skuPropValueList.size()>0){
 			Map<Integer, List<SkuPropValue>> skuGroupMap = new TreeMap<Integer, List<SkuPropValue>>();

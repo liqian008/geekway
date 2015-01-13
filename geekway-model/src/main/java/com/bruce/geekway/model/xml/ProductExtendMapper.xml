@@ -10,7 +10,7 @@
 	
 	<!-- limit查询指定tagId的product列表(分页方式) -->
 	<select id="queryProductsByTagId" resultMap="BaseResultMap">
-		select <include refid="Product_Tag_Base_Column_List" /> from tb_product tp, tb_product_tag_relation tptr where tptr.product_tag_id=#{tagId,jdbcType=INTEGER} and tp.id = tptr.product_id order by tptr.top_time desc
+		select <include refid="Product_Tag_Base_Column_List" /> from tb_product tp, tb_product_tag_relation tptr where tptr.product_tag_id=#{tagId,jdbcType=INTEGER} and tp.id = tptr.product_id and tp.status=1 order by tptr.top_time desc
 		<if test="criteria.limitRows != null">
 	      limit 
 	      <if test="criteria.limitOffset != null">
@@ -23,7 +23,7 @@
 	
 	<!-- limit查询指定categoryId的product列表(分页方式) -->
 	<select id="queryProductsByCategoryId" resultMap="BaseResultMap">
-		select <include refid="Product_Tag_Base_Column_List" /> from tb_product tp where tp.category_id= #{tagId,jdbcType=INTEGER} order by tp.id desc 
+		select <include refid="Product_Tag_Base_Column_List" /> from tb_product tp where tp.category_id= #{categoryId,jdbcType=INTEGER} and tp.status=1 order by tp.id desc 
 		<if test="criteria.limitRows != null">
 	      limit 
 	      <if test="criteria.limitOffset != null">

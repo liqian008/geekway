@@ -42,6 +42,8 @@
 		<mapper resource="com/bruce/geekway/model/xml/ProductExtendMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ProductSkuMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/ProductSkuExtendMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/SlideImageMapper.xml" />
+		
 		<mapper resource="com/bruce/geekway/model/xml/SkuPropMapper.xml" />
 		<mapper resource="com/bruce/geekway/model/xml/SkuPropValueMapper.xml" />
 		<!-- 

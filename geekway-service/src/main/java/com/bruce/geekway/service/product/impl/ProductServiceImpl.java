@@ -185,7 +185,7 @@ public class ProductServiceImpl implements IProductService {
 	}
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'categoryId-'+#categoryId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'products:categoryId-'+#categoryId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
 	public List<Product> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize, boolean isFallload) {
 		logger.debug("fallload productsByTag from db. [tagId:"+categoryId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
 		return queryProductsByCategoryId(categoryId, pageNo, pageSize, isFallload);
@@ -209,7 +209,7 @@ public class ProductServiceImpl implements IProductService {
 	}
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'tagId-'+#tagId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'products:tagId-'+#tagId+'-pageNo-'+#pageNo+'-pageSize-'+#pageSize")
 	public List<Product> queryCachedProductsByTagId(int tagId, int pageNo, int pageSize, boolean isFallload) {
 		logger.debug("fallload productsByTag from db. [tagId:"+tagId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
 		return queryProductsByTagId(tagId, pageNo, pageSize, isFallload);

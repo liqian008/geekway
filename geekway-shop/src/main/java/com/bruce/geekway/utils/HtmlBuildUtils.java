@@ -41,7 +41,7 @@ public class HtmlBuildUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
 			sb.append("<a href='" + ShopLinkUtil.getProductLink4Mobile(product.getId()) + "'>");
-			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 300, 0) + "'");
+			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(product.getCoverPicUrl(), 300, 0) + "'");
 			sb.append("</a>");
 			sb.append("<h4>"+product.getName()+"</h4>");
 			sb.append("<ul id='choose'>");
@@ -62,6 +62,7 @@ public class HtmlBuildUtils {
 	 * @param productSkuList
 	 * @return
 	 */
+	@Deprecated
 	public static String buildFallLoadProductSkuHtml(List<ProductSku> productSkuList) {
 		// TODO freemarker template
 		if (productSkuList != null && productSkuList.size() > 0) {
@@ -76,6 +77,8 @@ public class HtmlBuildUtils {
 		return "";
 	}
 
+	
+	@Deprecated
 	private static String buildProductSkuItemHtml(ProductSku productSku, int mod) {
 		String lastColumnCss = mod == 0 ? " last-column" : ""; 
 
@@ -83,7 +86,7 @@ public class HtmlBuildUtils {
 			StringBuilder sb = new StringBuilder();
 			sb.append("<div class='portfolio-item-thumb one-half " + lastColumnCss + "'>");
 			sb.append("<a href='" + ShopLinkUtil.getProductLink4Mobile(productSku.getProductId()) + "'>");
-			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(productSku.getSkuPic1Url(), 300, 0) + "'");
+//			sb.append("<img class='responsive-image' src='" + UploadUtil.getQiniuResizeImageUrl(productSku.getSkuPic1Url(), 300, 0) + "'");
 			sb.append("</a>");
 			sb.append("<h4>"+productSku.getName()+"</h4>");
 			sb.append("<ul id='choose'>");
@@ -221,7 +224,7 @@ public class HtmlBuildUtils {
 			
 			sb.append("<p class='quote-item'>");
 			sb.append("<a href='" + ShopLinkUtil.getProductLink4Mobile(product.getId()) + "'>");
-			sb.append("<img src='"+UploadUtil.getQiniuResizeImageUrl(product.getProductPic1Url(), 100, 0) +"'>");
+			sb.append("<img src='"+UploadUtil.getQiniuResizeImageUrl(product.getCoverPicUrl(), 100, 0) +"'>");
 			sb.append("</a>");
 			sb.append(product.getName());
 			sb.append("<em>");

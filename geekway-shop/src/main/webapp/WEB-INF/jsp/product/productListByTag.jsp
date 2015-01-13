@@ -2,7 +2,6 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import="com.bruce.geekway.utils.*" %>
-<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 <%
 String contextPath = request.getContextPath();
@@ -77,7 +76,7 @@ String contextPath = request.getContextPath();
                 <div class="slider-controls" data-snap-ignore="true">
 					<%for(SlideImage slideImage: slideImageList){%>
 					<div>
-						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getPicUrl()%>" class="responsive-image"></a>
 					</div>
 					<%}%>
 				</div>

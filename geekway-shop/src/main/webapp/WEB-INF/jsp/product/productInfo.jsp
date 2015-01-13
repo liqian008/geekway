@@ -2,7 +2,6 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
-<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 <!DOCTYPE HTML>
 <html>
@@ -83,7 +82,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 						for(SlideImage slideImage: slideImageList){
 					%>
 					<div>
-						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getPicUrl()%>" class="responsive-image"></a>
 					</div>
 					<%
 						}
