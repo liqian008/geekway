@@ -46,7 +46,8 @@ public class ProductSkuServiceImpl implements IProductSkuService{
 			@CacheEvict(value = ConstMemc.MEMCACHE_CACHE_VALUE, key = "'product-sku-'+#t.id"),
 			@CacheEvict(value = ConstMemc.MEMCACHE_CACHE_VALUE, key = "'product-'+#t.productId+'-skus'"), })
 	public int deleteById(Integer id) {
-		return productSkuMapper.deleteByPrimaryKey(id);
+//		return productSkuMapper.deleteByPrimaryKey(id);
+		return 0;//
 	}
 
 	@Override

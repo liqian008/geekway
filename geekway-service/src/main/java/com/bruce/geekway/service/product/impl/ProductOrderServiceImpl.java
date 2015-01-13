@@ -148,6 +148,9 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		return queryUserOrders(userOpenId, pageNo, pageSize, fallload);
 	}
 	
+	/**
+	 * 收到支付通知
+	 */
 	@Override
 	public int markNotifyReceived(short payType, String outTradeNo, String transactionId) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
@@ -159,7 +162,10 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
 		return updateByCriteria(productOrder, criteria);
 	}
-
+	
+	/**
+	 * 标记为等待发货
+	 */
 	@Override
 	public int markWaitingDelivery(String outTradeNo) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
@@ -170,6 +176,9 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		return updateByCriteria(productOrder, criteria);
 	} 
 
+	/**
+	 * 标记为已发货
+	 */
 	@Override
 	public int markDelivered(String outTradeNo) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
@@ -231,7 +240,7 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	 * 生成订单，供用户进行支付
 	 */
 	@Override
-	public int createOrder(ProductOrder productOrder, UserAddress addressInfo, List<ProductOrderItem> orderItemList) {
+	public synchronized int createOrder(ProductOrder productOrder, UserAddress addressInfo, List<ProductOrderItem> orderItemList) {
 		if(productOrder==null){
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR);
 		}
@@ -277,9 +286,9 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		//下单不扣减库存（支付成功后才扣减）
 		
 		//标记优惠码状态为正在使用
-		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
-			result = productVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), GeekwayEnum.ProductVoucherStatusEnum.USED.getStatus());
-		}
+//		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
+//			result = productVoucherService.changeStatus(productOrder.getUserOpenId(), productOrder.getVoucherId(), GeekwayEnum.ProductVoucherStatusEnum.USED.getStatus());
+//		}
 		if(addressInfo!=null&&result>0){
 			//保存用户邮寄地址信息
 			addressInfo.setUserOpenId(productOrder.getUserOpenId());

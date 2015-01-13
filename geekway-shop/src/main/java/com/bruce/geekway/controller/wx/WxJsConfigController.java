@@ -20,26 +20,27 @@ import com.bruce.geekway.utils.WxAuthUtil;
 @Controller
 public class WxJsConfigController {
 	
+	private static String jsApis = "'checkJsApi', 'onMenuShareTimeline','onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'hideMenuItems', 'showMenuItems','hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'translateVoice','startRecord', 'stopRecord', 'onRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'uploadVoice','downloadVoice','chooseImage','previewImage','uploadImage','downloadImage','getNetworkType','openLocation','getLocation','hideOptionMenu', 'showOptionMenu','closeWindow','scanQRCode','chooseWXPay','openProductSpecificView','addCard','chooseCard','openCard'";
+	
 	@ResponseBody
 	@RequestMapping(value = "wxJsConfig")
 	public String wxJsConfig(String pageUrl, HttpServletRequest request) {
-		String appId = "wx24e31a5fd464b35c";
+		String appId = "";//TODO 
 		String wxConfigFormat = "wx.config({debug: %b, appId: '%s', timestamp: %s, nonceStr: '%s', signature: '%s',jsApiList: [%s]})";
-		String requestUrl = request.getQueryString();
 		String timestampStr = String.valueOf(System.currentTimeMillis()/1000);//时间戳
 		String nonceStr = WxAuthUtil.createNoncestr();
 		
-		String jsapiTicket = buildJsApiTicket("﻿5xWr9iiGFP6VWHwbEjy9mCZSRpRCRX6x8Xb_Yb0exHY6uAQMOqboaDsBa24zAhDqD7nuiHFDHdxmtNOjbqxinKYkjTHkH3-88JUTRvv7GQs");
+		String accessToken = "";//TODO
+		String jsapiTicket = buildJsApiTicket(accessToken, pageUrl);
 		SortedMap<String, String> dataMap = new TreeMap<String, String>();
 		
 		dataMap.put("timestamp", timestampStr);
 		dataMap.put("noncestr", nonceStr);
 		dataMap.put("jsapi_ticket", jsapiTicket);
-		dataMap.put("url", requestUrl);
+		dataMap.put("url", pageUrl);
 		
 		String signature  = Sha1Util.getSha1(buildPlainText(dataMap));
-		String jsApiListStr = "'onMenuShareTimeline',  'onMenuShareAppMessage'";
-		String wxConfig = String.format(wxConfigFormat , true, appId, timestampStr, nonceStr, signature, jsApiListStr);
+		String wxConfig = String.format(wxConfigFormat , true, appId, timestampStr, nonceStr, signature, jsApis);
 		return wxConfig;
 	}
 	
@@ -58,7 +59,13 @@ public class WxJsConfigController {
 	}
 	
 	
-	private static String buildJsApiTicket(String accessToken) {
+	/**
+	 * 
+	 * @param accessToken
+	 * @param requestUrl 建议作为cache的key，确保不同页面的jsticket都不同
+	 * @return
+	 */
+	private static String buildJsApiTicket(String accessToken, String requestUrl) {
 		String url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
 		Map<String, String> map = new TreeMap<String, String>();
 		map.put("access_token", accessToken);
@@ -80,8 +87,8 @@ public class WxJsConfigController {
 		String timestampStr = String.valueOf(System.currentTimeMillis()/1000);//时间戳
 		String nonceStr = WxAuthUtil.createNoncestr();
 		
-		String accessToken = buildAccessToken(appId, secretKey);
-		String jsapiTicket = buildJsApiTicket(accessToken);
+		String accessToken = buildAccessToken(appId, secretKey); //TODO cache accessTOken
+		String jsapiTicket = buildJsApiTicket(accessToken, requestUrl);//TODO cache jsapiTicket
 		SortedMap<String, String> dataMap = new TreeMap<String, String>();
 		
 		dataMap.put("timestamp", timestampStr);
@@ -90,8 +97,7 @@ public class WxJsConfigController {
 		dataMap.put("url", requestUrl);
 		
 		String signature  = Sha1Util.getSha1(buildPlainText(dataMap));
-		String jsApiListStr = "'checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage'";
-		String wxConfig = String.format(wxConfigFormat , true, appId, timestampStr, nonceStr, signature, jsApiListStr);
+		String wxConfig = String.format(wxConfigFormat , true, appId, timestampStr, nonceStr, signature, jsApis);
 		System.out.println(wxConfig);
 	}
 	

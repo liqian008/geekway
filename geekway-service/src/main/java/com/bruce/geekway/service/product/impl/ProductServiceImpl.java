@@ -50,7 +50,8 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	@CacheEvict(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'product-'+#t.id")
 	public int deleteById(Integer id) {
-		return productMapper.deleteByPrimaryKey(id);
+//		return productMapper.deleteByPrimaryKey(id);
+		return 0;
 	}
 
 	@Override

@@ -21,7 +21,7 @@ public class OrderUtil {
 	 * 生成系统订单号（长度16位）
 	 * @return
 	 */
-	public static String generateOrderSn(Date date) {
+	public synchronized static String generateOrderSn(Date date) {
 		if(date==null){
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}

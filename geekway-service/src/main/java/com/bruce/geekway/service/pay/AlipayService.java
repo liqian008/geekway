@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.service.product.IProductOrderService;
@@ -19,8 +20,6 @@ public class AlipayService {
 
 	private static final Logger alipayNotifyLogger = LoggerFactory.getLogger("alipayNotifyLogger");
 
-	private IProductOrderService productOrderService;
-	
 	private IGenericPayService genericPayService;
 
 	/**
@@ -35,19 +34,10 @@ public class AlipayService {
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}
 		//TODO 入支付宝流水库表
-		int result = genericPayService.processPayNotify((short)1, outTradeNo, transId);
-		
+		int result = genericPayService.processPayNotify(GeekwayEnum.PayTypeEnum.ALIPAY.getValue(), outTradeNo, transId);
 		return result;
 	}
 
-	public IProductOrderService getWxProductOrderService() {
-		return productOrderService;
-	}
-
-	public void setWxProductOrderService(
-			IProductOrderService wxProductOrderService) {
-		this.productOrderService = wxProductOrderService;
-	}
 
 	public IGenericPayService getGenericPayService() {
 		return genericPayService;
@@ -56,5 +46,6 @@ public class AlipayService {
 	public void setGenericPayService(IGenericPayService genericPayService) {
 		this.genericPayService = genericPayService;
 	}
+
 	
 }

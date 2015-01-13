@@ -63,14 +63,6 @@
 		<property name="wxWebUserMapper" ref="wxWebUserMapper"></property>
 	</bean>
 	
-	<bean id="wxpayService" class="com.bruce.geekway.service.pay.WxpayService">
-	</bean>
-	<bean id="wxPayComplaintService" class="com.bruce.geekway.service.pay.impl.WxPayComplaintServiceImpl">
-	</bean>
-	<bean id="wxPayAlarmService" class="com.bruce.geekway.service.pay.impl.WxPayAlarmServiceImpl">
-	</bean>
-	<bean id="wxPayNotifyOrderService" class="com.bruce.geekway.service.pay.impl.WxPayNotifyOrderServiceImpl">
-	</bean>
 	<bean id="wxMpPayService" class="com.bruce.geekway.service.pay.mp.WxMpPayService">
 	</bean>
 	
@@ -112,6 +104,21 @@
 	
 	<!-- 计数cache -->
 	<bean id="productStockCache" class="com.bruce.geekway.cache.product.ProductStockCache">
+	</bean>
+	
+	<!-- 支付service -->	
+	<bean id="alipayService" class="com.bruce.geekway.service.pay.AlipayService">
+	</bean>
+	<bean id="wxpayService" class="com.bruce.geekway.service.pay.WxpayService">
+	</bean>
+	<bean id="genericPayService" class="com.bruce.geekway.service.pay.impl.GenericPayServiceImpl">
+	</bean>
+	
+	<bean id="wxPayComplaintService" class="com.bruce.geekway.service.pay.impl.WxPayComplaintServiceImpl">
+	</bean>
+	<bean id="wxPayAlarmService" class="com.bruce.geekway.service.pay.impl.WxPayAlarmServiceImpl">
+	</bean>
+	<bean id="wxPayNotifyOrderService" class="com.bruce.geekway.service.pay.impl.WxPayNotifyOrderServiceImpl">
 	</bean>
 	
 </beans>
