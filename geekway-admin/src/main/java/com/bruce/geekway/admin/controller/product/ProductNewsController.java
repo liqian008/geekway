@@ -22,14 +22,14 @@ import com.bruce.geekway.service.product.IProductNewsService;
 
 @Controller
 @RequestMapping("/product")
-public class WxProductNewsController {
+public class ProductNewsController {
 	
 
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 
 	@Autowired
-	private IProductNewsService wxProductNewsService;
+	private IProductNewsService productNewsService;
 	
 	/**
 	 * 分页方式查询
@@ -51,7 +51,7 @@ public class WxProductNewsController {
 		criteria.setOrderByClause(" id desc");
 		ProductNewsCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<ProductNews> productNewsPagingData = wxProductNewsService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductNews> productNewsPagingData = productNewsService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productNewsPagingData!=null){
 			productNewsPagingData.setRequestUri(request.getRequestURI());
 			
@@ -78,7 +78,7 @@ public class WxProductNewsController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ProductNews ProductNews = wxProductNewsService.loadById(newsId);
+		ProductNews ProductNews = productNewsService.loadById(newsId);
 		model.addAttribute("news", ProductNews);
 		return "product/newsEdit";
 	}
@@ -92,10 +92,10 @@ public class WxProductNewsController {
 		Date currentTime = new Date();
 		news.setUpdateTime(currentTime);
 		if(news!=null&&news.getId()!=null&&news.getId()>0){
-			result = wxProductNewsService.updateById(news);
+			result = productNewsService.updateById(news);
 		}else{
 			news.setCreateTime(currentTime);
-			result = wxProductNewsService.save(news);
+			result = productNewsService.save(news);
 		}
 		
 		model.addAttribute("redirectUrl", "./newsPaging");
@@ -114,7 +114,7 @@ public class WxProductNewsController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 	
-		int result = wxProductNewsService.deleteById(newsId);
+		int result = productNewsService.deleteById(newsId);
 		
 		model.addAttribute("redirectUrl", "./newsPaging");
 		return "forward:/home/operationRedirect"; 

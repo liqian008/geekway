@@ -38,6 +38,9 @@
 	<bean id="wxMpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
 	</bean>
 
+	
+	<!-- 微信公众平台接口service -->
+	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 -->
 	<bean id="wxUserService" class="com.bruce.geekway.service.mp.WxMpUserService">
 	</bean>
@@ -45,6 +48,9 @@
 	</bean>
 	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
+	<bean id="wxMpBroadcastService" class="com.bruce.geekway.service.mp.WxMpBroadcastService">
+	</bean>
+	
 
 
 	<!-- wxpay service -->

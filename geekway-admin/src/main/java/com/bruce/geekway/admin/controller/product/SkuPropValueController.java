@@ -18,10 +18,10 @@ import com.bruce.geekway.service.product.ISkuPropValueService;
 
 @Controller
 @RequestMapping("/product")
-public class WxSkuPropValueController {
+public class SkuPropValueController {
 
 	@Autowired
-	private ISkuPropValueService wxSkuPropValueService;
+	private ISkuPropValueService skuPropValueService;
 //	@Autowired
 //	private IWxProductSkuRelationService wxProductSkuRelationService;
 	
@@ -31,7 +31,7 @@ public class WxSkuPropValueController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<SkuPropValue> skuPropValueList = wxSkuPropValueService.querySortedSkuPropValues();
+		List<SkuPropValue> skuPropValueList = skuPropValueService.querySortedSkuPropValues();
 		model.addAttribute("skuPropValueList", skuPropValueList);
 		return "product/skuPropValueList";
 	}
@@ -50,7 +50,7 @@ public class WxSkuPropValueController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		SkuPropValue SkuPropValue = wxSkuPropValueService.loadById(skuPropValueId);
+		SkuPropValue SkuPropValue = skuPropValueService.loadById(skuPropValueId);
 		model.addAttribute("skuPropValue", SkuPropValue);
 		return "product/skuPropValueEdit";
 	}
@@ -65,10 +65,10 @@ public class WxSkuPropValueController {
 		Date currentTime = new Date();
 		skuPropValue.setUpdateTime(currentTime);
 		if(skuPropValue!=null&&skuPropValue.getId()!=null&&skuPropValue.getId()>0){
-			result = wxSkuPropValueService.updateById(skuPropValue);
+			result = skuPropValueService.updateById(skuPropValue);
 		}else{
 			skuPropValue.setCreateTime(currentTime);
-			result = wxSkuPropValueService.save(skuPropValue);
+			result = skuPropValueService.save(skuPropValue);
 		}
 		
 		model.addAttribute("redirectUrl", "./skuPropValueList");

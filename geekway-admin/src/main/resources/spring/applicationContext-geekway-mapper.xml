@@ -119,66 +119,66 @@
 	
 	
 	<!-- weixin product 相关mapper  -->
-	<bean id="wxProductMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductCategoryMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productCategoryMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductCategoryMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductCategoryMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductTagMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productTagMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductTagMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductTagMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductTagRelationMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productTagRelationMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductTagRelationMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductTagRelationMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductNewsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productNewsMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductNewsMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductNewsMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductSkuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productSkuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductSkuMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductSkuMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxSkuPropMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="skuPropMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxSkuPropMapper" />
+			value="com.bruce.geekway.dao.mapper.SkuPropMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxSkuPropValueMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="skuPropValueMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxSkuPropValueMapper" />
+			value="com.bruce.geekway.dao.mapper.SkuPropValueMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	
 	<!-- 订单相关 -->
-	<bean id="wxProductVoucherMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productVoucherMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductVoucherMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductVoucherMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productOrderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductOrderMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductOrderMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxProductOrderItemMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="productOrderItemMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxProductOrderItemMapper" />
+			value="com.bruce.geekway.dao.mapper.ProductOrderItemMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
-	<bean id="wxUserAddressMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+	<bean id="userAddressMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
-			value="com.bruce.geekway.dao.mapper.WxUserAddressMapper" />
+			value="com.bruce.geekway.dao.mapper.UserAddressMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
 	

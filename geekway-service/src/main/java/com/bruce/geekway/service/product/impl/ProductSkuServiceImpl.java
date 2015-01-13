@@ -5,7 +5,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 
 import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.ProductSkuMapper;
@@ -27,6 +29,9 @@ public class ProductSkuServiceImpl implements IProductSkuService{
 	}
 
 	@Override
+	@Caching(evict = {
+			@CacheEvict(value = ConstMemc.MEMCACHE_CACHE_VALUE, key = "'product-sku-'+#t.id"),
+			@CacheEvict(value = ConstMemc.MEMCACHE_CACHE_VALUE, key = "'product-'+#t.productId+'-skus'"), })
 	public int updateById(ProductSku t) {
 		return productSkuMapper.updateByPrimaryKeySelective(t);
 	}
@@ -37,13 +42,17 @@ public class ProductSkuServiceImpl implements IProductSkuService{
 	}
 
 	@Override
+	@Caching(evict = {
+			@CacheEvict(value = ConstMemc.MEMCACHE_CACHE_VALUE, key = "'product-sku-'+#t.id"),
+			@CacheEvict(value = ConstMemc.MEMCACHE_CACHE_VALUE, key = "'product-'+#t.productId+'-skus'"), })
 	public int deleteById(Integer id) {
 		return productSkuMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int deleteByCriteria(ProductSkuCriteria criteria) {
-		return productSkuMapper.deleteByExample(criteria);
+		//return productSkuMapper.deleteByExample(criteria);
+		return 0;
 	}
 
 	@Override

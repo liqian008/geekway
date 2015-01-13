@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -32,7 +33,11 @@ public class ProductServiceImpl implements IProductService {
 		return productMapper.insertSelective(t);
 	}
 
+	/**
+	 * 更新时同时逐出内存
+	 */
 	@Override
+	@CacheEvict(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'product-'+#t.id")
 	public int updateById(Product t) {
 		return productMapper.updateByPrimaryKeySelective(t);
 	}
@@ -43,13 +48,15 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
+	@CacheEvict(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'product-'+#t.id")
 	public int deleteById(Integer id) {
 		return productMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override
 	public int deleteByCriteria(ProductCriteria criteria) {
-		return productMapper.deleteByExample(criteria);
+//		return productMapper.deleteByExample(criteria);
+		return 0;
 	}
 
 	@Override

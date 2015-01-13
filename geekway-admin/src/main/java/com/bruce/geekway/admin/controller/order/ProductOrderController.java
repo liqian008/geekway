@@ -40,14 +40,14 @@ import com.bruce.geekway.utils.WxAuthUtil;
  */
 @Controller
 @RequestMapping("/order")
-public class WxOrderController {
+public class ProductOrderController {
 	
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
-	private IProductOrderService wxProductOrderService;
+	private IProductOrderService productOrderService;
 	@Autowired
-	private IProductOrderItemService wxProductOrderItemService;
+	private IProductOrderItemService productOrderItemService;
 	@Autowired
 	private WxMpPayService wxMpPayService;
 	@Autowired
@@ -98,7 +98,7 @@ public class WxOrderController {
 		String endTimeStr = request.getParameter("endTime");
 		
 		
-		PagingResult<ProductOrder> orderPagingData = wxProductOrderService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductOrder> orderPagingData = productOrderService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(orderPagingData!=null){
 			orderPagingData.setRequestUri(request.getRequestURI());
 			
@@ -116,9 +116,9 @@ public class WxOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
+		ProductOrder order = productOrderService.loadByTradeNo(outTradeNo);
 		if(order!=null){model.addAttribute("order", order);
-			List<ProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(outTradeNo);
+			List<ProductOrderItem> productOrderItemList = productOrderItemService.queryByTradeNo(outTradeNo);
 			model.addAttribute("productOrderItemList", productOrderItemList);
 		}
 		return "order/orderInfo";
@@ -129,10 +129,10 @@ public class WxOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ProductOrder order = wxProductOrderService.loadByTransactionId(transactionId);
+		ProductOrder order = productOrderService.loadByTransactionId(transactionId);
 		if(order!=null){
 			model.addAttribute("order", order);
-			List<ProductOrderItem> productOrderItemList = wxProductOrderItemService.queryByTradeNo(order.getOutTradeNo());
+			List<ProductOrderItem> productOrderItemList = productOrderItemService.queryByTradeNo(order.getOutTradeNo());
 			model.addAttribute("productOrderItemList", productOrderItemList);
 		}
 		return "order/orderInfo";
@@ -157,7 +157,7 @@ public class WxOrderController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ProductOrder order = wxProductOrderService.loadByTradeNo(outTradeNo);
+		ProductOrder order = productOrderService.loadByTradeNo(outTradeNo);
 		if(order!=null){
 			//构造微信发货对象
 			WxDeliverInfo deliveryInfo = buildDeliveryInfo(openId, transId, outTradeNo, deliverStatus, deliverMsg);
@@ -170,7 +170,7 @@ public class WxOrderController {
 				updatedOrder.setPostType(postType);
 				updatedOrder.setPostSn(postSn);
 				updatedOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());//状态改已发货
-				result = wxProductOrderService.updateById(updatedOrder);//更新操作
+				result = productOrderService.updateById(updatedOrder);//更新操作
 			}
 		}
 		model.addAttribute("redirectUrl", "./orderInfo?outTradeNo="+outTradeNo);

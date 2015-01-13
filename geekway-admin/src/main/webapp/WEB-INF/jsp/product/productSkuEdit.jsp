@@ -230,6 +230,26 @@
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-10"> 
+								<div class="block-inner">
+									<textarea class="ckeditor" name="description" id="description">
+										${productSku.description}
+									</textarea>
+								</div>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">参数规格: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-6">
+								<textarea name="param" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${productSku.param}</textarea>
+							</div>
+						</div>
+						
 						 
 						<div class="form-actions text-right">
 							<input type="reset" value="重 置" class="btn btn-danger">

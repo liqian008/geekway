@@ -18,12 +18,12 @@ import com.bruce.geekway.service.product.ISkuPropService;
 
 @Controller
 @RequestMapping("/product")
-public class WxSkuPropController {
+public class SkuPropController {
 
 	@Autowired
-	private ISkuPropService wxSkuPropService;
+	private ISkuPropService skuPropService;
 	@Autowired
-	private IProductCategoryService wxProductCategoryService;
+	private IProductCategoryService productCategoryService;
 
 	
 	@RequestMapping("/skuPropList")
@@ -31,7 +31,7 @@ public class WxSkuPropController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<SkuProp> skuPropList = wxSkuPropService.queryAll();
+		List<SkuProp> skuPropList = skuPropService.queryAll();
 		model.addAttribute("skuPropList", skuPropList);
 		return "product/skuPropList";
 	}
@@ -74,7 +74,7 @@ public class WxSkuPropController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		SkuProp SkuProp = wxSkuPropService.loadById(skuPropId);
+		SkuProp SkuProp = skuPropService.loadById(skuPropId);
 		model.addAttribute("skuProp", SkuProp);
 		return "product/skuPropEdit";
 	}
@@ -88,10 +88,10 @@ public class WxSkuPropController {
 		Date currentTime = new Date();
 		skuProp.setUpdateTime(currentTime);
 		if(skuProp!=null&&skuProp.getId()!=null&&skuProp.getId()>0){
-			result = wxSkuPropService.updateById(skuProp);
+			result = skuPropService.updateById(skuProp);
 		}else{
 			skuProp.setCreateTime(currentTime);
-			result = wxSkuPropService.save(skuProp);
+			result = skuPropService.save(skuProp);
 		}
 		
 		model.addAttribute("redirectUrl", "./skuPropList");
@@ -117,7 +117,7 @@ public class WxSkuPropController {
 			model.addAttribute("message", "该Sku属性已经被产品关联，无法删除");
 			return "forward:/home/operationResult"; 
 		}else{//未被使用，可以删除
-			int result = wxSkuPropService.deleteById(skuPropId);
+			int result = skuPropService.deleteById(skuPropId);
 			
 			model.addAttribute("redirectUrl", "./skuPropList");
 			return "forward:/home/operationRedirect"; 

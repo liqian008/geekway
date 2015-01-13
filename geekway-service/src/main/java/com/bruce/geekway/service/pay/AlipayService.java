@@ -2,7 +2,6 @@ package com.bruce.geekway.service.pay;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +19,8 @@ public class AlipayService {
 
 	private static final Logger alipayNotifyLogger = LoggerFactory.getLogger("alipayNotifyLogger");
 
-	@Autowired
-	private IProductOrderService wxProductOrderService;
-	@Autowired
+	private IProductOrderService productOrderService;
+	
 	private IGenericPayService genericPayService;
 
 	/**
@@ -43,12 +41,12 @@ public class AlipayService {
 	}
 
 	public IProductOrderService getWxProductOrderService() {
-		return wxProductOrderService;
+		return productOrderService;
 	}
 
 	public void setWxProductOrderService(
 			IProductOrderService wxProductOrderService) {
-		this.wxProductOrderService = wxProductOrderService;
+		this.productOrderService = wxProductOrderService;
 	}
 
 	public IGenericPayService getGenericPayService() {

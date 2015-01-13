@@ -29,20 +29,20 @@ import com.bruce.geekway.service.product.ISkuPropValueService;
 
 @Controller
 @RequestMapping("/product")
-public class WxProductTagController {
+public class ProductTagController {
 	
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 	@Autowired
-	private IProductService wxProductService;
+	private IProductService productService;
 	@Autowired
-	private IProductTagService wxProductTagService;
+	private IProductTagService productTagService;
 	@Autowired
-	private IProductTagRelationService wxProductTagRelationService;
+	private IProductTagRelationService productTagRelationService;
 	@Autowired
-	private ISkuPropService wxSkuPropService;
+	private ISkuPropService skuPropService;
 	@Autowired
-	private ISkuPropValueService wxSkuPropValueService;
+	private ISkuPropValueService skuPropValueService;
 	
 
 	/**
@@ -65,7 +65,7 @@ public class WxProductTagController {
 		criteria.setOrderByClause(" id desc");
 		ProductTagCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<ProductTag> productTagPagingData = wxProductTagService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductTag> productTagPagingData = productTagService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productTagPagingData!=null){
 			productTagPagingData.setRequestUri(request.getRequestURI());
 			
@@ -99,7 +99,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ProductTag productTag = wxProductTagService.loadById(productTagId);
+		ProductTag productTag = productTagService.loadById(productTagId);
 		model.addAttribute("productTag", productTag);
 		
 		return "product/tagEdit";
@@ -123,11 +123,11 @@ public class WxProductTagController {
 		Date currentTime = new Date();
 		productTag.setUpdateTime(currentTime);
 		if(productTag!=null&&productTag.getId()!=null&&productTag.getId()>0){
-			result = wxProductTagService.updateById(productTag);
+			result = productTagService.updateById(productTag);
 		}else{//新增
 			productTag.setCreateTime(currentTime);
 			productTag.setStatus((short) 0);
-			result = wxProductTagService.save(productTag);
+			result = productTagService.save(productTag);
 		}
 		model.addAttribute("redirectUrl", "./productTagPaging");
 		return "forward:/home/operationRedirect";
@@ -146,7 +146,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		ProductTag productTag = wxProductTagService.loadById(tagId);
+		ProductTag productTag = productTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
 		
 //		全量读取已关联的productList，将被下面分页替代
@@ -158,7 +158,7 @@ public class WxProductTagController {
 		criteria.setOrderByClause(" id desc");
 		ProductCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<Product> productPagingData = wxProductService.pagingTagProductsByCriteria(tagId, pageNo, pageSize, criteria);
+		PagingResult<Product> productPagingData = productService.pagingTagProductsByCriteria(tagId, pageNo, pageSize, criteria);
 		if(productPagingData!=null){
 			productPagingData.setRequestUri(request.getRequestURI());
 			
@@ -183,7 +183,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 
-		ProductTag productTag = wxProductTagService.loadById(tagId);
+		ProductTag productTag = productTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
 
 //		全量读取未关联的productList，将被下面分页替代
@@ -195,7 +195,7 @@ public class WxProductTagController {
 		criteria.setOrderByClause(" id desc");
 		ProductCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<Product> productPagingData = wxProductService.pagingTagOutProductsByCriteria(tagId, pageNo, pageSize, criteria);
+		PagingResult<Product> productPagingData = productService.pagingTagOutProductsByCriteria(tagId, pageNo, pageSize, criteria);
 		if(productPagingData!=null){
 			productPagingData.setRequestUri(request.getRequestURI());
 			
@@ -213,7 +213,7 @@ public class WxProductTagController {
 	@RequestMapping("/topProduct")
 	public String topProduct(Model model, int tagId, int productId) {
 		//置顶操作
-		wxProductTagRelationService.topProduct(tagId, productId);
+		productTagRelationService.topProduct(tagId, productId);
 
 		model.addAttribute("redirectUrl", "./tagProductSet?tagId="+tagId);
 		return "forward:/home/operationRedirect";
@@ -235,7 +235,7 @@ public class WxProductTagController {
 		obj.setProductTagId(tagId);
 		obj.setProductId(productId);
 		obj.setTopTime(new Date());
-		wxProductTagRelationService.save(obj);
+		productTagRelationService.save(obj);
 		
 		model.addAttribute("redirectUrl", "./tagProductSet?tagId="+tagId);
 		return "forward:/home/operationRedirect";
@@ -253,7 +253,7 @@ public class WxProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		int result = wxProductTagRelationService.delete(tagId, productId); 
+		int result = productTagRelationService.delete(tagId, productId); 
 		
 		model.addAttribute("redirectUrl", "./tagProductSet?tagId="+tagId);
 		return "forward:/home/operationRedirect";

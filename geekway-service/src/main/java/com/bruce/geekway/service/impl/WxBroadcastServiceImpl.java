@@ -257,6 +257,31 @@ public class WxBroadcastServiceImpl implements IWxBroadcastService, Initializing
 		this.wxBroadcastMapper = wxBroadcastMapper;
 	}
 
-	
+	public IWxMaterialMultimediaService getWxMaterialMultimediaService() {
+		return wxMaterialMultimediaService;
+	}
+
+	public void setWxMaterialMultimediaService(
+			IWxMaterialMultimediaService wxMaterialMultimediaService) {
+		this.wxMaterialMultimediaService = wxMaterialMultimediaService;
+	}
+
+	public IWxMaterialArticleService getWxMaterialArticleService() {
+		return wxMaterialArticleService;
+	}
+
+	public void setWxMaterialArticleService(
+			IWxMaterialArticleService wxMaterialArticleService) {
+		this.wxMaterialArticleService = wxMaterialArticleService;
+	}
+
+	public WxMpBroadcastService getWxMpBroadcastService() {
+		return wxMpBroadcastService;
+	}
+
+	public void setWxMpBroadcastService(WxMpBroadcastService wxMpBroadcastService) {
+		this.wxMpBroadcastService = wxMpBroadcastService;
+	}
+
 
 }

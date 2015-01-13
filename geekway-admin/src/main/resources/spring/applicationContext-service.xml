@@ -11,20 +11,107 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 
 	default-lazy-init="false" default-autowire="byName">
-
-	<!-- 本地上传service -->
+	
+	<!-- 本地上传service -->	
 	<bean id="uploadLocalService" class="com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl">
 	</bean>
-	
-	<!-- 七牛上传service -->
+	<!-- 七牛上传service -->	
 	<bean id="uploadQiniuService" class="com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl">
 	</bean>
 	
+	<!-- 上传本地的processor	
+	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadLocalProcessor">
+	</bean>
+	 -->
+	<!-- 上传七牛的processor	
+	<bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadQiniuProcessor">
+	</bean>
+	 -->
 	
-	<!-- 上传本地的processor <bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadLocalProcessor"> 
-		</bean> -->
-	<!-- 上传七牛的processor -->
-	<!-- <bean id="uploadProcessor" class="com.bruce.geekway.service.upload.impl.UploadQiniuProcessor"> 
-		</bean> -->
+	<!-- 本地MpUserService 
+	<bean id="wxUserService" class="com.bruce.geekway.service.impl.WxUserServiceImpl">
+		<property name="wxUserMapper" ref="wxUserMapper"></property>
+	</bean>
+	-->
+	
+	<!-- 微信公众平台接口service -->
+	<!-- weixin web oauth -->
+	<bean id="wxMpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
+	</bean>
+	<bean id="wxAccessTokenService" class="com.bruce.geekway.service.impl.WxAccessTokenServiceImpl">
+	</bean>
+	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
+	</bean>
+	<bean id="wxMpUserService" class="com.bruce.geekway.service.mp.WxMpUserService">
+	</bean>
+	<bean id="wxMpBroadcastService" class="com.bruce.geekway.service.mp.WxMpBroadcastService">
+	</bean>
+	<bean id="wxMpMediaUploadService" class="com.bruce.geekway.service.mp.WxMpMediaUploadService">
+	</bean>
+	<bean id="wxMpMenuService" class="com.bruce.geekway.service.mp.WxMpMenuService">
+	</bean>
+	<bean id="wxMpCustomReplyService" class="com.bruce.geekway.service.mp.WxMpCustomReplyService">
+	</bean>
+	<bean id="wxMpUserGroupService" class="com.bruce.geekway.service.mp.WxMpUserGroupService">
+	</bean>
+	<!-- 访问微信api接口的userService，供订阅后添加用户使用 -->
+	<!-- <bean id="wxUserService" class="com.bruce.geekway.service.mp.WxMpUserService">
+	</bean> -->
 
+	<!-- wxpay service -->
+	<bean id="wxWebUserService" class="com.bruce.geekway.service.impl.WxWebUserServiceImpl">
+		<property name="wxWebUserMapper" ref="wxWebUserMapper"></property>
+	</bean>
+	
+	<bean id="wxpayService" class="com.bruce.geekway.service.pay.WxpayService">
+	</bean>
+	<bean id="wxPayComplaintService" class="com.bruce.geekway.service.pay.impl.WxPayComplaintServiceImpl">
+	</bean>
+	<bean id="wxPayAlarmService" class="com.bruce.geekway.service.pay.impl.WxPayAlarmServiceImpl">
+	</bean>
+	<bean id="wxPayNotifyOrderService" class="com.bruce.geekway.service.pay.impl.WxPayNotifyOrderServiceImpl">
+	</bean>
+	<bean id="wxMpPayService" class="com.bruce.geekway.service.pay.mp.WxMpPayService">
+	</bean>
+	
+	<!-- wx product service -->
+	<bean id="productCategoryService" class="com.bruce.geekway.service.product.impl.ProductCategoryServiceImpl">
+	</bean>
+	<bean id="productTagService" class="com.bruce.geekway.service.product.impl.ProductTagServiceImpl">
+	</bean>
+	<bean id="productTagRelationService" class="com.bruce.geekway.service.product.impl.ProductTagRelationServiceImpl">
+	</bean>
+	<bean id="productNewsService" class="com.bruce.geekway.service.product.impl.ProductNewsServiceImpl">
+	</bean>
+	<bean id="productService" class="com.bruce.geekway.service.product.impl.ProductServiceImpl">
+	</bean>
+	<bean id="productSkuService" class="com.bruce.geekway.service.product.impl.ProductSkuServiceImpl">
+	</bean>
+	<bean id="skuPropService" class="com.bruce.geekway.service.product.impl.SkuPropServiceImpl">
+	</bean>
+	<bean id="skuPropValueService" class="com.bruce.geekway.service.product.impl.SkuPropValueServiceImpl">
+	</bean>
+	<bean id="productVoucherService" class="com.bruce.geekway.service.product.impl.ProductVoucherServiceImpl">
+	</bean>
+	<bean id="productOrderService" class="com.bruce.geekway.service.product.impl.ProductOrderServiceImpl">
+	</bean>
+	<bean id="productOrderItemService" class="com.bruce.geekway.service.product.impl.ProductOrderItemServiceImpl">
+	</bean>
+	<bean id="userAddressService" class="com.bruce.geekway.service.product.impl.UserAddressServiceImpl">
+	</bean>
+	<bean id="deliveryTemplateService" class="com.bruce.geekway.service.product.impl.DeliveryTemplateServiceImpl"
+	init-method="init">
+	</bean>
+	
+	<bean id="cacheTestService" class="com.bruce.geekway.service.product.CacheTestService">
+	</bean>
+	
+	<!-- 计数service -->
+	<bean id="counterService" class="com.bruce.geekway.service.product.impl.CounterServiceImpl">
+	</bean>
+	
+	<!-- 计数cache -->
+	<bean id="productStockCache" class="com.bruce.geekway.cache.product.ProductStockCache">
+	</bean>
+	
 </beans>

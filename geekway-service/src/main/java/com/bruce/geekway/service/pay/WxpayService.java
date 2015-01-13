@@ -35,20 +35,12 @@ import com.bruce.geekway.utils.WxAuthUtil;
 @Service
 public class WxpayService{
 	
-	@Autowired
 	private IWxPayNotifyOrderService wxPayNotifyOrderService;
-	@Autowired
 	private IWxPayAlarmService wxPayAlarmService;
-	@Autowired
 	private IWxPayComplaintService wxPayComplaintService;
-	@Autowired
-	private WxMpPayService wxMpPayService;
-	@Autowired
-	private IProductSkuService wxProductSkuService;
-	@Autowired
+	private IProductOrderService productOrderService;
 	private IGenericPayService genericPayService;
-	@Autowired
-	private IProductOrderService wxProductOrderService;
+	private WxMpPayService wxMpPayService;
 	
 	
 	/**
@@ -187,9 +179,9 @@ public class WxpayService{
 		if(deliverInfo!=null){
 			//提交微信处理
 			WxJsonResult jsonResult = wxMpPayService.deliverNotify(deliverInfo);
-			if(jsonResult!=null){
+			if(jsonResult!=null&&jsonResult.getErrcode()==0){
 				//微信提交成功后，更改db中的状态
-				int result = wxProductOrderService.markDelivered(deliverInfo.out_trade_no);
+				int result = productOrderService.markDelivered(deliverInfo.out_trade_no);
 				return result;
 			}
 		}
@@ -202,8 +194,8 @@ public class WxpayService{
 	 */
 	public int dealWxComplaint(String openId, String feedbackId){
 		//提交微信
-		WxJsonResult wxResult = wxMpPayService.dealComplaint(openId, feedbackId);
-		if(wxResult!=null){
+		WxJsonResult jsonResult = wxMpPayService.dealComplaint(openId, feedbackId);
+		if(jsonResult!=null&&jsonResult.getErrcode()==0){
 			//微信提交成功后，更改db中的状态
 			return wxPayComplaintService.markWait4Confirm(openId, feedbackId);
 		}

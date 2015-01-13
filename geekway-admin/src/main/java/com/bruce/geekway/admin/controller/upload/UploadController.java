@@ -1,7 +1,5 @@
 package com.bruce.geekway.admin.controller.upload;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +14,8 @@ import com.bruce.foundation.admin.security.WebUserDetails;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
-import com.bruce.geekway.service.mp.WxMpMediaUploadService;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
-import com.bruce.geekway.utils.UploadUtil;
 
 /**
  * 产品图片的上传

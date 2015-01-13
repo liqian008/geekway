@@ -23,14 +23,14 @@ import com.bruce.geekway.service.product.IProductCategoryService;
 
 @Controller
 @RequestMapping("/product")
-public class WxProductCategoryController {
+public class ProductCategoryController {
 	
 
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 	
 
 	@Autowired
-	private IProductCategoryService wxProductCategoryService;
+	private IProductCategoryService productCategoryService;
 	
 	/**
 	 * 分页方式查询
@@ -52,7 +52,7 @@ public class WxProductCategoryController {
 		criteria.setOrderByClause(" id desc");
 		ProductCategoryCriteria.Criteria subCriteria = criteria.createCriteria();
 		
-		PagingResult<ProductCategory> productCategoryPagingData = wxProductCategoryService.pagingByCriteria(pageNo, pageSize , criteria);
+		PagingResult<ProductCategory> productCategoryPagingData = productCategoryService.pagingByCriteria(pageNo, pageSize , criteria);
 		if(productCategoryPagingData!=null){
 			productCategoryPagingData.setRequestUri(request.getRequestURI());
 			
@@ -70,7 +70,7 @@ public class WxProductCategoryController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<ProductCategory> categoryList = wxProductCategoryService.queryAll();
+		List<ProductCategory> categoryList = productCategoryService.queryAll();
 		model.addAttribute("categoryList", categoryList);
 		return "product/categoryList";
 	}
@@ -89,7 +89,7 @@ public class WxProductCategoryController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		ProductCategory ProductCategory = wxProductCategoryService.loadById(categoryId);
+		ProductCategory ProductCategory = productCategoryService.loadById(categoryId);
 		model.addAttribute("category", ProductCategory);
 		return "product/categoryEdit";
 	}
@@ -103,10 +103,10 @@ public class WxProductCategoryController {
 		Date currentTime = new Date();
 		category.setUpdateTime(currentTime);
 		if(category!=null&&category.getId()!=null&&category.getId()>0){
-			result = wxProductCategoryService.updateById(category);
+			result = productCategoryService.updateById(category);
 		}else{
 			category.setCreateTime(currentTime);
-			result = wxProductCategoryService.save(category);
+			result = productCategoryService.save(category);
 		}
 		
 		model.addAttribute("redirectUrl", "./categoryList");
@@ -132,7 +132,7 @@ public class WxProductCategoryController {
 			model.addAttribute("message", "该分类已经被产品关联，无法删除");
 			return "forward:/home/operationResult"; 
 		}else{//未被使用，可以删除
-			int result = wxProductCategoryService.deleteById(categoryId);
+			int result = productCategoryService.deleteById(categoryId);
 			
 			model.addAttribute("redirectUrl", "./productCategoryPaging");
 			return "forward:/home/operationRedirect"; 

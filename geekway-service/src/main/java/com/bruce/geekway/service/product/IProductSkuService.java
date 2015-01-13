@@ -8,6 +8,7 @@ import com.bruce.geekway.model.ProductSkuCriteria;
 
 public interface IProductSkuService extends IFoundationService<ProductSku, Integer, ProductSkuCriteria>{
 	
+	
 	public List<ProductSku> querySkuListByProductId(int productId);
 	
 	/*cacheable query*/
@@ -16,6 +17,8 @@ public interface IProductSkuService extends IFoundationService<ProductSku, Integ
 	public ProductSku loadProductSku(int productId, int skuId);
 	/*cacheable query*/
 	public ProductSku loadCachedProductSku(int productId, int skuId);
+
+	
 
 	/**
 	 * 组查询productSku，供搜索使用

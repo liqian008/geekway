@@ -153,11 +153,6 @@
 					</table>
 				</div>
 				
-				<div class="table-footer">
-					<div class="table-actions">
-						<a href="./batchEditProductSkus?productId=<%=product.getId()%>" class="btn btn-danger btn-xs">批量编辑商品SKU</a>
-					</div> 
-				</div>
 				
 			</div>
 			<!-- /table view -->

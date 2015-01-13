@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;

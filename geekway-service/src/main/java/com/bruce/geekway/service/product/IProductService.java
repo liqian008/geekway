@@ -9,9 +9,12 @@ import com.bruce.geekway.model.ProductCriteria;
 
 public interface IProductService extends IFoundationPagingService<Product, Integer, ProductCriteria>{
 
-	
+	/**
+	 * 从缓存种读取（无缓存则读db）
+	 * @param id
+	 * @return
+	 */
 	public Product loadCachedById(Integer id);
-	
 	
 	/**
 	 * 获取正在销售的产品系列
@@ -44,6 +47,8 @@ public interface IProductService extends IFoundationPagingService<Product, Integ
 	//前台分页查询缓存category商品
 	public List<Product> queryCachedProductsByCategoryId(int categoryId, int pageNo, int pageSize, boolean isFallload);
 
+
+	
 	
 	//瀑布流方式加载tag产品
 //	public List<WxProduct> fallLoadProductsByTag(int tagId, int tailId, int limit);
