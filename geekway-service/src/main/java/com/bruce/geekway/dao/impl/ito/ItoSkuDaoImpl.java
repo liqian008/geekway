@@ -68,6 +68,27 @@ public class ItoSkuDaoImpl implements IItoSkuDao, InitializingBean {
 		criteria.createCriteria().andProductIdEqualTo(productId);
 		return itoSkuMapper.deleteByExample(criteria);
 	}
+	
+	@Override
+	public int deleteBySkuPropMaterialIds(int productId, List<Integer> skuPropValueMaterialIdList) {
+		ItoSkuCriteria criteria = new ItoSkuCriteria();
+		criteria.createCriteria().andProductIdEqualTo(productId).andMaterialIdIn(skuPropValueMaterialIdList);
+		return itoSkuMapper.deleteByExample(criteria);
+	}
+
+	@Override
+	public int deleteBySkuPropColorIds(int productId, List<Integer> skuPropValueColorIdList) {
+		ItoSkuCriteria criteria = new ItoSkuCriteria();
+		criteria.createCriteria().andProductIdEqualTo(productId).andColorIdIn(skuPropValueColorIdList);
+		return itoSkuMapper.deleteByExample(criteria);
+	}
+
+	@Override
+	public int deleteBySkuPropSizeIds(int productId, List<Integer> skuPropValueSizeIdList) {
+		ItoSkuCriteria criteria = new ItoSkuCriteria();
+		criteria.createCriteria().andProductIdEqualTo(productId).andSizeIdIn(skuPropValueSizeIdList);
+		return itoSkuMapper.deleteByExample(criteria);
+	}
 
     
 //    @Override

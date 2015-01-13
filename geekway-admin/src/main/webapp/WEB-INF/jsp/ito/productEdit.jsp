@@ -178,7 +178,7 @@
 								%>
 								<div class="checkbox-inline checkbox-info">
 									<label>
-										<input class="styled" type="radio" name="modifySkuSettings" value="false"/>
+										<input class="styled" type="radio" name="modifySkuSettings" value="false" checked="checked"/>
 										否
 									</label>
 								</div>

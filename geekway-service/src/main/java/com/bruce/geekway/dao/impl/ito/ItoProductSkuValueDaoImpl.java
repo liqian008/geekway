@@ -121,11 +121,20 @@ public class ItoProductSkuValueDaoImpl implements IItoProductSkuValueDao, Initia
 
   @Override
 	public int queryCountBySkuPropValueId(int skuPropValueId){
-	  ItoProductSkuValueCriteria criteria = new ItoProductSkuValueCriteria();
+		ItoProductSkuValueCriteria criteria = new ItoProductSkuValueCriteria();
 		criteria.createCriteria().andSkuPropValueIdEqualTo(skuPropValueId);
 		return itoProductSkuValueMapper.countByExample(criteria);
 	}
 	
+  
+  	@Override
+	public int deleteBySkuPropValueIds(int productId, List<Integer> skuPropValueIdList) {
+  		ItoProductSkuValueCriteria criteria = new ItoProductSkuValueCriteria();
+		criteria.createCriteria().andProductIdEqualTo(productId).andSkuPropValueIdIn(skuPropValueIdList);
+		return itoProductSkuValueMapper.deleteByExample(criteria);
+	}
+
+  
     @Override
     public void afterPropertiesSet() throws Exception {
 
@@ -147,5 +156,6 @@ public class ItoProductSkuValueDaoImpl implements IItoProductSkuValueDao, Initia
 		this.itoSkuPropValueMapper = itoSkuPropValueMapper;
 	}
 
+	
 	
 }

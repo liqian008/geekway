@@ -21,6 +21,10 @@ public interface IItoSkuDao extends IBaseDao<ItoSku, Integer> {
 //    public List<ItoSku> queryArticlesByModuleId(int moduleId, int limit);
 //
 //    public List<ItoSku> queryArticlesOutModuleId(int moduleId);
+	
+	public int deleteBySkuPropMaterialIds(int productId, List<Integer> skuPropValueMaterialIdList); 
+	public int deleteBySkuPropColorIds(int productId, List<Integer> skuPropValueColorIdList); 
+	public int deleteBySkuPropSizeIds(int productId, List<Integer> skuPropValueSizeIdList); 
 
     
 }

@@ -25,6 +25,7 @@ public interface IItoSkuPropValueService extends IFoundationService<ItoSkuPropVa
 //	public List<ItoSkuPropValue> queryCombiledSkuPropValueListByProductId(int productId);
     
 	
+	public int deleteBySkuPropValueIds(int productId, List<Integer> skuPropValueIdList);
 	
 
 }

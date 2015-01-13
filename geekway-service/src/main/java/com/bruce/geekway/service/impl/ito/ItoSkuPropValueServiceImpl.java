@@ -137,4 +137,8 @@ public class ItoSkuPropValueServiceImpl implements IItoSkuPropValueService{
 		return 0;
 	}
 
+	@Override
+	public int deleteBySkuPropValueIds(int productId, List<Integer> skuPropValueIdList) {
+		return itoProductSkuValueDao.deleteBySkuPropValueIds(productId, skuPropValueIdList);
+	}
 }

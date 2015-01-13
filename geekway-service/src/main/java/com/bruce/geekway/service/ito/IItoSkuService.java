@@ -13,6 +13,9 @@ public interface IItoSkuService extends IFoundationService<ItoSku, Integer, ItoS
 	public List<ItoSku> queryAllByProductId(int productId);
 	
 	public ItoSku loadProductSku(int productId, int skuId);
+
+	/*根据sku的属性id删除sku*/
+	public void deleteBySkuPropValueIds(int productId, List<Integer> productSkuValueIdList);
 	
 //	public int queryCountBySkuPropValueId(int skuPropValueId);
 	

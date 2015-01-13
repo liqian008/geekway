@@ -105,5 +105,13 @@ public class ItoSkuServiceImpl implements IItoSkuService{
 	public int deleteByProductId(int productId) {
 		return itoSkuDao.deleteByProductId(productId);
 	}
+
+	@Override
+	public void deleteBySkuPropValueIds(int productId, List<Integer> productSkuValueIdList) {
+		//因为colorId和materialId和sizeId不会重复，所以直接用productSkuValueIdList作为条件删除
+		itoSkuDao.deleteBySkuPropMaterialIds(productId, productSkuValueIdList);
+		itoSkuDao.deleteBySkuPropColorIds(productId, productSkuValueIdList);
+		itoSkuDao.deleteBySkuPropSizeIds(productId, productSkuValueIdList);
+	}
 	
 }

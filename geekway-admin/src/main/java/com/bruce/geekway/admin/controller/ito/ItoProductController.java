@@ -117,11 +117,31 @@ public class ItoProductController {
 		product.setUpdateTime(currentTime);
 		boolean isEdit = false;
 		int productId = 0;
+		String modifySkuSettings = request.getParameter("modifySkuSettings");//是否修改sku属性的标记
+		
 		if(product!=null&&product.getId()!=null&&product.getId()>0){
 			isEdit = true;
 			productId = product.getId();
 			result = itoProductService.updateById(product);
 			product = itoProductService.loadById(productId);//重新加载产品数据
+			
+			if("true".equals(modifySkuSettings)){
+				//检查编辑过程中，是否取消了某个sku属性（只需检查取消的，进行删除操作）
+				List<Integer> productSkuValueIdList =  itoSkuPropValueService.querySkuValueIdListByProductId(productId);
+				if(productSkuValueIdList!=null&&productSkuValueIdList.size()>0){
+					if(productSkuValueIds!=null&&productSkuValueIds.length>0){
+						for(Integer loopSkuValueId: productSkuValueIds){
+							productSkuValueIdList.remove(loopSkuValueId);//删除未变化的
+						}
+					}
+				}
+				
+				//此时的productSkuValueIdList应该是差异的部分，需要进行删除操作
+				if(productSkuValueIdList!=null&&productSkuValueIdList.size()>0){
+					itoSkuPropValueService.deleteBySkuPropValueIds(productId, productSkuValueIdList);//删除skuValue的关联表
+					itoSkuService.deleteBySkuPropValueIds(productId, productSkuValueIdList);//删除sku表中的相关数据
+				}
+			}
 			
 		}else{//新增
 			product.setCreateTime(currentTime);
@@ -136,21 +156,21 @@ public class ItoProductController {
 //			return "ito/productAddSkus";
 		}
 		
-		String modifySkuSettings = request.getParameter("modifySkuSettings");
+		
 		if("true".equals(modifySkuSettings)){//需要修改sku配置(新创建时也认为是修改)
 			//删除
 			if(product.getStatus()!=null&&product.getStatus()<1&&productSkuValueIds!=null&&productSkuValueIds.length>0){
 				//检查是否有订单
 				int orderCount = itoProductOrderService.countByProductId(productId);//已经产生订单了，不能删除
 				if(orderCount<=0){
-					//先删除sku配置，再继续创建sku
-					result = itoSkuService.deleteByProductId(productId);//删除商品sku
+					//取消删除原sku（会导致已有数据被删）
+					//result = itoSkuService.deleteByProductId(productId);//不删除sku，直接写db（因为有唯一键约束，不会重复插入）
 					
 					//创建新SKU配置
 					if(productSkuValueIds!=null && productSkuValueIds.length>0){
 						
-						//清除原productSku数据
-						itoSkuPropValueService.deleteSkuValuesByProductId(productId);
+						//取消删除原productSku数据（会导致已有数据被删）
+						//itoSkuPropValueService.deleteSkuValuesByProductId(productId);//不删除sku，直接写db（因为有唯一键约束，不会重复插入）
 						
 						List<Integer> productSkuValueIdList = Arrays.asList(productSkuValueIds);
 						result = itoSkuPropValueService.saveProductSkuValues(productId, productSkuValueIdList);
