@@ -95,8 +95,7 @@
 							<label class="col-sm-2 control-label">Tag名称:
 							</label>
 							<div class="col-sm-4">
-								<input type="text" class="form-control" name="title" id="title" value="${productTag.name}" readonly="readonly"/>
-	                             <form:hidden path="productTag.id"/>
+	                            <label class="control-label"><span class="label label-info">${productTag.name}</span></label> 
 							</div>
 						</div>
 						
@@ -135,8 +134,8 @@
 							<tr>
 								<td><%=product.getId()%></td>
 		                        <td>
-		                        	<a href="<%=product.getProductPic1Url()%>" class="lightbox">
-		                        	<img src='<%=product.getProductPic1Url()%>' class="img-media"/>
+		                        	<a href="<%=product.getCoverPicUrl()%>" class="lightbox">
+		                        	<img src='<%=product.getCoverPicUrl()%>' class="img-media"/>
 		                        	</a>
 		                        </td>
 		                        <td title="SN：<%=product.getOutId()%>"><%=product.getName()%></td>

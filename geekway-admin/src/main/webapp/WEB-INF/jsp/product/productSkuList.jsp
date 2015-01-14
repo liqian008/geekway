@@ -121,19 +121,19 @@
 						</thead>
 						<tbody>
 							<%
-								Product product = (Product) request.getAttribute("product"); 
-																	
-												                           	List<ProductSku> productSkuList = (List<ProductSku>)request.getAttribute("productSkuList");
-												                           	if(productSkuList!=null&&productSkuList.size()>0){
-												                           		int i=0;
-												                           		for(ProductSku sku: productSkuList){
-												                           			i++;
+							Product product = (Product) request.getAttribute("product"); 
+																
+                           	List<ProductSku> productSkuList = (List<ProductSku>)request.getAttribute("productSkuList");
+                           	if(productSkuList!=null&&productSkuList.size()>0){
+                           		int i=0;
+                           		for(ProductSku sku: productSkuList){
+                           			i++;
 							%>
 							<tr>
 		                        <td><%=i%></td>
 		                        <td class="text-center">
-		                        	<a href="<%=sku.getSkuPic1Url()%>" class="lightbox">
-		                        	<img src='<%=sku.getSkuPic1Url()%>' class="img-media"/>
+		                        	<a href="<%=sku.getSkuPicUrl()%>" class="lightbox">
+		                        	<img src='<%=sku.getSkuPicUrl()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
 		                        <td title="<%=sku.getPropertiesName()%>"><%=sku.getName()%></td>

@@ -147,7 +147,6 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>图片</th>
                                 <th>名称</th> 
                                 <th>描述</th>
                                 <th>创建时间</th>
@@ -164,11 +163,6 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 						
 							<tr>
 								<td><%=productTag.getId()%></td>
-		                        <td>
-		                        	<a href="<%=productTag.getTagPic1Url()%>" class="lightbox">
-		                        	<img src='<%=productTag.getTagPic1Url()%>' class="img-media"/>
-		                        	</a>
-		                        </td>
 		                        <td><%=productTag.getName()%></td>
 		                        <td><%=productTag.getDescription()%></td>
 		                        <td><%=sdf.format(productTag.getCreateTime())%></td>

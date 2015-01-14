@@ -12,5 +12,7 @@ public interface ConstMemc{
     
     /*mpAccessToken的key*/
     public static final String MEMCACHE_KEY_MP_ACCESSTOKEN = "mpAccessToken";
-	
+    /*mpJsTicket的key*/
+    public static final String MEMCACHE_KEY_MP_JSTICKET = "mpJsTicket";
+    
 }

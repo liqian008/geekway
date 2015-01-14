@@ -132,16 +132,17 @@
 							<label class="col-sm-2 control-label text-right">轮播图片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productTag.tagPic1Url}" id="tagPic1Link"  class="lightbox">
-									<img id="tagPic1Image" src="${productTag.tagPic1Url}" width="200px" />
+								<a href="#" id="tagPic1Link"  class="lightbox">
+									<img id="tagPic1Image" src="#" width="200px" />
 								</a>
 							</div>
 						</div>
 						
-						<div class="form-actions text-left">
+						<div class="form-actions text-right">
 							<input type="submit" value="提 交" class="btn btn-primary">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<a href="javascript:void(0)" class="btn btn-info">编辑轮播图片</a>
+							<a href="javascript:void(0)" class="btn btn-success">清除缓存</a>
+							<a href="./tagSlideImageList?tagId=${productTag.id}" class="btn btn-info">编辑轮播图片</a>
 						</div>
 					</div>
 				</div>

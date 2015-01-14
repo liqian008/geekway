@@ -1,6 +1,5 @@
-<%@page import="java.util.Map.Entry"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
-<%@page import="java.util.*"%>
+<%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.bruce.geekway.model.*"%>
@@ -57,9 +56,7 @@
 	src="${pageContext.request.contextPath}/js/plugins/interface/collapsible.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/application.js"></script>
-
-<script type="text/javascript" src="${pageContext.request.contextPath}/plugins/ckeditor/ckeditor.js"></script>
-</head>
+</head> 
 <body class="sidebar-wide">
 
 	<jsp:include page="../inc/header.jsp"></jsp:include>
@@ -75,7 +72,10 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						商品SKU数据
+						编辑分类图片
+						<!-- 
+						<small>Headings, lists, code, pre etc. </small>
+						 -->
 					</h3>
 				</div>
 			</div>
@@ -84,7 +84,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="javascript:void(0)">首页</a></li>
-					<li class="active">修改商品SKU数据</li>
+					<li class="active">编辑分类图片</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -95,170 +95,126 @@
 			
 			<div class="callout callout-info fade in">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<h5>功能介绍</h5>
+				<h5>功能介绍：</h5>
 				<p>
-					1、商品SKU详情<br/>
-					2、商品SKU图片尺寸应为1976 × 1536，透明背景，且大小应尽量控制在200K以内<br/>
+					<br/>
 				</p>
 			</div>
-
+			
 			<%
-				ProductSku productSku = (ProductSku)request.getAttribute("productSku");
-				Product product = (Product)request.getAttribute("product");
+				SlideImage slideImage = (SlideImage)request.getAttribute("slideImage");
 			%>
 
-			<form id="validate" action="<s:url value='./saveSku'/>" method="post"  class="form-horizontal form-bordered">
-
+			<form id="validate" action="<s:url value='./saveCategorySlideImage'/>" method="post"  class="form-horizontal form-bordered">
 				<!-- Basic inputs -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h6 class="panel-title">
-							<i class="icon-bubble4"></i>修改商品SKU数据
+							<i class="icon-bubble4"></i>编辑分类图片 
 						</h6>
 					</div>
-					<div class="panel-body">
-						
-						
+					<div class="panel-body"> 
+					
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品信息: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<label class="control-label">
-									${product.name}
-									<input type="hidden" name="id" id="id" value="${productSku.id}" readonly="readonly"/>
-									<input type="hidden" name="productId" id="productId" value="${product.id}" readonly="readonly"/>
-								</label>
+							<label class="col-sm-2 control-label text-right">分类名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<label class="control-label"><span class="label label-info">${category.name}</span></label> 
 							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品图片:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">轮播图片:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${productSku.skuPicUrl}" id="skuPic1Link"  class="lightbox">
-									<img id="skuPic1Image" src="${productSku.skuPicUrl}" width="200px" />
-								</a>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-4">
-								<input type="text" class="form-control" name="name" id="name" value="${product.name}"/>
-								<form:hidden path="product.id"/>
-							</div>
-						</div>
-						
-						
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU名称: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.name}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU KEY: <span class="mandatory">*</span></label>
-							<div class="col-sm-8">
-								<label class="control-label">
-									${productSku.propertiesName}
-								</label>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">SKU基本信息: <span class="mandatory">*</span>
-							</label>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="originPrice" id="price" value="${productSku.originPrice}"/>
-								<span class="label label-info label-block">原价(元)</span>
-							</div>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="price" id="price" value="${productSku.price}"/>
-								<span class="label label-danger label-block">现价(元)</span>
-							</div>
-							
-							<%-- <div class="col-sm-2">
-								<input type="text" class="form-control" name="postFee" id="postFee" value="${productSku.postFee}"/>
-								<span class="label label-success label-block">运费(元)</span>
-							</div> --%>
-							
-							<div class="col-sm-2">
-								<input type="text" class="form-control" name="stock" id="stock" value="${productSku.stock}" disabled="disabled"/>
-								<span class="label label-primary label-block">库存(个)</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品描述: <span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-10"> 
-								<div class="block-inner">
-									<textarea class="ckeditor" name="description" id="description">
-										${productSku.description}
-									</textarea>
+								<div class="col-sm-4">
+									<a href="${slideImage.picUrl}" id="slideImageLink"  class="lightbox">
+										<img id="slideImage" src="${slideImage.picUrl}" width="200px" />
+									</a>
+									<input id="picUrl" type="hidden" name="picUrl" value="${slideImage.picUrl}"/>
+									<input type="file" name="imageFile" id="imageFile" class="imageFile styled">
 								</div>
 							</div>
+						</div> 
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">图片用途: <span class="mandatory">*</span></label>
+							<div class="col-sm-3">
+								<input type="text" class="form-control" name="name" id="name" value="${slideImage.name}"/>
+	                            <form:hidden path="slideImage.id"/> 
+	                            <input type="hidden" name="rootId" value="${category.id}">
+							</div>
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">参数规格: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">跳转链接: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<input type="text" class="form-control" name="link" id="link" value="${slideImage.link}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">排序: <span class="mandatory">*</span></label>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" name="sort" id="sort" value="${slideImage.sort}"/>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-6">
-								<textarea name="param" rows="3" cols="5" class="elastic form-control" placeholder="上限1000字">${productSku.param}</textarea>
+							<div class="col-sm-4">
+								<form:select path="slideImage.status" class="select-liquid">
+									<form:option value="0"  label="禁用"/>
+									<form:option value="1"  label="启用"/>
+								</form:select>
 							</div>
 						</div>
 						
 						<div class="form-actions text-right">
 							<input type="submit" value="提 交" class="btn btn-primary">
 							<input type="reset" value="重 置" class="btn btn-danger">
-							<a href="javascript:void(0)" class="btn btn-success">清除缓存</a>
-							<a href="./productSkuSlideImageList?productId=${productSku.productId}&productSkuId=${productSku.id}" class="btn btn-info">编辑轮播图片</a>
 						</div>
 					</div>
-					
 				</div>
 				
 			</form>
-			
+
 			<jsp:include page="../inc/footer.jsp"></jsp:include>
 
 		</div>
 		<!-- /page content -->
 	</div>
 	<!-- /page container -->
-	
 </body>
 
-<script type="text/javascript">
-CKEDITOR.replace( 'content', {
-	toolbar :
-           [
-				['Source', 'newPage'],
-//图片    flash    表格       水平线            表情       特殊字符        分页符
-                ['Image', 'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
-//超链接  取消超链接 锚点
-                ['Link','Unlink','Anchor'],
-// 数字列表          实体列表            减小缩进    增大缩进
-                ['NumberedList','BulletedList','-','Outdent','Indent'],
-//左对 齐             居中对齐          右对齐          两端对齐
-                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-'/',
-//加粗     斜体，     下划线      穿过线      下标字        上标字
-   ['Bold','Italic','Underline','Strike','Subscript','Superscript'],
-// 样式       格式      字体    字体大小 
-                ['Styles','Format','Font','FontSize'],
-//文本颜色     背景颜色
-                ['TextColor','BGColor'],
-//全屏           显示区块
-                ['Maximize', 'ShowBlocks','-']
-            ]
-        }
-   );
-  </script>
 
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".imageFile").change(function(){
+    	var imageIndex =$(this).attr("imageIndex");
+        //创建FormData对象
+        var data = new FormData();
+        //为FormData对象添加数据 
+        data.append('image', $('#imageFile'+imageIndex)[0].files[0]);
+        $.ajax({
+            url:'${pageContext.request.contextPath}/upload/uploadQiniu',
+            type:'POST',
+            data:data,
+            cache: false,
+            contentType: false,    //不可缺
+            processData: false,    //不可缺
+            success:function(responseData){
+                if(responseData.result==1){
+                	var imageUrl = responseData.data.uploadImageMap.original.url;
+	                $('#slideImage').attr("src", imageUrl);
+	                $('#slideImageLink').attr("href", imageUrl);
+	                $('#picUrl').val(imageUrl);
+                }else{
+                	alert(responseData.message);
+                }
+            }
+        });
+    });
+});
+</script>
 </html>

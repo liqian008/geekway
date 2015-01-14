@@ -180,8 +180,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 							<tr>
 		                        <td><%=i%></td>
 		                        <td class="text-center">
-		                        	<a href="<%=product.getProductPic1Url()%>" class="lightbox">
-		                        	<img src='<%=product.getProductPic1Url()%>' class="img-media"/>
+		                        	<a href="<%=product.getCoverPicUrl()%>" class="lightbox">
+		                        	<img src='<%=product.getCoverPicUrl()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
 		                        <td title="SN：<%=product.getOutId()%>"><%=product.getName()%></td>
@@ -219,7 +219,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			</div>
 			<!-- /table view -->
 
-			<jsp:include page="../inc/footer.jsp"></jsp:include>
+			<jsp:include page="../inc/footer.jsp"></jsp:include> 
 
 		</div>
 		<!-- /page content -->

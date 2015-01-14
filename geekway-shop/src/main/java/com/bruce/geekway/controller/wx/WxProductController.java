@@ -147,7 +147,7 @@ public class WxProductController {
 											ShopLinkUtil.getCategoryLink4Mobile(categoryId)));
 			
 			List<SlideImage> slideImageList = slideImageService.queryCachedByCategoryId(categoryId);
-			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
+//			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 			model.addAttribute("slideImageList", slideImageList);
 		}
 		return "product/productListByCategory";
@@ -179,7 +179,7 @@ public class WxProductController {
 											ShopLinkUtil.getTagLink4Mobile(tagId)));
 			
 			List<SlideImage> slideImageList = slideImageService.queryCachedByTagId(tagId);
-			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
+//			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 			model.addAttribute("slideImageList", slideImageList);
 		}
 		return "product/productListByTag";
@@ -319,7 +319,7 @@ public class WxProductController {
 												ShopLinkUtil.getProductLink4Mobile(productId)));
 				
 				List<SlideImage> slideImageList = slideImageService.queryCachedByProductSkuId(currentProductSku.getId());
-				ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
+//				ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 				model.addAttribute("slideImageList", slideImageList);
 			}
 		}

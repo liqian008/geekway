@@ -105,7 +105,20 @@ public class SlideImageServiceImpl implements ISlideImageService, InitializingBe
 	@Override
 	public void afterPropertiesSet() throws Exception {
 	}
-	
+
+
+	@Override
+	public List<SlideImage> queryByIndex() {
+		SlideImageCriteria criteria = new SlideImageCriteria();
+		criteria.createCriteria().andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.INDEX.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+		return slideImageMapper.selectByExample(criteria);
+	}
+
+	@Override
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:index")
+	public List<SlideImage> queryCachedByIndex() {
+		return queryByIndex();
+	}
 
 	@Override
 	public List<SlideImage> queryByProductSkuId(int productSkuId) {

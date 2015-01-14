@@ -126,7 +126,6 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				if(webUserJson!=null){
 					try{
 						webUserJson= URLDecoder.decode(webUserJson, "utf-8");
-						
 						webUser = JsonUtil.gson.fromJson(webUserJson, WxWebUser.class);
 					}catch(Exception e){
 					}
@@ -153,7 +152,6 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 						} else {
 							// 其他方法取referer，增加redirectUrl
 							String redirectUrl = UrlUtil.getRefererUrl(request);
-							System.out.println("redirectUrl: "+redirectUrl);
 							logger.debug("微信post redirectUrl, redirectUrl: "+redirectUrl);
 							
 							wxOauthUrl = WxMpOAuthUtil.buildWeixinOauthProxyUrl(scope, redirectUrl, "");

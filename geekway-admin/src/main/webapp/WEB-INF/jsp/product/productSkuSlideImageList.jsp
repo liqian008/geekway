@@ -70,7 +70,7 @@
 			<div class="page-header">
 				<div class="page-title">
 					<h3>
-						Tag轮播图片管理
+						商品Sku轮播图片管理
 						<!-- 
 						<small>Headings, lists, code, pre etc. </small>
 						 -->
@@ -82,7 +82,7 @@
 			<div class="breadcrumb-line">
 				<ul class="breadcrumb">
 					<li><a href="${pageContext.request.contextPath}/home/index">首页</a></li>
-					<li class="active">Tag轮播图片管理</li>
+					<li class="active">商品Sku轮播图片管理</li>
 				</ul>
 				<div class="visible-xs breadcrumb-toggle">
 					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse"
@@ -95,15 +95,36 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、xxx<br/>
+					1、轮播图片，为保证用户体验，建议不超过6组，且图片尺寸规格相同<br/>
 				</p>
 			</div>
+			
+			<form id="validate" action="#" method="post"  class="form-horizontal form-bordered">
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>商品Sku详情
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">商品Sku名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label"><span class="label label-info">${productSku.name}</span></label> 
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</form>
 
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h5 class="panel-title">
-						<i class="icon-people"></i>Tag轮播图片管理
+						<i class="icon-people"></i>商品Sku轮播图片管理
 					</h5>
 				</div> 
 				<div class="table-responsive">
@@ -137,8 +158,8 @@
 		                        <td><%=slideImage.getLink()%></td>
 		                        <td><%=slideImage.getSort()%></td>
 		                        <td class='text-center'>
-		                        	<div class="table-controls">
-										<a href="./slideImageListEdit?slideImageId=<%=slideImage.getId()%>" 
+		                        	<div class="table-controls"> 
+										<a href="./productSkuSlideImageEdit?id=<%=slideImage.getId()%>&productId=${productSku.productId}&productSkuId=${productSku.id}" 
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
 									</div>
@@ -149,7 +170,6 @@
 						</tbody>
 					</table>
 				</div>
-				
 				
 			</div>
 			<!-- /table view -->

@@ -345,7 +345,7 @@ public class WxProductOrderController {
 		logger.debug("oauth wxUserInfoResult: "+ wxUserInfoResult);
 		
 		if(wxUserInfoResult!=null&&wxUserInfoResult.getErrcode()==0){//正确的响应 
-			wxWebUser = buildOAuthWebUser(wxUserInfoResult);
+			wxWebUser = buildFullOAuthWebUser(wxUserInfoResult);
 
 			if(wxWebUser!=null){
 				//重写cookie
@@ -384,7 +384,7 @@ public class WxProductOrderController {
 	 * @param wxUserInfoResult
 	 * @return
 	 */
-	private WxWebUser buildOAuthWebUser(WxUserInfoResult wxUserInfoResult) {
+	private WxWebUser buildFullOAuthWebUser(WxUserInfoResult wxUserInfoResult) {
 		WxWebUser webUser = new WxWebUser();
 		webUser.setOpenId(wxUserInfoResult.getOpenid());
 		webUser.setUnionId(wxUserInfoResult.getUnionid());

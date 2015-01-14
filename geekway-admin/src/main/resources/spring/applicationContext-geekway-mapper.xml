@@ -149,6 +149,11 @@
 			value="com.bruce.geekway.dao.mapper.ProductSkuMapper" />
 		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
 	</bean>
+	<bean id="slideImageSkuMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface"
+			value="com.bruce.geekway.dao.mapper.SlideImageMapper" />
+		<property name="sqlSessionFactory" ref="geekway_sqlSessionFactory" />
+	</bean>
 	<bean id="skuPropMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
 		<property name="mapperInterface"
 			value="com.bruce.geekway.dao.mapper.SkuPropMapper" />

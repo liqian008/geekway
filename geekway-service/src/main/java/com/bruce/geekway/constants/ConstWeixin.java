@@ -33,6 +33,9 @@ public interface ConstWeixin {
 	//微信获取公众账户accessToken的api
 	public static final String WX_ACCESS_TOKEN_API = ConfigUtil.getString("weixinmp_access_token_url");
 	
+	//微信获取公众账户jsTicket的api
+	public static final String WX_JS_TICKET_API = ConfigUtil.getString("weixinmp_js_ticket_url");
+	
 	//微信oauth accessToken api
 	public static final String WX_OAUTH_ACCESS_TOKEN_API = ConfigUtil.getString("weixinmp_oauth_accesstoken_url");
 	//微信oauth 获取个人资料api

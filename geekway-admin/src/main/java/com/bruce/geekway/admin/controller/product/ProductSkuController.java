@@ -188,11 +188,14 @@ public class ProductSkuController {
 	 * productSku轮播列表
 	 */
 	@RequestMapping("/productSkuSlideImageList")
-	public String productSkuSlideImageList(Model model, int productSkuId, HttpServletRequest request) {
+	public String productSkuSlideImageList(Model model, int productId, int productSkuId, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
-		List<SlideImage> slideImageList = slideImageService.queryByTagId(productSkuId);
+		ProductSku productSku = productSkuService.loadProductSku(productId, productSkuId);
+		model.addAttribute("productSku", productSku);
+		
+		List<SlideImage> slideImageList = slideImageService.queryByProductSkuId(productSkuId);
 		model.addAttribute("slideImageList", slideImageList);
 		return "product/productSkuSlideImageList";
 	}
@@ -201,9 +204,12 @@ public class ProductSkuController {
 	 * 编辑productSku轮播
 	 */
 	@RequestMapping("/productSkuSlideImageEdit")
-	public String productSkuSlideImageEdit(Model model, int productSkuId, int id, HttpServletRequest request) {
+	public String productSkuSlideImageEdit(Model model, int productId, int productSkuId, int id, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
+		
+		ProductSku productSku = productSkuService.loadProductSku(productId, productSkuId);
+		model.addAttribute("productSku", productSku);
 		
 		SlideImage slideImage = slideImageService.loadById(id);
 		model.addAttribute("slideImage", slideImage);
@@ -213,8 +219,8 @@ public class ProductSkuController {
 	/**
 	 * 保存productSku轮播
 	 */
-	@RequestMapping("/saveCategorySlideImage")
-	public String productSkuSlideImageEdit(Model model, SlideImage slideImage, HttpServletRequest request) {
+	@RequestMapping("/saveProductSkuSlideImage")
+	public String saveProductSkuSlideImage(Model model, SlideImage slideImage, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

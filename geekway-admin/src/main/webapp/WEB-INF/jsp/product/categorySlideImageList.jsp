@@ -95,10 +95,32 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					1、xxx<br/>
+					1、轮播图片，为保证用户体验，建议不超过4组，且图片尺寸规格相同<br/>
 				</p>
 			</div>
-
+			
+			<form id="validate" action="#" method="post"  class="form-horizontal form-bordered">
+				<!-- Basic inputs -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h6 class="panel-title">
+							<i class="icon-bubble4"></i>Tag详情
+						</h6>
+					</div>
+					<div class="panel-body">
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">分类名称: <span class="mandatory">*</span></label>
+							<div class="col-sm-4">
+								<label class="control-label"><span class="label label-info">${category.name}</span></label> 
+							
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</form>
+			
 			<!-- Table view -->
 			<div class="panel panel-default">
 				<div class="panel-heading">
@@ -128,17 +150,17 @@
 							%>
 							<tr>
 		                        <td><%=i%></td>
+		                        <td>分类</td>
 		                        <td class="text-center">
 		                        	<a href="<%=slideImage.getPicUrl()%>" class="lightbox">
 		                        	<img src='<%=slideImage.getPicUrl()%>' class="img-media"/>
 		                        	</a> 
 		                        </td>
-		                        <td>分类</td>
 		                        <td><%=slideImage.getLink()%></td>
 		                        <td><%=slideImage.getSort()%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
-										<a href="./slideImageListEdit?slideImageId=<%=slideImage.getId()%>" 
+										<a href="./categorySlideImageEdit?id=<%=slideImage.getId()%>&categoryId=${category.id}" 
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="编 辑"><i class="icon-pencil3"></i></a> 
 									</div>

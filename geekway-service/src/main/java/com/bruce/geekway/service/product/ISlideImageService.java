@@ -13,6 +13,11 @@ import com.bruce.geekway.model.SlideImageCriteria;
  */
 public interface ISlideImageService extends IFoundationPagingService<SlideImage, Integer, SlideImageCriteria>{
 	
+	/*查询首页指定的图片*/
+	public List<SlideImage> queryByIndex();
+	/*查询缓存中首页指定的图片*/
+	public List<SlideImage> queryCachedByIndex();
+	
 	/*查询指定skuId对应的图片*/
 	public List<SlideImage> queryByProductSkuId(int productSkuId);
 	/*查询缓存中指定skuId对应的图片*/
@@ -32,5 +37,6 @@ public interface ISlideImageService extends IFoundationPagingService<SlideImage,
 	public List<SlideImage> queryByTagId(int tagId);
 	/*查询缓存中指定tagId对应的图片*/
 	public List<SlideImage> queryCachedByTagId(int tagId);
+	
 	
 }

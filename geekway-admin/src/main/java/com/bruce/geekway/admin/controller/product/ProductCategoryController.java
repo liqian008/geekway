@@ -145,6 +145,9 @@ public class ProductCategoryController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
+		ProductCategory ProductCategory = productCategoryService.loadById(categoryId);
+		model.addAttribute("category", ProductCategory);
+		
 		List<SlideImage> slideImageList = slideImageService.queryByCategoryId(categoryId);
 		model.addAttribute("slideImageList", slideImageList);
 		return "product/categorySlideImageList";
@@ -158,6 +161,9 @@ public class ProductCategoryController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
+		ProductCategory ProductCategory = productCategoryService.loadById(categoryId);
+		model.addAttribute("category", ProductCategory);
+		
 		SlideImage slideImage = slideImageService.loadById(id);
 		model.addAttribute("slideImage", slideImage);
 		return "product/categorySlideImageEdit";
@@ -167,9 +173,10 @@ public class ProductCategoryController {
 	 * 保存分类轮播
 	 */
 	@RequestMapping("/saveCategorySlideImage")
-	public String categorySlideImageEdit(Model model, SlideImage slideImage, HttpServletRequest request) {
+	public String saveCategorySlideImage(Model model, SlideImage slideImage, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
+		
 		
 		int result = 0;
 		Date currentTime = new Date();

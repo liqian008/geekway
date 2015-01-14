@@ -118,53 +118,16 @@
 					</div>
 					<div class="panel-body">
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图1:<span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">商品大图:<span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
-								<a href="${product.productPic1Url}" id="productPic1Link"  class="lightbox">
-									<img id="productPic1Image" src="${product.productPic1Url}" width="200px" />
+								<a href="${product.coverPicUrl}" id="productPic1Link"  class="lightbox">
+									<img id="productPic1Image" src="${product.coverPicUrl}" width="200px" />
 								</a>
-								<input id="productPic1Url" type="hidden" name="productPic1Url" value="${product.productPic1Url}"/>
+								<input id="coverPicUrl" type="hidden" name="coverPicUrl" value="${product.coverPicUrl}"/>
 								<input type="file" name="imageFile" id="imageFile1" class="imageFile styled" imageIndex="1">
 							</div>
 						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图2:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${product.productPic2Url}" id="productPic2Link"  class="lightbox">
-									<img id="productPic2Image" src="${product.productPic2Url}" width="200px" />
-								</a>
-								<input id="productPic2Url" type="hidden" name="productPic2Url" value="${product.productPic2Url}"/>
-								<input type="file" name="imageFile" id="imageFile2" class="imageFile styled" imageIndex="2">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图3:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${product.productPic3Url}" id="productPic3Link"  class="lightbox">
-									<img id="productPic3Image" src="${product.productPic3Url}" width="200px" />
-								</a>
-								<input id="productPic3Url" type="hidden" name="productPic3Url" value="${product.productPic3Url}"/>
-								<input type="file" name="imageFile" id="imageFile3" class="imageFile styled" imageIndex="3">
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">商品大图4:<span class="mandatory">*</span>
-							</label>
-							<div class="col-sm-4">
-								<a href="${product.productPic4Url}" id="productPic4Link"  class="lightbox">
-									<img id="productPic4Image" src="${product.productPic4Url}" width="200px" />
-								</a>
-								<input id="productPic4Url" type="hidden" name="productPic4Url" value="${product.productPic4Url}"/>
-								<input type="file" name="imageFile" id="imageFile4" class="imageFile styled" imageIndex="4">
-							</div>
-						</div>
-						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">商品名称: <span class="mandatory">*</span></label>
@@ -203,11 +166,11 @@
 						</div>
 						
 						<%
-													List<SkuProp> skuPropList = (List<SkuProp>)request.getAttribute("skuPropList");
-																if(skuPropList!=null){
-																	for(SkuProp skuProp: skuPropList){
-																		int skuPropId = skuProp.getId();
-												%>
+							List<SkuProp> skuPropList = (List<SkuProp>)request.getAttribute("skuPropList");
+							if(skuPropList!=null){
+								for(SkuProp skuProp: skuPropList){
+									int skuPropId = skuProp.getId();
+						%>
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right"><%=skuProp.getName()%>: <span class="mandatory">*</span>
 							</label>

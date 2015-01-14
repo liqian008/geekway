@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.Product;
+import com.bruce.geekway.model.ProductCategory;
 import com.bruce.geekway.model.ProductCriteria;
 import com.bruce.geekway.model.ProductTag;
 import com.bruce.geekway.model.ProductTagCriteria;
@@ -274,6 +275,9 @@ public class ProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
+		ProductTag productTag = productTagService.loadById(tagId);
+		model.addAttribute("productTag", productTag);
+		
 		List<SlideImage> slideImageList = slideImageService.queryByTagId(tagId);
 		model.addAttribute("slideImageList", slideImageList);
 		return "product/tagSlideImageList";
@@ -287,6 +291,9 @@ public class ProductTagController {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
+		ProductTag productTag = productTagService.loadById(tagId);
+		model.addAttribute("productTag", productTag);
+		
 		SlideImage slideImage = slideImageService.loadById(id);
 		model.addAttribute("slideImage", slideImage);
 		return "product/tagSlideImageEdit";
@@ -295,8 +302,8 @@ public class ProductTagController {
 	/**
 	 * 保存tag轮播
 	 */
-	@RequestMapping("/saveCategorySlideImage")
-	public String tagSlideImageEdit(Model model, SlideImage slideImage, HttpServletRequest request) {
+	@RequestMapping("/saveTagSlideImage")
+	public String saveTagSlideImage(Model model, SlideImage slideImage, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		

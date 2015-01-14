@@ -135,7 +135,7 @@ public class GeekwayEnum {
 	 *
 	 */
 	public static enum SlideImageTypeEnum{
-		PRODUCT((short)0, "商品图片"), CATEGORY((short)1, "分类图片"), TAG((short)2, "TAG图片");
+		INDEX((short)0, "首页图片"), PRODUCT((short)10, "商品图片"), CATEGORY((short)20, "分类图片"), TAG((short)30, "TAG图片");
 		
 		private short value;
 		private String name;
