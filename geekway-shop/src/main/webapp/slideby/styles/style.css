@@ -62,7 +62,7 @@ body {
 	position:relative;
 	z-index:999;
 	background-image:url(../images/misc/header-nav.png);
-	background-size:18px 12px;
+	background-size:auto 14px;
 	background-repeat:no-repeat;
 	background-position:15px 19px;
 	width:50px;
@@ -106,7 +106,7 @@ body {
 
 .content-logo{
 	background-image:url(../images/misc/logo-dark.png);
-	background-size:75px 16px;
+	background-size:auto 16px;
 	background-repeat:no-repeat;
 	display:block;
 	float:left;
@@ -308,7 +308,7 @@ body {
 
 .sidebar-logo{
 	background-image:url(../images/misc/logo-white.png);
-	background-size:75px 16px;
+	background-size:auto 16px;
 	background-repeat:no-repeat;
 	display:block;
 	float:left;

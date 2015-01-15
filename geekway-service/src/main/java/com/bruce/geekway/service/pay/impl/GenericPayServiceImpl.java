@@ -54,9 +54,9 @@ public class GenericPayServiceImpl implements IGenericPayService{
 						for (ProductOrderItem orderItem : orderItemList) {
 							int productSkuId = orderItem.getProductSkuId();
 							int amount = orderItem.getAmount();
-							// 执行扣减
+							// TODO log this, 执行扣减库存
 							result = counterService.reduceProductSkuStock(productSkuId, amount); 
-							//如果虚拟商品，可能无需扣减库存数
+							//如果虚拟商品，则可能无需扣减库存数
 						}
 					}
 					//更新订单状态为待发货

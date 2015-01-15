@@ -35,6 +35,10 @@ public class WxSystemController {
 		return "product/index";
 	}
 	
+	@RequestMapping(value = "/aboutUs")
+	public String aboutUs(Model model, HttpServletRequest request) {
+		return "aboutUs";
+	}
 	
 	@RequestMapping(value = "/news/{newsId}")
 	public String newsInfo(Model model, @PathVariable int newsId, HttpServletRequest request) {

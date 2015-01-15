@@ -3,7 +3,7 @@
 <div id="sidebar" class="page-sidebar">
 	<div class="page-sidebar-scroll">
 		<div class="sidebar-section">
-			<p>美妞儿</p>
+			<p>菜单</p>
 			<a href="javascript:void(0)" class="sidebar-close"></a>
 		</div>
 		<div class="sidebar-header">
@@ -11,7 +11,7 @@
 			<!-- 分享 
                 <a href="http://www.facebook.com/enabled.labs" class="facebook-sidebar"></a>
                 <a href="https://twitter.com/iEnabled" class="twitter-sidebar"></a>
-                 -->
+                 --> 
 		</div>
 
 		<div class="navigation-items">

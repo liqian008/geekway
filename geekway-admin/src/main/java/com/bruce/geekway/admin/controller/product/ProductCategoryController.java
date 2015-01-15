@@ -18,6 +18,7 @@ import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.ProductCategory;
 import com.bruce.geekway.model.ProductCategoryCriteria;
 import com.bruce.geekway.model.SlideImage;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.service.product.IProductCategoryService;
 import com.bruce.geekway.service.product.ISlideImageService;
 
@@ -85,7 +86,7 @@ public class ProductCategoryController {
 		ProductCategory ProductCategory = productCategoryService.loadById(categoryId);
 		model.addAttribute("category", ProductCategory);
 		
-		List<SlideImage> slideImageList = slideImageService.queryByCategoryId(categoryId);
+		List<SlideImage> slideImageList = slideImageService.queryList(GeekwayEnum.SlideImageTypeEnum.CATEGORY.getValue(), categoryId);//.queryByCategoryId(categoryId);
 		model.addAttribute("slideImageList", slideImageList);
 		
 		return "product/categoryEdit";
@@ -148,7 +149,7 @@ public class ProductCategoryController {
 		ProductCategory ProductCategory = productCategoryService.loadById(categoryId);
 		model.addAttribute("category", ProductCategory);
 		
-		List<SlideImage> slideImageList = slideImageService.queryByCategoryId(categoryId);
+		List<SlideImage> slideImageList = slideImageService.queryList(GeekwayEnum.SlideImageTypeEnum.CATEGORY.getValue(), categoryId);
 		model.addAttribute("slideImageList", slideImageList);
 		return "product/categorySlideImageList";
 	}

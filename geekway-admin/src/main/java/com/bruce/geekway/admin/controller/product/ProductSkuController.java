@@ -16,6 +16,7 @@ import com.bruce.geekway.model.Product;
 import com.bruce.geekway.model.ProductSku;
 import com.bruce.geekway.model.SkuPropValue;
 import com.bruce.geekway.model.SlideImage;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IProductService;
 import com.bruce.geekway.service.product.IProductSkuService;
@@ -131,7 +132,7 @@ public class ProductSkuController {
 			model.addAttribute("product", product);
 			
 			//加载该sku商品对应的图片
-			List<SlideImage> slideImageList = slideImageService.queryByProductSkuId(skuId);
+			List<SlideImage> slideImageList = slideImageService.queryList(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue(), skuId);
 			model.addAttribute("slideImageList", slideImageList);
 		}
 		
@@ -195,7 +196,7 @@ public class ProductSkuController {
 		ProductSku productSku = productSkuService.loadProductSku(productId, productSkuId);
 		model.addAttribute("productSku", productSku);
 		
-		List<SlideImage> slideImageList = slideImageService.queryByProductSkuId(productSkuId);
+		List<SlideImage> slideImageList = slideImageService.queryList(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue(), productSkuId);
 		model.addAttribute("slideImageList", slideImageList);
 		return "product/productSkuSlideImageList";
 	}

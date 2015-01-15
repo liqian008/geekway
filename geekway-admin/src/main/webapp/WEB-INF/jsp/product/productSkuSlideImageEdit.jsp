@@ -97,7 +97,7 @@
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				<h5>功能介绍：</h5>
 				<p>
-					<br/>
+					1、轮播图片，为保证用户体验，建议不超过4~6组，且图片尺寸规格相同，不超过600x600<br/>
 				</p>
 			</div>
 			

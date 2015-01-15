@@ -100,81 +100,98 @@ public class SlideImageServiceImpl implements ISlideImageService, InitializingBe
 		return new PagingResult<SlideImage>(pageNo, pageSize, count, dataList);
 	}
 	
-	
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 	}
 
-
 	@Override
-	public List<SlideImage> queryByIndex() {
+	public List<SlideImage> queryList(short imageType, int rootId) {
 		SlideImageCriteria criteria = new SlideImageCriteria();
-		criteria.createCriteria().andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.INDEX.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+		SlideImageCriteria.Criteria subCriteria = criteria.createCriteria();
+		subCriteria.andImageTypeEqualTo(imageType);
+		if(imageType!=GeekwayEnum.SlideImageTypeEnum.INDEX.getValue()){//当为index时，无需指定rootId
+			subCriteria.andRootIdEqualTo(rootId);
+		}
+		subCriteria.andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
 		return slideImageMapper.selectByExample(criteria);
 	}
 
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:index")
-	public List<SlideImage> queryCachedByIndex() {
-		return queryByIndex();
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:imageType-'+#imageType+'-rootId-'+#rootId")
+	public List<SlideImage> queryCachedList(short imageType, int rootId) {
+		return queryList(imageType, rootId);
 	}
-
-	@Override
-	public List<SlideImage> queryByProductSkuId(int productSkuId) {
-		SlideImageCriteria criteria = new SlideImageCriteria();
-		criteria.createCriteria().andRootIdEqualTo(productSkuId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
-		return slideImageMapper.selectByExample(criteria);
-	}
-
-	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:productSkuId-'+#productSkuId")
-	public List<SlideImage> queryCachedByProductSkuId(int productSkuId) {
-		//TODO log
-		return queryByProductSkuId(productSkuId);
-	}
-
-	@Override
-	public List<SlideImage> queryByProductId(int productId) {
-		SlideImageCriteria criteria = new SlideImageCriteria();
-		criteria.createCriteria().andProductIdEqualTo(productId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
-		return slideImageMapper.selectByExample(criteria);
-	}
-
-	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:productId-'+#productId")
-	public List<SlideImage> queryCachedByProductId(int productId) {
-		//TODO log
-		return queryByProductId(productId);
-	}
-
-	@Override
-	public List<SlideImage> queryByCategoryId(int categoryId) {
-		SlideImageCriteria criteria = new SlideImageCriteria();
-		criteria.createCriteria().andRootIdEqualTo(categoryId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.CATEGORY.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
-		return slideImageMapper.selectByExample(criteria);
-	}
-
-	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:categoryId-'+#categoryId")
-	public List<SlideImage> queryCachedByCategoryId(int categoryId) {
-		//TODO log
-		return queryByCategoryId(categoryId);
-	}
-
-	@Override
-	public List<SlideImage> queryByTagId(int tagId) {
-		SlideImageCriteria criteria = new SlideImageCriteria();
-		criteria.createCriteria().andRootIdEqualTo(tagId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.TAG.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
-		return slideImageMapper.selectByExample(criteria);
-	}
-
-	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:tagId-'+#tagId")
-	public List<SlideImage> queryCachedByTagId(int tagId) {
-		//TODO log
-		return queryByTagId(tagId);
-	}
+	
+	
+//	@Override
+//	public List<SlideImage> queryByIndex() {
+//		SlideImageCriteria criteria = new SlideImageCriteria();
+//		criteria.createCriteria().andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.INDEX.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+//		return slideImageMapper.selectByExample(criteria);
+//	}
+//
+//	@Override
+//	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:index")
+//	public List<SlideImage> queryCachedByIndex() {
+//		return queryByIndex();
+//	}
+//
+//	@Override
+//	public List<SlideImage> queryByProductSkuId(int productSkuId) {
+//		SlideImageCriteria criteria = new SlideImageCriteria();
+//		criteria.createCriteria().andRootIdEqualTo(productSkuId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+//		return slideImageMapper.selectByExample(criteria);
+//	}
+//
+//	@Override
+//	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:productSkuId-'+#productSkuId")
+//	public List<SlideImage> queryCachedByProductSkuId(int productSkuId) {
+//		//TODO log
+//		return queryByProductSkuId(productSkuId);
+//	}
+//
+//	@Override
+//	public List<SlideImage> queryByProductId(int productId) {
+//		SlideImageCriteria criteria = new SlideImageCriteria();
+//		criteria.createCriteria().andProductIdEqualTo(productId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+//		return slideImageMapper.selectByExample(criteria);
+//	}
+//
+//	@Override
+//	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:productId-'+#productId")
+//	public List<SlideImage> queryCachedByProductId(int productId) {
+//		//TODO log
+//		return queryByProductId(productId);
+//	}
+//
+//	@Override
+//	public List<SlideImage> queryByCategoryId(int categoryId) {
+//		SlideImageCriteria criteria = new SlideImageCriteria();
+//		criteria.createCriteria().andRootIdEqualTo(categoryId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.CATEGORY.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+//		return slideImageMapper.selectByExample(criteria);
+//	}
+//
+//	@Override
+//	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:categoryId-'+#categoryId")
+//	public List<SlideImage> queryCachedByCategoryId(int categoryId) {
+//		//TODO log
+//		return queryByCategoryId(categoryId);
+//	}
+//
+//	@Override
+//	public List<SlideImage> queryByTagId(int tagId) {
+//		SlideImageCriteria criteria = new SlideImageCriteria();
+//		criteria.createCriteria().andRootIdEqualTo(tagId).andImageTypeEqualTo(GeekwayEnum.SlideImageTypeEnum.TAG.getValue()).andStatusEqualTo(GeekwayEnum.CommonStatusEnum.OPENED.getStatus());
+//		return slideImageMapper.selectByExample(criteria);
+//	}
+//
+//	@Override
+//	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'slideImages:tagId-'+#tagId")
+//	public List<SlideImage> queryCachedByTagId(int tagId) {
+//		//TODO log
+//		return queryByTagId(tagId);
+//	}
 	
 	public SlideImageMapper getSlideImageMapper() {
 		return slideImageMapper;

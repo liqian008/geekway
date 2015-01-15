@@ -31,6 +31,7 @@ import com.bruce.geekway.model.ProductSku;
 import com.bruce.geekway.model.ProductTag;
 import com.bruce.geekway.model.SkuPropValue;
 import com.bruce.geekway.model.SlideImage;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IProductCategoryService;
@@ -101,7 +102,7 @@ public class WxProductController {
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) throws TimeoutException, InterruptedException, MemcachedException {
 
-		List<SlideImage> slideImageList = slideImageService.queryCachedByIndex();
+		List<SlideImage> slideImageList = slideImageService.queryCachedList(GeekwayEnum.SlideImageTypeEnum.INDEX.getValue(), 0);
 		model.addAttribute("slideImageList", slideImageList);
 		
 		//		boolean memSet = memcachedClient.set("memkey", 60, "test");
@@ -150,7 +151,7 @@ public class WxProductController {
 											productCategory.getWxShareIconUrl(), 
 											ShopLinkUtil.getCategoryLink4Mobile(categoryId)));
 			
-			List<SlideImage> slideImageList = slideImageService.queryCachedByCategoryId(categoryId);
+			List<SlideImage> slideImageList = slideImageService.queryCachedList(GeekwayEnum.SlideImageTypeEnum.CATEGORY.getValue(), categoryId);
 //			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 			model.addAttribute("slideImageList", slideImageList);
 		}
@@ -182,7 +183,7 @@ public class WxProductController {
 											productTag.getWxShareIconUrl(), 
 											ShopLinkUtil.getTagLink4Mobile(tagId)));
 			
-			List<SlideImage> slideImageList = slideImageService.queryCachedByTagId(tagId);
+			List<SlideImage> slideImageList = slideImageService.queryCachedList(GeekwayEnum.SlideImageTypeEnum.TAG.getValue(), tagId);
 //			ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 			model.addAttribute("slideImageList", slideImageList);
 		}
@@ -322,7 +323,7 @@ public class WxProductController {
 												product.getWxShareIconUrl(), 
 												ShopLinkUtil.getProductLink4Mobile(productId)));
 				
-				List<SlideImage> slideImageList = slideImageService.queryCachedByProductSkuId(currentProductSku.getId());
+				List<SlideImage> slideImageList = slideImageService.queryCachedList(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue(), currentProductSku.getId());
 //				ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
 				model.addAttribute("slideImageList", slideImageList);
 			}

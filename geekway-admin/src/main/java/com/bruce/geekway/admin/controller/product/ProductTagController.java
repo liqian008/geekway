@@ -22,6 +22,7 @@ import com.bruce.geekway.model.ProductTag;
 import com.bruce.geekway.model.ProductTagCriteria;
 import com.bruce.geekway.model.ProductTagRelation;
 import com.bruce.geekway.model.SlideImage;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.service.product.IProductService;
 import com.bruce.geekway.service.product.IProductTagRelationService;
 import com.bruce.geekway.service.product.IProductTagService;
@@ -108,7 +109,7 @@ public class ProductTagController {
 		ProductTag productTag = productTagService.loadById(productTagId);
 		model.addAttribute("productTag", productTag);
 		
-		List<SlideImage> slideImageList = slideImageService.queryByTagId(productTagId);
+		List<SlideImage> slideImageList = slideImageService.queryList(GeekwayEnum.SlideImageTypeEnum.TAG.getValue(), productTagId);//.queryByCategoryId(categoryId);
 		model.addAttribute("slideImageList", slideImageList);
 		
 		return "product/tagEdit";
@@ -278,7 +279,7 @@ public class ProductTagController {
 		ProductTag productTag = productTagService.loadById(tagId);
 		model.addAttribute("productTag", productTag);
 		
-		List<SlideImage> slideImageList = slideImageService.queryByTagId(tagId);
+		List<SlideImage> slideImageList = slideImageService.queryList(GeekwayEnum.SlideImageTypeEnum.TAG.getValue(), tagId);//.queryByCategoryId(categoryId);
 		model.addAttribute("slideImageList", slideImageList);
 		return "product/tagSlideImageList";
 	}
