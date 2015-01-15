@@ -100,7 +100,11 @@ public class WxProductController {
 	@NeedAuthorize
 	@RequestMapping(value = {"/","/index"})
 	public String index(Model model, HttpServletRequest request) throws TimeoutException, InterruptedException, MemcachedException {
-//		boolean memSet = memcachedClient.set("memkey", 60, "test");
+
+		List<SlideImage> slideImageList = slideImageService.queryCachedByIndex();
+		model.addAttribute("slideImageList", slideImageList);
+		
+		//		boolean memSet = memcachedClient.set("memkey", 60, "test");
 //		System.out.println("mem set result: "+memSet);
 //		String xxx = memcachedClient.get("memkey");
 //		System.out.println("cache get result: "+xxx);
@@ -130,7 +134,7 @@ public class WxProductController {
 	 * @return
 	 */
 	@NeedAuthorize
-	@RequestMapping(value = "products/c-{categoryId}")
+	@RequestMapping(value = "c/{categoryId}")
 	public String productListByCategory(Model model, @PathVariable int categoryId, HttpServletRequest request) {
 		ProductCategory productCategory = productCategoryService.loadCachedById(categoryId);
 		model.addAttribute("productCategory", productCategory);
@@ -160,7 +164,7 @@ public class WxProductController {
 	 * @return
 	 */
 	@NeedAuthorize
-	@RequestMapping(value = "products/t-{tagId}")
+	@RequestMapping(value = "t/{tagId}")
 	public String productListByTag(Model model, @PathVariable int tagId, HttpServletRequest request) {
 		ProductTag productTag = productTagService.loadCachedById(tagId);
 		model.addAttribute("productTag", productTag);

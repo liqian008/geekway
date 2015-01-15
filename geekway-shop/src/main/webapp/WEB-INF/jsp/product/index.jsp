@@ -2,7 +2,6 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import="com.bruce.geekway.constants.*" %>
-<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 <%
 String contextPath = request.getContextPath();
@@ -51,15 +50,9 @@ String contextPath = request.getContextPath();
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
-        <div class="content-header">
-        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
-            <a href="http://www.facebook.com/enabled.labs" class="facebook-content"></a>
-            <a href="https://twitter.com/iEnabled" class="twitter-content"></a>
-        </div>
         
         <div class="content">
         	<div class="decoration"></div>
-            
             
             <div class="container">
             	<div class="section-title">
@@ -74,7 +67,7 @@ String contextPath = request.getContextPath();
                 <div class="slider-controls" data-snap-ignore="true">
 					<%for(SlideImage slideImage: slideImageList){%>
 					<div>
-						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getPicUrl()%>" class="responsive-image"></a>
 					</div>
 					<%}%>
 				</div>
@@ -82,7 +75,6 @@ String contextPath = request.getContextPath();
                 <a href="javascript:void(0)" class="prev-slider"></a>
                 <%}%>
             </div>
-            
             
             <div class="decoration"></div>
 

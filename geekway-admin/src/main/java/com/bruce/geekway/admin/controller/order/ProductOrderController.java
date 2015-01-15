@@ -84,7 +84,6 @@ public class ProductOrderController {
 			model.addAttribute("outTradeNo", outTradeNo);
 		}
 		
-		
 		//订单状态
 		String statusStr = request.getParameter("status");
 		short status = NumberUtils.toShort(statusStr, (short) -1);

@@ -16,38 +16,27 @@
 
 		<div class="navigation-items">
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/products/c-1" class="home-nav">双11促销<em></em></a>
+				<a href="${pageContext.request.contextPath}/t/1" class="home-nav">双11促销<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/products/t-1" class="home-nav">热销爆款<em></em></a>
+				<a href="${pageContext.request.contextPath}/c/1" class="home-nav">热销爆款<em></em></a>
 			</div>
 			<div class="nav-item">
 				<a href="./#" class="features-nav submenu-deploy">韩版<em></em></a>
 				<div class="nav-item-submenu" style="overflow: hidden; display: block;">
 					<a href="${pageContext.request.contextPath}/products/t-1">Introduction <em class="unselected-sub-nav"></em></a>
-					<a href="${pageContext.request.contextPath}/products/t-1">Typography<em class="unselected-sub-nav"></em></a>
-					<a href="${pageContext.request.contextPath}/products/t-1">jQuery <em class="unselected-sub-nav"></em></a>
 				</div>
 			</div>
-			<!-- 
-			<div class="nav-item">
-				<a href="./#" class="media-nav submenu-deploy">我的清单<em></em></a>
-				<div class="nav-item-submenu" style="overflow: hidden; display: block;">
-					<a href="onefolio.html">我的订单<em class="unselected-sub-nav"></em></a>
-					<a href="widefolio.html">我的优惠券<em class="unselected-sub-nav"></em></a>
-				</div> 
-			</div>
-			 -->
 			<div class="nav-item">
 				<a href="${pageContext.request.contextPath}/orders" class="home-order">我的订单<em></em></a>
 			</div>
 			<div class="nav-item">
 				<a href="${pageContext.request.contextPath}/cart/" class="home-voucher">我的购物车<em></em></a>
 			</div>
-			<!-- 
 			<div class="nav-item">
-				<a href="contact.html" class="contact-nav">联系我们<em></em></a>
+				<a href="${pageContext.request.contextPath}/about" class="contact-nav">关于美妞儿<em></em></a>
 			</div>
+			<!-- 
 			<div class="nav-item">
 				<a href="./#" class="close-nav">关 闭<em class="unselected-nav"></em></a>
 			</div>

@@ -74,7 +74,7 @@
 					for(CartProductSku cartItem: cartItemList){
 					%>
 	            	<p class="quote-item">
-	                	<img src="<%=cartItem.getProductSku().getSkuPic1Url()%>" alt="<%=cartItem.getProductSku().getName() %>">
+	                	<img src="<%=cartItem.getProductSku().getSkuPicUrl()%>" alt="<%=cartItem.getProductSku().getName() %>">
 	                    <em><%=cartItem.getProductSku().getName() %></em>
 	                    商品合计：&nbsp;<span class="text-highlight highlight-red"><%=cartItem.getProductSku().getPrice() %></span>元 X <span id="buyAmount" class="text-highlight highlight-blue"><%=cartItem.getAmount() %></span>件 = <span id="productTotalFee" class="text-highlight highlight-green"><%=cartItem.getAmount()*cartItem.getProductSku().getPrice() %></span>元
 	                </p>

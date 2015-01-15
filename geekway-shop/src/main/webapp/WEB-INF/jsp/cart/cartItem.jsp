@@ -3,7 +3,6 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 <%@ page import ="com.bruce.geekway.model.ProductCart.CartProductSku" %>
-<%@ page import="com.bruce.geekway.utils.ShopLinkUtil.SlideImage" %>
 
 
 <!DOCTYPE HTML>
@@ -80,10 +79,10 @@ int buyAmount = cartItem.getAmount();
 				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
 				if(slideImageList!=null&&slideImageList.size()>0){
             	%>
-                <div class="slider-controls" data-snap-ignore="true">
+                <div class="slider-controls" data-snap-ignore="true"> 
 					<%for(SlideImage slideImage: slideImageList){%>
 					<div>
-						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getImageUrl()%>" class="responsive-image"></a>
+						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getPicUrl()%>" class="responsive-image"></a>
 					</div>
 					<%}%>
 				</div>
