@@ -66,7 +66,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 			<div class="container no-bottom">
 				<div class="section-title">
 					<h4>
-						<a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">热销</a>
+						<a href="${pageContext.request.contextPath}/index">首页</a>
 					</h4>
 				</div>
 			</div>
@@ -74,13 +74,11 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 			<div class="container">
 				
 				<%
-									List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
-										if(slideImageList!=null&&slideImageList.size()>0){
-								%>
+				List<SlideImage> slideImageList = (List<SlideImage>) request.getAttribute("slideImageList");
+					if(slideImageList!=null&&slideImageList.size()>0){
+				%>
                 <div class="slider-controls" data-snap-ignore="true">
-					<%
-						for(SlideImage slideImage: slideImageList){
-					%>
+					<%for(SlideImage slideImage: slideImageList){%>
 					<div>
 						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getPicUrl()%>" class="responsive-image"></a>
 					</div>
@@ -144,18 +142,18 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 	            	%>
 	            	
 	            	<%
-	            		            		if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
-	            		            	%>
+	            		if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
+	            	%>
 	            	<li id="choose-version" class="choose-version-shouji">
 	            		<div class="dt">选择尺码：</div>
 	            		<div class="dd">
 	            			<%
-	            				List<SkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
-	            								for(SkuPropValue skuPropValue : sizeSkuValueList){
-	            									String displayName = skuPropValue.getName();
-	            									String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
-	            									
-	            									boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
+            				List<SkuPropValue> sizeSkuValueList = skuGroupMap.get(2);
+							for(SkuPropValue skuPropValue : sizeSkuValueList){
+								String displayName = skuPropValue.getName();
+								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
+								
+								boolean sizeSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuSizeValueId());
 	            			%>
 	            			<div class="item <%=sizeSelected?"selected":""%>" data="<%=propertyName%>"><b></b>
 	            			<a href="javascript:void(0)" title="<%=displayName%>" style="cursor: pointer;">
@@ -165,7 +163,12 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 	            		</div>
 	            	</li>
 	            	<%}%>
-	            	<li>购买数量: <span id="buyAmount" class="text-highlight highlight-blue">1</span>件</li> 
+	            	<li>购买数量: 
+		            	<span id="btn-reduce" class="text-highlight highlight-dark" style="margin-right:1px;margin-left:5px"><a href="javascript:amountReduce()" style="color:#fff">-</a></span>
+		            	<span id="buyAmount" class="text-highlight highlight-blue" style="margin-right:1px;padding-right:15px;padding-left:15px">1</span>
+		            	<span id="btn-add" class="text-highlight highlight-dark"><a href="javascript:amountIncr()" style="color:#fff">+</a></span>
+		            	件
+	            	</li> 
             	</ul>
             	<input type="hidden" id="productSkuId" name="productSkuId" value="${currentProductSku.id}"/> 
             	
@@ -228,7 +231,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 					
 					//点击购买操作
 					$("#buyNow").click(function(){
-						var buyAmount = "7";//$("#buyAmount").text();
+						var buyAmount = $("#buyAmount").text();
 						var productSkuId = $("#productSkuId").val();
 						//检查商品&数量有效性
 						var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
@@ -271,7 +274,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
                 <div class="tabs">
                     <a href="javascript:void(0)" class="tab-but tab-but-1 tab-active">商品描述</a>
                     <a href="javascript:void(0)" class="tab-but tab-but-2">规格参数</a>
-                    <a href="javascript:void(0)" class="tab-but tab-but-3">二维码购买</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-3">二维码</a>
                 </div>
                 <div class="tab-content tab-content-1">
                     <p>
@@ -285,7 +288,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
                 </div>
                 <div class="tab-content tab-content-3">
                     <p>
-                       二维码          
+                       <img src="http://imgqn.jinwanr.com/images/icon/mp_qrcode.jpg"/>      
                     </p>
                 </div>
             </div>
@@ -302,5 +305,25 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 </div>
 
 </body>
+
+<script>
+function amountIncr(){
+	var currentAmount = parseInt($("#buyAmount").text());
+	var targetAmount = currentAmount+1;
+	var leftStock = parseInt($("#leftStock").text());
+	if(targetAmount>leftStock){
+		targetAmount = leftStock;
+	}
+	$("#buyAmount").text(targetAmount);
+}
+
+function amountReduce(){
+	var currentAmount = parseInt($("#buyAmount").text());
+	if(targetAmount>1){
+		var targetAmount = currentAmount-1;
+		$("#buyAmount").text(targetAmount);
+	}
+}
+</script>
 
 </html>

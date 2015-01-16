@@ -217,6 +217,7 @@
 							<input type="submit" value="提 交" class="btn btn-primary">
 							<input type="reset" value="重 置" class="btn btn-danger">
 							<a href="javascript:void(0)" class="btn btn-success">清除缓存</a>
+							<a href="javascript:void(0)" class="btn btn-primary">增加库存</a>
 							<a href="./productSkuSlideImageList?productId=${productSku.productId}&productSkuId=${productSku.id}" class="btn btn-info">编辑轮播图片</a>
 						</div>
 					</div>

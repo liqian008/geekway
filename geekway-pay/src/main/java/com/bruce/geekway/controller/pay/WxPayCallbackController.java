@@ -62,7 +62,7 @@ public class WxPayCallbackController {
 				//检查支付签名是否正确
 				checkWxpaySig(wxOrderRequest);
 			}catch(Exception e){
-				
+				logger.error("微信回的支付签名校验失败: "+JsonUtil.gson.toJson(wxOrderRequest) + ", xml: "+xml);
 			}
 			
 			WxPayNotifyOrderRequest tempXmlOrder = parseWxOrderXml(xml);

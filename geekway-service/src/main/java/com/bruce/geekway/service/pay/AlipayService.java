@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
-import com.bruce.geekway.service.product.IProductOrderService;
 
 /**
  * 支付宝支付service

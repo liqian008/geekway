@@ -56,8 +56,8 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
      * 增加库存
      */
     @Override
-    public int incrProductSkuStock(int productSkuId, int incrNum){
-    	//TODO synchronized
+    public synchronized int incrProductSkuStock(int productSkuId, int incrNum){
+    	//TODO 优化同步策略
     	int result = productSkuMapper.incrStock(productSkuId, incrNum);
     	if(ConstConfig.REDIS_ENABLE){//启用redis时，同步redis数据
 	    	if(result>0){
@@ -73,8 +73,8 @@ public class CounterServiceImpl implements ICounterService, InitializingBean {
      * 扣减库存
      */
 	@Override
-	public int reduceProductSkuStock(int productSkuId, int reduceStock) { 
-		//TODO synchronized
+	public synchronized int reduceProductSkuStock(int productSkuId, int reduceStock) { 
+		//TODO 优化同步策略
     	int result = productSkuMapper.reduceStock(productSkuId, reduceStock);
 		if(ConstConfig.REDIS_ENABLE){//启用redis时，同步redis数据
 			if(result>0){

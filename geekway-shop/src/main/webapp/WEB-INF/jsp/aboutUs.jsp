@@ -51,8 +51,6 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
             <p class="bread-crumb">${product.name}</p>
-            <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
-            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
@@ -76,9 +74,48 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
             </div>
             
             <div class="container">
-            	<a href="javascript:void(0)" id="togather" class="button-big button-green">流量合作</a>
-            	<a href="javascript:void(0)" id="togather" class="button-big button-orange">内容合作</a> 
-            </div>
+            	<div class="container">
+                    <div class="submenu-navigation button-green">
+                        <a href="#" class="submenu-nav-deploy">流量合作</a>
+                        <div class="submenu-nav-items">
+                            <a href="tel:13810637222">联系电话：13810637222</a>
+                            <a href="mailto:liqian008@sina.com">电子邮箱：liqian008@sina.com</a>
+                        </div>
+                    </div>
+                </div>
+            
+            	<div class="container">
+                    <div class="submenu-navigation button-orange">
+                        <a href="#" class="submenu-nav-deploy">内容合作</a>
+                        <div class="submenu-nav-items">
+                            <a href="tel:13810637222">联系电话：13810637222</a>
+                            <a href="mailto:liqian008@sina.com">电子邮箱：liqian008@sina.com</a>
+                        </div>
+                    </div>
+                </div>
+            
+				<!-- <div class="sliding-door">
+					<div class="sliding-door-top button-green">
+						<a href="#"><em></em> 流量合作 </a>
+					</div>
+					<div class="sliding-door-bottom button-green">
+						<a href="tel:13810637222"><em></em> <strong>联系电话:</strong>13810637222
+						</a>
+					</div>
+				</div>
+				<div class="sliding-door-clear"></div>
+				
+				<div class="sliding-door">
+					<div class="sliding-door-top button-orange">
+						<a href="#"><em></em>内容合作 </a>
+					</div>
+					<div class="sliding-door-bottom button-orange">
+						<a href="tel:13810637222"><em></em> <strong>联系电话:</strong>13810637222
+						</a>
+					</div>
+				</div>
+				<div class="sliding-door-clear"></div> -->
+			</div>
             
             <div class="decoration"></div> 
             

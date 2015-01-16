@@ -34,7 +34,7 @@
 				<a href="${pageContext.request.contextPath}/cart/" class="home-voucher">我的购物车<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/about" class="contact-nav">关于美妞儿<em></em></a>
+				<a href="${pageContext.request.contextPath}/aboutUs" class="contact-nav">关于美妞儿<em></em></a>
 			</div>
 			<!-- 
 			<div class="nav-item">
