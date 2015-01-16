@@ -36,6 +36,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
 </head>
 <body>

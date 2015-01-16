@@ -2,7 +2,10 @@ package com.bruce.geekway.interceptor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Date;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +27,12 @@ import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxWebUser;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.json.response.WxOauthTokenResult;
+import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
+import com.bruce.geekway.service.IWxWebUserService;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
@@ -43,6 +49,8 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 
 	@Autowired
 	private WxMpOauthService wxMpOauthService;
+	@Autowired
+	private IWxWebUserService wxWebUserService;
 
 	private static final Logger logger = LoggerFactory.getLogger(AuthorizeInterceptor.class);
 	
@@ -83,16 +91,39 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			
 			//根据code换取openId
 			WxOauthTokenResult oauthResult = wxMpOauthService.getOauthAccessToken(code);
-			if(oauthResult!=null){
-				userOpenId = oauthResult.getOpenid();
+			if(oauthResult!=null){//成功的响应
+				String oauthUserOpenId = oauthResult.getOpenid();
 				String userAccessToken = oauthResult.getAccess_token();
 				if(logger.isDebugEnabled()){
-					logger.debug("微信oauth回调后进入[拦截器], 换取的userOpenId，并写入cookie: "+userOpenId);
+					logger.debug("微信oauth回调后进入[拦截器], 换取的userOpenId："+oauthUserOpenId+", accessToken: "+ userAccessToken);
 				}
-				if(StringUtils.isNotBlank(userOpenId)){
-					WxWebUser webUser = newUser(userOpenId);//拦截器只置入openid，如业务如需更多个人资料，需要在controller中根据下面的accessToken自行处理
-					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, JsonUtil.gson.toJson(webUser));
-					request.setAttribute(ConstFront.CURRENT_USER, webUser);
+				WxWebUser wxWebUser = newUser(oauthUserOpenId);//默认为隐式授权，对象中至少有个openId
+				if(StringUtils.isNotBlank(oauthUserOpenId)&&StringUtils.isNotBlank(userAccessToken)){
+					//获取需要使用的scope
+					String scope = getAuthorizeScope(request, handlerMethod).getScope();
+					if(logger.isDebugEnabled()){
+						logger.debug("微信oauth回调后进入[拦截器], 授权scope："+scope);
+					}
+					if("snsapi_userinfo".equals(scope)){//显示授权
+						//读取oauth授权用户的资料&写入DB
+						WxUserInfoResult wxUserInfoResult = wxMpOauthService.getOAuthUserinfo(userAccessToken, oauthUserOpenId);
+						if(logger.isDebugEnabled()){
+							logger.debug("使用accessToken获取wxUserInfo："+wxUserInfoResult);
+						}
+						if(wxUserInfoResult!=null){//正确的响应 
+							wxWebUser = buildFullOAuthWebUser(wxUserInfoResult);
+							//额外写入用户表saveOrUpdate
+							wxWebUserService.save(wxWebUser);
+						}
+					}
+					String webUserCookie = JsonUtil.gson.toJson(wxWebUser);
+					try {
+						webUserCookie = URLEncoder.encode(webUserCookie, "utf-8");
+					} catch (UnsupportedEncodingException e) {
+						throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+					}
+					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, webUserCookie);
+					request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
 					if(logger.isDebugEnabled()){
 						logger.debug("微信oauth回调后进入[拦截器], 换取的userAccessToken，并置入Attribute: "+userAccessToken);
 					}
@@ -103,6 +134,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 			}
 		}else{//自己业务系统内的处理
+			if(logger.isDebugEnabled()){
+				logger.debug("进入业务系统内处理");
+			}
 			AuthorizeStrategy authorizeStrategy = getAuthorizeStratege(request, handlerMethod);
 			boolean needAuthorize = authorizeStrategy!=null;//调用的接口需要进行登录
 			if (needAuthorize) {//需要用户身份才能访问
@@ -114,7 +148,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 						for(Cookie cookie: cookieArray){
 							if(ConstFront.COOKIE_KEY_WX_USER.equals(cookie.getName())){
 								webUserJson = cookie.getValue();
-								logger.debug("webUserJson from cookie:: " +webUserJson);
+								if(logger.isDebugEnabled()){
+									logger.debug("webUserJson from cookie:: " +webUserJson);
+								}
 								break;
 							}
 						}
@@ -134,6 +170,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				if (webUser!=null&&StringUtils.isNotBlank(webUser.getOpenId())) {//用户信息存在，写入request，供controller获取使用
 					request.setAttribute(ConstFront.CURRENT_USER, webUser);
 				}else{//用户身份信息不存在，无法访问
+					if(logger.isDebugEnabled()){
+						logger.debug("用户身份信息不存在，需要进行oauth获取");
+					}
 					//获取需要使用的scope
 					String scope = getAuthorizeScope(request, handlerMethod).getScope();
 					
@@ -226,7 +265,32 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		writer.close();
 	}
 
-
+	public WxWebUser newUser(String userOpenId){
+		WxWebUser wxWebUser = new WxWebUser();
+		wxWebUser.setOpenId(userOpenId);
+		return wxWebUser;
+	}
+	
+	/**
+	 * oauth返回webUser对象
+	 * @param wxUserInfoResult
+	 * @return
+	 */
+	private WxWebUser buildFullOAuthWebUser(WxUserInfoResult wxUserInfoResult) {
+		WxWebUser webUser = new WxWebUser();
+		webUser.setUserType(GeekwayEnum.UserTypeEnum.MP_MEINIUR.getValue());//美妞公众账户用户类型
+		webUser.setOpenId(wxUserInfoResult.getOpenid());
+		webUser.setUnionId(wxUserInfoResult.getUnionid());
+		webUser.setNickname(wxUserInfoResult.getNickname());
+		webUser.setCountry(wxUserInfoResult.getCountry());
+		webUser.setProvince(wxUserInfoResult.getProvince());
+		webUser.setCity(wxUserInfoResult.getCity());
+		webUser.setHeadImgUrl(wxUserInfoResult.getHeadimgurl());
+		webUser.setSex(wxUserInfoResult.getSex());
+		webUser.setCreateTime(new Date());
+		return webUser;
+	}
+	
 	public WxMpOauthService getWxMpOauthService() {
 		return wxMpOauthService;
 	}
@@ -235,12 +299,16 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 	public void setWxMpOauthService(WxMpOauthService wxMpOauthService) {
 		this.wxMpOauthService = wxMpOauthService;
 	}
-	
-	
-	public WxWebUser newUser(String userOpenId){
-		WxWebUser wxWebUser = new WxWebUser();
-		wxWebUser.setOpenId(userOpenId);
-		return wxWebUser;
+
+
+	public IWxWebUserService getWxWebUserService() {
+		return wxWebUserService;
 	}
+
+
+	public void setWxWebUserService(IWxWebUserService wxWebUserService) {
+		this.wxWebUserService = wxWebUserService;
+	}
+	
 	
 }

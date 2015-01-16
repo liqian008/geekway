@@ -162,4 +162,38 @@ public class GeekwayEnum {
 			return name;
 		}
 	}
+	
+	/**
+	 * wxWebUser的userType(主要用于区别)
+	 * @author liqian
+	 *
+	 */
+	public static enum UserTypeEnum{
+		MP_MEINIUR((short)0, "美妞儿公众帐号");
+		
+		private short value;
+		private String name;
+		UserTypeEnum(short value, String name){
+			this.value = value;
+			this.name = name;
+		}
+
+		public UserTypeEnum valueOf(short status){
+			UserTypeEnum[] arrays  = UserTypeEnum.values();
+			for(UserTypeEnum enumObj : arrays){
+				if(status == enumObj.value){
+					return enumObj;
+				}
+			}
+			return null;
+		}
+		
+		public short getValue() {
+			return value;
+		}
+		
+		public String getName() {
+			return name;
+		}
+	}
 }

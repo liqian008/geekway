@@ -144,7 +144,7 @@ public class WxProductOrderController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO ,authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/buy")
 	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="0")int cartBuy, HttpServletRequest request, HttpServletResponse response) {
 //		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
@@ -281,7 +281,7 @@ public class WxProductOrderController {
 				dataMap.put("payer", "self");//自己支付
 			}else{//找人代付
 				dataMap.put("tradeNo", productOrder.getOutTradeNo());
-				dataMap.put("payer", "diaosi");//找吊死备胎支付
+				dataMap.put("payer", "diaosi");//找屌丝备胎支付
 			}
 			return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildSuccessJson(dataMap));
 		}
@@ -329,7 +329,6 @@ public class WxProductOrderController {
 	 * @param request
 	 * @return
 	 */
-//	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO, authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/orderInfoShare")
 	public String orderInfoShare(Model model, String tradeNo, HttpServletRequest request, HttpServletResponse response) {
@@ -337,66 +336,39 @@ public class WxProductOrderController {
 		String userOpenId = wxWebUser.getOpenId();
 		checkUserOpenId(userOpenId);
 		
-		//userAccessToken，用于获取个人资料（昵称&头像）
-		String userAccessToken = (String) request.getAttribute(ConstFront.CURRENT_USER_ACCESS_TOKEN);
-		logger.debug("orderInfoShare中的accessToken: "+ userAccessToken);
-		//oauth获取个人资料
-		WxUserInfoResult wxUserInfoResult = wxMpOauthService.getOAuthUserinfo(userAccessToken, userOpenId);
-		logger.debug("oauth wxUserInfoResult: "+ wxUserInfoResult);
+		//加载订单信息
+		ProductOrder orderInfo = productOrderService.loadByUserTradeNo(userOpenId, tradeNo);
 		
-		if(wxUserInfoResult!=null&&wxUserInfoResult.getErrcode()==0){//正确的响应 
-			wxWebUser = buildFullOAuthWebUser(wxUserInfoResult);
-
-			if(wxWebUser!=null){
-				//重写cookie
-				String webUserCookie = JsonUtil.gson.toJson(wxWebUser);
-				try {
-					webUserCookie = URLEncoder.encode(webUserCookie, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
-				}
-				logger.debug("userCookie json: "+ webUserCookie);
-				
-				//用户表saveOrUpdate
-				wxWebUserService.save(wxWebUser);
-				
-				ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, webUserCookie);
-				request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
-				
-				//加载订单信息
-				ProductOrder orderInfo = productOrderService.loadByUserTradeNo(userOpenId, tradeNo);
-				
-				//TODO 检查商品完整性
-				model.addAttribute("orderInfo", orderInfo);
-				
-				//加载订单中商品列表
-				List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(tradeNo);
-				model.addAttribute("orderItemList", orderItemList);
-				
-				return "order/orderInfoShare";
-			}
-		}
-		throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+		//TODO 检查商品完整性
+		model.addAttribute("orderInfo", orderInfo);
+		
+		//加载订单中商品列表
+		List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(tradeNo);
+		model.addAttribute("orderItemList", orderItemList);
+		
+		return "order/orderInfoShare";
+			
 	}
 	
-	/**
-	 * oauth返回webUser对象
-	 * @param wxUserInfoResult
-	 * @return
-	 */
-	private WxWebUser buildFullOAuthWebUser(WxUserInfoResult wxUserInfoResult) {
-		WxWebUser webUser = new WxWebUser();
-		webUser.setOpenId(wxUserInfoResult.getOpenid());
-		webUser.setUnionId(wxUserInfoResult.getUnionid());
-		webUser.setNickname(wxUserInfoResult.getNickname());
-		webUser.setCountry(wxUserInfoResult.getCountry());
-		webUser.setProvince(wxUserInfoResult.getProvince());
-		webUser.setCity(wxUserInfoResult.getCity());
-		webUser.setHeadImgUrl(wxUserInfoResult.getHeadimgurl());
-		webUser.setSex(wxUserInfoResult.getSex());
-		
-		return webUser;
-	}
+//	/**
+//	 * oauth返回webUser对象
+//	 * @param wxUserInfoResult
+//	 * @return
+//	 */
+//	private WxWebUser buildFullOAuthWebUser(WxUserInfoResult wxUserInfoResult) {
+//		WxWebUser webUser = new WxWebUser();
+//		webUser.setUserType(GeekwayEnum.UserTypeEnum.MP_MEINIUR.getValue());//美妞公众账户用户类型
+//		webUser.setOpenId(wxUserInfoResult.getOpenid());
+//		webUser.setUnionId(wxUserInfoResult.getUnionid());
+//		webUser.setNickname(wxUserInfoResult.getNickname());
+//		webUser.setCountry(wxUserInfoResult.getCountry());
+//		webUser.setProvince(wxUserInfoResult.getProvince());
+//		webUser.setCity(wxUserInfoResult.getCity());
+//		webUser.setHeadImgUrl(wxUserInfoResult.getHeadimgurl());
+//		webUser.setSex(wxUserInfoResult.getSex());
+//		
+//		return webUser;
+//	}
 
 	/**
 	 * 代付条款页面，分享后回流的url，在此知会当前登录用户是给别人付款（点击确定后，才会进入真正的支付页）

@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>${currentProductSku.name}【美妞儿】</title>
+<title>${currentProductSku.title} ${currentProductSku.name}【美妞儿】</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -33,6 +33,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
 </head>
 
@@ -50,7 +51,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">${product.name}</p>
+            <p class="bread-crumb">${currentProductSku.title} ${currentProductSku.name}</p>
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
@@ -82,16 +83,11 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 					<div>
 						<a href="<%=slideImage.getLink()%>"><img src="<%=slideImage.getPicUrl()%>" class="responsive-image"></a>
 					</div>
-					<%
-						}
-					%>
+					<%}%>
 				</div>
                 <a href="javascript:void(0)" class="next-slider"></a>
                 <a href="javascript:void(0)" class="prev-slider"></a>
-                <%
-                	}
-                %>
-				
+                <%}%>
 			</div>
 
 			<div class="decoration"></div> 
@@ -116,12 +112,12 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 	            		<div class="dt">选择颜色：</div>
 	            		<div class="dd">
 							<%
-								List<SkuPropValue> colorSkuValueList = skuGroupMap.get(1);
-												for(SkuPropValue skuPropValue : colorSkuValueList){
-													String displayName = skuPropValue.getName();
-													String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
-													
-													boolean colorSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuColorValueId());
+							List<SkuPropValue> colorSkuValueList = skuGroupMap.get(1);
+							for(SkuPropValue skuPropValue : colorSkuValueList){
+								String displayName = skuPropValue.getName();
+								String propertyName = skuPropValue.getSkuPropId()+":"+skuPropValue.getId()+";";
+								
+								boolean colorSelected = currentProductSku!=null&&skuPropValue.getId().equals(currentProductSku.getSkuColorValueId());
 							%>	            		
 	            			<div class="item <%=colorSelected?"selected":""%>" data="<%=propertyName%>">
 	            				<b></b>
@@ -132,17 +128,13 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 		            				<i><%=displayName%></i>
 		            			</a>
 	            			</div>
-	            			<%
-	            				}
-	            			%>
+	            			<%}%>
 	            		</div>
 	            	</li>
-	            	<%
-	            		}
-	            	%>
+	            	<%}%>
 	            	
 	            	<%
-	            		if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
+	            	if(skuGroupMap!=null&&skuGroupMap.get(2)!=null){
 	            	%>
 	            	<li id="choose-version" class="choose-version-shouji">
 	            		<div class="dt">选择尺码：</div>
@@ -184,7 +176,6 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
                 <div class="static-notification-red <%=canBuy?"gone":""%>" id="buyDisable">
                     <p class="center-text uppercase">本品暂时缺货</p>
                 </div>
-                
                 
                 <script>
 					var skuMap = new Map();
@@ -275,25 +266,30 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
                     <a href="javascript:void(0)" class="tab-but tab-but-1 tab-active">商品描述</a>
                     <a href="javascript:void(0)" class="tab-but tab-but-2">规格参数</a>
                     <a href="javascript:void(0)" class="tab-but tab-but-3">二维码</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-4">发货时间</a>
                 </div>
                 <div class="tab-content tab-content-1">
                     <p>
-                        ${product.description}
+                        ${currentProductSku.description}
                     </p>
                 </div>
                 <div class="tab-content tab-content-2">
                     <p>
-                        ${product.param}                    
+                        ${currentProductSku.param}
                     </p>
                 </div>
                 <div class="tab-content tab-content-3">
                     <p>
-                       <img src="http://imgqn.jinwanr.com/images/icon/mp_qrcode.jpg"/>      
+                       <img src="${currentProductSku.skuQrcode}"/>
+                    </p>
+                </div>
+                <div class="tab-content tab-content-4">
+                    <p>
+                    	${currentProductSku.deliverInfo}
                     </p>
                 </div>
             </div>
 			
-			                
             <div class="decoration"></div>
             
             <jsp:include page="../inc/guessLike.jsp"></jsp:include>
@@ -326,4 +322,5 @@ function amountReduce(){
 }
 </script>
 
+<jsp:include page="../inc/commonJs.jsp"></jsp:include>
 </html>

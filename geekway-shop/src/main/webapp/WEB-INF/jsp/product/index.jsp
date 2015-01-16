@@ -35,6 +35,7 @@ String contextPath = request.getContextPath();
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/custom.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
 </head>
 <body>

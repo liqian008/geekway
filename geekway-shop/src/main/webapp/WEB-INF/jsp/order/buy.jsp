@@ -35,6 +35,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
 </head>
 <body>
@@ -323,5 +324,6 @@ function refreshDeliveryFee(totalProductFee, totalAmount, province, city){
 
 <!-- 微信默认分享 -->
 <jsp:include page="../inc/weixinShareJsDefault.jsp"></jsp:include>
+
 
 </html>

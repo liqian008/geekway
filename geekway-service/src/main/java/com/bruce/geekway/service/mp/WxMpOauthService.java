@@ -2,6 +2,9 @@ package com.bruce.geekway.service.mp;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bruce.foundation.util.EmojiUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
@@ -15,6 +18,9 @@ import com.bruce.geekway.utils.HttpUtil;
  *
  */
 public class WxMpOauthService extends WxBaseService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(WxMpOauthService.class);
+	
 	
 	/**
 	 * 根据code换取oauthAccessToken
@@ -30,7 +36,9 @@ public class WxMpOauthService extends WxBaseService {
 		params.put("grant_type", "authorization_code");
 		
 		String oauthResult = HttpUtil.getRequest(ConstWeixin.WX_OAUTH_ACCESS_TOKEN_API, params);
-		
+		if(logger.isDebugEnabled()){
+			logger.debug("getOauthAccessToken result ："+oauthResult);
+		}
 		WxOauthTokenResult wxOauthTokenResult = JsonUtil.gson.fromJson(oauthResult, WxOauthTokenResult.class);
 		if(wxOauthTokenResult!=null && wxOauthTokenResult.getErrcode()==0){//成功
 			return wxOauthTokenResult;
@@ -53,6 +61,9 @@ public class WxMpOauthService extends WxBaseService {
 		//过滤emoji字符
 		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResultStr);
 		
+		if(logger.isDebugEnabled()){
+			logger.debug("getOAuthUserinfo result ："+emojiFilterResult);
+		}
 		WxUserInfoResult userinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
 		if(userinfoResult!=null && userinfoResult.getErrcode()==0){//成功
 			return userinfoResult;

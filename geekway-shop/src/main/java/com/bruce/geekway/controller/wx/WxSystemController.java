@@ -63,7 +63,7 @@ public class WxSystemController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/wxOauthRedirect")
+	@RequestMapping(value = "/wxOauthRedirect")//TODO 如修改此requestMapping，必须与interceptor中保存一致
 	public String wxOauthRedirect(HttpServletRequest request) {
 		String code = request.getParameter("code");
 		String state = request.getParameter("state");
