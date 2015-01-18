@@ -107,8 +107,7 @@
   		$('#moreOrdersBtn').text("努力加载中...");
   		$('#moreOrdersBtn').attr("disabled","disabled");
   		var pageNo = $("#pageNo").val();
-  		var pageSize = 2;
-  		var jsonData = {'pageNo' : pageNo, 'pageSize' : pageSize};
+  		var jsonData = {'pageNo' : pageNo};
   		$.post('${pageContext.request.contextPath}/moreOrders.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){

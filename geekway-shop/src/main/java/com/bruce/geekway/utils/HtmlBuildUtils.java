@@ -159,6 +159,7 @@ public class HtmlBuildUtils {
 			sb.append("<div>");
 			sb.append("<p class='quote-item'>");
 			sb.append("订单号： "+productOrder.getOutTradeNo()+"<br/>");
+			sb.append("下单时间： "+productOrder.getCreateTime()+"<br/>");
 			sb.append("订单信息： "+productOrder.getTitle()+"<br/>");
 			sb.append("合计： " +
 					"商品 <span class='text-highlight highlight-blue'>"+productOrder.getProductFee()+"</span>&nbsp;" +

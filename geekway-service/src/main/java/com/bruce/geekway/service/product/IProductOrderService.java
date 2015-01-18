@@ -28,17 +28,20 @@ public interface IProductOrderService extends IFoundationPagingService<ProductOr
 	/**
 	 * 查询我的订单列表
 	 * @param userOpenId
-	 * @param voucherTailId
+	 * @param orderType(主要用于区分是否支付)
 	 * @param limit
 	 * @return
 	 */
-	public List<ProductOrder> queryUserOrders(String userOpenId, int pageNo, int pageSize, boolean isFallload);
+	public List<ProductOrder> queryUserOrders(String userOpenId, short orderType, int pageNo, int pageSize, boolean isFallload);
 	
 	/**
 	 * 使用缓存查询我的订单列表
+	 * @param userOpenId
+	 * @param orderType(主要用于区分是否支付)
+	 * @param limit
 	 * @return
 	 */
-	public List<ProductOrder> queryCachedUserOrders(String userOpenId, int pageNo, int pageSize, boolean isFallload);
+	public List<ProductOrder> queryCachedUserOrders(String userOpenId, short orderType, int pageNo, int pageSize, boolean isFallload);
 	
 	
 	/**
@@ -95,7 +98,7 @@ public interface IProductOrderService extends IFoundationPagingService<ProductOr
 	 * @param status
 	 * @return
 	 */
-	public int markDelivered(String outTradeNo);
+	public int markDelivered(String outTradeNo, short deliverType, String deliverSn);
 
 	
 }

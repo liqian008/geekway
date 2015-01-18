@@ -123,13 +123,19 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	
 	
 	@Override
-	public List<ProductOrder> queryUserOrders(String userOpenId, int pageNo, int pageSize, boolean fallload) {
+	public List<ProductOrder> queryUserOrders(String userOpenId, short orderType, int pageNo, int pageSize, boolean fallload) {
 		pageNo = pageNo<=0?1:pageNo;//确保pageNo合法
 		pageSize = pageNo<=0?ConstConfig.PAGE_SIZE_DEFAULT:pageSize;//确保pageSize合法
 		int offset = (pageNo-1)*pageSize;
 		
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
-		criteria.createCriteria().andUserOpenIdEqualTo(userOpenId);
+		ProductOrderCriteria.Criteria subCriteria = criteria.createCriteria();
+		subCriteria.andUserOpenIdEqualTo(userOpenId);
+		if(orderType!=0){
+			subCriteria.andStatusGreaterThan(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus());
+		}else{
+			subCriteria.andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus());
+		}
 		criteria.setLimitOffset(offset);
 		if(fallload){//如果是瀑布流方式加载，需要多加一行，以便于判断是否有下一页
 			criteria.setLimitRows(pageSize+1);
@@ -142,10 +148,10 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	
 	
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'userOpenId-'+#userOpenId", condition="#pageNo<=1")
-	public List<ProductOrder> queryCachedUserOrders(String userOpenId, int pageNo, int pageSize, boolean fallload) {
-		logger.debug("fallload userOrderList from db. [userOpenId:"+userOpenId+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
-		return queryUserOrders(userOpenId, pageNo, pageSize, fallload);
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'userOpenId-'+#userOpenId+'orderType-'+#orderType", condition="#pageNo<=1")
+	public List<ProductOrder> queryCachedUserOrders(String userOpenId, short orderType, int pageNo, int pageSize, boolean fallload) {
+		logger.debug("fallload userOrderList from db. [userOpenId:"+userOpenId+", orderType:"+orderType+", pageNo:"+pageNo+", pageSize:"+pageSize+"]");
+		return queryUserOrders(userOpenId, orderType, pageNo, pageSize, fallload);
 	}
 	
 	/**
@@ -154,7 +160,7 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	@Override
 	public int markNotifyReceived(short payType, String outTradeNo, String transactionId) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
-		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo);
+		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo).andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus());
 		
 		ProductOrder productOrder = new ProductOrder();
 		productOrder.setPayType(payType);
@@ -169,7 +175,8 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	@Override
 	public int markWaitingDelivery(String outTradeNo) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
-		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo);
+		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo).andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
+		;
 		
 		ProductOrder productOrder = new ProductOrder();
 		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus());
@@ -180,12 +187,14 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	 * 标记为已发货
 	 */
 	@Override
-	public int markDelivered(String outTradeNo) {
+	public int markDelivered(String outTradeNo, short deliverType, String deliverSn) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
-		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo);
+		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo).andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus());
 		
 		ProductOrder productOrder = new ProductOrder();
 		productOrder.setDeliverTime(new Date());
+		productOrder.setDeliverSn(deliverSn);
+		productOrder.setDeliverType(deliverType);
 		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());
 		return updateByCriteria(productOrder, criteria);
 	}

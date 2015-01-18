@@ -59,17 +59,62 @@ public class WxMyController{
 	@NeedAuthorize
 	@RequestMapping(value = "/orders")
 	public String orders(Model model, HttpServletRequest request) {
-//		List<WxProduct> productList = productService.queryAvailableList();
-//		model.addAttribute("productList", productList);
 		if(logger.isDebugEnabled()){
 			logger.debug("进入[我的订单], debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
 		}
 		return "order/myOrderList";
 	}
 	
+	/**
+	 * 我的订单
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/ordersPaid")
+	public String ordersPaid(Model model, @RequestParam(defaultValue="1")int pageSize, HttpServletRequest request) {
+		if(logger.isDebugEnabled()){
+			logger.debug("进入[我的已支付订单], debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
+		}
+//		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+//		String userOpenId = wxWebUser.getOpenId();
+		
+		//用户有效
+//		if(!StringUtils.isBlank(userOpenId)){
+//			List<ProductOrder> paidOrderList = productOrderService.queryCachedUserOrders(userOpenId, 1, pageSize, true);
+//			model.addAttribute("paidOrderList", paidOrderList);
+//		}
+		return "order/myOrderPaidList";
+	}
+	
+	/**
+	 * 未付款订单
+	 * @param model
+	 * @param request
+	 * @return
+	 */
+	@NeedAuthorize
+	@RequestMapping(value = "/ordersUnpay")
+	public String ordersUnpay(Model model, @RequestParam(defaultValue="1")int pageSize, HttpServletRequest request) {
+		if(logger.isDebugEnabled()){
+			logger.debug("进入[我的未付款订单], debug模式: "+ConstWeixin.WX_OAUTH_DEBUG);
+		}
+//		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
+//		String userOpenId = wxWebUser.getOpenId();
+		
+		//用户有效
+//		if(!StringUtils.isBlank(userOpenId)){
+//			List<ProductOrder> paidOrderList = productOrderService.queryCachedUserOrders(userOpenId, 1, pageSize, true);
+//			model.addAttribute("paidOrderList", paidOrderList);
+//		}
+		return "order/myOrderUnpayList";
+	}
+	
+	
 	@NeedAuthorize
 	@RequestMapping(value = "/moreOrders.json")
-	public ModelAndView moreOrders(Model model, @RequestParam(value="pageNo", defaultValue="1") int pageNo, HttpServletRequest request) {
+	public ModelAndView moreOrders(Model model, @RequestParam(defaultValue="0")short orderType, @RequestParam(defaultValue="1") int pageNo, int pageSize, HttpServletRequest request) {
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
 		String userOpenId = wxWebUser.getOpenId();
 		
@@ -81,7 +126,7 @@ public class WxMyController{
 		
 		//用户有效
 		if(!StringUtils.isBlank(userOpenId)){
-			productOrderList = productOrderService.queryCachedUserOrders(userOpenId, pageNo, limit, true);
+			productOrderList = productOrderService.queryCachedUserOrders(userOpenId, orderType, pageNo, limit, true);
 		}
 		
 		long nextPageNo = 0;

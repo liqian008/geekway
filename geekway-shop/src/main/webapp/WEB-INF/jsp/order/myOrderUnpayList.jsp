@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 
-<title>我的订单【美妞儿】</title>
+<title>我的待支付订单【美妞儿】</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -56,7 +56,7 @@
         	
 			<div class="container no-bottom">
 				<div class="big-notification blue-notification"> 
-					<h4 class="uppercase">订单介绍</h4>
+					<h4 class="uppercase">我的待支付订单</h4>
 					<a href="#" class="close-big-notification">x</a>
 					<p>
 					</p>
@@ -65,15 +65,18 @@
 			
 			<div class="container no-bottom">
             	<div class="section-title">
-					<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">我的订单</a></h4>
+					<h4><a href="${pageContext.request.contextPath}/index">首页</a></h4>
 				</div>
 			</div>
 			
 			<div class="decoration"></div>
 			<div id="ordersContainer" class="container no-bottom">
 				<div class="section-title">
-                	<h4>我的订单</h4>
-                    <em></em>
+                	<h4>我的待支付订单</h4>
+                </div>
+                <div class="tabs section-title">
+                    <a href="${pageContext.request.contextPath}/ordersUnpay" class="tab-but tab-active">待支付</a>
+                    <a href="${pageContext.request.contextPath}/ordersPaid" class="tab-but">已支付</a>
                 </div>
             </div>
 			
@@ -108,7 +111,8 @@
   		$('#moreOrdersBtn').attr("disabled","disabled");
   		var pageNo = $("#pageNo").val();
   		var pageSize = 2;
-  		var jsonData = {'pageNo' : pageNo, 'pageSize' : pageSize};
+  		var orderType = 0;
+  		var jsonData = {'pageNo' : pageNo, 'pageSize' : pageSize, 'orderType' : orderType};
   		$.post('${pageContext.request.contextPath}/moreOrders.json', jsonData, function(data) {
   			var result = data.result;
 			if(result==1){

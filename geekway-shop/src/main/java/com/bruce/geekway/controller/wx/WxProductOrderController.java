@@ -1,7 +1,5 @@
 package com.bruce.geekway.controller.wx;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.foundation.util.DateUtil;
-import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
@@ -42,7 +39,6 @@ import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
-import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
 import com.bruce.geekway.service.IWxWebUserService;
@@ -144,7 +140,7 @@ public class WxProductOrderController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO ,authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/buy")
 	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="0")int cartBuy, HttpServletRequest request, HttpServletResponse response) {
 //		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
@@ -288,6 +284,31 @@ public class WxProductOrderController {
 		return ResponseBuilderUtil.buildJsonView(ResponseBuilderUtil.buildErrorJson(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR));
 	}
 
+	//支付成功
+	@NeedAuthorize
+	@RequestMapping(value = "/paySuccess")
+	public String paySuccess(Model model, String outTradeNo, HttpServletRequest request, HttpServletResponse response) {
+		if(logger.isDebugEnabled()){
+			logger.debug("进入[支付成功]界面, outTradeNo: "+outTradeNo);
+		}
+		//加载订单信息
+		ProductOrder orderInfo = productOrderService.loadByTradeNo(outTradeNo);
+		model.addAttribute("orderInfo", orderInfo);
+		return "order/paySuccess";
+	}
+	
+	
+	@RequestMapping(value = "/payFailed")
+	public String payFailed(Model model, String outTradeNo, HttpServletRequest request, HttpServletResponse response) {
+		if(logger.isDebugEnabled()){
+			logger.debug("进入[支付失败]界面, outTradeNo: "+outTradeNo);
+		}
+		//加载订单信息
+		ProductOrder orderInfo = productOrderService.loadByTradeNo(outTradeNo);
+		model.addAttribute("orderInfo", orderInfo);
+		return "order/payFailed";
+	}
+	
 	
 	/**
 	 * 订单详情

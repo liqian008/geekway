@@ -179,16 +179,16 @@ public class WxpayService{
 	}
 	
 	/**
-	 * 发货
+	 * 微信发货
 	 * @return
 	 */
-	public int dealWxDeliver(WxDeliverInfo deliverInfo){
+	public int dealWxDeliver(WxDeliverInfo deliverInfo, short deliverType, String deliverSn){
 		if(deliverInfo!=null){
 			//提交微信处理
 			WxJsonResult jsonResult = wxMpPayService.deliverNotify(deliverInfo);
 			if(jsonResult!=null&&jsonResult.getErrcode()==0){
 				//微信提交成功后，更改db中的状态
-				int result = productOrderService.markDelivered(deliverInfo.out_trade_no);
+				int result = productOrderService.markDelivered(deliverInfo.out_trade_no, deliverType, deliverSn);
 				return result;
 			}
 		}

@@ -40,7 +40,7 @@
 </head>
 
 <%
-	CartProductSku cartItem = (CartProductSku)request.getAttribute("cartItem");
+CartProductSku cartItem = (CartProductSku)request.getAttribute("cartItem");
 ProductSku cartProductSku = cartItem.getProductSku();
 int buyAmount = cartItem.getAmount();
 %>
@@ -59,7 +59,6 @@ int buyAmount = cartItem.getAmount();
         </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
-            <a href="javascript:void(0)" id="shareToFriend" class="facebook-content"></a>
         </div>
         
         <div class="content"> 
@@ -118,9 +117,14 @@ int buyAmount = cartItem.getAmount();
 	            			</div>
 	            		</div>
 	            	</li>
-	            	<li>购买数量: <span id="buyAmount" class="text-highlight highlight-blue"><%=buyAmount%></span>件</li> 
+	            	<li>购买数量: 
+		            	<span id="btn-reduce" class="text-highlight highlight-dark" style="margin-right:1px;margin-left:5px"><a href="javascript:amountReduce()" style="color:#fff">-</a></span>
+		            	<span id="buyAmount" class="text-highlight highlight-blue" style="margin-right:1px;padding-right:15px;padding-left:15px"><%=buyAmount%></span>
+		            	<span id="btn-add" class="text-highlight highlight-dark"><a href="javascript:amountIncr()" style="color:#fff">+</a></span>
+		            	件
+	            	</li>
             	</ul>
-            	<input type="hidden" id="productSkuId" name="productSkuId" value="${currentProductSku.id}"/> 
+            	<input type="hidden" id="productSkuId" name="productSkuId" value="<%=cartProductSku.getId()%>"/> 
             	
             	<%
             	boolean canBuy = false;
@@ -128,7 +132,7 @@ int buyAmount = cartItem.getAmount();
             		canBuy = true;
             	}
             	%>
-                <a href="javascript:void(0)" id="buyNow" class="button-big button-green <%=canBuy?"":"gone"%>">保存修改</a>
+                <a href="javascript:void(0)" id="modifyCartItem" class="button-big button-green <%=canBuy?"":"gone"%>">保存修改</a>
                 <a href="${pageContext.request.contextPath}/cart/removeFromCart?productSkuId=<%=cartProductSku.getId()%>" id="removeFromCart" class="button-big button-red <%=canBuy?"":"gone"%>">从购物车中移除</a>
                 
                 <div class="static-notification-red <%=canBuy?"gone":""%>" id="buyDisable">
@@ -137,8 +141,8 @@ int buyAmount = cartItem.getAmount();
                 
                 <script>
 					//点击购买操作
-					$("#buyNow").click(function(){
-						var buyAmount = "7";//$("#buyAmount").text();
+					$("#modifyCartItem").click(function(){
+						var buyAmount = $("#buyAmount").text();
 						var productSkuId = $("#productSkuId").val();
 						//检查商品&数量有效性
 						var productInfoError = !isInteger(buyAmount) || !isInteger(productSkuId);
@@ -146,7 +150,7 @@ int buyAmount = cartItem.getAmount();
 							alert("商品选择有误，请检查后重新提交");
 							return;
 						}
-						location.href= "${pageContext.request.contextPath}/buy?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
+						location.href= "${pageContext.request.contextPath}/cart/modifyCartItem?buyAmount="+buyAmount+"&productSkuId="+productSkuId;
 					});
 					
 				</script>
@@ -159,17 +163,29 @@ int buyAmount = cartItem.getAmount();
                 	<h4>商品详情</h4>
                 </div>
                 <div class="tabs">
-                    <a href="#" class="tab-but tab-but-1 tab-active">商品描述</a>
-                    <a href="#" class="tab-but tab-but-2">规格参数</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-1 tab-active">商品描述</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-2">规格参数</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-3">二维码</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-4">物流信息</a>
                 </div>
                 <div class="tab-content tab-content-1">
                     <p>
-                        ${product.description}
+                        ${cartItem.productSku.description}
                     </p>
                 </div>
                 <div class="tab-content tab-content-2">
                     <p>
-                        ${product.param}
+                        ${cartItem.productSku.param}
+                    </p>
+                </div>
+                <div class="tab-content tab-content-3">
+                    <p>
+                       <img src="${cartItem.productSku.skuQrcode}"/>
+                    </p>
+                </div>
+                <div class="tab-content tab-content-4">
+                    <p>
+                    	${cartItem.productSku.deliverInfo}
                     </p>
                 </div>
             </div>
@@ -177,23 +193,6 @@ int buyAmount = cartItem.getAmount();
 			                
             <div class="decoration"></div>
             
-            <div id="recommendProductsContainer" class="container">
-            	<div class="section-title">
-                	<h4>猜您喜欢</h4>
-                </div>
-                <!-- 
-                <p class="quote-item">
-                	<img src="http://jinwanr.qiniudn.com/image/20140930/1_fb315d11ac58521c025082df3e0c4fff.jpg">
-                    ${product.name}
-                    <em>
-					原 价：&nbsp;<span id='originPrice' class='text-highlight highlight-red'><del>3</del></span>元
-					现 价：&nbsp;<span id='price' class='text-highlight highlight-green'>2</span>元
-					</em>
-                </p>
-                 -->
-            </div>
-             
-            <div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
             
         </div>                
@@ -202,22 +201,26 @@ int buyAmount = cartItem.getAmount();
 
 </body>
 
-
-
 <script>
-recommendProducts();
+function amountIncr(){
+	var currentAmount = parseInt($("#buyAmount").text());
+	var targetAmount = currentAmount+1;
+	var leftStock = parseInt($("#leftStock").text());
+	if(targetAmount>leftStock){
+		targetAmount = leftStock;
+	}
+	$("#buyAmount").text(targetAmount);
+}
 
-function recommendProducts(){
-	//置为数据加载状态
-	var paramData = {};
-	$.post('${pageContext.request.contextPath}/recommendProducts.json', paramData, function(data) {
-		var result = data.result;
-		if(result==1){
-			$("#recommendProductsContainer").append(data.data.html);
-		}
-	})
+function amountReduce(){
+	var currentAmount = parseInt($("#buyAmount").text());
+	if(targetAmount>1){
+		var targetAmount = currentAmount-1;
+		$("#buyAmount").text(targetAmount);
+	}
 }
 </script>
 
+<jsp:include page="../inc/commonJs.jsp"></jsp:include>
 
 </html>

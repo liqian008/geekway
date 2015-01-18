@@ -160,7 +160,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 		            	<span id="buyAmount" class="text-highlight highlight-blue" style="margin-right:1px;padding-right:15px;padding-left:15px">1</span>
 		            	<span id="btn-add" class="text-highlight highlight-dark"><a href="javascript:amountIncr()" style="color:#fff">+</a></span>
 		            	件
-	            	</li> 
+	            	</li>
             	</ul>
             	<input type="hidden" id="productSkuId" name="productSkuId" value="${currentProductSku.id}"/> 
             	
@@ -266,7 +266,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
                     <a href="javascript:void(0)" class="tab-but tab-but-1 tab-active">商品描述</a>
                     <a href="javascript:void(0)" class="tab-but tab-but-2">规格参数</a>
                     <a href="javascript:void(0)" class="tab-but tab-but-3">二维码</a>
-                    <a href="javascript:void(0)" class="tab-but tab-but-4">发货时间</a>
+                    <a href="javascript:void(0)" class="tab-but tab-but-4">物流信息</a>
                 </div>
                 <div class="tab-content tab-content-1">
                     <p>

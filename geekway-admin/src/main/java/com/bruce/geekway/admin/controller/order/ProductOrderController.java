@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -137,9 +138,27 @@ public class ProductOrderController {
 		return "order/orderInfo";
 	}
 	
+
+	/**
+	 * 发货信息
+	 * @param model
+	 * @param openId
+	 * @param outTradeNo
+	 * @return
+	 */
+	@RequestMapping(value="/deliverInfo", method=RequestMethod.GET)
+	public String deliverInfo(Model model, String outTradeNo, HttpServletRequest request) {
+		String servletPath = request.getRequestURI();
+		model.addAttribute("servletPath", servletPath);
+		
+		ProductOrder order = productOrderService.loadByTradeNo(outTradeNo);
+		model.addAttribute("order", order);
+		
+		return "order/deliverInfo";
+	}
 	
 	/**
-	 * 发货操作
+	 * 进行发货操作
 	 * @param model
 	 * @param openId
 	 * @param transId
@@ -151,26 +170,17 @@ public class ProductOrderController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/deliver")
-	public String deliver(Model model, String openId, String transId, String outTradeNo, int deliverStatus, String deliverMsg, String postType, String postSn, HttpServletRequest request) {
+	@RequestMapping(value="/deliver", method=RequestMethod.POST)
+	public String deliver(Model model, String openId, String transId, String outTradeNo, short deliverType, String deliverSn, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
 		ProductOrder order = productOrderService.loadByTradeNo(outTradeNo);
 		if(order!=null){
 			//构造微信发货对象
-			WxDeliverInfo deliveryInfo = buildDeliveryInfo(openId, transId, outTradeNo, deliverStatus, deliverMsg);
+			WxDeliverInfo deliveryInfo = buildDeliveryInfo(openId, transId, outTradeNo, 1, "已发货");//TODO deliver status
 			//调用微信发货通知接口
-			int result = wxpayService.dealWxDeliver(deliveryInfo);
-			if(result>0){
-				//更新订单发货状态
-				ProductOrder updatedOrder = new ProductOrder();
-				updatedOrder.setId(order.getId());
-				updatedOrder.setPostType(postType);
-				updatedOrder.setPostSn(postSn);
-				updatedOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus());//状态改已发货
-				result = productOrderService.updateById(updatedOrder);//更新操作
-			}
+			wxpayService.dealWxDeliver(deliveryInfo, deliverType, deliverSn);
 		}
 		model.addAttribute("redirectUrl", "./orderInfo?outTradeNo="+outTradeNo);
 		return "forward:/home/operationRedirect";

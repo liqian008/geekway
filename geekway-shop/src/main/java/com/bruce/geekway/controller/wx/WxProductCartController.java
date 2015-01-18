@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.model.Product;
 import com.bruce.geekway.model.ProductCart;
+import com.bruce.geekway.model.SlideImage;
 import com.bruce.geekway.model.ProductCart.CartProductSku;
+import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.ProductSku;
 import com.bruce.geekway.model.ProductSkuCriteria;
 import com.bruce.geekway.service.product.IProductService;
 import com.bruce.geekway.service.product.IProductSkuService;
+import com.bruce.geekway.service.product.ISlideImageService;
 import com.bruce.geekway.utils.CartUtil;
 import com.bruce.geekway.utils.ResponseUtil;
 
@@ -38,6 +41,8 @@ public class WxProductCartController {
 	private IProductService productService;
 	@Autowired
 	private IProductSkuService productSkuService;
+	@Autowired
+	private ISlideImageService slideImageService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductCartController.class);
 
@@ -146,6 +151,10 @@ public class WxProductCartController {
 						
 						model.addAttribute("product", product);
 						model.addAttribute("cartItem", new CartProductSku(productSku, buyAmount));
+						
+						List<SlideImage> slideImageList = slideImageService.queryCachedList(GeekwayEnum.SlideImageTypeEnum.PRODUCT.getValue(), productSkuId);
+//						ShopLinkUtil.resizeSlideImageList(slideImageList, 400);
+						model.addAttribute("slideImageList", slideImageList);
 					}
 				}
 			}
@@ -173,10 +182,8 @@ public class WxProductCartController {
 	}
 	
 	/**
-	 * 修改购物车中的商品信息
+	 * 清空购物车
 	 * @param model
-	 * @param productSkuId
-	 * @param buyAmount
 	 * @param request
 	 * @param response
 	 * @return

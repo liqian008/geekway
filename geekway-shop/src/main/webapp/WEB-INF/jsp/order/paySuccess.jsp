@@ -6,14 +6,6 @@
 <%@ page import="com.bruce.geekway.utils.*" %>
 
 
-<%
-String contextPath = request.getContextPath();
-String errorMessage = (String)request.getAttribute(ResponseBuilderUtil.ERROR_MSG);
-if(errorMessage==null){
-	errorMessage = "服务器开小差，请稍后再试！";
-}
-%>
-
 <!DOCTYPE HTML>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -21,7 +13,7 @@ if(errorMessage==null){
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>出错了</title>
+<title>支付成功</title>
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
@@ -48,12 +40,12 @@ if(errorMessage==null){
 <body>
 
 <div class="all-elements">
-    <jsp:include page="./inc/sidebar.jsp"></jsp:include>
+    <jsp:include page="../inc/sidebar.jsp"></jsp:include>
 
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">出错了</p>
+            <p class="bread-crumb">支付成功</p>
         </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
@@ -62,23 +54,23 @@ if(errorMessage==null){
         <div class="content"> 
 	
 			<div class="decoration"></div> 
-
+			
         	<div class="container no-bottom">
             	<div class="section-title">
-                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">错误提示</a></h4>
+                	<h4><a href="${pageContext.request.contextPath}/index">首页</a>&nbsp;/&nbsp;<a href="javascript:void(0)">支付结果</a></h4>
 				</div>
-            </div> 
+            </div>
             
-			<div class="decoration"></div>
+            <div class="decoration"></div>
         	<div class="container no-bottom">
-	            <div class="big-notification red-notification"> 
-	                <h4 class="uppercase">系统处理失败</h4> 
-	                <p><%=errorMessage%></p> 
+	            <div class="big-notification green-notification"> 
+	                <h4 class="uppercase">支付成功</h4> 
+	                <p>您已经成功完成支付操作，订单号：${orderInfo.outTradeNo}，订单金额：¥${orderInfo.totalFee}元，［美妞儿］随后将立即为您安排发货，请耐心等待哦！</p> 
 	            </div>
             </div>
             
             <div class="decoration"></div>
-            <jsp:include page="./inc/footer.jsp"></jsp:include>
+            <jsp:include page="../inc/footer.jsp"></jsp:include>
             
         </div>                
     </div>  
