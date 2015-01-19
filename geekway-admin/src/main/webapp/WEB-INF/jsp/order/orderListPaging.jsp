@@ -1,3 +1,4 @@
+<%@page import="com.bruce.geekway.model.enumeration.GeekwayEnum"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
@@ -9,6 +10,25 @@
 <%@page import="com.bruce.foundation.admin.utils.*"%>
 
 <%@ include file="../inc/include_tag.jsp" %>
+
+<%!String displayOrderStatus(Short status){
+	if(status!=null){
+		if(status==GeekwayEnum.ProductOrderStatusEnum.TIMEOUT.getStatus()){
+			return "<span class='label label-primary'><b>"+GeekwayEnum.ProductOrderStatusEnum.TIMEOUT.getName()+"</b></span>"; 
+		}else if(status==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
+			return "<span class='label label-info'><b>"+GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getName()+"</b></span>";
+		}else if(status==GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus()){
+			return "<span class='label label-warning'><b>"+GeekwayEnum.ProductOrderStatusEnum.PAYED.getName()+"</b></span>";
+		//}else if(status==GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus()){
+		//	return "<span class='label label-primary'><b>"+GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getName()+"</b></span>";
+		}else if(status==GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus()){
+			return "<span class='label label-success'><b>"+GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getName()+"</b></span>";
+		}else if(status==GeekwayEnum.ProductOrderStatusEnum.COMPLETED.getStatus()){
+			return "<span class='label label-success'><b>"+GeekwayEnum.ProductOrderStatusEnum.COMPLETED.getName()+"</b></span>";
+		}
+	}
+	return "未知";
+} %>
 
 <%
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -162,7 +182,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                 <th>订单号</th>
                                 <th>用户ID</th>
                                 <th>金额</th>
-                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>下单时间</th>
                                 <th class="team-links">操作</th>
 							</tr>
 						</thead>
@@ -179,12 +200,18 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		                        <td><%=notifyOrder.getOutTradeNo()%></td>
 		                        <td><%=notifyOrder.getUserOpenId()%></td>
 		                        <td><%=notifyOrder.getTotalFee()%></td>
+		                        <td><%=displayOrderStatus(notifyOrder.getStatus())%></td>
 		                        <td><%=sdf.format(notifyOrder.getCreateTime())%></td>
 		                        <td class='text-center'>
 		                        	<div class="table-controls">
 										<a href="./orderInfo?outTradeNo=<%=notifyOrder.getOutTradeNo()%>"
 											class="btn btn-link btn-icon btn-xs tip" title=""
 											data-original-title="查 看"><i class="icon-pencil3"></i></a>
+											
+										<a href="./deliverInfo?outTradeNo=<%=notifyOrder.getOutTradeNo()%>"
+											class="btn btn-link btn-icon btn-xs tip" title=""
+											data-original-title="发 货"><i class="icon-pencil3"></i></a>
+											
 									</div>
 								</td>
 							</tr>

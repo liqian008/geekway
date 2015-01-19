@@ -81,8 +81,8 @@ String contextPath = request.getContextPath();
 
 			<div class="container no-bottom" id="productsContainer">
 				<div class="section-title">
-                	<h4>个性时尚腕表</h4>
-                	<em>来自韩国的无指针腕表，最梦幻的情人节礼品</em>
+                	<h4>韩版专区</h4>
+                	<em>just a few words to start</em>
                 </div>
 				<div class="portfolio-item-thumb one-half ">
 					<a href="http://localhost:8080/geekway-pay/product/66">

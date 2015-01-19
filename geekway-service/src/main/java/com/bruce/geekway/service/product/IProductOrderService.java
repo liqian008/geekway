@@ -1,5 +1,6 @@
 package com.bruce.geekway.service.product;
 
+import java.util.Date;
 import java.util.List;
 
 import com.bruce.foundation.service.IFoundationPagingService;
@@ -14,6 +15,20 @@ import com.bruce.geekway.model.UserAddress;
  *
  */
 public interface IProductOrderService extends IFoundationPagingService<ProductOrder, Long, ProductOrderCriteria>{
+	
+	/**
+	 * 查询未支付的订单
+	 * @param time 时间节点（查询该时间节点前的数据）
+	 * @return
+	 */
+//	public List<ProductOrder> queryUnpayOrderList(Date time);
+	
+	/**
+	 * 清除未支付的订单（回滚订单数据）
+	 * @param time 时间节点（清除该时间节点前的数据）
+	 * @return
+	 */
+	public void clearTimeoutOrderList(Date time);
 	
 	
 	/**
@@ -75,18 +90,22 @@ public interface IProductOrderService extends IFoundationPagingService<ProductOr
 	 */
 	public ProductOrder loadByTransactionId(String transactionId);
 	
+	/**
+	 * 标记为订单支付超时
+	 * @return
+	 */
+//	int markTimeout(List<Long> timeoutOrderIdList);
+	public int markTimeout(List<String> outTradeNoList);
 	
 	/**
 	 * 已收到支付通知（更新订单状态&其中的微信id）
-	 * @param status
 	 * @return
 	 */
-	public int markNotifyReceived(short payType, String outTradeNo, String wxTransId);
+	public int markNotifyReceived(short payType, String outTradeNo, String transId);
 	
 	/**
 	 * 标记为等待发货
 	 * @param outTradeNo
-	 * @param status
 	 * @return
 	 */
 	public int markWaitingDelivery(String outTradeNo);
@@ -94,11 +113,13 @@ public interface IProductOrderService extends IFoundationPagingService<ProductOr
 	
 	
 	/**
-	 * 第三方发货成功，更新订单状态为已发货
+	 * 标记订单状态为已发货
 	 * @param status
 	 * @return
 	 */
 	public int markDelivered(String outTradeNo, short deliverType, String deliverSn);
+
+	
 
 	
 }

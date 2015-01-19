@@ -30,6 +30,7 @@
 	<!-- 集中调度列表 -->
 	<util:map id="scheduleTaskMap" key-type="java.lang.String"
 		value-type="java.lang.Integer">
-		<entry key-ref="wxUserSyncTask" value="60"/>
+		<!-- 真正的执行时间 = clearTimeoutOrderTask*period -->
+		<entry key-ref="clearTimeoutOrderTask" value="1"/>
 	</util:map>
 </beans>

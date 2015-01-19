@@ -40,7 +40,7 @@ public class GeekwayEnum {
 	
 	public static enum ProductOrderStatusEnum{
 		//可能还需要其他流程，如维权，退款等
-		SUBMITED((short)10, "待支付"), PAYED((short)20, "已支付"), WAITING_DELIVER((short)30, "待发货"), DELIVERED((short)40, "已发货"), COMPLETED((short)100, "完成"), UNKNOWN((short)0, "关闭");
+		TIMEOUT((short)0, "超时取消"), SUBMITED((short)10, "待支付"), PAYED((short)20, "已支付"), WAITING_DELIVER((short)30, "待发货"), DELIVERED((short)40, "已发货"), COMPLETED((short)100, "完成"), UNKNOWN((short)0, "关闭");
 		
 		private short status;
 		private String name;

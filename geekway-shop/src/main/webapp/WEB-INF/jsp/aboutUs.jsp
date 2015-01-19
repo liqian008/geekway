@@ -71,7 +71,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
             
             <div class="decoration"></div>
             <div class="container no-bottom">
-            	<img class="responsive-image" src="http://mp.weixin.qq.com/misc/getqrcode?fakeid=2396797137&token=70313241&style=17">
+            	<img class="responsive-image" src="http://imgqn.jinwanr.com/images/icon/mp_qrcode.jpg">
             </div>
             
             <div class="container">

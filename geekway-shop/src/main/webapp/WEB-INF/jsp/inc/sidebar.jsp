@@ -16,10 +16,17 @@
 
 		<div class="navigation-items">
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/t/1" class="home-nav">双11促销<em></em></a>
+				<a href="${pageContext.request.contextPath}/t/1" class="home-nav">情人节特供<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/c/1" class="home-nav">热销爆款<em></em></a>
+				<a href="${pageContext.request.contextPath}/c/1" class="home-nav">韩国时尚腕表<em></em></a>
+			</div>
+			<div class="nav-item">
+				<a href="${pageContext.request.contextPath}/c/2" class="home-nav">韩国精美饰品<em></em></a>
+			</div>
+			<!-- 
+			<div class="nav-item">
+				<a href="${pageContext.request.contextPath}/c/1" class="home-nav">热销饰品<em></em></a>
 			</div>
 			<div class="nav-item">
 				<a href="./#" class="features-nav submenu-deploy">韩版<em></em></a>
@@ -27,6 +34,7 @@
 					<a href="${pageContext.request.contextPath}/products/t-1">Introduction <em class="unselected-sub-nav"></em></a>
 				</div>
 			</div>
+			 -->
 			<div class="nav-item">
 				<a href="${pageContext.request.contextPath}/orders" class="home-order">我的订单<em></em></a>
 			</div>

@@ -3,12 +3,14 @@ package com.bruce.geekway.service.product.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.foundation.util.DateUtil;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.ProductOrderMapper;
@@ -19,6 +21,7 @@ import com.bruce.geekway.model.UserAddress;
 import com.bruce.geekway.model.enumeration.GeekwayEnum;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
+import com.bruce.geekway.service.product.ICounterService;
 import com.bruce.geekway.service.product.IDeliveryTemplateService;
 import com.bruce.geekway.service.product.IProductOrderItemService;
 import com.bruce.geekway.service.product.IProductOrderService;
@@ -32,6 +35,8 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	private ProductOrderMapper productOrderMapper;
 	@Autowired
 	private IProductOrderItemService productOrderItemService;
+	@Autowired
+	private ICounterService counterService;
 	@Autowired
 	private IProductVoucherService productVoucherService;
 	@Autowired
@@ -147,6 +152,48 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	}
 	
 	
+//	@Override
+//	public List<ProductOrder> queryUnpayOrderList(Date time) {
+//		if(time==null){
+//			//time为空的情况下，默认取半小时前的时间
+//			time = new Date(System.currentTimeMillis() - (30*DateUtil.TIME_UNIT_MINUTE)); 
+//		}
+//		ProductOrderCriteria criteria = new ProductOrderCriteria();
+//		criteria.createCriteria().andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()).andCreateTimeLessThan(time);
+//		criteria.setOrderByClause("id desc");
+//		return queryByCriteria(criteria);
+//	}
+	
+	@Override
+	public void clearTimeoutOrderList(Date time) {
+		if(time==null){
+			//time为空的情况下，默认取半小时前的时间
+			time = new Date(System.currentTimeMillis() - (30*DateUtil.TIME_UNIT_MINUTE)); 
+		}
+		
+		System.err.println("==============="+time);
+//		ProductOrderCriteria criteria = new ProductOrderCriteria();
+//		criteria.createCriteria().andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()).andCreateTimeLessThan(time);
+//		criteria.setOrderByClause("id desc");
+//		List<ProductOrder> timeoutOrderList = queryByCriteria(criteria);//超时未支付的订单数据
+//		if(CollectionUtils.isNotEmpty(timeoutOrderList)){
+//			for(ProductOrder timeoutOrder : timeoutOrderList){
+//				//修改状态未已超时, TODO log this
+//				//markTimeout(timeoutOrder.getOutTradeNo());
+//				//释放该order对应的产品库存
+//				List<ProductOrderItem> timeoutOrderItemList = null;
+//				if(CollectionUtils.isNotEmpty(timeoutOrderItemList)){
+//					for(ProductOrderItem timeoutOrderItem : timeoutOrderItemList){
+//						int productSkuId = timeoutOrderItem.getProductSkuId();
+//						int amount = timeoutOrderItem.getAmount();
+//						//回滚, TODO log this
+//						counterService.incrProductSkuStock(productSkuId, amount);
+//					}
+//				}
+//			}
+//		}
+	}
+	
 	@Override
 	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'userOpenId-'+#userOpenId+'orderType-'+#orderType", condition="#pageNo<=1")
 	public List<ProductOrder> queryCachedUserOrders(String userOpenId, short orderType, int pageNo, int pageSize, boolean fallload) {
@@ -154,6 +201,20 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		return queryUserOrders(userOpenId, orderType, pageNo, pageSize, fallload);
 	}
 	
+	
+	/**
+	 * 标记为订单支付超时
+	 */
+	@Override
+	public int markTimeout(List<String> outTradeNoList) {
+		ProductOrderCriteria criteria = new ProductOrderCriteria();
+		criteria.createCriteria().andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()).andOutTradeNoIn(outTradeNoList);
+		
+		ProductOrder productOrder = new ProductOrder();
+		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.TIMEOUT.getStatus());
+		return updateByCriteria(productOrder, criteria);
+	}
+
 	/**
 	 * 收到支付通知
 	 */
@@ -166,6 +227,7 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		productOrder.setPayType(payType);
 		productOrder.setTransactionId(transactionId);
 		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
+		productOrder.setPayNotifyTime(new Date());//通知时间
 		return updateByCriteria(productOrder, criteria);
 	}
 	
@@ -176,7 +238,6 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 	public int markWaitingDelivery(String outTradeNo) {
 		ProductOrderCriteria criteria = new ProductOrderCriteria();
 		criteria.createCriteria().andOutTradeNoEqualTo(outTradeNo).andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus());
-		;
 		
 		ProductOrder productOrder = new ProductOrder();
 		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus());
@@ -371,7 +432,13 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 			IDeliveryTemplateService deliveryTemplateService) {
 		this.deliveryTemplateService = deliveryTemplateService;
 	}
-	
-	
+
+	public ICounterService getCounterService() {
+		return counterService;
+	}
+
+	public void setCounterService(ICounterService counterService) {
+		this.counterService = counterService;
+	}
 	
 }
