@@ -376,6 +376,14 @@ body {
 	background-image:url(../images/misc/sidebar-gallery.png);
 }
 
+.home-cat{
+	background-image:url(../images/misc/sidebar-cat.png);	
+}
+
+.home-about{
+	background-image:url(../images/misc/sidebar-about.png);	
+}
+
 .contact-nav{
 	background-image:url(../images/misc/sidebar-mail.png);	
 }

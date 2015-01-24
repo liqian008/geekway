@@ -16,13 +16,13 @@
 
 		<div class="navigation-items">
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/t/1" class="home-nav">情人节特供<em></em></a>
+				<a href="${pageContext.request.contextPath}/t/1" class="home-cat">情人节特供<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/c/1" class="home-nav">韩国时尚腕表<em></em></a>
+				<a href="${pageContext.request.contextPath}/c/1" class="home-cat">韩国时尚腕表<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/c/2" class="home-nav">韩国精美饰品<em></em></a>
+				<a href="${pageContext.request.contextPath}/c/2" class="home-cat">韩国精美饰品<em></em></a>
 			</div>
 			<!-- 
 			<div class="nav-item">
@@ -42,7 +42,7 @@
 				<a href="${pageContext.request.contextPath}/cart/" class="home-voucher">我的购物车<em></em></a>
 			</div>
 			<div class="nav-item">
-				<a href="${pageContext.request.contextPath}/aboutUs" class="contact-nav">关于美妞儿<em></em></a>
+				<a href="${pageContext.request.contextPath}/aboutUs" class="home-about">关于美妞儿<em></em></a>
 			</div>
 			<!-- 
 			<div class="nav-item">

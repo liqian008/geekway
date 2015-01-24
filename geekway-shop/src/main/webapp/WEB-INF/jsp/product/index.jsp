@@ -77,63 +77,84 @@ String contextPath = request.getContextPath();
                 <%}%>
             </div>
             
+
+			<%
+			ProductTag productTag = (ProductTag)request.getAttribute("productTag");
+            if(productTag!=null){
+            %>
             <div class="decoration"></div>
-
-			<div class="container no-bottom" id="productsContainer">
+			<div class="container no-bottom">
 				<div class="section-title">
-                	<h4>个性时尚腕表</h4>
-                	<em>来自韩国的无指针腕表，最梦幻的情人节礼品</em>
+                	<h4>${productTag.name}-个性时尚腕表</h4>
+                	<em>${productTag.name}-来自韩国的无指针腕表，最梦幻的情人节礼品</em>
                 </div>
-				<div class="portfolio-item-thumb one-half ">
-					<a href="http://localhost:8080/geekway-pay/product/66">
-					<img class="responsive-image" src="/geekway-pay/slideby/images/general-nature/2s.jpg"/>
-						<h4>null</h4>
+                
+                <%
+                List<Product> categoryProductList = productTag.getTagProductList();
+                if(categoryProductList!=null&&categoryProductList.size()>0){
+                	int i=0;
+                	for(Product product: categoryProductList){
+                		i++;
+                		String divClass = i%2==0?"last-column":"";
+                %>
+                
+				<div class="one-half <%=divClass%>">
+					<a href="./product/<%=product.getId()%>">
+					<img class="responsive-image" src="<%=product.getCoverPicUrl()%>"/>
+						<h4><%=product.getName()%></h4>
 						<ul id="choose">
 							<li>原 价：&nbsp;<span id="price"
-								class="text-highlight highlight-dark"><del>7.0</del></span>元
+								class="text-highlight highlight-dark"><del><%=product.getOriginPrice()%></del></span>元
 							</li>
 							<li>现 价：&nbsp;<span id="price"
-								class="text-highlight highlight-red">6.0</span>元
+								class="text-highlight highlight-red"><%=product.getPrice()%></span>元
 							</li>
 						</ul></a>
 				</div>
-				<div class="portfolio-item-thumb one-half  last-column">
-					<a href="http://localhost:8080/geekway-pay/product/65">
-					<img class="responsive-image" src="/geekway-pay/slideby/images/general-nature/2s.jpg"/>
-						<h4>null</h4>
-						<ul id="choose">
-							<li>原 价：&nbsp;<span id="price"
-								class="text-highlight highlight-dark"><del>6.0</del></span>元
-							</li>
-							<li>现 价：&nbsp;<span id="price"
-								class="text-highlight highlight-red">5.2</span>元
-							</li>
-						</ul></a>
-				</div>
+				<%}
+	            }%>
 			</div>
+			<%}%>			
 			
+			<%
+			ProductCategory productCategory = (ProductCategory)request.getAttribute("productCategory");
+            if(productCategory!=null){
+            %>
 			<div class="decoration"></div>
-            <div class="container no-bottom">
-            	<div class="section-title">
-                	<h4>Testimonials!</h4>
-                    <em>just a few words to start</em>
-                </div>
-            	<div class="one-half-responsive">
-                	<p class="quote-item">
-                    	<img src="slideby/images/general-nature/6s.jpg" alt="img">
-                        Great product and awesome help to get for this! Many thanks mate!
-                        <em>John Doe - ThemeForest Customer</em>
-                    </p>
-                </div>
-                <div class="one-half-responsive last-column">
-                	<p class="quote-item">
-                    	<img src="slideby/images/general-nature/2s.jpg" alt="img">
-                        Fast support, awesome file, good  docs, this rocks! Thank you for all!
-                        <em>John Doe - ThemeForest Customer</em>
-                    </p>
-                </div>
-            </div> 
 
+			<div class="container no-bottom">
+				<div class="section-title">
+                	<h4>${productCategory.name}-个性时尚腕表</h4>
+                	<em>${productCategory.name}-来自韩国的无指针腕表，最梦幻的情人节礼品</em>
+                </div>
+                
+                <%
+                List<Product> tagProductList = productCategory.getCategoryProductList();
+                if(tagProductList!=null&&tagProductList.size()>0){
+                	int i=0;
+                	for(Product product: tagProductList){
+                		i++;
+                		String divClass = i%2==0?"last-column":"";
+                %>
+                
+				<div class="one-half <%=divClass%>">
+					<a href="./product/<%=product.getId()%>">
+					<img class="responsive-image" src="<%=product.getCoverPicUrl()%>"/>
+						<h4><%=product.getName()%></h4>
+						<ul id="choose">
+							<li>原 价：&nbsp;<span id="price"
+								class="text-highlight highlight-dark"><del><%=product.getOriginPrice()%></del></span>元
+							</li>
+							<li>现 价：&nbsp;<span id="price"
+								class="text-highlight highlight-red"><%=product.getPrice()%></span>元
+							</li>
+						</ul></a>
+				</div>
+				<%}
+                }%>
+			</div>
+			<%} %>
+			
 			<div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
             

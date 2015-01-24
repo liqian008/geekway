@@ -4,14 +4,25 @@ import java.util.List;
 
 public class ProductCategoryBase {
 	
-	private List<SlideImage> slideImageList;
+	
+	private List<Product> categoryProductList;
 
-	public List<SlideImage> getSlideImageList() {
-		return slideImageList;
+	public List<Product> getCategoryProductList() {
+		return categoryProductList;
 	}
 
-	public void setSlideImageList(List<SlideImage> slideImageList) {
-		this.slideImageList = slideImageList;
+	public void setCategoryProductList(List<Product> categoryProductList) {
+		this.categoryProductList = categoryProductList;
 	}
+
+//	private List<SlideImage> slideImageList;
+//
+//	public List<SlideImage> getSlideImageList() {
+//		return slideImageList;
+//	}
+//
+//	public void setSlideImageList(List<SlideImage> slideImageList) {
+//		this.slideImageList = slideImageList;
+//	}
 	
 }

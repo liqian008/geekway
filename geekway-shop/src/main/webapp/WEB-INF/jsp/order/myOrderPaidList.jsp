@@ -43,25 +43,24 @@
     <div id="content" class="page-content">
     	<div class="page-header">
         	<a href="./#" class="deploy-sidebar"></a>
-            <h4 class="uppercase">我的已支付订单</h4>
+            <p class="bread-crumb">我的已支付订单</p>
             <a href="${pageContext.request.contextPath}/cart/" class="deploy-cart"></a>
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="./" class="content-logo"></a>
+        	<a href="${pageContext.request.contextPath}" class="content-logo"></a>
         </div>
         
         <div class="content">
         	<div class="decoration"></div>
         	
-			<div class="container no-bottom">
+			<!-- <div class="container no-bottom">
 				<div class="big-notification blue-notification"> 
 					<h4 class="uppercase">订单介绍</h4>
 					<a href="#" class="close-big-notification">x</a>
-					<p>
-					</p>
+					<p>下单后20分钟内未完成支付，系统将自动取消该订单</p>
 				</div>
-			</div>
+			</div> -->
 			
 			<div class="container no-bottom">
             	<div class="section-title">

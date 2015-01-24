@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.rubyeye.xmemcached.exception.MemcachedException;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,17 +79,6 @@ public class WxProductController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
 	
-	
-//	@RequestMapping(value = {"cacheTest.json"})
-//	public ModelAndView cacheTest(Model model, HttpServletRequest request){
-//		System.out.println(cacheTestService.cacheTest());
-////		System.out.println(cacheTestService.secondCache());
-//		
-//		return ResponseBuilderUtil.SUBMIT_SUCCESS_VIEW;
-//	}
-	
-	
-	
 	/**
 	 * 首页
 	 * @param model
@@ -98,32 +88,32 @@ public class WxProductController {
 	 * @throws InterruptedException 
 	 * @throws TimeoutException 
 	 */
-	@NeedAuthorize
-	@RequestMapping(value = {"/","/index"})
-	public String index(Model model, HttpServletRequest request) throws TimeoutException, InterruptedException, MemcachedException {
-
+	@RequestMapping(value="/")
+	public String index(Model model, HttpServletRequest request) {
+		if(logger.isDebugEnabled()){
+            logger.debug("进入首页");
+        }
+		
+		int tagId = 1;
+		
+		ProductTag productTag = productTagService.loadCachedById(tagId);
+		if(productTag!=null&&productTag.getId()!=null){
+			List<Product> tagProductList = productService.queryCachedProductsByTagId(tagId, 1, 6, false);
+			productTag.setTagProductList(tagProductList);
+			model.addAttribute("productTag", productTag);
+		}
+		
+		int categoryId = 1;
+		ProductCategory productCategory = productCategoryService.loadCachedById(categoryId);
+		if(productCategory!=null&&productCategory.getId()!=null){
+			List<Product> categoryProductList = productService.queryCachedProductsByCategoryId(categoryId, 1, 6, false);
+			productCategory.setCategoryProductList(categoryProductList);
+			model.addAttribute("productCategory", productCategory);
+		}
+		
 		List<SlideImage> slideImageList = slideImageService.queryCachedList(GeekwayEnum.SlideImageTypeEnum.INDEX.getValue(), 0);
 		model.addAttribute("slideImageList", slideImageList);
 		
-		//		boolean memSet = memcachedClient.set("memkey", 60, "test");
-//		System.out.println("mem set result: "+memSet);
-//		String xxx = memcachedClient.get("memkey");
-//		System.out.println("cache get result: "+xxx);
-		
-		try {
-//			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
-//			byte[] bytesData = UploadUtil.file2bytes(file);
-//			String result = uploadService.uploadFile(bytesData, "", file.getName());
-//			System.out.println(result);
-			
-//			UploadImageResult uploadResult = qiniuUploadService.uploadImage(new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg"), "", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
-//			File file = new File("/home/liqian/Desktop/pic/hands-plant-870x450.jpg");
-//			byte[] bytesData = UploadUtil.file2bytes(file);
-//			UploadImageResult imageUploadResult = uploadService.uploadImage(bytesData, "", "hands-plant-870x450.jpg", IUploadService.IMAGE_SPEC_LARGE, IUploadService.IMAGE_SPEC_MEDIUM, IUploadService.IMAGE_SPEC_SMALL);
-//			System.out.println(imageUploadResult);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		return "product/index";
 	}
 	
@@ -134,7 +124,6 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
 	@RequestMapping(value = "c/{categoryId}")
 	public String productListByCategory(Model model, @PathVariable int categoryId, HttpServletRequest request) {
 		ProductCategory productCategory = productCategoryService.loadCachedById(categoryId);
@@ -164,7 +153,6 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
 	@RequestMapping(value = "t/{tagId}")
 	public String productListByTag(Model model, @PathVariable int tagId, HttpServletRequest request) {
 		ProductTag productTag = productTagService.loadCachedById(tagId);
@@ -197,7 +185,6 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
 	@RequestMapping(value = "moreTagProducts.json")
 	public ModelAndView moreTagProducts(HttpServletRequest request, @RequestParam("tagId") int tagId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int pageSize) {
 	    if(logger.isDebugEnabled()){
@@ -239,7 +226,6 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
 	@RequestMapping(value = "moreCategoryProducts.json")
 	public ModelAndView moreCategoryProducts(HttpServletRequest request, @RequestParam("categoryId") int categoryId, @RequestParam(value="pageNo", defaultValue="1") int pageNo, @RequestParam(required=false, defaultValue="6")int pageSize) {
 		if(logger.isDebugEnabled()){
@@ -283,7 +269,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/product/{productId}/{productSkuId}")
 	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
 		Product product = productService.loadCachedById(productId);

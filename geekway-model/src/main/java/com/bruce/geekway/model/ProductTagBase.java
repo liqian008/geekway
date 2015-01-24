@@ -4,14 +4,25 @@ import java.util.List;
 
 public class ProductTagBase {
 	
-	private List<SlideImage> slideImageList;
+	
+	private List<Product> tagProductList;
 
-	public List<SlideImage> getSlideImageList() {
-		return slideImageList;
+	public List<Product> getTagProductList() {
+		return tagProductList;
 	}
 
-	public void setSlideImageList(List<SlideImage> slideImageList) {
-		this.slideImageList = slideImageList;
+	public void setTagProductList(List<Product> tagProductList) {
+		this.tagProductList = tagProductList;
 	}
+	
+//	private List<SlideImage> slideImageList;
+//
+//	public List<SlideImage> getSlideImageList() {
+//		return slideImageList;
+//	}
+//
+//	public void setSlideImageList(List<SlideImage> slideImageList) {
+//		this.slideImageList = slideImageList;
+//	}
 	
 }

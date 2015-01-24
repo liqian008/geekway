@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
+import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.ProductTagMapper;
 import com.bruce.geekway.model.ProductTag;
 import com.bruce.geekway.model.ProductTagCriteria;
@@ -102,7 +103,7 @@ public class ProductTagServiceImpl implements IProductTagService {
 	}
 	
 	@Override
-	@Cacheable(value="storageCache", key="'tag-'+#id")
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE, key="'tag-'+#id")
 	public ProductTag loadCachedById(Integer id) {
 		logger.debug("load tag from db. [tagId:"+id+"]");
 		return loadById(id);
