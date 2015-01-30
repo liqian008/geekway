@@ -18,7 +18,7 @@ import com.bruce.geekway.service.ito.IItoProductOrderService;
 public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 	
 	
-	private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmss");
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 	
 	@Autowired
 	private IItoProductOrderDao itoProductOrderDao;
@@ -91,10 +91,12 @@ public class ItoProductOrderServiceImpl implements IItoProductOrderService{
 
 	
 	@Override
-	public String generateOrderSn() {
-		String uuid = UUID.randomUUID().toString().replace("-", "");
+	public synchronized String generateOrderSn() {
+//		String uuid = UUID.randomUUID().toString().replace("-", "");
+//		return orderTimeStr +"_"+ uuid;
+		
 		String orderTimeStr = SDF.format(new Date());
-		return orderTimeStr +"_"+ uuid;
+		return orderTimeStr;
 	}
 	
 
