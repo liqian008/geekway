@@ -7,55 +7,10 @@
 	
 		<!-- geekway config -->
 
-		<mapper resource="com/bruce/geekway/model/xml/WxUserMapper.xml" /> 
-		<mapper resource="com/bruce/geekway/model/xml/WxWebUserMapper.xml" /> 
-		
-		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
-		<mapper resource="com/bruce/geekway/model/xml/WxCommandExtendMapper.xml" />
-		
-		<!-- 
-		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
-		 -->
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleExtendMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMultimediaMapper.xml" />
-		
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsArticleMapper.xml" />
-		
-		<mapper resource="com/bruce/geekway/model/xml/WxCustomizeMenuMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxBroadcastMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxHistoryMessageMapper.xml" />
-		
 		<mapper resource="com/bruce/geekway/model/xml/WxAccessTokenMapper.xml" />
-		
-		<!-- weixin pay -->
-		<mapper resource="com/bruce/geekway/model/xml/WxPayNotifyOrderMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxPayAlarmMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxPayComplaintMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/WxPayComplaintExtendMapper.xml" />
-		
-		<!-- weixin product -->
-		<mapper resource="com/bruce/geekway/model/xml/ProductCategoryMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductExtendMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductSkuMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductSkuExtendMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/SlideImageMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/SkuPropMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/SkuPropValueMapper.xml" />
-		<!-- 
-		<mapper resource="com/bruce/geekway/model/xml/ProductSkuRelationMapper.xml" />
-		-->
-		<mapper resource="com/bruce/geekway/model/xml/ProductNewsMapper.xml" /> 
-		<mapper resource="com/bruce/geekway/model/xml/ProductTagMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductTagRelationMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductVoucherMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductOrderMapper.xml" />
-		<mapper resource="com/bruce/geekway/model/xml/ProductOrderItemMapper.xml" />
-		
-		<mapper resource="com/bruce/geekway/model/xml/UserAddressMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxAppMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxJsapiMapper.xml" />
+		<!-- <mapper resource="com/bruce/geekway/model/xml/WxAppJsapiRelationMapper.xml" /> -->
 		
 	</mappers>
 

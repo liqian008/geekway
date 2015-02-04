@@ -2,18 +2,18 @@ package com.bruce.geekway.model.wx.json.response;
 
 public class WxJsTicketResult extends WxJsonResult {
 
-	private String js_ticket;
+	private String ticket;
 	private long expires_in;
-
-	/* 自己增加的access的 expires time，基本等同与expires_in + 7200s */
+	
+	/* 自己增加的ticket的 expires time，基本等同与expires_in + 7200s*/
 	private long expiresTime;
 
-	public String getJs_ticket() {
-		return js_ticket;
+	public String getTicket() {
+		return ticket;
 	}
 
-	public void setJs_ticket(String js_ticket) {
-		this.js_ticket = js_ticket;
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
 	}
 
 	public long getExpires_in() {
@@ -31,5 +31,5 @@ public class WxJsTicketResult extends WxJsonResult {
 	public void setExpiresTime(long expiresTime) {
 		this.expiresTime = expiresTime;
 	}
-
+	
 }

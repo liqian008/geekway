@@ -79,5 +79,17 @@
 
 	<context:component-scan base-package="com.bruce.geekway.controller" />
 
+	<mvc:interceptors>
+		<!-- <bean class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+			<property name="cacheMappings">
+				<map>
+					<entry key="/api/wxJsConfig" value="2000"></entry>
+				</map>
+			</property>
+		</bean> -->
+		<bean class="com.bruce.geekway.interceptor.AuthorizeInterceptor">
+		<!-- <bean class="com.bruce.geekway.interceptor.CacheControlHandlerInterceptor"> -->
+		</bean>
+	</mvc:interceptors>
 	
 </beans>

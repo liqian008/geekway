@@ -3,6 +3,8 @@ package com.bruce.geekway.service;
 
 public interface IWxJsapiTicketService{
 	
-	public String getCachedJsTicket();
+	public String getCachedJsTicket(String appId, String secretKey);
+	
+	public String getCachedJsTicket(String accessToken);
 	
 }

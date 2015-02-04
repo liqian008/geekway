@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<mappers>
+	
+		<!-- geekway config -->
+		<mapper resource="com/bruce/geekway/model/xml/WxAccessTokenMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxAppMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/RegUserMapper.xml" />
+		
+	</mappers>
+
+</configuration>

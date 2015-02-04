@@ -79,4 +79,7 @@ public interface ConstWeixin {
 	//微信oauth redirect回调的代理地址
 	public static final String WX_OAUTH_REDIRECT_PROXY_URL = ConfigUtil.getString("weixinmp_oauth_redirect_proxy_url");
 	
+	
+	public static final String WX_JS_API_FULL = "'checkJsApi','onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','hideMenuItems','showMenuItems','hideAllNonBaseMenuItem','showAllNonBaseMenuItem','translateVoice','startRecord','stopRecord','onRecordEnd','playVoice','pauseVoice','stopVoice','uploadVoice','downloadVoice','chooseImage','previewImage','uploadImage','downloadImage','getNetworkType','openLocation','getLocation','hideOptionMenu','showOptionMenu','closeWindow','scanQRCode','chooseWXPay','openProductSpecificView','addCard','chooseCard','openCard'";
+	
 }

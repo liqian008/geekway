@@ -17,8 +17,6 @@ import com.bruce.foundation.admin.security.WebUserDetails;
 import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
-import com.bruce.geekway.service.mp.WxMpMediaUploadService;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 import com.bruce.geekway.utils.UploadUtil;
@@ -29,9 +27,6 @@ public class GeekwayUploadController extends BaseController{
 
 	@Qualifier
 	private IUploadService uploadQiniuService;
-	
-	@Autowired
-	private WxMpMediaUploadService wxMediaUploadService;
 	
 	/**
 	 * 处理ckEditor文件上传

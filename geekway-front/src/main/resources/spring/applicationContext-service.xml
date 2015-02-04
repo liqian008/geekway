@@ -12,38 +12,6 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<bean id="wxCommandService" class="com.bruce.geekway.service.impl.WxCommandServiceImpl">
-		<property name="wxCommandMapper" ref="wxCommandMapper"></property>
-	</bean>
-	<bean id="wxDefaultReplyService" class="com.bruce.geekway.service.impl.WxDefaultReplyServiceImpl">
-		<property name="wxDefaultReplyMapper" ref="wxDefaultReplyMapper"></property>
-	</bean>
-	<bean id="wxMaterialArticleService" class="com.bruce.geekway.service.impl.WxMaterialArticleServiceImpl">
-		<property name="wxMaterialArticleMapper" ref="wxMaterialArticleMapper"></property>
-	</bean>
-	<bean id="wxMaterialNewsService" class="com.bruce.geekway.service.impl.WxMaterialNewsServiceImpl">
-		<property name="wxMaterialNewsMapper" ref="wxMaterialNewsMapper"></property>
-	</bean>
-	<bean id="wxMaterialMultimediaService" class="com.bruce.geekway.service.impl.WxMaterialMultimediaServiceImpl">
-		<property name="wxMaterialMultimediaMapper" ref="wxMaterialMultimediaMapper"></property>
-	</bean>
-	<!-- 本地MpUserService -->
-	<bean id="wxUserService" class="com.bruce.geekway.service.impl.WxUserServiceImpl">
-		<property name="wxUserMapper" ref="wxUserMapper"></property>
-	</bean>
-	
-	<bean id="wxBroadcastService" class="com.bruce.geekway.service.impl.WxBroadcastServiceImpl">
-		<property name="wxBroadcastMapper" ref="wxBroadcastMapper"></property>
-	</bean>
-	<bean id="wxHistoryMessageService" class="com.bruce.geekway.service.impl.WxHistoryMessageServiceImpl">
-		<property name="wxHistoryMessageMapper" ref="wxHistoryMessageMapper"></property>
-	</bean>
-	
-	<!-- weixin web oauth -->
-	<bean id="wxMpOauthService" class="com.bruce.geekway.service.mp.WxMpOauthService">
-	</bean>
-	
-	
 	<!-- 本地上传service -->	
 	<bean id="uploadLocalService" class="com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl">
 	</bean>
@@ -54,12 +22,18 @@
 	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
 	-->
-	<bean id="mpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
+	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
-	<bean id="wxMpUserService" class="com.bruce.geekway.service.mp.WxMpUserService">
-	</bean>
-	<bean id="wxAccessTokenService" class="com.bruce.geekway.service.impl.WxAccessTokenServiceImpl">
+	<bean id="wxMpJsTicketService" class="com.bruce.geekway.service.mp.WxMpJsTicketService">
 	</bean>
 	
+	<bean id="wxAccessTokenService" class="com.bruce.geekway.service.impl.WxAccessTokenServiceImpl">
+	</bean>
+	<bean id="wxJsapiTicketService" class="com.bruce.geekway.service.impl.WxJsapiTicketServiceImpl">
+	</bean>
+	<bean id="wxAppService" class="com.bruce.geekway.service.impl.WxAppServiceImpl">
+	</bean>
+	<bean id="regUserService" class="com.bruce.geekway.service.impl.RegUserServiceImpl">
+	</bean>
 	
 </beans>
