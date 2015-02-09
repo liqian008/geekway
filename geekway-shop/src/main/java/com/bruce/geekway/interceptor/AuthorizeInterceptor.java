@@ -7,7 +7,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Date;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.bruce.foundation.util.CookieUtils;
+import com.bruce.foundation.util.DateUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.foundation.util.UrlUtil;
 import com.bruce.geekway.annotation.NeedAuthorize;
@@ -36,7 +37,6 @@ import com.bruce.geekway.service.IWxWebUserService;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
-import com.bruce.geekway.utils.ResponseUtil;
 import com.bruce.geekway.utils.WxMpOAuthUtil;
 import com.google.gson.Gson;
 
@@ -62,8 +62,17 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		logger.debug("进入拦截器, requestURI: "+request.getRequestURI());
 
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
-
-		String userOpenId = null;
+		
+		//获取cookie中的渠道标志
+		String cookieChannel = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_CHANNEL);
+		if(StringUtils.isBlank(cookieChannel)){
+			String requestChannel = request.getParameter("chn");
+			if(StringUtils.isNotBlank(requestChannel)){
+				CookieUtils.saveCookie(response, ConstFront.COOKIE_KEY_CHANNEL, requestChannel, (int)DateUtil.TIME_UNIT_WEEK, "/", null);
+				cookieChannel = requestChannel;
+			}
+		}
+		
 		logger.debug("weixin oauth debug: " +ConstWeixin.WX_OAUTH_DEBUG);
 		if((ConstWeixin.WX_OAUTH_DEBUG)){//微信调试模式
 			WxWebUser wxWebUser = new WxWebUser();
@@ -116,13 +125,15 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 							wxWebUserService.save(wxWebUser);
 						}
 					}
+					
 					String webUserCookie = JsonUtil.gson.toJson(wxWebUser);
 					try {
 						webUserCookie = URLEncoder.encode(webUserCookie, "utf-8");
 					} catch (UnsupportedEncodingException e) {
 						throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 					}
-					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, webUserCookie);
+//					ResponseUtil.addCookie(response, ConstFront.COOKIE_KEY_WX_USER, webUserCookie);
+					CookieUtils.saveCookie(response, ConstFront.COOKIE_KEY_WX_USER, webUserCookie, (int)DateUtil.TIME_UNIT_MONTH, "/", null);
 					request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);
 					if(logger.isDebugEnabled()){
 						logger.debug("微信oauth回调后进入[拦截器], 换取的userAccessToken，并置入Attribute: "+userAccessToken);
@@ -140,34 +151,41 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			AuthorizeStrategy authorizeStrategy = getAuthorizeStratege(request, handlerMethod);
 			boolean needAuthorize = authorizeStrategy!=null;//调用的接口需要进行登录
 			if (needAuthorize) {//需要用户身份才能访问
-				String webUserJson = null;
+				String cookiedWebUserJson = null;
 				if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//允许从cookie中读取用户信息
 					//检查cookie中是否存在用户信息
-					Cookie[] cookieArray = request.getCookies();
-					if(cookieArray!=null&&cookieArray.length>0){
-						for(Cookie cookie: cookieArray){
-							if(ConstFront.COOKIE_KEY_WX_USER.equals(cookie.getName())){
-								webUserJson = cookie.getValue();
-								if(logger.isDebugEnabled()){
-									logger.debug("webUserJson from cookie:: " +webUserJson);
-								}
-								break;
-							}
-						}
+//					Cookie[] cookieArray = request.getCookies();
+//					if(cookieArray!=null&&cookieArray.length>0){
+//						for(Cookie cookie: cookieArray){
+//							if(ConstFront.COOKIE_KEY_WX_USER.equals(cookie.getName())){
+//								webUserJson = cookie.getValue();
+//								if(logger.isDebugEnabled()){
+//									logger.debug("webUserJson from cookie:: " +webUserJson);
+//								}
+//								break;
+//							}
+//						}
+//					}
+					
+					//读取 cookie中数据
+					cookiedWebUserJson = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_WX_USER);
+					if(logger.isDebugEnabled()){
+						logger.debug("webUserJson from cookie: " +cookiedWebUserJson);
 					}
 				}
 				
 				//从cookie中读出的webUser对象
 				WxWebUser webUser = null;
-				if(webUserJson!=null){
+				if(StringUtils.isNotBlank(cookiedWebUserJson)){
 					try{
-						webUserJson= URLDecoder.decode(webUserJson, "utf-8");
-						webUser = JsonUtil.gson.fromJson(webUserJson, WxWebUser.class);
+						cookiedWebUserJson= URLDecoder.decode(cookiedWebUserJson, "utf-8");
+						webUser = JsonUtil.gson.fromJson(cookiedWebUserJson, WxWebUser.class);
 					}catch(Exception e){
 					}
 				}
 				
 				if (webUser!=null&&StringUtils.isNotBlank(webUser.getOpenId())) {//用户信息存在，写入request，供controller获取使用
+					webUser.setChannel(cookieChannel);//将渠道信息放到用户对象中
 					request.setAttribute(ConstFront.CURRENT_USER, webUser);
 				}else{//用户身份信息不存在，无法访问
 					if(logger.isDebugEnabled()){

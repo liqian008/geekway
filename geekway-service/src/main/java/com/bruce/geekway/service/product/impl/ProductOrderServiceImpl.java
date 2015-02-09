@@ -3,7 +3,6 @@ package com.bruce.geekway.service.product.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,7 +170,7 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 			time = new Date(System.currentTimeMillis() - (30*DateUtil.TIME_UNIT_MINUTE)); 
 		}
 		
-		System.err.println("==============="+time);
+//		System.err.println("==============="+time);
 //		ProductOrderCriteria criteria = new ProductOrderCriteria();
 //		criteria.createCriteria().andStatusEqualTo(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()).andCreateTimeLessThan(time);
 //		criteria.setOrderByClause("id desc");
@@ -315,36 +314,37 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 			throw new GeekwayException(ErrorCode.WX_PRODUCT_ORDER_CREATE_ERROR);
 		}
 		Date currentTime = new Date();
-		String tradeNo = OrderUtil.generateOrderSn(currentTime);
+		String outTradeNo = OrderUtil.generateOrderSn(currentTime);
 		//保存订单
-		productOrder.setOutTradeNo(tradeNo);
+		productOrder.setOutTradeNo(outTradeNo);
 		
-		double productTotalFee = 0;
-		int totalBuyAmount = 0;
+		//TODO 遍历检查购买物品是否有库存
+		int productTotalFee = 0;
+		int totalBuyAmount = 0;//总计购买数量
 		if(orderItemList!=null&&orderItemList.size()>0){
 			for(ProductOrderItem orderItem:orderItemList){
-				double itemTotalPrice = orderItem.getTotalFee();//单品总金额
+				int itemTotalPrice = orderItem.getTotalFee();//单品总金额(单位：分)
 				productTotalFee = productTotalFee + itemTotalPrice;
 				totalBuyAmount = totalBuyAmount + orderItem.getAmount();
-				orderItem.setOutTradeNo(tradeNo);
+				orderItem.setOutTradeNo(outTradeNo);
 				productOrderItemService.save(orderItem);
 			}
 		}
 		productOrder.setTotalFee(productTotalFee);
 		//总数量
 		
-		double transportFee = deliveryTemplateService.calcDeliveryFee(0, productTotalFee, totalBuyAmount, "", addressInfo.getPostProvince(), addressInfo.getPostCity());
+		int transportFee = 0;//暂时免邮费 deliveryTemplateService.calcDeliveryFee(0, productTotalFee, totalBuyAmount, "", addressInfo.getPostProvince(), addressInfo.getPostCity());
 		//优惠券抵扣费用
-		double voucherFee = 0;//voucher==null?0:voucher.getPrice();
+		int voucherFee = 0;//voucher==null?0:voucher.getPrice();
 		//折扣（用于后台改价）
-		double discountFee = 0;
+		int discountFee = 0;//折扣费用(不能为负)
 		
-		productOrder.setTitle("");//TODO
+		productOrder.setTitle("");//TODO 构造订单标题
 		productOrder.setProductFee(productTotalFee);
 		productOrder.setVoucherFee(voucherFee);//折扣费用
 		productOrder.setDiscountFee(discountFee);//折扣费用
 		productOrder.setTransportFee(transportFee);//运费
-		double totalFee = productTotalFee - voucherFee + transportFee;
+		int totalFee = productTotalFee + transportFee - discountFee - voucherFee;
 		productOrder.setTotalFee(totalFee);//总费用
 		productOrder.setStatus(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus());//预支付状态
 		productOrder.setCreateTime(currentTime);
@@ -353,7 +353,7 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		
 		int result = save(productOrder);
 		
-		//下单不扣减库存（支付成功后才扣减）
+		//下单就扣减库存（先前版本：支付成功后才扣减）
 		
 		//标记优惠码状态为正在使用
 //		if(productOrder.getVoucherId()!=null&&productOrder.getVoucherId()>0){
@@ -367,8 +367,6 @@ public class ProductOrderServiceImpl implements IProductOrderService {
 		}
 		return result;
 	}
-	
-	
 	
 	/**
 	 * 将用户地址信息填写到订单对象中

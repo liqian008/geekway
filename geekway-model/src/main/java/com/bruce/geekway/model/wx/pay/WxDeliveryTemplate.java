@@ -121,13 +121,13 @@ public class WxDeliveryTemplate {
 
 	public static class NormalFee {
 		private int startStandards;
-		private double startFees;
+		private int startFees;
 		private int addStandards;
-		private double addFees;
-		private double freeStartFees;
+		private int addFees;
+		private int freeStartFees;
 
-		public NormalFee(int startStandards, double startFees, int addStandards,
-				double addFees, double freeStartFees) {
+		public NormalFee(int startStandards, int startFees, int addStandards,
+				int addFees, int freeStartFees) {
 			super();
 			this.startStandards = startStandards;
 			this.startFees = startFees;
@@ -136,7 +136,7 @@ public class WxDeliveryTemplate {
 			this.freeStartFees = freeStartFees;
 		}
 
-		public double getStartStandards() {
+		public int getStartStandards() {
 			return startStandards;
 		}
 
@@ -144,12 +144,8 @@ public class WxDeliveryTemplate {
 			this.startStandards = startStandards;
 		}
 
-		public double getStartFees() {
+		public int getStartFees() {
 			return startFees;
-		}
-
-		public void setStartFees(int startFees) {
-			this.startFees = startFees;
 		}
 
 		public int getAddStandards() {
@@ -160,23 +156,23 @@ public class WxDeliveryTemplate {
 			this.addStandards = addStandards;
 		}
 
-		public double getAddFees() {
+		public int getAddFees() {
 			return addFees;
 		}
 
-		public void setAddFees(double addFees) {
+		public void setAddFees(int addFees) {
 			this.addFees = addFees;
 		}
 
-		public double getFreeStartFees() {
+		public int getFreeStartFees() {
 			return freeStartFees;
 		}
 
-		public void setFreeStartFees(double freeStartFees) {
+		public void setFreeStartFees(int freeStartFees) {
 			this.freeStartFees = freeStartFees;
 		}
 
-		public void setStartFees(double startFees) {
+		public void setStartFees(int startFees) {
 			this.startFees = startFees;
 		}
 	}
@@ -186,8 +182,8 @@ public class WxDeliveryTemplate {
 		private String destProvince;
 		private String destCity;
 
-		public CustomFee(int startStandards, double startFees, int addStandards,
-				double addFees, double freeStartFees, String destCountry, String destProvince,
+		public CustomFee(int startStandards, int startFees, int addStandards,
+				int addFees, int freeStartFees, String destCountry, String destProvince,
 				String destCity) {
 			super(startStandards, startFees, addStandards, addFees, freeStartFees);
 			this.destCountry = destCountry;

@@ -16,7 +16,11 @@ public interface ConstFront {
     public static final String REQUEST_USER_ATTRIBUTE = "_user";
     
     
-	 /* 购物车在cookie的key*/
+    /* 推广渠道在cookie的key*/
+	public static final String COOKIE_KEY_CHANNEL = "meiniur_chn";
+    
+    
+	/* 购物车在cookie的key*/
 	public static final String COOKIE_KEY_WX_PRODUCT_CART = "wx_product_cart";
     
     

@@ -1,5 +1,7 @@
 package com.bruce.geekway.controller.wx;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.foundation.util.DateUtil;
+import com.bruce.foundation.util.JsonUtil;
+import com.bruce.foundation.util.Md5Util;
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeStrategy;
@@ -41,6 +49,7 @@ import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.model.wx.pay.WxOrderAddressJsObj;
 import com.bruce.geekway.model.wx.pay.WxPayItemJsObj;
+import com.bruce.geekway.model.wx.pay.WxPrepayObj;
 import com.bruce.geekway.service.IWxWebUserService;
 import com.bruce.geekway.service.mp.WxMpOauthService;
 import com.bruce.geekway.service.product.IDeliveryTemplateService;
@@ -51,9 +60,11 @@ import com.bruce.geekway.service.product.IProductSkuService;
 import com.bruce.geekway.service.product.IProductVoucherService;
 import com.bruce.geekway.service.product.IUserAddressService;
 import com.bruce.geekway.utils.CartUtil;
+import com.bruce.geekway.utils.HttpUtil;
 import com.bruce.geekway.utils.RequestUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
 import com.bruce.geekway.utils.ResponseUtil;
+import com.bruce.geekway.utils.SignUtil;
 import com.bruce.geekway.utils.WxAuthUtil;
 
 /**
@@ -223,8 +234,8 @@ public class WxProductOrderController {
 		Date currentTime = new Date();
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
 		String userOpenId = wxWebUser.getOpenId();
-//		String userUnionId = wxWebUser.getUnionId();
 		checkUserOpenId(userOpenId);
+//		String userUnionId = wxWebUser.getUnionId();
 //		checkUserOpenId(userUnionId);
 		
 		//TODO 检查请求参数的正确性
@@ -244,6 +255,7 @@ public class WxProductOrderController {
 				orderItem.setItemFee(productSku.getPrice());
 				orderItem.setTotalFee(productSku.getPrice() * buyAmount[i]);
 				orderItem.setCreateTime(currentTime);
+				//TODO 检查库存
 				orderItem.setAmount(buyAmount[i]);
 				
 				orderItemList.add(orderItem);
@@ -256,6 +268,8 @@ public class WxProductOrderController {
 		//构造预购买的订单数据
 		ProductOrder productOrder = new ProductOrder();
 		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
+		productOrder.setChannel(wxWebUser.getChannel());//推广渠道
+		
 //		productOrder.setUserUnionId(userUnionId);//下单人的unionId
 		
 //		productOrder.setVoucherId(null);//不使用优惠券
@@ -271,7 +285,7 @@ public class WxProductOrderController {
 			if(selfPay){//如果是自己支付的
 				//立刻构造微信所需的支付JS对象，供用户支付
 				String remoteIp = RequestUtil.getRemoteIP(request);
-				WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(productOrder, remoteIp);
+				WxPayItemJsObj wxPayJsObj = buildWxPrepayJsObj(productOrder, userOpenId, remoteIp);//buildWxPayJsObj(productOrder, remoteIp);
 				dataMap.put("wxPayJsObj", wxPayJsObj);
 				dataMap.put("tradeNo", productOrder.getOutTradeNo());
 				dataMap.put("payer", "self");//自己支付
@@ -336,7 +350,7 @@ public class WxProductOrderController {
 		boolean notPayed = GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus() == orderInfo.getStatus();
 		if(notPayed){//如果是未付款状态，需要构造支付js对象(与在buy流程中不同，为保证速度，不在页面中使用ajax构造，而是直接在controller中就构造好)
 			String remoteIp = RequestUtil.getRemoteIP(request);
-			WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
+			WxPayItemJsObj wxPayJsObj = buildWxPrepayJsObj(orderInfo, userOpenId, remoteIp);// buildWxPayJsObj(orderInfo, remoteIp);
 			model.addAttribute("wxPayJsObj", wxPayJsObj);
 		}
 		return "order/orderInfo";
@@ -405,7 +419,7 @@ public class WxProductOrderController {
 		String hostOpenId = hostWebUser.getOpenId();
 		checkUserOpenId(hostOpenId);
 		
-		//TODO 参数签名，用于保护订单不被泄漏
+		//TODO 参数签名，用于保护订单号不被泄漏
 		
 		//加载订单信息
 		ProductOrder orderInfo = productOrderService.loadByTradeNo(tradeNo);
@@ -422,7 +436,6 @@ public class WxProductOrderController {
 			
 			return "order/payForAngleTerms";
 		}
-		
 	}
 	
 	
@@ -472,7 +485,7 @@ public class WxProductOrderController {
 			
 			//未付款状态，需要构造支付js对象
 			String remoteIp = RequestUtil.getRemoteIP(request);
-			WxPayItemJsObj wxPayJsObj = buildWxPayJsObj(orderInfo, remoteIp);
+			WxPayItemJsObj wxPayJsObj = buildWxPrepayJsObj(orderInfo, hostOpenId, remoteIp);//buildWxPayJsObj(orderInfo, remoteIp);
 			model.addAttribute("wxPayJsObj", wxPayJsObj);
 			
 			return "order/payForAngle";
@@ -485,6 +498,7 @@ public class WxProductOrderController {
 	 * @param clientIp
 	 * @return
 	 */
+	@Deprecated
 	private WxPayItemJsObj buildWxPayJsObj(ProductOrder orderInfo, String clientIp) {
 		String banktype = "WX";
 		String productName = orderInfo.getTitle();// 商品名称信息，这里由测试网页填入。
@@ -533,6 +547,86 @@ public class WxProductOrderController {
 		itemJsObj.setPaySign(paySign);
 		return itemJsObj;
 	}
+	
+	
+	/**
+	 * 构造用于预支付的js对象(新版微信统一下单接口)
+	 * @param clientIp
+	 * @return
+	 * @throws IOException 
+	 */
+	private WxPayItemJsObj buildWxPrepayJsObj(ProductOrder orderInfo, String openid, String clientIp) {
+		String productName = orderInfo.getTitle();// 商品名称信息，这里由测试网页填入。
+		String notify_url = ConstPay.NOTIFY_URL_JS_WXPAY;// 支付成功后将通知该地址
+		String out_trade_no = orderInfo.getOutTradeNo();// 订单号，商户需要保证该字段对于本商户的唯一性, 长度<32
+		String spbill_create_ip = clientIp;// 用户浏览器的ip，这个需要在前端获取 
+		String total_fee = String.valueOf((int)(orderInfo.getTotalFee()*100));// 总金额
+		String noncestr = WxAuthUtil.createNoncestr();
+		String trade_type = "JSAPI";
+		//String openid = orderInfo.getUserOpenId();
+		
+		Map<String, String> signMap = new TreeMap<String, String>();
+		signMap.put("appid", ConstWeixin.WX_APP_ID);
+		signMap.put("body", productName);
+		signMap.put("mch_id", ConstWeixin.WX_PAY_PARTERN_ID);
+		signMap.put("nonce_str", noncestr);
+		signMap.put("notify_url", notify_url);
+		signMap.put("openid", openid);
+		signMap.put("out_trade_no", out_trade_no);
+		signMap.put("spbill_create_ip", spbill_create_ip);
+		signMap.put("total_fee", total_fee);
+		signMap.put("trade_type", trade_type);
+		String plainSignText = SignUtil.getOriginalPlainSignText(signMap)+"&key="+ConstWeixin.WX_PAY_PARTERN_KEY;
+		logger.debug("=====plainSignText======"+plainSignText); 
+		String sign = Md5Util.md5Encode(plainSignText).toUpperCase();
+		
+		String postXmlContent = "<xml>"
+				+ "<appid>"+ConstWeixin.WX_APP_ID+"</appid>"
+				+ "<attach></attach>"
+				+ "<body>"+productName+"</body>"
+				+ "<mch_id>"+ConstWeixin.WX_PAY_PARTERN_ID+"</mch_id>"
+				+ "<nonce_str>"+noncestr+"</nonce_str>"
+				+ "<notify_url>"+notify_url+"</notify_url>"
+				+ "<openid>"+openid+"</openid>"
+				+ "<out_trade_no>"+out_trade_no+"</out_trade_no>"
+				+ "<spbill_create_ip>"+spbill_create_ip+"</spbill_create_ip>"
+				+ "<total_fee>"+total_fee+"</total_fee>"
+				+ "<trade_type>"+trade_type+"</trade_type>"
+				+ "<sign>"+sign+"</sign>"
+				+ "</xml>";
+		
+		String prepayResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_PREPAY_API, null, postXmlContent);
+		WxPrepayObj prepayObj = parsePrepayXml(prepayResultStr);
+		logger.info("======prepayResult======"+JsonUtil.gson.toJson(prepayObj));
+		if(prepayObj!=null&&"SUCCESS".equals(prepayObj.getReturn_code())&&"SUCCESS".equals(prepayObj.getResult_code())){
+			String prepayId = prepayObj.getPrepay_id();
+			//生成package的串
+			String finalPackage = "prepay_id="+prepayId;
+			String timestamp = String.valueOf(DateUtil.getUnixTime(new Date()));
+			SortedMap<String, String> paySignMap = new TreeMap<String, String>();
+			paySignMap.put("appId", ConstWeixin.WX_APP_ID);
+			paySignMap.put("timeStamp", timestamp);
+			paySignMap.put("nonceStr", noncestr);
+			paySignMap.put("package", finalPackage);
+			paySignMap.put("signType", "MD5");
+			
+			//生成paySign
+			String paySign = Md5Util.md5Encode(SignUtil.getOriginalPlainSignText(paySignMap)+"&key="+ConstWeixin.WX_PAY_PARTERN_KEY).toUpperCase(); 
+			
+			//构造支付js对象，传到前端，供调起微信支付
+			WxPayItemJsObj itemJsObj = new WxPayItemJsObj();
+			itemJsObj.setAppId(ConstWeixin.WX_APP_ID);
+			itemJsObj.setTimeStamp(timestamp);
+			itemJsObj.setNonceStr(noncestr);
+			itemJsObj.setSignType("MD5");
+			itemJsObj.setPackageValue(finalPackage);
+			itemJsObj.setPaySign(paySign);
+			logger.debug("======itemJsObj======"+JsonUtil.gson.toJson(itemJsObj));
+			return itemJsObj;
+		}
+		return null;
+	}
+	
 	
 	/**
 	 * 构造地址对象
@@ -648,6 +742,7 @@ public class WxProductOrderController {
 	 * 验证优惠券的有效性
 	 * @param userAddress
 	 */
+	@Deprecated
 	private void checkUserVoucher(ProductVoucher voucher) {
 		if(voucher==null){
 			//地址对象为空
@@ -680,6 +775,48 @@ public class WxProductOrderController {
 			addressInfo.setPostAddressDetailInfo(request.getParameter("postAddressDetailInfo"));
 			addressInfo.setPostNationalCode(request.getParameter("postNationalCode"));
 			return addressInfo;
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * 解析返回的prepay数据
+	 * @param response
+	 * @return
+	 */
+	private static WxPrepayObj parsePrepayXml(String response) {
+		if(StringUtils.isNotBlank(response)){
+			SAXReader saxReader = new SAXReader();
+			Document document = null;
+			try {
+				document = saxReader.read(new StringReader(response));
+				Element rootEle = document.getRootElement();
+				if(rootEle!=null){
+					WxPrepayObj obj = new WxPrepayObj();
+					Element return_codeEle = rootEle.element("return_code");
+					Element return_msgEle = rootEle.element("return_msg");
+					Element appidEle = rootEle.element("appid");
+	//				Element mch_idEle = rootEle.element("mch_id");//其他属性暂时不需要，就暂时不构造了
+	//				Element nonce_strEle = rootEle.element("nonce_str");//其他属性暂时不需要，就暂时不构造了
+					Element signEle = rootEle.element("sign");
+					Element result_codeEle = rootEle.element("result_code");
+					Element prepay_idEle = rootEle.element("prepay_id");
+					Element trade_typeEle = rootEle.element("trade_type");
+					
+					obj.setAppid(appidEle.getText());
+					obj.setResult_code(result_codeEle.getText());
+					obj.setReturn_code(return_codeEle.getText());
+					obj.setPrepay_id(prepay_idEle.getText());
+					obj.setTrade_type(trade_typeEle.getText());
+					obj.setReturn_msg(return_msgEle.getText());
+					obj.setSign(signEle.getText());
+					//其他属性暂时不需要，就暂时不构造了
+					return obj;
+				}
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}

@@ -48,15 +48,17 @@ public class ResponseUtil {
 		return "forward:/redirect";
 	}
 	
-	/**
-	 * 设置cookie
-	 * @param response
-	 * @param key
-	 * @param value
-	 */
-	public static void addCookie(HttpServletResponse response, String key, String value){
-		Cookie cookie = new Cookie(key, value);
-		cookie.setMaxAge(Integer.MAX_VALUE);
-		response.addCookie(cookie);
-	}
+//	/**
+//	 * 设置cookie
+//	 * @param response
+//	 * @param key
+//	 * @param value
+//	 */
+//	public static void addCookie(HttpServletResponse response, String key, String value){
+//		Cookie cookie = new Cookie(key, value);
+//		cookie.setMaxAge(Integer.MAX_VALUE);
+//		response.addCookie(cookie);
+//	}
+
+
 }

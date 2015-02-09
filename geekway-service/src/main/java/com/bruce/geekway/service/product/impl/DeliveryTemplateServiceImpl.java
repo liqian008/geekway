@@ -79,10 +79,10 @@ public class DeliveryTemplateServiceImpl implements IDeliveryTemplateService{
 								
 								//转double类型
 								int normalStartStandards = NumberUtils.toInt(normalStartStandardsText, 1);
-								double normalStartFees = NumberUtils.toDouble(normalStartFeesText, 0);
+								int normalStartFees = NumberUtils.toInt(normalStartFeesText, 0);
 								int normalAddStandards = NumberUtils.toInt(normalAddStandardsText, 1);
-								double normalAddFees = NumberUtils.toDouble(normalAddFeesText, 0);
-								double normalFreeStartFees = NumberUtils.toDouble(normalFreeStartFeesText, Double.MAX_VALUE);
+								int normalAddFees = NumberUtils.toInt(normalAddFeesText, 0);
+								int normalFreeStartFees = NumberUtils.toInt(normalFreeStartFeesText, Integer.MAX_VALUE);
 								
 								//构造NormalFee对象
 								NormalFee normalFee = new NormalFee(normalStartStandards, normalStartFees, normalAddStandards, normalAddFees, normalFreeStartFees);
@@ -102,10 +102,10 @@ public class DeliveryTemplateServiceImpl implements IDeliveryTemplateService{
 										
 										//转int类型
 										int startStandards = NumberUtils.toInt(startStandardsText, 1);
-										double startFees = NumberUtils.toDouble(startFeesText, 0);
+										int startFees = NumberUtils.toInt(startFeesText, 0);
 										int addStandards = NumberUtils.toInt(addStandardsText, 1);
-										double addFees = NumberUtils.toDouble(addFeesText, 0);
-										double freeStartFees = NumberUtils.toDouble(freeStartFeesText, Double.MAX_VALUE);
+										int addFees = NumberUtils.toInt(addFeesText, 0);
+										int freeStartFees = NumberUtils.toInt(freeStartFeesText, Integer.MAX_VALUE);
 										//构造CustomFee对象
 										CustomFee customFee = new CustomFee(startStandards, startFees, addStandards, addFees, freeStartFees, destCountry, destProvince, destCity);
 										customFeeList.add(customFee);
@@ -145,13 +145,13 @@ public class DeliveryTemplateServiceImpl implements IDeliveryTemplateService{
 	 * 计算相应的邮费
 	 */
 	@Override
-	public double calcDeliveryFee(int deliveryType, double totalProductFee, int totalAmount, String country, String province, String city) {
+	public int calcDeliveryFee(int deliveryType, double totalProductFee, int totalAmount, String country, String province, String city) {
 		int templateId = 1;
 		WxDeliveryTemplate deliverTemplate = loadDeliveryTemplate(templateId);
 		if(deliverTemplate!=null){//有对应的邮费模板
 			List<TopFee> topFeeList = deliverTemplate.getTopFeeList();
 			if(topFeeList!=null&&topFeeList.size()>0){
-				double deliveryFee = 0;
+				int deliveryFee = 0;
 				for(TopFee topFee: topFeeList){
 					if(deliveryType!=0 && topFee.getDeliveryType()==deliveryType){//确定快递类型
 						//计算费用金额
@@ -175,9 +175,9 @@ public class DeliveryTemplateServiceImpl implements IDeliveryTemplateService{
 		return 0;
 	}
 
-	private double calcTopFeeDelivery(double totalProductFee, int amount, TopFee topFee, String province, String city) {
+	private int calcTopFeeDelivery(double totalProductFee, int amount, TopFee topFee, String province, String city) {
 		//计算费用金额
-		double deliveryFee =0;
+		int deliveryFee =0;
 		List<CustomFee> customFeeList = topFee.getCustomFeeList();
 		if(customFeeList!=null&&customFeeList.size()>0){
 			for(CustomFee customFee: customFeeList){

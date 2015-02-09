@@ -69,6 +69,9 @@ public interface ConstWeixin {
 	
 	
 	// 发货通知api
+	public static final String WX_PAY_PREPAY_API = ConfigUtil.getString("weixinmp_pay_prepay_url");
+		
+	// 发货通知api
 	public static final String WX_PAY_DELIVER_NOTIFY_API = ConfigUtil.getString("weixinmp_pay_deliver_url");
 	// 维权处理api
 	public static final String WX_PAY_COMPLAINT_DEAL_API = ConfigUtil.getString("weixinmp_pay_complaint_deal_url");

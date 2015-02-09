@@ -61,29 +61,29 @@
 	</bean>
 	
 	<!-- wx product service -->
-	<bean id="wxProductCategoryService" class="com.bruce.geekway.service.product.impl.WxProductCategoryServiceImpl">
+	<bean id="productCategoryService" class="com.bruce.geekway.service.product.impl.ProductCategoryServiceImpl">
 	</bean>
-	<bean id="wxProductTagService" class="com.bruce.geekway.service.product.impl.WxProductTagServiceImpl">
+	<bean id="productTagService" class="com.bruce.geekway.service.product.impl.ProductTagServiceImpl">
 	</bean>
-	<bean id="wxProductNewsService" class="com.bruce.geekway.service.product.impl.WxProductNewsServiceImpl">
+	<bean id="productNewsService" class="com.bruce.geekway.service.product.impl.ProductNewsServiceImpl">
 	</bean>
-	<bean id="wxProductService" class="com.bruce.geekway.service.product.impl.WxProductServiceImpl">
+	<bean id="productService" class="com.bruce.geekway.service.product.impl.ProductServiceImpl">
 	</bean>
-	<bean id="wxProductSkuService" class="com.bruce.geekway.service.product.impl.WxProductSkuServiceImpl">
+	<bean id="productSkuService" class="com.bruce.geekway.service.product.impl.ProductSkuServiceImpl">
 	</bean>
-	<bean id="wxSkuPropService" class="com.bruce.geekway.service.product.impl.WxSkuPropServiceImpl">
+	<bean id="skuPropService" class="com.bruce.geekway.service.product.impl.SkuPropServiceImpl">
 	</bean>
-	<bean id="wxSkuPropValueService" class="com.bruce.geekway.service.product.impl.WxSkuPropValueServiceImpl">
+	<bean id="skuPropValueService" class="com.bruce.geekway.service.product.impl.SkuPropValueServiceImpl">
 	</bean>
-	<bean id="wxProductVoucherService" class="com.bruce.geekway.service.product.impl.WxProductVoucherServiceImpl">
+	<bean id="productVoucherService" class="com.bruce.geekway.service.product.impl.ProductVoucherServiceImpl">
 	</bean>
-	<bean id="wxProductOrderService" class="com.bruce.geekway.service.product.impl.WxProductOrderServiceImpl">
+	<bean id="productOrderService" class="com.bruce.geekway.service.product.impl.ProductOrderServiceImpl">
 	</bean>
-	<bean id="wxProductOrderItemService" class="com.bruce.geekway.service.product.impl.WxProductOrderItemServiceImpl">
+	<bean id="productOrderItemService" class="com.bruce.geekway.service.product.impl.ProductOrderItemServiceImpl">
 	</bean>
-	<bean id="wxUserAddressService" class="com.bruce.geekway.service.product.impl.WxUserAddressServiceImpl">
+	<bean id="wxUserAddressService" class="com.bruce.geekway.service.product.impl.UserAddressServiceImpl">
 	</bean>
-	<bean id="wxDeliveryTemplateService" class="com.bruce.geekway.service.product.impl.WxDeliveryTemplateServiceImpl"
+	<bean id="deliveryTemplateService" class="com.bruce.geekway.service.product.impl.DeliveryTemplateServiceImpl"
 	init-method="init">
 	</bean>
 	

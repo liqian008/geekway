@@ -39,7 +39,7 @@ public interface IDeliveryTemplateService{
 	 * @param city
 	 * @return
 	 */
-	public double calcDeliveryFee(int deliveryType, double totalProductFee, int totalAmount, String country, String province, String city);
+	public int calcDeliveryFee(int deliveryType, double totalProductFee, int totalAmount, String country, String province, String city);
 
 	
 	

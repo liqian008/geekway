@@ -55,17 +55,17 @@ public class GenericPayServiceImpl implements IGenericPayService{
 				result = productOrderService.markNotifyReceived(payType, outTradeNo, transactionId);
 				if(result>0){
 					payLogger.info("");
-					List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(outTradeNo);
-					// 遍历单条订单，扣减sku商品的库存数
-					if (orderItemList != null && orderItemList.size() > 0) {
-						for (ProductOrderItem orderItem : orderItemList) {
-							int productSkuId = orderItem.getProductSkuId();
-							int amount = orderItem.getAmount();
-							payLogger.info("对支付对商品库存进行扣减：productSkuId：" + productSkuId+", amount：" + amount);
-							result = counterService.reduceProductSkuStock(productSkuId, amount); 
-							//如果虚拟商品，则可能无需扣减库存数
-						}
-					}
+//					List<ProductOrderItem> orderItemList = productOrderItemService.queryByTradeNo(outTradeNo);
+//					// 遍历单条订单，扣减sku商品的库存数(下单时已经扣减过了，支付后无需无扣减了)
+//					if (orderItemList != null && orderItemList.size() > 0) {
+//						for (ProductOrderItem orderItem : orderItemList) {
+//							int productSkuId = orderItem.getProductSkuId();
+//							int amount = orderItem.getAmount();
+//							payLogger.info("对支付对商品库存进行扣减：productSkuId：" + productSkuId+", amount：" + amount);
+//							result = counterService.reduceProductSkuStock(productSkuId, amount); 
+//							//如果虚拟商品，则可能无需扣减库存数
+//						}
+//					}
 					payLogger.info("更新订单状态为待发货：outTradeNo：" + outTradeNo);
 					result = productOrderService.markWaitingDelivery(outTradeNo);
 					return result;
