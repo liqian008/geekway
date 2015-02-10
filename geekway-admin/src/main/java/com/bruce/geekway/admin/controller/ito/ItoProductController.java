@@ -250,7 +250,7 @@ public class ItoProductController {
 										ItoSku itoSku = new ItoSku();
 										itoSku.setProductId(productId);
 										//设置各sku的缩略图
-										itoSku.setSkuPicUrl(product.getProductPicUrl());
+										//itoSku.setSkuPicUrl(product.getProductPicUrl());//使用空白图片
 										itoSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
 										
 										itoSku.setOriginPrice((double) 0);

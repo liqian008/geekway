@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alipay.model.AlipayNotifyData;
@@ -58,6 +59,7 @@ public class AlipayOrderController {
 	 * @param orderSnSig
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/order/alipayReturn")
 	public String alipayReturn(Model model, AlipayReturnData alipayReturnData, HttpServletRequest request) {
 		
@@ -125,15 +127,17 @@ public class AlipayOrderController {
 					System.out.println("=========alipayReturn=====7====");
 					AlipayReturnResult alipayReturnResult = new AlipayReturnResult(null, alipayProductOrder.getOrderSn());
 					System.out.println("=========alipayReturn=====alipayReturnResult===="+alipayReturnResult.toString());
-					model.addAttribute("alipayReturnResult", alipayReturnResult.toString());
-					return "ito/alipay/returnResult";
+//					model.addAttribute("alipayReturnResult", alipayReturnResult.toString());
+					//return "ito/alipay/returnResult";
+					return alipayReturnResult.toString();
 				}
 			}
 		}
 		System.out.println("=========alipayReturn=====8====");
 		AlipayReturnResult alipayReturnResult = new AlipayReturnResult(AlipayReturnErrorCodeEnum.OUT_SYSTEM_ERROR, null);
-		model.addAttribute("alipayReturnResult", alipayReturnResult.toString());
-		return "ito/alipay/returnResult";
+//		model.addAttribute("alipayReturnResult", alipayReturnResult.toString());
+//		return "ito/alipay/returnResult";
+		return alipayReturnResult.toString();
 	}
 	
 	

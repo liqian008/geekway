@@ -12,7 +12,7 @@
 		<title>NUTS Machine互动游戏</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css" />
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css?v=1" />
 
 		<script type="text/javascript" src="<%=request.getContextPath()%>/mobile/js/jquery.min.js"></script>
 		<!-- 
@@ -40,7 +40,6 @@
 					
 					<img src="<%=request.getContextPath()%>/mobile/img/ito/title.jpg">
 					
-					
 					<%
 					String loadingImgUrl = request.getContextPath()+"/mobile/img/ito/qrcode/loading.jpg";
 					String errorImgUrl = request.getContextPath()+"/mobile/img/ito/qrcode/error.jpg";
@@ -65,20 +64,27 @@
 			   			});
 						</script>
 					<%}%>
-					<div style="text-align:center"><img id="subscribedQrcode" src="<%=subscribedQrcodeUrl%>" style="width:60%"></div>
-					<h5 style="text-align:center">请将二维码对准操纵杆上方的扫描端口，扫描成功启动游戏</h5>
+					<div style="text-align:center">
+						<img id="subscribedQrcode" src="<%=subscribedQrcodeUrl%>" style="width:60%">
+						<img src="<%=request.getContextPath()%>/mobile/img/ito/usage.jpg">
+					</div>
+					<!-- <h5 style="text-align:center">请将二维码对准操纵杆上方的扫描端口，扫描成功启动游戏</h5> -->
 					
 					<%
 					String regedQrcodeUrl = (String) request.getAttribute("regedQrcodeUrl");
 					if(regedQrcodeUrl!=null){//不为空的情况下直接展示
 					%>
-						<div style="text-align:center"><img id="regedQrcode" src="<%=regedQrcodeUrl%>" style="width:60%"></div>
+						<div style="text-align:center">
+							<img id="regedQrcode" src="<%=regedQrcodeUrl%>" style="width:60%">
+						</div>
 						<h5 style="text-align:center">注册成功奖励二维码游戏机会</h5>
 					<%}else{
 						Boolean alreadyReged = (Boolean)request.getAttribute("alreadyReged");
 						if(alreadyReged!=null&&alreadyReged){//注册成功，但未取到图片
 						%>
-						<div style="text-align:center"><img id="regedQrcode" src="<%=loadingImgUrl%>" style="width:60%"></div>
+						<div style="text-align:center">
+							<img id="regedQrcode" src="<%=loadingImgUrl%>" style="width:60%">
+						</div>
 						<h5 style="text-align:center">注册成功奖励二维码游戏机会</h5>
 						
 						<script>
@@ -95,19 +101,21 @@
 							}
 			   			});
 						</script>
-						
-						
 						<%}else{//未注册，可以进行注册%>
-						<h5>请先完成第一次游戏，再点击下方“再玩一次”按钮，每个微信帐号仅有两次游戏机会。</h5>
- 						<a href="./register" id="submitBtn" class="ito-buttons grey">再玩一次</a>
+						<img src="<%=request.getContextPath()%>/mobile/img/ito/comment.jpg">
+						<!-- <h5>请先完成第一次游戏，再点击下方“再玩一次”按钮，每个微信帐号仅有两次游戏机会。</h5> -->
+ 						<div style="padding:0px 40px">
+ 							<a href="./register" id="submitBtn" class="ito-buttons grey">再玩一次</a>
+ 						</div>
 					<%}
 					}%>
 					
 					<br/> 
-					<h5>NUTS by概念店地址:</h5>
-					<h5>上海市武康路216号</h5>
 					<img src="<%=request.getContextPath()%>/mobile/img/ito/map.jpg">
-					<h5>*本游戏目前仅在上海地区开通。</h5>
+					
+					<!-- <h5>NUTS by概念店地址:</h5>
+					<h5>上海市武康路216号</h5>
+					<h5>*本游戏目前仅在上海地区开通。</h5> -->
 				</article>
 			</div>
 			<!--<div class="subFooter">Copyright 2013. All rights reserved.</div>-->

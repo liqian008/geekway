@@ -12,7 +12,7 @@
 		<title>NUTS Machine互动游戏@XTD</title>
 		<link href="img/favicon.ico" rel="shortcut icon" type="image/x-icon">
 
-		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css" />
+		<link type="text/css" rel="stylesheet" href="<%=request.getContextPath()%>/mobile/css/style.css?v=2" />
 
 		<script type="text/javascript" src="<%=request.getContextPath()%>/mobile/js/jquery.min.js"></script>
 		<!-- 
@@ -38,7 +38,7 @@
 						NUTS Machine互动游戏二维码区域
 					</div> -->
 					
-					<img src="<%=request.getContextPath()%>/mobile/img/ito/title_xtd.jpg">
+					<img src="<%=request.getContextPath()%>/mobile/img/ito/title_xtd.jpg"> 
 					
 					<%
 					String loadingImgUrl = request.getContextPath()+"/mobile/img/ito/qrcode/loading.jpg";
@@ -64,19 +64,16 @@
 			   			});
 						</script>
 					<%}%>
-					<div style="text-align:center"><img id="subscribedQrcode" src="<%=subscribedQrcodeUrl%>" style="width:60%"></div>
-					<h5 style="text-align:center">请将二维码对准操纵杆上方的扫描端口，扫描成功启动游戏</h5>
+					<div style="text-align:center">
+						<img id="subscribedQrcode" src="<%=subscribedQrcodeUrl%>" style="width:60%">
+						<img src="<%=request.getContextPath()%>/mobile/img/ito/usage.jpg">
+					</div>
+					<!-- <h5 style="text-align:center">请将二维码对准操纵杆上方的扫描端口，扫描成功启动游戏</h5> -->
 					
 					<br/> 
 					
 					<img src="<%=request.getContextPath()%>/mobile/img/ito/map_xtd.jpg">
 					
-					<!-- 	
-					<h5>NUTS by概念店地址:</h5>
-					<h5>地址：上海市太仓路181弄新天地北里25号</h5>
-					<h5>*礼品兑换 优惠券使用方法请致电或至XTD新天地礼品店咨询店员。</h5>
-					<h5>*本游戏目前仅在上海地区开通。</h5>
-					 -->
 				</article>
 			</div>
 			<!--<div class="subFooter">Copyright 2013. All rights reserved.</div>-->

@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.bruce.geekway.model.ItoSku;
 import com.bruce.geekway.model.ItoSkuPropValue;
 import com.bruce.geekway.service.ito.IItoProductSkuValueService;
 import com.bruce.geekway.service.ito.IItoSkuPropValueService;

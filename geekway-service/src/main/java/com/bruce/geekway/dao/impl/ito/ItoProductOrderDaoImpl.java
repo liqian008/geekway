@@ -63,6 +63,7 @@ public class ItoProductOrderDaoImpl implements IItoProductOrderDao, Initializing
     public List<ItoProductOrder> queryOrderListByPayType(short payType){
     	ItoProductOrderCriteria criteria = new ItoProductOrderCriteria();
    		criteria.createCriteria().andPayTypeEqualTo(payType);
+   		criteria.setOrderByClause(" id desc");
    		return itoProductOrderMapper.selectByExample(criteria);
     }
     
