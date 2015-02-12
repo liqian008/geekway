@@ -14,6 +14,7 @@ public interface ConstWeixin {
 	/*支付财付通的id&key*/
 	public static final String WX_PAY_PARTERN_ID = ConfigUtil.getString("weixinmp_pay_partner_id");
 	public static final String WX_PAY_PARTERN_KEY = ConfigUtil.getString("weixinmp_pay_partner_key");
+	
 	public static final String WX_PAY_SIGN_KEY = ConfigUtil.getString("weixinmp_pay_sign_key");
 	
 	//开发模式的url

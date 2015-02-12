@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.rubyeye.xmemcached.exception.MemcachedException;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -269,7 +268,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
+	//@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/product/{productId}/{productSkuId}")
 	public String productInfo(Model model, @PathVariable int productId, @PathVariable int productSkuId, HttpServletRequest request) {
 		Product product = productService.loadCachedById(productId);
@@ -340,7 +339,7 @@ public class WxProductController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
+//	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
 	@RequestMapping(value = "/product/{productId}")
 	public String productInfo(Model model, @PathVariable int productId, HttpServletRequest request) {
 		return productInfo(model, productId, 0, request);

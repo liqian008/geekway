@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bruce.foundation.util.Md5Util;
 import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.UploadUtil;
@@ -65,6 +66,12 @@ public class TempController {
 		return "temp";
 	}
 	
+	
+	public static void main(String[] args) {
+		String text = Md5Util.md5Encode("Geekway,Meiniur_liqian008");
+		System.out.println(text);
+		System.out.println(text.length());
+	}
 	
 	
 	

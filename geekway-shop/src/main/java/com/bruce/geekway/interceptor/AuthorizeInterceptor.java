@@ -79,6 +79,8 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			wxWebUser.setOpenId("debug_openid");
 			wxWebUser.setNickname("Debug模式");
 			wxWebUser.setUnionId("debug_unionid");
+			wxWebUser.setHeadImgUrl("http://tp3.sinaimg.cn/1407260150/180/5614558400/1");
+			//http://tp3.sinaimg.cn/1420410030/180/5682952735/0
 			
 			//attribute中存放json对象
 			request.setAttribute(ConstFront.CURRENT_USER, wxWebUser);

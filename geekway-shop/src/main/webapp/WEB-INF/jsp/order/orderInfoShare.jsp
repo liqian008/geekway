@@ -37,6 +37,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
+<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 <body>
 
@@ -84,9 +85,9 @@
 
 				<p class="quote-item">
 					<%
-						List<ProductOrderItem> orderItemList = (List<ProductOrderItem>)request.getAttribute("orderItemList"); 
-								if(orderItemList!=null&&orderItemList.size()>0){
-									for(ProductOrderItem orderItem: orderItemList){
+					List<ProductOrderItem> orderItemList = (List<ProductOrderItem>)request.getAttribute("orderItemList"); 
+					if(orderItemList!=null&&orderItemList.size()>0){
+						for(ProductOrderItem orderItem: orderItemList){
 					%>  
 						<img src="<%=orderItem.getProductPicUrl()%>" alt="<%=orderItem.getProductName() %>">
 						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>
@@ -111,7 +112,7 @@
 				</div>
             	<ul id="choose">
             		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">${orderInfo.postName}</span></li>
-	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">${orderInfo.postMobile}</span></li>
+	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-blue">${orderInfo.postMobile}</span></li>
 	            	<li>收货地址：&nbsp;<span id="postAddress" class="text-highlight highlight-dark">${orderInfo.postProvince}${orderInfo.postCity}${orderInfo.postCountries}-${orderInfo.postAddressDetailInfo}</span></li>
 	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">${orderInfo.postCode}</span></li>
 	            </ul>
@@ -121,15 +122,14 @@
                 运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
                 
                 <%
-                                 	ProductOrder productOrder = (ProductOrder)request.getAttribute("orderInfo");
-                                                 if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
-                                 %>
+               	ProductOrder productOrder = (ProductOrder)request.getAttribute("orderInfo");
+                if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
+               	%>
                 折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
                 <%}%>
                 
                 合计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
-                
             </div>
             
             
@@ -143,7 +143,6 @@
 				</div>
 			</div>
             <div class="decoration"></div>
-            
             
             <jsp:include page="../inc/footer.jsp"></jsp:include>
             

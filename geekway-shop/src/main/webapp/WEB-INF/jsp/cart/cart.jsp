@@ -37,6 +37,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
+<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 <body>
 
@@ -72,7 +73,7 @@
 				List<CartProductSku> cartItemList = (List<CartProductSku>)request.getAttribute("cartItemList");
 				if(cartItemList!=null&&cartItemList.size()>0){
 				%>
-				<form action="${pageContext.request.contextPath}/buy?showwxpaytitle=1" method="get" id="cartForm"> 	 
+				<form action="${pageContext.request.contextPath}/pay/buy?showwxpaytitle=1" method="get" id="cartForm"> 	 
 				<input type="hidden" name="cartBuy" value="1"/>
 				<%
 				for(CartProductSku cartItem: cartItemList){

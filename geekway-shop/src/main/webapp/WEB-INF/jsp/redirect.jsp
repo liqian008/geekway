@@ -48,6 +48,7 @@ if(redirectUrl==null||"".equals(redirectUrl)){
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
+<jsp:include page="./inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 <body>
 

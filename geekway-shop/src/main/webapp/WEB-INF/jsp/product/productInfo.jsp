@@ -35,10 +35,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
+<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 
 <%
-	//选中的sku属性map
+//选中的sku属性map
 ProductSku currentProductSku = (ProductSku)request.getAttribute("currentProductSku");
 Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>)request.getAttribute("skuGroupMap");
 %>
@@ -230,7 +231,7 @@ Map<Integer, List<SkuPropValue>> skuGroupMap = (Map<Integer, List<SkuPropValue>>
 							alert("商品选择有误，请检查后重新提交");
 							return;
 						}
-						location.href= "${pageContext.request.contextPath}/buy?buyAmount="+buyAmount+"&productSkuId="+productSkuId+"&showwxpaytitle=1";
+						location.href= "${pageContext.request.contextPath}/pay/buy?buyAmount="+buyAmount+"&productSkuId="+productSkuId+"&showwxpaytitle=1";
 					});
 					
 					//点击购买操作

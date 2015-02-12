@@ -37,6 +37,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
+<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 
 <%

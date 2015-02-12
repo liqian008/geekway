@@ -36,6 +36,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
+<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 <body>
 
@@ -76,9 +77,9 @@
 					
 				<p class="quote-item">
 					<%
-						List<ProductOrderItem> orderItemList = (List<ProductOrderItem>)request.getAttribute("orderItemList"); 
-								if(orderItemList!=null&&orderItemList.size()>0){
-									for(ProductOrderItem orderItem: orderItemList){
+					List<ProductOrderItem> orderItemList = (List<ProductOrderItem>)request.getAttribute("orderItemList"); 
+					if(orderItemList!=null&&orderItemList.size()>0){
+						for(ProductOrderItem orderItem: orderItemList){
 					%>  
 						<img src="<%=orderItem.getProductPicUrl()%>" alt="<%=orderItem.getProductName() %>">
 						<span class="text-highlight highlight-dark"><a href="${pageContext.request.contextPath}/product/<%=orderItem.getProductId()%>/<%=orderItem.getProductSkuId()%>"><%=orderItem.getProductName()%></a></span>
@@ -103,7 +104,7 @@
 				</div>
             	<ul id="choose">
             		<li>姓 名：&nbsp;<span id="postName" class="text-highlight highlight-green">${orderInfo.postName}</span></li>
-	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-red">${orderInfo.postMobile}</span></li>
+	            	<li>手机号：&nbsp;<span id="postMobile" class="text-highlight highlight-blue">${orderInfo.postMobile}</span></li>
 	            	<li>收货地址：&nbsp;<span id="postAddress" class="text-highlight highlight-dark">${orderInfo.postProvince}${orderInfo.postCity}${orderInfo.postCountries}-${orderInfo.postAddressDetailInfo}</span></li>
 	            	<li>邮 编：&nbsp;<span id="postCode" class="text-highlight highlight-yellow">${orderInfo.postCode}</span></li>
 	            </ul>
@@ -113,31 +114,68 @@
                 运费：&nbsp;<span id="deliveryFee" class="text-highlight highlight-red">${orderInfo.transportFee}</span>元&nbsp;|&nbsp; 
                 
                 <%
-                                 	ProductOrder productOrder = (ProductOrder)request.getAttribute("orderInfo");
-                                                 if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
-                                 %>
+               	ProductOrder productOrder = (ProductOrder)request.getAttribute("orderInfo");
+                if(productOrder.getDiscountFee()!=null&&productOrder.getDiscountFee()>0){
+               	%>
                 折扣：&nbsp;<span class="text-highlight highlight-dark">-${orderInfo.discountFee}</span>元&nbsp;|&nbsp;
-                <%
-                	}
-                %>
+                <%}%>
                 
                 总计：&nbsp;<span id="totalPrice" class="text-highlight highlight-green">${orderInfo.totalFee}</span>元
                 </h5>
-                
             </div>
             
-            
-            <%
-                                    	ProductOrder orderInfo = (ProductOrder)request.getAttribute("orderInfo");
-                                                if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
-                                    %>
             <div class="decoration"></div>
-        	<div class="container center-text">
+        	<div class="container">
+            <%
+           	ProductOrder orderInfo = (ProductOrder)request.getAttribute("orderInfo");
+            if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus()){
+           	%>
+            	<h5>订单状态：未支付</h5>
             	<a href="javascript:void(0)" id="wxpayBtn" class="button-big button-green button-fullscreen">自付【微支付】</a>
-               	<a href="javascript:void(0)" id="alipayBtn" class="button-big button-orange button-fullscreen">自付【支付宝】</a>
-               	<a href="javascript:void(0)" id="shareOrderBtn" class="button-big button-blue button-fullscreen">让土豪朋友【代付】</a>
-        	</div> 
+               	<!-- <a href="javascript:void(0)" id="alipayBtn" class="button-big button-orange button-fullscreen">自付【支付宝】</a> -->
+               	<a href="javascript:void(0)" id="shareOrderBtn" class="button-big button-orange button-fullscreen">让土豪朋友【代付】</a>
+        		<p class="left-text"> 
+               		说明：
+               		当您使用“代付”功能时，页面将弹起［微信授权］，以便于获取您的个人资料，供您的“土豪朋友”确认。
+               	</p>
+        	<%
+			WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
+			%>
+			<script language="javascript">
+				// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+				document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+					//公众号支付
+					jQuery('a#wxPay').click(function(e) {
+						WeixinJSBridge.invoke('getBrandWCPayRequest', {
+							"appId" : "<%=itemJsObj.getAppId()%>", //公众号名称，由商户传入
+							"timeStamp" : "<%=itemJsObj.getTimeStamp()%>", //时间戳
+							"nonceStr" : "<%=itemJsObj.getNonceStr()%>", //随机串
+							"package" : "<%=itemJsObj.getPackageValue()%>",//扩展包
+							"signType" : "<%=itemJsObj.getSignType()%>", //微信签名方式:1.sha1
+							"paySign" : "<%=itemJsObj.getPaySign()%>"
+						//微信签名
+						}, function(res) {
+							if (res.err_msg == "get_brand_wcpay_request:ok") {
+								payComplete();
+							}
+							// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+							//因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
+						});
+					});
+				}, false);
+			</script>
+        	<%}else if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.TIMEOUT.getStatus()){%>
+        		<a href="javascript:void(0)" class="button-big button-red button-fullscreen">订单支付超时，自动取消</a>
+        	<%}else if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.PAYED.getStatus()){%>
+        		<a href="javascript:void(0)" class="button-big button-dark button-fullscreen">订单已支付，待确认</a>
+        	<%}else if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.WAITING_DELIVER.getStatus()){%>
+        		<a href="javascript:void(0)" class="button-big button-orange button-fullscreen">订单已确认，等待发货</a>
+        	<%}else if(orderInfo.getStatus()==GeekwayEnum.ProductOrderStatusEnum.DELIVERED.getStatus()){%>
+        		<h5>订单状态：已发货，等待买家收货</h5>
+        		<a href="javascript:void(0)" class="button-big button-blue button-fullscreen">查看物流状态</a>
         	<%}%>
+        	
+        	</div>
             <div class="decoration"></div>
             <jsp:include page="../inc/footer.jsp"></jsp:include>
             
@@ -145,34 +183,6 @@
     </div>  
 </div>
 </body>
-
-<%
-WxPayItemJsObj itemJsObj = (WxPayItemJsObj)request.getAttribute("wxPayJsObj");
-%>
-
-<script language="javascript">
-	// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
-	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-		//公众号支付
-		jQuery('a#wxPay').click(function(e) {
-			WeixinJSBridge.invoke('getBrandWCPayRequest', {
-				"appId" : "<%=itemJsObj.getAppId()%>", //公众号名称，由商户传入
-				"timeStamp" : "<%=itemJsObj.getTimeStamp()%>", //时间戳
-				"nonceStr" : "<%=itemJsObj.getNonceStr()%>", //随机串
-				"package" : "<%=itemJsObj.getPackageValue()%>",//扩展包
-				"signType" : "<%=itemJsObj.getSignType()%>", //微信签名方式:1.sha1
-				"paySign" : "<%=itemJsObj.getPaySign()%>"
-			//微信签名
-			}, function(res) {
-				if (res.err_msg == "get_brand_wcpay_request:ok") {
-					payComplete();
-				}
-				// 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-				//因此微信团队建议，当收到ok返回时，向商户后台询问是否收到交易成功的通知，若收到通知，前端展示交易成功的界面；若此时未收到通知，商户后台主动调用查询订单接口，查询订单的当前状态，并反馈给前端展示相应的界面。
-			});
-		});
-	}, false);
-</script>
 
 
 </html>

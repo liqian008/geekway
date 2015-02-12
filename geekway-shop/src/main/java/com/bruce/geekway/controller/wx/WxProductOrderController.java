@@ -72,7 +72,7 @@ import com.bruce.geekway.utils.WxAuthUtil;
  * @author liqian
  *
  */
-
+@RequestMapping(value="/pay")
 @Controller
 public class WxProductOrderController {
 	
@@ -151,7 +151,7 @@ public class WxProductOrderController {
 	 * @param request
 	 * @return
 	 */
-	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_USERINFO)
+	@NeedAuthorize(AuthorizeScope=AuthorizeScope.WX_SNSAPI_BASE, authorizeStrategy=AuthorizeStrategy.COOKIE_DENY)
 	@RequestMapping(value = "/buy")
 	public String buy(Model model, @RequestParam(required=false)String code, int productSkuId[], int buyAmount[], @RequestParam(required=false, defaultValue="0")int cartBuy, HttpServletRequest request, HttpServletResponse response) {
 //		String userOpenId = (String) request.getAttribute(ConstFront.CURRENT_USER);
@@ -196,8 +196,12 @@ public class WxProductOrderController {
 			//标记为从购物车购买的
 			model.addAttribute("cartBuy", cartBuy);
 			
+			if(logger.isDebugEnabled()){
+				logger.debug("request.getRequestURL(): "+request.getRequestURL());
+				logger.debug("request.getQueryString(): "+request.getQueryString());
+			}
 			//获取当前页面url，用于构造地址签名
-			String currentUrl = request.getRequestURL().toString()+"&"+request.getQueryString();
+			String currentUrl = request.getRequestURL().toString()+"?"+request.getQueryString();
 			System.out.println("userAccessToken: "+userAccessToken);
 			WxOrderAddressJsObj orderAddressJsObj = buildWxOrderAddressJsObj(userAccessToken, currentUrl);
 			model.addAttribute("orderAddressJsObj", orderAddressJsObj);
@@ -235,7 +239,7 @@ public class WxProductOrderController {
 		WxWebUser wxWebUser = (WxWebUser) request.getAttribute(ConstFront.CURRENT_USER);
 		String userOpenId = wxWebUser.getOpenId();
 		checkUserOpenId(userOpenId);
-//		String userUnionId = wxWebUser.getUnionId();
+		String userUnionId = wxWebUser.getUnionId();
 //		checkUserOpenId(userUnionId);
 		
 		//TODO 检查请求参数的正确性
@@ -268,11 +272,9 @@ public class WxProductOrderController {
 		//构造预购买的订单数据
 		ProductOrder productOrder = new ProductOrder();
 		productOrder.setUserOpenId(userOpenId);//下单人的用户身份
+		productOrder.setUserUnionId(userUnionId);//下单人的unionId
+		
 		productOrder.setChannel(wxWebUser.getChannel());//推广渠道
-		
-//		productOrder.setUserUnionId(userUnionId);//下单人的unionId
-		
-//		productOrder.setVoucherId(null);//不使用优惠券
 		
 		//提交订单
 		int result = productOrderService.createOrder(productOrder, addressInfo, orderItemList);
@@ -347,8 +349,7 @@ public class WxProductOrderController {
 		model.addAttribute("orderItemList", orderItemList);
 		
 		//检查订单状态
-		boolean notPayed = GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus() == orderInfo.getStatus();
-		if(notPayed){//如果是未付款状态，需要构造支付js对象(与在buy流程中不同，为保证速度，不在页面中使用ajax构造，而是直接在controller中就构造好)
+		if(GeekwayEnum.ProductOrderStatusEnum.SUBMITED.getStatus() == orderInfo.getStatus()){//如果是未付款状态，需要构造支付js对象(与在buy流程中不同，为保证速度，不在页面中使用ajax构造，而是直接在controller中就构造好)
 			String remoteIp = RequestUtil.getRemoteIP(request);
 			WxPayItemJsObj wxPayJsObj = buildWxPrepayJsObj(orderInfo, userOpenId, remoteIp);// buildWxPayJsObj(orderInfo, remoteIp);
 			model.addAttribute("wxPayJsObj", wxPayJsObj);
@@ -382,7 +383,6 @@ public class WxProductOrderController {
 		model.addAttribute("orderItemList", orderItemList);
 		
 		return "order/orderInfoShare";
-			
 	}
 	
 //	/**
@@ -556,18 +556,18 @@ public class WxProductOrderController {
 	 * @throws IOException 
 	 */
 	private WxPayItemJsObj buildWxPrepayJsObj(ProductOrder orderInfo, String openid, String clientIp) {
-		String productName = orderInfo.getTitle();// 商品名称信息，这里由测试网页填入。
+		String orderTitle = "测试产品"+orderInfo.getTitle();// 商品名称信息，这里由测试网页填入。
 		String notify_url = ConstPay.NOTIFY_URL_JS_WXPAY;// 支付成功后将通知该地址
 		String out_trade_no = orderInfo.getOutTradeNo();// 订单号，商户需要保证该字段对于本商户的唯一性, 长度<32
 		String spbill_create_ip = clientIp;// 用户浏览器的ip，这个需要在前端获取 
-		String total_fee = String.valueOf((int)(orderInfo.getTotalFee()*100));// 总金额
+		String total_fee = String.valueOf(orderInfo.getTotalFee());// 总金额
 		String noncestr = WxAuthUtil.createNoncestr();
 		String trade_type = "JSAPI";
 		//String openid = orderInfo.getUserOpenId();
 		
 		Map<String, String> signMap = new TreeMap<String, String>();
 		signMap.put("appid", ConstWeixin.WX_APP_ID);
-		signMap.put("body", productName);
+		signMap.put("body", orderTitle);
 		signMap.put("mch_id", ConstWeixin.WX_PAY_PARTERN_ID);
 		signMap.put("nonce_str", noncestr);
 		signMap.put("notify_url", notify_url);
@@ -582,8 +582,8 @@ public class WxProductOrderController {
 		
 		String postXmlContent = "<xml>"
 				+ "<appid>"+ConstWeixin.WX_APP_ID+"</appid>"
-				+ "<attach></attach>"
-				+ "<body>"+productName+"</body>"
+				//+ "<attach></attach>"
+				+ "<body>"+orderTitle+"</body>"
 				+ "<mch_id>"+ConstWeixin.WX_PAY_PARTERN_ID+"</mch_id>"
 				+ "<nonce_str>"+noncestr+"</nonce_str>"
 				+ "<notify_url>"+notify_url+"</notify_url>"
@@ -594,11 +594,11 @@ public class WxProductOrderController {
 				+ "<trade_type>"+trade_type+"</trade_type>"
 				+ "<sign>"+sign+"</sign>"
 				+ "</xml>";
-		
+		logger.debug("======postXmlContent======"+postXmlContent);
 		String prepayResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_PREPAY_API, null, postXmlContent);
+		logger.debug("======prepayResultStr======"+prepayResultStr);
 		WxPrepayObj prepayObj = parsePrepayXml(prepayResultStr);
-		logger.info("======prepayResult======"+JsonUtil.gson.toJson(prepayObj));
-		if(prepayObj!=null&&"SUCCESS".equals(prepayObj.getReturn_code())&&"SUCCESS".equals(prepayObj.getResult_code())){
+		if(prepayObj!=null){
 			String prepayId = prepayObj.getPrepay_id();
 			//生成package的串
 			String finalPackage = "prepay_id="+prepayId;
@@ -795,31 +795,36 @@ public class WxProductOrderController {
 				if(rootEle!=null){
 					WxPrepayObj obj = new WxPrepayObj();
 					Element return_codeEle = rootEle.element("return_code");
-					Element return_msgEle = rootEle.element("return_msg");
-					Element appidEle = rootEle.element("appid");
-	//				Element mch_idEle = rootEle.element("mch_id");//其他属性暂时不需要，就暂时不构造了
-	//				Element nonce_strEle = rootEle.element("nonce_str");//其他属性暂时不需要，就暂时不构造了
-					Element signEle = rootEle.element("sign");
-					Element result_codeEle = rootEle.element("result_code");
-					Element prepay_idEle = rootEle.element("prepay_id");
-					Element trade_typeEle = rootEle.element("trade_type");
-					
-					obj.setAppid(appidEle.getText());
-					obj.setResult_code(result_codeEle.getText());
-					obj.setReturn_code(return_codeEle.getText());
-					obj.setPrepay_id(prepay_idEle.getText());
-					obj.setTrade_type(trade_typeEle.getText());
-					obj.setReturn_msg(return_msgEle.getText());
-					obj.setSign(signEle.getText());
-					//其他属性暂时不需要，就暂时不构造了
-					return obj;
+					String returnCode = return_codeEle.getText();
+					if("SUCCESS".equals(returnCode)){
+						Element result_codeEle = rootEle.element("result_code");
+						String resultCode = result_codeEle.getText();
+						if("SUCCESS".equals(resultCode)){//成功
+							obj.setReturn_code(returnCode);
+							obj.setResult_code(resultCode);
+
+							Element appidEle = rootEle.element("appid");
+							Element return_msgEle = rootEle.element("return_msg");
+							Element signEle = rootEle.element("sign");
+							Element prepay_idEle = rootEle.element("prepay_id");
+							Element trade_typeEle = rootEle.element("trade_type");
+							// Element mch_idEle = rootEle.element("mch_id");//其他属性暂时不需要，就暂时不构造了
+							// Element nonce_strEle = rootEle.element("nonce_str");//其他属性暂时不需要，就暂时不构造了
+							obj.setAppid(appidEle.getText());
+							obj.setPrepay_id(prepay_idEle.getText());
+							obj.setTrade_type(trade_typeEle.getText());
+							obj.setReturn_msg(return_msgEle.getText());
+							obj.setSign(signEle.getText());
+							// 其他属性暂时不需要，就暂时不构造了
+							return obj;
+						}
+					}
 				}
 			} catch (DocumentException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 		}
 		return null;
 	}
-
 	
 }
