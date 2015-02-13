@@ -82,5 +82,8 @@ public interface ConstWeixin {
 	
 	//微信oauth redirect回调的代理地址
 	public static final String WX_OAUTH_REDIRECT_PROXY_URL = ConfigUtil.getString("weixinmp_oauth_redirect_proxy_url");
+
+	//微信js-sdk的权限
+	public static final Object WX_JS_API_FULL = ConfigUtil.getString("weixinmp_jssdk_jsapi");
 	
 }

@@ -59,7 +59,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		logger.debug("进入拦截器, requestURI: "+request.getRequestURI());
+		String requestUri = request.getRequestURI();
+		String queryString = request.getQueryString();
+		logger.debug("进入拦截器, requestURI: "+requestUri+", queryString: "+ queryString);
 
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 		
@@ -93,9 +95,9 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 				logger.debug("微信oauth回调后进入[拦截器], code: "+code);
 			}
 			//排除例外，如处理redirectUrl的proxy接口
-			if(request.getRequestURI().endsWith("wxOauthRedirect")){
+			if(requestUri.endsWith("wxOauthRedirect")||requestUri.endsWith("wxJsConfigSrc")){
 				if(logger.isDebugEnabled()){
-					logger.debug("微信oauth回调后进入[拦截器]，进入代理proxyUrl"+request.getRequestURI());
+					logger.debug("微信oauth回调后进入[拦截器]，进入代理proxyUrl"+requestUri);
 				}
 				return true;
 			}
@@ -146,7 +148,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			}else{
 				throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 			}
-		}else{//自己业务系统内的处理
+		}else{//进入业务系统内的处理
 			if(logger.isDebugEnabled()){
 				logger.debug("进入业务系统内处理");
 			}
@@ -155,20 +157,6 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			if (needAuthorize) {//需要用户身份才能访问
 				String cookiedWebUserJson = null;
 				if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//允许从cookie中读取用户信息
-					//检查cookie中是否存在用户信息
-//					Cookie[] cookieArray = request.getCookies();
-//					if(cookieArray!=null&&cookieArray.length>0){
-//						for(Cookie cookie: cookieArray){
-//							if(ConstFront.COOKIE_KEY_WX_USER.equals(cookie.getName())){
-//								webUserJson = cookie.getValue();
-//								if(logger.isDebugEnabled()){
-//									logger.debug("webUserJson from cookie:: " +webUserJson);
-//								}
-//								break;
-//							}
-//						}
-//					}
-					
 					//读取 cookie中数据
 					cookiedWebUserJson = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_WX_USER);
 					if(logger.isDebugEnabled()){
@@ -186,15 +174,32 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 					}
 				}
 				
-				if (webUser!=null&&StringUtils.isNotBlank(webUser.getOpenId())) {//用户信息存在，写入request，供controller获取使用
+				boolean needOauth = true;
+				String scope = getAuthorizeScope(request, handlerMethod).getScope();//获取需要使用的scope
+				if(logger.isDebugEnabled()){
+					logger.debug("mapping scope: " +scope);
+				}
+				if("snsapi_base".equals(scope)){
+					//检查是否有openid
+					if (webUser!=null&&StringUtils.isNotBlank(webUser.getOpenId())) {//用户信息存在，写入request，供controller获取使用
+						needOauth = false;
+					}
+				}else if("snsapi_userinfo".equals(scope)){
+					
+					//检查是否有昵称
+					if (webUser!=null&&StringUtils.isNotBlank(webUser.getOpenId())&&StringUtils.isNotBlank(webUser.getNickname())) {
+						needOauth = false;
+					}
+				}
+				
+				if (!needOauth) {//无需oauth，使用缓存的用户信息，写入request，供controller获取使用
 					webUser.setChannel(cookieChannel);//将渠道信息放到用户对象中
 					request.setAttribute(ConstFront.CURRENT_USER, webUser);
 				}else{//用户身份信息不存在，无法访问
 					if(logger.isDebugEnabled()){
-						logger.debug("用户身份信息不存在，需要进行oauth获取");
+						logger.debug("用户身份信息不存在，需要进行oauth获取"); 
 					}
-					//获取需要使用的scope
-					String scope = getAuthorizeScope(request, handlerMethod).getScope();
+					
 					
 					if (RequestUtil.isJsonRequest(request)) {//来路为json请求
 						writeJson(response, ErrorCode.AUTHORIZE_NEED_LOGIN);
@@ -284,7 +289,7 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		writer.flush();
 		writer.close();
 	}
-
+	
 	public WxWebUser newUser(String userOpenId){
 		WxWebUser wxWebUser = new WxWebUser();
 		wxWebUser.setOpenId(userOpenId);
@@ -305,7 +310,11 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 		webUser.setCountry(wxUserInfoResult.getCountry());
 		webUser.setProvince(wxUserInfoResult.getProvince());
 		webUser.setCity(wxUserInfoResult.getCity());
-		webUser.setHeadImgUrl(wxUserInfoResult.getHeadimgurl());
+		String headImgUrl = ConstWeixin.DEFAULT_USER_AVATAR_URL;//增加一个默认头像
+		if(StringUtils.isNotBlank(wxUserInfoResult.getHeadimgurl())){
+			headImgUrl = wxUserInfoResult.getHeadimgurl();
+		}
+		webUser.setHeadImgUrl(headImgUrl);
 		webUser.setSex(wxUserInfoResult.getSex());
 		webUser.setCreateTime(new Date());
 		return webUser;

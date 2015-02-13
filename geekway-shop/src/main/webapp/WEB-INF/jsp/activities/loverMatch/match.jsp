@@ -3,6 +3,16 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 
+<%
+WxWebUser friendWebUser = (WxWebUser)request.getAttribute("friendWebUser");
+String friendHeadImg = "http://imgqn.meiniur.com/avatar/default.jpg";
+String friendNickname = "暂无好友参与";
+if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
+	friendHeadImg = friendWebUser.getHeadImgUrl();
+	friendNickname = friendWebUser.getNickname();
+}
+%>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -11,7 +21,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<title>${currentProductSku.name}【美妞儿】</title>
+<title>情侣匹配度测试 - 【美妞儿】</title>
 
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
@@ -36,16 +46,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
 
-<style>
-.change{-webkit-transition:all .7s ease-out .1s; -moz-transition:all .7s ease-out .1s; -o-transition:all .7s ease-out .1s; transition:all .7s ease-out .1s}
-#lbox{position:absolute;top:0;left:0; width:100%; max-width:600px; max-height:600px;background-color:#aaa;}
-        .changelbox{position:absolute;top:0;left:0;width:18%;height:18%; background-color:#333;-webkit-transition:all .7s ease-out .1s; -moz-transition:all .7s ease-out .1s; -o-transition:all .7s ease-out .1s; transition:all .7s ease-out .1s}
-#inbox{position:absolute;top:0;left:0; width:100%; max-width:600px; max-height:600px;z-index:2;}
-.random_current {background-color:#fff;}
-.changeinbox{position:absolute;top:0;left:0;width:18%;height:18%; }
-</style>
-
-<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
+<jsp:include page="../../inc/jssdk.jsp"></jsp:include> 
+<jsp:include page="../../inc/baiduAsyncStat.jsp"></jsp:include>
 
 </head>
 
@@ -65,28 +67,37 @@
 			
 			<div class="decoration"></div>
 			<div class="container no-bottom">
-            	<div class="section-title">
-                	<h4>情侣匹配度测试</h4>
-                </div>
+            	<div class="big-notification blue-notification"> 
+					<h4>［情侣匹配度测试］</h4>
+					<p>
+						<strong>游戏规则：</strong><br/>
+               			
+					</p>
+				</div>
             </div>
             
 			<div class="container no-bottom">
             	<div class="one-half center-text">
 					<img class="responsive-image" src="${_currentWxUser.headImgUrl}">
 					<h2>${_currentWxUser.nickname}</h2>
+					<p></p>
 				</div>
-				<div class="center-text">
-					<img class="responsive-image" src="http://img10.360buyimg.com/n0/jfs/t370/116/572252638/310514/af36a4af/542397f8N4ec1be8f.jpg">
-					<h2>毛衣</h2>
+				<div class="one-half last-column center-text">
+					<img class="responsive-image" src="<%=friendHeadImg%>">
+					<h2><%=friendNickname%></h2>
+					<p></p>
 				</div>
 			</div>
 			<div class="decoration"></div>
+			
+			<%if(friendWebUser!=null){ %>
 			<div class="container">
-				<a href="javascript:void(0)" id="matchSubmitBtn" class="button-big button-green button-fullscreen">开始测试</a>
+				<a href="javascript:void(0)" id="matchSubmitBtn" class="button-big button-blue button-fullscreen">开始匹配</a>
 	        </div>
-            <div class="decoration"></div>
+	        <div class="decoration"></div>
+            <%} %>
             
-            <jsp:include page="../inc/footer.jsp"></jsp:include>
+            <jsp:include page="../../inc/footer.jsp"></jsp:include>
             
         </div>
     </div>  
@@ -95,10 +106,86 @@
 </body>
 
 <script>
-$("#matchSubmitBtn").click(function(){
-	$(this).text("匹配度计算中...");
-	setTimeout(function(){$("#matchSubmitBtn").text("匹配度计算完成");alert("需要构造几组情侣匹配度的结果（图文方式）");}, 3000);
-})
 
+	$("#matchSubmitBtn").click(function() {
+		$("#matchSubmitBtn").removeClass("button-blue").addClass("button-dark");
+		var count = 0;
+		var timer = setInterval(function(){
+			count++;
+			var num= count%6;
+			$("#matchSubmitBtn").text("匹配度计算中，请稍候"+fillDots((6-num), 6));
+			$(".responsive-image").css("opacity",(10-num)/10);
+			if(count>=24){
+				clearInterval(timer);
+				window.timeLineShareData.title="朋友圈xxx情侣匹配结果为：";
+				window.timeLineShareData.desc="朋友圈xxx情侣匹配结果为：";
+				window.friendShareData.title="xxx情侣匹配结果为：";
+				window.friendShareData.desc="xxx情侣匹配结果为：";
+				
+				$("#matchSubmitBtn").removeClass("button-dark").addClass("button-green");
+				$("#matchSubmitBtn").text("计算完成，点击查看匹配结果：${luckyNumber}");
+				$("#matchSubmitBtn").unbind();
+				
+			}
+		}, 250);
+	})
+	
+	function fillDots(nowLength, maxLength){
+		var text = "";
+		while(nowLength<maxLength){
+			text+=".";
+			nowLength++;
+		}
+		return text;
+	}
+	
+	//分享到朋友圈的内容
+	window.timeLineShareData = {
+		"title" : "情侣匹配度测试 - 【美妞儿】",
+		"desc" : "情侣匹配度测试",
+		"link" : "http://wx.meiniur.com/activities/loverMatchIntro?friendOpenId=${_currentWxUser.openId}",
+		"imgUrl" : "${_currentWxUser.headImgUrl}",
+	};
+	
+	//分享给朋友的内容
+	window.friendShareData = {
+		"title" : "情侣匹配度测试 - 【美妞儿】",
+		"desc" : "情侣匹配度测试",
+		"link" : "http://wx.meiniur.com/activities/loverMatchIntro?friendOpenId=${_currentWxUser.openId}",
+		"imgUrl" : "${_currentWxUser.headImgUrl}",
+	};
+
+	wx.ready(function() {
+		wx.onMenuShareAppMessage({//分享给朋友
+			title : window.friendShareData.title,
+			desc : window.friendShareData.desc,
+			link : window.friendShareData.link,
+			imgUrl : window.friendShareData.imgUrl,
+			trigger : function(res) {
+			},
+			success : function(res) {
+			},
+			cancel : function(res) {
+			},
+			fail : function(res) {
+			}
+		});
+		
+		wx.onMenuShareTimeline({//朋友圈分享
+			title : window.timeLineShareData.title,
+			desc : window.timeLineShareData.desc,
+			link : window.timeLineShareData.link,
+			imgUrl : window.timeLineShareData.imgUrl,
+			trigger : function(res) {
+			},
+			success : function(res) {
+			},
+			cancel : function(res) {
+			},
+			fail : function(res) {
+			}
+		});
+	});
 </script>
+
 </html>

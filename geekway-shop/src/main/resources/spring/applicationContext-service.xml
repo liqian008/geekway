@@ -46,6 +46,8 @@
 	</bean>
 	<bean id="wxAccessTokenService" class="com.bruce.geekway.service.impl.WxAccessTokenServiceImpl">
 	</bean>
+	<bean id="wxJsapiTicketService" class="com.bruce.geekway.service.impl.WxJsapiTicketServiceImpl">
+	</bean>
 	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
 	<bean id="wxMpBroadcastService" class="com.bruce.geekway.service.mp.WxMpBroadcastService">

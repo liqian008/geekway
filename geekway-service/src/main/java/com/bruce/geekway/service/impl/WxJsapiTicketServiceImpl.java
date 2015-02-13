@@ -2,6 +2,7 @@ package com.bruce.geekway.service.impl;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -34,15 +35,26 @@ public class WxJsapiTicketServiceImpl extends WxBaseService implements IWxJsapiT
 		Map<String, String> params = buildAccessTokenParams(accessToken);
 		params.put("type", "jsapi");
 		
-		String authResultStr = HttpUtil.getRequest(ConstWeixin.WX_ACCESS_TOKEN_API, params);
-		WxJsTicketResult wxJsTicketResult = JsonUtil.gson.fromJson(authResultStr, WxJsTicketResult.class);
-		if(wxJsTicketResult!=null && wxJsTicketResult.getErrcode()==0){//正常的响应结果
-			long expireTime = System.currentTimeMillis() + (wxJsTicketResult.getExpires_in() - JS_TICKET_REQUEST_TIME) * 1000;
-			wxJsTicketResult.setExpiresTime(expireTime);
-			return wxJsTicketResult.getJs_ticket();
-		}else{
-			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+		String jsapiTicketStr = HttpUtil.getRequest(ConstWeixin.WX_JS_TICKET_API, params);
+		if(StringUtils.isNotBlank(jsapiTicketStr)){
+			WxJsTicketResult wxJsTicketResult = JsonUtil.gson.fromJson(jsapiTicketStr, WxJsTicketResult.class);
+			if(wxJsTicketResult!=null && wxJsTicketResult.getErrcode()==0){//正常的响应结果
+				long expireTime = System.currentTimeMillis() + (wxJsTicketResult.getExpires_in() - JS_TICKET_REQUEST_TIME) * 1000;
+				wxJsTicketResult.setExpiresTime(expireTime);
+				return wxJsTicketResult.getTicket();
+			}
 		}
+		return null;
 	}
+
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
+	}
+
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
+	}
+	
+	
 	
 }

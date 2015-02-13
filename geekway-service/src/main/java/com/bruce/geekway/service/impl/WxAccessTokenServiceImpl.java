@@ -117,6 +117,15 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 		this.wxAccessTokenMapper = wxAccessTokenMapper;
 	}
 
+	public WxMpTokenService getWxMpTokenService() {
+		return wxMpTokenService;
+	}
+
+	public void setWxMpTokenService(WxMpTokenService wxMpTokenService) {
+		this.wxMpTokenService = wxMpTokenService;
+	}
+
+	
 	
 
 	

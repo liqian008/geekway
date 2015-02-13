@@ -45,8 +45,8 @@
 .changeinbox{position:absolute;top:0;left:0;width:18%;height:18%; }
 </style>
 
-<jsp:include page="../inc/baiduAsyncStat.jsp"></jsp:include>
 
+<jsp:include page="../../inc/baiduAsyncStat.jsp"></jsp:include>
 </head>
 
 <body>
@@ -93,7 +93,7 @@
             
             <div class="decoration"></div> 
             
-            <jsp:include page="../inc/footer.jsp"></jsp:include>
+            <jsp:include page="../../inc/footer.jsp"></jsp:include>
             
         </div>
     </div>  
