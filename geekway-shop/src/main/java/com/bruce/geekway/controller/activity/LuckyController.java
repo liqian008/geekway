@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
@@ -43,7 +42,7 @@ public class LuckyController{
 			logger.debug("进入情侣匹配度首页");
 		}
 		if(StringUtils.isNotBlank(friendOpenId)){
-			WxWebUser friendWebUser = wxWebUserService.loadByOpenId(friendOpenId);
+			WxWebUser friendWebUser = wxWebUserService.loadCachedByOpenId(friendOpenId);
 			if(friendWebUser!=null&&friendWebUser.getId()!=null){
 				model.addAttribute("friendWebUser", friendWebUser);
 			}
@@ -69,11 +68,11 @@ public class LuckyController{
 			if(followed){//关注者才能参加
 				if(StringUtils.isNotBlank(friendOpenId)){
 					if(!myWebUser.getOpenId().equals(friendOpenId)){//点是的时自己的链接
-						WxWebUser friendWebUser = wxWebUserService.loadByOpenId(friendOpenId);
+						WxWebUser friendWebUser = wxWebUserService.loadCachedByOpenId(friendOpenId);
 						if(friendWebUser!=null&&friendWebUser.getId()!=null){
 							model.addAttribute("friendWebUser", friendWebUser);
-							int luckyNumber = getLoverMatchResult(myWebUser, friendWebUser);
-							model.addAttribute("luckyNumber", luckyNumber);
+//							int luckyNumber = getLoverMatchResult(myWebUser, friendWebUser);
+//							model.addAttribute("luckyNumber", luckyNumber);
 						}
 					}
 				}
@@ -88,20 +87,19 @@ public class LuckyController{
 	}
 	
 	@RequestMapping(value = "/loverMatchResult")
-	public String loverMatchResult(Model model, String[] loverOpenIds, HttpServletRequest request) {
+	public String loverMatchResult(Model model, String openId1, String openId2, HttpServletRequest request) {
 		if(logger.isDebugEnabled()){
 			logger.debug("查看情侣匹配度测试结果");
 		}
-		if(loverOpenIds!=null&&loverOpenIds.length==2){
-			String openId1=loverOpenIds[0];
-			String openId2=loverOpenIds[1];
-			WxWebUser wxWebUser1 = wxWebUserService.loadByOpenId(openId1);
-			WxWebUser wxWebUser2 = wxWebUserService.loadByOpenId(openId2);
-			if(wxWebUser1!=null&&wxWebUser2!=null){
-				int luckyNumber = getLoverMatchResult(wxWebUser1, wxWebUser2);
-				model.addAttribute("luckyNumber", luckyNumber);
-				return "activities/loverMatch/matchResult";
-			}
+		WxWebUser wxWebUser1 = wxWebUserService.loadCachedByOpenId(openId1); 
+		WxWebUser wxWebUser2 = wxWebUserService.loadCachedByOpenId(openId2);
+		if(wxWebUser1!=null&&wxWebUser2!=null){
+			model.addAttribute("wxWebUser1", wxWebUser1);
+			model.addAttribute("wxWebUser2", wxWebUser2);
+			
+//				int luckyNumber = getLoverMatchResult(wxWebUser1, wxWebUser2);
+//				model.addAttribute("luckyNumber", luckyNumber);
+			return "activities/loverMatch/matchResult";
 		}
 		return "error";
 	}

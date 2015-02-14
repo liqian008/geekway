@@ -3,10 +3,14 @@ package com.bruce.geekway.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;
+import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.WxWebUserMapper;
 import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.WxWebUserCriteria;
@@ -127,6 +131,19 @@ public class WxWebUserServiceImpl implements IWxWebUserService {
 		return null;
 	}
 
+
+	@Override
+//	@Caching(
+//			cacheable = { 
+//					@Cacheable(value = ConstMemc.MEMCACHE_CACHE_VALUE + "#7000", key = "'webUserOpenId-'+#userOpenId") }, 
+//			put = { 
+//					@CachePut(value = ConstMemc.MEMCACHE_CACHE_VALUE + "#7000", key = "'webUserOpenId-'+#userOpenId", condition = "#result != null")}
+//			)
+//	@Cacheable(value = ConstMemc.MEMCACHE_CACHE_VALUE + "#7000", key = "'webUserOpenId-'+#userOpenId")//, condition = "#result != null ") 
+	public WxWebUser loadCachedByOpenId(String userOpenId) {
+		return loadByOpenId(userOpenId);
+	}
+	
 	
 	public WxWebUserMapper getWxWebUserMapper() {
 		return wxWebUserMapper;
@@ -135,6 +152,6 @@ public class WxWebUserServiceImpl implements IWxWebUserService {
 	public void setWxWebUserMapper(WxWebUserMapper wxWebUserMapper) {
 		this.wxWebUserMapper = wxWebUserMapper;
 	}
-	
+
 	
 }

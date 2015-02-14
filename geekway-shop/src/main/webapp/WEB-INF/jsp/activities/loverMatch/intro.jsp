@@ -3,6 +3,27 @@
 <%@ page import="java.util.Map.*" %>
 <%@ page import="com.bruce.geekway.model.*" %>
 
+<%
+String showTitle = "［情侣匹配度测试］";
+String showImg = "http://imgqn.meiniur.com/images/activities/loverMatchLogo.jpg";
+WxWebUser friendWebUser = (WxWebUser)request.getAttribute("friendWebUser");
+if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
+	showTitle = "［"+friendWebUser.getNickname()+"］想和您进行"+showTitle;
+	showImg = friendWebUser.getHeadImgUrl();
+}
+
+String shareTitle = "［情侣匹配度测试］- 【美妞儿】";
+String shareImg = "http://imgqn.meiniur.com/avatar/default.jpg";
+WxWebUser myWebUser = (WxWebUser)request.getAttribute("_currentWxUser");
+if(myWebUser!=null&&myWebUser.getNickname()!=null){
+	shareTitle = "［"+myWebUser.getNickname()+"］想和您进行"+shareTitle;
+	System.out.println("====="+shareTitle);
+	if(myWebUser.getHeadImgUrl()!=null&&!"".equals(myWebUser.getHeadImgUrl())){
+		shareImg = myWebUser.getHeadImgUrl();
+	} 
+}
+%>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -43,21 +64,13 @@
 
 <body>
 
-<%
-WxWebUser friendWebUser = (WxWebUser)request.getAttribute("friendWebUser");
-String title = "［情侣匹配度测试］";
-String activityImg = "http://imgqn.meiniur.com/avatar/default.jpg";
-if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
-	title = "\""+friendWebUser.getNickname()+"\"想和您进行"+title;
-	activityImg = friendWebUser.getHeadImgUrl();
-}
-%>
-
 <div class="all-elements">
 
     <div id="content" class="page-content">
     	<div class="page-header">
-            <p class="bread-crumb">${product.name}</p>
+           	<a href="#" class="deploy-sidebar"></a>
+            <p class="bread-crumb">情侣匹配度结果</p> 
+            <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
         	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
@@ -70,10 +83,11 @@ if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
 			<div class="container no-bottom">
 				
 				<div class="big-notification blue-notification"> 
-					<h4><%=title%></h4>
+					<h4><%=showTitle%></h4>
 					<p>
 						<strong>游戏提示：</strong><br/>
-               			当您首次开始时，页面将弹起［微信授权］，用于获取您的生（ge）辰（ren）八（zi）字（liao），以进行匹配计算。
+               			当您首次开始时，页面将弹起［微信授权］，用于获取您的生（ge）辰（ren）八（zi）字（liao），以进行匹配计算。<br/>
+						更多有趣内容，请点击关注<a href="javascript:void(0)" style="color:#efe;font-size:14px"><strong>［美妞儿］</strong></a>公众账号</strong>
 					</p>
 				</div>
 				
@@ -84,9 +98,9 @@ if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
             
 			<div class="container no-bottom center-text">
                 <div class="portfolio-item-full-width" style="padding:0px 60px">
-                    <img class="responsive-image" src="<%=activityImg%>" alt="img">
+                    <img class="responsive-image" src="<%=showImg%>" alt="img">
                 </div>
-                <h4><%=title%></h4>
+                <h4><%=showTitle%></h4>
         	</div>
         	
         	<!-- <div class="decoration"></div>
@@ -115,23 +129,23 @@ if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
 <script>
 	//分享到朋友圈的内容
 	window.timeLineShareData = {
-		"title" : "情侣匹配度测试 - 【美妞儿】",
+		"title" : "<%=shareTitle%>",
 		"desc" : "情侣匹配度测试",
 		"link" : "http://wx.meiniur.com/activities/loverMatchIntro?friendOpenId=${_currentWxUser.openId}",
-		"imgUrl" : "<%=activityImg%>",
+		"imgUrl" : "<%=shareImg%>",
 	};
 	
 	//分享给朋友的内容
 	window.friendShareData = {
-		"title" : "情侣匹配度测试 - 【美妞儿】",
+		"title" : "<%=shareTitle%>",
 		"desc" : "情侣匹配度测试",
 		"link" : "http://wx.meiniur.com/activities/loverMatchIntro?friendOpenId=${_currentWxUser.openId}",
-		"imgUrl" : "<%=activityImg%>",
+		"imgUrl" : "<%=shareImg%>",
 	};
 
 	wx.ready(function() {
 		wx.onMenuShareAppMessage({//分享给朋友
-			title : window.friendShareData.title,
+			title : '<%=shareTitle%>',
 			desc : window.friendShareData.desc,
 			link : window.friendShareData.link,
 			imgUrl : window.friendShareData.imgUrl,
@@ -146,7 +160,7 @@ if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
 		});
 		
 		wx.onMenuShareTimeline({//朋友圈分享
-			title : window.timeLineShareData.title,
+			title : '<%=shareTitle%>',
 			desc : window.timeLineShareData.desc,
 			link : window.timeLineShareData.link,
 			imgUrl : window.timeLineShareData.imgUrl,

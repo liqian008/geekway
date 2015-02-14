@@ -6,16 +6,6 @@ import com.bruce.geekway.model.WxWebUserCriteria;
 
 public interface IWxWebUserService extends IFoundationPagingService<WxWebUser, Integer, WxWebUserCriteria> {
 	
-
-	
-	/**
-	 * 根据用户的unionId获取用户对象
-	 * @param unionId
-	 * @return
-	 */
-	public WxWebUser loadByUnionId(String unionId);
-	
-	
 	/**
 	 * 根据用户的openId获取用户对象（可能会有碰撞出现）
 	 * @param userOpenId
@@ -23,5 +13,12 @@ public interface IWxWebUserService extends IFoundationPagingService<WxWebUser, I
 	 */
 	public WxWebUser loadByOpenId(String userOpenId);
 	
+	public WxWebUser loadCachedByOpenId(String userOpenId);
 	
+	/**
+	 * 根据用户的unionId获取用户对象
+	 * @param unionId
+	 * @return
+	 */
+	public WxWebUser loadByUnionId(String unionId);
 }

@@ -5,7 +5,7 @@
   var jssdkEle = document.createElement("script");
   jssdkEle.type = "text/javascript";
   var currentUrl = encodeURIComponent(location.href.split('#')[0]);;
-  jssdkEle.src = "${pageContext.request.contextPath}/api/wxJsConfigSrc?debug=true&pageUrl="+currentUrl;
+  jssdkEle.src = "${pageContext.request.contextPath}/api/wxJsConfigSrc?pageUrl="+currentUrl;
   var allJsEles = document.getElementsByTagName("script")[0]; 
   allJsEles.parentNode.insertBefore(jssdkEle, allJsEles);
 })();

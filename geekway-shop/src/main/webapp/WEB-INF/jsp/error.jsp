@@ -10,7 +10,8 @@
 String contextPath = request.getContextPath();
 String errorMessage = (String)request.getAttribute(ResponseBuilderUtil.ERROR_MSG);
 if(errorMessage==null){
-	errorMessage = "服务器开小差，请稍后再试！";
+	//errorMessage = "服务器开小差，请稍后再试！";
+	errorMessage = "您访问的页面正在过情人节，暂时无法提供服务";
 }
 %>
 

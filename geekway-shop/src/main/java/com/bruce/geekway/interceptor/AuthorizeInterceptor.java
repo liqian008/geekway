@@ -152,26 +152,28 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 			if(logger.isDebugEnabled()){
 				logger.debug("进入业务系统内处理");
 			}
+			
+			String cookiedWebUserJson = null;
+			//读取 cookie中数据
+			cookiedWebUserJson = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_WX_USER);
+			if(logger.isDebugEnabled()){
+				logger.debug("webUserJson from cookie: " +cookiedWebUserJson);
+			}
+			//从cookie中读出的webUser对象
+			WxWebUser webUser = null;
+			if(StringUtils.isNotBlank(cookiedWebUserJson)){
+				try{
+					cookiedWebUserJson= URLDecoder.decode(cookiedWebUserJson, "utf-8");
+					webUser = JsonUtil.gson.fromJson(cookiedWebUserJson, WxWebUser.class);
+				}catch(Exception e){
+				}
+			}
+			
 			AuthorizeStrategy authorizeStrategy = getAuthorizeStratege(request, handlerMethod);
 			boolean needAuthorize = authorizeStrategy!=null;//调用的接口需要进行登录
 			if (needAuthorize) {//需要用户身份才能访问
-				String cookiedWebUserJson = null;
-				if(AuthorizeStrategy.COOKIE_ALLOW.equals(authorizeStrategy)){//允许从cookie中读取用户信息
-					//读取 cookie中数据
-					cookiedWebUserJson = CookieUtils.getCookie(request, ConstFront.COOKIE_KEY_WX_USER);
-					if(logger.isDebugEnabled()){
-						logger.debug("webUserJson from cookie: " +cookiedWebUserJson);
-					}
-				}
-				
-				//从cookie中读出的webUser对象
-				WxWebUser webUser = null;
-				if(StringUtils.isNotBlank(cookiedWebUserJson)){
-					try{
-						cookiedWebUserJson= URLDecoder.decode(cookiedWebUserJson, "utf-8");
-						webUser = JsonUtil.gson.fromJson(cookiedWebUserJson, WxWebUser.class);
-					}catch(Exception e){
-					}
+				if(AuthorizeStrategy.COOKIE_DENY.equals(authorizeStrategy)){//允许从cookie中读取用户信息
+					webUser=null;
 				}
 				
 				boolean needOauth = true;
@@ -223,6 +225,11 @@ public class AuthorizeInterceptor extends HandlerInterceptorAdapter implements I
 						response.sendRedirect(wxOauthUrl);
 						return false;
 					}
+				}
+			}else{//无NeedAuthorize属性，也存attribute
+				if(webUser!=null){
+					webUser.setChannel(cookieChannel);//将渠道信息放到用户对象中
+					request.setAttribute(ConstFront.CURRENT_USER, webUser);
 				}
 			}
 		}
