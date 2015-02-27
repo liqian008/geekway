@@ -10,14 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.constants.ConstFront;
-import com.bruce.geekway.controller.wx.WxProductController;
 import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.service.IWxWebUserService;
 
@@ -27,13 +25,13 @@ import com.bruce.geekway.service.IWxWebUserService;
  *
  */
 @RequestMapping(value = "/activities/")
-@Controller
+//@Controller
 public class LuckyController{
 	
 	@Autowired
 	private IWxWebUserService wxWebUserService;
 	
-	private static final Logger logger = LoggerFactory.getLogger(WxProductController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LuckyController.class);
 	
 	
 	@RequestMapping(value = "/loverMatchIntro")

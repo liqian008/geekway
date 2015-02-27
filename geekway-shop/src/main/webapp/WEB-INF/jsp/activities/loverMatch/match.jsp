@@ -30,7 +30,7 @@ if(friendWebUser!=null&&friendWebUser.getNickname()!=null){
 }
 
 String shareTitle = "［情侣匹配度测试］- 【美妞儿】";
-String shareImg ="http://imgqn.meiniur.com/images/activities/loverMatchLogo.jpg";
+String shareImg ="http://imgqn.meiniur.com/images/activities/loverMatch1.jpg";
 WxWebUser myWebUser = (WxWebUser)request.getAttribute("_currentWxUser");
 if(myWebUser!=null&&myWebUser.getNickname()!=null){
 	shareTitle = "［"+myWebUser.getNickname()+"］想和您进行"+shareTitle;
@@ -74,25 +74,14 @@ String[][] descriptions = new String[][]{
 
 <link href="${pageContext.request.contextPath}/slideby/styles/style.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/framework.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/slideby/styles/owl.carousel.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/slideby/styles/owl.theme.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/slideby/styles/swipebox.css" rel="stylesheet" type="text/css">
-<link href="${pageContext.request.contextPath}/slideby/styles/colorbox.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/slideby/styles/meiniu.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jquery.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jqueryui.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/owl.carousel.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/jquery.swipebox.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/colorbox.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/snap.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/contact.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/custom.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/framework.launcher.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/map.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/common.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/slideby/scripts/url.js"></script>
+
 
 <style>
 .matchResultContainer{
@@ -104,6 +93,10 @@ padding:12px;
 
 .matchResultContainer h4{
 color:#7798cb
+}
+
+.responsive-image{
+border-radius:10px;
 }
 </style>
 
@@ -119,11 +112,11 @@ color:#7798cb
     <div id="content" class="page-content">
     	<div class="page-header">
             <a href="#" class="deploy-sidebar"></a>
-            <p class="bread-crumb">情侣匹配度结果</p> 
+            <p class="bread-crumb">情侣匹配度测试</p> 
             <a href="javascript:void(0)" class="deploy-refresh"></a>
         </div>
         <div class="content-header">
-        	<a href="${pageContext.request.contextPath}/index" class="content-logo"></a>
+        	<a href="http://mp.weixin.qq.com/s?__biz=MjM5Njc5NzEzNw==&mid=203236144&idx=1&sn=2e433cd14b5b877c9a9f608f9d906ad2#rd" class="content-logo"></a>
         </div>
         
         <div class="content"> 
@@ -133,8 +126,8 @@ color:#7798cb
             	<div class="big-notification blue-notification" style=""> 
 					<h4>［情侣匹配度测试］</h4>
 					<p>
-						“发送给朋友”或“分享到朋友圈”，可与好友进行匹配度测试！<br/>
-						更多有趣内容，请点击关注 <a href="javascript:void(0)" style="color:#efe;font-size:14px"><span>【美妞儿】</span></a> 公众账号</strong>
+						“发送给朋友”或“分享到朋友圈”，可与众多好友进行匹配度测试！<br/>
+						更多有趣内容，请点击关注 <a href="http://mp.weixin.qq.com/s?__biz=MjM5Njc5NzEzNw==&mid=203236144&idx=1&sn=2e433cd14b5b877c9a9f608f9d906ad2#rd" style="color:#efe;font-size:14px"><span>【美妞儿】</span></a> 公众账号</strong>
 					</p>
 				</div>
             </div>
@@ -160,6 +153,7 @@ color:#7798cb
 	        	<div id="result0" class="matchResultContainer">
 					<h4>匹配度 <%=descriptions[luckyNumber][0]%>分</h4>
 					<h4><%=descriptions[luckyNumber][1]%></h4>
+					<p style="margin-bottom:0px">友情提醒：给出的测试结果仅供参考，并不能作为您选择伴侣或者您择偶的标准.</p>
 		        </div>
 		        
 	        	<a href="javascript:void(0)" id="matchSubmitBtn" class="button-big button-green button-fullscreen">开始匹配</a>
