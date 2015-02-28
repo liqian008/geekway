@@ -11,11 +11,11 @@
 
 		<!-- mainmenu begin -->
 		<ul id="mainmenu">
-			<li><a href="javascript:void(0)">首页</a></li>
-			<li><a href="javascript:void(0)">产品介绍</a></li>
-			<li><a href="javascript:void(0)">客户案例</a></li>
+			<li><a href="${pageContext.request.contextPath}/">首页</a></li>
 			<li><a href="${pageContext.request.contextPath}/quickstart">快速开始</a></li>
 			<li><a href="${pageContext.request.contextPath}/myWxApps">我的应用</a></li>
+			<li><a href="javascript:void(0)">产品介绍</a></li>
+			<li><a href="javascript:void(0)">客户案例</a></li>
 			<li><a href="javascript:void(0)">关于我们</a></li>
 
 		</ul>

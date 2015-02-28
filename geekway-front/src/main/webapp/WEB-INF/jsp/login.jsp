@@ -53,12 +53,12 @@
                 <div class="row">
                     <div class="span12">
                         <h1>用户登录</h1>
-                        <span>Some Cool Page Description.</span>
+                        <!-- <span>Some Cool Page Description.</span>
                         <ul class="crumb">
                             <li><a href="index.html">Home</a></li>
                             <li class="sep">/</li>
                             <li>Blog Right Sidebar</li>
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
             </div>
