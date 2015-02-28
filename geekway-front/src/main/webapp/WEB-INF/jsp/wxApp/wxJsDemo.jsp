@@ -8,7 +8,6 @@
     <title>Demo JS-SDK</title>
 </head>
 
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
 <script>
 	//分享到朋友圈的内容
@@ -64,16 +63,18 @@
 3、开发、测试阶段如需开启debug模式，请在js中的wxJssdkSrc中增加debug=true的参数
 </body>
 
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-var currentUrl = location.href.split('#')[0];
-var wxJssdkSrc = "http://jssdk.bruce-lee.cn/api/wxJsConfigSrc?wxAppId=wxc2a0a71ba13664f6&nonce=nonceVal&sign=signVal&pageUrl="+currentUrl;
-//开发、测试阶段如需开启debug模式，请在wxJssdkSrc中增加debug=true的参数，见下行
-//var wxJssdkSrc = "http://jssdk.bruce-lee.cn/api/wxJsConfigSrc?debug=true&wxAppId=wxc2a0a71ba13664f6&nonce=nonceVal&sign=signVal&pageUrl="+currentUrl;
-
-var script = document.createElement("script");
-script.type = "text/javascript";
-script.src = wxJssdkSrc;
-document.body.appendChild(script);
+	(function() {
+		var jssdkEle = document.createElement("script");
+		jssdkEle.type = "text/javascript";
+		var currentUrl = encodeURIComponent(location.href.split('#')[0]);
+		//jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?wxAppId=wxc2a0a71ba13664f6&nonce=nonceVal&sign=signVal&pageUrl="+currentUrl;
+		//开发、测试阶段如需开启debug模式，请在wxJssdkSrc中增加debug=true的参数，见下行
+		jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?debug=true&wxAppId=wxc2a0a71ba13664f6&nonce=nonceVal&sign=signVal&pageUrl="+currentUrl;
+		var allJsEles = document.getElementsByTagName("script")[0];
+		allJsEles.parentNode.insertBefore(jssdkEle, allJsEles);
+	})();
 </script>
 
 </html>

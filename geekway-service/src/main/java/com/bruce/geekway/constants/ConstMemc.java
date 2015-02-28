@@ -13,7 +13,7 @@ public interface ConstMemc{
     /*wxAppId的key*/
     public static final String MEMCACHE_KEY_WX_APP_ID = "wxAppId";
     
-    /*wxApps的key*/
+    /*myWxApps的key*/
     public static final String MEMCACHE_KEY_WY_WX_APPS = "myWxApps";
     
     

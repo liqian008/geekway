@@ -83,7 +83,7 @@
                         <div id="comment-form-wrapper">
 
                             <div class="alert alert-warning">
-                                成功登录后可管理我的应用
+                                成功登录后可管理我的微信应用
                             </div>
 
                             <div class="comment_form_holder">

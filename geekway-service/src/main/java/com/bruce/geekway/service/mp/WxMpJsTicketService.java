@@ -1,6 +1,5 @@
 package com.bruce.geekway.service.mp;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +29,10 @@ public class WxMpJsTicketService extends WxBaseService {
 	 * 获取jsTicket对象
 	 * @return
 	 */
-	public synchronized WxJsTicketResult getMpJsTicket() {
+	public synchronized WxJsTicketResult getMpJsTicket(String appId, String secretKey) {
 			//通过网络获取新accessToken
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
+		String accessToken = wxAccessTokenService.getCachedAccessToken(appId, secretKey);
 		Map<String, String> params = buildAccessTokenParams(accessToken);
-		params.put("access_token", "client_credential");
 		params.put("type", "jsapi");
 		
 		String jsTicketResultStr = HttpUtil.getRequest(ConstWeixin.WX_JS_TICKET_API, params);
@@ -47,5 +45,35 @@ public class WxMpJsTicketService extends WxBaseService {
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}
 	}
+	
+	/**
+	 * 获取jsTicket对象
+	 * @return
+	 */
+	public synchronized WxJsTicketResult getMpJsTicket(String accessToken) {
+			//通过网络获取新accessToken
+		Map<String, String> params = buildAccessTokenParams(accessToken);
+		params.put("type", "jsapi");
+		
+		String jsTicketResultStr = HttpUtil.getRequest(ConstWeixin.WX_JS_TICKET_API, params);
+		WxJsTicketResult wxJsTicketRes = JsonUtil.gson.fromJson(jsTicketResultStr, WxJsTicketResult.class);
+		if(wxJsTicketRes!=null && wxJsTicketRes.getErrcode()==0){//正常的响应结果
+			long expireTime = System.currentTimeMillis() + (wxJsTicketRes.getExpires_in() - JS_TICKET_REQUEST_TIME) * 1000;
+			wxJsTicketRes.setExpiresTime(expireTime);
+			return wxJsTicketRes;
+		}else{
+			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
+		}
+	}
+
+	public IWxAccessTokenService getWxAccessTokenService() {
+		return wxAccessTokenService;
+	}
+
+	public void setWxAccessTokenService(IWxAccessTokenService wxAccessTokenService) {
+		this.wxAccessTokenService = wxAccessTokenService;
+	}
+	
+	
 	
 }

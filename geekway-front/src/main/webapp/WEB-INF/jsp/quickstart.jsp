@@ -45,7 +45,7 @@
             <div class="container">
                 <div class="row">
                     <div class="span12">
-                        <h1>用户登录</h1>
+                        <h1>快速开始</h1>
                         <span>Some Cool Page Description.</span>
                         <ul class="crumb">
                             <li><a href="index.html">Home</a></li>
@@ -69,7 +69,7 @@
 						<div id="comment-form-wrapper">
 
 							<div class="alert alert-warning">
-								<strong>提醒：</strong> 添加微信应用后，会为您创建一个新用户——如果您之前提交过，请先 <a
+								<strong>提醒：</strong> 添加微信应用后，会为您创建一个新用户——如果您之前曾提交过，请先 <a
 									href="./login" class="btn btn-small btn-primary">登录</a>
 							</div>
 
@@ -111,7 +111,7 @@
 									<div id="error_wxAppSecret" class="error">微信Secret输入有误</div>
 									
 									<p>
-										<button class="btn btn-success" type="submit">提 交</button>
+										<button class="btn btn-success" type="submit">保 存</button>
 										<button class="btn btn-info" type="reset">重 置</button>
 									</p>
 								</form>

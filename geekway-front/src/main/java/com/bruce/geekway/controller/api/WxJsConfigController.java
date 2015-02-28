@@ -31,7 +31,7 @@ public class WxJsConfigController {
 	// implements LastModified
 
 	private static final String wxConfigFormat = "wx.config({\r\ndebug: %b, \r\nappId: '%s', \r\ntimestamp: %s, \r\nnonceStr: '%s', \r\nsignature: '%s',\r\njsApiList: [%s]\r\n})";
-	private static final String[] WX_JSAPI_ARRAY = ConstWeixin.WX_JS_API_FULL.replace("'", "").split(","); 
+//	private static final String[] WX_JSAPI_ARRAY = ConstWeixin.WX_JS_API_FULL.replace("'", "").split(","); 
 	
 	private static final Logger logger = LoggerFactory.getLogger(WxJsConfigController.class);
 	

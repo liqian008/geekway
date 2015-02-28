@@ -92,18 +92,17 @@
 									<div class="alert alert-info">
 										集成方法：将下方对话框中的代码粘贴到您的H5页面中，即可完成微信JS-SDK的集成。完整页面代码可点击“Demo”按钮进行查看</div>
 									<textarea cols="10" rows="12" name="message" id="message" readonly="readonly">
-请务必将下方的JS代码粘贴在H5页面的<body>标签后：
-
+请在您都页面中引用以下JS代码：
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-var currentUrl = location.href.split('#')[0];
-var wxJssdkSrc = "http://jssdk.bruce-lee.cn/api/wxJsConfigSrc?wxAppId=${myWxApp.wxAppId}&nonce=nonceVal&sign=signVal&pageUrl="+currentUrl;
-//开发、测试阶段如需开启debug模式，请在wxJssdkSrc中增加debug=true的参数，见下行
-//var wxJssdkSrc = "http://jssdk.meiniur.com/api/wxJsConfigSrc?debug=true&wxAppId=${myWxApp.wxAppId}&nonce=nonceVal&sign=signVal&pageUrl="+currentUrl;
-
-var script = document.createElement("script");
-script.type = "text/javascript";
-script.src = wxJssdkSrc;
-document.body.appendChild(script);
+(function() {
+  var jssdkEle = document.createElement("script");
+  jssdkEle.type = "text/javascript";
+  var currentUrl = encodeURIComponent(location.href.split('#')[0]);;
+  jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?pageUrl="+currentUrl;
+  var allJsEles = document.getElementsByTagName("script")[0]; 
+  allJsEles.parentNode.insertBefore(jssdkEle, allJsEles);
+})();
 </script>
 									</textarea>
 
@@ -129,7 +128,8 @@ document.body.appendChild(script);
 <script>
 $(document).ready(function(){
 	$("#demoBtn").click(function(){
-		location.href="./wxJsDemo";
+		//location.href="./wxJsDemo";
+		window.open('./wxJsDemo');
 	});
 	
 	$("#delAppBtn").click(function(){

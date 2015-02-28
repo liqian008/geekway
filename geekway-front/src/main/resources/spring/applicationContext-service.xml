@@ -12,14 +12,6 @@
 
 	default-lazy-init="false" default-autowire="byName">
 
-	<!-- 本地上传service -->	
-	<bean id="uploadLocalService" class="com.bruce.geekway.service.upload.impl.UploadLocalServiceImpl">
-	</bean>
-	<!-- 七牛上传service -->	
-	<bean id="uploadQiniuService" class="com.bruce.geekway.service.upload.impl.UploadQiniuServiceImpl">
-	</bean>
-	
-	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
 	-->
 	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">

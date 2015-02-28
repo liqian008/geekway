@@ -68,7 +68,7 @@
 					<div class="span8">
 						<h4>添加微信应用</h4>
 						<div class="alert alert-success">
-							步骤1：只需要提供您的微信公共账户信息，即可完成微信js.config的配置。
+							步骤1：只需要提供您的微信公共账户信息，即可完成生成微信js.config的配置。
 						</div>
 						
 						<div id="comment-form-wrapper">

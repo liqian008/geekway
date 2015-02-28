@@ -12,7 +12,7 @@ RegUser currentUser = (RegUser)session.getAttribute(ConstFront.CURRENT_USER);
 		<ul>
 			<%if(currentUser==null){ %>
 			<li><a href="${pageContext.request.contextPath}/login">登录</a> ｜ <a href="${pageContext.request.contextPath}/registe">注册</a></li>
-			<li><a href="${pageContext.request.contextPath}/quickstart">快速集成微信JS-SDK</a></li>
+			<li><a href="${pageContext.request.contextPath}/quickstart">快速生成微信JS-SDK</a></li>
 			<%}%>
 			<li><a href="${pageContext.request.contextPath}/myWxApps">管理我的微信应用</a></li>
 			<%if(currentUser!=null){ %>

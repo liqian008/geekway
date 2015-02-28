@@ -70,7 +70,7 @@
                         <div id="comment-form-wrapper">
 
                             <div class="alert alert-warning">
-                                <strong>提醒：</strong> 添加微信应用的同时，会为您创建一个新用户
+                                <strong>提醒：</strong>用户创建成功后，需要添加微信应用，方可生成wx.config的配置代码
                             </div>
 
                             <div class="comment_form_holder">

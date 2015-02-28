@@ -1,9 +1,9 @@
 package com.bruce.geekway.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,9 @@ import com.bruce.geekway.service.mp.WxMpTokenService;
 
 @Service
 public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(WxAccessTokenServiceImpl.class);
+	
 	@Autowired
 	private WxAccessTokenMapper wxAccessTokenMapper;
 	@Autowired
@@ -82,29 +84,30 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 	 * 获取缓存中的accessToken
 	 */
 	@Override
-	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE+"#7000", key="'"+ConstMemc.MEMCACHE_KEY_MP_ACCESSTOKEN+"'")
-	public synchronized String getCachedAccessToken() {
+	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE+"#7000", key="'"+ConstMemc.MEMCACHE_KEY_MP_ACCESSTOKEN+"-'+#appId")
+	public synchronized String getCachedAccessToken(String appId, String secretKey) {
+		logger.info("请求微信Mp获取accessToken, [appId="+appId+"]");
 		//从db中获取缓存的accessToken
-		WxAccessToken dbAccessToken = loadById(1);
-		if(dbAccessToken!=null&&!StringUtils.isBlank(dbAccessToken.getAccessToken())&&dbAccessToken.getExpireTime().getTime()>System.currentTimeMillis()){
-			//accessToken可用
-			return dbAccessToken.getAccessToken();
-		}else{
-			WxAuthResult wxResult = wxMpTokenService.getMpAccessToken();
+//		WxAccessToken dbAccessToken = loadById(1);
+//		if(dbAccessToken!=null&&!StringUtils.isBlank(dbAccessToken.getAccessToken())&&dbAccessToken.getExpireTime().getTime()>System.currentTimeMillis()){
+//			//accessToken可用
+//			return dbAccessToken.getAccessToken();
+//		}else{
+			WxAuthResult wxResult = wxMpTokenService.getMpAccessToken(appId, secretKey);
 			if(wxResult!=null){//成功的响应
 				String accessToken = wxResult.getAccess_token();
 				
-				WxAccessToken newAccessToken = new WxAccessToken();
-				newAccessToken.setAccessToken(accessToken);
-				newAccessToken.setExpireTime(new Date(wxResult.getExpiresTime()));
+//				WxAccessToken newAccessToken = new WxAccessToken();
+//				newAccessToken.setAccessToken(accessToken);
+//				newAccessToken.setExpireTime(new Date(wxResult.getExpiresTime()));
 				
 				//更新db中的accessToken
-				WxAccessTokenCriteria criteria = new WxAccessTokenCriteria();
-				criteria.createCriteria().andIdEqualTo(1);
-				updateByCriteria(newAccessToken, criteria); 
+//				WxAccessTokenCriteria criteria = new WxAccessTokenCriteria();
+//				criteria.createCriteria().andIdEqualTo(1);
+//				updateByCriteria(newAccessToken, criteria); 
 				return accessToken;
 			}
-		}
+//		}
 		return null;
 	}
 
@@ -117,6 +120,16 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 		this.wxAccessTokenMapper = wxAccessTokenMapper;
 	}
 
+	public WxMpTokenService getWxMpTokenService() {
+		return wxMpTokenService;
+	}
+
+	public void setWxMpTokenService(WxMpTokenService wxMpTokenService) {
+		this.wxMpTokenService = wxMpTokenService;
+	}
+
+	
+	
 	
 
 	

@@ -5,7 +5,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="span6">&copy; Copyright 2014 - JS-SDK</div>
-			<div class="span6">京备xxxxxxx</div>
+			<div class="span6"></div>
 		</div>
 	</div>
 </div>

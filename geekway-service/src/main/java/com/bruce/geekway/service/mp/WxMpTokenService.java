@@ -27,23 +27,25 @@ public class WxMpTokenService {
 	 * @param appsecret
 	 * @return
 	 */
-	public synchronized WxAuthResult getMpAccessToken() {
+	public synchronized WxAuthResult getMpAccessToken(String appid, String secretKey) {
 			//通过网络获取新accessToken
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("grant_type", "client_credential");
-		params.put("appid", ConstWeixin.WX_APP_ID);
-		params.put("secret",  ConstWeixin.WX_APP_SECRET_KEY);
+		params.put("appid", appid);
+		params.put("secret", secretKey);
 		
 		String authResultStr = HttpUtil.getRequest(ConstWeixin.WX_ACCESS_TOKEN_API, params);
 		WxAuthResult wxAuthRes = JsonUtil.gson.fromJson(authResultStr, WxAuthResult.class);
 		if(wxAuthRes!=null && wxAuthRes.getErrcode()==0){//正常的响应结果
-//			WxAuthResult authResult = wxAuthRes;
 			long expireTime = System.currentTimeMillis() + (wxAuthRes.getExpires_in() - ACCESS_TOKEN_REQUEST_TIME) * 1000;
+			System.out.println("accessToken: "+wxAuthRes.getAccess_token());
 			wxAuthRes.setExpiresTime(expireTime);
 			return wxAuthRes;
 		}else{
 			throw new GeekwayException(ErrorCode.SYSTEM_ERROR);
 		}
 	}
+	
+	
 
 }
