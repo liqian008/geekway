@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.WxMediaTypeEnum;
 import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
@@ -73,17 +74,20 @@ public class WxMpMediaUploadService extends WxBaseService {
 	 * @return
 	 */
 	private WxMediaUploadResult uploadMedia(WxMediaTypeEnum typeEnum, String contentType, File file) {
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		params.put("type", typeEnum.toString());
-		
-		String uploadResultStr = HttpUtil.postMultipartRequest(ConstWeixin.WX_MEDIA_UPLOAD_API, params, file, contentType);
-		if(uploadResultStr!=null){
-			return JsonUtil.gson.fromJson(uploadResultStr, WxMediaUploadResult.class);
-		}else{
-			return null;
+		try{
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			params.put("type", typeEnum.toString());
+			
+			String uploadResultStr = HttpUtil.postMultipartRequest(ConstWeixin.WX_MEDIA_UPLOAD_API, params, file, contentType);
+			if(uploadResultStr!=null){
+				return JsonUtil.gson.fromJson(uploadResultStr, WxMediaUploadResult.class);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
+		return null;
 	}
 	
 //	public WxMpTokenService getMpTokenService() {

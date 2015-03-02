@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.WxBroadcastTypeEnum;
 import com.bruce.geekway.model.wx.json.WxBroadcastInfo;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
@@ -59,17 +60,22 @@ public class WxMpBroadcastService extends WxBaseService {
 	 * @return
 	 */
 	private WxBroadcastResult broadcastMessage(WxBroadcastTypeEnum broadcastTypeEnum, String content, String mediaId) {
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		
-		WxBroadcastInfo broadcastInfo = new WxBroadcastInfo(broadcastTypeEnum, content, mediaId);
-		
-		WxBroadcastInfo.FilterGroup filterGroup = new WxBroadcastInfo.FilterGroup();
-		filterGroup.setGroup_id(0);
-		broadcastInfo.setFilter(filterGroup);
-		String broadcastResultStr = HttpUtil.postRequest(ConstWeixin.WX_BROADCAST_API, params,  JsonUtil.gson.toJson(broadcastInfo));
-		WxBroadcastResult broadcastResult = JsonUtil.gson.fromJson(broadcastResultStr,  WxBroadcastResult.class);
-		return broadcastResult;
+		try {
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			
+			WxBroadcastInfo broadcastInfo = new WxBroadcastInfo(broadcastTypeEnum, content, mediaId);
+			
+			WxBroadcastInfo.FilterGroup filterGroup = new WxBroadcastInfo.FilterGroup();
+			filterGroup.setGroup_id(0);
+			broadcastInfo.setFilter(filterGroup);
+			String broadcastResultStr = HttpUtil.postRequest(ConstWeixin.WX_BROADCAST_API, params,  JsonUtil.gson.toJson(broadcastInfo));
+			WxBroadcastResult broadcastResult = JsonUtil.gson.fromJson(broadcastResultStr,  WxBroadcastResult.class);
+			return broadcastResult;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

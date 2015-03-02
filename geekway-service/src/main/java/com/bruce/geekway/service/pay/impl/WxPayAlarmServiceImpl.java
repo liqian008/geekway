@@ -3,7 +3,6 @@ package com.bruce.geekway.service.pay.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
 import com.bruce.geekway.constants.ConstConfig;

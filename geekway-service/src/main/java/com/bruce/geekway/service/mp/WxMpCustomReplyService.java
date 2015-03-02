@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.CustomMessage;
 import com.bruce.geekway.model.wx.message.ImageMessage;
@@ -78,25 +79,28 @@ public class WxMpCustomReplyService extends WxBaseService {
 	public WxJsonResult replyMessage(CustomMessage customMessage) {
 		if (customMessage != null) {
 			//TODO 48小时间隔检查
-			
-			String accessToken = wxAccessTokenService.getCachedAccessToken();
-			Map<String, String> params = buildAccessTokenParams(accessToken);
-			String customMessageStr = JsonUtil.gson.toJson(customMessage);
-			
-//			if(customMessage instanceof TextMessage){//文本消息
-//			}else if(customMessage instanceof NewsMessage){//图文消息
-//			}else if(customMessage instanceof ImageMessage){//图片消息
-//			}else if(customMessage instanceof VoiceMessage){//语音消息
-//			}
-			
-			// 回复客服消息
-			String sendResultStr = HttpUtil.postRequest(ConstWeixin.WX_REPLY_MESSAGE_API, params, customMessageStr);
-			
-			WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
-			if (wxSendResult != null &&wxSendResult.getErrcode() == 0) {//消息回复成功
-				//回复成功，将回复消息写入历史记录
-				int result = wxHistoryMessageService.logCustomReplyMessage(customMessage);
-				return wxSendResult;
+			try {
+				String accessToken = wxAccessTokenService.getCachedAccessToken();
+				Map<String, String> params = buildAccessTokenParams(accessToken);
+				String customMessageStr = JsonUtil.gson.toJson(customMessage);
+
+				// if(customMessage instanceof TextMessage){//文本消息
+				// }else if(customMessage instanceof NewsMessage){//图文消息
+				// }else if(customMessage instanceof ImageMessage){//图片消息
+				// }else if(customMessage instanceof VoiceMessage){//语音消息
+				// }
+
+				// 回复客服消息
+				String sendResultStr = HttpUtil.postRequest(ConstWeixin.WX_REPLY_MESSAGE_API, params, customMessageStr);
+
+				WxJsonResult wxSendResult = JsonUtil.gson.fromJson(sendResultStr, WxJsonResult.class);
+				if (wxSendResult != null && wxSendResult.getErrcode() == 0) {// 消息回复成功
+					// 回复成功，将回复消息写入历史记录
+					int result = wxHistoryMessageService.logCustomReplyMessage(customMessage);
+					return wxSendResult;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		return null;

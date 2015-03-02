@@ -3,10 +3,10 @@ package com.bruce.geekway.service.pay.mp;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.pay.WxDeliverInfo;
 import com.bruce.geekway.model.wx.pay.WxOrderQueryRequest;
@@ -32,17 +32,21 @@ public class WxMpPayService extends WxBaseService {
 	 * @return
 	 */
 	public WxJsonResult queryOrder(WxOrderQueryRequest orderRequest) {
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		
-		String queryJson = JsonUtil.gson.toJson(orderRequest);
-		
-		//提交查询请求至微信
-		String deliverResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_QUERY_ORDER_API, params, queryJson);
-		
-		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
-		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//订单查询成功
-			return wxpayDeliverResult;
+		try{
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			
+			String queryJson = JsonUtil.gson.toJson(orderRequest);
+			
+			//提交查询请求至微信
+			String deliverResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_QUERY_ORDER_API, params, queryJson);
+			
+			WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
+			if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//订单查询成功
+				return wxpayDeliverResult;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -53,17 +57,21 @@ public class WxMpPayService extends WxBaseService {
 	 * @return
 	 */
 	public WxJsonResult deliverNotify(WxDeliverInfo deliverInfo) {
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		
-		String postInfoStr = JsonUtil.gson.toJson(deliverInfo);
-		
-		//提交发货请求至微信
-		String deliverResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
-		
-		WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
-		if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//发货操作成功
-			return wxpayDeliverResult;
+		try{
+				String accessToken = wxAccessTokenService.getCachedAccessToken();
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			
+			String postInfoStr = JsonUtil.gson.toJson(deliverInfo);
+			
+			//提交发货请求至微信
+			String deliverResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_DELIVER_NOTIFY_API, params, postInfoStr);
+			
+			WxJsonResult wxpayDeliverResult = JsonUtil.gson.fromJson(deliverResultStr, WxJsonResult.class);
+			if(wxpayDeliverResult!=null && wxpayDeliverResult.getErrcode()==0){//发货操作成功
+				return wxpayDeliverResult;
+			}
+		}catch (CachedException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -73,17 +81,20 @@ public class WxMpPayService extends WxBaseService {
 	 * @return
 	 */
 	public WxJsonResult dealComplaint(String openId, String feedbackId) {
-		
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		params.put("openid", openId);
-		params.put("feedbackid", feedbackId);
-		
-		//发送至微信
-		String complaintResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
-		WxJsonResult wxpayComplaintResult = JsonUtil.gson.fromJson(complaintResultStr, WxJsonResult.class);
-		if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()==0){//维权处理成功
-			return wxpayComplaintResult;
+		try{
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			params.put("openid", openId);
+			params.put("feedbackid", feedbackId);
+			
+			//发送至微信
+			String complaintResultStr = HttpUtil.postRequest(ConstWeixin.WX_PAY_COMPLAINT_DEAL_API, params, null);
+			WxJsonResult wxpayComplaintResult = JsonUtil.gson.fromJson(complaintResultStr, WxJsonResult.class);
+			if(wxpayComplaintResult!=null && wxpayComplaintResult.getErrcode()==0){//维权处理成功
+				return wxpayComplaintResult;
+			}
+		}catch (CachedException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

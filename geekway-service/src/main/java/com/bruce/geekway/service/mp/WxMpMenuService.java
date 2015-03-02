@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.json.WxMenuBtn;
 import com.bruce.geekway.model.wx.json.request.WxMenuCreateJson;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
@@ -43,18 +44,21 @@ public class WxMpMenuService extends WxBaseService {
 //			WxAuthResult authResult = getWxAccessToken();
 //			if(authResult!=null && authResult.getErrcode()==null){
 //				String accessToken = authResult.getAccess_token();
-				
-				String accessToken = wxAccessTokenService.getCachedAccessToken();
-				Map<String, String> params = buildAccessTokenParams(accessToken);
-				//创建菜单
-				String menuCreateResult = HttpUtil.postRequest(ConstWeixin.WX_MENU_CREATE_API, params, JsonUtil.gson.toJson(menuCreateJson));
-
-				//for httpclient 4.0
-				//String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(menuCreateJson), Consts.UTF_8));
-				
-				WxJsonResult wxMenuCreateResult = JsonUtil.gson.fromJson(menuCreateResult, WxJsonResult.class);
-				if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
-					return wxMenuCreateResult;
+				try{
+					String accessToken = wxAccessTokenService.getCachedAccessToken();
+					Map<String, String> params = buildAccessTokenParams(accessToken);
+					//创建菜单
+					String menuCreateResult = HttpUtil.postRequest(ConstWeixin.WX_MENU_CREATE_API, params, JsonUtil.gson.toJson(menuCreateJson));
+	
+					//for httpclient 4.0
+					//String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(menuCreateJson), Consts.UTF_8));
+					
+					WxJsonResult wxMenuCreateResult = JsonUtil.gson.fromJson(menuCreateResult, WxJsonResult.class);
+					if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
+						return wxMenuCreateResult;
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
 				}
 //			}
 		}
@@ -73,20 +77,24 @@ public class WxMpMenuService extends WxBaseService {
 //			if(authResult!=null && authResult.getErrcode()==null){
 //				String accessToken = authResult.getAccess_token();
 				
-				String accessToken = wxAccessTokenService.getCachedAccessToken();
-				
-				Map<String, String> params = buildAccessTokenParams(accessToken);
-				//构造菜单的json对象
-				WxMenuCreateJson wrapper = new WxMenuCreateJson(menuList);
-				wrapper.setButton(menuList);
-				//创建菜单
-				String menuCreateResult = HttpUtil.postRequest(ConstWeixin.WX_MENU_CREATE_API, params, JsonUtil.gson.toJson(wrapper));
-				
-				//for httpclient 4.0
-//				String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(wrapper), Consts.UTF_8));
-				WxJsonResult wxMenuCreateResult = JsonUtil.gson.fromJson(menuCreateResult, WxJsonResult.class);
-				if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
-					return wxMenuCreateResult;
+				try{
+					String accessToken = wxAccessTokenService.getCachedAccessToken();
+					
+					Map<String, String> params = buildAccessTokenParams(accessToken);
+					//构造菜单的json对象
+					WxMenuCreateJson wrapper = new WxMenuCreateJson(menuList);
+					wrapper.setButton(menuList);
+					//创建菜单
+					String menuCreateResult = HttpUtil.postRequest(ConstWeixin.WX_MENU_CREATE_API, params, JsonUtil.gson.toJson(wrapper));
+					
+					//for httpclient 4.0
+	//				String menuCreateResult = WxUtil.sendPostRequest(ConfigUtil.getString("weixinmp_menu_create_url"), params, new StringEntity(JsonUtil.gson.toJson(wrapper), Consts.UTF_8));
+					WxJsonResult wxMenuCreateResult = JsonUtil.gson.fromJson(menuCreateResult, WxJsonResult.class);
+					if(wxMenuCreateResult!=null && wxMenuCreateResult.getErrcode()==0){//自定义菜单创建成功
+						return wxMenuCreateResult;
+					}
+				}catch (Exception e) {
+					e.printStackTrace();
 				}
 //			}
 		}
@@ -100,13 +108,18 @@ public class WxMpMenuService extends WxBaseService {
 	 * @return
 	 */
 	public WxMenuQueryResult menuGet() {
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		
-		String menuQueryResult = HttpUtil.getRequest(ConstWeixin.WX_MENU_GET_API, params);
-		WxMenuQueryResult wxMenuQueryResult = JsonUtil.gson.fromJson(menuQueryResult, WxMenuQueryResult.class);
-		return wxMenuQueryResult;
+		try{
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			
+			String menuQueryResult = HttpUtil.getRequest(ConstWeixin.WX_MENU_GET_API, params);
+			WxMenuQueryResult wxMenuQueryResult = JsonUtil.gson.fromJson(menuQueryResult, WxMenuQueryResult.class);
+			return wxMenuQueryResult;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
@@ -118,7 +131,7 @@ public class WxMpMenuService extends WxBaseService {
 //		WxAuthResult authResult = getWxAccessToken();
 //		if(authResult!=null && authResult.getErrcode()==null){
 //			String accessToken = authResult.getAccess_token();
-		
+		try{
 			String accessToken = wxAccessTokenService.getCachedAccessToken();
 		
 			Map<String, String> params = buildAccessTokenParams(accessToken);
@@ -127,8 +140,10 @@ public class WxMpMenuService extends WxBaseService {
 			
 			WxJsonResult wxMenuDeleteResult = JsonUtil.gson.fromJson(menuDeleteResult, WxJsonResult.class);
 			return wxMenuDeleteResult;
-//		}
-//		return null;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	

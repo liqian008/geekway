@@ -3,6 +3,7 @@ package com.bruce.geekway.service;
 import com.bruce.foundation.service.IFoundationPagingService;
 import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.WxWebUserCriteria;
+import com.bruce.geekway.model.exception.CachedException;
 
 public interface IWxWebUserService extends IFoundationPagingService<WxWebUser, Integer, WxWebUserCriteria> {
 	
@@ -13,7 +14,7 @@ public interface IWxWebUserService extends IFoundationPagingService<WxWebUser, I
 	 */
 	public WxWebUser loadByOpenId(String userOpenId);
 	
-	public WxWebUser loadCachedByOpenId(String userOpenId);
+	public WxWebUser loadCachedByOpenId(String userOpenId) throws CachedException;
 	
 	/**
 	 * 根据用户的unionId获取用户对象

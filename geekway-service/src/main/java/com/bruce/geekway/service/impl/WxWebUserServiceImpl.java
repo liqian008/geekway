@@ -3,9 +3,7 @@ package com.bruce.geekway.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import com.bruce.foundation.model.paging.PagingResult;
@@ -14,6 +12,7 @@ import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.WxWebUserMapper;
 import com.bruce.geekway.model.WxWebUser;
 import com.bruce.geekway.model.WxWebUserCriteria;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.service.IWxWebUserService;
 import com.bruce.geekway.service.mp.WxMpUserService;
 
@@ -139,9 +138,13 @@ public class WxWebUserServiceImpl implements IWxWebUserService {
 //			put = { 
 //					@CachePut(value = ConstMemc.MEMCACHE_CACHE_VALUE + "#7000", key = "'webUserOpenId-'+#userOpenId", condition = "#result != null")}
 //			)
-//	@Cacheable(value = ConstMemc.MEMCACHE_CACHE_VALUE + "#7000", key = "'webUserOpenId-'+#userOpenId")//, condition = "#result != null ") 
-	public WxWebUser loadCachedByOpenId(String userOpenId) {
-		return loadByOpenId(userOpenId);
+	@Cacheable(value = ConstMemc.MEMCACHE_CACHE_VALUE + "#7000", key = "'webUserOpenId-'+#userOpenId")//, condition = "#result != null ") 
+	public WxWebUser loadCachedByOpenId(String userOpenId) throws CachedException { 
+		WxWebUser webUser = loadByOpenId(userOpenId);
+		if(webUser==null||webUser.getId()==null){
+			throw new CachedException("webUser result is null"); 
+		}
+		return webUser;
 	}
 	
 	

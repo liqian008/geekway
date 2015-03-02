@@ -2,21 +2,17 @@ package com.bruce.geekway.service.impl;
 
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstMemc;
-import com.bruce.geekway.constants.ConstWeixin;
-import com.bruce.geekway.model.exception.ErrorCode;
-import com.bruce.geekway.model.exception.GeekwayException;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.json.response.WxJsTicketResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.IWxJsapiTicketService;
 import com.bruce.geekway.service.mp.WxBaseService;
-import com.bruce.geekway.utils.HttpUtil;
+import com.bruce.geekway.service.mp.WxMpJsTicketService;
 
 @Service
 public class WxJsapiTicketServiceImpl extends WxBaseService implements IWxJsapiTicketService {
@@ -26,25 +22,31 @@ public class WxJsapiTicketServiceImpl extends WxBaseService implements IWxJsapiT
 	
 	@Autowired
 	private IWxAccessTokenService wxAccessTokenService;
+	@Autowired
+	private WxMpJsTicketService wxMpJsTicketService;
 
 	@Override
 	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE+"#7000", key="'"+ConstMemc.MEMCACHE_KEY_MP_JSTICKET+"'")
-	public String getCachedJsTicket() {
-		
+	public String getCachedJsTicket() throws CachedException {
 		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		params.put("type", "jsapi");
+//		Map<String, String> params = buildAccessTokenParams(accessToken);
+//		params.put("type", "jsapi");
 		
-		String jsapiTicketStr = HttpUtil.getRequest(ConstWeixin.WX_JS_TICKET_API, params);
-		if(StringUtils.isNotBlank(jsapiTicketStr)){
-			WxJsTicketResult wxJsTicketResult = JsonUtil.gson.fromJson(jsapiTicketStr, WxJsTicketResult.class);
-			if(wxJsTicketResult!=null && wxJsTicketResult.getErrcode()==0){//正常的响应结果
-				long expireTime = System.currentTimeMillis() + (wxJsTicketResult.getExpires_in() - JS_TICKET_REQUEST_TIME) * 1000;
-				wxJsTicketResult.setExpiresTime(expireTime);
-				return wxJsTicketResult.getTicket();
-			}
+//		String jsapiTicketStr = HttpUtil.getRequest(ConstWeixin.WX_JS_TICKET_API, params);
+//		if(StringUtils.isNotBlank(jsapiTicketStr)){
+//			WxJsTicketResult wxJsTicketResult = JsonUtil.gson.fromJson(jsapiTicketStr, WxJsTicketResult.class);
+//			if(wxJsTicketResult!=null && wxJsTicketResult.getErrcode()==0){//正常的响应结果
+//				long expireTime = System.currentTimeMillis() + (wxJsTicketResult.getExpires_in() - JS_TICKET_REQUEST_TIME) * 1000;
+//				wxJsTicketResult.setExpiresTime(expireTime);
+//				return wxJsTicketResult.getTicket();
+//			}
+//		}
+		WxJsTicketResult jsTicketResult = wxMpJsTicketService.getMpJsTicket(accessToken);
+		if(jsTicketResult!=null){
+			return jsTicketResult.getTicket();
+		}else{
+			throw new CachedException();
 		}
-		return null;
 	}
 
 	public IWxAccessTokenService getWxAccessTokenService() {

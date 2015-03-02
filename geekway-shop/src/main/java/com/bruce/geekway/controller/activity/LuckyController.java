@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,6 +18,7 @@ import com.bruce.geekway.annotation.NeedAuthorize;
 import com.bruce.geekway.annotation.NeedAuthorize.AuthorizeScope;
 import com.bruce.geekway.constants.ConstFront;
 import com.bruce.geekway.model.WxWebUser;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.service.IWxWebUserService;
 
 /**
@@ -25,7 +27,7 @@ import com.bruce.geekway.service.IWxWebUserService;
  *
  */
 @RequestMapping(value = "/activities/")
-//@Controller
+@Controller
 public class LuckyController{
 	
 	@Autowired
@@ -40,7 +42,12 @@ public class LuckyController{
 			logger.debug("进入情侣匹配度首页");
 		}
 		if(StringUtils.isNotBlank(friendOpenId)){
-			WxWebUser friendWebUser = wxWebUserService.loadCachedByOpenId(friendOpenId);
+			WxWebUser friendWebUser = null;
+			try {
+				friendWebUser = wxWebUserService.loadCachedByOpenId(friendOpenId);
+			} catch (CachedException e) {
+				e.printStackTrace();
+			}
 			if(friendWebUser!=null&&friendWebUser.getId()!=null){
 				model.addAttribute("friendWebUser", friendWebUser);
 			}
@@ -66,7 +73,12 @@ public class LuckyController{
 			if(followed){//关注者才能参加
 				if(StringUtils.isNotBlank(friendOpenId)){
 					if(!myWebUser.getOpenId().equals(friendOpenId)){//点是的时自己的链接
-						WxWebUser friendWebUser = wxWebUserService.loadCachedByOpenId(friendOpenId);
+						WxWebUser friendWebUser = null;
+						try {
+							friendWebUser = wxWebUserService.loadCachedByOpenId(friendOpenId);
+						} catch (CachedException e) {
+							e.printStackTrace();
+						}
 						if(friendWebUser!=null&&friendWebUser.getId()!=null){
 							model.addAttribute("friendWebUser", friendWebUser);
 //							int luckyNumber = getLoverMatchResult(myWebUser, friendWebUser);
@@ -89,8 +101,14 @@ public class LuckyController{
 		if(logger.isDebugEnabled()){
 			logger.debug("查看情侣匹配度测试结果");
 		}
-		WxWebUser wxWebUser1 = wxWebUserService.loadCachedByOpenId(openId1); 
-		WxWebUser wxWebUser2 = wxWebUserService.loadCachedByOpenId(openId2);
+		WxWebUser wxWebUser1 = null;
+		WxWebUser wxWebUser2 = null;
+		try {
+			wxWebUser1 = wxWebUserService.loadCachedByOpenId(openId1);
+			wxWebUser2 = wxWebUserService.loadCachedByOpenId(openId2);
+		} catch (CachedException e) {
+			e.printStackTrace();
+		} 
 		if(wxWebUser1!=null&&wxWebUser2!=null){
 			model.addAttribute("wxWebUser1", wxWebUser1);
 			model.addAttribute("wxWebUser2", wxWebUser2);

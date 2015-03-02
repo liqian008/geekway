@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bruce.foundation.util.EmojiUtil;
 import com.bruce.foundation.util.JsonUtil;
 import com.bruce.geekway.constants.ConstWeixin;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.json.response.WxUserInfoResult;
 import com.bruce.geekway.model.wx.json.response.WxUserListResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
@@ -34,21 +35,25 @@ public class WxMpUserService extends WxBaseService {
 		// WxAuthResult authResult = getWxAccessToken();
 		// if(authResult!=null && authResult.getErrcode()==null){
 		// String accessToken = authResult.getAccess_token();
-
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		if (!StringUtils.isBlank(nextOpenId)) {
-			params.put("next_openid", nextOpenId);
-			// params.put("count", "10");
+		try{
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			if (!StringUtils.isBlank(nextOpenId)) {
+				params.put("next_openid", nextOpenId);
+				// params.put("count", "10");
+			}
+	
+			// String menuQueryResult =
+			// WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"),
+			// params);
+			String userListResult = HttpUtil.getRequest(ConstWeixin.WX_USER_INFO_API, params);
+	
+			WxUserListResult wxUserListResult = JsonUtil.gson.fromJson(userListResult, WxUserListResult.class);
+			return wxUserListResult;
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		// String menuQueryResult =
-		// WxUtil.sendGetRequest(ConfigUtil.getString("weixinmp_menu_get_url"),
-		// params);
-		String userListResult = HttpUtil.getRequest(ConstWeixin.WX_USER_INFO_API, params);
-
-		WxUserListResult wxUserListResult = JsonUtil.gson.fromJson(userListResult, WxUserListResult.class);
-		return wxUserListResult;
+		return null;
 	}
 
 	/**
@@ -58,18 +63,22 @@ public class WxMpUserService extends WxBaseService {
 	 * @return
 	 */
 	public WxUserInfoResult getUser(String openId) {
-
-		String accessToken = wxAccessTokenService.getCachedAccessToken();
-		Map<String, String> params = buildAccessTokenParams(accessToken);
-		params.put("OPENID", openId);
-		params.put("lang", "zh_CN");
-
-		String userinfoResult = HttpUtil.getRequest(ConstWeixin.WX_USER_INFO_API, params);
-		
-		String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResult);
-		
-		WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
-		return wxUserinfoResult;
+		try{
+			String accessToken = wxAccessTokenService.getCachedAccessToken();
+			Map<String, String> params = buildAccessTokenParams(accessToken);
+			params.put("OPENID", openId);
+			params.put("lang", "zh_CN");
+	
+			String userinfoResult = HttpUtil.getRequest(ConstWeixin.WX_USER_INFO_API, params);
+			
+			String emojiFilterResult = EmojiUtil.filterEmoji(userinfoResult);
+			
+			WxUserInfoResult wxUserinfoResult = JsonUtil.gson.fromJson(emojiFilterResult, WxUserInfoResult.class);
+			return wxUserinfoResult;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public IWxAccessTokenService getWxAccessTokenService() {

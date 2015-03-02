@@ -12,6 +12,7 @@ import com.bruce.geekway.constants.ConstMemc;
 import com.bruce.geekway.dao.mapper.WxAccessTokenMapper;
 import com.bruce.geekway.model.WxAccessToken;
 import com.bruce.geekway.model.WxAccessTokenCriteria;
+import com.bruce.geekway.model.exception.CachedException;
 import com.bruce.geekway.model.wx.json.response.WxAuthResult;
 import com.bruce.geekway.service.IWxAccessTokenService;
 import com.bruce.geekway.service.mp.WxMpTokenService;
@@ -80,19 +81,21 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 	
 	/**
 	 * 获取缓存中的accessToken
+	 * @throws CachedException 
 	 */
 	@Override
 	@Cacheable(value=ConstMemc.MEMCACHE_CACHE_VALUE+"#7000", key="'"+ConstMemc.MEMCACHE_KEY_MP_ACCESSTOKEN+"'")
-	public synchronized String getCachedAccessToken() {
-		//从db中获取缓存的accessToken
+	public synchronized String getCachedAccessToken() throws CachedException {
+		String accessToken  = null;
+
 		WxAccessToken dbAccessToken = loadById(1);
 		if(dbAccessToken!=null&&!StringUtils.isBlank(dbAccessToken.getAccessToken())&&dbAccessToken.getExpireTime().getTime()>System.currentTimeMillis()){
 			//accessToken可用
-			return dbAccessToken.getAccessToken();
+			accessToken = dbAccessToken.getAccessToken();
 		}else{
 			WxAuthResult wxResult = wxMpTokenService.getMpAccessToken();
 			if(wxResult!=null){//成功的响应
-				String accessToken = wxResult.getAccess_token();
+				accessToken = wxResult.getAccess_token();
 				
 				WxAccessToken newAccessToken = new WxAccessToken();
 				newAccessToken.setAccessToken(accessToken);
@@ -102,10 +105,13 @@ public class WxAccessTokenServiceImpl implements IWxAccessTokenService {
 				WxAccessTokenCriteria criteria = new WxAccessTokenCriteria();
 				criteria.createCriteria().andIdEqualTo(1);
 				updateByCriteria(newAccessToken, criteria); 
-				return accessToken;
 			}
 		}
-		return null;
+		if(StringUtils.isNotBlank(accessToken)){
+			return accessToken;
+		}else{
+			throw new CachedException();
+		}
 	}
 
 	
