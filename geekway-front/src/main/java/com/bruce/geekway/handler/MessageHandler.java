@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bruce.geekway.handler.processor.Processor;
-import com.bruce.geekway.model.WxUser;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgRespTypeEnum;
 import com.bruce.geekway.model.wx.WxMsgTypeEnum;
@@ -34,6 +35,9 @@ import com.bruce.geekway.utils.WxXmlUtil;
  */
 //@Service
 public class MessageHandler {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
+	
 	// @Resource
 	// @Qualifier("textProcessorList")
 	// @Autowired
@@ -75,21 +79,25 @@ public class MessageHandler {
 		boolean fromUser = true;
 		switch (msgTypeEnum) {
 		case TEXT:
+			logger.debug("文本消息");
 			TextRequest textRequest = WxXmlUtil.getMsgText(ele);//解析文本请求
 			wxRequest = textRequest;
 			wxResponse =  processTextRequest(textRequest);
 			break;
 		case IMAGE:
+			logger.debug("图片消息");
 			ImageRequest imageRequest = WxXmlUtil.getMsgImage(ele);//解析图片消息
 			wxRequest = imageRequest;
 			wxResponse = processImageRequest(imageRequest);
 			break;
 		case VOICE:
+			logger.debug("语音消息");
 			VoiceRequest voiceRequest = WxXmlUtil.getMsgVoice(ele);//解析voice消息
 			wxRequest = voiceRequest;
 			wxResponse =  processVoiceRequest(voiceRequest);
 			break;
 		case EVENT: {
+			logger.debug("事件消息");
 			String event = ele.elementText("Event");
 			if (event == null) {
 				throw new Exception("cannot find Event Node!" + xml);
@@ -97,22 +105,28 @@ public class MessageHandler {
 			WxEventTypeEnum eventTypeEnum = WxEventTypeEnum.instance(event);
 			switch (eventTypeEnum) {
 				case SUBSCRIBE: {// 订阅关注
+					logger.debug("关注事件");
 					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 					wxRequest = eventRequest;
 					String fromOpenId = eventRequest.getFromUserName();
-					WxUser wxUser = wxUserService.loadByOpenId(fromOpenId);
-					if(wxUser==null){//全新用户关注
-						wxUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
+					boolean isNewUser = true;
+//					WxUser wxUser = wxUserService.loadByOpenId(fromOpenId);
+//					isNewUser = wxUser==null?true:false;
+					if(isNewUser){//全新用户关注
+						logger.debug("全新用户关注"+fromOpenId);
+//						wxUserService.newSubscribeUser(fromOpenId);//作为系统级操作，向用户表中写入新数据（脱离processor处理系统的订阅事件）
 						wxResponse = processEventFirstSubscribeRequest(eventRequest);
 						break;
 					}else{//之前存在过，属于重复关注
-						wxUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
+						logger.debug("用户重复关注"+fromOpenId);
+//						wxUserService.reSubscribeUser(fromOpenId);//作为系统级操作，更新用户表的关注状态（脱离processor处理系统的订阅事件）
 						eventRequest.setEvent(WxEventTypeEnum.RESUBSCRIBE);//设置为重复关注类型
 						wxResponse = processEventRepeatSubscribeRequest(eventRequest);
 						break;
 					}
 				}
 				case UNSUBSCRIBE: {// 退订
+					logger.debug("取消关注事件");
 					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 					wxRequest = eventRequest;
 					//作为系统级操作，向用户表中更新数据（脱离processor处理系统的退订事件）
@@ -121,18 +135,21 @@ public class MessageHandler {
 					break;
 				}
 				case CLICK: {// 点击菜单
+					logger.debug("菜单点击事件");
 					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 					wxRequest = eventRequest;
 					wxResponse = processEventClickRequest(eventRequest);
 					break;
 				}
 				case VIEW: {// 点击菜单链接跳转（wiki文档中写到会发送该消息，但实际未检测到该消息）
+					logger.debug("菜单点击链接事件");
 					EventRequest eventRequest = WxXmlUtil.getMsgEvent(ele);
 					wxRequest = eventRequest;
 					wxResponse = null;//点击菜单链接跳转，无需返回数据（此处作为特殊处理）
 					break;
 				}
 				case LOCATION: {// 上报location位置
+					logger.debug("上报location位置");
 					LocationEventRequest locationEventRequest = new LocationEventRequest();
 					wxRequest = locationEventRequest;
 					wxResponse = processEventLocationRequest(locationEventRequest);
@@ -159,11 +176,11 @@ public class MessageHandler {
 			break;
 		}
 		if(wxRequest!=null){
-			if(fromUser){//对于普通消息类型，需要将消息中的openid写入用户表，避免因停服的时候导致用户遗漏
-				wxUserService.logUserFromMessage(wxRequest.getFromUserName());
-			}
-			//将wx消息写入历史消息，便于查阅
-			wxHistoryMessageService.logRequestMessage(wxRequest, xml);
+//			if(fromUser){//对于普通消息类型，需要将消息中的openid写入用户表，避免因停服的时候导致用户遗漏
+//				wxUserService.logUserFromMessage(wxRequest.getFromUserName());
+//			}
+//			//将wx消息写入历史消息，便于查阅
+//			wxHistoryMessageService.logRequestMessage(wxRequest, xml);
 		}
 		return wxResponse;
 	}
@@ -199,7 +216,7 @@ public class MessageHandler {
 		default:
 			break;
 		}
-		wxHistoryMessageService.logResponseMessage(wxResponse, responseStr);
+//		wxHistoryMessageService.logResponseMessage(wxResponse, responseStr);
 		return responseStr;
 	}
 

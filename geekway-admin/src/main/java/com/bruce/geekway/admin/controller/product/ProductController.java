@@ -294,8 +294,8 @@ public class ProductController {
 //								productSku.setSkuPicUrl(product.getProductPicUrl());
 //								productSku.setSkuThumbPicUrl(product.getProductThumbPicUrl());
 								
-								productSku.setOriginPrice((double) 0);
-								productSku.setPrice((double) 0);
+								productSku.setOriginPrice(0);
+								productSku.setPrice(0);
 								productSku.setStock(0);
 								productSku.setPropertiesName(skuProperty);
 								
@@ -375,8 +375,8 @@ public class ProductController {
 			for(String skuIdStr: skuIdArray){
 				int skuId = NumberUtils.toInt(skuIdStr, 0);
 //				
-				double skuOriginPrice = NumberUtils.toDouble(request.getParameter("skuOriginPrice_"+skuIdStr), 0);
-				double skuPrice = NumberUtils.toDouble(request.getParameter("skuPrice_"+skuIdStr), 0);
+				int skuOriginPrice = NumberUtils.toInt(request.getParameter("skuOriginPrice_"+skuIdStr), 0);
+				int skuPrice = NumberUtils.toInt(request.getParameter("skuPrice_"+skuIdStr), 0);
 				int skuStock = NumberUtils.toInt(request.getParameter("skuAmount_"+skuIdStr), 0);
 				//保存
 				ProductSku productSku = new ProductSku();

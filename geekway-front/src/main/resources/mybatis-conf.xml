@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<mappers>
+	
+		<!-- geekway config -->
+
+		<mapper resource="com/bruce/geekway/model/xml/WxUserMapper.xml" /> 
+		<mapper resource="com/bruce/geekway/model/xml/WxWebUserMapper.xml" /> 
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxCommandMapper.xml" /> 
+		<mapper resource="com/bruce/geekway/model/xml/WxCommandExtendMapper.xml" />
+		
+		<!-- 
+		<mapper resource="com/bruce/geekway/model/xml/WxCommandMaterialMapper.xml" />
+		 -->
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialArticleExtendMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialMultimediaMapper.xml" />
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxMaterialNewsArticleMapper.xml" />
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxCustomizeMenuMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxDefaultReplyMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxBroadcastMapper.xml" />
+		<mapper resource="com/bruce/geekway/model/xml/WxHistoryMessageMapper.xml" />
+		
+		<mapper resource="com/bruce/geekway/model/xml/WxAccessTokenMapper.xml" />
+		
+		
+	</mappers>
+
+</configuration>

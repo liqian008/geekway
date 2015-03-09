@@ -18,6 +18,14 @@
 	</properties>
 
 	<dependencies>
+		
+		<dependency>
+			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+	
 		<!-- foundation admin -->
 		<dependency>
 			<groupId>com.bruce</groupId>

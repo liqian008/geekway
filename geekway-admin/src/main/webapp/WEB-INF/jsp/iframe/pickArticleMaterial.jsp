@@ -90,9 +90,9 @@
 								<td><%=materialArticle.getShortContent()%></td>
 								<td>
 									<%
-										String meterialLink = ProductUtil.getArticleLink(materialArticle.getId());
+										String meterialLink = "";// ProductUtil.getArticleLink(materialArticle.getId());
 									%>
-									<a href="<%=meterialLink%>" target="_blank">预览</a>
+									<a href="<%=materialArticle.getLink()%>" target="_blank">预览</a>
 								</td>
 								<td>正常</td>
 								<td class='text-center'>

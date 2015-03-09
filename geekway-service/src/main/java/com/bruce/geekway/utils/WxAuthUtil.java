@@ -32,7 +32,7 @@ public class WxAuthUtil {
 	 * @return
 	 */
 	public static boolean wxMessageAuth(String signature, String timestamp, String nonce, String echostr) {
-		String excepted = Sha1Util.getSha1(combineWxMessageParam(timestamp, nonce, ""));
+		String excepted = Sha1Util.getSha1(combineWxMessageParam(timestamp, nonce, "geekway"));
 		if (signature == null || !signature.equals(excepted)) {
 			log.error("Authentication failed! excepted echostr ->" + excepted);
 			log.error("actual ->" + signature);
@@ -40,6 +40,26 @@ public class WxAuthUtil {
 		}
 		return true;
 	}
+	
+	/**
+	 * 验证微信消息签名，文档api: http://mp.weixin.qq.com/wiki/index.php?title=%E9%AA%8C%E8%AF%81%E6%B6%88%E6%81%AF%E7%9C%9F%E5%AE%9E%E6%80%A7
+	 * @param token
+	 * @param signature
+	 * @param timestamp
+	 * @param nonce
+	 * @param echostr
+	 * @return
+	 */
+	public static boolean wxMessageAuth(String token, String signature, String timestamp, String nonce, String echostr) {
+		String excepted = Sha1Util.getSha1(combineWxMessageParam(timestamp, nonce, token));
+		if (signature == null || !signature.equals(excepted)) {
+			log.error("Authentication failed! excepted echostr ->" + excepted);
+			log.error("actual ->" + signature);
+			return false;
+		}
+		return true;
+	}
+	
 	
 	
 	/**

@@ -54,7 +54,7 @@
 	
 	<!-- 访问微信api接口的userService，供订阅后添加用户使用 
 	-->
-	<bean id="mpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
+	<bean id="wxMpTokenService" class="com.bruce.geekway.service.mp.WxMpTokenService">
 	</bean>
 	<bean id="wxMpUserService" class="com.bruce.geekway.service.mp.WxMpUserService">
 	</bean>

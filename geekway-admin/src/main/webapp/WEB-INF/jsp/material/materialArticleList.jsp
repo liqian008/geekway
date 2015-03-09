@@ -115,7 +115,7 @@
 								<th>序号</th>
                                 <th>类型</th>
                                 <th>封面</th>
-                                <th>内容</th>
+                                <th>标题</th>
                                 <th>预览</th>
                                 <th>状态</th>
                                 <th class="team-links">操作</th>
@@ -138,7 +138,7 @@
 		                        	</a>
 		                        </td>
 		                        <td>
-		                        	<%=material.getShortContent()%>
+		                        	<%=material.getTitle()%>
 		                        </td>
 		                        <td>
 									<%

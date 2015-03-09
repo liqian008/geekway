@@ -198,7 +198,7 @@
 									<label class="control-label">
 									<%
 										String meterialLink = ProductUtil.getArticleLink(subscribedMaterial.getId());
-									%>
+									%> 
 									<%=meterialLink%>
 									<a href="<%=meterialLink%>" target="_blank">预览</a>
 								</label>

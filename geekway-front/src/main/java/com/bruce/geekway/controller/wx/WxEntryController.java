@@ -1,5 +1,7 @@
 package com.bruce.geekway.controller.wx;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,8 @@ import com.bruce.geekway.utils.WxAuthUtil;
 @RequestMapping("/wx")
 public class WxEntryController {
 
+	private static final Logger logger = LoggerFactory.getLogger(WxEntryController.class);
+	
 	@Autowired
 	private MessageHandler messageHandler;
 
@@ -36,13 +40,13 @@ public class WxEntryController {
 
 	@RequestMapping(value="/api", method = {RequestMethod.POST})
 	public String message(Model model, @RequestBody String xml) {
+		logger.info("api xml: "+xml);
 		String response =  "";
 		try {
-			System.out.println("wx xml: "+xml);
 			BaseResponse wxResponse = messageHandler.processMessage(xml);
 			if (wxResponse != null) {
 				response = messageHandler.parseXMLResp(wxResponse);
-				System.out.println("response: "+response);
+				logger.info("response: "+response);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,10 +76,9 @@ public class WxEntryController {
 		} else if ("broadcast".equalsIgnoreCase(type)) {
 			baseResponse = messageHandler.processMessage(MessageMocker.MSG_EVENT_BROADCAST_XML);
 		}
-		System.out.println(baseResponse);
 		if (baseResponse != null) {
 			response = messageHandler.parseXMLResp(baseResponse);
-			System.out.println("response: "+response);
+			logger.debug("response: "+response);
 		}
 		model.addAttribute("response", response);
 		return "wx/response";

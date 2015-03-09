@@ -34,7 +34,7 @@ public class GeekwayCommandSubscribedController {
 	
 	
 	@RequestMapping("/subscribedCommandList")
-	public String commandList(Model model, HttpServletRequest request) {
+	public String subscribedCommandList(Model model, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -62,7 +62,7 @@ public class GeekwayCommandSubscribedController {
 	 * @return
 	 */
 	@RequestMapping("/newsubscribeCommandAdd")
-	public String subscribedCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
+	public String newsubscribeCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -80,7 +80,7 @@ public class GeekwayCommandSubscribedController {
 	 * @return
 	 */
 	@RequestMapping("/resubscribeCommandAdd")
-	public String menuCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
+	public String resubscribeCommandAdd(Model model, WxCommand command, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -91,7 +91,7 @@ public class GeekwayCommandSubscribedController {
 	}
 	
 	@RequestMapping("/subscribeCommandEdit")
-	public String commandEdit(Model model, HttpServletRequest request, int commandId) {
+	public String subscribeCommandEdit(Model model, HttpServletRequest request, int commandId) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -107,7 +107,7 @@ public class GeekwayCommandSubscribedController {
 	}
 	
 	@RequestMapping(value = "/saveSubscribeCommand", method = RequestMethod.POST)
-	public String saveCommand(Model model, WxCommand command, HttpServletRequest request) {
+	public String saveSubscribeCommand(Model model, WxCommand command, HttpServletRequest request) {
 		String servletPath = request.getRequestURI();
 		model.addAttribute("servletPath", servletPath);
 		
@@ -127,7 +127,7 @@ public class GeekwayCommandSubscribedController {
 	}
 	
 	@RequestMapping("/delSubscribedCommand")
-	public String delCommand(Model model,  int commandId) {
+	public String delSubscribedCommand(Model model,  int commandId) {
 		//删除command实体
 		wxCommandService.deleteById(commandId);
 		

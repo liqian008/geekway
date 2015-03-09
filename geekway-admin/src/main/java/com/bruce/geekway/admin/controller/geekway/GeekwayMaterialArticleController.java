@@ -33,7 +33,6 @@ public class GeekwayMaterialArticleController extends BaseController {
 
 	private static final int pageSize = ConstConfig.PAGE_SIZE_DEFAULT;
 
-	
 	@Autowired
 	private IWxMaterialArticleService wxMaterialArticleService;
 	@Autowired
@@ -149,6 +148,46 @@ public class GeekwayMaterialArticleController extends BaseController {
 		Date currentTime = new Date();
 		materialArticle.setUpdateTime(currentTime);
 		
+//		//从微信页面中读取标题&图片
+//		if(materialArticle!=null&&StringUtils.isNotBlank(materialArticle.getLink())){
+//			String link = materialArticle.getLink();
+//			try {
+//				Document doc;
+//				doc = Jsoup.connect(link).get();
+//				Elements activityTitles = doc.select("#activity-name");
+//				if(activityTitles!=null&&activityTitles.size()>0){
+//					for (Element element : activityTitles) {
+//						String title = element.text();
+//						if(StringUtils.isNotBlank(title)) {
+//							materialArticle.setTitle(title);
+//							materialArticle.setShortTitle(title);
+//						}
+//					}
+//				}
+//				Elements ListDiv = doc.select("div#js_content p img");// doc.getElementsByAttributeValue("class", "postTitle");
+//				for (Element element : ListDiv) {
+//					if(element.hasAttr("data-src")){
+//						String coverUrl = element.attr("data-src");
+//						if(StringUtils.isNotBlank(coverUrl)){
+//							materialArticle.setCoverImageUrl(coverUrl);
+//							materialArticle.setCoverThumbImageUrl(coverUrl);
+//						}
+//						break;
+//					}
+//					if(element.hasAttr("src")){
+//						String coverUrl = element.attr("src");
+//						if(StringUtils.isNotBlank(coverUrl)){
+//							materialArticle.setCoverImageUrl(coverUrl);
+//							materialArticle.setCoverThumbImageUrl(coverUrl);
+//						}
+//						break;
+//					}
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+		
 		if(materialArticle!=null&&materialArticle.getId()!=null&&materialArticle.getId()>0){
 			result = wxMaterialArticleService.updateById(materialArticle);
 		}else{
@@ -172,5 +211,71 @@ public class GeekwayMaterialArticleController extends BaseController {
 		model.addAttribute("redirectUrl", "./materialArticlePaging");
 		return "forward:/home/operationRedirect";
 	}
+	
+	
+	
+	
+//	@RequestMapping("/loadWeixinArticle")
+//	public String loadWeixinArticle(Model model, int start, int end) {
+//		
+////		WxMaterialArticle materialArticle = wxMaterialArticleService.loadById(articleId);
+//		List<WxMaterialArticle> list = wxMaterialArticleService.queryAll();
+//		if(list!=null&&list.size()>0){
+//			int i=0;
+//			for(WxMaterialArticle materialArticle: list){
+//				if(i>=start&&i<end){
+//				//从微信页面中读取标题&图片
+//				if(materialArticle!=null&&StringUtils.isNotBlank(materialArticle.getLink())){
+//					String link = materialArticle.getLink();
+//					try {
+//						Document doc;
+//						doc = Jsoup.connect(link).get();
+//						Elements activityTitles = doc.select("#activity-name");
+//						if(activityTitles!=null&&activityTitles.size()>0){
+//							for (Element element : activityTitles) {
+//								String title = element.text();
+//								if(StringUtils.isNotBlank(title)) {
+//									materialArticle.setTitle(title);
+//									materialArticle.setShortTitle(title);
+//								}
+//							}
+//						}
+//						Elements ListDiv = doc.select("div#js_content p img");// doc.getElementsByAttributeValue("class", "postTitle");
+//						for (Element element : ListDiv) {
+//							if(element.hasAttr("data-src")){
+//								String coverUrl = element.attr("data-src");
+//								if(StringUtils.isNotBlank(coverUrl)){
+//									materialArticle.setCoverImageUrl(coverUrl);
+//									materialArticle.setCoverThumbImageUrl(coverUrl);
+//								}
+//								break;
+//							}
+//							if(element.hasAttr("src")){
+//								String coverUrl = element.attr("src");
+//								if(StringUtils.isNotBlank(coverUrl)){
+//									materialArticle.setCoverImageUrl(coverUrl);
+//									materialArticle.setCoverThumbImageUrl(coverUrl);
+//								}
+//								break;
+//							}
+//						}
+//						
+//						wxMaterialArticleService.updateById(materialArticle);
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
+//				}
+//			}
+//		}
+//		
+//		model.addAttribute("redirectUrl", "./materialArticlePaging");
+//		return "forward:/home/operationRedirect";
+//	}
 
+	
+	
+	
+	
+	
 }

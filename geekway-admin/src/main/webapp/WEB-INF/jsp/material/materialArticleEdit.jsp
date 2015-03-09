@@ -142,7 +142,7 @@
 						</div>
 						
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文短标题: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">微信短标题: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-4">
 								<input type="text" class="form-control" name="shortTitle" id="shortTitle" value="${materialArticle.shortTitle}"/>
@@ -152,18 +152,18 @@
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">图片缩略图:<span class="mandatory">*</span>
 							</label>
-							<div class="col-sm-4">
+							<div class="col-sm-8">
+								<input id="cover-image-url" type="text" class="form-control"  name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
 								<a href="${materialArticle.coverImageUrl}" id="cover-image-link"  class="lightbox">
 									<img id="cover-image" src="${materialArticle.coverImageUrl}" width="200px" />
 								</a>
 								<form:hidden path="materialArticle.thumbMediaId"/>
-								<input id="cover-image-url" type="hidden" name="coverImageUrl" value="${materialArticle.coverImageUrl}"/>
 								<input type="file" name="thumbImage" id="cover-image-file" class="styled">
 							</div>
 						</div>
 
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文内容概要: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">微信内容概要: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-10"> 
 								<div class="block-inner">
@@ -184,9 +184,9 @@
 							</div>
 						</div>
 						
-						<%if(materialArticle!=null&&materialArticle.getId()!=null){%>
+						<%-- <%if(materialArticle!=null&&materialArticle.getId()!=null){%>
 						<div class="form-group">
-							<label class="col-sm-2 control-label text-right">图文链接: <span class="mandatory">*</span>
+							<label class="col-sm-2 control-label text-right">本文链接: <span class="mandatory">*</span>
 							</label>
 							<div class="col-sm-6">
 								<label class="control-label">
@@ -198,7 +198,18 @@
 								</label>
 							</div>
 						</div>
-						<%}%>
+						<%}%> --%>
+						
+						
+						<div class="form-group">
+							<label class="col-sm-2 control-label text-right">图文外链: <span class="mandatory">*</span>
+							</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" name="link" id="link" value="${materialArticle.link}"/>
+							</div>
+						</div>
+						
+						
 						
 						<div class="form-group">
 							<label class="col-sm-2 control-label text-right">状 态: <span class="mandatory">*</span>
@@ -234,9 +245,9 @@
 	        //创建FormData对象
 	        var data = new FormData();
 	        //为FormData对象添加数据 
-	        data.append('thumbImage', $('input[type=file]')[0].files[0]);  
+	        data.append('image', $('input[type=file]')[0].files[0]);
 	        $.ajax({
-	        	url:'${pageContext.request.contextPath}/geekway/wxThumbUpload',
+	        	 url:'${pageContext.request.contextPath}/upload/uploadQiniu',
 	            type:'POST',
 	            data:data,
 	            cache: false,
@@ -244,8 +255,8 @@
 	            processData: false,    //不可缺
 	            success:function(responseData){
 	                if(responseData.result==1){
-	                	var imageUrl = responseData.data.mediumImage.url;
-	                	$('#thumbMediaId').val(responseData.data.wxMediaResult.thumb_media_id);
+	                	var imageUrl = responseData.data.uploadImageMap.original.url; 
+	                	//$('#thumbMediaId').val(responseData.data.wxMediaResult.thumb_media_id);
 		                $('#cover-image').attr("src", imageUrl);
 		                $('#cover-image-link').attr("href", imageUrl);
 		                $('#cover-image-url').val(imageUrl);

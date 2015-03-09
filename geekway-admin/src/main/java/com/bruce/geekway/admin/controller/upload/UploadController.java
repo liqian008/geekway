@@ -18,7 +18,7 @@ import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 
 /**
- * 产品图片的上传
+ * 图片的上传
  * @author liqian
  *
  */
@@ -44,6 +44,29 @@ public class UploadController extends BaseController{
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
 			UploadImageResult imageUploadResult = uploadQiniuService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
+			if(imageUploadResult!=null){
+				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return JsonResultBuilderUtil.buildErrorJson(ErrorCode.UPLOAD_IMAGE_ERROR);
+	}
+	
+	
+	/**
+	 * 上传到七牛cdn
+	 * @param model
+	 * @param file
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/uploadLocal", method = RequestMethod.POST)
+	public JsonResultBean uploadLocal(Model model, @RequestParam("image") CommonsMultipartFile file) {
+		try {
+			WebUserDetails userDetail = getUserInfo();
+			int userId = userDetail.getUserId();
+			UploadImageResult imageUploadResult = uploadLocalService.uploadImage(file.getBytes(), String.valueOf(userId), file.getOriginalFilename());
 			if(imageUploadResult!=null){
 				return JsonResultBuilderUtil.buildSuccessJson(imageUploadResult);
 			}

@@ -2,6 +2,8 @@ package com.bruce.geekway.handler.processor;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialMultimedia;
 import com.bruce.geekway.model.wx.WxEventTypeEnum;
@@ -169,7 +171,11 @@ public abstract class AbstractProcessor implements Processor{
 		if(materialArticleList!=null&&materialArticleList.size()>0){
 			NewsResponse newsResponse = new NewsResponse(toUserName, fromUserName);
 			for(WxMaterialArticle article: materialArticleList){
-				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), ArticleLinkUtil.getArticleLink(article.getId()));
+				String link = article.getLink();
+				if(StringUtils.isBlank(link)){
+					link = ArticleLinkUtil.getArticleLink(article.getId());
+				}
+				newsResponse.addArticle(article.getShortTitle(), article.getShortContent(), article.getCoverImageUrl(), link);
 			}
 			return newsResponse;
 		}
