@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bruce.foundation.model.paging.PagingResult;
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.constants.ConstWeixin;
 import com.bruce.geekway.model.WxBroadcast;
 import com.bruce.geekway.model.WxBroadcastCriteria;
-import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.wx.json.response.WxBroadcastResult;
 import com.bruce.geekway.service.IWxBroadcastService;
@@ -127,25 +127,25 @@ public class GeekwayBroadcastController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/mpBroadcastText.json", method = RequestMethod.POST)
-	public JsonResultBean mpBroadcastText(Model model, String content, HttpServletRequest request) {
+	public ApiJsonResult mpBroadcastText(Model model, String content, HttpServletRequest request) {
 		return broadcastMaterialMedia(0, 0, content);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/mpBroadcastArticle.json", method = RequestMethod.POST)
-	public JsonResultBean mpBroadcastArticle(Model model, int materialId, HttpServletRequest request) {
+	public ApiJsonResult mpBroadcastArticle(Model model, int materialId, HttpServletRequest request) {
 		return broadcastMaterialMedia(1, materialId, null);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/mpBroadcastNews.json", method = RequestMethod.POST)
-	public JsonResultBean mpBroadcastNews(Model model, int materialId, HttpServletRequest request) {
+	public ApiJsonResult mpBroadcastNews(Model model, int materialId, HttpServletRequest request) {
 		return broadcastMaterialMedia(2, materialId, null);
 	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/mpBroadcastImage.json", method = RequestMethod.POST)
-	public JsonResultBean mpBroadcastImage(Model model, int materialId, HttpServletRequest request) {
+	public ApiJsonResult mpBroadcastImage(Model model, int materialId, HttpServletRequest request) {
 		return broadcastMaterialMedia(3, materialId, null);
 	}
 	
@@ -156,7 +156,7 @@ public class GeekwayBroadcastController {
 	 * @param request
 	 * @return
 	 */
-	private JsonResultBean broadcastMaterialMedia(int materialType, int materialId, String content) {
+	private ApiJsonResult broadcastMaterialMedia(int materialType, int materialId, String content) {
 		if("senior".equalsIgnoreCase(ConstWeixin.WX_ACCOUNT_TYPE)){
 			//TODO 检查每月发送<4次
 			boolean canBroadcast = true;

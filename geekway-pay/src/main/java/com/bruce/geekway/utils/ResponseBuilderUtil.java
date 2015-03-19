@@ -6,8 +6,8 @@ package com.bruce.geekway.utils;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.constants.ConstFront;
-import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.exception.ErrorCode;
 
 
@@ -43,18 +43,18 @@ public final class ResponseBuilderUtil {
 	}
 	
 	
-	public static ModelAndView buildJsonView(JsonResultBean jsonResult) {
+	public static ModelAndView buildJsonView(ApiJsonResult jsonResult) {
 		ModelAndView mv = new ModelAndView(ConstFront.JSON_VIEW);
 		mv.addObject(JSON_RESULT, jsonResult);
 		return mv;
 	}
 
-	public static JsonResultBean buildSuccessJson() {
+	public static ApiJsonResult buildSuccessJson() {
 		return buildSuccessJson(null);
 	}
 
-	public static JsonResultBean buildSuccessJson(Object data) {
-		JsonResultBean jsonResult = new JsonResultBean();
+	public static ApiJsonResult buildSuccessJson(Object data) {
+		ApiJsonResult jsonResult = new ApiJsonResult();
 		jsonResult.setResult(RESULT_SUCCESS);
 		if (data != null) {
 			jsonResult.setData(data);
@@ -62,20 +62,20 @@ public final class ResponseBuilderUtil {
 		return jsonResult;
 	}
 
-	public static JsonResultBean buildErrorJson() {
-		JsonResultBean jsonResult = new JsonResultBean();
+	public static ApiJsonResult buildErrorJson() {
+		ApiJsonResult jsonResult = new ApiJsonResult();
 		jsonResult.setResult(RESULT_FAILED);
 		jsonResult.setErrorcode(ErrorCode.SYSTEM_ERROR);
 		return jsonResult;
 	}
 
-	public static JsonResultBean buildErrorJson(int errorCode) {
+	public static ApiJsonResult buildErrorJson(int errorCode) {
 		String errorMsg = ErrorCode.getMessage(errorCode);
 		return buildErrorJson(errorCode, errorMsg);
 	}
 
-	public static JsonResultBean buildErrorJson(int errorCode, String errorMsg) {
-		JsonResultBean jsonResult = new JsonResultBean();
+	public static ApiJsonResult buildErrorJson(int errorCode, String errorMsg) {
+		ApiJsonResult jsonResult = new ApiJsonResult();
 		jsonResult.setResult(RESULT_FAILED);
 		jsonResult.setErrorcode(errorCode);
 		jsonResult.setMessage(errorMsg);

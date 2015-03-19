@@ -5,12 +5,11 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
+import com.bruce.foundation.util.ImageUtil;
 import com.bruce.geekway.constants.ConstConfig;
 import com.bruce.geekway.model.upload.UploadImageInfo;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.utils.ImageUtil;
 import com.bruce.geekway.utils.UploadUtil;
 
 /**

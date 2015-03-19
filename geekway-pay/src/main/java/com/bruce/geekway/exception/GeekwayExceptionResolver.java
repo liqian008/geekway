@@ -13,7 +13,7 @@ import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.exception.GeekwayException;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
 //import com.bruce.geekway.front.util.ResponseBuilderUtil;
-import com.bruce.geekway.utils.JsonViewBuilderUtil; 
+import com.bruce.geekway.utils.JsonViewBuilderUtil;
 
 /**
  * Comments for RestExceptionResolver.java

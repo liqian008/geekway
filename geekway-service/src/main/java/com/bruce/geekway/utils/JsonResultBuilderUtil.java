@@ -4,7 +4,7 @@
  */
 package com.bruce.geekway.utils;
 
-import com.bruce.geekway.model.data.JsonResultBean;
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.model.exception.ErrorCode;
 
 
@@ -15,12 +15,12 @@ public final class JsonResultBuilderUtil {
 	public final static int RESULT_FAILED = 0X00;
 	
 	
-	public static JsonResultBean buildSuccessJson() {
+	public static ApiJsonResult buildSuccessJson() {
 		return buildSuccessJson(null);
 	}
 
-	public static JsonResultBean buildSuccessJson(Object data) {
-		JsonResultBean jsonResult = new JsonResultBean();
+	public static ApiJsonResult buildSuccessJson(Object data) {
+		ApiJsonResult jsonResult = new ApiJsonResult();
 		jsonResult.setResult(RESULT_SUCCESS);
 		if (data != null) {
 			jsonResult.setData(data);
@@ -28,20 +28,20 @@ public final class JsonResultBuilderUtil {
 		return jsonResult;
 	}
 
-	public static JsonResultBean buildErrorJson() {
-		JsonResultBean jsonResult = new JsonResultBean();
+	public static ApiJsonResult buildErrorJson() {
+		ApiJsonResult jsonResult = new ApiJsonResult();
 		jsonResult.setResult(RESULT_FAILED);
 		jsonResult.setErrorcode(ErrorCode.SYSTEM_ERROR);
 		return jsonResult;
 	}
 
-	public static JsonResultBean buildErrorJson(int errorCode) {
+	public static ApiJsonResult buildErrorJson(int errorCode) {
 		String errorMsg = ErrorCode.getMessage(errorCode);
 		return buildErrorJson(errorCode, errorMsg);
 	}
 
-	public static JsonResultBean buildErrorJson(int errorCode, String errorMsg) {
-		JsonResultBean jsonResult = new JsonResultBean();
+	public static ApiJsonResult buildErrorJson(int errorCode, String errorMsg) {
+		ApiJsonResult jsonResult = new ApiJsonResult();
 		jsonResult.setResult(RESULT_FAILED);
 		jsonResult.setErrorcode(errorCode);
 		jsonResult.setMessage(errorMsg);

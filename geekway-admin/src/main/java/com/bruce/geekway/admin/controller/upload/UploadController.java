@@ -11,7 +11,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.bruce.foundation.admin.controller.BaseController;
 import com.bruce.foundation.admin.security.WebUserDetails;
-import com.bruce.geekway.model.data.JsonResultBean;
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
 import com.bruce.geekway.service.upload.IUploadService;
@@ -39,7 +39,7 @@ public class UploadController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/uploadQiniu", method = RequestMethod.POST)
-	public JsonResultBean uploadQiniu(Model model, @RequestParam("image") CommonsMultipartFile file) {
+	public ApiJsonResult uploadQiniu(Model model, @RequestParam("image") CommonsMultipartFile file) {
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
@@ -62,7 +62,7 @@ public class UploadController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/uploadLocal", method = RequestMethod.POST)
-	public JsonResultBean uploadLocal(Model model, @RequestParam("image") CommonsMultipartFile file) {
+	public ApiJsonResult uploadLocal(Model model, @RequestParam("image") CommonsMultipartFile file) {
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
@@ -85,7 +85,7 @@ public class UploadController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public JsonResultBean upload(Model model, @RequestParam("image") CommonsMultipartFile file) {
+	public ApiJsonResult upload(Model model, @RequestParam("image") CommonsMultipartFile file) {
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();

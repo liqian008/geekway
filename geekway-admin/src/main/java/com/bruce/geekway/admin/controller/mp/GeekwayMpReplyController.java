@@ -12,9 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.model.WxMaterialArticle;
 import com.bruce.geekway.model.WxMaterialMultimedia;
-import com.bruce.geekway.model.data.JsonResultBean;
 import com.bruce.geekway.model.wx.json.response.WxJsonResult;
 import com.bruce.geekway.model.wx.message.CustomMessage;
 import com.bruce.geekway.model.wx.message.ImageMessage;
@@ -49,7 +49,7 @@ public class GeekwayMpReplyController {
 	
 	@ResponseBody
 	@RequestMapping("/mpReplyText.json")
-	public JsonResultBean mpReplyText(Model model, HttpServletRequest request, String openId, String text) {
+	public ApiJsonResult mpReplyText(Model model, HttpServletRequest request, String openId, String text) {
 		if(!StringUtils.isBlank(openId)&&!StringUtils.isBlank(text)){
 			TextMessage textMessage = new TextMessage();
 			textMessage.touser = openId;
@@ -66,25 +66,25 @@ public class GeekwayMpReplyController {
 	
 	@ResponseBody
 	@RequestMapping("/mpReplyArticle.json") 
-	public JsonResultBean mpReplyArticle(Model model, HttpServletRequest request, String openId, int materialId) {
+	public ApiJsonResult mpReplyArticle(Model model, HttpServletRequest request, String openId, int materialId) {
 		return mpReplyMaterial(model, request, openId, (short) 1,  materialId);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/mpReplyNews.json") 
-	public JsonResultBean mpReplyNews(Model model, HttpServletRequest request, String openId, int materialId) {
+	public ApiJsonResult mpReplyNews(Model model, HttpServletRequest request, String openId, int materialId) {
 		return mpReplyMaterial(model, request, openId, (short) 2,  materialId);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/mpReplyImage.json") 
-	public JsonResultBean mpReplyImage(Model model, HttpServletRequest request, String openId, int materialId) {
+	public ApiJsonResult mpReplyImage(Model model, HttpServletRequest request, String openId, int materialId) {
 		return mpReplyMaterial(model, request, openId, (short) 3, materialId);
 	}
 	
 	@ResponseBody
 	@RequestMapping("/mpReplyVoice.json") 
-	public JsonResultBean mpReplyVoice(Model model, HttpServletRequest request, String openId, int materialId) {
+	public ApiJsonResult mpReplyVoice(Model model, HttpServletRequest request, String openId, int materialId) {
 		return mpReplyMaterial(model, request, openId, (short) 4, materialId);
 	}
 	
@@ -97,7 +97,7 @@ public class GeekwayMpReplyController {
 	 * @param materialId
 	 * @return
 	 */
-	private JsonResultBean mpReplyMaterial(Model model, HttpServletRequest request, String openId, short materialType, int materialId) {
+	private ApiJsonResult mpReplyMaterial(Model model, HttpServletRequest request, String openId, short materialType, int materialId) {
 		if(!StringUtils.isBlank(openId)){
 			CustomMessage replyMessage = null;
 			if(materialType==1){//单图文

@@ -6,8 +6,8 @@ package com.bruce.geekway.utils;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.constants.ConstFront;
-import com.bruce.geekway.model.data.JsonResultBean;
 
 
 public final class JsonViewBuilderUtil {
@@ -41,7 +41,7 @@ public final class JsonViewBuilderUtil {
 		SUBMIT_FAILED_VIEW = temp;
 	}
 	
-	public static ModelAndView buildJsonView(JsonResultBean jsonResult) {
+	public static ModelAndView buildJsonView(ApiJsonResult jsonResult) {
 		ModelAndView mv = new ModelAndView(ConstFront.JSON_VIEW);
 		mv.addObject(JSON_RESULT, jsonResult);
 		return mv;

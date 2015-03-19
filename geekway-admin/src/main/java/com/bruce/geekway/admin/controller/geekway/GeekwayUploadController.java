@@ -1,7 +1,5 @@
 package com.bruce.geekway.admin.controller.geekway;
 
-import java.io.File;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -14,14 +12,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.bruce.foundation.admin.controller.BaseController;
 import com.bruce.foundation.admin.security.WebUserDetails;
-import com.bruce.geekway.model.data.JsonResultBean;
+import com.bruce.foundation.model.result.ApiJsonResult;
 import com.bruce.geekway.model.exception.ErrorCode;
 import com.bruce.geekway.model.upload.UploadImageResult;
-import com.bruce.geekway.model.wx.json.response.WxMediaUploadResult;
 import com.bruce.geekway.service.mp.WxMpMediaUploadService;
 import com.bruce.geekway.service.upload.IUploadService;
 import com.bruce.geekway.utils.JsonResultBuilderUtil;
-import com.bruce.geekway.utils.UploadUtil;
 
 @Controller
 @RequestMapping("/geekway")
@@ -62,7 +58,7 @@ public class GeekwayUploadController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/imageUpload", method = RequestMethod.POST)
-	public JsonResultBean imageUpload(Model model, @RequestParam("imageFile") CommonsMultipartFile file) {
+	public ApiJsonResult imageUpload(Model model, @RequestParam("imageFile") CommonsMultipartFile file) {
 		try {
 			WebUserDetails userDetail = getUserInfo();
 			int userId = userDetail.getUserId();
