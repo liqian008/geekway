@@ -99,9 +99,9 @@
   var jssdkEle = document.createElement("script");
   jssdkEle.type = "text/javascript";
   var currentUrl = encodeURIComponent(location.href.split('#')[0]);
-  jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?wxAppId=${myWxApp.wxAppId}&pageUrl="+currentUrl;
+  jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?wxAppId=${myWxApp.wxAppId}&sign=signVal&pageUrl="+currentUrl;
   //开发、测试阶段如需开启debug模式，请在wxJssdkSrc中增加debug=true的参数，请用下行替换上行
-  jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?debug=true&wxAppId=${myWxApp.wxAppId}&pageUrl="+currentUrl;
+  jssdkEle.src = "http://api.js-sdk.com.cn/api/wxJsConfigSrc?debug=true&wxAppId=${myWxApp.wxAppId}&sign=signVal&pageUrl="+currentUrl;
   var allJsEles = document.getElementsByTagName("script")[0];
   allJsEles.parentNode.insertBefore(jssdkEle, allJsEles);
 })();
