@@ -10,12 +10,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.geekway.model.WxDefaultReply;
 import com.bruce.geekway.model.ito.json.ItoWwjQrcodeResult;
+import com.bruce.geekway.service.IWxDefaultReplyService;
 import com.bruce.geekway.utils.JsonUtil;
 import com.bruce.geekway.utils.JsonViewBuilderUtil;
 import com.bruce.geekway.utils.ResponseBuilderUtil;
@@ -45,6 +48,8 @@ public class QrcodeNewController {
 	/*用户关注新天地分店后生成的二维码key*/
 	private static final String KEY_USER_SURSCRIBE_XTD_QRCODE = "user_subscribe_xtd_qrcode";
 	
+	@Autowired
+	private IWxDefaultReplyService wxDefaultReplyService;
 	
 	/**
 	 * 发放的二维码处理（第一家分店）
@@ -229,25 +234,31 @@ public class QrcodeNewController {
 	 * 
 	 * @return
 	 */
-	private static String getQrcodeUrl(){
-		boolean isTest = false; 
-		if(isTest){
-			return getMockQrcodeUrl();
-		}
-		//从第三方服务获取二维码&展示给用户
+	private String getQrcodeUrl(){
 		String qrcodeUrl = null;
-		String wwjUrl = "http://www.itocases.com:90/api/QRCode";
-		String result = WxHttpUtil.getRequest(wwjUrl, null);
-		if(!StringUtils.isBlank(result)){
-			ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
-			if(wwjResult!=null&&wwjResult.getErrorCode()==0){
-				qrcodeUrl = wwjResult.getImageUrl();
-				logger.info("从发码中心获取新二维码成功!["+qrcodeUrl+"]");
-			}
-		}else{
-			logger.error("从发码中心获取新二维码失败!");
-		}
+//		WxDefaultReply wxDefaultReply = wxDefaultReplyService.
 		
+		WxDefaultReply defaultReply = wxDefaultReplyService.loadById(1);
+		
+		boolean isOpen = defaultReply!=null&&Short.valueOf("99").equals(defaultReply.getStatus());//99时开启二维码
+		if(isOpen){
+			boolean isTest = false; 
+			if(isTest){
+				return getMockQrcodeUrl();
+			}
+			//从第三方服务获取二维码&展示给用户
+			String wwjUrl = "http://www.itocases.com:90/api/QRCode";
+			String result = WxHttpUtil.getRequest(wwjUrl, null);
+			if(!StringUtils.isBlank(result)){
+				ItoWwjQrcodeResult wwjResult = JsonUtil.gson.fromJson(result, ItoWwjQrcodeResult.class);
+				if(wwjResult!=null&&wwjResult.getErrorCode()==0){
+					qrcodeUrl = wwjResult.getImageUrl();
+					logger.info("从发码中心获取新二维码成功!["+qrcodeUrl+"]");
+				}
+			}else{
+				logger.error("从发码中心获取新二维码失败!");
+			}
+		}
 		return qrcodeUrl;
 	}
 
