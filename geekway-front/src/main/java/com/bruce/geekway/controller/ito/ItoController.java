@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.geekway.model.ItoProductBg;
@@ -26,23 +29,25 @@ import com.bruce.geekway.utils.JsonViewBuilderUtil;
  *
  */
 @Controller
-@RequestMapping(value={"api"})
 public class ItoController {
 	
-	private static final Logger logger = LoggerFactory.getLogger("ItoAppLogger");
+	private static final Logger logger = LoggerFactory.getLogger(ItoController.class);
 	
-	
+	public static final String DEBUG_FLAG = "debug_flag";
+
 	@Autowired
 	private IItoSystemStatusService itoSystemStatusService;
 	@Autowired
 	private IItoProductBgService itoProductBgService;
+	
+	
 	
 	/**
 	 * 系统状态
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/running.json")
+	@RequestMapping(value = "/api/running.json")
 	public ModelAndView running(String deviceId) {
 		
 		logger.info("App客户端["+deviceId+"]发送运行状态");
@@ -64,7 +69,7 @@ public class ItoController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/productBgList.json")
+	@RequestMapping(value = "/api/productBgList.json")
 	public ModelAndView productList() {
 		
 		logger.info("App客户端获取图片配置数据");
@@ -83,5 +88,17 @@ public class ItoController {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		dataMap.put("productBgList", productBgList);
 		return JsonViewBuilderUtil.buildJsonView(JsonResultBuilderUtil.buildSuccessJson(dataMap));
+	}
+	
+	/**
+	 * 运行模式
+	 * @param debugStatus
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/ito/debugStatus.json")
+	public ModelAndView debugStatus(@RequestParam(defaultValue="true")boolean debugStatus, HttpServletRequest request) {
+		request.getSession().setAttribute(DEBUG_FLAG, debugStatus);
+		return JsonViewBuilderUtil.SUBMIT_SUCCESS_VIEW;
 	}
 }

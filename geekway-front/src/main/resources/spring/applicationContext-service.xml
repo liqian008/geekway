@@ -77,6 +77,8 @@
 	</bean>
 	<bean id="itoUserProfileService" class="com.bruce.geekway.service.impl.ito.ItoUserProfileServiceImpl">
 	</bean>
+	<bean id="itoQrcodeService" class="com.bruce.geekway.service.impl.ito.ItoQrcodeServiceImpl">
+	</bean>
 	
 	
 	<!-- sku service config -->
